@@ -1,0 +1,22 @@
+[
+    {
+        "model-name": "niveles_acceso",
+        "resource-file": "niveles_accesos.json",
+        "table-name": "niveles_acceso"
+    },
+    {
+        "model-name": "users",
+        "resource-file": "users.json",
+        "table-name": "users"
+    },
+    {
+        "model-name": "camaras",
+        "resource-file": "camaras.json",
+        "table-name": "camaras"
+    },
+    {
+        "model-name": "puestos",
+        "resource-file": "puestos.json",
+        "table-name": "puestos"
+    }
+]

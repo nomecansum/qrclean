@@ -14,14 +14,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Auth::routes();
+
 
 Route::get('/logout','Auth\LoginController@logout');
 
+Route::view('/scan2', 'scan2');
+
+Auth::routes();
+
+Route::view('/', 'scan');
 
 Route::group(['middleware' => 'auth'], function() {
     //Pagina pricipal
-    Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@index');
     //
 
@@ -32,7 +36,6 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/delete/{id}',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@delete']);
         Route::get('/ver_puesto/{id}',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@ver_puesto']);
         Route::get('/savesnapshot/{id}',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@savesnapshot']);
-
     });
 
     Route::group(['prefix' => 'users'], function () {
@@ -45,31 +48,27 @@ Route::group(['middleware' => 'auth'], function() {
         Route::delete('/users/{users}','UsersController@destroy')->name('users.users.destroy');
     });
 
-    Route::get('/bitacoras', 'BitacorasController@index')->name('bitacoras.bitacora.index');
-    Route::post('/bitacoras/search', 'BitacorasController@search')->name('bitacoras.bitacora.search');
+    Route::group(['prefix' => 'bitacoras'], function () {
+        Route::get('/', 'BitacorasController@index')->name('bitacoras.bitacora.index');
+        Route::post('/search', 'BitacorasController@search')->name('bitacoras.bitacora.search');
+    });
 
 
-    Route::get('profiles',['middleware'=>'permissions:["Perfiles"],["R"]','uses'=>'PermissionsController@profiles']);
-	Route::get('profiles/edit/{id}',['middleware'=>'permissions:["Perfiles"],["C"]','uses'=>'PermissionsController@profilesEdit']);
-	Route::post('profiles/save',['middleware'=>'permissions:["Perfiles"],["W"]','uses'=>'PermissionsController@profilesSave']);
-	Route::post('profiles/update',['middleware'=>'permissions:["Perfiles"],["C"]','uses'=>'PermissionsController@profilesSave']);
-	Route::get('profiles/delete/{id}',['middleware'=>'permissions:["Perfiles"],["D"]','uses'=>'PermissionsController@profilesDelete']);
+    Route::group(['prefix' => 'profiles'], function () {
+        Route::get('/',['middleware'=>'permissions:["Perfiles"],["R"]','uses'=>'PermissionsController@profiles']);
+        Route::get('/edit/{id}',['middleware'=>'permissions:["Perfiles"],["C"]','uses'=>'PermissionsController@profilesEdit']);
+        Route::post('/save',['middleware'=>'permissions:["Perfiles"],["W"]','uses'=>'PermissionsController@profilesSave']);
+        Route::post('/update',['middleware'=>'permissions:["Perfiles"],["C"]','uses'=>'PermissionsController@profilesSave']);
+        Route::get('/delete/{id}',['middleware'=>'permissions:["Perfiles"],["D"]','uses'=>'PermissionsController@profilesDelete']);
+    });
 
-	Route::get('sections',['middleware'=>'permissions:["Secciones"],["R"]','uses'=>'PermissionsController@sections']);
-	Route::get('sections/edit/{id}',['middleware'=>'permissions:["Secciones"],["C"]','uses' => 'PermissionsController@sectionsEdit']);
-	Route::post('sections/save',['middleware'=>'permissions:["Secciones"],["W"]','uses' => 'PermissionsController@sectionsSave']);
-	Route::post('sections/update',['middleware'=>'permissions:["Secciones"],["C"]','uses' => 'PermissionsController@sectionsSave']);
-	Route::get('sections/delete/{id}',['middleware'=>'permissions:["Secciones"],["D"]','uses' => 'PermissionsController@sectionsDelete']);
-
-	Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);
-    Route::get('permissions/getProfiles',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'PermissionsController@getProfiles']);
-
-	/**/
-	Route::post('addPermissions',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions']);
-	Route::post('removePermissions',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions']);
-	Route::post('addPermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions_user']);
-	Route::post('removePermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions_user']);
-});
+    Route::group(['prefix' => 'sections'], function () {
+        Route::get('/',['middleware'=>'permissions:["Secciones"],["R"]','uses'=>'PermissionsController@sections']);
+        Route::get('/edit/{id}',['middleware'=>'permissions:["Secciones"],["C"]','uses' => 'PermissionsController@sectionsEdit']);
+        Route::post('/save',['middleware'=>'permissions:["Secciones"],["W"]','uses' => 'PermissionsController@sectionsSave']);
+        Route::post('/update',['middleware'=>'permissions:["Secciones"],["C"]','uses' => 'PermissionsController@sectionsSave']);
+        Route::get('/delete/{id}',['middleware'=>'permissions:["Secciones"],["D"]','uses' => 'PermissionsController@sectionsDelete']);
+    });
 
     Route::group(['prefix' => 'clientes'], function() {
         Route::get('/',['middleware'=>'permissions:["Empresas"],["R"]', 'uses' => 'CustomersController@index']);
@@ -78,5 +77,16 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('edit/{id}',['middleware'=>'permissions:["Empresas"],["C"]', 'uses' => 'CustomersController@edit']);
         Route::post('update',['middleware'=>'permissions:["Empresas"],["C"]', 'uses' => 'CustomersController@update']);
         Route::get('delete/{id}',['middleware'=>'permissions:["Empresas"],["D"]', 'uses' => 'CustomersController@delete']);
+    });
+
+    Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);
+    Route::get('permissions/getProfiles',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'PermissionsController@getProfiles']);
+	Route::post('addPermissions',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions']);
+	Route::post('removePermissions',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions']);
+	Route::post('addPermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions_user']);
+    Route::post('removePermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions_user']);
+
 });
+
+
 

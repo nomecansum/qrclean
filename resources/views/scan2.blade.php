@@ -1,5 +1,3 @@
-@extends('layouts.app')
-
 @extends('layout')
 
 @section('styles')
@@ -51,25 +49,38 @@
 @endsection
 
 @section('content')
+<div class="w-100" style="height: 60px; background-color:#4d627b">
+
+</div>
+<div class="text-center">
+    <img src="/img/Mosaic_brand_300.png">
+</div>
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div id="mensaje" class="alert text-center"></div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12" style="text-align: center;">
         <div id="qr" style="display: inline-block;">
-            <div class="placeholder"> QR Code viewfinder comes here</div>
+            <div class="placeholder"> QR Code</div>
         </div>
         <div id="scannedCodeContainer"></div>
         <div id="feedback"></div>
     </div>
     <div class="col-md-12 scan-type-region camera" id="scanTypeCamera">
-        <div>
-             <input type="radio" name="scan-type" value="camera" checked>
-             <strong>Scan using Camera</strong>&nbsp;&nbsp;
-             <code id="status">Click "Start Scanning"</b></code>
-             <button id="requestPermission" class="btn btn-success btn-sm">Request Permission</button>
+        <div class="text-center">
+             {{-- <input type="radio" name="scan-type" value="camera" checked> --}}
+             {{-- <strong>Scan using Camera</strong>&nbsp;&nbsp; --}}
+             {{-- <code id="status">Click "Start Scanning"</b></code> --}}
+             <button id="btn_requestPermission" class="btn btn-success btn-sm" style="display: none"> <i class="fad fa-question-square"></i> Habilitar permiso</button>
         </div>
         <div>
             <div>
                 <div id="selectCameraContainer" style="display: inline-block;"></div>
-                 <select id="cameraSelection" disabled></select>
+                 <select id="cameraSelection"></select>
             </div>
             <div>
                  <button id="scanButton" class="btn btn-success btn-sm" disabled>start scanning</button>
@@ -77,23 +88,164 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12 scan-type-region disabled file" id="scanTypeFile">
-        <div>
-             <input type="radio" name="scan-type" value="file">
-             <strong>Scan using file</strong>
-        </div>
-        <div>
-             <input type="file" id="qrInputFile" accept="image/*" disabled> Select Image
-        </div>
-    </div>
+
 </div>
 @endsection
 
 
-
 @section('scripts')
     <script src="{{ asset('/plugins/html5-qrcode/minified/html5-qrcode.min.js') }}"></script>
+
     <script>
+        function requestPermission(){
+            console.log('requestPermission');
+            const scanRegionCamera = document.getElementById('scanTypeCamera');
+            const scanButton = document.getElementById('scanButton');
+            const stopButton = document.getElementById('stopButton');
+            const requestPermissionButton = document.getElementById('requestPermission');
+            const selectCameraContainer = document.getElementById('selectCameraContainer');
+            const cameraSelection = document.getElementById('cameraSelection');
+            const scannedCodeContainer = document.getElementById('scannedCodeContainer');
+
+            const feedbackContainer = document.getElementById('feedback');
+            const statusContainer = document.getElementById('status');
+            const SCAN_TYPE_CAMERA = "camera";
+            // declaration of html5 qrcode
+            const html5QrCode = new Html5Qrcode("qr", /* verbose= */ true);
+            var currentScanTypeSelection = SCAN_TYPE_CAMERA;
+            var codesFound = 0;
+            var lastMessageFound = null;
+            const setPlaceholder = () => {
+                const placeholder = document.createElement("div");
+                placeholder.innerHTML = "";
+                placeholder.className = "placeholder";
+                document.getElementById('qr').appendChild(placeholder);
+            }
+            const setFeedback = message => {
+                console.log(message);
+                //feedbackContainer.innerHTML = message;
+            }
+            const setStatus = status => {
+               console.log(status);
+            }
+            const qrCodeSuccessCallback = qrCodeMessage => {
+                setStatus("Pattern Found");
+                setFeedback("");
+                if (lastMessageFound === qrCodeMessage.toLocaleLowerCase()) {
+                    return;
+                }
+                ++codesFound;
+                lastMessageFound = qrCodeMessage.toLocaleLowerCase();
+                const result = document.createElement('div');
+                result.innerHTML = `[${codesFound}] New code found: <strong>${qrCodeMessage}</strong>`;
+                scannedCodeContainer.appendChild(result);
+            }
+            const qrCodeErrorCallback = message => {
+                setStatus("Scanning");
+            }
+            const videoErrorCallback = message => {
+                setFeedback(`Video Error, error = ${message}`);
+            }
+            const classExists = (element, needle) => {
+                const classList = element.classList;
+                for (var i = 0; i < classList.length; i++) {
+                    if (classList[i] == needle) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            const addClass = (element, className) => {
+                if (!element || !className) throw "Both element and className mandatory";
+                if (classExists(element, className)) return;
+                element.classList.add(className);
+            };
+            const removeClass = (element, className) => {
+                if (!element || !className) throw "Both element and className mandatory";
+                if (!classExists(element, className)) return;
+                element.classList.remove(className);
+            }
+
+            const setupCameraOption = () => {
+                currentScanTypeSelection = SCAN_TYPE_CAMERA;
+                html5QrCode.clear();
+                setPlaceholder();
+                removeClass(scanRegionCamera, "disabled");
+                setFeedback("Click 'Start Scanning' to <b>start scanning QR Code</b>");
+            }
+
+
+            Html5Qrcode.getCameras().then(cameras => {
+
+            if (cameras && cameras.length) {
+                var camara = cameras[0].id;
+               console.log(cameras);
+            }
+
+            if (cameras.length == 0) {
+                return setFeedback("Error: Zero cameras found in the device");
+            }
+            for (var i = 0; i < cameras.length; i++) {
+                const camera = cameras[i];
+                const value = camera.id;
+                const name = camera.label == null ? value : camera.label;
+                const option = document.createElement('option');
+                option.value = value;
+                option.innerHTML = name;
+                cameraSelection.appendChild(option);
+            }
+
+
+
+            html5QrCode.clear();
+            setPlaceholder();
+            removeClass(scanRegionCamera, "disabled");
+            setFeedback("Click 'Start Scanning' to <b>start scanning QR Code</b>");
+            setupCameraOption();
+
+
+            const cameraId = cameraSelection.value;
+            cameraSelection.disabled = true;
+            scanButton.disabled = true;
+            // Start scanning.
+            html5QrCode.start(
+                cameraId,
+                {
+                    fps: 10,
+                    qrbox: 250
+                },
+                qrCodeSuccessCallback,
+                qrCodeErrorCallback)
+                .then(_ => {
+                    stopButton.disabled = false;
+                    setStatus("scanning");
+                    setFeedback("");
+                })
+                .catch(error => {
+                    cameraSelection.disabled = false;
+                    scanButton.disabled = false;
+                    videoErrorCallback(error);
+                });
+
+            }).catch(err => {
+                console.log('Error camaras '+err);
+                $('#mensaje').html('<i class="fad fa-exclamation-triangle"></i> No se ha podido acceder a la camara. <br> Debe dar permiso de acceso a la camara a QRClean');
+                $('#mensaje').addClass('alert-danger');
+                $('#mensaje').show();
+                $('#btn_requestPermission').show();
+            });
+        }
+
+        $(function(){
+            requestPermission();
+        });
+
+        $('#btn_requestPermission').click(function(){
+            location.reload();
+        })
+
+    </script>
+    {{-- <script>
         function docReady(fn) {
             // see if DOM is already available
             if (document.readyState === "complete" || document.readyState === "interactive") {
@@ -125,12 +277,13 @@
             var lastMessageFound = null;
             const setPlaceholder = () => {
                 const placeholder = document.createElement("div");
-                placeholder.innerHTML = "QR viewfinder comes here";
+                placeholder.innerHTML = "";
                 placeholder.className = "placeholder";
                 document.getElementById('qr').appendChild(placeholder);
             }
             const setFeedback = message => {
-                feedbackContainer.innerHTML = message;
+                console.log(message);
+                //feedbackContainer.innerHTML = message;
             }
             const setStatus = status => {
                 statusContainer.innerHTML = status;
@@ -271,17 +424,7 @@
                     setFeedback(`Error: Unable to query any cameras. Reason: ${err}`);
                 });
             });
-            // File based scanning
-            fileInput.addEventListener('change', e => {
-                if (currentScanTypeSelection != SCAN_TYPE_FILE) return;
-                if (e.target.files.length == 0) {
-                    return;
-                }
-                const file = e.target.files[0];
-                html5QrCode.scanFile(file, true)
-                .then(qrCodeSuccessCallback)
-                .catch(err => setFeedback(`Error scanning file. Reason: ${err}`));
-            });
+
         });
-        </script>
+        </script> --}}
 @endsection

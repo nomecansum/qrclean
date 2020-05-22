@@ -288,6 +288,10 @@
             setCookie('cam_def',$('#cameraSelection').val(),9999);
             $('#scan_Button').click();
         })
+
+        $('#switch_Button').click(function(){
+            
+        })
     </script>
 
 @endsection

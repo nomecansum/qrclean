@@ -15,7 +15,7 @@
 @section('content')
 @php
     $puesto=$respuesta['puesto']??null;
-    dump($respuesta);
+    //dump($respuesta);
 @endphp
 
     <div class="row">

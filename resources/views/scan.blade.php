@@ -103,6 +103,12 @@
     <button id="stop_Button" class="btn btn-warning btn-sm">stop scanning</button>
 </div>
 
+<div class="row mt-5">
+    <div class="col-md-12 text-center">
+        <a class="btn btn-lg btn-primary text-bold btn_estado" href="{{ url('/login') }}"><i class="fad fa-user"></i> Login</a>
+    </div>
+</div>
+
 @endsection
 
 

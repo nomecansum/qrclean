@@ -17,6 +17,7 @@ class PuestosController extends Controller
         $puestos=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where('puestos.id_cliente',Auth::user()->id_cliente)
             ->get();
         return view('puestos.index',compact('puestos'));
@@ -74,5 +75,17 @@ class PuestosController extends Controller
             ];
 
         }
+    }
+
+    public function print_qr(){
+
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('puestos.id_cliente',Auth::user()->id_cliente)
+            ->get();
+
+        return view('puestos.print_qr',compact('puestos'));
     }
 }

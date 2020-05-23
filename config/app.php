@@ -123,6 +123,9 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+
+    'url_base_scan'=>'https://qrclean.ddns.net/puesto/',
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

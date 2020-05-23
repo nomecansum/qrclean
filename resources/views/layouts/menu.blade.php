@@ -133,10 +133,10 @@
 
                         <!--Submenu-->
                         <ul class="collapse">
-                            <li><a href="/puestos"> <i class="fad fa-browser"></i> Puestos</a></li>
-                            <li><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li>
                             <li><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li>
-
+                            <li><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li>
+                            <li><a href="/puestos"> <i class="fad fa-browser"></i> Puestos</a></li>
+                            <li><a href="/print"><i class="fad fa-print"></i> Etiquetas</a></li>
                         </ul>
                     </li>
                     <li>

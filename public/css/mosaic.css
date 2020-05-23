@@ -342,3 +342,8 @@
     /* width: calc(100% - 72px) !important; */
     padding-right: 0px;
 }
+
+
+.rounded{
+  border-radius: 8px;
+}

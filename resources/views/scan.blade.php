@@ -59,7 +59,7 @@
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-        <div id="mensaje" class="alert text-center"></div>
+        <div id="mensaje_error" class="alert text-center alert-danger alert-dismissible" style="display:none"></div>
     </div>
 </div>
 <div class="row">
@@ -102,6 +102,7 @@
     <button id="scan_Button" class="btn btn-success btn-sm">start scanning</button>
     <button id="stop_Button" class="btn btn-warning btn-sm">stop scanning</button>
 </div>
+
 @endsection
 
 
@@ -109,6 +110,25 @@
     <script src="{{ asset('/plugins/html5-qrcode/minified/html5-qrcode.min.js') }}"></script>
 
     <script>
+        function playaudio() {
+            const audio = new Audio("{{url('/audio/beep-2.mp3')}}");
+            audio.play();
+        }
+
+        function geturl(url){
+            console.log('Get URL: '+url);
+            $.post('{{url('/getsitio/')}}', {_token: '{{csrf_token()}}', data: url}, function(data, textStatus, xhr){
+
+            })
+                .done(function(){
+                    console.log(data);
+                })
+                .fail(function(){
+                    $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> Codigo de sitio no reconocido');
+                    $('#mensaje_error').show();
+                });
+            }
+
         function requestPermission(){
             console.log('requestPermission');
             const scanRegionCamera = document.getElementById('scanTypeCamera');
@@ -122,7 +142,7 @@
             const statusContainer = document.getElementById('status');
             const SCAN_TYPE_CAMERA = "camera";
             // declaration of html5 qrcode
-            const html5QrCode = new Html5Qrcode("qr", /* verbose= */ true);
+            const html5QrCode = new Html5Qrcode("qr", /* verbose= */ false);
             var currentScanTypeSelection = SCAN_TYPE_CAMERA;
             var codesFound = 0;
             var lastMessageFound = null;
@@ -137,19 +157,23 @@
                 //feedbackContainer.innerHTML = message;
             }
             const setStatus = status => {
-               console.log(status);
+               console.log('Status: '+ status);
             }
             const qrCodeSuccessCallback = qrCodeMessage => {
-                setStatus("Pattern Found");
-                setFeedback("");
-                if (lastMessageFound === qrCodeMessage.toLocaleLowerCase()) {
+                //setStatus("Pattern Found");
+                //setFeedback("");
+                if (lastMessageFound === qrCodeMessage) {
                     return;
                 }
                 ++codesFound;
-                lastMessageFound = qrCodeMessage.toLocaleLowerCase();
-                const result = document.createElement('div');
-                result.innerHTML = `[${codesFound}] New code found: <strong>${qrCodeMessage}</strong>`;
-                scannedCodeContainer.appendChild(result);
+                lastMessageFound = qrCodeMessage;
+                //lastMessageFound = qrCodeMessage.toLocaleLowerCase();
+                //const result = document.createElement('div');
+                console.log(`[${codesFound}] Nuevo QR: ${qrCodeMessage}`);
+                playaudio();
+                geturl(lastMessageFound);
+                //result.innerHTML = `[${codesFound}] Nuevo QR: <strong>${qrCodeMessage}</strong>`;
+                //scannedCodeContainer.appendChild(result);
             }
             const qrCodeErrorCallback = message => {
                 //setStatus("Scanning");
@@ -193,7 +217,9 @@
             }
 
             if (cameras.length == 0) {
-                return setFeedback("Error: Zero cameras found in the device");
+                console.log('Error camaras '+err);
+                $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> No se han encotnrado camaras');
+                $('#mensaje_error').show();
             }
             for (var i = 0; i < cameras.length; i++) {
                 const camera = cameras[i];
@@ -268,9 +294,8 @@
 
             }).catch(err => {
                 console.log('Error camaras '+err);
-                $('#mensaje').html('<i class="fad fa-exclamation-triangle"></i> No se ha podido acceder a la camara. <br> Debe dar permiso de acceso a la camara a QRClean');
-                $('#mensaje').addClass('alert-danger');
-                $('#mensaje').show();
+                $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> No se ha podido acceder a la camara. <br> Debe dar permiso de acceso a la camara a QRClean');
+                $('#mensaje_error').show();
                 $('#btn_requestPermission').show();
             });
         }
@@ -290,8 +315,18 @@
         })
 
         $('#switch_Button').click(function(){
-            
+            //$('#cameraSelection option:selected').removeAttr('selected');
+            $("#cameraSelection > option:selected")
+                .prop("selected", false)
+                .next()
+                .prop("selected", true);
+            if($("#cameraSelection option:last").is(":selected")){
+               $("#cameraSelection option:first").attr('selected', 'selected');
+            }
+            $('#cameraSelection').change();
         })
+
+        
     </script>
 
 @endsection

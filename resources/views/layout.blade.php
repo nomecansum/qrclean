@@ -230,6 +230,8 @@
     <script src="{{url('/plugins/sweetalert/dist/sweetalert2.all.min.js')}}"></script>
     {{-- Iconpicker --}}
     <script src="{{ asset('/plugins/bootstrap-iconpicker/js/bootstrap-iconpicker.bundle.min.js') }}"></script>
+    {{-- Plugin print --}}
+    <script src="{{asset('/plugins/printThis-master/printThis.js')}}"></script>
 
     @include('layouts.main_scripts')
     @yield('scripts')

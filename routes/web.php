@@ -15,14 +15,22 @@ use Illuminate\Support\Facades\Route;
 
 
 
+Auth::routes();
+////////////////////////// RUTAS PARA LA OPERACION DE USUARIOS SIN LOGIN ////////////////////////////////
+Route::view('/', 'scan');
+Route::post('/getsitio','HomeController@getsitio');
+Route::get('/setqr/{sitio}','HomeController@setqr');
+Route::get('/getqr/{sitio}','HomeController@getqr');
+Route::get('/print','PuestosController@print_qr');
+Route::get('/puesto/{puesto}','HomeController@getpuesto');
+Route::get('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Route::get('/logout','Auth\LoginController@logout');
 
-Route::view('/scan2', 'scan2');
+//Route::view('/scan2', 'scan2');
 
-Auth::routes();
-
-Route::view('/', 'scan');
 
 Route::group(['middleware' => 'auth'], function() {
     //Pagina pricipal

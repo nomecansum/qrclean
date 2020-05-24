@@ -149,6 +149,7 @@ class UsersController extends Controller
                 $data["password"]=Hash::make($request->password);
             }
             $users = users::findOrFail($id);
+
             $users->update($data);
             return [
                 'title' => "Usuarios",
@@ -206,8 +207,6 @@ class UsersController extends Controller
             'email_verified_at' => 'nullable|date_format:j/n/Y g:i A',
             'id_grupo' => 'nullable',
             'id_perfil' => 'nullable',
-            'name' => 'required|string|min:1|max:255',
-            'password' => 'required|string|min:1|max:255',
             'remember_token' => 'nullable|string|min:0|max:100',
             'theme' => 'nullable|string|min:0|max:150',
             'val_timezone' => 'nullable|string|min:0|max:100',

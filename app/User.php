@@ -25,7 +25,7 @@ class User extends Authenticatable
         'collapse',
         'nivel_acceso',
         'id_cliente',
-
+        'val_zona_horaria'
 
     ];
 

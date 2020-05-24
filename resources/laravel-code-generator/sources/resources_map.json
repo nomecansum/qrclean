@@ -18,5 +18,10 @@
         "model-name": "puestos",
         "resource-file": "puestos.json",
         "table-name": "puestos"
+    },
+    {
+        "model-name": "clientes",
+        "resource-file": "clientes.json",
+        "table-name": "clientes"
     }
 ]

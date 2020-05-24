@@ -16,6 +16,7 @@ class PuestosController extends Controller
 
         $puestos=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where('puestos.id_cliente',Auth::user()->id_cliente)

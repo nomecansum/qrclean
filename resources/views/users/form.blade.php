@@ -65,7 +65,7 @@
             <div class="row">
                 <div class="form-group col-md-10 {{ $errors->has('password') ? 'has-error' : '' }}">
                     <label for="password" class="control-label">Password</label>
-                    <input class="form-control" name="password" type="password" id="password" value="{{ old('password', optional($users)->password) }}" minlength="1" maxlength="255" required="true" placeholder="Enter password here...">
+                    <input class="form-control" name="password" type="password" id="password"  minlength="8" maxlength="255" placeholder="Enter password here...">
                     {!! $errors->first('password', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
@@ -88,11 +88,22 @@
         </div>
 </div>
 <div class="row">
-        <div class="col-md-2">
-
+        <div class="col-md-3 mr-3">
+            <div class="form-group">
+                <label>Cliente</label><br>
+                <select required name="cod_cliente" id="cod_cliente" class="select2" style="width: 100%">
+                    <option value=""></option>
+                    @foreach (\DB::table('clientes')->where(function($q){
+                        if (!fullAccess()){
+                                $q->WhereIn('id_cliente',Auth::user()->id_cliente);
+                            }
+                        })->wherenull('fec_borrado')->get() as $c)
+                        <option {{$users->id_cliente == $c->id_cliente ? 'selected' : ''}} value="{{$c->id_cliente}}">{{$c->nom_cliente}}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
-        <div class="col-md-1"></div>
-        <div class="col-md-2">
+        <div class="col-md-2 mr-3">
             <div class="form-group {{ $errors->has('id_perfil') ? 'has-error' : '' }}">
                 <label for="id_perfil" class="control-label">Perfil</label>
                 <select class="form-control" id="cod_nivel" name="cod_nivel">
@@ -104,9 +115,7 @@
                 </select>
                 {!! $errors->first('cod_nivel', '<p class="help-block">:message</p>') !!}
             </div>
-
         </div>
-        <div class="col-md-1"></div>
         {{-- //Vamos a añadir un combo con las zonas horarias --}}
         @php
             $regions = array(

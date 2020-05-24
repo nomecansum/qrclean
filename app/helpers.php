@@ -15,7 +15,7 @@ function getProfilePic()
     return url('default.png');
 }
 
-function savebitacora($des_bitacora,$user,$seccion,$tipo)
+function savebitacora($des_bitacora,$seccion=null,$tipo=null)
 {
    if(isset(Auth::user()->name)){
        $user=Auth::user()->name;
@@ -23,7 +23,7 @@ function savebitacora($des_bitacora,$user,$seccion,$tipo)
 
     \DB::table('bitacora')->insert([
         'accion' => $des_bitacora,
-        'id_usuario' =>$user,
+        'id_usuario' =>Auth::user()->id,
         'id_modulo' => $seccion,
         'status' => $tipo,
         'fecha' => Carbon::now()
@@ -36,7 +36,7 @@ function fullAccess(){
 
 function isAdmin(){
     try{
-        return Auth::User()->val_nivel_acceso == 200 ? true : false;
+        return Auth::User()->nivel_acceso == 200 ? true : false;
     } catch(\Exception $e){
         return false;
     }

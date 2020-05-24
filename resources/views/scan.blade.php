@@ -88,10 +88,12 @@
     </div>
     <div class="col-md-4">
         <div id="selectCameraContainer" style="display: inline-block;"></div>
-        <select id="cameraSelection" class="form-control"></select>
-    </div>
-    <div class="col-md-1 pt-2">
-        <button id="switch_Button" class="btn btn-primary mt-3"><i class="fad fa-camera-alt"></i><i class="fad fa-repeat-alt"></i></button>
+        <div class="input-group mar-btm">
+            <select id="cameraSelection" class="form-control"></select>
+            <span class="input-group-btn">
+                <button id="switch_Button" class="btn btn-primary"><i class="fad fa-camera-alt"></i><i class="fad fa-repeat-alt"></i></button>
+            </span>
+        </div>
     </div>
     <div class="col-md-3">
         
@@ -123,17 +125,19 @@
 
         function geturl(url){
             console.log('Get URL: '+url);
-            $.post('{{url('/getsitio/')}}', {_token: '{{csrf_token()}}', data: url}, function(data, textStatus, xhr){
+            document.location.href=url;
+            // $.post('{{url('/getsitio/')}}', {_token: '{{csrf_token()}}', data: url}, function(data, textStatus, xhr){
 
-            })
-                .done(function(){
-                    console.log(data);
-                })
-                .fail(function(){
-                    $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> Codigo de sitio no reconocido');
-                    $('#mensaje_error').show();
-                });
-            }
+            // })
+            //     .done(function(){
+            //         console.log(data);
+            //     })
+            //     .fail(function(){
+            //         $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> Codigo de sitio no reconocido');
+            //         $('#mensaje_error').show();
+            //     });
+            //
+             }
 
         function requestPermission(){
             console.log('requestPermission');

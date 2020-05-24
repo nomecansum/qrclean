@@ -34,6 +34,9 @@
     {{--  Animate CSS  --}}
     <link rel="stylesheet" href="{{ URL('/plugins/animate-css/animate.min.css') }}">
 
+    {{--  Datatables  --}}
+    <link rel="stylesheet" href="{{ URL('/plugins/datatables/datatables.min.css') }}">
+
     {{-- Custom file --}}
     <link href="{{ URL('/plugins/custom_file.css') }}" rel="stylesheet">
     <!-- Select2 -->
@@ -212,8 +215,7 @@
     <!--=================================================-->
     <!--Demo script [ DEMONSTRATION ]-->
     <script src="{{ url('js/demo/nifty-demo.js') }}"></script>
-        <!--Sparkline [ OPTIONAL ]-->
-    <script src="{{ url('plugins/sparkline/jquery.sparkline.min.js') }}"></script>
+     
     <!--Specify page [ SAMPLE ]-->
     {{--  <script src="{{ url('js/demo/dashboard.js') }}"></script>  --}}
     <!-- Select2 -->
@@ -222,16 +224,16 @@
     <script src="{{url('/plugins/toast-master/js/jquery.toast.js')}}"></script>
     {{--  Colorpicker  --}}
     <script src="{{url('/plugins/jquery-minicolors-master/jquery.minicolors.min.js')}}"></script>
-    {{--  Inputmask  --}}
-    <script type="text/javascript" src="{{url('/plugins/inputmask')}}/dist/inputmask.js"></script>
-    <script type="text/javascript" src="{{url('/plugins/inputmask')}}/dist/jquery.inputmask.js"></script>
-    <script type="text/javascript" src="{{url('/plugins/inputmask')}}/dist/bindings/inputmask.binding.js"></script>
-    {{--  Colorpicker  --}}
+   
+    {{--  SweetAlert  --}}
     <script src="{{url('/plugins/sweetalert/dist/sweetalert2.all.min.js')}}"></script>
     {{-- Iconpicker --}}
     <script src="{{ asset('/plugins/bootstrap-iconpicker/js/bootstrap-iconpicker.bundle.min.js') }}"></script>
     {{-- Plugin print --}}
     <script src="{{asset('/plugins/printThis-master/printThis.js')}}"></script>
+
+    {{-- Datatables --}}
+    <script src="{{asset('/plugins/datatables/datatables.min.js')}}"></script>
 
     @include('layouts.main_scripts')
     @yield('scripts')

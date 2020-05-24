@@ -148,6 +148,7 @@
 
                         <!--Submenu-->
                         <ul class="collapse">
+                            <li><a href="/clientes">Clientes</a></li>
                             <li><a href="/users">Usuarios</a></li>
                             <li><a href="/profiles">Perfiles</a></li>
                             <li><a href="/sections">Secciones</a></li>

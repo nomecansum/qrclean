@@ -74,7 +74,7 @@
     												@foreach ($niveles as $n)
     													<td class="text-center celda_{{ $n->cod_nivel }}" style="font-size: 14px; font-weight: bold">
     													    {{$n->des_nivel_acceso}}
-    													    @if (isAdmin()  && !session('cod_cliente')) ({{$n->nom_cliente}}) @endif
+    													    @if (isAdmin()  && !session('cod_cliente'))  @endif
     													</td>
     												@endforeach
     											</tr>
@@ -125,7 +125,7 @@
 								@foreach($niveles as $nivel)
 								<option selected value="{{ $nivel->cod_nivel }}">
 								    {{ $nivel->des_nivel_acceso }}
-								    @if (isAdmin() && !session('cod_cliente')) ({{$nivel->nom_cliente}}) @endif
+								    @if (isAdmin() && !session('cod_cliente')) @endif
 								</option>
 								@endforeach
 							</select>

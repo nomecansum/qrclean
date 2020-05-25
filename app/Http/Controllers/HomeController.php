@@ -118,6 +118,8 @@ class HomeController extends Controller
         return view('scan.result',compact('respuesta'));
     }
 
+
+
     public function estado_puesto($puesto,$estado){ 
         $p=DB::table('puestos')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')

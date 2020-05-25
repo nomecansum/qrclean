@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\puestos;
+use App\Models\logpuestos;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+Use Carbon\Carbon;
 
 class PuestosController extends Controller
 {
@@ -102,5 +104,37 @@ class PuestosController extends Controller
             ->get();
 
         return view('puestos.print_qr',compact('puestos'));
+    }
+
+    public function accion_estado(Request $r){
+
+        $puestos=DB::table('puestos')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            }
+        })
+        ->wherein('id_puesto',$r->lista_id)
+        ->get();
+
+        $e=DB::table('estados_puestos')->where('id_estado',$r->estado)->first();
+
+        foreach($puestos as $puesto){
+            $p=puestos::find($puesto->id_puesto);
+            $p->id_estado=$r->estado;
+            $p->fec_ult_estado=Carbon::now();
+            //Lo añadimos al log
+            $l=logpuestos::create(['id_puesto'=>$puesto->id_puesto,'id_estado'=>$r->estado,'id_user'=>Auth::user()->id]);
+            
+        }
+
+        savebitacora('Cambio de puestos '.implode(",",$r->lista_id). ' a estado '.$r->estado,"Puestos","accion_estado","OK");
+        return [
+            'title' => "Puestos",
+            'mensaje' => count($r->lista_id).' puestos actualizados a '.$e->des_estado,
+            'label'=>$e->des_estado,
+            'color'=>$e->val_color,
+            'url' => url('puestos')
+        ];
     }
 }

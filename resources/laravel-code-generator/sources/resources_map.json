@@ -33,5 +33,10 @@
         "model-name": "edificios",
         "resource-file": "edificios.json",
         "table-name": "edificios"
+    },
+    {
+        "model-name": "logpuestos",
+        "resource-file": "logpuestos.json",
+        "table-name": "log_cambios_estado"
     }
 ]

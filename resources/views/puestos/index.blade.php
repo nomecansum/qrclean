@@ -31,9 +31,9 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="">
                             <li class="dropdown-header">Cambiar estado</li>
-                            <li><div class="bg-success rounded float-left" style="width:20px; height: 20px"></div><a href="#" class="float-right">Disponible</a></li>
-                            <li><a href="#">Usado</a></li>
-                            <li><a href="#">Limpieza</a></li>
+                            <li><a href="#" data-estado="1" class="btn_estado_check"><i class="fas fa-square text-success"></i> Disponible</a></li>
+                            <li><a href="#" data-estado="2" class="btn_estado_check"><i class="fas fa-square text-danger"></i> Usado</a></li>
+                            <li><a href="#" data-estado="3" class="btn_estado_check"><i class="fas fa-square text-info"></i> Limpieza</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Acciones</li>
                             <li><a href="#">Imprimir QR</a></li>
@@ -76,7 +76,7 @@
                             @foreach($puestos as $puesto)
                             <tr class="hover-this">
                                 <td class="text-center">
-                                    <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="chk{{ $puesto->id_puesto }}" id="chk{{ $puesto->id_puesto }}">
+                                    <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chk{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}">
                                     <label class="custom-control-label"   for="chk{{ $puesto->id_puesto }}"></label>
                                 </td>
                                 <td class="thumb text-center" data-id="{{ $puesto->id_puesto }}" >
@@ -179,11 +179,37 @@
 $('.btn_estado').click(function(){
     $.get("{{ url('/puesto/estado/') }}/"+$(this).data('token')+"/"+$(this).data('estado'), function(data){
         toast_ok('Cambio de estado',data.mensaje);
-        console.log('#estado_'+$(this).data('id'));
+        //console.log('#estado_'+$(this).data('id'));
         $('#estado_'+data.id).removeClass();
         $('#estado_'+data.id).addClass('bg-'+data.color);
         $('#estado_'+data.id).html(data.label);
     }) 
+    .fail(function(err){
+        toast_error('Error',err);
+    });
+});
+
+$('.btn_estado_check').click(function(){
+//     $('.chkpuesto:checkbox:checked').each(function () {
+        
+//   });
+
+    var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+      return $(this).val();
+    }).get(); // <----
+
+    $.post('{{url('/puestos/accion_estado')}}', {_token: '{{csrf_token()}}',estado: $(this).data('estado'),lista_id:searchIDs}, function(data, textStatus, xhr) {
+        toast_ok('Acciones',data.mensaje);
+        //console.log($('.chkpuesto:checkbox:checked'));
+        $('.chkpuesto:checkbox:checked').each(function(){
+            //console.log('#estado_'+$(this).data('id'));
+            $('#estado_'+$(this).data('id')).removeClass();
+            $('#estado_'+$(this).data('id')).addClass('bg-'+data.color);
+            $('#estado_'+$(this).data('id')).html(data.label);
+        });
+
+        //console.log('success');
+    })
     .fail(function(err){
         toast_error('Error',err);
     });

@@ -16,7 +16,7 @@ class ClienteService
     public function validar_request($r,$metodo_notif){
         $validator = Validator::make($r->all(), [
             'nom_cliente' => 'required|string|max:500',
-            //'cod_sistema' => 'required|int|unique:cug_sistema,cod_sistema,cod_cliente,'.$r->cod_cliente,
+            //'cod_sistema' => 'required|int|unique:cug_sistema,cod_sistema,id_cliente,'.$r->id_cliente,
         ],
         [
             'nom_cliente.required' => 'El campo NOMBRE es obligatorio',
@@ -84,7 +84,7 @@ class ClienteService
         $cl->tel_cliente = $r->tel_cliente;
         $cl->cif = isset($r->cif) ? $r->cif : '';
         $cl->save();
-        return $cl->cod_cliente;
+        return $cl->id_cliente;
     }
 
     public function actualizar($r){
@@ -100,26 +100,23 @@ class ClienteService
         $cl->tel_cliente = $r->tel_cliente;
         $cl->cif = isset($r->cif) ? $r->cif : '';
         $cl->save();
-        return $cl->cod_cliente;
+        return $cl->id_cliente;
     }
 
     public function delete($id){
 
         //Quitamos el cliente de la lista de acceso de los usuarios
-        DB::statement("UPDATE cug_usuarios set clientes = replace(clientes,',".$id."','')");
         $clientes = clientes::find($id);
         $app = $clientes->mca_appmovil;
         $clientes->fec_borrado = Carbon::now();
         $clientes->mca_appmovil = "N";
-        $clientes->mca_actualizacion = "B";
-        $clientes->completado = "N";
         $clientes->save();
         return true;
     }
 
     public function add_a_supracliente($id,$r){
         //damos permisos para este cliente a todos los usuarios del supracliente
-        DB::table('cug_usuarios')->where('cod_cliente',$r->cod_supracliente)->update([
+        DB::table('users')->where('id_cliente',$r->cod_supracliente)->update([
             'clientes' => DB::raw('CONCAT(clientes,\','.$id.',\')')
             ]);
     }

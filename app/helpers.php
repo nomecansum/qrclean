@@ -15,7 +15,7 @@ function getProfilePic()
     return url('default.png');
 }
 
-function savebitacora($des_bitacora,$seccion=null,$tipo=null)
+function savebitacora($des_bitacora,$modulo=null,$seccion=null,$tipo='OK')
 {
    if(isset(Auth::user()->name)){
        $user=Auth::user()->name;
@@ -24,7 +24,8 @@ function savebitacora($des_bitacora,$seccion=null,$tipo=null)
     \DB::table('bitacora')->insert([
         'accion' => $des_bitacora,
         'id_usuario' =>Auth::user()->id,
-        'id_modulo' => $seccion,
+        'id_modulo' => $modulo,
+        'id_seccion' => $seccion,
         'status' => $tipo,
         'fecha' => Carbon::now()
     ]);
@@ -341,5 +342,51 @@ function validar_request($r,$metodo_notif,$tipo,$reglas,$mensajes=[]){
         }
     }  else{
         return true;
+    }
+}
+
+function validar_acceso_tabla($id,$tabla){
+    switch($tabla){
+        case "clientes":
+            $descriptivo="cliente";
+            $campo="id_cliente";
+            break;
+        case "plantas":
+            $descriptivo="planta";
+            $campo="id_planta";
+            break;
+        case "edificios":
+            $descriptivo="edificio";
+            $campo="id_edificio";
+            break;
+        case "users":
+            $descriptivo="usuario";
+            $campo="id";
+            break;
+        case "puestos":
+            $descriptivo="puesto";
+            $campo="id_puesto";
+            break;
+        default:
+            $descriptivo=$tabla;
+    }
+
+    $c = DB::table($tabla)
+        ->where($campo,$id)
+        ->when($tabla!='clientes', function($q) use($tabla){
+            $q->join('clientes','clientes.id_cliente',$tabla.'.id_cliente');
+        })
+        ->whereNull('clientes.fec_borrado')
+        ->where(function($q){
+            if (!isAdmin()){
+                $q->orWhereIn('cug_clientes.cod_cliente',clientes());
+            }
+        })
+    ->first();
+    if(empty($c))
+    {
+        savebitacora("BLOQUEO DE ACCESO --> ERROR: El ".$descriptivo." ".$id." no existe o no tienes acceso",'validar_acceso_tabla',$tabla);
+        flash("ERROR: El ".$descriptivo." ".$id." no existe o no tienes acceso")->error();
+        return redirect()->back()->withInput();
     }
 }

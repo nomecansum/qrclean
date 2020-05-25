@@ -19,24 +19,31 @@ class PuestosController extends Controller
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-            ->where('puestos.id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->take(35)
             ->get();
         return view('puestos.index',compact('puestos'));
     }
 
     public function edit($id){
+        
         if($id==0){
             $puesto=new puestos;
             $puesto->id=0;
         } else {
+            validar_acceso_tabla($id,"puestos");
             $puesto=puestos::find($id);
         }
-
         return view('puestos.edit',compact('puesto'));
 
     }
 
     public function ver_puesto($id){
+        validar_acceso_tabla($id,"puestos");
         $puesto=puestos::find($id);
         $url_puesto=explode("?",$puesto->url);
         $url=$url_puesto[0]."?800X600";
@@ -45,9 +52,11 @@ class PuestosController extends Controller
     }
 
     public function delete($id){
+        validar_acceso_tabla($id,"puestos");
         $puesto=puestos::find($id);
         $puesto->delete();
         flash('puesto '.$puesto->etiqueta.' Borrada')->success();
+        savebitacora('puesto '.$puesto->etiqueta. ' borrado',"Puestos","delete","OK");
         return redirect('/puestos');
 
     }
@@ -55,7 +64,7 @@ class PuestosController extends Controller
     public function update(Request $r){
         try{
 
-
+            validar_acceso_tabla($id,"puestos");
             if($r->id==0){
                 $puesto=puestos::create($r->all());
             } else {
@@ -63,6 +72,7 @@ class PuestosController extends Controller
                 $puesto->update($r->all());
             }
             $puesto->save();
+            savebitacora('puesto '.$r->etiqueta. ' actualizado',"Puestos","Update","OK");
             return [
                 'title' => "puestos",
                 'message' => 'puesto '.$r->etiqueta. ' actualizado',
@@ -84,7 +94,11 @@ class PuestosController extends Controller
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-            ->where('puestos.id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
             ->get();
 
         return view('puestos.print_qr',compact('puestos'));

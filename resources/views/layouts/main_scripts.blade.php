@@ -134,6 +134,12 @@
       modal_open = false;
     })
 
+    //Muetra el fichero seleccionado en los custom file input
+    $('.custom-file-input').on('change',function(){
+        var fileName = $(this).val();
+        $(this).next('.custom-file-label').html(fileName);
+    })
+
 
     $('.form-ajax').submit(form_ajax_submit);
 
@@ -199,6 +205,45 @@
         });
     }
 
+    function get_ajax(url,spin){
+            console.log(url+" "+spin);
+            if(spin!=null){
+                $('#'+spin).show();
+            }
+            $.ajax({
+                url: url
+            })
+            .done(function(data) {
+                if(data.error){
+                    toast_error(data.title,data.error);
+                } else if(data.warning){
+                    toast_warning(data.title,data.alert);
+                } else{
+                    toast_ok(data.title,data.message);
+                }
+                $('.modal').modal('hide');
+                setTimeout(()=>{
+                    window.open(data.url,'_self');
+                },3000)
+            })
+            .fail(function(err) {
+                let error = JSON.parse(err.responseText);
+                let html = "";
+                console.log(error);
+                $.each(error.errors, function(index, val) {
+                    html += "- "+$(this)[0]+"<br>";
+                });
+                toast_error("Error",html);
+            })
+            .always(function() {
+                fin_espere();
+                console.log("complete");
+                if(spin!=null){
+                    $('#'+spin).hide();
+                }
+            });
+        }
+
 
     $('#loginform,#recoverform').submit(function(event) {
         event.preventDefault();
@@ -256,4 +301,19 @@
     function eraseCookie(name) {   
         document.cookie = name+'=; Max-Age=-99999999;';  
     }
+
+    $('.dataTable').dataTable({
+        "lengthChange": false,
+        "pageLength":100,
+        "responsive": true,
+        "bSort": true,
+        "scrollX": true,
+        "language": {
+            "paginate": {
+              "previous": '<i class="demo-psi-arrow-left"></i>',
+              "next": '<i class="demo-psi-arrow-right"></i>'
+            }
+        },
+        columnDefs: [ { targets: 'no-sort', orderable: false } ],
+    });
 </script>

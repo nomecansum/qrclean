@@ -72,10 +72,10 @@ class CustomersController extends Controller
 
             DB::commit();
             return [
-                'title' => trans('strings.business'),
+                'title' => 'Clientes',
                 'message' => 'Creado cliente '.$r->nom_cliente,
                 //'url' => url('business')
-                'url' => url('business/edit') . "/" . $c
+                'url' => url('clientes')
             ];
 
         } catch (\Exception $e) {
@@ -84,9 +84,9 @@ class CustomersController extends Controller
             savebitacora("Error al crear cliente ".$r->nom_cliente. $e->getMessage(),'CustomerController','Save');
 
             return [
-                'error' => trans('strings.business'),
+                'error' => 'Clientes',
                 'message' => "Error al crear cliente ".mensaje_excepcion($e),
-                //'url' => url('business')
+                //'url' => url('clientes')
             ];
         }
     }
@@ -106,18 +106,18 @@ class CustomersController extends Controller
             savebitacora("Actualizados datos de cliente ".$r->nom_cliente,$r->id_cliente);
 
             return [
-                'title' => trans('strings.business'),
-                'message' => $r->nom_cliente.': '.trans('strings._configuration.business.updated'),
-                'url' => url('business')
+                'title' => 'Clientes',
+                'message' => $r->nom_cliente.': Actualizado',
+                'url' => url('clientes')
             ];
         } catch (\Exception $e) {
             DB::rollback();
-            savebitacora("Error al actualizar cliente ".$r->nom_cliente. $e->getMessage(),null);
+            savebitacora("Error al actualizar cliente ".$r->nom_cliente. $e->getMessage(),'CustomerController','Update');
 
             return [
-                'error' => trans('strings.business'),
+                'error' => 'Clientes',
                 'message' => "Error al actualizar cliente ".mensaje_excepcion($e),
-                //'url' => url('business')
+                //'url' => url('clientes')
             ];
         }
     }
@@ -129,7 +129,7 @@ class CustomersController extends Controller
         $clsvc = new ClienteService;
         $cliente = $clsvc->delete($id);
 
-        savebitacora("Borrado de cliente [".$id."] completado con éxito", null);
+        savebitacora("Borrado de cliente [".$id."] completado con éxito", 'CustomerController','DeleteCompleto');
 		flash("Borrado de cliente " . DB::table('clientes')->where('id_cliente', $id)->value('nom_cliente') . " con id " . $id . " completado con éxito")->success();
         return redirect()->back();
     }
@@ -152,15 +152,10 @@ class CustomersController extends Controller
                 throw new \Exception("Error en la provision del cliente en la APP: " . $resultado_app["msg"]);
             }
         }
-
-        //Borramos en las tablas principales para que se disparen el resto de cascade
-        //DB::table('centros')->where('id_cliente',$id)->delete();
-        //DB::table('empleados')->where('id_cliente',$id)->delete();
-        //DB::table('colectivos')->where('id_cliente',$id)->delete();
         DB::table('users')->where('id_cliente',$id)->delete();
         DB::table('clientes')->where('id_cliente',$id)->delete();
 
-        savebitacora("Borrado de cliente [".$id."] completado con éxito", null);
+        savebitacora("Borrado de cliente [".$id."] completado con éxito", 'CustomerController','DeleteCompleto');
         flash("Borrado completo de cliente " . DB::table('clientes')->where('id_cliente', $id)->value('nom_cliente') . " con id " . $id . " completado con éxito")->success();
         return redirect()->back();
     }

@@ -25,6 +25,11 @@ class UsersController extends Controller
     {
         $usersObjects = DB::table('users')
         ->join('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('users.id_cliente',Auth;::user()->id_cliente);
+            }
+        })
         ->paginate(25);
         //$usersObjects = users::with('grupo','perfile')->paginate(25);
 
@@ -91,22 +96,6 @@ class UsersController extends Controller
         }
     }
 
-    /**
-     * Display the specified users.
-     *
-     * @param int $id
-     *
-     * @return Illuminate\View\View
-     */
-    public function show($id)
-    {
-        $users = DB::table('users')
-        ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
-        ->where('id',$id)
-        -first();
-
-        return view('users.show', compact('users'));
-    }
 
     /**
      * Show the form for editing the specified users.
@@ -117,6 +106,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+        validar_acceso_tabla($id,"users");
         $users = users::findOrFail($id);
         $Perfiles = niveles_acceso::all();
 
@@ -133,6 +123,7 @@ class UsersController extends Controller
      */
     public function update($id, Request $request)
     {
+        validar_acceso_tabla($id,"users");
         $img_usuario = "";
         $data = $this->getData($request);
         try {
@@ -179,6 +170,7 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
+        validar_acceso_tabla($id,"users");
         try {
             $users = users::findOrFail($id);
             $users->delete();

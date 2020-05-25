@@ -85,6 +85,27 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('edit/{id}',['middleware'=>'permissions:["Clientes"],["C"]', 'uses' => 'CustomersController@edit']);
         Route::post('update',['middleware'=>'permissions:["Clientes"],["C"]', 'uses' => 'CustomersController@update']);
         Route::get('delete/{id}',['middleware'=>'permissions:["Clientes"],["D"]', 'uses' => 'CustomersController@delete']);
+        Route::get('gen_key',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@gen_key']);
+    });
+
+    Route::group(['prefix' => 'edificios'], function () {
+        Route::get('/', 'EdificiosController@index')->name('edificios.edificios.index');
+        Route::get('/create','EdificiosController@create')->name('edificios.edificios.create');
+        Route::get('/show/{edificios}','EdificiosController@show')->name('edificios.edificios.show')->where('id', '[0-9]+');
+        Route::get('/edit/{edificios}','EdificiosController@edit')->name('edificios.edificios.edit')->where('id', '[0-9]+');
+        Route::post('/', 'EdificiosController@store')->name('edificios.edificios.store');
+        Route::put('edificios/{edificios}', 'EdificiosController@update')->name('edificios.edificios.update')->where('id', '[0-9]+');
+        Route::get('/delete/{edificios}','EdificiosController@destroy')->name('edificios.edificios.destroy')->where('id', '[0-9]+');
+    });
+
+    Route::group(['prefix' => 'plantas'], function () {
+        Route::get('/', 'PlantasController@index')->name('plantas.plantas.index');
+        Route::get('/create','PlantasController@create')->name('plantas.plantas.create');
+        Route::get('/show/{plantas}','PlantasController@show')->name('plantas.plantas.show')->where('id', '[0-9]+');
+        Route::get('/edit/{plantas}','PlantasController@edit')->name('plantas.plantas.edit')->where('id', '[0-9]+');
+        Route::post('/', 'PlantasController@store')->name('plantas.plantas.store');
+        Route::put('plantas/{plantas}', 'PlantasController@update')->name('plantas.plantas.update')->where('id', '[0-9]+');
+        Route::get('/delete/{plantas}','PlantasController@destroy')->name('plantas.plantas.destroy')->where('id', '[0-9]+');
     });
 
     Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);
@@ -95,6 +116,10 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('removePermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions_user']);
 
 });
+
+
+
+
 
 
 

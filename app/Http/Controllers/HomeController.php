@@ -124,6 +124,7 @@ class HomeController extends Controller
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where('token',$puesto)
             ->first();
+        $e=DB::table('estados_puestos')->where('id_estado',$estado)->first();
         if(!isset($p)){
             //Error puesto no encontrado
             $respuesta=[
@@ -139,31 +140,46 @@ class HomeController extends Controller
                 case 1:
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." listo para ser usado de nuevo. Muchas gracias"
+                        'mensaje'=>"Puesto ".$p->cod_puesto." listo para ser usado de nuevo. Muchas gracias",
+                        'color'=>'success',
+                        'label'=>$e->des_estado,
+                        'id'=>$p->id_puesto,
                     ];
                     break;
                 case 2:
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." esta ahora ocupado por usted"
+                        'mensaje'=>"Puesto ".$p->cod_puesto." esta ahora ocupado por usted",
+                        'color'=>'danger',
+                        'label'=>$e->des_estado,
+                        'id'=>$p->id_puesto,
                     ];
                     break;
                 case 3:
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." marcado para limpiar. Muchas gracias"
+                        'mensaje'=>"Puesto ".$p->cod_puesto." marcado para limpiar. Muchas gracias",
+                        'color'=>'info',
+                        'label'=>$e->des_estado,
+                        'id'=>$p->id_puesto,
                     ];
                     break;
                 case 4:
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." marcado como inoperativo"
+                        'mensaje'=>"Puesto ".$p->cod_puesto." marcado como inoperativo",
+                        'color'=>'gray',
+                        'label'=>$e->des_estado,
+                        'id'=>$p->id_puesto,
                     ];
                     break;
                 case 4:
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." marcado como bloqueado"
+                        'mensaje'=>"Puesto ".$p->cod_puesto." marcado como bloqueado",
+                        'color'=>'danger',
+                        'label'=>$e->des_estado,
+                        'id'=>$p->id_puesto,
                     ];
                     break;
                 default:

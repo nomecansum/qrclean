@@ -23,5 +23,15 @@
         "model-name": "clientes",
         "resource-file": "clientes.json",
         "table-name": "clientes"
+    },
+    {
+        "model-name": "plantas",
+        "resource-file": "plantas.json",
+        "table-name": "plantas"
+    },
+    {
+        "model-name": "edificios",
+        "resource-file": "edificios.json",
+        "table-name": "edificios"
     }
 ]

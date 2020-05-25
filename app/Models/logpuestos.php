@@ -35,6 +35,7 @@ class logpuestos extends Model
     protected $fillable = [
                   'fecha',
                   'id_estado',
+                  'id_user',
                   'id_puesto'
               ];
 

@@ -123,8 +123,9 @@ class PuestosController extends Controller
             $p=puestos::find($puesto->id_puesto);
             $p->id_estado=$r->estado;
             $p->fec_ult_estado=Carbon::now();
+            $p->save();
             //Lo añadimos al log
-            $l=logpuestos::create(['id_puesto'=>$puesto->id_puesto,'id_estado'=>$r->estado,'id_user'=>Auth::user()->id]);
+            logpuestos::create(['id_puesto'=>$puesto->id_puesto,'id_estado'=>$r->estado,'id_user'=>Auth::user()->id,'fecha'=>Carbon::now()]);
             
         }
 

@@ -197,6 +197,10 @@ $('.btn_estado_check').click(function(){
     var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
       return $(this).val();
     }).get(); // <----
+    if(searchIDs.length==0){
+        toast_error('Error','Debe seleccionar algún puesto');
+        exit();
+    }
 
     $.post('{{url('/puestos/accion_estado')}}', {_token: '{{csrf_token()}}',estado: $(this).data('estado'),lista_id:searchIDs}, function(data, textStatus, xhr) {
         toast_ok('Acciones',data.mensaje);

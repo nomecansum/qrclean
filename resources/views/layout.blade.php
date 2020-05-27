@@ -13,7 +13,7 @@
      <link href="{{ url('/plugins/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    {{--  <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">  --}}
     <!--Nifty Stylesheet [ REQUIRED ]-->
 
     <link href="{{ url('/css/nifty.min.css') }}" rel="stylesheet">
@@ -51,6 +51,8 @@
     <link href="{{url('/plugins/sweetalert/dist/sweetalert2.min.css')}}" rel="stylesheet" media="all">
     {{-- Iconpicker --}}
     <link href="{{ asset('/plugins/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css') }}" rel="stylesheet">
+
+
 
     <!--=================================================
 

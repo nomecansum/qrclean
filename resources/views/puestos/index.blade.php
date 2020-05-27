@@ -58,7 +58,7 @@
             <div class="panel-heading">
                 <h3 class="panel-title">Puestos</h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body w-100">
                 <div class="table-responsive w-100">
                     <form action="{{url('/puestos/print_qr')}}" method="POST"  id="frmpuestos" enctype='multipart/form-data'>
                         @csrf
@@ -192,6 +192,7 @@ $('.btn_estado').click(function(){
         $('#estado_'+data.id).html(data.label);
     }) 
     .fail(function(err){
+        console.log(err);
         toast_error('Error',err);
     });
 });
@@ -219,7 +220,7 @@ $('.btn_estado_check').click(function(){
         //console.log('success');
     })
     .fail(function(err){
-        toast_error('Error',err);
+        toast_error('Error',err.responseJSON.message);
     });
 });
 

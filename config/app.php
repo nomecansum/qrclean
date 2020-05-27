@@ -125,7 +125,9 @@ return [
 
 
     'url_base_scan'=>'https://qrclean.ddns.net/puesto/',
-
+    //Rutas de los WKLHTML2PDF
+    'BIN_SNAPPY_PDF'=>env('BIN_SNAPPY_PDF',"C:/Progra~1/wkhtmltopdf/bin/wkhtmltopdf.exe"),
+    'BIN_SNAPPY_IMG'=>env('BIN_SNAPPY_IMG',"C:/Progra~1/wkhtmltopdf/bin/wkhtmltoimage.exe"),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -235,7 +237,10 @@ return [
 
 
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
 
     ],
 

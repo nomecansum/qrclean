@@ -165,3 +165,4 @@ class CustomersController extends Controller
 		return Str::random(64);
 	}
 }
+

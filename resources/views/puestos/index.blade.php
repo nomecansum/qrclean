@@ -36,8 +36,8 @@
                             <li><a href="#" data-estado="3" class="btn_estado_check"><i class="fas fa-square text-info"></i> Limpieza</a></li>
                             <li class="divider"></li>
                             <li class="dropdown-header">Acciones</li>
-                            <li><a href="#">Imprimir QR</a></li>
-                            <li><a href="#">Imprimir hoja de trabajo</a></li>
+                            <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
+                            <li><a href="#" class="btn_asignar" ><i class="fad fa-broom"></i>Ruta de limpieza</a></li>
                         </ul>
                     </div>
                 </div>
@@ -60,91 +60,94 @@
             </div>
             <div class="panel-body">
                 <div class="table-responsive w-100">
-                    <table class="table table-striped table-hover table-vcenter  dataTable " id="tablapuestos"  style="width: 98%">
-                        <thead>
-                            <tr>
-                                <th style="width: 10px" class="no-sort"><input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos"></label></th>
-                                <th style="width: 20px" class="no-sort"></th>
-                                <th>Puesto</th>
-                                <th>Edificio</th>
-                                <th>Planta</th>
-                                <th class="text-center" style="width: 100px">Estado</th>
-                                <td class="no-sort"></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($puestos as $puesto)
-                            <tr class="hover-this">
-                                <td class="text-center">
-                                    <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chk{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}">
-                                    <label class="custom-control-label"   for="chk{{ $puesto->id_puesto }}"></label>
-                                </td>
-                                <td class="thumb text-center" data-id="{{ $puesto->id_puesto }}" >
-                                    @isset($puesto->val_icono)
-                                        <i class="{{ $puesto->val_icono }} fa-2x" style="color:{{ $puesto->val_color }}"></i>
-                                    @endisset
-                                </td>
-                                <td class="td" data-id="{{ $puesto->id_puesto }}"><b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}</td>
-                                <td class="td" data-id="{{ $puesto->id_puesto }}">{{ $puesto->des_edificio }}</td>
-                                <td class="td" data-id="{{ $puesto->id_puesto }}">{{$puesto->des_planta}}</td>
-                                <td class="td text-center" data-id="{{ $puesto->id_puesto }}">
-                                    @switch($puesto->id_estado)
-                                        @case(1)
-                                            <div class="bg-success rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
-                                        @case(2)
-                                            <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
-                                        @case(3)
-                                            <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
-                                        @case(4)
-                                            <div class="bg-secondary rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
-                                        @case(5)
-                                            <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
-                                        @default
-                                    @endswitch
-                                    {{$puesto->des_estado}}
-                                    </div>
-                                </td>
-                                
-                                <td style="position: relative;">
-                                    <div class="btn-group btn-group-xs pull-right floating-like-gmail" role="group">
-                                        <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver puesto" data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-eye" aria-hidden="true"></span></a>
-                                        <a href="#"  class="btn btn-info btn_editar add-tooltip" onclick="editar({{ $puesto->id_puesto }})" title="Editar puesto" data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>
-                                        <a href="#eliminar-puesto-{{$puesto->id_puesto}}" data-target="#eliminar-puesto-{{$puesto->id_puesto}}" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span></a>
-                                    </div>
-                                    <div class="btn-group btn-group-xs pull-right floating-like-gmail" role="group">
-                                        <a href="#"  class="btn btn-success btn_estado add-tooltip thumb"  title="Disponible" data-token="{{ $puesto->token }}"  data-estado="1" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-thumbs-up" aria-hidden="true"></span></a>
-                                        <a href="#"  class="btn btn-danger btn_estado add-tooltip thumb"  title="Usado"  data-token="{{ $puesto->token }}"  data-estado="2" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-lock-alt" aria-hidden="true"></span></a>
-                                        <a href="#"  class="btn btn-info btn_estado add-tooltip thumb"  title="Limpiar"  data-token="{{ $puesto->token }}"  data-estado="3" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-broom" aria-hidden="true"></span></a>
-                                    </div>
-                                    <div class="modal fade" id="eliminar-puesto-{{$puesto->id_puesto}}" style="display: none;">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
+                    <form action="{{url('/puestos/print_qr')}}" method="POST"  id="frmpuestos" enctype='multipart/form-data'>
+                        @csrf
+                        <table class="table table-striped table-hover table-vcenter dataTable" id="tablapuestos"  style="width: 98%">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px" class="no-sort"><input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos"></label></th>
+                                    <th style="width: 20px" class="no-sort"></th>
+                                    <th>Puesto</th>
+                                    <th>Edificio</th>
+                                    <th>Planta</th>
+                                    <th class="text-center" style="width: 100px">Estado</th>
+                                    <td class="no-sort"></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($puestos as $puesto)
+                                <tr class="hover-this">
+                                    <td class="text-center">
+                                        <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chk{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}">
+                                        <label class="custom-control-label"   for="chk{{ $puesto->id_puesto }}"></label>
+                                    </td>
+                                    <td class="thumb text-center" data-id="{{ $puesto->id_puesto }}" >
+                                        @isset($puesto->val_icono)
+                                            <i class="{{ $puesto->val_icono }} fa-2x" style="color:{{ $puesto->val_color }}"></i>
+                                        @endisset
+                                    </td>
+                                    <td class="td" data-id="{{ $puesto->id_puesto }}"><b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}</td>
+                                    <td class="td" data-id="{{ $puesto->id_puesto }}">{{ $puesto->des_edificio }}</td>
+                                    <td class="td" data-id="{{ $puesto->id_puesto }}">{{$puesto->des_planta}}</td>
+                                    <td class="td text-center" data-id="{{ $puesto->id_puesto }}">
+                                        @switch($puesto->id_estado)
+                                            @case(1)
+                                                <div class="bg-success rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @case(2)
+                                                <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @case(3)
+                                                <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @case(4)
+                                                <div class="bg-secondary rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @case(5)
+                                                <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @default
+                                        @endswitch
+                                        {{$puesto->des_estado}}
+                                        </div>
+                                    </td>
+                                    
+                                    <td style="position: relative;">
+                                        <div class="btn-group btn-group-xs pull-right floating-like-gmail" role="group">
+                                            <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver puesto" data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-eye" aria-hidden="true"></span></a>
+                                            <a href="#"  class="btn btn-info btn_editar add-tooltip" onclick="editar({{ $puesto->id_puesto }})" title="Editar puesto" data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>
+                                            <a href="#eliminar-puesto-{{$puesto->id_puesto}}" data-target="#eliminar-puesto-{{$puesto->id_puesto}}" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                                        </div>
+                                        <div class="btn-group btn-group-xs pull-right floating-like-gmail" role="group">
+                                            <a href="#"  class="btn btn-success btn_estado add-tooltip thumb"  title="Disponible" data-token="{{ $puesto->token }}"  data-estado="1" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-thumbs-up" aria-hidden="true"></span></a>
+                                            <a href="#"  class="btn btn-danger btn_estado add-tooltip thumb"  title="Usado"  data-token="{{ $puesto->token }}"  data-estado="2" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-lock-alt" aria-hidden="true"></span></a>
+                                            <a href="#"  class="btn btn-info btn_estado add-tooltip thumb"  title="Limpiar"  data-token="{{ $puesto->token }}"  data-estado="3" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-broom" aria-hidden="true"></span></a>
+                                        </div>
+                                        <div class="modal fade" id="eliminar-puesto-{{$puesto->id_puesto}}" style="display: none;">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
 
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">×</span></button>
-                                                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                                                    <h4 class="modal-title">¿Borrar puesto {{$puesto->des_puesto}}?</h4>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a class="btn btn-info" href="{{url('/puestos/delete',$puesto->id_puesto)}}">Si</a>
-                                                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span></button>
+                                                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                                                        <h4 class="modal-title">¿Borrar puesto {{$puesto->des_puesto}}?</h4>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <a class="btn btn-info" href="{{url('/puestos/delete',$puesto->id_puesto)}}">Si</a>
+                                                        <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                </td>
+                                    </td>
 
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>
@@ -153,6 +156,10 @@
 
 @section('scripts')
 <script>
+
+    $('#frmpuestos').submit(form_pdf_submit);
+
+
 	$('#btn_nueva_puesto').click(function(){
        $('#editorCAM').load("{{ url('/puestos/edit/0') }}", function(){
 		animateCSS('#editorCAM','bounceInRight');
@@ -190,9 +197,6 @@ $('.btn_estado').click(function(){
 });
 
 $('.btn_estado_check').click(function(){
-//     $('.chkpuesto:checkbox:checked').each(function () {
-        
-//   });
 
     var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
       return $(this).val();
@@ -217,6 +221,36 @@ $('.btn_estado_check').click(function(){
     .fail(function(err){
         toast_error('Error',err);
     });
+});
+
+$('.btn_qr').click(function(){
+    //block_espere();
+    var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+      return $(this).val();
+    }).get(); // <----
+    if(searchIDs.length==0){
+        toast_error('Error','Debe seleccionar algún puesto');
+        exit();
+    }
+//
+    $('#frmpuestos').attr('action',"{{url('/puestos/print_qr')}}");
+    $('#frmpuestos').submit();
+    //
+});
+
+$('.btn_asignar').click(function(){
+    //block_espere();
+    var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+      return $(this).val();
+    }).get(); // <----
+    if(searchIDs.length==0){
+        toast_error('Error','Debe seleccionar algún puesto');
+        exit();
+    }
+    
+    
+
+    //fin_espere();
 });
 
 </script>

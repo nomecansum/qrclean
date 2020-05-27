@@ -17,11 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 ////////////////////////// RUTAS PARA LA OPERACION DE USUARIOS SIN LOGIN ////////////////////////////////
-Route::view('/', 'scan');
-Route::post('/getsitio','HomeController@getsitio');
-Route::get('/setqr/{sitio}','HomeController@setqr');
-Route::get('/getqr/{sitio}','HomeController@getqr');
-Route::get('/print','PuestosController@print_qr');
+//Route::view('/', 'scan');
+//Route::post('/getsitio','HomeController@getsitio');
+// Route::get('/setqr/{sitio}','HomeController@setqr');
+// Route::get('/getqr/{sitio}','HomeController@getqr');
 Route::get('/puesto/{puesto}','HomeController@getpuesto');
 Route::get('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
 
@@ -34,7 +33,9 @@ Route::get('/logout','Auth\LoginController@logout');
 
 Route::group(['middleware' => 'auth'], function() {
     //Pagina pricipal
+    Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@index');
+    Route::view('/scan', 'scan');
     //
 
     Route::group(['prefix' => 'users'], function () {
@@ -87,7 +88,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/ver_puesto/{id}',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@ver_puesto']);
         Route::get('/savesnapshot/{id}',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@savesnapshot']);
         Route::post('/accion_estado',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@accion_estado']);
-        
+        Route::Post('/print_qr','PuestosController@print_qr');
+        Route::get('/mapa','PuestosController@mapa');
     });
 
     Route::group(['prefix' => 'edificios'], function () {

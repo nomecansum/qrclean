@@ -127,7 +127,7 @@
                     <li>
                         <a href="#">
                             <i class="fad fa-browser"></i>
-                            <span class="menu-title">Puestos</span>
+                            <span class="menu-title">Parametrizacion</span>
                             <i class="arrow"></i>
                         </a>
 
@@ -135,8 +135,8 @@
                         <ul class="collapse">
                             <li><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li>
                             <li><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li>
-                            <li><a href="/puestos"> <i class="fad fa-browser"></i> Puestos</a></li>
-                            <li><a href="/print"><i class="fad fa-print"></i> Etiquetas</a></li>
+                            <li><a href="/puestos"> <i class="fad fa-user"></i> Puestos</a></li>
+                            <li><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li>
                         </ul>
                     </li>
                     <li>

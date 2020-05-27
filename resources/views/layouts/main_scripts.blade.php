@@ -53,7 +53,7 @@
     function block_espere(mensaje="Cargando... espere"){
         sw=Swal.fire({
             title: mensaje,
-            footer: '<img src="/imgs/Mosaic_brand_20.png" class="float-right">',
+            footer: '<img src="/img/Mosaic_brand_20.png" class="float-right">',
             allowEscapeKey: true,
             allowOutsideClick: false,
             timer: 90000
@@ -205,6 +205,28 @@
         });
     }
 
+
+    function form_pdf_submit(event){
+        block_espere("Generando PDF...");
+
+        $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
+            block_espere("Generando PDF...");
+            fin_espere();
+            toast_ok('Generacion de PDF','PDF Generado');
+        })
+        .fail(function(err) {
+            let error = JSON.parse(err.responseText);
+            console.log(error);
+
+            toast_error("ERROR",error.message);
+        })
+        .always(function() {
+            fin_espere();
+            //console.log("complete");
+            $(this).find('[type="submit"]').attr('disabled',false);
+        });
+    }
+
     function get_ajax(url,spin){
             console.log(url+" "+spin);
             if(spin!=null){
@@ -304,7 +326,7 @@
 
     $('.dataTable').dataTable({
         "lengthChange": false,
-        "pageLength":100,
+        "pageLength":40,
         "responsive": true,
         "bSort": true,
         "scrollX": true,

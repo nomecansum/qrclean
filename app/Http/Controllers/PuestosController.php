@@ -10,6 +10,7 @@ use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 Use Carbon\Carbon;
+use PDF;
 
 class PuestosController extends Controller
 {
@@ -26,7 +27,6 @@ class PuestosController extends Controller
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 }
             })
-            ->take(35)
             ->get();
         return view('puestos.index',compact('puestos'));
     }
@@ -90,7 +90,7 @@ class PuestosController extends Controller
         }
     }
 
-    public function print_qr(){
+    public function print_qr(Request $r){
 
         $puestos=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -101,9 +101,13 @@ class PuestosController extends Controller
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->wherein('id_puesto',$r->lista_id)
             ->get();
-
-        return view('puestos.print_qr',compact('puestos'));
+        
+        $filename='Codigos_QR Puestos_'.Auth::user()->id_cliente.'_.pdf';
+        $pdf = PDF::loadView('puestos.print_qr',compact('puestos'));
+        return $pdf->download($filename);
+        //return view('puestos.print_qr',compact('puestos'));
     }
 
     public function accion_estado(Request $r){
@@ -137,5 +141,36 @@ class PuestosController extends Controller
             'color'=>$e->val_color,
             'url' => url('puestos')
         ];
+    }
+
+    public function mapa(){
+
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $edificios=DB::table('edificios')
+        ->select('id_edificio','des_edificio')
+        ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
+        ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            }
+        })
+        ->get();
+        
+        return view('puestos.mapa',compact('puestos','edificios'));
     }
 }

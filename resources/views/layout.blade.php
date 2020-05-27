@@ -13,7 +13,9 @@
      <link href="{{ url('/plugins/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
     <!--Nifty Stylesheet [ REQUIRED ]-->
+
     <link href="{{ url('/css/nifty.min.css') }}" rel="stylesheet">
     <!--Nifty Premium Icon [ DEMONSTRATION ]-->
     <link href="{{ url('/css/demo/nifty-demo-icons.min.css/') }}" rel="stylesheet">

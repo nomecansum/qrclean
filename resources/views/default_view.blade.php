@@ -18,7 +18,14 @@
 @endsection
 
 @section('content')
+<div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title">Titulo</h3>
+    </div>
+    <div class="panel-body">
 
+    </div>
+</div>
 
 @endsection
 

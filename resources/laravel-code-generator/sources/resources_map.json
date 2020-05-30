@@ -38,5 +38,15 @@
         "model-name": "logpuestos",
         "resource-file": "logpuestos.json",
         "table-name": "log_cambios_estado"
+    },
+    {
+        "model-name": "bitacora",
+        "resource-file": "bitacoras.json",
+        "table-name": "bitacora"
+    },
+    {
+        "model-name": "estados",
+        "resource-file": "estados.json",
+        "table-name": "estados_puestos"
     }
 ]

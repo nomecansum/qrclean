@@ -56,8 +56,8 @@
             <img src="{{ url('/img/Mosaic_brand_white.png') }}" style="height: 100px">
         </div>
        
-        <div class="pad-all text-center text-secondary">
-            <h3>Welcome back to the Dashboard.</h3>
+        <div class="pad-all text-center text-primary mt-3">
+            <div class="text-primary text-3x font-bold">Bienvenido de nuevo {{ Auth::user()->name }}</div>
             <p1>Scroll down to see quick links and overviews of your Server, To do list, Order status or get some Help using Nifty.<p></p>
         </p1></div>
     </div>

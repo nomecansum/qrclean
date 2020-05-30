@@ -258,11 +258,11 @@
     overflow-y: auto;
 }
 
-.select2-selection__choice {
+/* .select2-selection__choice {
     background-color: #cfcfcf !important;
     color: #000 !important;
     border: 1px solid #444 !important;
-}
+} */
 .select2-selection--multiple{
     color: #000;
 }
@@ -345,5 +345,22 @@
 
 
 .rounded{
+  border-radius: 4px;
+}
+.rounded2{
+  border-radius: 6px;
+}
+.rounded3{
   border-radius: 8px;
+}
+.rounded4{
+  border-radius: 10px;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+td{
+  font-size: 14px;
 }

@@ -127,32 +127,33 @@
                     <li>
                         <a href="#">
                             <i class="fad fa-browser"></i>
-                            <span class="menu-title">Parametrizacion</span>
+                            @if(checkPermissions(['Parametrizacion'],['R']))<span class="menu-title">Parametrizacion</span> @endif
                             <i class="arrow"></i>
                         </a>
 
                         <!--Submenu-->
                         <ul class="collapse">
-                            <li><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li>
-                            <li><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li>
-                            <li><a href="/puestos"> <i class="fad fa-user"></i> Puestos</a></li>
-                            <li><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li>
+                            @if(checkPermissions(['Edificios'],['R']))<li><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li> @endif
+                            @if(checkPermissions(['Plantas'],['R']))<li><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li> @endif
+                            @if(checkPermissions(['Puestos'],['R']))<li><a href="/puestos"> <i class="fad fa-user"></i> Puestos</a></li> @endif
+                            @if(checkPermissions(['Puestos'],['R']))<li><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
                         </ul>
                     </li>
                     <li>
                         <a href="#">
                             <i class="fa fa-cog"></i>
-                            <span class="menu-title">Configuracion</span>
+                            @if(checkPermissions(['Usuarios'],['R']))<span class="menu-title">Configuracion</span> @endif
                             <i class="arrow"></i>
                         </a>
 
                         <!--Submenu-->
                         <ul class="collapse">
-                            <li><a href="/clientes">Clientes</a></li>
-                            <li><a href="/users">Usuarios</a></li>
-                            <li><a href="/profiles">Perfiles</a></li>
-                            <li><a href="/sections">Secciones</a></li>
-                            <li><a href="/profile-permissions">Permisos</a></li>
+                            @if(checkPermissions(['Bitacora'],['R']))<li><a href="/bitacoras">Bitacora</a></li> @endif
+                            @if(checkPermissions(['Clientes'],['R']))<li><a href="/clientes">Clientes</a></li> @endif
+                            @if(checkPermissions(['Usuarios'],['R']))<li><a href="/users">Usuarios</a></li> @endif
+                            @if(checkPermissions(['Perfiles'],['R']))<li><a href="/profiles">Perfiles</a></li> @endif
+                            @if(checkPermissions(['Secciones'],['R']))<li><a href="/sections">Secciones</a></li> @endif
+                            @if(checkPermissions(['Permisos'],['R']))<li><a href="/profile-permissions">Permisos</a></li> @endif
 
                         </ul>
                     </li>
@@ -173,105 +174,5 @@
                 <!--End widget-->
             </div>
         </div>
-
-    <!--================================-->
-    <!--End menu-->
-    @if(checkPermissions(['Usuarios'],['R']))
-
-        <ul class="collapse">
-            <li><a href="/users">Usuarios</a></li>
-        </ul>
-
-        @endif
-
-
-        @if(checkPermissions(['Perfiles'],['R']))
-
-            <ul class="collapse">
-                <li><a href="/profiles">Perfiles</a></li>
-            </ul>
-
-        @endif
-
-        @if(checkPermissions(['Secciones'],['R']))
-
-            <ul class="collapse">
-                <li><a href="/sections">Secciones</a></li>
-            </ul>
-
-
-        @endif
-
-        @if(checkPermissions(['Permisos'],['R']))
-
-            <ul class="collapse">
-                <li><a href="/profile-permissions">Permisos</a></li>
-            </ul>
-
-        @endif
-
-        @if(checkPermissions(['Bitacora'],['R']))
-
-            <ul class="collapse">
-                <li class="nav-item">
-                    <a  class="nav-link" href="{{ url('bitacoras') }}"><i class="nav-icon fab fa-stack-exchange"></i><p><span>Bitacora</span></p></a>
-                </li>
-            </ul>
-
-        @endif
-
-        @if(checkPermissions(['Configuracion'],['R']))
-            @if(checkPermissions(['Acceso'],['R']))
-            <li>
-                <a href="#">
-                    <i class="fa fa-cog"></i>
-                    <span class="menu-title">Configuracion</span>
-                    <i class="arrow"></i>
-                </a>
-
-                <!--Submenu-->
-                <ul class="collapse">
-                    <li><a href="/users">Usuarios</a></li>
-                    <li><a href="/profiles">Perfiles</a></li>
-                    <li><a href="/sections">Secciones</a></li>
-                    <li><a href="/profile-permissions">Permisos</a></li>
-
-                </ul>
-            </li>
-            @endif
-
-            @if(checkPermissions(['Permisos'],['R']))
-                <li><a href="/profile-permissions">Permisos</a></li>
-            @endif
-
-        @endif
-
-
-        @if(checkPermissions(['Camaras'],['R']))
-
-            <a href="{{ url('/camaras') }}">
-                <i class="fa fa-video-camera"></i>
-                <span class="menu-title">Gestion de camaras</span>
-                <i class="arrow"></i>
-            </a>
-
-            <li>
-                <a href="#">
-                    <i class="fa fa-cog"></i>
-                    <span class="menu-title">Configuracion</span>
-                    <i class="arrow"></i>
-                </a>
-
-                <!--Submenu-->
-                <ul class="collapse">
-                    <li><a href="/users">Usuarios</a></li>
-                    <li><a href="/profiles">Perfiles</a></li>
-                    <li><a href="/sections">Secciones</a></li>
-                    <li><a href="/profile-permissions">Permisos</a></li>
-
-                </ul>
-            </li>
-
-        @endif
 </div>
 

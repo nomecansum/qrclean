@@ -31,6 +31,48 @@ class PuestosController extends Controller
         return view('puestos.index',compact('puestos'));
     }
 
+
+    public function search(Request $r){
+
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->cliente) {
+                    $q->WhereIn('puestos.id_cliente',$r->cliente);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->edificio) {
+                    $q->WhereIn('puestos.id_edificio',$r->edificio);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->planta) {
+                    $q->whereIn('puestos.id_planta',$r->planta);
+                }
+            })
+            ->whereExists(function($q) use($r){
+                if ($r->puesto) {
+                    $q->whereIn('puestos.id_puesto',$r->puesto);
+                }
+            })
+            ->whereExists(function($q) use($r){
+                if ($r->estado) {
+                    $q->whereIn('puestos.id_estado',$r->estado);
+                }
+            })
+            ->get();
+        return view('puestos.fill-tabla',compact('puestos','r'));
+    }
+
     public function edit($id){
         
         if($id==0){

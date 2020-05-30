@@ -13,9 +13,7 @@
      <link href="{{ url('/plugins/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
-    {{--  <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">  --}}
     <!--Nifty Stylesheet [ REQUIRED ]-->
-
     <link href="{{ url('/css/nifty.min.css') }}" rel="stylesheet">
     <!--Nifty Premium Icon [ DEMONSTRATION ]-->
     <link href="{{ url('/css/demo/nifty-demo-icons.min.css/') }}" rel="stylesheet">
@@ -37,7 +35,8 @@
     <link rel="stylesheet" href="{{ URL('/plugins/animate-css/animate.min.css') }}">
 
     {{--  Datatables  --}}
-    <link rel="stylesheet" href="{{ URL('/plugins/datatables/datatables.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ URL('/plugins/datatables/datatables.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ URL('/plugins/bootstrap-table/bootstrap-table.min.css') }}">
 
     {{-- Custom file --}}
     <link href="{{ URL('/plugins/custom_file.css') }}" rel="stylesheet">
@@ -51,7 +50,12 @@
     <link href="{{url('/plugins/sweetalert/dist/sweetalert2.min.css')}}" rel="stylesheet" media="all">
     {{-- Iconpicker --}}
     <link href="{{ asset('/plugins/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css') }}" rel="stylesheet">
-
+    {{--  CSS Loaders  --}}
+    <link href="{{ asset('/plugins/css-loaders/css/css-loaders.css') }}" rel="stylesheet">
+    {{-- Daterangepicker --}}
+    <link href="{{ asset('/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+    {{-- Boostrap Select --}}
+    <link href="{{ asset('/plugins/bootstrap-select-master/css/bootstrap-select.min.css') }}" rel="stylesheet">
 
 
     <!--=================================================
@@ -79,6 +83,8 @@
     Detailed information and more samples can be found in the document.
 
     =================================================-->
+
+    @include('layouts.styles')
     @yield('styles')
 </head>
 <!--TIPS-->
@@ -237,7 +243,18 @@
     <script src="{{asset('/plugins/printThis-master/printThis.js')}}"></script>
 
     {{-- Datatables --}}
-    <script src="{{asset('/plugins/datatables/datatables.min.js')}}"></script>
+    {{-- <script src="{{asset('/plugins/datatables/datatables.min.js')}}"></script> --}}
+    <script src="{{asset('/plugins/bootstrap-table/bootstrap-table.min.js')}}"></script>
+    <script src="{{asset('/plugins/bootstrap-table/bootstrap-table-locale-all.min.js')}}"></script>
+
+    {{-- Datepickers --}}
+    <script src="{{ asset('/plugins/momentjs/moment.js') }}"></script>
+    <script src="{{ asset('/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js') }}"></script>
+    <script src="{{ asset('/plugins/daterangepicker/daterangepicker.js') }}"></script>
+
+    {{-- Bootstrap select --}}
+    <script src="{{ asset('/plugins/bootstrap-select-master/js/bootstrap-select.min.js') }}"></script>
 
     @include('layouts.main_scripts')
     @yield('scripts')

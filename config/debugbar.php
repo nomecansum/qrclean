@@ -67,7 +67,7 @@ return [
      */
 
     'capture_ajax' => true,
-    'add_ajax_timing' => false,
+    'add_ajax_timing' => true,
 
     /*
      |--------------------------------------------------------------------------
@@ -111,7 +111,7 @@ return [
         'views'           => true,  // Views with their data
         'route'           => true,  // Current route information
         'auth'            => true, // Display Laravel authentication status
-        'gate'            => true,  // Display Laravel Gate checks
+        'gate'            => false,  // Display Laravel Gate checks
         'session'         => true,  // Display session data
         'symfony_request' => false,  // Only one can be enabled..
         'mail'            => false,  // Catch mail messages

@@ -18,6 +18,7 @@
 @endsection
 
 @section('content')
+
     <div class="row botones_accion">
         <div class="col-md-8">
 
@@ -50,114 +51,105 @@
             </div>
         </div>
     </div>
+    @php $etiqueta_boton="Ver puestos" @endphp
+    <form method="post" name="form_puestos" id="formbuscador" action="{{ url('puestos/') }}">
+        @csrf
+        <input type="hidden" name="document" value="pantalla">
+        @include('resources.combos_filtro')
+    </form>
     <div id="editorCAM" class="mt-2">
 
     </div>
-    <div class="row mt-2">
-        <div class="panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">Puestos</h3>
-            </div>
-            <div class="panel-body w-100">
-                <div class="table-responsive w-100">
-                    <form action="{{url('/puestos/print_qr')}}" method="POST"  id="frmpuestos" enctype='multipart/form-data'>
-                        @csrf
-                        <table class="table table-striped table-hover table-vcenter dataTable" id="tablapuestos"  style="width: 98%">
-                            <thead>
-                                <tr>
-                                    <th style="width: 10px" class="no-sort"><input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos"></label></th>
-                                    <th style="width: 20px" class="no-sort"></th>
-                                    <th>Puesto</th>
-                                    <th>Edificio</th>
-                                    <th>Planta</th>
-                                    <th class="text-center" style="width: 100px">Estado</th>
-                                    <td class="no-sort"></td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($puestos as $puesto)
-                                <tr class="hover-this">
-                                    <td class="text-center">
-                                        <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chk{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}">
-                                        <label class="custom-control-label"   for="chk{{ $puesto->id_puesto }}"></label>
-                                    </td>
-                                    <td class="thumb text-center" data-id="{{ $puesto->id_puesto }}" >
-                                        @isset($puesto->val_icono)
-                                            <i class="{{ $puesto->val_icono }} fa-2x" style="color:{{ $puesto->val_color }}"></i>
-                                        @endisset
-                                    </td>
-                                    <td class="td" data-id="{{ $puesto->id_puesto }}"><b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}</td>
-                                    <td class="td" data-id="{{ $puesto->id_puesto }}">{{ $puesto->des_edificio }}</td>
-                                    <td class="td" data-id="{{ $puesto->id_puesto }}">{{$puesto->des_planta}}</td>
-                                    <td class="td text-center" data-id="{{ $puesto->id_puesto }}">
-                                        @switch($puesto->id_estado)
-                                            @case(1)
-                                                <div class="bg-success rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                                @break
-                                            @case(2)
-                                                <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                                @break
-                                            @case(3)
-                                                <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                                @break
-                                            @case(4)
-                                                <div class="bg-secondary rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                                @break
-                                            @case(5)
-                                                <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                                @break
-                                            @default
-                                        @endswitch
-                                        {{$puesto->des_estado}}
-                                        </div>
-                                    </td>
-                                    
-                                    <td style="position: relative;">
-                                        <div class="btn-group btn-group-xs pull-right floating-like-gmail" role="group">
-                                            <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver puesto" data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-eye" aria-hidden="true"></span></a>
-                                            <a href="#"  class="btn btn-info btn_editar add-tooltip" onclick="editar({{ $puesto->id_puesto }})" title="Editar puesto" data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>
-                                            <a href="#eliminar-puesto-{{$puesto->id_puesto}}" data-target="#eliminar-puesto-{{$puesto->id_puesto}}" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span></a>
-                                        </div>
-                                        <div class="btn-group btn-group-xs pull-right floating-like-gmail" role="group">
-                                            <a href="#"  class="btn btn-success btn_estado add-tooltip thumb"  title="Disponible" data-token="{{ $puesto->token }}"  data-estado="1" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-thumbs-up" aria-hidden="true"></span></a>
-                                            <a href="#"  class="btn btn-danger btn_estado add-tooltip thumb"  title="Usado"  data-token="{{ $puesto->token }}"  data-estado="2" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-lock-alt" aria-hidden="true"></span></a>
-                                            <a href="#"  class="btn btn-info btn_estado add-tooltip thumb"  title="Limpiar"  data-token="{{ $puesto->token }}"  data-estado="3" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-broom" aria-hidden="true"></span></a>
-                                        </div>
-                                        <div class="modal fade" id="eliminar-puesto-{{$puesto->id_puesto}}" style="display: none;">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                <div class="modal-header">
+    <script>
+        let id_fila=0;
+        let token_fila=0;
 
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">×</span></button>
-                                                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                                                        <h4 class="modal-title">¿Borrar puesto {{$puesto->des_puesto}}?</h4>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a class="btn btn-info" href="{{url('/puestos/delete',$puesto->id_puesto)}}">Si</a>
-                                                        <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+        function hoverdiv(obj,e,divid,id,txt,token){
+            if(id==id_fila){
+                $('#'+divid).hide();
+                id_fila=0;
+                return;
+            }
+            id_fila=id;
+            token_fila=token;
+            console.log(obj.position());
+            
+            console.log(e);
+            var left  =obj.position().left-280;
+            var top  = obj.position().top+16;
 
-                                    </td>
 
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </form>
+            $('#nombrepuesto').html(txt);
+            $('#txt_borrar').html(txt);
+            $('#toolbutton').data('id',id);
+            $('#toolbutton').data('token',token);
+            $('#link_borrar').attr('href','{{url('/puestos/delete')}}/'+id)
+            $('#'+divid).css('left',left);
+            $('#'+divid).css('top',top);
+            console.log(left+','+top);
+            $('#'+divid).show();
+            animateCSS('#'+divid,'fadeIn');
+            return false;
+            $
+        }
+        function editar(){
+            $('#editorCAM').load("{{ url('/puestos/edit/') }}"+"/"+id_fila, function(){
+                animateCSS('#editorCAM','bounceInRight');
+            });
+        }
+
+        function estado(est){
+            $.get("{{ url('/puesto/estado/') }}/"+token_fila+"/"+est, function(data){
+                toast_ok('Cambio de estado',data.mensaje);
+                //console.log('#estado_'+$(this).data('id'));
+                $('#estado_'+data.id).removeClass();
+                $('#estado_'+data.id).addClass('bg-'+data.color);
+                $('#estado_'+data.id).html(data.label);
+                $('#toolbutton').hide();
+                animateCSS('#estado_'+data.id,'rubberBand');
+            }) 
+            .fail(function(err){
+                console.log(err);
+                toast_error('Error',err);
+            });
+        }
+       
+    </script>
+    <div id="myFilter">
+        @if(!isset($r))
+            @include('puestos.fill-tabla')
+        @endif
+    </div>
+    
+    <div class="modal fade" id="eliminar-puesto" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <h4 class="modal-title">¿Borrar puesto <span id="txt_borrar"></span>?</h4>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-info" href="" id="link_borrar">Si</a>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
                 </div>
             </div>
         </div>
     </div>
+    
 @endsection
 
 @section('scripts')
 <script>
 
+       
+
     $('#frmpuestos').submit(form_pdf_submit);
+    $('#formbuscador').submit(ajax_filter);
+
+    
 
 
 	$('#btn_nueva_puesto').click(function(){
@@ -168,13 +160,9 @@
       //stopPropagation()
 	});
 
-	function editar(id){
-        $('#editorCAM').load("{{ url('/puestos/edit/') }}"+"/"+id, function(){
-			animateCSS('#editorCAM','bounceInRight');
-		});
-    }
+	
 
-    $('.td').click(function(event){
+    $('td').click(function(event){
         editar( $(this).data('id'));
     })
 
@@ -183,22 +171,10 @@
         $('.chkpuesto').not(this).prop('checked', this.checked);
     });
 
-$('.btn_estado').click(function(){
-    $.get("{{ url('/puesto/estado/') }}/"+$(this).data('token')+"/"+$(this).data('estado'), function(data){
-        toast_ok('Cambio de estado',data.mensaje);
-        //console.log('#estado_'+$(this).data('id'));
-        $('#estado_'+data.id).removeClass();
-        $('#estado_'+data.id).addClass('bg-'+data.color);
-        $('#estado_'+data.id).html(data.label);
-    }) 
-    .fail(function(err){
-        console.log(err);
-        toast_error('Error',err);
-    });
-});
+
 
 $('.btn_estado_check').click(function(){
-
+    console.log('check');
     var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
       return $(this).val();
     }).get(); // <----
@@ -216,6 +192,8 @@ $('.btn_estado_check').click(function(){
             $('#estado_'+$(this).data('id')).addClass('bg-'+data.color);
             $('#estado_'+$(this).data('id')).html(data.label);
         });
+
+        
 
         //console.log('success');
     })
@@ -248,11 +226,14 @@ $('.btn_asignar').click(function(){
         toast_error('Error','Debe seleccionar algún puesto');
         exit();
     }
-    
-    
-
     //fin_espere();
 });
+
+
+    $('#tablapuestos').on('click-cell.bs.table', function(e, value, row, $element){
+        //console.log(e);
+    });
+
 
 </script>
 @endsection

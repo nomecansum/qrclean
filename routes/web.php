@@ -48,11 +48,16 @@ Route::group(['middleware' => 'auth'], function() {
         Route::delete('/users/{users}','UsersController@destroy')->name('users.users.destroy');
     });
 
+    Route::group(['prefix' => 'filters'], function () {
+        Route::post('/loadedificios', 'CombosController@loadedificios');
+        Route::post('/loadplantas', 'CombosController@loadplantas');
+        Route::post('/loadpuestos', 'CombosController@loadpuestos');
+    });
+
     Route::group(['prefix' => 'bitacoras'], function () {
         Route::get('/', 'BitacorasController@index')->name('bitacoras.bitacora.index');
         Route::post('/search', 'BitacorasController@search')->name('bitacoras.bitacora.search');
     });
-
 
     Route::group(['prefix' => 'profiles'], function () {
         Route::get('/',['middleware'=>'permissions:["Perfiles"],["R"]','uses'=>'PermissionsController@profiles']);
@@ -72,7 +77,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::group(['prefix' => 'clientes'], function() {
         Route::get('/',['middleware'=>'permissions:["Clientes"],["R"]', 'uses' => 'CustomersController@index']);
-        Route::get('create',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@create']);
+        Route::get('create',['middleware'=>'permissions:["Clientes"],[""]', 'uses' => 'CustomersController@create']);
         Route::post('save',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@save']);
         Route::get('edit/{id}',['middleware'=>'permissions:["Clientes"],["C"]', 'uses' => 'CustomersController@edit']);
         Route::post('update',['middleware'=>'permissions:["Clientes"],["C"]', 'uses' => 'CustomersController@update']);
@@ -82,6 +87,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::group(['prefix' => 'puestos'], function() {
         Route::get('/',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@index']);
+        Route::post('/',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@search']);
 	    Route::get('/edit/{id}',['middleware'=>'permissions:["Puestos"],["C"]', 'uses' => 'PuestosController@edit']);
 	    Route::post('/update',['middleware'=>'permissions:["Puestos"],["C"]', 'uses' => 'PuestosController@update']);
         Route::get('/delete/{id}',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@delete']);

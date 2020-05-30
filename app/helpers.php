@@ -31,6 +31,65 @@ function savebitacora($des_bitacora,$modulo=null,$seccion=null,$tipo='OK')
     ]);
 }
 
+function clientes()
+{
+    try{
+        if(fullAccess())
+        {
+            $clientes = DB::table('clientes')->select('id_cliente')->wherenull('fec_borrado')->pluck('id_cliente')->toarray();
+            if(session('id_cliente')){
+                $clientes=DB::table('clientes')->where('id_cliente',session('id_cliente'))->pluck('id_cliente')->toarray();
+            }
+        }
+        else
+        {
+            $clientes = [];
+            if(isset(Auth::user()->clientes)){
+                foreach (explode(',',Auth::user()->clientes) as $key => $value) {
+                    if ($value != "") {
+                        $clientes[] = $value;
+                    }
+                }
+            }
+        }
+
+        if(count($clientes)==0){
+            return [Auth::user()->id_cliente];
+        } else{
+            return $clientes;
+        }
+    } catch(\Exception $e){
+        return [0];
+    }
+}
+
+function puede_ver_cliente($id){
+    try{
+        $cus=\DB::table('clientes')
+        ->where('clientes.id_cliente',$id)
+        ->whereNull('clientes.fec_borrado')
+        ->where(function($q){
+            if (!fullAccess()) {
+                $q->Wherein('clientes.id_cliente',clientes());
+            }
+        })->exists();
+        return $cus;
+    } catch(\Exception $e){
+        return false;
+    }
+}
+
+function lista_clientes(){
+    $clientes=DB::table('clientes')
+    ->wherein('id_cliente',clientes())
+    ->orderby('nom_cliente')
+    ->get();
+    return $clientes;
+}
+
+
+
+
 function fullAccess(){
     return isAdmin();
 }

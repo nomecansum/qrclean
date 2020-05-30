@@ -1,8 +1,45 @@
 @php
 Use \Carbon\Carbon;
+if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
+    $fechas=explode(" - ",$r->fechas);
+    $fechas[0]=Carbon::parse($fechas[0]);
+    $fechas[1]=Carbon::parse($fechas[1]);
+    //dd($fechas);
+} else {
+    $fechas[0]=Carbon::now()->startOfMonth;
+    $fechas[1]=Carbon::now()->endOfMonth;
+}
+
 @endphp
 
-@extends('layouts.web.web')
+@extends('layout')
+
+@section('styles')
+<style type="text/css">
+    .select2-results__options[id*="tipo_log"] .select2-results__option:nth-child(2) {
+        color: green;
+    }
+    .select2-results__options[id*="tipo_log"] .select2-results__option:nth-child(3) {
+       
+        color: red;
+    }
+
+    .select2-container{
+        height: 40px;
+    }
+       
+    .select2-selection{
+        height: 40px;
+    }
+
+    .select2-selection__choice{
+        height: 30px;
+        padding-top: 2px;
+        background-color: #25476a;
+    }
+  
+</style>
+@endsection
 
 @section('camino')
 <!-- Content Header (Page header) -->
@@ -40,116 +77,115 @@ Use \Carbon\Carbon;
         </div>
     @endif
 
-    <div class="panel panel-default">
-        
-        <div class="row"><br></div>
-        <form name="frm_busca_bitacora" method="POST" action="{{ url('bitacoras/search') }}">
-        <div class="row">
-            
-        {{ csrf_field() }}
-            <div class="col-xs-1" style="width: 110px">
-                <div class="form-group">
-                    <label>Mostrar</label>
-                    <select class="form-control" name="tipo_log">
-                        <option value=""></option>
-                        <option  {{ isset($r) && $r->tipo_log=="ok" ? 'selected' : '' }} value="ok">ok</option>
-                        <option {{ isset($r) && $r->tipo_log=="error" ? 'selected' : '' }} value="error">error</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Fechas:</label>
-    
-                    <div class="input-group">
-                        
-                        <input type="text" class="form-control pull-right" id="fechas" name="fechas">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+    <div class="panel panel-default " >
+        <div class="panel-heading cursor-pointer" style="padding-top: 10px" id="headfiltro" >
+            <span class="mt-3 ml-2 font-18"><i class="fad fa-filter"></i> Filtro</span>
+        </div>
+        <div class="panel-body" id="divfiltro" style="display:none" >
+            <form name="frm_busca_bitacora" method="POST" action="{{ url('bitacoras/search') }}">
+                {{ csrf_field() }}
+                <div class="row">
+                    
+                
+                    <div class="col-md-1" style="width: 110px">
+                        <div class="form-group">
+                            <label>Mostrar</label>
+                            <select class="form-control select2" name="tipo_log" id="tipo_log">
+                                <option value=""></option>
+                                <option  {{ isset($r) && $r->tipo_log=="ok" ? 'selected' : '' }} value="ok" id="ok">ok</option>
+                                <option {{ isset($r) && $r->tipo_log=="error" ? 'selected' : '' }} value="error" id="error">error</option>
+                            </select>
                         </div>
                     </div>
-                    <!-- /.input group -->
-                </div> 
-            </div>
-            
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label>Usuario</label>
-                    <select class="form-control select2" style="width: 100%;" tabindex="-1" aria-hidden="true" name="usuario">
-                        <option value=""></option>
-                        @foreach(DB::table('usuarios')->get() as $usuario)
-                        <option {{ isset($r) && $r->usuario==$usuario->nombre ? 'selected' : '' }} value="{{ $usuario->nombre }}">{{ $usuario->nombre }}</option>
-                        @endforeach
-                    </select>
+                
+                    
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Usuario</label>
+                            <select class="form-control select2" tabindex="-1" aria-hidden="true" name="usuario">
+                                <option value=""></option>
+                                @foreach($usuarios as $key=>$value)
+                                <option {{ isset($r) && $r->usuario==$key ? 'selected' : '' }} value="{{ $key }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">  
+                            <label>Modulo</label>
+                            <select class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Seleccione modulo" tabindex="-1" aria-hidden="true" name="modulos[]"> 
+                                @forelse($modulos as $modulo)
+                                <option {{ isset($r) && in_array($modulo,$r->modulos) ? 'selected' : '' }}  value="{{ $modulo }}">{{ $modulo }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Fechas:</label>
+                            <div class="input-group mar-btm">
+                                <input type="text" class="form-control pull-right" id="fechas" name="fechas" style="height: 40px" value="{{ isset($r)?Carbon::parse($fechas[0])->format('d/m/Y').' - '.Carbon::parse($fechas[1])->format('d/m/Y'):'' }}">
+                                <div class="input-group-btn">
+                                    <span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                                </div>
+                            </div>
+                            <!-- /.input group -->
+                        </div> 
+                    </div>
+
+                    
+                        
+                    <div class="col-md-1 form-group text-right">
+                        <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 24px; height: 40px;"><i class="fa fa-search"></i> Buscar</button>
+                    </div>
+                    
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">  
-                    <label>Modulo</label>
-                    <select class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Seleccione modulo" style="width: 100%; color #000;" tabindex="-1" aria-hidden="true" name="modulos[]"> 
-                        @foreach(DB::table('modulos')->get() as $modulo)
-                        <option {{ isset($r) && array_search($modulo,$r->modulos)!=false ? 'selected' : '' }}  value="{{ $modulo->modulo }}">{{ $modulo->modulo }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-1 form-group">
-                <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 34px"><i class="fa fa-search"></i> Buscar</button>
-            </div>
-            
+            </form>
         </div>
-        </form>
+    </div>
+    <div class="panel">
         @if(count($bitacoras) == 0)
             <div class="panel-body text-center">
                 <h4>No Bitacoras Available.</h4>
             </div>
         @else
         
-        <div class="panel-body panel-body-with-table">
-            <div class="table-responsive">
+            <div class="panel-body panel-body-with-table">
+                <div class="table-responsive">
 
-                <table class="table table-striped" >
-                    <thead>
-                        <tr>
-                            <th>Usuario</th>
-                            <th>Modulo</th>
-                            <th>Accion</th>
-                            <th>Status</th>
-                            <th style="width: 140px">Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($bitacoras as $bitacora)
-                        <tr @if($bitacora->status=="error" || strpos($bitacora->accion,"ERROR:")!==false) class="bg-red color-palette" @endif>
-                            <td>{{ $bitacora->id_usuario }}</td>
-                            <td>{{ $bitacora->id_modulo }}</td>
-                            @php
-                                $clase="";
-                                if(strpos($bitacora->id_modulo,"ATIS Maniobras")!==false && $bitacora->status!=="error"){
-                                    if(strpos($bitacora->accion,"Cambiada Maniobra S")!==false){
-                                        $clase="linea_titulo_pistas bg_amarillo titulo_orientacion_maniobras";
-                                    } else{
-                                        $clase="linea_titulo_pistas bg_azul_claro txt_blanco titulo_orientacion_maniobras";
-                                    }
-                                }
-                            @endphp
-                            <td class="{{ $clase }}" style="word-break: break-all;">{{ $bitacora->accion }}</td>
-                            <td ><span @if($bitacora->status=="ok") class="bg-green-active color-palette" @endif style="padding: 0 5px 0 5px">{{ $bitacora->status }}</span></td>
-                            <td>{!! beauty_fecha($bitacora->fecha) !!}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                    <table class="table table-striped" >
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Cliente</th>
+                                <th>Modulo</th>
+                                <th>Seccion</th>
+                                <th>Accion</th>
+                                <th>Status</th>
+                                <th style="width: 140px">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($bitacoras as $bitacora)
+                            <tr @if($bitacora->status=="error" || strpos($bitacora->accion,"ERROR:")!==false) class="bg-red color-palette" @endif>
+                                <td>{{ $bitacora->name }}</td>
+                                <td>{{ $bitacora->nom_cliente }}</td>
+                                <td>{{ $bitacora->id_modulo }}</td>
+                                <td>{{ $bitacora->id_seccion }}</td>
+                                <td style="word-break: break-all;">{{ $bitacora->accion }}</td>
+                                <td ><span @if(strtoupper($bitacora->status)=="OK") class="bg-success" @else class="bg-danger" @endif style="padding: 0 5px 0 5px">{{ $bitacora->status }}</span></td>
+                                <td>{!! beauty_fecha($bitacora->fecha) !!}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
 
+                </div>
             </div>
-        </div>
-
+        @endif
         <div class="panel-footer">
             {!! $bitacoras->render() !!}
         </div>
-        
-        @endif
-    
     </div>
 @endsection
 @php
@@ -164,6 +200,15 @@ Use \Carbon\Carbon;
 @endphp
 @section('scripts')
     <script>
+
+    $('#headfiltro').click(function(){
+        $('#divfiltro').toggle();
+    })  
+
+    $('#tipo_log').select2({
+        minimumResultsForSearch: -1
+    });
+
      //Date range picker
      $('#fechas').daterangepicker({
             autoUpdateInput: false,

@@ -84,7 +84,10 @@
     $('div.alert').not('.alert-important,.alert-danger,.not-dismissable').delay(5000).fadeOut(350);
 
     //Inicilizacion de los controles select2
-    $('.select2').select2();
+    $('.select2').select2({
+        width: '100%',
+    }      
+    );
 
     //Inicializacion del picker de colores
     $('.minicolors').minicolors({
@@ -120,6 +123,55 @@
         }else{
             $(this).parent().prev().attr('type',"password")
         }
+    });
+
+    $('.input-daterange-datepicker').daterangepicker({
+        timePicker: false,
+        timePickerIncrement: 30,
+        timePicker24Hour: true,
+        autoUpdateInput : true,
+        locale: {
+            format: 'DD/MM/YYYY',
+            applyLabel: "OK",
+            cancelLabel: "Cancelar"
+        },
+        buttonClasses: ['btn', 'btn-sm'],
+        applyClass: 'btn-info',
+        cancelClass: 'btn-warning',
+        autoUpdateInput: true,
+        autoApply: true,
+        onSelect: function () {
+            $('#data').text(this.value);
+        }
+    });
+
+    $('.singledate').daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        //autoUpdateInput : false,
+        //autoApply: true,
+        locale: {
+            format: '{{trans("general.date_format")}}',
+            applyLabel: "OK",
+            cancelLabel: "Cancelar",
+            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+            firstDay: {{trans("general.firstDayofWeek")}}
+        },
+        onSelect: function () {
+            $('#data').text(this.value);
+        }
+    });
+
+    $('[data-toggle="modal"]').click(function(event) {
+        event.stopPropagation();
+        $($(this).data('target')).modal('show');
+        $($(this).attr('href')).modal('show');
+    });
+
+    $('.select-all').click(function(event) {
+        element=$('#'+$(this).data('select'));
+        element.find('option').prop('selected', 'selected').end().select2();
     });
 
     // when any modal is opening
@@ -228,43 +280,79 @@
     }
 
     function get_ajax(url,spin){
-            console.log(url+" "+spin);
-            if(spin!=null){
-                $('#'+spin).show();
-            }
-            $.ajax({
-                url: url
-            })
-            .done(function(data) {
-                if(data.error){
-                    toast_error(data.title,data.error);
-                } else if(data.warning){
-                    toast_warning(data.title,data.alert);
-                } else{
-                    toast_ok(data.title,data.message);
-                }
-                $('.modal').modal('hide');
-                setTimeout(()=>{
-                    window.open(data.url,'_self');
-                },3000)
-            })
-            .fail(function(err) {
-                let error = JSON.parse(err.responseText);
-                let html = "";
-                console.log(error);
-                $.each(error.errors, function(index, val) {
-                    html += "- "+$(this)[0]+"<br>";
-                });
-                toast_error("Error",html);
-            })
-            .always(function() {
-                fin_espere();
-                console.log("complete");
-                if(spin!=null){
-                    $('#'+spin).hide();
-                }
-            });
+        console.log(url+" "+spin);
+        if(spin!=null){
+            $('#'+spin).show();
         }
+        $.ajax({
+            url: url
+        })
+        .done(function(data) {
+            if(data.error){
+                toast_error(data.title,data.error);
+            } else if(data.warning){
+                toast_warning(data.title,data.alert);
+            } else{
+                toast_ok(data.title,data.message);
+            }
+            $('.modal').modal('hide');
+            setTimeout(()=>{
+                window.open(data.url,'_self');
+            },3000)
+        })
+        .fail(function(err) {
+            let error = JSON.parse(err.responseText);
+            let html = "";
+            console.log(error);
+            $.each(error.errors, function(index, val) {
+                html += "- "+$(this)[0]+"<br>";
+            });
+            toast_error("Error",html);
+        })
+        .always(function() {
+            fin_espere();
+            console.log("complete");
+            if(spin!=null){
+                $('#'+spin).hide();
+            }
+        });
+    }
+
+
+    function ajax_filter(event) {
+        block_espere("Obteniendo datos...");
+        let form = $(this);
+        let tipo = form.find('[name="document"]').val();
+
+        if (tipo == 'pantalla') {
+            event.preventDefault();
+        }
+        $('#action_orig').val($(this).attr('action'));
+
+        $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
+            block_espere("Renderizando datos...");
+
+            if (tipo == 'pantalla') {
+                $('#myFilter').html(data);
+            }
+            fin_espere();
+
+        })
+        .fail(function(err) {
+            let error = JSON.parse(err.responseText);
+            console.log(error);
+
+            toast_error("ERROR",error.message);
+        })
+        .always(function() {
+            fin_espere();
+            //console.log("complete");
+            form.find('[type="submit"]').attr('disabled',false);
+        });
+
+
+
+    }
 
 
     $('#loginform,#recoverform').submit(function(event) {
@@ -324,18 +412,48 @@
         document.cookie = name+'=; Max-Age=-99999999;';  
     }
 
-    $('.dataTable').dataTable({
-        "lengthChange": false,
-        "pageLength":40,
-        "responsive": true,
-        "bSort": true,
-        "scrollX": true,
-        "language": {
-            "paginate": {
-              "previous": '<i class="demo-psi-arrow-left"></i>',
-              "next": '<i class="demo-psi-arrow-right"></i>'
-            }
-        },
-        columnDefs: [ { targets: 'no-sort', orderable: false } ],
-    });
+    // $('.dataTable').dataTable({
+    //         "lengthChange": false,
+    //         "pageLength":40,
+    //         "responsive": true,
+    //         "bSort": true,
+    //         "processing": true,
+    //         "scrollX": true,
+    //         "language": {
+    //             "paginate": {
+    //             "previous": '<i class="demo-psi-arrow-left"></i>',
+    //             "next": '<i class="demo-psi-arrow-right"></i>',
+    //             'loadingRecords': '<div class="load8"><div class="loader"></div></div>',
+    //             'processing': '<div class="load8"><div class="loader"></div></div>'
+    //             }
+    //         },
+    //         columnDefs: [ { targets: 'no-sort', orderable: false } ],
+    //         "drawCallback": function( settings ) {
+    //             $('.load8').hide();
+    //             //console.log(settings);
+    //         }
+    // });
+
+    function cargar_combo(combo,ruta,selected=0,fire=0){
+        $.ajax({
+                url: ruta
+            })
+            .done(function(data) {
+                $('#'+combo).empty();
+                $('#'+combo).html(data);
+                if(selected!=0){
+                    $('#'+combo).val(selected);
+                    $('#'+combo).select2().trigger('change');
+                }
+                if(fire!=0){
+                    $('#'+combo).select2().trigger('change');
+                }
+            })
+            .fail(function(err) {
+                console.log(err);
+            });
+    }
+
+    
+
 </script>

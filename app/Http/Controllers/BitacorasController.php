@@ -19,19 +19,41 @@ class BitacorasController extends Controller
      */
     public function index()
     {
-        $bitacoras = bitacora::orderby('fecha','desc')->paginate(50);
+        $bitacoras = DB::table('bitacora')
+        ->join('users','bitacora.id_usuario','users.id')
+        ->join('clientes','clientes.id_cliente','users.id_cliente')
+        ->paginate(50);
 
-        return view('bitacoras.index', compact('bitacoras'));
+        $todas_bitacoras = DB::table('bitacora')
+        ->join('users','bitacora.id_usuario','users.id')
+        ->join('clientes','clientes.id_cliente','users.id_cliente')
+        ->get();
+
+        $usuarios=$todas_bitacoras->pluck('name','id_usuario')->unique();
+
+        $modulos=$todas_bitacoras->pluck('id_modulo')->unique();
+
+        return view('bitacoras.index', compact('bitacoras','usuarios','modulos'));
     }
     
     public function search(Request $r)
     {
-        try {
+           // dd($r->all());
+            $todas_bitacoras = DB::table('bitacora')
+            ->join('users','bitacora.id_usuario','users.id')
+            ->join('clientes','clientes.id_cliente','users.id_cliente')
+            ->get();
+
+            $usuarios=$todas_bitacoras->pluck('name','id_usuario')->unique();
+
+            $modulos=$todas_bitacoras->pluck('id_modulo')->unique();
+
             //D($r->modulos);
+           
             if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                 $fechas=explode(" - ",$r->fechas);
-                $fechas[0]=Carbon::parse(Carbon::createFromFormat('d/m/Y', $fechas[0]))->format('Y-m-d');
-                $fechas[1]=Carbon::parse(Carbon::createFromFormat('d/m/Y', $fechas[1]))->format('Y-m-d');
+                $fechas[0]=Carbon::parse($fechas[0]);
+                $fechas[1]=Carbon::parse($fechas[1]);
                 //dd($fechas);
             } else {
                 $fechas=null;
@@ -39,6 +61,8 @@ class BitacorasController extends Controller
             //dd($fechas);
             //dd($fechas[0].' '.$fechas[1]);
             $bitacoras=DB::table('bitacora')
+            ->join('users','bitacora.id_usuario','users.id')
+            ->join('clientes','clientes.id_cliente','users.id_cliente')
             ->when($r->tipo_log, function($query) use ($r) {
                return  $query->where('status', $r->tipo_log);
               })
@@ -51,10 +75,13 @@ class BitacorasController extends Controller
             ->when($r->modulos, function($query) use ($r) {
                 return  $query->whereIn('id_modulo', $r->modulos);
                 })
+            ->when($r->texto && $r->texto!='', function($query) use ($r) {
+                return  $query->whereraw("UPPER(accion) like '%".strtoupper($r->texto)."%'");
+                })
             ->orderby('fecha','desc')
             ->paginate(50);
-            return view('bitacoras.index', compact('bitacoras'), compact(r));
-             } catch (Exception $exception) {
+            return view('bitacoras.index', compact('bitacoras'), compact('r','usuarios','modulos'));
+            try {     } catch (Exception $exception) {
             flash('ERROR: Ocurrio un error al hacer la busqueda '.$exception->getMessage())->error();
             return back()->withInput();
         }        

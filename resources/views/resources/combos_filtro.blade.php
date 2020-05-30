@@ -1,59 +1,83 @@
 @php
     //$hide=['cli'=>0,'cen'=>0,'dis'=>0,'col'=>0,'dep'=>0,'emp'=>0,'fec'=>0];
-
+    use App\Models\estados;
 @endphp
-<div class="form-group  pr-5" style="{{ ((!fullAccess() && count(clientes())==1) || (isset($hide['cli']) && $hide['cli']===1)) ? 'display: none' : ''}}">
-    <label>{{trans('general.clientes')}}</label>
-    <select class="select2 select2-filtro mb-2 col-md-10 select2-multiple form-control" multiple="multiple" name="clientes[]" id="multi-clientes">
-        @foreach (lista_clientes() as $c)
-            <option value="{{$c->id_cliente}}">{{$c->nombre_cliente}}</option>
-        @endforeach
-    </select>
-    <button class="btn btn-info float-right mt-0 position-absolute select-all"data-select="multi-clientes"  type="button"><i class="fad fa-check-double"></i> {{ __('general.todos') }}</button>
-</div>
-<div class="form-group pr-5" style="{{ (isset($hide['tag']) && $hide['tag']==1) ? 'display: none' : ''  }}">
-    <label>{{trans('general.tags')}}</label>
-    <select class="select2 select2-filtro mb-2 col-md-9 select2-multiple form-control multi2" multiple="multiple" name="tags[]" id="multi-tags">
-    </select>
-    <button class="btn btn-info float-right mt-0 position-absolute select-all" data-select="multi-tags" type="button"><i class="fad fa-check-double"></i> {{ __('general.todos') }}</button>
-</div>
-<div class="form-group pr-5" style="{{ (isset($hide['dis']) && $hide['dis']==1) ? 'display: none' : ''  }}">
-    <label>{{trans('general.dispositivos')}}</label>
-    <select class="select2 select2-filtro mb-2  select2-multiple form-control multi2" multiple="multiple" name="dispositivos[]" id="multi-dispositivos" style="width: 80%">
-    </select>
-    <button class="btn btn-info float-right mt-0 position-absolute select-all"   data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> {{ __('general.todos') }}</button>
-</div>
 
-<div class="form-group pr-5" style="{{ (isset($hide['con']) && $hide['con']==1) ? 'display: none' : ''  }}">
-    <label>{{trans('rss.tipos_de_contenidos')}}</label>
-    <select class="select2 select2-filtro mb-2 col-md-11 select2-multiple form-control multi2" multiple="multiple" name="contenidos[]" id="multi-contenidos" >
-    </select>
-    <button class="btn btn-info float-right mt-0 position-absolute select-all"  data-select="multi-contenidos"  type="button"><i class="fad fa-check-double"></i> {{ __('general.todos') }}</button>
-</div>
-<div class="row" >
-    <div class="col-md-3">
-        <div class="form-group" style="{{ (isset($hide['fec']) && $hide['fec']==1) ? 'display: none' : ''  }}">
-            <label>{{trans('general.fechas')}}</label>
-            <div class="input-group">
-                <input type="text" autocomplete="off" class="form-control input-daterange-datepicker" name="rango" id="multi-rango" value="@isset($startdate){{ Carbon\Carbon::parse($startdate)->format(trans("general.short_date_format"))}}@else{{Carbon\Carbon::now()->startOfMonth()->setTimezone(Auth::user()->val_timezone)->format(trans("general.short_date_format"))}}@endisset - @isset($enddate){{ Carbon\Carbon::parse($enddate)->format(trans("general.short_date_format"))}}@else{{Carbon\Carbon::now()->setTimezone(Auth::user()->val_timezone)->format(trans("general.short_date_format"))}}@endisset">
-                <div class="input-group-append">
-                    <span class="input-group-text btn-info"><i class="fa fa-calendar"></i></span>
+<div class="panel panel-default " style="padding-right: 10px" >
+    <div class="panel-heading cursor-pointer" style="padding-top: 10px" id="headfiltro" >
+        <span class="mt-3 ml-2 font-18"><i class="fad fa-filter"></i> Filtro </span>
+        <span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
+        {{-- <div id="loadfilter" class="load8"><div class="loader"></div></div> --}}
+    </div>
+    <div class="panel-body" id="divfiltro" style="display: none" >
+        <div class="form-group" style="{{ ((!fullAccess() && count(clientes())==1) || (isset($hide['cli']) && $hide['cli']===1)) ? 'display: none' : ''}}">
+            <label>Cliente</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="cliente[]" id="multi-cliente">
+                    @foreach (lista_clientes() as $c)
+                        <option value="{{$c->id_cliente}}">{{$c->nom_cliente}}</option>
+                    @endforeach
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
+        <div class="form-group" style="{{ (isset($hide['edi']) && $hide['edi']==1) ? 'display: none' : ''  }}">
+            <label>Edificio</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="edificio[]" id="multi-edificio"></select>
+                <div class="input-group-btn">
+                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group" style="{{ (isset($hide['pla']) && $hide['pla']==1) ? 'display: none' : ''  }}">
+            <label>Planta</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="planta[]" id="multi-planta" ></select>
+                <div class="input-group-btn">
+                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" style="{{ (isset($hide['pue']) && $hide['pue']==1) ? 'display: none' : ''  }}">
+            <label>Puesto</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="puesto[]" id="multi-puesto" ></select>
+                <div class="input-group-btn">
+                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" style="{{ (isset($hide['est']) && $hide['est']==1) ? 'display: none' : ''  }}">
+            <label>Estado</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="estado[]" id="multi-estado" >
+                    @foreach(estados::all() as $estado)
+                        <option {{ $estado->id_estado==0?'selected':'' }} value="{{ $estado->id_estado }}">{{ $estado->des_estado }}</option>
+                    @endforeach
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-md-12 text-right mb-3">
+                <button id="btn_submit" class="btn btn-primary btn-lg float-right"><i class="fa fa-search"></i> {{ $etiqueta_boton??'Ver' }}</button>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3 text-right">
-        <div class="spinner-border text-primary float-left" role="status" style="margin-right: 10px; display: none" id="spin_filtros"><span class="sr-only">{{trans('strings.espere')}}...</span></div>
-    </div>
-    <div class="col-md-6 text-right vb">
-        @if(!isset($hide['save_filter']))
-            <button type="button" style="margin-top:00px"  data-target="#save-favorite" data-toggle="modal" class="btn btn-secondary btn-xs float-right  mr-2">{{ __('general.guardar_filtro') }}</button>
-            <button type="button" style="margin-top:00px" id="load-favorites" class="btn btn-primary btn-xs float-right  mr-2">{{ __('general.cargar_filtro') }}</button>
-        @endif
-    </div>
+    
 </div>
 
-<div class="modal fade" id="save-favorite">
+
+
+
+
+{{--  <div class="modal fade" id="save-favorite">
     <div class="modal-dialog modal-sm">
         <div class="modal-content"><div><img src="/images/onthespot_20.png" class="float-right"></div>
             <div class="modal-header"   style="justify-content: left"><i class="mdi mdi-export text-primary mdi-48px"></i><h4 style="margin-top: 20px"><label>{{ __('general.guardar_filtro_favorito') }}</label></h4></div>
@@ -91,50 +115,154 @@
             </div>
         </div>
     </div>
-</div>
+</div>  --}}
 
 <br>
 
 
-@section('scripts')
+@section('scripts2')
 <script>
+
+    $(function(){
+        $('#multi-cliente').change();
+    }) 
+
+    $('.select-all').click(function(event) {
+        $(this).parent().parent().find('select option').prop('selected', true)
+        $(this).parent().parent().find('select').select2();
+        $(this).parent().parent().find('select').change();
+    });
+
+
+
+    $('#headfiltro').click(function(){
+        $('#divfiltro').toggle();
+    })  
+
     $(".select2-filtro").select2({
         placeholder: "Todos",
         allowClear: true,
-        width: '90%'
+        width: "99.2%",
     });
 
-    $('#multi-clientes').change(function(event) {
+    $('#multi-cliente').change(function(event) {
+        $('#loadfilter').show();
         $('.multi2').empty();
-        $.post('{{url('filters/loadtags')}}', {_token:'{{csrf_token()}}',clientes:$(this).val()}, function(data, textStatus, xhr) {
-
+        $.post('{{url('/filters/loadedificios')}}', {_token:'{{csrf_token()}}',cliente:$(this).val()}, function(data, textStatus, xhr) {
+            console.log(data);
             cliente="";
-            $.each(data.tags, function(index, val) {
-                if(cliente!=val.nombre_cliente){
-                    $('#multi-tags').append('<optgroup label="'+val.nombre_cliente+'"></optgroup>');
-                    cliente=val.nombre_cliente;
+            $.each(data.edificios, function(index, val) {
+                if(cliente!=val.id_cliente){
+                    $('#multi-edificio').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    cliente=val.id_cliente;
                 }
-                $('#multi-tags').append('<option value="'+val.id_tag+'">'+val.nombre_tag+'</option>');
+                $('#multi-edificio').append('<option value="'+val.id_edificio+'">'+val.des_edificio+'</option>');
             });
 
-            cliente="";
-            $.each(data.dispositivos, function(index, val) {
-                if(cliente!=val.nombre_cliente){
-                    $('#multi-dispositivos').append('<optgroup label="'+val.nombre_cliente+'"></optgroup>');
-                    cliente=val.nombre_cliente;
+            cliente_c="";
+            edificio_c="";
+            $.each(data.plantas, function(index, val) {
+                if(cliente_c!=val.id_cliente){
+                    $('#multi-planta').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    cliente_c=val.id_cliente;
                 }
-                $('#multi-dispositivos').append('<option value="'+val.id_dispositivo+'">'+val.nombre+'</option>');
+                if(edificio_c!=val.id_edificio){
+                    $('#multi-planta').append('<optgroup label="'+val.des_edificio+'"></optgroup>');
+                    edificio_c=val.id_edificio;
+                }
+                $('#multi-planta').append('<option value="'+val.id_planta+'">'+val.des_planta+'</option>');
             });
 
-            cliente="";
-            $.each(data.contenidos, function(index, val) {
-                if(cliente!=val.nombre_cliente){
-                    $('#multi-contenidos').append('<optgroup label="'+val.nombre_cliente+'"></optgroup>');
-                    cliente=val.nombre_cliente;
+            cliente_c="";
+            edificio_c="";
+            planta_c="";
+            $.each(data.puestos, function(index, val) {
+                if(cliente_c!=val.id_cliente){
+                    $('#multi-puesto').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    cliente_c=val.id_cliente;
                 }
-                $('#multi-contenidos').append('<option value="'+val.id_texto_dinamico+'">'+val.des_texto_dinamico+'</option>');
+                if(edificio_c!=val.id_edificio){
+                    $('#multi-puesto').append('<optgroup label="'+val.des_edificio+'"></optgroup>');
+                    edificio_c=val.id_edificio;
+                }
+                if(planta_c!=val.id_planta){
+                    $('#multi-puesto').append('<optgroup label="'+val.des_planta+'"></optgroup>');
+                    planta_c=val.id_planta;
+                }
+                $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
             });
+            $('#loadfilter').hide();
         });
+        
+    });
+
+    $('#multi-edificio').change(function(event) {
+        $('#loadfilter').show();
+        $('#multi-planta').empty();
+        $('#multi-puesto').empty();
+       $.post('{{url('/filters/loadplantas')}}', {_token:'{{csrf_token()}}',centros:$(this).val(),cliente:$('#multi-cliente').val(),edificio:$('#multi-edificio').val()}, function(data, textStatus, xhr) {
+            cliente_e="";
+            edificio_e="";
+            $.each(data.plantas, function(index, val) {
+                if(cliente_e!=val.id_cliente){
+                    $('#multi-planta').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    cliente_e=val.id_cliente;
+                }
+                if(edificio_e!=val.id_edificio){
+                    $('#multi-planta').append('<optgroup label="'+val.des_edificio+'"></optgroup>');
+                    edificio_e=val.id_edificio;
+                }
+                $('#multi-planta').append('<option value="'+val.id_planta+'">'+val.des_planta+'</option>');
+            });
+
+            cliente_e="";
+            edificio_e="";
+            planta_e="";
+            $.each(data.puestos, function(index, val) {
+                if(cliente_e!=val.id_cliente){
+                    $('#multi-puesto').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    cliente_e=val.id_cliente;
+                }
+                if(edificio_e!=val.id_edificio){
+                    $('#multi-puesto').append('<optgroup label="'+val.des_edificio+'"></optgroup>');
+                    edificio_e=val.id_edificio;
+                }
+                if(planta_e!=val.id_planta){
+                    $('#multi-puesto').append('<optgroup label="'+val.des_planta+'"></optgroup>');
+                    planta_e=val.id_planta;
+                }
+                $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
+            });
+            $('#loadfilter').hide();
+        });
+       
+    });
+
+    $('#multi-planta').change(function(event) {
+        $('#loadfilter').show();
+        $('#multi-puesto').empty();
+        $.post('{{url('/filters/loadpuestos')}}', {_token:'{{csrf_token()}}',centros:$(this).val(),cliente:$('#multi-cliente').val(),edificio:$('#multi-edificio').val(),planta:$('#multi-planta').val()}, function(data, textStatus, xhr) {
+            cliente_p="";
+            edificio_p="";
+            planta_p="";
+            $.each(data.puestos, function(index, val) {
+                if(cliente_p!=val.id_cliente){
+                    $('#multi-puesto').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    cliente_p=val.id_cliente;
+                }
+                if(edificio_p!=val.id_edificio){
+                    $('#multi-puesto').append('<optgroup label="'+val.des_edificio+'"></optgroup>');
+                    edificio_p=val.id_edificio;
+                }
+                if(planta_p!=val.id_planta){
+                    $('#multi-puesto').append('<optgroup label="'+val.des_planta+'"></optgroup>');
+                    planta_p=val.id_planta;
+                }
+                $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
+            });
+            $('#loadfilter').hide();
+        });
+        
     });
 
     $('#save-favorite-button').click(function(event) {
@@ -184,21 +312,21 @@
         $('#spin_filtros').show();
         let filter = JSON.parse(json);
 		$('#multi-rango').val(filter['rango']);
-		$('#multi-clientes').val(filter['clientes']).select2({placeholder: "{{ __('general.todos') }}"});
+		$('#multi-cliente').val(filter['clientes']).select2({placeholder: "todos"});
         $('.multi2').empty();
 
-        $.post('{{url('filtros/loadtags')}}', {_token:'{{csrf_token()}}',clientes:$('#multi-clientes').val()}, function(data, textStatus, xhr) {
+        $.post('{{url('filtros/loadtags')}}', {_token:'{{csrf_token()}}',clientes:$('#multi-cliente').val()}, function(data, textStatus, xhr) {
 
-            $.each(data.tags, function(index, val) {
-                $('#multi-tags').append('<option value="'+val.id_tag+'">'+val.nombre_tag+'</option>');
+            $.each(data.edificios, function(index, val) {
+                $('#multi-edificio').append('<option value="'+val.id_edificio+'">'+val.des_edificio+'</option>');
             });
 
-            $.each(data.dispositivos, function(index, val) {
-                $('#multi-dispositivos').append('<option value="'+val.id_dispositivo+'">'+val.nombre+'</option>');
+            $.each(data.plantas, function(index, val) {
+                $('#multi-planta').append('<option value="'+val.id_planta+'">'+val.des_planta+'</option>');
             });
 
-            $.each(data.contenidos, function(index, val) {
-                $('#multi-colectivos').append('<option value="'+val.id_texto_dinamico+'">'+val.des_texto_dinamico+'</option>');
+            $.each(data.puestos, function(index, val) {
+                $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.des_puesto+'</option>');
             });
 
         });
@@ -206,12 +334,12 @@
         $('#spin_filtros').hide();
 	}
 
-    $('#multi-clientes').on('select2:clearing', function(e){
-        // $('#multi-clientes').off('change');
+    $('#multi-cliente').on('select2:clearing', function(e){
+        // $('#multi-cliente').off('change');
         e.preventDefault();
-        $('#multi-clientes').empty();
-        $('#multi-clientes').val(null).trigger('change');
-        $('#multi-clientes').load("{{ url('/combos/clientes') }}", function(){
+        $('#multi-cliente').empty();
+        $('#multi-cliente').val(null).trigger('change');
+        $('#multi-cliente').load("{{ url('/combos/clientes') }}", function(){
             $('#multi_clientes').trigger("change");
         });
 

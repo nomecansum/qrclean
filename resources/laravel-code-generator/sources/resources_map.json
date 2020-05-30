@@ -48,5 +48,15 @@
         "model-name": "estados",
         "resource-file": "estados.json",
         "table-name": "estados_puestos"
+    },
+    {
+        "model-name": "rondas",
+        "resource-file": "rondas.json",
+        "table-name": "rondas_limpieza"
+    },
+    {
+        "model-name": "puestos_ronda",
+        "resource-file": "puestos_rondas.json",
+        "table-name": "puestos_ronda"
     }
 ]

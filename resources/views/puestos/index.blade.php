@@ -18,7 +18,6 @@
 @endsection
 
 @section('content')
-
     <div class="row botones_accion">
         <div class="col-md-8">
 
@@ -138,26 +137,55 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="ronda-limpieza" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <h3 class="modal-title">Crear ruta de limpieza</h3><br>
+                   
+                    
+                </div>
+                
+                <div class="modal-body" style="height: 250px">
+                    <input type="hidden" id="listaID">
+                    Crear ruta de limpieza para <span id="cuenta_puestos_limpieza"></span> puestos.
+                    <br><br>
+                    <div class="form-group">
+                        <label> nombre del trabajo</label>
+                        <input type="text" class="form-control" name="des_ronda" id="des_ronda" id="listaID">
+                    </div>
+                    <div class="form-group">
+                        <label> Asignar a empleado de limpieza</label>
+                        <div id="divlimpiadores"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-info" id="btn_crear_ronda" href="javascript:void(0)">Si</a>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
 @endsection
 
 @section('scripts')
 <script>
 
-       
+    let searchIDs=[];
 
     $('#frmpuestos').submit(form_pdf_submit);
     $('#formbuscador').submit(ajax_filter);
-
-    
-
 
 	$('#btn_nueva_puesto').click(function(){
        $('#editorCAM').load("{{ url('/puestos/edit/0') }}", function(){
 		animateCSS('#editorCAM','bounceInRight');
 	   });
-	  // window.scrollTo(0, 0);
-      //stopPropagation()
 	});
 
 	
@@ -173,65 +201,86 @@
 
 
 
-$('.btn_estado_check').click(function(){
-    console.log('check');
-    var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
-      return $(this).val();
-    }).get(); // <----
-    if(searchIDs.length==0){
-        toast_error('Error','Debe seleccionar algún puesto');
-        exit();
-    }
+    $('.btn_estado_check').click(function(){
+        console.log('check');
+        var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            exit();
+        }
 
-    $.post('{{url('/puestos/accion_estado')}}', {_token: '{{csrf_token()}}',estado: $(this).data('estado'),lista_id:searchIDs}, function(data, textStatus, xhr) {
-        toast_ok('Acciones',data.mensaje);
-        //console.log($('.chkpuesto:checkbox:checked'));
-        $('.chkpuesto:checkbox:checked').each(function(){
-            //console.log('#estado_'+$(this).data('id'));
-            $('#estado_'+$(this).data('id')).removeClass();
-            $('#estado_'+$(this).data('id')).addClass('bg-'+data.color);
-            $('#estado_'+$(this).data('id')).html(data.label);
+        $.post('{{url('/puestos/accion_estado')}}', {_token: '{{csrf_token()}}',estado: $(this).data('estado'),lista_id:searchIDs}, function(data, textStatus, xhr) {
+            toast_ok('Acciones',data.mensaje);
+            //console.log($('.chkpuesto:checkbox:checked'));
+            $('.chkpuesto:checkbox:checked').each(function(){
+                //console.log('#estado_'+$(this).data('id'));
+                $('#estado_'+$(this).data('id')).removeClass();
+                $('#estado_'+$(this).data('id')).addClass('bg-'+data.color);
+                $('#estado_'+$(this).data('id')).html(data.label);
+                animateCSS('#estado_'+$(this).data('id'),'rubberBand');
+            });
+        })
+        .fail(function(err){
+            toast_error('Error',err.responseJSON.message);
         });
-
-        
-
-        //console.log('success');
-    })
-    .fail(function(err){
-        toast_error('Error',err.responseJSON.message);
     });
-});
 
-$('.btn_qr').click(function(){
-    //block_espere();
-    var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
-      return $(this).val();
-    }).get(); // <----
-    if(searchIDs.length==0){
-        toast_error('Error','Debe seleccionar algún puesto');
-        exit();
-    }
-//
-    $('#frmpuestos').attr('action',"{{url('/puestos/print_qr')}}");
-    $('#frmpuestos').submit();
+    $('.btn_qr').click(function(){
+        //block_espere();
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            return;
+        }
     //
-});
+        $('#frmpuestos').attr('action',"{{url('/puestos/print_qr')}}");
+        $('#frmpuestos').submit();
+        //
+    });
 
-$('.btn_asignar').click(function(){
-    //block_espere();
-    var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
-      return $(this).val();
-    }).get(); // <----
-    if(searchIDs.length==0){
-        toast_error('Error','Debe seleccionar algún puesto');
-        exit();
-    }
-    //fin_espere();
-});
+    $('.btn_asignar').click(function(){
+        //block_espere();
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            return;
+        }
+        $('#cuenta_puestos_limpieza').html(searchIDs.length);
+        $('#des_ronda').val();
+        $.post('{{url('/combos/limpiadores')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs}, function(data, textStatus, xhr) {
+            $('#divlimpiadores').html(data);
+        })
+        $('#ronda-limpieza').modal('show');
+        //fin_espere();
+    });
 
 
     $('#tablapuestos').on('click-cell.bs.table', function(e, value, row, $element){
         //console.log(e);
+    });
+
+    $('#btn_crear_ronda').click(function(){
+        var userIDs = $('.chkuser:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); // <----
+        if(userIDs.length==0){
+            toast_error('Error','Debe seleccionar algún empleado de limpieza');
+            return;
+        }
+        $.post('{{url('/puestos/ronda_limpieza')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs,lista_limpiadores: userIDs,des_ronda: $('#des_ronda').val()}, function(data, textStatus, xhr) {
+            console.log(data);
+            toast_ok(data.title,data.mensaje);
+        })
+        .fail(function(err){
+            toast_error('Error',err.responseJSON.message);
+        });
+        $('#ronda-limpieza').modal('hide');
     });
 
 

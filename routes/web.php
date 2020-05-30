@@ -54,6 +54,10 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/loadpuestos', 'CombosController@loadpuestos');
     });
 
+    Route::group(['prefix' => 'combos'], function () {
+        Route::post('/limpiadores', 'CombosController@combo_limpiadores');
+    });
+
     Route::group(['prefix' => 'bitacoras'], function () {
         Route::get('/', 'BitacorasController@index')->name('bitacoras.bitacora.index');
         Route::post('/search', 'BitacorasController@search')->name('bitacoras.bitacora.search');
@@ -96,6 +100,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/accion_estado',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@accion_estado']);
         Route::Post('/print_qr','PuestosController@print_qr');
         Route::get('/mapa','PuestosController@mapa');
+        Route::post('/ronda_limpieza','PuestosController@ronda_limpieza');
     });
 
     Route::group(['prefix' => 'edificios'], function () {

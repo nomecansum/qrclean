@@ -40,7 +40,7 @@
                             @foreach($puestos as $puesto)
                             <tr class="hover-this">
                                 <td class="text-center">
-                                    <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id=""" id="chk{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}">
+                                    <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chk{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}">
                                     <label class="custom-control-label"   for="chk{{ $puesto->id_puesto }}"></label>
                                 </td>
                                 <td class="thumb text-center" data-id=""" >

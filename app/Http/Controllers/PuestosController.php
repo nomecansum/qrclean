@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\puestos;
 use App\Models\logpuestos;
+use App\Models\rondas;
+use App\Models\puestos_ronda;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -214,5 +216,41 @@ class PuestosController extends Controller
         ->get();
         
         return view('puestos.mapa',compact('puestos','edificios'));
+    }
+
+    public function ronda_limpieza(Request $r){
+        //Primero asegurarnos de que tiene acceso para los puestos
+
+        $puestos=DB::table('puestos')
+            ->wherein('id_puesto',$r->lista_id)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+
+        $usuarios=DB::table('users')
+            ->wherein('id',$r->lista_limpiadores)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('users.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+        foreach($usuarios as $u){
+            $ronda=rondas::create(['fec_ronda'=>Carbon::now(),'des_ronda'=>$r->des_ronda,'user_creado'=>Auth::user()->id,'user_asignado'=>$u->id]);
+            foreach($puestos as $p){
+                puestos_ronda::create(['id_ronda'=>$ronda->id_ronda,'fec_inicio'=>Carbon::now(),'id_puesto'=>$p->id_puesto]);
+            }
+        }
+        //dd($ronda);
+        savebitacora('Ruta de limpieza '.$r->des_ronda.' creada para '.count($r->lista_id).' puestos y '.count($r->lista_limpiadores).' empleados de limpieza',"Puestos","ronda_limpieza","OK");
+        return [
+            'title' => "Ruta de limpieza",
+            'mensaje' => 'Ruta de limpieza '.$r->des_ronda.' creada para '.count($r->lista_id).' puestos y '.count($r->lista_limpiadores).' empleados de limpieza',
+            //'url' => url('puestos')
+        ];
+
     }
 }

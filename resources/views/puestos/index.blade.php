@@ -156,7 +156,7 @@
                     Crear ruta de limpieza para <span id="cuenta_puestos_limpieza"></span> puestos.
                     <br><br>
                     <div class="form-group">
-                        <label> nombre del trabajo</label>
+                        <label> Descripcion del trabajo</label>
                         <input type="text" class="form-control" name="des_ronda" id="des_ronda" id="listaID">
                     </div>
                     <div class="form-group">
@@ -176,6 +176,10 @@
 
 @section('scripts')
 <script>
+
+    //Menu
+    $('.parametrizacion').addClass('active active-sub');
+    $('.puestos').addClass('active-link');
 
     let searchIDs=[];
 

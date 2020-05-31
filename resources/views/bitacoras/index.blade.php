@@ -6,8 +6,8 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
     $fechas[1]=Carbon::parse($fechas[1]);
     //dd($fechas);
 } else {
-    $fechas[0]=Carbon::now()->startOfMonth;
-    $fechas[1]=Carbon::now()->endOfMonth;
+    $fechas[0]=Carbon::now()->startOfMonth();
+    $fechas[1]=Carbon::now()->endOfMonth();
 }
 
 @endphp
@@ -41,25 +41,17 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
 </style>
 @endsection
 
-@section('camino')
-<!-- Content Header (Page header) -->
-<div class="content-header">
-        <div class="container-fluid">
-          <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1 class="m-0 text-dark">Log Argos</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a></li>
-                <li class="breadcrumb-item active">Log</li>
-                <li class="breadcrumb-item active">Log Argos</li>
-              </ol>
-            </div><!-- /.col -->
-          </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-      </div>
-      <!-- /.content-header -->
+@section('title')
+    <h1 class="page-header text-overflow pad-no">Bitácora</h1>
+@endsection
+
+@section('breadcrumb')
+    <ol class="breadcrumb">
+        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item">configuración</li>
+        <li class="breadcrumb-item">bitácora</li>
+        {{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
+    </ol>
 @endsection
 
 
@@ -77,7 +69,7 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
         </div>
     @endif
 
-    <div class="panel panel-default " >
+    <div class="panel " >
         <div class="panel-heading cursor-pointer" style="padding-top: 10px" id="headfiltro" >
             <span class="mt-3 ml-2 font-18"><i class="fad fa-filter"></i> Filtro</span>
         </div>
@@ -144,6 +136,9 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
         </div>
     </div>
     <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Bitácora</h3>
+        </div>
         @if(count($bitacoras) == 0)
             <div class="panel-body text-center">
                 <h4>No Bitacoras Available.</h4>
@@ -153,14 +148,25 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
             <div class="panel-body panel-body-with-table">
                 <div class="table-responsive">
 
-                    <table class="table table-striped" >
+                    <table id="tablapuestos"  data-toggle="table"
+                        data-locale="es-ES"
+                        data-search="true"
+                        data-show-columns="true"
+                        data-show-columns-toggle-all="true"
+                        data-page-list="[5, 10, 20, 30, 40, 50]"
+                        data-page-size="50"
+                        data-pagination="true" 
+                        data-show-pagination-switch="true"
+                        data-show-button-icons="true"
+                        data-toolbar="#all_toolbar"
+                        >
                         <thead>
                             <tr>
                                 <th>Usuario</th>
                                 <th>Cliente</th>
                                 <th>Modulo</th>
                                 <th>Seccion</th>
-                                <th>Accion</th>
+                                <th style="width:30%">Accion</th>
                                 <th>Status</th>
                                 <th style="width: 140px">Fecha</th>
                             </tr>
@@ -183,9 +189,7 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                 </div>
             </div>
         @endif
-        <div class="panel-footer">
-            {!! $bitacoras->render() !!}
-        </div>
+        
     </div>
 @endsection
 @php
@@ -200,6 +204,9 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
 @endphp
 @section('scripts')
     <script>
+
+    $('.configuracion').addClass('active active-sub');
+	$('.bitacora').addClass('active-link');
 
     $('#headfiltro').click(function(){
         $('#divfiltro').toggle();

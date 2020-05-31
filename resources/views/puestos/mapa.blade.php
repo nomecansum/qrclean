@@ -68,5 +68,8 @@
 
 
 @section('scripts')
-
+    <script>
+        $('.parametrizacion').addClass('active active-sub');
+        $('.mapa').addClass('active-link');
+    </script>
 @endsection

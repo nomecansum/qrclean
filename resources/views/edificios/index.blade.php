@@ -1,5 +1,23 @@
 @extends('layout')
 
+@section('title')
+    <h1 class="page-header text-overflow pad-no">Gestión de edificios</h1>
+@endsection
+
+@section('styles')
+
+@endsection
+
+@section('breadcrumb')
+    <ol class="breadcrumb">
+        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item">parametrización</li>
+        <li class="breadcrumb-item">edificios</li>
+        {{--  <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
+        <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
+    </ol>
+@endsection
+
 @section('content')
 <div class="row botones_accion">
     <div class="col-md-4">
@@ -35,12 +53,7 @@
     <div class="panel">
 
         <div class="panel-heading">
-
-            <div class="pull-left">
-                <h4 class="mt-5 mb-5">Edificios</h4>
-            </div>
-
-
+            <h3 class="panel-title">Edificios</h3>
         </div>
         
         @if(count($edificiosObjects) == 0)
@@ -51,7 +64,7 @@
         <div class="panel-body panel-body-with-table">
             <div class="table-responsive w-100" >
 
-                <table class="table table-striped dataTable" style="width: 98%">
+                <table class="table table-bordered table-condensed table-hover dataTable" style="width: 98%">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -107,6 +120,9 @@
 
 @section('scripts')
     <script>
+        $('.parametrizacion').addClass('active active-sub');
+        $('.edificios').addClass('active-link');
+        
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/edificios/create') }}", function(){
                 animateCSS('#editorCAM','bounceInRight');

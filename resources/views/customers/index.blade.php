@@ -1,21 +1,24 @@
 @extends('layout')
 
 
-@section('title')
-    <h1 class="page-header text-overflow pad-no">Gestión de clientes</h1>
-@endsection
+
 
 @section('styles')
 
 @endsection
 
+@section('title')
+    <h1 class="page-header text-overflow pad-no">Gestión de clientes</h1>
+@endsection
+
 @section('breadcrumb')
-    <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
-        <li class="breadcrumb-item">clientes</li>
-        <li class="breadcrumb-item">listado</li>
-        {{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
-    </ol>
+<ol class="breadcrumb">
+	<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+	<li class="breadcrumb-item">configuración</li>
+	<li class="breadcrumb-item">clientes</li>
+	<li class="breadcrumb-item">listado</li>
+	{{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
+</ol>
 @endsection
 
 @section('content')
@@ -134,6 +137,9 @@
 
 @section('scripts')
 	<script>
+
+	$('.configuracion').addClass('active active-sub');
+	$('.clientes').addClass('active-link');
 
 	$('#btn_nueva_puesto').click(function(){
        $('#editorCAM').load("{{ url('/clientes/edit/0') }}", function(){

@@ -22,7 +22,7 @@ class BitacorasController extends Controller
         $bitacoras = DB::table('bitacora')
         ->join('users','bitacora.id_usuario','users.id')
         ->join('clientes','clientes.id_cliente','users.id_cliente')
-        ->paginate(50);
+        ->get();
 
         $todas_bitacoras = DB::table('bitacora')
         ->join('users','bitacora.id_usuario','users.id')
@@ -79,7 +79,7 @@ class BitacorasController extends Controller
                 return  $query->whereraw("UPPER(accion) like '%".strtoupper($r->texto)."%'");
                 })
             ->orderby('fecha','desc')
-            ->paginate(50);
+            ->get();
             return view('bitacoras.index', compact('bitacoras'), compact('r','usuarios','modulos'));
             try {     } catch (Exception $exception) {
             flash('ERROR: Ocurrio un error al hacer la busqueda '.$exception->getMessage())->error();

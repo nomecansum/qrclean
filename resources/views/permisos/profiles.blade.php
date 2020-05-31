@@ -66,6 +66,9 @@
 	<div class="row">
 
 			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Perfiles de acceso</h3>
+				</div>
                 <div class="row" style="margin-top: 10px">
                     <div class="col-md-4">
 
@@ -131,15 +134,18 @@
 
 @section('scripts')
 	<script>
-		$(function(){
-			$('#nn').change(function(event){
-				if($('#nn').val()!=''){
-					$('#warning_level').show();
-				} else {
-					$('#warning_level').hide();
-				}
-			});
-		})
+	$('.configuracion').addClass('active active-sub');
+	$('.perfiles').addClass('active-link');
+	
+	$(function(){
+		$('#nn').change(function(event){
+			if($('#nn').val()!=''){
+				$('#warning_level').show();
+			} else {
+				$('#warning_level').hide();
+			}
+		});
+	})
 
 	$('#btn_nueva_seccion').click(function(){
 		$('#editor').show();

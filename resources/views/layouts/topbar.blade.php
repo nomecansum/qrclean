@@ -145,21 +145,22 @@
 
 
             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
+                <div class="font-bold text-center w100 mt-2">{{ Auth::user()->name }}</div>
                 <ul class="head-list">
                     <li>
-                        <a href="#"><i class="fad fa-user"></i> Profile</a>
+                        <a href="{{ url('/users/'.Auth::user()->id.'/edit') }}"><i class="fad fa-user"></i> Mi Perfil</a>
                     </li>
                     {{-- <li>
                         <a href="#"><span class="badge badge-danger pull-right">9</span><i class="demo-pli-mail icon-lg icon-fw"></i> Messages</a>
                     </li> --}}
-                    <li>
+                    {{-- <li>
                         <a href="#"><span class="label label-success pull-right">New</span><i class="demo-pli-gear icon-lg icon-fw"></i> Settings</a>
+                    </li> --}}
+                    <li>
+                        <a href="{{ url('/lockscreen') }}"><i class="fad fa-user-lock"></i> Bloquear pantalla</a>
                     </li>
                     <li>
-                        <a href="#"><i class="demo-pli-computer-secure icon-lg icon-fw"></i> Lock screen</a>
-                    </li>
-                    <li>
-                        <a href="{{url('/logout')}}"><i class="demo-pli-unlock icon-lg icon-fw"></i> Logout</a>
+                        <a href="{{url('/logout')}}"><i class="fad fa-sign-out-alt"></i> Logout</a>
                     </li>
                 </ul>
             </div>

@@ -47,6 +47,9 @@
     <div class="row">
         <div class="col-12">
 			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Permisos de la aplicación</h3>
+				</div>
 			    <div class="panel-body">
 			        {{-- <h2 class="panel-title">Asignacion de permisos</h2> --}}
 			        {{-- @include('resources.combo_clientes') --}}
@@ -141,6 +144,9 @@
 @section('scripts')
 
 <script>
+	$('.configuracion').addClass('active active-sub');
+	$('.permisos').addClass('active-link');
+		
 	$('.check-permission').on('change', function(event){
 		$(this).data('_token','{{csrf_token()}}');
 		if ($(this).is(':checked')) {

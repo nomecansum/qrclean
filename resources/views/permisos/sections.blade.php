@@ -58,6 +58,9 @@
 	<div class="row">
 		<div class="formfestivo">
 			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Secciones</h3>
+				</div>
 			    <div class="panel-body">
 			        <div class="row">
                         <div class="col-md-4">
@@ -156,6 +159,10 @@
 		var originalOption = icon.element;
 		return $('<span><i class="mdi ' + $(originalOption).data('icon') + '"></i> ' + icon.text + '</span>');
 	}
+	
+	$('.configuracion').addClass('active active-sub');
+	$('.secciones').addClass('active-link');
+	
 	$('.icons_select2').select2({
 		width: "100%",
 		templateSelection: iformat,

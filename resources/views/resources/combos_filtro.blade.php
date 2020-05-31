@@ -3,7 +3,7 @@
     use App\Models\estados;
 @endphp
 
-<div class="panel panel-default " style="padding-right: 10px" >
+<div class="panel " style="padding-right: 10px" >
     <div class="panel-heading cursor-pointer" style="padding-top: 10px" id="headfiltro" >
         <span class="mt-3 ml-2 font-18"><i class="fad fa-filter"></i> Filtro </span>
         <span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>

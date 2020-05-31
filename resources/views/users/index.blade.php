@@ -1,16 +1,18 @@
 @extends('layout')
 
-@section('css')
 
+@section('title')
+    <h1 class="page-header text-overflow pad-no">Gestión de usuarios</h1>
 @endsection
-@section('breadcrumb')
-<!-- Content Header (Page header) -->
-<ol class="breadcrumb">
-    <li><a href="{{url('/')}}"><i class="demo-pli-home"></i> </a></li>
-    <li class="">Configuracion</li>
-    <li class="active">Usuarios</li>
-</ol>
 
+@section('breadcrumb')
+    <ol class="breadcrumb">
+        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item">configuración</li>
+        <li class="breadcrumb-item">usuarios</li>
+        <li class="breadcrumb-item">listado</li>
+        {{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
+    </ol>
 @endsection
 
 @section('content')
@@ -27,7 +29,10 @@
         </div>
     @endif
 
-    <div class="panel panel-default">
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Usuarios</h3>
+        </div>
         <div class="row">
             <div class="col-md-4">
 
@@ -52,9 +57,9 @@
         <div class="panel-body panel-body-with-table">
             <div class="table-responsive">
 
-                <table class="table table-striped table-hover ">
+                <table class="table table-bordered table-condensed table-hover dataTable">
                     <thead>
-                        <tr>
+                        <tr >
                             <th style="width:30px"></th>
                             <th>Nombre</th>
                             <th>Email</th>
@@ -108,4 +113,11 @@
         </div>
         @endif
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $('.configuracion').addClass('active active-sub');
+	    $('.usuarios').addClass('active-link');
+    </script>
 @endsection

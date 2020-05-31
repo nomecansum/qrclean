@@ -56,7 +56,7 @@ class HomeController extends Controller
             ->select('cod_puesto','des_puesto','val_color','val_icono')
             ->where('id_cliente',$p->id_cliente)
             ->where('id_edificio',$p->id_edificio)
-            ->where('planta',$p->planta)
+            ->where('id_planta',$p->id_planta)
             ->where('id_estado',1)
             ->get();
         if(!isset($p)){

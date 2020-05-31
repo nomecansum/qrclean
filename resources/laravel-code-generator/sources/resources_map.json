@@ -50,6 +50,11 @@
         "table-name": "estados_puestos"
     },
     {
+        "model-name": "limpiadores",
+        "resource-file": "limpiadores.json",
+        "table-name": "limpiadores_ronda"
+    },
+    {
         "model-name": "rondas",
         "resource-file": "rondas.json",
         "table-name": "rondas_limpieza"

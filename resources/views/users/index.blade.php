@@ -28,26 +28,27 @@
 
         </div>
     @endif
+    <div class="row botones_accion mb-2">
+        <div class="col-md-4">
+
+        </div>
+        <div class="col-md-7">
+            <br>
+        </div>
+        <div class="col-md-1 text-right">
+            <div class="btn-group btn-group-sm pull-right v-middle mt-2" role="group" style="margin-right: 20px;">
+                <a href="{{ route('users.users.create') }}" class="btn btn-success" title="Nuevo dashboard">
+                    <i class="fa fa-plus-square" style="font-size: 20px" aria-hidden="true"></i> Nuevo
+                </a>
+            </div>
+        </div>
+    </div>
 
     <div class="panel">
         <div class="panel-heading">
             <h3 class="panel-title">Usuarios</h3>
         </div>
-        <div class="row">
-            <div class="col-md-4">
 
-            </div>
-            <div class="col-md-7">
-                <br>
-            </div>
-            <div class="col-md-1 text-right ">
-                <div class="btn-group btn-group-sm pull-right v-middle mt-2" role="group" style="margin-right: 20px;">
-                    <a href="{{ route('users.users.create') }}" class="btn btn-success" title="Nuevo dashboard">
-                        <i class="fa fa-plus-square" style="font-size: 20px" aria-hidden="true"></i> Nuevo
-                    </a>
-                </div>
-            </div>
-        </div>
 
         @if(count($usersObjects) == 0)
             <div class="panel-body text-center">

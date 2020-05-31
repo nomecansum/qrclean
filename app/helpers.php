@@ -449,3 +449,26 @@ function validar_acceso_tabla($id,$tabla){
         return redirect()->back()->withInput();
     }
 }
+
+function color_porcentaje($pct){
+    
+    if($pct<50){
+        return "danger";
+    }
+
+    if($pct>=50 && $pct<75){
+        return "warning";
+    }
+
+    if($pct>=75 && $pct<100){
+        return "info";
+    }
+
+    if($pct==100){
+        return "success";
+    }
+
+    if($pct>100){
+        return "mint";
+    }
+}

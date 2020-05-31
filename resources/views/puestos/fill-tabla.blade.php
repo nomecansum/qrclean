@@ -43,16 +43,16 @@
                                     <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chk{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}">
                                     <label class="custom-control-label"   for="chk{{ $puesto->id_puesto }}"></label>
                                 </td>
-                                <td class="thumb text-center" data-id=""" >
+                                <td class="thumb text-center" data-id="" >
                                     @isset($puesto->val_icono)
                                         <i class="{{ $puesto->val_icono }} fa-2x" style="color:{{ $puesto->val_color }}"></i>
                                     @endisset
                                 </td>
                                 
-                                <td class="td" data-id=""">{{ $puesto->des_edificio }}</td>
-                                <td class="td" data-id=""">{{$puesto->des_planta}}</td>
-                                <td class="td" data-id="""><b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}</td>
-                                <td class="td text-center" data-id=""">
+                                <td class="td" data-id="">{{ $puesto->des_edificio }}</td>
+                                <td class="td" data-id="">{{$puesto->des_planta}}</td>
+                                <td class="td" data-id=""><b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}</td>
+                                <td class="td text-center" data-id="">
                                     @switch($puesto->id_estado)
                                         @case(1)
                                             <div class="bg-success rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
@@ -111,4 +111,7 @@
     @if(isset($r))
         $('#tablapuestos').bootstrapTable();
     @endif
+    $("#chktodos").click(function(){
+        $('.chkpuesto').not(this).prop('checked', this.checked);
+    });
 </script>

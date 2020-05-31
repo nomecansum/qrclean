@@ -65,16 +65,6 @@ class puestos_ronda extends Model
     }
 
     /**
-     * Get the RondasLimpieza for this model.
-     *
-     * @return App\Models\RondasLimpieza
-     */
-    public function RondasLimpieza()
-    {
-        return $this->belongsTo('App\Models\RondasLimpieza','id_ronda','id_ronda');
-    }
-
-    /**
      * Get the key for this model.
      *
      * @return App\Models\Key
@@ -82,6 +72,16 @@ class puestos_ronda extends Model
     public function key()
     {
         return $this->belongsTo('App\Models\Key','key_id');
+    }
+
+    /**
+     * Get the RondasLimpieza for this model.
+     *
+     * @return App\Models\RondasLimpieza
+     */
+    public function RondasLimpieza()
+    {
+        return $this->belongsTo('App\Models\RondasLimpieza','num_ronda','id_ronda');
     }
 
     /**

@@ -35,7 +35,7 @@ class rondas extends Model
     protected $fillable = [
                   'des_ronda',
                   'fec_ronda',
-                  'user_asignado',
+                  'id_cliente',
                   'user_creado'
               ];
 
@@ -54,6 +54,16 @@ class rondas extends Model
     protected $casts = [];
     
     /**
+     * Get the Cliente for this model.
+     *
+     * @return App\Models\Cliente
+     */
+    public function Cliente()
+    {
+        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+    }
+
+    /**
      * Get the User for this model.
      *
      * @return App\Models\User
@@ -70,7 +80,7 @@ class rondas extends Model
      */
     public function puestosRonda()
     {
-        return $this->hasOne('App\Models\PuestosRonda','id_ronda','id_ronda');
+        return $this->hasOne('App\Models\PuestosRonda','num_ronda','id_ronda');
     }
 
 

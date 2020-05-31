@@ -11,13 +11,16 @@
 @section('breadcrumb')
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
-        <li class="breadcrumb-item">Configuracion</li>
-        <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
+        <li class="breadcrumb-item">Ccnfiguracion</li>
+        <li class="breadcrumb-item"><a href="{{url('/users')}}">usuarios</a></li>
         <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>
     </ol>
 @endsection
 
 @section('content')
+<div class="row botones_accion mb-2">
+    <br><br>
+</div>
 <div class="panel">
     <div class="panel-heading">
         <h3 class="panel-title">Titulo</h3>
@@ -31,5 +34,8 @@
 
 
 @section('scripts')
-
+    <script>
+        $('.SECCION_MENU').addClass('active active-sub');
+        $('.ITEM_MENU').addClass('active-link');
+    </script>
 @endsection

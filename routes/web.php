@@ -124,6 +124,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/delete/{plantas}','PlantasController@destroy')->name('plantas.plantas.destroy')->where('id', '[0-9]+');
     });
 
+    Route::group(['prefix' => 'rondas'], function () {
+        Route::get('/', 'LimpiezaController@index')->name('rondas.index');
+        Route::get('/view/{id}/{print}', 'LimpiezaController@view')->name('rondas.view');
+    });
+
     Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);
     Route::get('permissions/getProfiles',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'PermissionsController@getProfiles']);
 	Route::post('addPermissions',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions']);

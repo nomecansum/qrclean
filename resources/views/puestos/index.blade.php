@@ -37,7 +37,7 @@
                             <li class="divider"></li>
                             <li class="dropdown-header">Acciones</li>
                             <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
-                            <li><a href="#" class="btn_asignar" ><i class="fad fa-broom"></i>Ruta de limpieza</a></li>
+                            <li><a href="#" class="btn_asignar" ><i class="fad fa-broom"></i>Ronda de limpieza</a></li>
                         </ul>
                     </div>
                 </div>
@@ -146,14 +146,14 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span></button>
                     <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                    <h3 class="modal-title">Crear ruta de limpieza</h3><br>
+                    <h3 class="modal-title">Crear ronda de limpieza</h3><br>
                    
                     
                 </div>
                 
                 <div class="modal-body" style="height: 250px">
                     <input type="hidden" id="listaID">
-                    Crear ruta de limpieza para <span id="cuenta_puestos_limpieza"></span> puestos.
+                    Crear ronda de limpieza para <span id="cuenta_puestos_limpieza"></span> puestos.
                     <br><br>
                     <div class="form-group">
                         <label> Descripcion del trabajo</label>

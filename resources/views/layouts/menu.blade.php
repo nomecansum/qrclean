@@ -125,6 +125,7 @@
                         <span class="menu-title">Puestos</span>
                         <i class="arrow"></i>
                     </a> --}}
+                    @if(checkPermissions(['Parametrizacion'],['R']))
                     <li class="parametrizacion">
                         <a href="#">
                             <i class="fad fa-browser"></i>
@@ -136,14 +137,32 @@
                         <ul class="collapse">
                             @if(checkPermissions(['Edificios'],['R']))<li class="edificios"><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li> @endif
                             @if(checkPermissions(['Plantas'],['R']))<li class="plantas"><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li> @endif
-                            @if(checkPermissions(['Puestos'],['R']))<li class="puestos"><a href="/puestos"> <i class="fad fa-user"></i> Puestos</a></li> @endif
+                            @if(checkPermissions(['Puestos'],['R']))<li class="puestos"><a href="/puestos"> <i class="fad fa-desktop-alt"></i> Puestos</a></li> @endif
                             @if(checkPermissions(['Puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
                         </ul>
                     </li>
+                    @endif
+
+                    @if(checkPermissions(['Limpieza'],['R']))
+                    <li class="limpieza">
+                        <a href="#">
+                            <i class="fad fa-broom"></i>
+                            @if(checkPermissions(['Parametrizacion'],['R']))<span class="menu-title">Limpieza</span> @endif
+                            <i class="arrow"></i>
+                        </a>
+
+                        <!--Submenu-->
+                        <ul class="collapse">
+                            @if(checkPermissions(['Rondas de limpieza'],['R']))<li class="rondas"><a href="/rondas" class="text-nowrap"><i class="fad fa-broom"></i> Rondas limpieza</a></li> @endif
+                        </ul>
+                    </li>
+                    @endif
+
+                    @if(checkPermissions(['Configuracion'],['R']))
                     <li class="configuracion">
                         <a href="#">
                             <i class="fa fa-cog"></i>
-                            @if(checkPermissions(['Configuracion'],['R']))<span class="menu-title">Configuracion</span> @endif
+                                <span class="menu-title">Configuracion</span> 
                             <i class="arrow"></i>
                         </a>
 
@@ -158,6 +177,7 @@
 
                         </ul>
                     </li>
+                    @endif
                 </ul>
 
 

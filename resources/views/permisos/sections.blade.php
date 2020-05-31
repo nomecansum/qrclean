@@ -13,7 +13,22 @@
 @endsection
 @section('content')
 <div class="container-fluid">
+	<div class="row botones_accion mb-2">
+		<div class="col-md-4">
 
+		</div>
+		<div class="col-md-7">
+			<br>
+		</div>
+		<div class="col-md-1 text-right">
+			<div class="btn-group btn-group-sm pull-right" role="group">
+					<a href="#" id="btn_nueva_seccion" class="btn btn-success" title="Nueva seccion">
+					<i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
+					<span>Nueva</span>
+				</a>
+			</div>
+		</div>
+	</div>
 
     <div class="row">
 			<div class="panel panel-default col-md-12" id="editor" style="display:none">
@@ -62,22 +77,6 @@
 					<h3 class="panel-title">Secciones</h3>
 				</div>
 			    <div class="panel-body">
-			        <div class="row">
-                        <div class="col-md-4">
-
-                        </div>
-                        <div class="col-md-7">
-                            <br>
-                        </div>
-                        <div class="col-md-1 text-right">
-                            <div class="btn-group btn-group-sm pull-right" role="group">
-                                    <a href="#" id="btn_nueva_seccion" class="btn btn-success" title="Nueva seccion">
-                                    <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-                                    <span>Nueva</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
 			        <div class="table-responsive m-t-40">
 			            <table id="myTable" class="table table-bordered nowrap table-hover table-striped table-bordered">
 			                <thead>

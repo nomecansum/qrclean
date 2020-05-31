@@ -12,6 +12,22 @@
 
 @endsection
 @section('content')
+<div class="row botones_accion mb-2">
+	<div class="col-md-4">
+
+	</div>
+	<div class="col-md-7">
+		<br>
+	</div>
+	<div class="col-md-1 text-right">
+		<div class="btn-group btn-group-sm pull-right mt-2" role="group" style="margin-right: 20px;">
+				<a href="#" id="btn_nueva_seccion" class="btn btn-success" title="Nuevo perfil">
+				<span class="fa fa-plus-square pt-1" style="font-size: 20px" aria-hidden="true"></span> Nuevo
+			</a>
+		</div>
+	</div>
+</div>
+
 <div class="container-fluid">
 
     <div class="row">
@@ -69,21 +85,7 @@
 				<div class="panel-heading">
 					<h3 class="panel-title">Perfiles de acceso</h3>
 				</div>
-                <div class="row" style="margin-top: 10px">
-                    <div class="col-md-4">
-
-                    </div>
-                    <div class="col-md-7">
-                        <br>
-                    </div>
-                    <div class="col-md-1 text-right">
-                        <div class="btn-group btn-group-sm pull-right mt-2" role="group" style="margin-right: 20px;">
-                                <a href="#" id="btn_nueva_seccion" class="btn btn-success" title="Nuevo perfil">
-                                <span class="fa fa-plus-square pt-1" style="font-size: 20px" aria-hidden="true"></span> Nuevo
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                
 			    <div class="panel-body collapse show">
 			        {{-- <h2 class="panel-title float-left">{{trans('strings.profiles')}}</h2> --}}
 			        {{-- @include('resources.combo_clientes') --}}

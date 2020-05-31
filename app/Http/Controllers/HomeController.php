@@ -136,7 +136,7 @@ class HomeController extends Controller
                 'mensaje'=>"Error, puesto no encontrado"
             ];
         } else {    
-            logpuestos::create(['id_puesto'=>$p->id_puesto,'id_estado'=>$estado,'id_user'=>Auth::user()->id,'fecha'=>Carbon::now()]);
+            logpuestos::create(['id_puesto'=>$p->id_puesto,'id_estado'=>$estado,'id_user'=>Auth::user()->id??0,'fecha'=>Carbon::now()]);
             DB::table('puestos')->where('token',$puesto)->update([
                 'id_estado'=>$estado,
                 'fec_ult_estado'=>Carbon::now()

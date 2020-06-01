@@ -30,7 +30,7 @@ class UsersController extends Controller
                 $q->where('users.id_cliente',Auth::user()->id_cliente);
             }
         })
-        ->paginate(25);
+        ->get();
         //$usersObjects = users::with('grupo','perfile')->paginate(25);
 
         return view('users.index', compact('usersObjects'));
@@ -63,7 +63,6 @@ class UsersController extends Controller
             flash('ERROR: El e-mail ya existe '.$request->email)->error();
             return back()->withInput();
         }
-
         $data = $this->getData($request);
 
         $img_usuario = "";
@@ -76,8 +75,9 @@ class UsersController extends Controller
             }
 
             $data['img_usuario']=$img_usuario;
-            $data["password"]=Hash::make($data["password"]);
+            $data["password"]=Hash::make($request->password);
             $data["cod_nivel"]=$request->cod_nivel;
+            $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
 
             users::create($data);
             return [
@@ -89,7 +89,7 @@ class UsersController extends Controller
             return [
                 'title' => "Usuarios",
                 'error' => 'ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage(),
-                //'url' => url('sections')
+                'url' => url('users')
             ];
             // flash('ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage())->error();
             // return back()->withInput();
@@ -124,8 +124,10 @@ class UsersController extends Controller
     public function update($id, Request $request)
     {
         validar_acceso_tabla($id,"users");
+       
         $img_usuario = "";
         $data = $this->getData($request);
+        
         try {
             if ($request->hasFile('img_usuario')) {
                 $file = $request->file('img_usuario');
@@ -136,16 +138,17 @@ class UsersController extends Controller
 
             $data['img_usuario']=$img_usuario;
 
+            
             if (isset($request->password)){
                 $data["password"]=Hash::make($request->password);
             }
             $users = users::findOrFail($id);
-
+            $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
             $users->update($data);
             return [
                 'title' => "Usuarios",
                 'message' => 'Usuario '.$request->name. ' actualizado con exito',
-                //'url' => url('sections')
+                'url' => url('users')
             ];
             // flash('Usuario '.$request->name. 'actualizado con exito')->success();
             // return redirect()->route('users.users.index');
@@ -194,14 +197,16 @@ class UsersController extends Controller
     protected function getData(Request $request)
     {
         $rules = [
+            'name'=>'required',
             'collapse' => 'nullable|numeric|min:-2147483648|max:2147483647',
             'email' => 'required|string|min:1|max:255',
             'email_verified_at' => 'nullable|date_format:j/n/Y g:i A',
-            'id_grupo' => 'nullable',
-            'id_perfil' => 'nullable',
+            'id_cliente' => 'required',
+            'cod_nivel' => 'nullable',
             'remember_token' => 'nullable|string|min:0|max:100',
             'theme' => 'nullable|string|min:0|max:150',
             'val_timezone' => 'nullable|string|min:0|max:100',
+            'nivel_acceso'=>'nullable'
         ];
 
 

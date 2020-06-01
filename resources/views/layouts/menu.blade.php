@@ -153,7 +153,7 @@
 
                         <!--Submenu-->
                         <ul class="collapse">
-                            @if(checkPermissions(['Rondas de limpieza'],['R']))<li class="rondas"><a href="/rondas" class="text-nowrap"><i class="fad fa-broom"></i> Rondas limpieza</a></li> @endif
+                            @if(checkPermissions(['Rondas de limpieza'],['R']))<li class="rondas"><a href="/rondas/index/" class="text-nowrap"><i class="fad fa-broom"></i> Rondas limpieza</a></li> @endif
                         </ul>
                     </li>
                     @endif

@@ -26,6 +26,12 @@
         <h3 class="panel-title">Rondas de limpieza</h3>
     </div>
     <div class="panel-body">
+        <div id="all_toolbar">
+            <div class="input-group">
+                <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
+                <span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+            </div>
+        </div>
         <table id="tablarondas"  data-toggle="table"
             data-locale="es-ES"
             data-search="true"
@@ -122,6 +128,8 @@
 
 @section('scripts')
     <script>
+
+
         $('.limpieza').addClass('active active-sub');
         $('.rondas').addClass('active-link');
 
@@ -136,5 +144,23 @@
         });
 
         $('.add-tooltip').tooltip({container:'body'});
+
+        //Date range picker
+        $('#fechas').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: '{{trans("general.date_format")}}',
+                applyLabel: "OK",
+                cancelLabel: "Cancelar",
+                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+                firstDay: {{trans("general.firstDayofWeek")}}
+            },
+            opens: 'right',
+        }, function(start_date, end_date) {
+            $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
+            window.location.href = '{{ url('/rondas/index/') }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
+        });
+
     </script>
 @endsection

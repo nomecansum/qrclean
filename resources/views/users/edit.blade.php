@@ -10,26 +10,12 @@
 
 @section('content')
 
-<div class="row" style="margin-top: 10px">
-    <div class="col-md-4">
 
-    </div>
-    <div class="col-md-7">
-        <br>
-    </div>
-    <div class="col-md-1 text-right">
-        <div class="btn-group btn-group-sm pull-right" role="group" style="margin-right: 20px;">
-            <a href="{{ route('users.users.index') }}" class="btn btn-primary" title="Listado">
-                <span class="fa fa-list pt-2" aria-hidden="true"></span>
-            </a>
-            <a href="{{ route('users.users.create') }}" class="btn btn-success" title="Nuevo usuario">
-                <span class="fa fa-plus-square pt-1" style="font-size: 20px" aria-hidden="true"></span>
-            </a>
+
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</h3>
         </div>
-    </div>
-</div>
-
-    <div class="panel panel-default">
         <div class="panel-body">
 
             @if ($errors->any())

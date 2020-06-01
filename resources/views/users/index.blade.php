@@ -58,9 +58,20 @@
         <div class="panel-body panel-body-with-table">
             <div class="table-responsive">
 
-                <table class="table table-bordered table-condensed table-hover dataTable">
+                <table id="tablarondas"  data-toggle="table"
+                    data-locale="es-ES"
+                    data-search="true"
+                    data-show-columns="true"
+                    data-show-columns-toggle-all="true"
+                    data-page-list="[5, 10, 20, 30, 40, 50]"
+                    data-page-size="50"
+                    data-pagination="true" 
+                    data-show-pagination-switch="true"
+                    data-show-button-icons="true"
+                    data-toolbar="#all_toolbar"
+                    >
                     <thead>
-                        <tr >
+                        <tr>
                             <th style="width:30px"></th>
                             <th>Nombre</th>
                             <th>Email</th>
@@ -108,9 +119,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="panel-footer">
-            {!! $usersObjects->render() !!}
         </div>
         @endif
     </div>

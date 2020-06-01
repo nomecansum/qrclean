@@ -63,15 +63,15 @@
     </div>
     <div class="row">
         <div class="col-md-3">
-            <div class="panel panel-warning panel-colorful media middle pad-all">
+            <div class="panel panel-purple panel-colorful media middle pad-all">
                 <div class="media-left">
                     <div class="pad-hor">
-                        <i class="demo-pli-file-word icon-3x"></i>
+                        <i class="fad fa-building fa-2x"></i>
                     </div>
                 </div>
                 <div class="media-body">
-                    <p class="text-2x mar-no text-semibold">241</p>
-                    <p class="mar-no">Documents</p>
+                    <p class="text-2x mar-no text-semibold">{{ $edificios->count() }}</p>
+                    <p class="mar-no">Edificios</p>
                 </div>
             </div>
         </div>
@@ -79,12 +79,12 @@
             <div class="panel panel-info panel-colorful media middle pad-all">
                 <div class="media-left">
                     <div class="pad-hor">
-                        <i class="demo-pli-file-zip icon-3x"></i>
+                        <i class="fad fa-layer-group fa-2x"></i>
                     </div>
                 </div>
                 <div class="media-body">
-                    <p class="text-2x mar-no text-semibold">241</p>
-                    <p class="mar-no">Zip Files</p>
+                    <p class="text-2x mar-no text-semibold">{{ $plantas->count() }}</p>
+                    <p class="mar-no">Plantas</p>
                 </div>
             </div>
         </div>
@@ -92,31 +92,31 @@
             <div class="panel panel-mint panel-colorful media middle pad-all">
                 <div class="media-left">
                     <div class="pad-hor">
-                        <i class="demo-pli-camera-2 icon-3x"></i>
+                        <i class="fad fa-desktop-alt fa-2x"></i>
                     </div>
                 </div>
                 <div class="media-body">
-                    <p class="text-2x mar-no text-semibold">241</p>
-                    <p class="mar-no">Photos</p>
+                    <p class="text-2x mar-no text-semibold">{{ $puestos->count() }}</p>
+                    <p class="mar-no">Puestos</p>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="panel panel-danger panel-colorful media middle pad-all">
+            <div class="panel panel-{{ color_porcentaje($pct_completado) }} panel-colorful media middle pad-all">
                 <div class="media-left">
                     <div class="pad-hor">
-                        <i class="demo-pli-video icon-3x"></i>
+                        <i class="fad fa-check"></i>
                     </div>
                 </div>
                 <div class="media-body">
-                    <p class="text-2x mar-no text-semibold">241</p>
-                    <p class="mar-no">Videos</p>
+                    <p class="text-2x mar-no text-semibold">{{ round($pct_completado) }}%   </p>
+                    <p class="mar-no">Operativos</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-sm-3 col-lg-3">
             <!--Sparkline Area Chart-->
             <div class="panel panel-success panel-colorful">
@@ -187,21 +187,65 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="panel">
         <div class="panel-heading">
-            <h3 class="panel-title">Donut Chart</h3>
+            <h3 class="panel-title">Estado {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
         </div>
         <div class="panel-body">
-            <div id="demo-flot-donut" style="height: 250px; padding: 0px; position: relative;"><canvas class="flot-base" width="476" height="250" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 476px; height: 250px;"></canvas><canvas class="flot-overlay" width="476" height="250" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 476px; height: 250px;"></canvas><div class="legend"><div style="position: absolute; width: 52px; height: 68px; top: 5px; right: 5px; background-color: rgb(255, 255, 255); opacity: 0.85;"> </div><table style="position:absolute;top:5px;right:5px;;font-size:smaller;color:#545454"><tbody><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(237,194,64);overflow:hidden"></div></div></td><td class="legendLabel">Series1</td></tr><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(175,216,248);overflow:hidden"></div></div></td><td class="legendLabel">Series2</td></tr><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(203,75,75);overflow:hidden"></div></div></td><td class="legendLabel">Series3</td></tr><tr><td class="legendColorBox"><div style="border:1px solid #ccc;padding:1px"><div style="width:4px;height:0;border:5px solid rgb(77,167,77);overflow:hidden"></div></div></td><td class="legendLabel">Series4</td></tr></tbody></table></div></div>
+            <div id="chartdiv" style="width:100%; height:300px;  ml-0"></div>
+
         </div>
     </div>
 
 @endsection
 
-
+@php
+   
+@endphp
 
 @section('scripts')
+    {{--  AMCharts  --}}
+    <script src="{{url('plugins')}}/amcharts4/core.js"></script>
+    <script src="{{url('plugins')}}/amcharts4/charts.js"></script>
+    <script src="{{url('plugins')}}/amcharts4/themes/material.js"></script>
+    <script src="{{url('plugins')}}/amcharts4/themes/animated.js"></script>
+    <script src="{{url('plugins')}}/amcharts4/themes/kelly.js"></script>
+    <script src="{{url('plugins')}}/amcharts4/lang/es_ES.js"></script>
+
     <script src="/js/demo/nifty-demo.min.js"></script>
+
+<script>
+    am4core.ready(function() {
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    //am4core.useTheme(am4themes_kelly);
+
+    // Themes end
+    // Create chart instance
+    var chart = am4core.create("chartdiv", am4charts.PieChart);
+
+    chart.legend = new am4charts.Legend();
+    
+    // Add data
+    chart.data = {!! json_encode($datos_quesito) !!};
+    
+    // Add and configure Series
+    var pieSeries = chart.series.push(new am4charts.PieSeries());
+    pieSeries.dataFields.value = "cuenta";
+    pieSeries.dataFields.category = "des_estado";
+    pieSeries.slices.template.stroke = am4core.color("#fff");
+    pieSeries.slices.template.strokeWidth = 2;
+    pieSeries.slices.template.strokeOpacity = 1;
+    
+    // This creates initial animation
+    pieSeries.hiddenState.properties.opacity = 1;
+    pieSeries.hiddenState.properties.endAngle = -90;
+    pieSeries.hiddenState.properties.startAngle = -90;
+    
+    }); // end am4core.ready()
+    </script>
+
+
 @endsection

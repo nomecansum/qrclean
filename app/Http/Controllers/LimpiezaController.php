@@ -6,13 +6,19 @@ use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
 use App\Models\users;
+use App\Models\puestos_ronda;
 use PDF;
 
 
 class LimpiezaController extends Controller
 {
-    public function index(){
+    public function index($f1=0,$f2=0){
 
+        $f1=$f1==0?Carbon::now()->startOfMonth():Carbon::parse($f1);
+        $f2=$f2==0?Carbon::now()->endOfMonth():Carbon::parse($f2);
+        $fhasta=clone($f2);
+        $fhasta=$fhasta->addDay();
+        
         $usuarios=DB::table('users')
             ->where(function($q){
                 if (!isAdmin()) {
@@ -32,7 +38,7 @@ class LimpiezaController extends Controller
                     $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
                 }
             })
-            ->whereBetween('fec_ronda',[Carbon::now()->startOfMonth(),Carbon::now()->endOfMonth()])
+            ->whereBetween('fec_ronda',[$f1,$fhasta])
             ->groupby('rondas_limpieza.id_ronda','fec_ronda','des_ronda','u1.name')
             ->get();
 
@@ -45,9 +51,9 @@ class LimpiezaController extends Controller
                     $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
                 }
             })
-            ->whereBetween('fec_ronda',[Carbon::now()->startOfMonth(),Carbon::now()->endOfMonth()])
+            ->whereBetween('fec_ronda',[$f1,$fhasta])
             ->get();
-        return view('limpieza.index',compact('rondas','detalles','usuarios'));
+        return view('limpieza.index',compact('rondas','detalles','usuarios','f1','f2'));
     }
 
     public function view($id,$print=0){
@@ -86,5 +92,23 @@ class LimpiezaController extends Controller
         }
 
         
+    }
+
+    public function estado_puesto(Request $r){
+        
+
+        $lista_id=explode(',',$r->id);
+        foreach($lista_id as $i){
+            $puesto=puestos_ronda::findorfail($i);
+            $puesto->user_audit=$r->user;
+            $puesto->fec_fin=Carbon::now();
+            $puesto->save();
+        }
+        return [
+            'title' => "OK",
+            'message' => 'puesto '.$r->etiqueta. ' actualizado',
+            'id' => $lista_id
+        ];
+
     }
 }

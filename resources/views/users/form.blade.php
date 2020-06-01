@@ -71,19 +71,21 @@
             </div>
         </div>
         <div class="col-md-1"></div>
-        <div class="col-md-2 text-center">
-            <label for="imagen_usuario" class="col-md-2 control-label">Imagen</label><br>
+        <div class="col-md-2 text-center b-all rounded">
             <div class="col-12">
                 <div class="form-group  {{ $errors->has('img_usuario') ? 'has-error' : '' }}">
                     <label for="img_usuario" class="preview preview1" style="background-image: url();">
-                        <img src="{{ isset($users) ? url('img/users/',$users->img_usuario) : ''}}" style="margin: auto; display: block; width: 180px; heigth:180px" alt="" class="img-fluid">
+                        <img src="{{ isset($users) ? url('img/users/',$users->img_usuario) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid">
                     </label>
                     <div class="custom-file">
-                        <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input" name="img_usuario" id="img_usuario" lang="es">
+                        <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input" name="img_usuario" id="img_usuario" lang="es" value="{{ isset($users) ? $users->img_usuario : ''}}">
                         <label class="custom-file-label" for="img_usuario"></label>
                     </div>
                 </div>
                     {!! $errors->first('img_usuario', '<p class="help-block">:message</p>') !!}
+            </div>
+            <div class="row font-bold">
+                Imagen<br>
             </div>
         </div>
 </div>
@@ -91,22 +93,22 @@
         <div class="col-md-3 mr-3">
             <div class="form-group">
                 <label>Cliente</label><br>
-                <select required name="cod_cliente" id="cod_cliente" class="select2" style="width: 100%">
+                <select required name="id_cliente" id="id_cliente" class="select2" style="width: 100%">
                     <option value=""></option>
                     @foreach (\DB::table('clientes')->where(function($q){
                         if (!fullAccess()){
                                 $q->WhereIn('id_cliente',Auth::user()->id_cliente);
                             }
                         })->wherenull('fec_borrado')->get() as $c)
-                        <option {{$users->id_cliente == $c->id_cliente ? 'selected' : ''}} value="{{$c->id_cliente}}">{{$c->nom_cliente}}</option>
+                        <option {{isset($users) && $users->id_cliente == $c->id_cliente ? 'selected' : ''}} value="{{$c->id_cliente}}">{{$c->nom_cliente}}</option>
                     @endforeach
                 </select>
             </div>
         </div>
-        <div class="col-md-2 mr-3">
+        <div class="col-md-3 mr-3">
             <div class="form-group {{ $errors->has('id_perfil') ? 'has-error' : '' }}">
                 <label for="id_perfil" class="control-label">Perfil</label>
-                <select class="form-control" id="cod_nivel" name="cod_nivel">
+                <select class="form-control"  id="cod_nivel" name="cod_nivel">
                     @foreach ($Perfiles as $Perfile)
                         <option value="{{ $Perfile->cod_nivel }}" {{ old('cod_nivel', optional($users)->cod_nivel) == $Perfile->cod_nivel ? 'selected' : '' }}>
                             {{ $Perfile->des_nivel_acceso }}
@@ -146,7 +148,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label>Zona horaria</label>
-                <select name="timezone" class="select2" style="width: 100%; margin-top: 25px; height: 38px">
+                <select name="val_timezone" class="select2" style="width: 100%; margin-top: 25px; height: 38px">
                     <option value="" selected></option>
                     @foreach($regions as $region => $list)
                     <optgroup label="{{ $region }}">
@@ -164,18 +166,20 @@
 
 @section('scripts_modulo')
 <script>
-    function readURL(input,element) {
+    function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-            console.log(reader)
+
             reader.onload = function (e) {
-                $(element).html('<img src="'+e.target.result+'" style="height: 100%; margin: auto; display: block;" alt="">');
+                $('#img_preview').attr('src', e.target.result);
             }
             reader.readAsDataURL(input.files[0]);
         }
     }
-    $(".imgInp").change(function(){
-        readURL(this,$(this).data('preview'));
+
+    $("#img_usuario").change(function(){
+        readURL(this);
     });
+
 </script>
 @endsection

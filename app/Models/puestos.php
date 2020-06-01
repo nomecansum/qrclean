@@ -35,10 +35,12 @@ class puestos extends Model
     protected $fillable = [
                   'cod_puesto',
                   'des_puesto',
-                  'id_edificio',
-                  'planta',
-                  'id_estado',
+                  'fec_ult_estado',
                   'id_cliente',
+                  'id_edificio',
+                  'id_estado',
+                  'id_planta',
+                  'token',
                   'val_color',
                   'val_icono'
               ];
@@ -58,6 +60,16 @@ class puestos extends Model
     protected $casts = [];
     
     /**
+     * Get the Cliente for this model.
+     *
+     * @return App\Models\Cliente
+     */
+    public function Cliente()
+    {
+        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+    }
+
+    /**
      * Get the Edificio for this model.
      *
      * @return App\Models\Edificio
@@ -68,13 +80,33 @@ class puestos extends Model
     }
 
     /**
-     * Get the Cliente for this model.
+     * Get the Planta for this model.
      *
-     * @return App\Models\Cliente
+     * @return App\Models\Planta
      */
-    public function Cliente()
+    public function Planta()
     {
-        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+        return $this->belongsTo('App\Models\Planta','id_planta','id_planta');
+    }
+
+    /**
+     * Get the puestosRondas for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function puestosRondas()
+    {
+        return $this->hasMany('App\Models\PuestosRonda','id_puesto','id_puesto');
+    }
+
+    /**
+     * Get the logCambiosEstados for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function logCambiosEstados()
+    {
+        return $this->hasMany('App\Models\Logpuesto','id_puesto','id_puesto');
     }
 
 

@@ -2,6 +2,10 @@
     ///Variables globales de la aplicacion ////
     let modal_open = false;   //Indica si hay ventanas modales abiertas
 
+    //Locale de Moment
+    moment.locale('es');
+
+
     //Ocultar los alert
     $('div.alert').not('.alert-important,.alert-danger,.not-dismissable').delay(5000).fadeOut(350);
 

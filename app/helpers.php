@@ -409,22 +409,27 @@ function validar_acceso_tabla($id,$tabla){
         case "clientes":
             $descriptivo="cliente";
             $campo="id_cliente";
+            $ruta="clientes.index";
             break;
         case "plantas":
             $descriptivo="planta";
             $campo="id_planta";
+            $ruta="plantas.plantas.index";
             break;
         case "edificios":
             $descriptivo="edificio";
             $campo="id_edificio";
+            $ruta="edificios.edificios.index";
             break;
         case "users":
             $descriptivo="usuario";
             $campo="id";
+            $ruta="users.index";
             break;
         case "puestos":
             $descriptivo="puesto";
             $campo="id_puesto";
+            $ruta="puestos.index";
             break;
         default:
             $descriptivo=$tabla;
@@ -438,7 +443,7 @@ function validar_acceso_tabla($id,$tabla){
         ->whereNull('clientes.fec_borrado')
         ->where(function($q){
             if (!isAdmin()){
-                $q->orWhereIn('cug_clientes.cod_cliente',clientes());
+                $q->orWhereIn('clientes.id_cliente',clientes());
             }
         })
     ->first();
@@ -446,7 +451,7 @@ function validar_acceso_tabla($id,$tabla){
     {
         savebitacora("BLOQUEO DE ACCESO --> ERROR: El ".$descriptivo." ".$id." no existe o no tienes acceso",'validar_acceso_tabla',$tabla);
         flash("ERROR: El ".$descriptivo." ".$id." no existe o no tienes acceso")->error();
-        return redirect()->back()->withInput();
+        return redirect()->route($ruta);
     }
 }
 

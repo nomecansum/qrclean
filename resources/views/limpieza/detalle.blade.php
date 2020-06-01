@@ -71,7 +71,7 @@ try{
     <label class="mt-1 ml-1 mb-1">Pesonal asignado</label>
     <ul class="lista_emp">
         @foreach($limpiadores as $l)
-            <li class="mb-1" style="color: {{ genColorCodeFromText("EMPLEADO".$l->id,2) }}"><i class="fas fa-male fa-2x"></i> {{ $l->name }}</li>
+            <li class="mb-1 item_empleado hover-this rounded pt-1 pl-1 pb-1"  data-id="{{ $l->id }}" style="color: {{ genColorCodeFromText("EMPLEADO".$l->id,2) }}; cursor: pointer;"><i class="fas fa-male fa-2x"></i> {{ $l->name }}</li>
         @endforeach
     </ul>
 </div>
@@ -94,7 +94,7 @@ try{
                 $puestos=$detalles->where('id_planta',$key_planta);
             @endphp
             @foreach($puestos as $p)
-                <div class="col-md-2 rounded add-tooltip" data-container="body" title="@if(!isset($p->user_audit)) Puesto sin limpiar @else Limpiado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; @else border: 1px solid #ccc; @endif">
+                <div class="col-md-2 rounded add-tooltip divpuesto hover-this" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->id_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto sin limpiar @else Limpiado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer; @else border: 1px solid #ccc; @endif">
                     {{ $p->cod_puesto }}<br>
                     @if(isset($p->user_audit))<i class="fas fa-male" style="color: {{ genColorCodeFromText("EMPLEADO".$p->user_audit,2) }}"></i> <span style="font-size: 12px">{!! beauty_fecha($p->fec_fin) !!}</span> @else --- @endif
                 </div>
@@ -102,3 +102,25 @@ try{
         @endforeach
     @endforeach
 </div>
+<script>
+    
+    id_user={{ Auth::user()->id }};
+
+    $('.divpuesto').click(function(){
+        if(!$(this).data('user'))
+        {
+            $.post("{{ url('/rondas/estado_puesto/') }}/", {_token:'{{csrf_token()}}',id:$(this).data('id'), user: id_user}, function(data, textStatus, xhr) {
+                console.log(data);
+                $('#divpuesto'+data.id[0]).addClass('bg-success');
+            })   
+        }
+       
+    })
+
+    $('.item_empleado').click(function(){
+        $('.item_empleado').removeClass('b-all bg-gray');
+        $(this).addClass('b-all bg-gray');
+        id_user=$(this).data('id');
+        console.log('Cambiado a '+id_user);
+    })
+</script>

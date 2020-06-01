@@ -40,7 +40,7 @@ Route::group(['middleware' => 'auth'], function() {
     //
 
     Route::group(['prefix' => 'users'], function () {
-        Route::get('/', 'UsersController@index')->name('users.users.index');
+        Route::get('/', 'UsersController@index')->name('users.index');
         Route::get('/create','UsersController@create')->name('users.users.create');
         Route::get('/show/{users}','UsersController@show')->name('users.users.show');
         Route::get('/{users}/edit','UsersController@edit')->name('users.users.edit');
@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::group(['prefix' => 'clientes'], function() {
-        Route::get('/',['middleware'=>'permissions:["Clientes"],["R"]', 'uses' => 'CustomersController@index']);
+        Route::get('/',['middleware'=>'permissions:["Clientes"],["R"]', 'uses' => 'CustomersController@index'])->name('clientes.index');
         Route::get('create',['middleware'=>'permissions:["Clientes"],[""]', 'uses' => 'CustomersController@create']);
         Route::post('save',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@save']);
         Route::get('edit/{id}',['middleware'=>'permissions:["Clientes"],["C"]', 'uses' => 'CustomersController@edit']);
@@ -91,7 +91,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::group(['prefix' => 'puestos'], function() {
-        Route::get('/',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@index']);
+        Route::get('/',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@index'])->name('puestos.index');
         Route::post('/',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@search']);
 	    Route::get('/edit/{id}',['middleware'=>'permissions:["Puestos"],["C"]', 'uses' => 'PuestosController@edit']);
 	    Route::post('/update',['middleware'=>'permissions:["Puestos"],["C"]', 'uses' => 'PuestosController@update']);
@@ -125,8 +125,11 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::group(['prefix' => 'rondas'], function () {
-        Route::get('/', 'LimpiezaController@index')->name('rondas.index');
+       
         Route::get('/view/{id}/{print}', 'LimpiezaController@view')->name('rondas.view');
+        Route::post('/estado_puesto', 'LimpiezaController@estado_puesto')->name('rondas.estado_puesto');
+        Route::get('/index/{f1?}/{f2?}', 'LimpiezaController@index')->name('rondas.index');
+        
     });
 
     Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);

@@ -18,6 +18,7 @@
 @endsection
 
 @section('content')
+    
     <div class="row botones_accion">
         <div class="col-md-8">
 
@@ -30,22 +31,26 @@
                             <i class="fad fa-poll-people pt-2" style="font-size: 20px" aria-hidden="true"></i> Acciones <i class="dropdown-caret"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="">
-                            <li class="dropdown-header">Cambiar estado</li>
-                            <li><a href="#" data-estado="1" class="btn_estado_check"><i class="fas fa-square text-success"></i> Disponible</a></li>
-                            <li><a href="#" data-estado="2" class="btn_estado_check"><i class="fas fa-square text-danger"></i> Usado</a></li>
-                            <li><a href="#" data-estado="3" class="btn_estado_check"><i class="fas fa-square text-info"></i> Limpieza</a></li>
+                            @if(checkPermissions(['Puestos'],['W']))
+                                <li class="dropdown-header">Cambiar estado</li>
+                                <li><a href="#" data-estado="1" class="btn_estado_check"><i class="fas fa-square text-success"></i> Disponible</a></li>
+                                <li><a href="#" data-estado="2" class="btn_estado_check"><i class="fas fa-square text-danger"></i> Usado</a></li>
+                                <li><a href="#" data-estado="3" class="btn_estado_check"><i class="fas fa-square text-info"></i> Limpieza</a></li>
+                            @endif
                             <li class="divider"></li>
                             <li class="dropdown-header">Acciones</li>
                             <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
-                            <li><a href="#" class="btn_asignar" ><i class="fad fa-broom"></i>Ronda de limpieza</a></li>
+                            @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" ><i class="fad fa-broom"></i>Ronda de limpieza</a></li>@endif
                         </ul>
                     </div>
                 </div>
                 <div class="btn">
+                    @if(checkPermissions(['Puestos'],['C']))
                     <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo puesto">
                         <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
                         <span>Nuevo</span>
                     </a>
+                    @endif
                 </div>
             </div>
         </div>

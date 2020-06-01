@@ -35,7 +35,7 @@ try{
         <link rel="stylesheet" href="{{ URL('/css/materialdesignicons.min.css') }}">
         <link href="{{ asset('/plugins/fontawesome5/css/all.min.css') }}" rel="stylesheet">
         <link href="{{ url('/css/mosaic.css') }}" rel="stylesheet">
-        <h1 class="modal-title">Ronda de limpieza <span id="idronda">#{{ $ronda->id_ronda }}</span></h1>
+        <h1 class="modal-title">Ronda de limpieza <span class="idronda">#{{ $ronda->id_ronda }}</span></h1>
     </head>
 @endif
 
@@ -94,7 +94,7 @@ try{
                 $puestos=$detalles->where('id_planta',$key_planta);
             @endphp
             @foreach($puestos as $p)
-                <div class="col-md-2 rounded add-tooltip divpuesto hover-this" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->id_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto sin limpiar @else Limpiado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer; @else border: 1px solid #ccc; @endif">
+                <div class="col-md-2 rounded add-tooltip divpuesto hover-this" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->cod_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto sin limpiar @else Limpiado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer; @else border: 1px solid #ccc; @endif">
                     {{ $p->cod_puesto }}<br>
                     @if(isset($p->user_audit))<i class="fas fa-male" style="color: {{ genColorCodeFromText("EMPLEADO".$p->user_audit,2) }}"></i> <span style="font-size: 12px">{!! beauty_fecha($p->fec_fin) !!}</span> @else --- @endif
                 </div>
@@ -111,7 +111,15 @@ try{
         {
             $.post("{{ url('/rondas/estado_puesto/') }}/", {_token:'{{csrf_token()}}',id:$(this).data('id'), user: id_user}, function(data, textStatus, xhr) {
                 console.log(data);
-                $('#divpuesto'+data.id[0]).addClass('bg-success');
+                if (data.error){
+                    toast_error('ERROR',data.error);
+                    return;
+                }
+                $.each(data.id,function(index,value){
+                    $('#divpuesto'+value).addClass('bg-success');
+                    toast_ok('Estado',$('#divpuesto'+value).data('puesto')+' Actualizado');
+                });
+                
             })   
         }
        

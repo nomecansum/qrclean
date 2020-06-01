@@ -7,7 +7,9 @@ use DB;
 use Carbon\Carbon;
 use App\Models\users;
 use App\Models\puestos_ronda;
+use App\Models\puestos;
 use PDF;
+use Auth;
 
 
 class LimpiezaController extends Controller
@@ -22,7 +24,7 @@ class LimpiezaController extends Controller
         $usuarios=DB::table('users')
             ->where(function($q){
                 if (!isAdmin()) {
-                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                    $q->where('users.id_cliente',Auth::user()->id_cliente);
                 }
             })
             ->get();
@@ -38,8 +40,14 @@ class LimpiezaController extends Controller
                     $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->where(function($q){
+                if (Auth::user()->nivel_acceso==10) {  //Personal de limpieza
+                    $q->where('limpiadores_ronda.id_limpiador',Auth::user()->id);
+                }
+            })
             ->whereBetween('fec_ronda',[$f1,$fhasta])
             ->groupby('rondas_limpieza.id_ronda','fec_ronda','des_ronda','u1.name')
+            ->orderby('id_ronda','desc')
             ->get();
 
         $detalles=DB::table('rondas_limpieza')
@@ -90,25 +98,123 @@ class LimpiezaController extends Controller
             $pdf = PDF::loadView('limpieza.detalle',compact('ronda','limpiadores','detalles','print'));
             return $pdf->download($filename);
         }
-
-        
     }
+
+    public function view_limpia($id){
+        $ronda=DB::table('rondas_limpieza')
+            ->join('users as u1','rondas_limpieza.user_creado','u1.id')
+            ->join('clientes','rondas_limpieza.id_cliente','clientes.id_cliente')
+            ->join('limpiadores_ronda','rondas_limpieza.id_ronda','limpiadores_ronda.id_ronda')
+            ->where('rondas_limpieza.id_ronda',$id)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->where(function($q){
+                if (Auth::user()->nivel_acceso==10) {  //Personal de limpieza
+                    $q->where('limpiadores_ronda.id_limpiador',Auth::user()->id);
+                }
+            })
+            ->first();
+
+        $edificios=DB::table('edificios')
+            ->select('edificios.id_edificio','edificios.des_edificio')
+            ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
+            ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
+            ->join('puestos','edificios.id_edificio','puestos.id_edificio')
+            ->join('puestos_ronda','puestos_ronda.id_puesto','puestos.id_puesto')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->distinct()
+            ->where('puestos_ronda.id_ronda',$ronda->id_ronda)
+            ->get();
+
+        $puestos=DB::table('puestos_ronda')
+            ->select('puestos_ronda.*','puestos.cod_puesto','puestos.id_edificio','puestos.id_planta','puestos.id_estado','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado','estados_puestos.val_color','users.name')
+            ->join('puestos','puestos_ronda.id_puesto','puestos.id_puesto')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->leftjoin('users','puestos_ronda.user_audit','users.id')
+            ->where('id_ronda',$ronda->id_ronda)
+            ->get();
+
+            return view('limpieza.detalle_limpiador',compact('ronda','puestos','edificios'));
+    }
+
+
 
     public function estado_puesto(Request $r){
         
+        try{
+            if(!$r->estado){ //Valor por defecto si no se pasa el estado al que queremos ir
+                $r->estado=1;
+            }
+            $lista_id=explode(',',$r->id);
+            foreach($lista_id as $i){
+                $puesto=puestos_ronda::findorfail($i);
+                $puesto->user_audit=$r->user;
+                $puesto->fec_fin=Carbon::now();
+                $puesto->save();
 
-        $lista_id=explode(',',$r->id);
-        foreach($lista_id as $i){
-            $puesto=puestos_ronda::findorfail($i);
-            $puesto->user_audit=$r->user;
-            $puesto->fec_fin=Carbon::now();
-            $puesto->save();
+                $dato=puestos::findorfail($puesto->id_puesto);
+                $dato->id_estado=$r->estado;
+                $dato->save();
+            }
+            savebitacora('Estado de puesto '.implode(",",$lista_id). ' a estado '.$r->estado,"Ronda de limpieza","estado_puesto","OK");
+            return [
+                'title' => "OK",
+                'message' => 'puesto '.$r->etiqueta. ' actualizado',
+                'id' => $lista_id,
+                'estado'=>$r->estado
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'title' => "Estado de puesto",
+                'error' => 'ERROR: Ocurrio un error actualizando el estado '.mensaje_excepcion($exception),
+                //'url' => url('sections')
+            ];
         }
-        return [
-            'title' => "OK",
-            'message' => 'puesto '.$r->etiqueta. ' actualizado',
-            'id' => $lista_id
-        ];
+        
+    }
 
+    public function completar_ronda($id,$empleado){
+        validar_acceso_tabla($id,"rondas_limpieza");
+        $ronda=db::table('rondas_limpieza')
+            ->where('id_ronda',$id)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->first();
+
+        try{
+            $puesto=puestos_ronda::where('id_ronda',$id);
+            $puesto->update(['user_audit'=>$empleado,'fec_fin'=>Carbon::now()]);
+            savebitacora('Completada ronda '.$ronda->des_ronda,"Ronda de limpieza","completar_ronda","OK");
+            return [
+                'title' => "Rondas de limpieza",
+                'message' => 'Ronda completada',
+                'reload'=>1
+            ];
+        } catch (\Exception $exception) {
+            return [
+                'title' => "Edificios",
+                'error' => 'ERROR: Ocurrio un error actualizando el estado '.mensaje_excepcion($exception),
+                //'url' => url('sections')
+            ];
+        }
+    }
+
+    public function scan(){
+        $estado_destino=1;
+        $modo='cambio_estado';
+        $titulo='Marcar puesto como limpiado';
+        return view('scan',compact('estado_destino','modo','titulo'));
     }
 }

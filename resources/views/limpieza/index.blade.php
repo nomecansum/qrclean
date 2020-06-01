@@ -110,12 +110,13 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span></button>
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                
+                <span class="float-right" id="loading" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span><h1 class="modal-title">Ronda de limpieza <span class="idronda">#</span></h1>
             </div>
             <div class="modal-body" id="detalle_modal">
                 
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-id_ronda=0 id="btn_completar"><i class="fad fa-check-double"></i> Completar ronda</button>
                 <a  class="btn btn-info" id="btn_print" href=""><i class="fad fa-print"></i> Imprimir</a>
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Cerrar</button>
             </div>
@@ -132,14 +133,22 @@
 
         $('.limpieza').addClass('active active-sub');
         $('.rondas').addClass('active-link');
+       
 
         $('#tablarondas').on('click-cell.bs.table', function(e, value, row, $element){
            //console.log($element._data.id);
-           $('#ronda-limpieza').modal('show');
-           $('#detalle_modal').load("{{ url('/rondas/view/') }}/"+$element._data.id+"/0")
-           $('#btn_print').attr('href',"{{ url('/rondas/view/')}}/"+$element._data.id+"/1");
-           //$('#detalle_ronda'+$element._data.id).show();
-
+           @if(Auth::user()->nivel_acceso==10)
+                window.location.href = '{{ url('/rondas/detallelimp/') }}/'+$element._data.id;
+           @else
+            $('#loading').show();
+            $('#ronda-limpieza').modal('show');
+            $('#detalle_modal').load("{{ url('/rondas/view/') }}/"+$element._data.id+"/0",function(){
+                $('#loading').hide();
+            })
+            $('#btn_print').attr('href',"{{ url('/rondas/view/')}}/"+$element._data.id+"/1");
+            $('.idronda').html('#'+$element._data.id);
+            $('#btn_completar').data('id_ronda',$element._data.id)
+           @endif
            //animateCSS('#detalle_ronda'+$element._data.id,'bounceInRight');
         });
 
@@ -161,6 +170,12 @@
             $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
             window.location.href = '{{ url('/rondas/index/') }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
         });
+
+        $('#btn_completar').click(function(){
+            get_ajax("{{ url('/rondas/completar_ronda/') }}/"+$(this).data('id_ronda')+'/'+id_user,'loading',function(){
+                console.log('ok0');
+            });
+        })
 
     </script>
 @endsection

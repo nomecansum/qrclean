@@ -301,7 +301,10 @@
             }
             $('.modal').modal('hide');
             setTimeout(()=>{
-                window.open(data.url,'_self');
+                if(data.url)
+                    window.open(data.url,'_self');
+                if(data.reload)
+                    window.location.reload();
             },3000)
         })
         .fail(function(err) {
@@ -456,6 +459,19 @@
             .fail(function(err) {
                 console.log(err);
             });
+    }
+
+    function color_estado(estado){
+        if(estado==1)
+            return 'success';
+        if(estado==2)
+            return 'danger';
+        if(estado==3)
+            return 'info';
+        if(estado==4)
+            return 'gray';
+        if(estado==5)
+            return 'pink';
     }
 
     

@@ -44,72 +44,80 @@
 @section('breadcrumb')
 <ol class="breadcrumb">
     <li><a href="{{url('/')}}"><i class="demo-pli-home"></i> Home</a></li>
-    {{--  <li class="active">Helper Classes</li>  --}}
+     <li class="active">{{ $titulo??'Scan'}}</li> 
 </ol>
 @endsection
 
 @section('content')
-<div class="w-100" style="height: 60px; background-color:#4d627b">
-
-</div>
-<div class="text-center">
-    <img src="/img/Mosaic_brand_300.png">
-</div>
-
-<div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-        <div id="mensaje_error" class="alert text-center alert-danger alert-dismissible" style="display:none"></div>
+<div class="panel">
+    <div class="panel-heading">
+       
     </div>
-</div>
-<div class="row">
-    <div class="col-md-12" style="text-align: center;">
-        <div id="qr" style="display: inline-block;">
-            <div class="placeholder"> QR Code</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div id="mensaje_error" class="alert text-center alert-danger alert-dismissible" style="display:none"></div>
+            </div>
         </div>
-        <div id="scannedCodeContainer"></div>
-        <div id="feedback"></div>
-    </div>
-</div>
-<div class="row scan-type-region camera" id="scanTypeCamera">
-    <div class="col-md-4">
-         
-    </div>
-    <div class="col-md-4 text-center">
-        <button id="btn_requestPermission" class="btn btn-success btn-sm" style="display: none"> <i class="fad fa-question-square"></i> Habilitar permiso</button>
-    </div>
-    <div class="col-md-4">
-         
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-4">
-         
-    </div>
-    <div class="col-md-4">
-        <div id="selectCameraContainer" style="display: inline-block;"></div>
-        <div class="input-group mar-btm">
-            <select id="cameraSelection" class="form-control"></select>
-            <span class="input-group-btn">
-                <button id="switch_Button" class="btn btn-primary"><i class="fad fa-camera-alt"></i><i class="fad fa-repeat-alt"></i></button>
-            </span>
+        <div class="row" id="div_mensaje_fin" style="display:none">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 text-3x text-center rounded" id="div_txt_mensaje">
+                
+            </div>
+            <div class="col-md-3"></div>
         </div>
-    </div>
-    <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-12" style="text-align: center;">
+                <div id="qr" style="display: inline-block;">
+                    <div class="placeholder"> QR Code</div>
+                </div>
+                <div id="scannedCodeContainer"></div>
+                <div id="feedback"></div>
+            </div>
+        </div>
+        <div class="row scan-type-region camera" id="scanTypeCamera">
+            <div class="col-md-4">
+                 
+            </div>
+            <div class="col-md-4 text-center">
+                <button id="btn_requestPermission" class="btn btn-success btn-sm" style="display: none"> <i class="fad fa-question-square"></i> Habilitar permiso</button>
+            </div>
+            <div class="col-md-4">
+                 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                 
+            </div>
+            <div class="col-md-4">
+                <div id="selectCameraContainer" style="display: inline-block;"></div>
+                <div class="input-group mar-btm">
+                    <select id="cameraSelection" class="form-control"></select>
+                    <span class="input-group-btn">
+                        <button id="switch_Button" class="btn btn-primary"><i class="fad fa-camera-alt"></i><i class="fad fa-repeat-alt"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                
+            </div>
+            
+        </div>
+        <div style="display: none">
+            <button id="scan_Button" class="btn btn-success btn-sm">start scanning</button>
+            <button id="stop_Button" class="btn btn-warning btn-sm">stop scanning</button>
+        </div>
         
+        {{-- <div class="row mt-5">
+            <div class="col-md-12 text-center">
+                <a class="btn btn-lg btn-primary text-bold btn_estado" href="{{ url('/login') }}"><i class="fad fa-user"></i> Login</a>
+            </div>
+        </div> --}}
     </div>
-    
-</div>
-<div style="display: none">
-    <button id="scan_Button" class="btn btn-success btn-sm">start scanning</button>
-    <button id="stop_Button" class="btn btn-warning btn-sm">stop scanning</button>
 </div>
 
-<div class="row mt-5">
-    <div class="col-md-12 text-center">
-        <a class="btn btn-lg btn-primary text-bold btn_estado" href="{{ url('/login') }}"><i class="fad fa-user"></i> Login</a>
-    </div>
-</div>
 
 @endsection
 
@@ -118,26 +126,53 @@
     <script src="{{ asset('/plugins/html5-qrcode/minified/html5-qrcode.min.js') }}"></script>
 
     <script>
+        $('.limpieza').addClass('active active-sub');
+        $('.scan_ronda').addClass('active-link');
+
         function playaudio() {
             const audio = new Audio("{{url('/audio/beep-2.mp3')}}");
             audio.play();
         }
 
+        function ocultar_mensaje(){
+            animateCSS('#div_txt_mensaje','fadeOut',$('#div_txt_mensaje').hide());  
+        }
+
         function geturl(url){
             console.log('Get URL: '+url);
-            document.location.href=url;
-            // $.post('{{url('/getsitio/')}}', {_token: '{{csrf_token()}}', data: url}, function(data, textStatus, xhr){
+            @if(!isset($modo) || isset($modo) && $modo=='location'))
+                document.location.href=url;
+            @elseif($modo=='cambio_estado' && isset($estado_destino))
+                puesto=url.split('/').pop();
+                console.log(puesto);
+                $.post('{{url('/puesto/estado/')}}/'+puesto+'/{{ $estado_destino }}', {_token: '{{csrf_token()}}', data: url})
+                .done(function(data){
+                    $('#div_botones').hide();
+                    $('#div_respuesta').hide();
+                    $('#div_mensaje_fin').show();
 
-            // })
-            //     .done(function(){
-            //         console.log(data);
-            //     })
-            //     .fail(function(){
-            //         $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> Codigo de sitio no reconocido');
-            //         $('#mensaje_error').show();
-            //     });
-            //
-             }
+                    $('#div_txt_mensaje').show();
+                    animateCSS('#div_mensaje_fin','bounceInright');
+                    if(data.tipo=='OK'){
+                        $('#div_txt_mensaje').addClass('bg-info');
+                        $('#div_txt_mensaje').removeClass('bg-danger');
+                        $('#div_txt_mensaje').html('<i class="fad fa-check-circle"></i> '+data.mensaje);
+                    } else {
+                        $('#div_txt_mensaje').removeClass('bg-info');
+                        $('#div_txt_mensaje').addClass('bg-danger');
+                        $('#div_txt_mensaje').html('<i class="fad fa-exclamation-square"></i> '+data.mensaje);
+                    }
+                    console.log(data);
+                    fin=setTimeout(ocultar_mensaje,5000);
+
+                })
+                .fail(function(data){
+                    $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> Codigo de sitio no reconocido');
+                    $('#mensaje_error').show();
+                });
+            
+            @endif
+            }
 
         function requestPermission(){
             console.log('requestPermission');
@@ -182,6 +217,7 @@
                 console.log(`[${codesFound}] Nuevo QR: ${qrCodeMessage}`);
                 playaudio();
                 geturl(lastMessageFound);
+                
                 //result.innerHTML = `[${codesFound}] Nuevo QR: <strong>${qrCodeMessage}</strong>`;
                 //scannedCodeContainer.appendChild(result);
             }

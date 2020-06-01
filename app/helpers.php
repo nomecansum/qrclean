@@ -431,6 +431,11 @@ function validar_acceso_tabla($id,$tabla){
             $campo="id_puesto";
             $ruta="puestos.index";
             break;
+        case "rondas_limpieza":
+            $descriptivo="ronda";
+            $campo="id_ronda";
+            $ruta="rondas.index";
+            break;
         default:
             $descriptivo=$tabla;
     }

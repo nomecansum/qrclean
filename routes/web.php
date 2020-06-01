@@ -23,6 +23,7 @@ Auth::routes();
 // Route::get('/getqr/{sitio}','HomeController@getqr');
 Route::get('/puesto/{puesto}','HomeController@getpuesto');
 Route::get('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
+Route::post('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -129,7 +130,9 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/view/{id}/{print}', 'LimpiezaController@view')->name('rondas.view');
         Route::post('/estado_puesto', 'LimpiezaController@estado_puesto')->name('rondas.estado_puesto');
         Route::get('/index/{f1?}/{f2?}', 'LimpiezaController@index')->name('rondas.index');
-        
+        Route::get('/completar_ronda/{id}/{empleado}', 'LimpiezaController@completar_ronda')->name('rondas.completar');
+        Route::get('/detallelimp/{id}', 'LimpiezaController@view_limpia')->name('rondas.detalle_limpiador');
+        Route::get('/scan', 'LimpiezaController@scan')->name('rondas.estado_puesto');
     });
 
     Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);

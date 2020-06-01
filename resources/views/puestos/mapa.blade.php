@@ -36,7 +36,7 @@
                     <div class="col-md-2 text-right">
                         <h4>
                             <span class="mr-2"><i class="fad fa-layer-group"></i> {{ $e->plantas }}</span>
-                            <span class="mr-2"><i class="fad fa-user"></i> {{ $e->puestos }}</span>
+                            <span class="mr-2"><i class="fad fa-desktop-alt"></i> {{ $e->puestos }}</span>
                         </h4>
                     </div>
                 </div>

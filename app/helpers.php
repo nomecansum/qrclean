@@ -23,7 +23,7 @@ function savebitacora($des_bitacora,$modulo=null,$seccion=null,$tipo='OK')
 
     \DB::table('bitacora')->insert([
         'accion' => $des_bitacora,
-        'id_usuario' =>Auth::user()->id,
+        'id_usuario' =>Auth::user()->id??0,
         'id_modulo' => $modulo,
         'id_seccion' => $seccion,
         'status' => $tipo,

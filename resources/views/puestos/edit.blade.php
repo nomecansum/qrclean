@@ -45,13 +45,17 @@
                         <label for="id_edificio">Edificio</label>
                         <select name="id_edificio" id="id_edificio" class="form-control">
                             @foreach(DB::table('edificios')->where('id_cliente',Auth::user()->id_cliente)->get() as $edificio)
-                                <option value="{{ $edificio->id_edificio}}">{{ $edificio->des_edificio }}</option>
+                                <option value="{{ $edificio->id_edificio}}" {{ $puesto->id_edificio==$edificio->id_edificio?'selected':'' }}>{{ $edificio->des_edificio }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group col-md-2">
                         <label for="planta">Planta</label>
-                        <input required type="text" name="planta" id="planta" class="form-control"  value="{{$puesto->planta}}">
+                        <select name="id_planta" id="id_planta" class="form-control">
+                            @foreach(DB::table('plantas')->where('id_cliente',Auth::user()->id_cliente)->where('id_edificio',$puesto->id_edificio)->get() as $planta)
+                                <option value="{{ $planta->id_planta}}" {{ $puesto->id_planta==$planta->id_planta?'selected':'' }}>{{ $planta->des_planta }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="md-1 float-right" style="margin-top:22px">
                         @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary">GUARDAR</button>@endif
@@ -90,5 +94,9 @@
     $('#val_icono').iconpicker({
         icon:'{{isset($t) ? ($t->val_icono) : ''}}'
     });
+
+    $('#id_edificio').change(function(){
+        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$(this).val())
+    })
 
  </script>

@@ -58,6 +58,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::group(['prefix' => 'combos'], function () {
         Route::post('/limpiadores', 'CombosController@combo_limpiadores');
+        Route::get('/plantas/{id_edificio}', 'CombosController@combo_plantas');
     });
 
     Route::group(['prefix' => 'bitacoras'], function () {

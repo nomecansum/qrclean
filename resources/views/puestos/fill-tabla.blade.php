@@ -110,10 +110,11 @@
 </div>
 
 <script>
-    @if(isset($r))
+    @if(isset($r))  //Solo se ejecuta cuando se pide por ajax
         $('#tablapuestos').bootstrapTable();
+        $("#chktodos").click(function(){
+            $('.chkpuesto').not(this).prop('checked', this.checked);
+        });
     @endif
-    $("#chktodos").click(function(){
-        $('.chkpuesto').not(this).prop('checked', this.checked);
-    });
+    
 </script>

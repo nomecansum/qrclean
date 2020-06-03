@@ -140,4 +140,17 @@ class CombosController extends Controller
         return view('resources.combo_limpiadores',compact('usuarios','clientes'));
     }
 
+    public function combo_plantas($id_edificio){
+
+        $plantas=DB::table('plantas')
+            ->where('id_edificio',$id_edificio)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+        return view('resources.combo_plantas',compact('plantas'));
+    }
+
 }

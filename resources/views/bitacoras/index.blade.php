@@ -82,7 +82,7 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                     <div class="col-md-1" style="width: 110px">
                         <div class="form-group">
                             <label>Mostrar</label>
-                            <select class="form-control select2" name="tipo_log" id="tipo_log">
+                            <select class="form-control select2" name="tipo_log" id="tipo_log" style="height: 43px">
                                 <option value=""></option>
                                 <option  {{ isset($r) && $r->tipo_log=="ok" ? 'selected' : '' }} value="ok" id="ok">ok</option>
                                 <option {{ isset($r) && $r->tipo_log=="error" ? 'selected' : '' }} value="error" id="error">error</option>
@@ -94,7 +94,7 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                     <div class="col-md-2">
                         <div class="form-group">
                             <label>Usuario</label>
-                            <select class="form-control select2" tabindex="-1" aria-hidden="true" name="usuario">
+                            <select class="form-control select2" tabindex="-1" aria-hidden="true" name="usuario"  style="height: 43px">
                                 <option value=""></option>
                                 @foreach($usuarios as $key=>$value)
                                 <option {{ isset($r) && $r->usuario==$key ? 'selected' : '' }} value="{{ $key }}">{{ $value }}</option>
@@ -116,9 +116,9 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                         <div class="form-group">
                             <label>Fechas:</label>
                             <div class="input-group mar-btm">
-                                <input type="text" class="form-control pull-right" id="fechas" name="fechas" style="height: 40px" value="{{ isset($r)?Carbon::parse($fechas[0])->format('d/m/Y').' - '.Carbon::parse($fechas[1])->format('d/m/Y'):'' }}">
+                                <input type="text" class="form-control pull-right" id="fechas" name="fechas" value="{{ isset($r)?Carbon::parse($fechas[0])->format('d/m/Y').' - '.Carbon::parse($fechas[1])->format('d/m/Y'):'' }}">
                                 <div class="input-group-btn">
-                                    <span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                                    <span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fa fa-calendar mt-1"></i></span>
                                 </div>
                             </div>
                             <!-- /.input group -->

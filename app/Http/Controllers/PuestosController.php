@@ -111,11 +111,12 @@ class PuestosController extends Controller
     public function update(Request $r){
         try{
 
-            validar_acceso_tabla($id,"puestos");
-            if($r->id==0){
+            
+            if($r->id_puesto==0){
                 $puesto=puestos::create($r->all());
             } else {
-                $puesto=puestos::find($r->id);
+                validar_acceso_tabla($r->id_puesto,"puestos");
+                $puesto=puestos::find($r->id_puesto);
                 $puesto->update($r->all());
             }
             $puesto->save();

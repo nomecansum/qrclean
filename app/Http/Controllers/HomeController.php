@@ -163,7 +163,7 @@ class HomeController extends Controller
                     break;
             }
         }
-        savebitacora('Cambio de puestos QR anonimo'.$p->id. ' a estado '.$p->estado,"Home","getpuesto","OK");
+        savebitacora('Cambio de puestos QR anonimo'.$p->id_puesto. ' a estado '.$p->estado,"Home","getpuesto","OK");
         return view('scan.result',compact('respuesta'));
     }
 

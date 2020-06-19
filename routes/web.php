@@ -127,7 +127,6 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::group(['prefix' => 'rondas'], function () {
-       
         Route::get('/view/{id}/{print}', 'LimpiezaController@view')->name('rondas.view');
         Route::post('/estado_puesto', 'LimpiezaController@estado_puesto')->name('rondas.estado_puesto');
         Route::get('/index/{f1?}/{f2?}', 'LimpiezaController@index')->name('rondas.index');
@@ -136,12 +135,24 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/scan', 'LimpiezaController@scan')->name('rondas.estado_puesto');
     });
 
+    Route::group(['prefix' => 'reservas'], function () {
+        Route::get('/',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'ReservasController@index']);
+        Route::get('/edit/{id}',['middleware'=>'permissions:["Secciones"],["C"]','uses' => 'ReservasController@sectionsEdit']);
+        Route::post('/save',['middleware'=>'permissions:["Secciones"],["W"]','uses' => 'ReservasController@sectionsSave']);
+        Route::post('/update',['middleware'=>'permissions:["Secciones"],["C"]','uses' => 'ReservasController@sectionsSave']);
+        Route::get('/delete/{id}',['middleware'=>'permissions:["Secciones"],["D"]','uses' => 'ReservasController@sectionsDelete']);
+        Route::post('loadMonthSchedule',['middleware'=>'permissions:["Reservas"],["R"]', 'uses' => 'ReservasController@loadMonthSchedule']);
+        
+    });
+
     Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);
     Route::get('permissions/getProfiles',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'PermissionsController@getProfiles']);
 	Route::post('addPermissions',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions']);
 	Route::post('removePermissions',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions']);
 	Route::post('addPermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions_user']);
     Route::post('removePermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions_user']);
+
+    Route::get('/scan', 'HomeController@scan')->name('main_scan');
 
 });
 

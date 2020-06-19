@@ -126,8 +126,14 @@
     <script src="{{ asset('/plugins/html5-qrcode/minified/html5-qrcode.min.js') }}"></script>
 
     <script>
-        $('.limpieza').addClass('active active-sub');
-        $('.scan_ronda').addClass('active-link');
+        @if($tipo_scan=="limpieza")
+            $('.limpieza').addClass('active active-sub');
+            $('.scan_ronda').addClass('active-link');
+        @else
+            //$('.limpieza').addClass('active active-sub');
+            $('.main_scan').addClass('active-link');
+        @endif
+       
 
         function playaudio() {
             const audio = new Audio("{{url('/audio/beep-2.mp3')}}");

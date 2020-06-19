@@ -20,8 +20,7 @@
 <div id="mainnav-menu-wrap">
     <div class="nano">
         <div class="nano-content">
-
-            <!--Profile Widget-->
+                        <!--Profile Widget-->
             <!--================================-->
             <div id="mainnav-profile" class="mainnav-profile">
                 <div class="profile-wrap text-center">
@@ -179,6 +178,8 @@
                         </ul>
                     </li>
                     @endif
+                    @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
+                    @if(checkPermissions(['Reservas'],['R']))<li class="reservas"><a href="/reservas" class="text-nowrap"><i class="fad fa-calendar-alt"></i></i> <span class="menu-title">Reservar</span></a></li> @endif
                 </ul>
 
 

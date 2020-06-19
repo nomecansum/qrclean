@@ -215,6 +215,7 @@ class LimpiezaController extends Controller
         $estado_destino=1;
         $modo='cambio_estado';
         $titulo='Marcar puesto como limpiado';
-        return view('scan',compact('estado_destino','modo','titulo'));
+        $tipo_scan="limpieza";
+        return view('scan',compact('estado_destino','modo','titulo','tipo_scan'));
     }
 }

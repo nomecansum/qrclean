@@ -256,5 +256,12 @@ class HomeController extends Controller
        }
     }
 
+    public function scan(){
+        $estado_destino=2;
+        $modo='cambio_estado';
+        $titulo='Marcar puesto como usado';
+        $tipo_scan="main";
+        return view('scan',compact('estado_destino','modo','titulo','tipo_scan'));
+    }
 
 }

@@ -28,6 +28,15 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 	.bloque{
 		left: 40px;
 	}
+	.background {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		z-index: -1;
+		overflow: hidden;
+		}
 </style>
 {{-- <div class="panel-heading">
 	<table class="table table-calendar mb0">
@@ -128,4 +137,5 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 	var tooltip = $('.add-tooltip');
     if (tooltip.length)tooltip.tooltip();
 
+	let fechacal="{{ $month }}";
 </script>

@@ -61,6 +61,7 @@
             <p1>Scroll down to see quick links and overviews of your Server, To do list, Order status or get some Help using Nifty.<p></p>
         </p1></div>
     </div>
+
     <div class="row">
         <div class="col-md-3">
             <div class="panel panel-purple panel-colorful media middle pad-all">

@@ -56,6 +56,8 @@ class LoginController extends Controller
         if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')], $remember_me))
         {
             $user = auth()->user();
+            $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  
+            session(['CL'=>$config_cliente]);
 
             auth()->user()->last_login = Carbon::now();
             auth()->user()->save();
@@ -96,6 +98,9 @@ class LoginController extends Controller
                     id_perfil=".auth()->user()->cod_nivel.") sq
             GROUP BY sq.des_seccion"));
             session(['P' => $permisos]);
+            
+            
+            //session(['CL'=>$config_cliente]);
 
             return redirect ('/');
         }else{

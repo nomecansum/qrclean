@@ -5,7 +5,8 @@
 @endsection
 
 @section('styles')
-
+    <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
+    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('breadcrumb')
@@ -16,8 +17,24 @@
 @endsection
 
 @section('content')
-<div class="row botones_accion mb-2">
-    <br><br>
+<div class="row botones_accion">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-7">
+        <br>
+    </div>
+    <div class="col-md-1 text-right">
+        <div class="btn-group btn-group-sm pull-right" role="group">
+                <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva reserva">
+                <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
+                <span>Nuevo</span>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="editorCAM" class="mt-2">
+
 </div>
 <div class="panel">
     <div class="panel-heading">
@@ -54,5 +71,21 @@
         $(function(){
             loadMonth();
         })
+
+        $('#btn_nueva_puesto').click(function(){
+            $('#editorCAM').load("{{ url('/reservas/create/') }}/"+fechacal, function(){
+                animateCSS('#editorCAM','bounceInRight');
+            });
+            // window.scrollTo(0, 0);
+            //stopPropagation()
+        });
+
+        function editar(id){
+            $('#editorCAM').load("{{ url('/reservas/edit/') }}"+"/"+id, function(){
+                animateCSS('#editorCAM','bounceInRight');
+            });
+        }
+
+
     </script>
 @endsection

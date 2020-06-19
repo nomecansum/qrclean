@@ -137,11 +137,14 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::group(['prefix' => 'reservas'], function () {
         Route::get('/',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'ReservasController@index']);
-        Route::get('/edit/{id}',['middleware'=>'permissions:["Secciones"],["C"]','uses' => 'ReservasController@sectionsEdit']);
-        Route::post('/save',['middleware'=>'permissions:["Secciones"],["W"]','uses' => 'ReservasController@sectionsSave']);
-        Route::post('/update',['middleware'=>'permissions:["Secciones"],["C"]','uses' => 'ReservasController@sectionsSave']);
-        Route::get('/delete/{id}',['middleware'=>'permissions:["Secciones"],["D"]','uses' => 'ReservasController@sectionsDelete']);
+        Route::get('/create/{fecha}',['middleware'=>'permissions:["Reservas"],["C"]','uses'=>'ReservasController@create']);
+        Route::get('/edit/{id}',['middleware'=>'permissions:["Reservas"],["C"]','uses' => 'ReservasController@edit']);
+        Route::post('/save',['middleware'=>'permissions:["Reservas"],["W"]','uses' => 'ReservasController@save']);
+        Route::post('/update',['middleware'=>'permissions:["Reservas"],["C"]','uses' => 'ReservasController@save']);
+        Route::get('/delete/{id}',['middleware'=>'permissions:["Reservas"],["D"]','uses' => 'ReservasController@delete']);
         Route::post('loadMonthSchedule',['middleware'=>'permissions:["Reservas"],["R"]', 'uses' => 'ReservasController@loadMonthSchedule']);
+
+        Route::post('/comprobar',['middleware'=>'permissions:["Reservas"],["W"]','uses' => 'ReservasController@comprobar_puestos']);
         
     });
 

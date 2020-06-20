@@ -171,7 +171,7 @@
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-info" id="btn_crear_ronda" href="javascript:void(0)">Si</a>
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                    <button type="button" id="btn_cancel_ronda" data-dismiss="modal" class="btn btn-warning">No</button>
                 </div>
             </div>
         </div>

@@ -82,7 +82,7 @@ class ReservasController extends Controller
                 }
             })
             ->where(function($q){
-                if(session('CL')->mca_restringir_usuarios_planta=='S'){
+                if(session('CL') && session('CL')->mca_restringir_usuarios_planta=='S'){
                     $q->wherein('puestos.id_planta',$plantas_usuario);
                 }
             })

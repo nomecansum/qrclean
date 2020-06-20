@@ -56,26 +56,26 @@ class reservas extends Model
     protected $casts = [];
     
 
-    /**
-     * Set the fec_reserva.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setFecReservaAttribute($value)
-    {
-        $this->attributes['fec_reserva'] = !empty($value) ? \DateTime::createFromFormat('[% date_format %]', $value) : null;
-    }
+    // /**
+    //  * Set the fec_reserva.
+    //  *
+    //  * @param  string  $value
+    //  * @return void
+    //  */
+    // public function setFecReservaAttribute($value)
+    // {
+    //     $this->attributes['fec_reserva'] = !empty($value) ? \DateTime::createFromFormat('[% date_format %]', $value) : null;
+    // }
 
-    /**
-     * Get fec_reserva in array format
-     *
-     * @param  string  $value
-     * @return array
-     */
-    public function getFecReservaAttribute($value)
-    {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
-    }
+    // /**
+    //  * Get fec_reserva in array format
+    //  *
+    //  * @param  string  $value
+    //  * @return array
+    //  */
+    // public function getFecReservaAttribute($value)
+    // {
+    //     return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
+    // }
 
 }

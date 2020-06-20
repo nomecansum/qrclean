@@ -36,9 +36,6 @@
 </div>
 @endforeach
 <script>
-    function seleccionar(){
-        
-    }
 
     $('.sitio').click(function(){
         $('#des_puesto').html('');
@@ -53,7 +50,7 @@
 
     $('.disponible').click(function(){
         $('#des_puesto').html($(this).data('desc'));
-        $('#des_puesto_form').html($(this).data('desc'));
+        $('#des_puesto_form').val($(this).data('desc'));
         $('#id_puesto').val($(this).data('id'));
         $('.disponible').removeClass('bg-info');
         $('.disponible').each(function(){

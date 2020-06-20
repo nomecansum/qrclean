@@ -29,8 +29,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <span style="font-size: 38px; font-weight: bolder; color: #888; margin-top:50px" id="des_puesto"></span>
+                    <div class="col-md-5 pt-4">
+                        <span style="font-size: 30px; font-weight: bolder; color: #888; margin-top:60px" id="des_puesto"></span>
                     </div>
                     <div class="md-1 float-right" style="margin-top:22px">
                         @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary btn_guardar">GUARDAR</button>@endif
@@ -51,7 +51,46 @@
  <script>
 
     //$('#frm_contador').on('submit',form_ajax_submit);
-    $('#frm_contador').submit(form_ajax_submit);
+    $('#frm_contador').submit(function(event){
+        event.preventDefault();
+        let form = $(this);
+        let data = new FormData(form[0]);
+
+        $.ajax({
+            url: form.attr('action'),
+            type: form.attr('method'),
+            contentType: false,
+            processData: false,
+            data: data,
+        })
+        .done(function(data) {
+            console.log(data);
+            if(data.error){
+                mensaje_error_controlado(data);
+            } else if(data.alert){
+                mensaje_warning_controlado(data);
+            } else{
+                toast_ok(data.title,data.mensaje);
+                loadMonth();
+                animateCSS('#TD'+data.fecha,'flip');
+                animateCSS('#editor','fadeOut',$('#editor').html(''))
+            }
+            
+        })
+        .fail(function(err) {
+            mensaje_error_respuesta(err);
+        })
+        .always(function() {
+            fin_espere();
+            console.log("Reserva complete");
+            form.find('[type="submit"]').attr('disabled',false);
+        });
+    });
+
+    function prueba(){
+        console.log('prueba');
+
+    }
 
     $('.demo-psi-cross').click(function(){
         $('#editor').hide();
@@ -76,7 +115,7 @@
         singleDatePicker: true,
         showDropdowns: true,
         //autoUpdateInput : false,
-        //autoApply: true,
+        autoApply: true,
         locale: {
             format: '{{trans("general.date_format")}}',
             applyLabel: "OK",
@@ -87,7 +126,9 @@
         }
        
     },
-    function() {
+    function(date) {
+        $('#fechas').val(moment(date).format('D/M/Y'));
+        $('#fechas').data('fecha',moment(date).format('Y-MM-DD'));
         comprobar_puestos();
     });
 

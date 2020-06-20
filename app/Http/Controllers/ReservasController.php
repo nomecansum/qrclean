@@ -47,6 +47,18 @@ class ReservasController extends Controller
         return view('reservas.edit',compact('reserva','f1'));
     }
 
+    public function edit($fecha){
+        
+        $f1=Carbon::parse($fecha);
+        $reserva=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->where('fec_reserva',$f1)
+            ->where('id_usuario',Auth::user()->id)
+            ->first();
+        return view('reservas.edit_del',compact('reserva','f1'));
+    }
+
+
     public function comprobar_puestos(Request $r){
         $plantas_usuario=DB::table('plantas_usuario')
             ->where('id_usuario',Auth::user()->id)
@@ -56,9 +68,9 @@ class ReservasController extends Controller
         $reservados=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->where('puestos.id_edificio',$r->edificio)
-            ->where('fec_reserva',adaptar_fecha($r->fecha))
+            ->where('fec_reserva',adaptar_fecha($r->fecha)->format('Y-m-d'))
             ->pluck('reservas.id_puesto')
-            ->toarray();
+            ->toArray();
         $puestos=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
@@ -99,7 +111,7 @@ class ReservasController extends Controller
 
         //Primero hay que comprobar que no han pillado el pñuesto mientras el usuario se lo pensabe
 
-        $ya_esta=reservas::where('id_puesto',$r->id_puesto)->first();
+        $ya_esta=reservas::where('id_puesto',$r->id_puesto)->where('fec_reserva',adaptar_fecha($r->fechas)->format('Y-m-d'))->first();
         if($ya_esta){
             //Ya esta pillado
             return [
@@ -109,18 +121,42 @@ class ReservasController extends Controller
             ];
 
         } else{
+            //Borramos cualquier otra reserva que tuviese el usuarios par ese dia
+            $antoerior=reservas::where('id_usuario',Auth::user()->id)->where('fec_reserva',adaptar_fecha($r->fechas)->format('Y-m-d'))->delete();
+            //Insertamos la nueva
             $res=new reservas;
             $res->id_puesto=$r->id_puesto;
             $res->id_usuario=Auth::user()->id;
             $res->fec_reserva=adaptar_fecha($r->fechas);
+            $res->id_cliente=Auth::user()->id_cliente;
             $res->save();
             return [
                 'title' => "Reservas",
                 'mensaje' => 'Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,
+                'fecha' => adaptar_fecha($r->fechas)->format('Ymd'),
                 //'url' => url('puestos')
             ];
         }
+    }
 
+    public function delete(Request $r){
+
+        $reserva=reservas::where('id_usuario',Auth::user()->id)->where('id_reserva',$r->id)->first();
         
+        if(isset($reserva)){
+            $reserva->delete();
+            return [
+                'title' => "Reservas",
+                'mensaje' => 'Reserva del puesto '.$r->des_puesto.' reservado para el dia '.$r->fecha.' Cancelada',
+                //'url' => url('puestos')
+            ];
+        } else {
+            return [
+                'title' => "Reservas",
+                'error' => 'La reserva no existe o no es suya',
+                //'url' => url('sections')
+            ];
+        }
+
     }
 }

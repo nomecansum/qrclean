@@ -39,6 +39,7 @@
 <div class="panel">
     <div class="panel-heading">
         <h3 class="panel-title">Mis reservas</h3>
+        <span class="float-right" id="spin" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
     </div>
     <div class="panel-body">
         <div id="calendario"></div>
@@ -73,8 +74,11 @@
         })
 
         $('#btn_nueva_puesto').click(function(){
+            spshow('spin');
             $('#editorCAM').load("{{ url('/reservas/create/') }}/"+fechacal, function(){
                 animateCSS('#editorCAM','bounceInRight');
+                sphide('spin');
+                $('#titulo').html('Nueva reserva de puesto');
             });
             // window.scrollTo(0, 0);
             //stopPropagation()

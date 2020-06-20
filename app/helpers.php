@@ -154,13 +154,13 @@ function decimal_to_time($dec)
 function adaptar_fecha($d){
     try{
         if (Carbon::createFromFormat('d/m/Y', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
+            return Carbon::createFromFormat('d/m/Y', $d);
         }
         if (Carbon::createFromFormat('Y-m-d', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
+            return Carbon::createFromFormat('d/m/Y', $d);
         }
         if (Carbon::parse($d)!== false) {
-            return Carbon::parse($d)->format('Y-m-d');
+            return Carbon::parse($d);
         }
     } catch (\Exception $e){
         return  $d." ".$e->getMessage();

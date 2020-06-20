@@ -78,20 +78,22 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 							@php
 								$dia=$reservas->where('fec_reserva',Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d'))->first();
 								if($dia){
-									$color="#2ec4b6";
+									$color="#b3dbbf";
 									$border="border: 2px solid ##e55a34";
 									$descrip=$dia->cod_puesto;
 									$title=Carbon\Carbon::parse($dia->fec_reserva)->format('d/m/Y').chr(13)." Puesto: ".$descrip." - Edificio: ".$dia->des_edificio." - Planta: ".$dia->des_planta;
+									$estado="ocupado";
 								} else {
 									$color = '#fff';
 									$borde="border: 2px solid #f2f7f8";
 									$descrip="";
 									$title="";
+									$estado="vacio";
 								}
 								
                             @endphp
                             {{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
-							<td style="background-color: {{$color}}; height: 100px;  color: #ddd; border-radius: 6px;"  class="add-tooltip pt-3 td_calendar" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
+							<td style="background-color: {{$color}}; height: 100px;  color: #999; border-radius: 6px;"  class="add-tooltip  pt-3 td_calendar {{ $estado }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
                                 <span class="font-bold" style="font-size: 26px; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
 								<span style="font-size: 11px; color: #fff; cursor: pointer">
@@ -137,5 +139,21 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 	var tooltip = $('.add-tooltip');
     if (tooltip.length)tooltip.tooltip();
 
-	let fechacal="{{ $month }}";
+	fechacal="{{ $month }}";
+
+	$('.vacio').click(function(){
+		spshow('spin');
+		$('#editorCAM').load("{{ url('/reservas/create/') }}/"+$(this).data('fecha'), function(){
+			animateCSS('#editorCAM','bounceInRight');
+			sphide('spin');
+		});
+	})
+
+	$('.ocupado').click(function(){
+		spshow('spin');
+		$('#editorCAM').load("{{ url('/reservas/edit/') }}/"+$(this).data('fecha'), function(){
+			animateCSS('#editorCAM','bounceInRight');
+			sphide('spin');
+		});
+	})
 </script>

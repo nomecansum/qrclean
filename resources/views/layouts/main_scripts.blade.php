@@ -9,12 +9,21 @@
     //Ocultar los alert
     $('div.alert').not('.alert-important,.alert-danger,.not-dismissable').delay(5000).fadeOut(350);
 
+    //Mostrar / Ocultar spinner
+    function spshow(spinner){
+        $('#'+spinner).show();
+    }
+
+    function sphide(spinner){
+        $('#'+spinner).hide();
+    }
+
     //Funciones para mostrar los mensajes Toast
     function toast_ok(titulo,mensaje){
         $.toast({
             heading: titulo,
             text: mensaje,
-            position: 'bottom-right',
+            position: 'top-center',
             showHideTransition: 'slide',
             loaderBg: '#ff8000',
             icon: 'success',
@@ -28,7 +37,7 @@
         $.toast({
             heading: titulo,
             text: mensaje,
-            position: 'bottom-right',
+            position: 'top-right',
             showHideTransition: 'slide',
             loaderBg: '#ff8000',
             icon: 'error',
@@ -42,7 +51,7 @@
         $.toast({
             heading: titulo,
             text: mensaje,
-            position: 'bottom-right',
+            position: 'top-right',
             showHideTransition: 'slide',
             loaderBg: '#ff8000',
             icon: 'warning',
@@ -51,6 +60,24 @@
             bgColor : '#fff3cd',
             textColor : '#856404',
         });
+    }
+
+    function mensaje_error_respuesta(err){
+        let error = JSON.parse(err.responseText);
+        let html =error.message;
+        console.log(error);
+        $.each(error.errors, function(index, val) {
+                html += "- "+$(this)[0]+"<br>";
+        });
+        toast_error("Error:",html);
+    }
+
+    function mensaje_error_controlado(data){
+        toast_error(data.title,data.error);
+    }
+
+    function mensaje_warning_controlado(data){
+        toast_warning(data.title,data.error);
     }
 
     //Mostrara un sweet alert indicando que hay algo leyendo en la pagina. Para quitarlo se llama a fin_espere()
@@ -232,8 +259,6 @@
                 //$('#theme').attr('href','{{url('monster-admin/main')}}/css/colors/'+data.theme+'.css')
             }
             $('.modal').modal('hide');
-
-
 
             setTimeout(()=>{
                 if(data.url=="reload()"){

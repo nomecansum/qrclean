@@ -8,6 +8,11 @@
     </ol>
 @endsection
 
+@section('styles')
+    <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
+    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
 
 
@@ -42,5 +47,23 @@
 
         </div>
     </div>
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Plantas en las que puede reservar</h3>
+        </div>
+        <div class="panel-body" id="plantas_usuario">
 
+        </div>
+    </div>
+
+@endsection
+
+@section('scripts')
+    <script>
+        $(function(){
+            $('#plantas_usuario').load("{{ url('users/plantas/'.$users->id) }}")
+        });
+        $('.configuracion').addClass('active active-sub');
+	    $('.usuarios').addClass('active-link');
+    </script>
 @endsection

@@ -68,5 +68,10 @@
         "model-name": "reservas",
         "resource-file": "reservas.json",
         "table-name": "reservas"
+    },
+    {
+        "model-name": "plantas_usuario",
+        "resource-file": "plantas_usuarios.json",
+        "table-name": "plantas_usuario"
     }
 ]

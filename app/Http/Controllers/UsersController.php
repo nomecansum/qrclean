@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Grupo;
 use App\Models\niveles_acceso;
 use App\Models\users;
+use App\Models\plantas_usuario;
 use Illuminate\Http\Request;
 use Exception;
 use DB;
@@ -211,11 +212,62 @@ class UsersController extends Controller
 
 
         $data = $request->validate($rules);
-
-
-
-
         return $data;
+    }
+
+
+    public function plantas_usuario($id){
+        validar_acceso_tabla($id,'users');
+        $user=users::findorfail($id);
+
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',$user->id_cliente);
+                }
+            })
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $edificios=DB::table('edificios')
+        ->select('id_edificio','des_edificio')
+        ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
+        ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('edificios.id_cliente',$user->id_cliente);
+            }
+        })
+        ->get();
+
+        $plantas_usuario=DB::table('plantas_usuario')->where('id_usuario',$id)->pluck('id_planta')->toarray();
+        return view('users.selector_plantas',compact('puestos','edificios','plantas_usuario','id'));
+    }
+
+    public function addplanta($usuario,$planta){
+        validar_acceso_tabla($usuario,'users');
+        $pl=plantas_usuario::insert(['id_planta'=>$planta,'id_usuario'=>$usuario]);
+        return [
+            'title' => "Asociar planta a usuario",
+            'message' => 'Planta asociada ',
+            'id' =>$planta
+        ];
+    }
+
+    public function delplanta($usuario,$planta){
+        validar_acceso_tabla($usuario,'users');
+        $pl=plantas_usuario::where(['id_planta'=>$planta,'id_usuario'=>$usuario])->delete();
+        return [
+            'title' => "Asociar planta a usuario",
+            'message' => 'Planta eliminada ',
+            'id' =>$planta
+        ];
     }
 
 }

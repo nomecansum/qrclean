@@ -45,9 +45,13 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/create','UsersController@create')->name('users.users.create');
         Route::get('/show/{users}','UsersController@show')->name('users.users.show');
         Route::get('/{users}/edit','UsersController@edit')->name('users.users.edit');
+        Route::get('/plantas/{id}','UsersController@plantas_usuario')->name('users.plantas');
         Route::post('/', 'UsersController@store')->name('users.users.store');
         Route::post('users/{users}', 'UsersController@update')->name('users.users.update');
         Route::delete('/users/{users}','UsersController@destroy')->name('users.users.destroy');
+
+        Route::get('/addplanta/{usuario}/{planta}','UsersController@addplanta')->name('users.addplanta');
+        Route::get('/delplanta/{usuario}/{planta}','UsersController@delplanta')->name('users.delplanta');
     });
 
     Route::group(['prefix' => 'filters'], function () {

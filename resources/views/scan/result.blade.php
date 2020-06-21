@@ -44,27 +44,29 @@
     </div>
     @if(isset($puesto))
         <div id="div_botones">
-            @if($puesto->id_estado<3)
-                <div class="row mt-5 mb-5">
-                    <div class="col-md-12 pt-3 pb-3 text-2x text-center">
-                        ¿Que quiere hacer?
+            @if(!$reserva)
+                @if($puesto->id_estado<3)
+                    <div class="row mt-5 mb-5">
+                        <div class="col-md-12 pt-3 pb-3 text-2x text-center">
+                            ¿Que quiere hacer?
+                        </div>
+                    </div>
+                @endif
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        @switch($puesto->id_estado)
+                            @case(1)
+                                    <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
+                                @break
+                            @case(2)
+                                    <button class="btn btn-lg btn-warning btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
+                                @break
+                            @default
+                        @endswitch
                     </div>
                 </div>
             @endif
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    @switch($puesto->id_estado)
-                        @case(1)
-                                <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
-                            @break
-                        @case(2)
-                                <button class="btn btn-lg btn-warning btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
-                            @break
-                        @default
-                    @endswitch
-                </div>
-            </div>
-            @if($puesto->id_estado>1 && isset($respuesta['disponibles']))
+            @if(($puesto->id_estado>1 && isset($respuesta['disponibles'])) || $reserva)
                 <div class="row">
                     <div class="col-md-12 font-18 text-center mt-5">
                         En esta misma planta tiene los siguientes puestos disponibles:

@@ -97,7 +97,8 @@ class HomeController extends Controller
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where('token',$puesto)
             ->first();
-
+        
+        
         $disponibles=DB::table('puestos')
             ->select('cod_puesto','des_puesto','val_color','val_icono')
             ->where('id_cliente',$p->id_cliente)
@@ -105,6 +106,14 @@ class HomeController extends Controller
             ->where('id_planta',$p->id_planta)
             ->where('id_estado',1)
             ->get();
+        //A ver si el usuario viene autentificado
+        if(Auth::check())
+            {
+                $id_usuario=Auth::user()->id;
+            } else {
+                $id_usuario=0;
+            }
+
         if(!isset($p)){
             //Error puesto no encontrado
             $respuesta=[
@@ -112,7 +121,26 @@ class HomeController extends Controller
                 'icono' => '<i class="fad fa-exclamation-triangle"></i>',
                 'color'=>'danger'
             ];
+            $reserva=null;
         } else {    
+            //Ahora comprobamos si el puesto esta reservado por alguien distinto a el usuario
+            $reserva=DB::table('reservas')
+                ->where('id_puesto',$p->id_puesto)
+                ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+                ->where('id_usuario','<>',$id_usuario)
+                ->first();
+
+            if($reserva){
+                $respuesta=[
+                    'mensaje'=>"PUESTO RESERVADO",
+                    'icono' => '<i class="fad fa-bring-forward"></i>',
+                    'color'=>'danger',
+                    'puesto'=>$p,
+                    'disponibles'=>$disponibles
+                ];
+                return view('scan.result',compact('respuesta','reserva'));
+            }
+            
             switch ($p->id_estado) {
                 case 1:
                     $respuesta=[
@@ -163,13 +191,21 @@ class HomeController extends Controller
                     break;
             }
         }
-        savebitacora('Cambio de puestos QR anonimo'.$p->id_puesto. ' a estado '.$p->id_estado,"Home","getpuesto","OK");
-        return view('scan.result',compact('respuesta'));
+        //savebitacora('Cambio de puestos QR anonimo'.$p->id_puesto. ' a estado '.$p->id_estado,"Home","getpuesto","OK");
+        return view('scan.result',compact('respuesta','reserva'));
     }
 
 
 
     public function estado_puesto($puesto,$estado){ 
+        //A ver si el usuario viene autentificado
+        if(Auth::check())
+            {
+                $id_usuario=Auth::user()->id;
+            } else {
+                $id_usuario=0;
+            }
+        
         $p=DB::table('puestos')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
@@ -183,11 +219,27 @@ class HomeController extends Controller
                 'mensaje'=>"Error, puesto no encontrado"
             ];
         } else {    
+            $reserva=DB::table('reservas')
+                ->where('id_puesto',$p->id_puesto)
+                ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+                ->where('id_usuario','<>',$id_usuario)
+                ->first();
+            if($reserva){
+                $respuesta=[
+                    'tipo'=>'ERROR',
+                    'mensaje'=>"El puesto esta reservado por otro usuario"
+                ];
+            }
             logpuestos::create(['id_puesto'=>$p->id_puesto,'id_estado'=>$estado,'id_user'=>Auth::user()->id??0,'fecha'=>Carbon::now()]);
             DB::table('puestos')->where('token',$puesto)->update([
                 'id_estado'=>$estado,
                 'fec_ult_estado'=>Carbon::now()
             ]);
+            DB::table('reservas')
+                ->where('id_puesto',$p->id_puesto)
+                ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+                ->where('id_usuario',$id_usuario)
+                ->update(['fec_utilizada'=>Carbon::now()]);
             switch ($estado) {
                 case 1:
                     $respuesta=[

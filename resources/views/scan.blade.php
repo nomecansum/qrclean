@@ -170,6 +170,7 @@
                     }
                     console.log(data);
                     fin=setTimeout(ocultar_mensaje,5000);
+                    
 
                 })
                 .fail(function(data){
@@ -223,6 +224,7 @@
                 console.log(`[${codesFound}] Nuevo QR: ${qrCodeMessage}`);
                 playaudio();
                 geturl(lastMessageFound);
+                setTimeout(lastMessageFound=null, 2000);
                 
                 //result.innerHTML = `[${codesFound}] Nuevo QR: <strong>${qrCodeMessage}</strong>`;
                 //scannedCodeContainer.appendChild(result);

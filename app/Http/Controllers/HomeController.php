@@ -316,4 +316,12 @@ class HomeController extends Controller
         return view('scan',compact('estado_destino','modo','titulo','tipo_scan'));
     }
 
+    public function scan_usuario(){
+        $estado_destino=1;
+        $modo='location';
+        $titulo='';
+        $tipo_scan="main";
+        return view('scan',compact('estado_destino','modo','titulo','tipo_scan'));
+    }
+
 }

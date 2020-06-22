@@ -146,8 +146,6 @@ class LimpiezaController extends Controller
             return view('limpieza.detalle_limpiador',compact('ronda','puestos','edificios'));
     }
 
-
-
     public function estado_puesto(Request $r){
         
         try{

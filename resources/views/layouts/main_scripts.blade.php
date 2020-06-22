@@ -444,6 +444,15 @@
         document.cookie = name+'=; Max-Age=-99999999;';  
     }
 
+    function isJson(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
     // $('.dataTable').dataTable({
     //         "lengthChange": false,
     //         "pageLength":40,

@@ -145,33 +145,32 @@
         }
 
         function geturl(url){
-            console.log('Get URL: '+url);
-            @if(!isset($modo) || isset($modo) && $modo=='location'))
+            
+            @if(!isset($modo) || (isset($modo) && $modo=='location'))
+                console.log('Get URL: '+url);
                 document.location.href=url;
             @elseif($modo=='cambio_estado' && isset($estado_destino))
                 puesto=url.split('/').pop();
-                console.log(puesto);
+                console.log('Cambio estado '+puesto);
                 $.post('{{url('/puesto/estado/')}}/'+puesto+'/{{ $estado_destino }}', {_token: '{{csrf_token()}}', data: url})
                 .done(function(data){
-                    $('#div_botones').hide();
-                    $('#div_respuesta').hide();
-                    $('#div_mensaje_fin').show();
-
-                    $('#div_txt_mensaje').show();
-                    animateCSS('#div_mensaje_fin','bounceInright');
-                    if(data.tipo=='OK'){
-                        $('#div_txt_mensaje').addClass('bg-info');
-                        $('#div_txt_mensaje').removeClass('bg-danger');
-                        $('#div_txt_mensaje').html('<i class="fad fa-check-circle"></i> '+data.mensaje);
-                    } else {
-                        $('#div_txt_mensaje').removeClass('bg-info');
-                        $('#div_txt_mensaje').addClass('bg-danger');
-                        $('#div_txt_mensaje').html('<i class="fad fa-exclamation-square"></i> '+data.mensaje);
-                    }
-                    console.log(data);
-                    fin=setTimeout(ocultar_mensaje,5000);
-                    
-
+ //La respuesta es un mensaje JSON
+                        $('#div_botones').hide();
+                        $('#div_respuesta').hide();
+                        $('#div_mensaje_fin').show();
+                        $('#div_txt_mensaje').show();
+                        animateCSS('#div_mensaje_fin','bounceInright');
+                        if(data.tipo=='OK'){
+                            $('#div_txt_mensaje').addClass('bg-info');
+                            $('#div_txt_mensaje').removeClass('bg-danger');
+                            $('#div_txt_mensaje').html('<i class="fad fa-check-circle"></i> '+data.mensaje);
+                        } else {
+                            $('#div_txt_mensaje').removeClass('bg-info');
+                            $('#div_txt_mensaje').addClass('bg-danger');
+                            $('#div_txt_mensaje').html('<i class="fad fa-exclamation-square"></i> '+data.mensaje);
+                        }
+                        console.log(data);
+                        fin=setTimeout(ocultar_mensaje,5000);
                 })
                 .fail(function(data){
                     $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> Codigo de sitio no reconocido');
@@ -211,9 +210,14 @@
             const setStatus = status => {
                console.log('Status: '+ status);
             }
+
+            function resetmessage(){
+                lastMessageFound=null;
+            }
             const qrCodeSuccessCallback = qrCodeMessage => {
                 //setStatus("Pattern Found");
                 //setFeedback("");
+                //ocultar_mensaje();
                 if (lastMessageFound === qrCodeMessage) {
                     return;
                 }
@@ -224,7 +228,7 @@
                 console.log(`[${codesFound}] Nuevo QR: ${qrCodeMessage}`);
                 playaudio();
                 geturl(lastMessageFound);
-                setTimeout(lastMessageFound=null, 2000);
+                //setTimeout(resetmessage, 5000);
                 
                 //result.innerHTML = `[${codesFound}] Nuevo QR: <strong>${qrCodeMessage}</strong>`;
                 //scannedCodeContainer.appendChild(result);

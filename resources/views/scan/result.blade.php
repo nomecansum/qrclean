@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Gestión de cámaras</h1>
+    <h1 class="page-header text-overflow pad-no">Scceso a puesto</h1>
 @endsection
 
 @section('styles')
@@ -80,7 +80,13 @@
                     @endforeach
                     </div>
                 </div>
-                
+                @if(Auth::check())
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <a class="btn btn-lg btn-primary text-2x rounded btn_otravez" href="{{ url('/scan_usuario/') }} "><i class="fad fa-qrcode fa-3x"></i> Escanear otra vez</a>
+                        </div>
+                    </div>
+                @endif
 
             @endif
         </div>

@@ -159,7 +159,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('addPermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions_user']);
     Route::post('removePermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions_user']);
 
-    Route::get('/scan', 'HomeController@scan')->name('main_scan');
+    Route::get('/scan_usuario', 'HomeController@scan_usuario')->name('main_scan');
 
 });
 

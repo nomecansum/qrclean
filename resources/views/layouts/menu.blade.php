@@ -178,21 +178,21 @@
                         </ul>
                     </li>
                     @endif
-                    @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
+                    @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan_usuario" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
                     @if(checkPermissions(['Reservas'],['R']))<li class="reservas"><a href="/reservas" class="text-nowrap"><i class="fad fa-calendar-alt"></i></i> <span class="menu-title">Reservar</span></a></li> @endif
                 </ul>
 
 
                 <!--Widget-->
                 <!--================================-->
-                <div class="mainnav-widget">
+                {{-- <div class="mainnav-widget">
                     <!-- Show the button on collapsed navigation -->
                     <div class="show-small">
                         <a href="#" data-toggle="menu-widget" data-target="#demo-wg-server">
                             <i class="demo-pli-monitor-2"></i>
                         </a>
                     </div>
-                </div>
+                </div> --}}
                 <!--================================-->
                 <!--End widget-->
             </div>

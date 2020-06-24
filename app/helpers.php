@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use App\Models\users;
 
 function getProfilePic()
 {
@@ -480,5 +481,68 @@ function color_porcentaje($pct){
 
     if($pct>100){
         return "mint";
+    }
+}
+
+function color_porcentaje_inv($pct){
+    
+    if($pct<50){
+        return "success";
+    }
+
+    if($pct>=50 && $pct<75){
+        return "warning";
+    }
+
+    if($pct>=75 && $pct<=100){
+        return "danger";
+    }
+}
+
+function authbyToken($token){
+    $usuario=users::where('token_acceso',$token)->first();
+    if($usuario){
+        Auth::logout();
+        Auth::loginUsingId($usuario->id);
+        session(['lang' => auth()->user()->lang]);
+        //Permisos del usuario
+        $permisos = DB::select(DB::raw("
+        SELECT
+                des_seccion,
+                max(mca_read)as mca_read,
+                max(mca_write) as mca_write,
+                max(mca_create) as mca_create,
+                max(mca_delete) as mca_delete
+        FROM
+            (SELECT
+                `permisos_usuarios`.`id_seccion`,
+                `permisos_usuarios`.`mca_read`,
+                `permisos_usuarios`.`mca_write`,
+                `permisos_usuarios`.`mca_create`,
+                `permisos_usuarios`.`mca_delete`,
+                `secciones`.`des_seccion`
+            FROM
+                `permisos_usuarios`
+                INNER JOIN `secciones` ON (`permisos_usuarios`.`id_seccion` = `secciones`.`cod_seccion`)
+            WHERE
+                `cod_usuario` = ".auth()->user()->id."
+            UNION
+            SELECT
+                `secciones_perfiles`.`id_seccion`,
+                `secciones_perfiles`.`mca_read`,
+                `secciones_perfiles`.`mca_write`,
+                `secciones_perfiles`.`mca_create`,
+                `secciones_perfiles`.`mca_delete`,
+                `secciones`.`des_seccion`
+            FROM
+                `secciones_perfiles`
+                INNER JOIN `secciones` ON (`secciones_perfiles`.`id_seccion` = `secciones`.`cod_seccion`)
+            WHERE
+                id_perfil=".auth()->user()->cod_nivel.") sq
+        GROUP BY sq.des_seccion"));
+        session(['P' => $permisos]);
+        return true;
+    } else {
+        return false;
     }
 }

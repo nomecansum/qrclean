@@ -1,12 +1,32 @@
 @extends('layout')
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Mapa de puestos (mosaico)</h1>
+    <h1 class="page-header text-overflow pad-no">Mapa de puestos (plano)</h1>
 @endsection
 
 @section('styles')
     <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+        .container {
+            border: 1px solid #DDDDDD;
+            width: 100%;
+            position: relative;
+            padding: 0px;
+        }
+        .flpuesto {
+            float: left;
+            position: absolute;
+            z-index: 1000;
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 9px;
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+    </style>
 @endsection
 
 @section('breadcrumb')
@@ -20,6 +40,7 @@
 @php
     $edificio_ahora=0;
     $planta_ahora=0;
+    use App\Models\plantas;
 @endphp
 
 @section('content')
@@ -28,8 +49,8 @@
 
             </div>
             <div class="col-md-4 text-right">
-                <a href="{{ url('puestos/mapa') }}" class="mr-2" style="color:#fff"><i class="fad fa-th"></i> Mosaico</a>
-                <a href="{{ url('puestos/plano') }}" class="mr-2"><i class="fad fa-map-marked-alt"></i> Plano</a>
+                <a href="{{ url('puestos/mapa') }}" class="mr-2" ><i class="fad fa-th"></i> Mosaico</a>
+                <a href="{{ url('puestos/plano') }}" class="mr-2" style="color:#fff"><i class="fad fa-map-marked-alt"></i> Plano</a>
             </div>
         </div>
    
@@ -51,21 +72,11 @@
             </div>
             <div class="panel-body">
                 @php
-                    $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
+                    $plantas=plantas::where('id_edificio',$e->id_edificio)->get();
                 @endphp
-                @foreach($plantas as $key=>$value)
-                    <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $value }}</h3>
-                    @php
-                        $puestos_planta=$puestos->where('id_planta',$key);
-                    @endphp
-                    <div class="d-flex flex-wrap">
-                        @foreach($puestos_planta as $p)
-                            <div class="text-center font-bold rounded bg-{{ $p->val_color }} mr-2 mb-2 align-middle" style="width:100px; height: 100px; overflow: hidden;">
-                                <span class="h-100 align-middle">{{ $p->cod_puesto }}</span>
-                            </div>
-                            
-                        @endforeach
-                    </div>
+                @foreach($plantas as $pl)
+                    <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $pl->des_planta }}</h3>
+                    @include('puestos.fill-plano')
                 @endforeach
             </div>
         </div>
@@ -79,5 +90,30 @@
     <script>
         $('.parametrizacion').addClass('active active-sub');
         $('.mapa').addClass('active-link');
+        function recolocar_puestos(posiciones){
+            $('.container').each(function(){
+                plano=$(this);
+                //console.log(plano.data('posiciones'));
+                
+                $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
+                    puesto=$('#puesto'+item.id);
+                    puesto.css('top',plano.height()*item.offsettop/100);
+                    puesto.css('left',plano.width()*item.offsetleft/100);
+                });
+
+            }) 
+        }
+
+        
+
+        $(window).resize(function(){
+            recolocar_puestos();
+        })
+
+        $('.mainnav-toggle').click(function(){
+            recolocar_puestos();
+        })
+
+
     </script>
 @endsection

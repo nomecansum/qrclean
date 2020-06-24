@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\clientes;
 use App\Models\edificios;
 use App\Models\plantas;
+use App\Models\puestos;
 use Illuminate\Http\Request;
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -68,9 +70,16 @@ class PlantasController extends Controller
      */
     public function store(Request $request)
     {
+        $img_planta="";
+        $data = $this->getData($request);
         try {
-            $data = $this->getData($request);
-            
+            if ($request->hasFile('img_plano')) {
+                $file = $request->file('img_plano');
+                $path = public_path().'/img/plantas/';
+                $img_planta = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+                $file->move($path,$img_planta);
+                $data['img_plano']=$img_planta;
+            }
             plantas::create($data);
 
             return [
@@ -114,10 +123,17 @@ class PlantasController extends Controller
      */
     public function update($id, Request $request)
     {
+        $img_planta = "";
+        $data = $this->getData($request);
         try {
             validar_acceso_tabla($id,"plantas");
-            $data = $this->getData($request);
-            
+            if ($request->hasFile('img_plano')) {
+                $file = $request->file('img_plano');
+                $path = public_path().'/img/plantas/';
+                $img_planta = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+                $file->move($path,$img_planta);
+                $data['img_plano']=$img_planta;
+            } 
             $plantas = plantas::findOrFail($id);
             $plantas->update($data);
 
@@ -178,6 +194,34 @@ class PlantasController extends Controller
 
 
         return $data;
+    }
+
+    public function puestos($id)
+    {
+        validar_acceso_tabla($id,'plantas');
+        $plantas = plantas::findOrFail($id);
+        $puestos= DB::Table('puestos')
+            ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
+            ->where('id_planta',$id)
+            ->get();
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->get();
+
+        return view('plantas.editor_puestos', compact('plantas','puestos','reservas'));
+    }
+
+    public function puestos_save(Request $r){
+        validar_acceso_tabla($r->id_planta,'plantas');
+        $planta = plantas::findOrFail($r->id_planta);
+        $planta->posiciones=$r->json;
+        $planta->save();
+        return [
+            'title' => "Plantas",
+            'message' => 'Distribucion de puestos en  '.$planta->des_planta. ' actualizada',
+            'url' => url('plantas')
+        ];
     }
 
 }

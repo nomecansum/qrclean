@@ -17,7 +17,7 @@
                 </ul>
             @endif
 
-            <form method="POST" action="{{ route('plantas.plantas.update', $plantas->id_planta) }}" id="edit_plantas_form" name="edit_plantas_form" accept-charset="UTF-8" class="form-horizontal form-ajax">
+            <form method="POST" action="{{ route('plantas.plantas.update', $plantas->id_planta) }}" id="edit_plantas_form" name="edit_plantas_form" accept-charset="UTF-8" class="form-horizontal form-ajax"  enctype="multipart/form-data">
             {{ csrf_field() }}
             <input name="_method" type="hidden" value="PUT">
             @include ('plantas.form', [

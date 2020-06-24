@@ -220,6 +220,48 @@ class PuestosController extends Controller
         return view('puestos.mapa',compact('puestos','edificios'));
     }
 
+    public function plano(){
+
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $edificios=DB::table('edificios')
+        ->select('id_edificio','des_edificio')
+        ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
+        ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            }
+        })
+        ->get();
+
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','reservas.id_usuario','users.id')
+            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+        
+        return view('puestos.plano',compact('puestos','edificios','reservas'));
+    }
+
     public function ronda_limpieza(Request $r){
         //Primero asegurarnos de que tiene acceso para los puestos
 

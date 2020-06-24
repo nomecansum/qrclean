@@ -33,9 +33,11 @@ class plantas extends Model
      * @var array
      */
     protected $fillable = [
-                  'des_planta',
+                  'id_edificio',
                   'id_cliente',
-                  'id_edificio'
+                  'des_planta',
+                  'img_plano',
+                  'posiciones'
               ];
 
     /**
@@ -53,16 +55,6 @@ class plantas extends Model
     protected $casts = [];
     
     /**
-     * Get the Cliente for this model.
-     *
-     * @return App\Models\Cliente
-     */
-    public function Cliente()
-    {
-        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
-    }
-
-    /**
      * Get the Edificio for this model.
      *
      * @return App\Models\Edificio
@@ -70,6 +62,16 @@ class plantas extends Model
     public function Edificio()
     {
         return $this->belongsTo('App\Models\Edificio','id_edificio','id_edificio');
+    }
+
+    /**
+     * Get the Cliente for this model.
+     *
+     * @return App\Models\Cliente
+     */
+    public function Cliente()
+    {
+        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
     }
 
     /**
@@ -82,6 +84,36 @@ class plantas extends Model
         return $this->hasMany('App\Models\Puesto','id_planta','id_planta');
     }
 
+    /**
+     * Get the plantasUsuario for this model.
+     *
+     * @return App\Models\PlantasUsuario
+     */
+    public function plantasUsuario()
+    {
+        return $this->hasOne('App\Models\PlantasUsuario','id_planta','id_planta');
+    }
 
+    /**
+     * Set the posiciones.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setPosicionesAttribute($value)
+    {
+        $this->attributes['posiciones'] = json_encode($value);
+    }
+
+    /**
+     * Get posiciones in array format
+     *
+     * @param  string  $value
+     * @return array
+     */
+    public function getPosicionesAttribute($value)
+    {
+        return json_decode($value) ?: [];
+    }
 
 }

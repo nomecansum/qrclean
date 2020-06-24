@@ -79,7 +79,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 								$dia=$reservas->where('fec_reserva',Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d'))->first();
 								if($dia){
 									$color="#b3dbbf";
-									$border="border: 2px solid ##e55a34";
+									$borde="";
 									$descrip=$dia->cod_puesto;
 									$title=Carbon\Carbon::parse($dia->fec_reserva)->format('d/m/Y').chr(13)." Puesto: ".$descrip." - Edificio: ".$dia->des_edificio." - Planta: ".$dia->des_planta;
 									$estado="ocupado";
@@ -90,10 +90,13 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 									$title="";
 									$estado="vacio";
 								}
-								
-                            @endphp
+								if(Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d')==Carbon\Carbon::now()->format('Y-m-d')){
+									$borde="border: 3px solid #1e90ff";
+								}
+							@endphp
+					
                             {{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
-							<td style="background-color: {{$color}}; height: 100px;  color: #999; border-radius: 6px;"  class="add-tooltip  pt-3 td_calendar {{ $estado }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
+							<td style="background-color: {{$color}}; height: 100px;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip  pt-3 td_calendar {{ $estado }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
                                 <span class="font-bold" style="font-size: 26px; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
 								<span style="font-size: 11px; color: #fff; cursor: pointer">

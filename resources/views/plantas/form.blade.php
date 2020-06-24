@@ -2,37 +2,63 @@
 <div class="row">
     <div class="form-group col-md-12 {{ $errors->has('des_planta') ? 'has-error' : '' }}">
         <label for="des_planta" class="control-label">Nombre</label>
-            <input class="form-control" name="des_planta" type="text" id="des_planta" value="{{ old('des_planta', optional($plantas)->des_planta) }}" maxlength="50" placeholder="Enter des planta here...">
+            <input class="form-control" required name="des_planta" type="text" id="des_planta" value="{{ old('des_planta', optional($plantas)->des_planta) }}" maxlength="50" placeholder="Enter des planta here...">
             {!! $errors->first('des_planta', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
 
 <div class="row">
     <div class="form-group col-md-6 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
-        <label for="id_cliente" class="control-label">Cliente</label>
-            <select class="form-control" id="id_cliente" name="id_cliente">
-                    <option value="" style="display: none;" {{ old('id_cliente', optional($plantas)->id_cliente ?: '') == '' ? 'selected' : '' }} disabled selected>Enter id cliente here...</option>
-                @foreach ($Clientes as $key => $Cliente)
-                    <option value="{{ $key }}" {{ old('id_cliente', optional($plantas)->id_cliente) == $key ? 'selected' : '' }}>
-                        {{ $Cliente }}
-                    </option>
-                @endforeach
-            </select>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="id_cliente" class="control-label">Cliente</label>
+                <select class="form-control" required id="id_cliente" name="id_cliente">
+                    @foreach ($Clientes as $key => $Cliente)
+                        <option value="{{ $key }}" {{ old('id_cliente', optional($plantas)->id_cliente) == $key ? 'selected' : '' }}>
+                            {{ $Cliente }}
+                        </option>
+                    @endforeach
+                </select>
+                {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
+            </div>
             
-            {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label for="id_edificio" class="control-label">Edificio</label>
+                <select class="form-control" required id="id_edificio" name="id_edificio">
+                        <option value="" style="display: none;" {{ old('id_edificio', optional($plantas)->id_edificio ?: '') == '' ? 'selected' : '' }} disabled selected>Enter id edificio here...</option>
+                    @foreach ($Edificios as $key => $Edificio)
+                        <option value="{{ $key }}" {{ old('id_edificio', optional($plantas)->id_edificio) == $key ? 'selected' : '' }}>
+                            {{ $Edificio }}
+                        </option>
+                    @endforeach
+                </select>
+                {!! $errors->first('id_edificio', '<p class="help-block">:message</p>') !!}
+            </div>
+        </div>
     </div>
-
-    <div class="form-group col-md-6 {{ $errors->has('id_edificio') ? 'has-error' : '' }}">
-        <label for="id_edificio" class="control-label">Edificio</label>
-            <select class="form-control" id="id_edificio" name="id_edificio">
-                    <option value="" style="display: none;" {{ old('id_edificio', optional($plantas)->id_edificio ?: '') == '' ? 'selected' : '' }} disabled selected>Enter id edificio here...</option>
-                @foreach ($Edificios as $key => $Edificio)
-                    <option value="{{ $key }}" {{ old('id_edificio', optional($plantas)->id_edificio) == $key ? 'selected' : '' }}>
-                        {{ $Edificio }}
-                    </option>
-                @endforeach
-            </select>
-            
-            {!! $errors->first('id_edificio', '<p class="help-block">:message</p>') !!}
+    <div class="col-md-6 text-center b-all rounded">
+        <div class="col-md-12" >
+            <div class="form-group  {{ $errors->has('img_plano') ? 'has-error' : '' }}" style="padding-top: 50px">
+                <label for="img_plano" class="preview preview1" style="background-image: url();">
+                    <img src="{{ isset($plantas) ? url('img/plantas/',$plantas->img_plano) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid">
+                </label>
+                <div class="custom-file">
+                    <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input" name="img_plano" id="img_plano" lang="es" value="{{ isset($plantas) ? $plantas->img_plano : ''}}">
+                    <label class="custom-file-label" for="img_plano"></label>
+                </div>
+            </div>
+                {!! $errors->first('img_plano', '<p class="help-block">:message</p>') !!}
+        </div>
+        <div class="row font-bold">
+            Plano de la planta<br>
+        </div>
     </div>
 </div>
+<script type="application/javascript">
+    $('input[type="file"]').change(function(e){
+        var fileName = e.target.files[0].name;
+        $('.custom-file-label').html(fileName);
+    });
+</script>>

@@ -25,6 +25,10 @@ Route::get('/puesto/{puesto}','HomeController@getpuesto');
 Route::get('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
 Route::post('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
 
+Route::group(['prefix' => 'MKD'], function () {
+    Route::get('/plano/{planta}/{token}','MKDController@plano');
+});   
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Route::get('/logout','Auth\LoginController@logout');
@@ -108,6 +112,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::Post('/print_qr','PuestosController@print_qr');
         Route::get('/mapa','PuestosController@mapa');
         Route::post('/ronda_limpieza','PuestosController@ronda_limpieza');
+        Route::get('/plano','PuestosController@plano');
     });
 
     Route::group(['prefix' => 'edificios'], function () {
@@ -128,6 +133,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/', 'PlantasController@store')->name('plantas.plantas.store');
         Route::put('plantas/{plantas}', 'PlantasController@update')->name('plantas.plantas.update')->where('id', '[0-9]+');
         Route::get('/delete/{plantas}','PlantasController@destroy')->name('plantas.plantas.destroy')->where('id', '[0-9]+');
+        Route::get('/puestos/{id}','PlantasController@puestos')->name('plantas.puestos.index')->where('id', '[0-9]+');
+        Route::post('/puestos','PlantasController@puestos_save')->name('plantas.puestos.save')->where('id', '[0-9]+');
     });
 
     Route::group(['prefix' => 'rondas'], function () {

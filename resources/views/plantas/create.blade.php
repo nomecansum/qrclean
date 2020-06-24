@@ -15,7 +15,7 @@
                 </ul>
             @endif
 
-            <form method="POST" action="{{ route('plantas.plantas.store') }}" accept-charset="UTF-8" id="create_plantas_form" name="create_plantas_form" class="form-horizontal form-ajax">
+            <form method="POST" action="{{ route('plantas.plantas.store') }}" accept-charset="UTF-8" id="create_plantas_form" name="create_plantas_form" class="form-horizontal form-ajax"  enctype="multipart/form-data">
             {{ csrf_field() }}
             @include ('plantas.form', [
                                         'plantas' => null,

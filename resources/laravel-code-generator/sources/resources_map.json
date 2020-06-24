@@ -20,11 +20,6 @@
         "table-name": "clientes"
     },
     {
-        "model-name": "plantas",
-        "resource-file": "plantas.json",
-        "table-name": "plantas"
-    },
-    {
         "model-name": "edificios",
         "resource-file": "edificios.json",
         "table-name": "edificios"
@@ -73,5 +68,10 @@
         "model-name": "plantas_usuario",
         "resource-file": "plantas_usuarios.json",
         "table-name": "plantas_usuario"
+    },
+    {
+        "model-name": "plantas",
+        "resource-file": "plantas.json",
+        "table-name": "plantas"
     }
 ]

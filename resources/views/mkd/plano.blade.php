@@ -156,13 +156,14 @@
                 $('#reservados').html(reservados);
                 ocupados=cuenta-disponibles-reservados;
                 pct_aforo=Math.round(100*ocupados/cuenta);
+                //console.log(pct_aforo);
                 $('#ocupacion').html(pct_aforo+'%');
             })
         }
 
         $(function() {
             recolocar_puestos();
-            ir=setInterval(refrescar_datos,10000);
+            ir=setInterval(refrescar_datos,3000);
         });
 
         

@@ -156,7 +156,7 @@
                 $('#reservados').html(reservados);
                 ocupados=cuenta-disponibles-reservados;
                 pct_aforo=Math.round(100*ocupados/cuenta);
-                $('#activos').html(cuenta);
+                $('#ocupacion').html(pct_aforo+'%');
             })
         }
 

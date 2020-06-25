@@ -90,7 +90,7 @@
 				});	
 			})
 			if($("#token_1uso").val() == "")
-			$('#btn_generar_token').click();
+				$('#btn_generar_token').click();
 		@endif
 	
 	</script>

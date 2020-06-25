@@ -207,7 +207,8 @@ class UsersController extends Controller
             'remember_token' => 'nullable|string|min:0|max:100',
             'theme' => 'nullable|string|min:0|max:150',
             'val_timezone' => 'nullable|string|min:0|max:100',
-            'nivel_acceso'=>'nullable'
+            'nivel_acceso'=>'nullable',
+            'token_acceso'=>'nullable'
         ];
 
 

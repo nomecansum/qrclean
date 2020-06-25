@@ -47,31 +47,42 @@
 </style>
 @endsection
 <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="row">
-                <div class="form-group col-md-10 {{ $errors->has('name') ? 'has-error' : '' }}">
+                <div class="form-group col-md-12 {{ $errors->has('name') ? 'has-error' : '' }}">
                     <label for="name" class="control-label">Nombre</label>
                     <input class="form-control" name="name" type="text" id="name" value="{{ old('name', optional($users)->name) }}" minlength="1" maxlength="255" required="true" placeholder="Enter name here...">
                     {!! $errors->first('name', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-10 {{ $errors->has('email') ? 'has-error' : '' }}">
+                <div class="form-group col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}">
                     <label for="email" class="control-label">e-mail</label>
                     <input class="form-control" name="email" type="text" id="email" value="{{ old('email', optional($users)->email) }}" minlength="1" maxlength="255" required="true" placeholder="Enter email here...">
                     {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-10 {{ $errors->has('password') ? 'has-error' : '' }}">
+                <div class="form-group col-md-6 {{ $errors->has('password') ? 'has-error' : '' }}">
                     <label for="password" class="control-label">Password</label>
                     <input class="form-control" name="password" type="password" id="password"  minlength="4" maxlength="255" placeholder="Enter password here...">
                     {!! $errors->first('password', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="control-label">Token registro</label>
+                    <div class="input-group mb-3">
+                        <input type="text" name="token_acceso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($users) ? $users->token_acceso : ''}}">
+                        <div class="input-group-btn">
+                            <button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-1"></div>
         <div class="col-md-2 text-center b-all rounded">
+            <div class="row font-bold" style="padding-left: 15px">
+                Imagen<br>
+            </div>
             <div class="col-12">
                 <div class="form-group  {{ $errors->has('img_usuario') ? 'has-error' : '' }}">
                     <label for="img_usuario" class="preview preview1" style="background-image: url();">
@@ -84,9 +95,7 @@
                 </div>
                     {!! $errors->first('img_usuario', '<p class="help-block">:message</p>') !!}
             </div>
-            <div class="row font-bold">
-                Imagen<br>
-            </div>
+            
         </div>
 </div>
 <div class="row">
@@ -164,7 +173,7 @@
         </div>
 </div>
 
-@section('scripts_modulo')
+@section('scripts2')
 <script>
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -180,6 +189,17 @@
     $("#img_usuario").change(function(){
         readURL(this);
     });
+
+    $('#btn_generar_token').click(function(event){
+        //console.log('token');
+        $.get( "/clientes/gen_key")
+        .done(function( data, textStatus, jqXHR ) {
+            $('#token_1uso').val(data);
+        })
+        .fail(function( jqXHR, textStatus, errorThrown ) {
+                console.log(errorThrown);
+        });	
+    })
 
 </script>
 @endsection

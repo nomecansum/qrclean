@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 use App\Models\clientes;
 use App\Models\edificios;
@@ -37,5 +36,17 @@ class MKDController extends Controller
 
         return view('mkd.plano',compact('plantas','puestos','reservas','cliente','edificio'));
         
+    }
+
+    public function datos_plano($planta,$token){
+        validar_acceso_tabla($planta,'plantas');
+        $puestos= DB::Table('puestos')
+            ->select('puestos.id_puesto','cod_puesto','puestos.id_estado','estados_puestos.val_color')
+            ->selectraw('(select(fec_reserva) from reservas where reservas.id_puesto=puestos.id_puesto and fec_reserva=date(now())) as fec_reserva')
+            ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
+            ->where('id_planta',$planta)
+            ->get();
+        $puestos=json_encode($puestos);
+        return $puestos;       
     }
 }

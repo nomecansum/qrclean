@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class users extends Model
 {
-
+    
 
     /**
      * The database table used by the model.
@@ -37,13 +37,14 @@ class users extends Model
                   'password',
                   'remember_token',
                   'img_usuario',
-                  'id_grupo',
+                  'cod_nivel',
                   'theme',
                   'collapse',
                   'last_login',
                   'nivel_acceso',
-                  'cod_nivel',
-                  'id_cliente'
+                  'id_cliente',
+                  'val_timezone',
+                  'token_acceso'
               ];
 
     /**
@@ -52,14 +53,23 @@ class users extends Model
      * @var array
      */
     protected $dates = [];
-
+    
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
     protected $casts = [];
-
+    
+    /**
+     * Get the plantasUsuarios for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function plantasUsuarios()
+    {
+        return $this->hasMany('App\Models\PlantasUsuario','id_usuario','id');
+    }
 
     /**
      * Set the email_verified_at.

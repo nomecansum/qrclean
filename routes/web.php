@@ -27,6 +27,7 @@ Route::post('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
 
 Route::group(['prefix' => 'MKD'], function () {
     Route::get('/plano/{planta}/{token}','MKDController@plano');
+    Route::get('/datos_plano/{planta}/{token}','MKDController@datos_plano');
 });   
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

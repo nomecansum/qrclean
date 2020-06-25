@@ -162,7 +162,7 @@
 
         $(function() {
             recolocar_puestos();
-            ir=setInterval(refrescar_datos,3000);
+            ir=setInterval(refrescar_datos,10000);
         });
 
         

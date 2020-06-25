@@ -124,6 +124,8 @@
                         <span class="menu-title">Puestos</span>
                         <i class="arrow"></i>
                     </a> --}}
+                    @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan_usuario" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
+                    @if(checkPermissions(['Reservas'],['R']))<li class="reservas"><a href="/reservas" class="text-nowrap"><i class="fad fa-calendar-alt"></i></i> <span class="menu-title">Reservar</span></a></li> @endif
                     @if(checkPermissions(['Parametrizacion'],['R']))
                     <li class="parametrizacion">
                         <a href="#">
@@ -131,7 +133,7 @@
                             @if(checkPermissions(['Parametrizacion'],['R']))<span class="menu-title">Parametrizacion</span> @endif
                             <i class="arrow"></i>
                         </a>
-
+                        
                         <!--Submenu-->
                         <ul class="collapse">
                             @if(checkPermissions(['Edificios'],['R']))<li class="edificios"><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li> @endif
@@ -178,8 +180,7 @@
                         </ul>
                     </li>
                     @endif
-                    @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan_usuario" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
-                    @if(checkPermissions(['Reservas'],['R']))<li class="reservas"><a href="/reservas" class="text-nowrap"><i class="fad fa-calendar-alt"></i></i> <span class="menu-title">Reservar</span></a></li> @endif
+                    
                 </ul>
 
 

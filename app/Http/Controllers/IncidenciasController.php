@@ -21,7 +21,25 @@ use Illuminate\Validation\Rule;
 
 class IncidenciasController extends Controller
 {
-    
+    //LISTADO DE INCIDENCIAS
+    public function index(){
+        $incidencias=DB::table('incidencias')
+            ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+        return view('incidencias.index',compact('incidencias'));
+    }
+
+
     // GESTION DE TIPOS DE INCIDENCIA
     public function index_tipos(){
         $tipos = DB::table('incidencias_tipos')

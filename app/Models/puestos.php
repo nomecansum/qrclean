@@ -33,16 +33,19 @@ class puestos extends Model
      * @var array
      */
     protected $fillable = [
+                  'id_edificio',
+                  'id_planta',
+                  'id_cliente',
                   'cod_puesto',
                   'des_puesto',
-                  'fec_ult_estado',
-                  'id_cliente',
-                  'id_edificio',
                   'id_estado',
-                  'id_planta',
-                  'token',
                   'val_color',
-                  'val_icono'
+                  'token',
+                  'fec_ult_estado',
+                  'val_icono',
+                  'id_usuario_usando',
+                  'mca_acceso_anonimo',
+                  'mca_reservar'
               ];
 
     /**
@@ -59,16 +62,6 @@ class puestos extends Model
      */
     protected $casts = [];
     
-    /**
-     * Get the Cliente for this model.
-     *
-     * @return App\Models\Cliente
-     */
-    public function Cliente()
-    {
-        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
-    }
-
     /**
      * Get the Edificio for this model.
      *
@@ -87,6 +80,26 @@ class puestos extends Model
     public function Planta()
     {
         return $this->belongsTo('App\Models\Planta','id_planta','id_planta');
+    }
+
+    /**
+     * Get the Cliente for this model.
+     *
+     * @return App\Models\Cliente
+     */
+    public function Cliente()
+    {
+        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the User for this model.
+     *
+     * @return App\Models\User
+     */
+    public function User()
+    {
+        return $this->belongsTo('App\Models\User','id_usuario_usando','id');
     }
 
     /**

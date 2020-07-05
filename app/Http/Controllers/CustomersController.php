@@ -12,6 +12,8 @@ use App\Services\APPApiService;
 use Illuminate\Support\Str;
 use App\Models\clientes;
 use \Carbon\Carbon;
+use App\Models\config_clientes;
+use Session;
 
 class CustomersController extends Controller
 {
@@ -49,7 +51,14 @@ class CustomersController extends Controller
             })
             ->first();
         }
-    	return view('customers.create',compact('c'));
+        $config=DB::table('config_clientes')->where('id_cliente',$id)->first();
+        if(!isset($config)){
+            $config= new config_clientes;
+            $config->id_cliente=$id;
+            $config->save();
+        }
+
+    	return view('customers.create',compact('c','config'));
     }
     public function create()
     {
@@ -67,6 +76,17 @@ class CustomersController extends Controller
         try {
             //Insertar el cliente
             $c = $clsvc->insertar($r);
+            
+            $config= new config_clientes;
+            $config->id_cliente=$c->id_cliente;
+            
+            $config->update($r->all());
+            $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';
+            $config->mca_limpieza=$r->mca_limpieza??'N';
+            $config->mca_permitir_anonimo=$r->mca_permitir_anonimo??'N';
+            $config->save();
+
+            Session::put('CL',$config->toArray());
 
             savebitacora("Creado cliente ".$r->nom_cliente,'CustomerController','Save');
 
@@ -102,6 +122,16 @@ class CustomersController extends Controller
             $clsvc->validar_request($r,'toast');
             //Actualizar el cliente
             $c = $clsvc->actualizar($r);
+            //Config de cliente
+            $config=config_clientes::findorfail($r->id);
+
+            $config->update($r->all());
+            $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';
+            $config->mca_limpieza=$r->mca_limpieza??'N';
+            $config->mca_permitir_anonimo=$r->mca_permitir_anonimo??'N';
+            $config->save();
+            
+            Session::put('CL',$config->toArray());
 
             savebitacora("Actualizados datos de cliente ".$r->nom_cliente,$r->id_cliente);
 

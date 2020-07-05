@@ -4,7 +4,28 @@
 
     //Locale de Moment
     moment.locale('es');
+    
+    //Para cambiar el tema de la plantilla
+    var themeBtn = $('.demo-theme'),
+    changeTheme = function (themeName, type) {
+        var themeCSS = $('#theme'),
+            fileext = '.min.css',
+            filename = 'css/themes/type-' + type + '/' + themeName + fileext;
 
+        if (themeCSS.length) {
+            themeCSS.prop('href', filename);
+        } else {
+            themeCSS = '<link id="theme" href="' + filename + '" rel="stylesheet">';
+            $('head').append(themeCSS);
+        }
+        localStorage.theme=themeName;
+        localStorage.themetype=type;
+    };
+
+    @if(isset(session('CL')['theme_type']) && isset(session('CL')['theme_name']))
+        localStorage.theme="{{ session('CL')['theme_name'] }}";
+        localStorage.themetype="{{ session('CL')['theme_type'] }}";
+    @endif
 
     //Ocultar los alert
     $('div.alert').not('.alert-important,.alert-danger,.not-dismissable').delay(5000).fadeOut(350);

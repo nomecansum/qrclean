@@ -15,6 +15,11 @@
     <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
     <!--Nifty Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/nifty.min.css') }}" rel="stylesheet">
+    @if(isset(session('CL')['theme_type']) && isset(session('CL')['theme_name']))
+        <link href="{{ url('/css/themes/type-'.session('CL')['theme_type'].'/'.session('CL')['theme_name'].'.min.css') }}" rel="stylesheet">
+    @else
+        <link href="{{ url('/css/themes/type-e/theme-navy.min.css') }}" rel="stylesheet">
+    @endif
     <!--Nifty Premium Icon [ DEMONSTRATION ]-->
     <link href="{{ url('/css/demo/nifty-demo-icons.min.css/') }}" rel="stylesheet">
     <!--=================================================-->
@@ -229,7 +234,7 @@
     <script src="{{ url('js/nifty.js') }}"></script>
     <!--=================================================-->
     <!--Demo script [ DEMONSTRATION ]-->
-    <script src="{{ url('js/demo/nifty-demo.js') }}"></script>
+    {{--  <script src="{{ url('js/demo/nifty-demo.js') }}"></script>  --}}
      
     <!--Specify page [ SAMPLE ]-->
     {{--  <script src="{{ url('js/demo/dashboard.js') }}"></script>  --}}

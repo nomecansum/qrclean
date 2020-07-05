@@ -50,11 +50,6 @@
         "table-name": "puestos_ronda"
     },
     {
-        "model-name": "puestos",
-        "resource-file": "puestos.json",
-        "table-name": "puestos"
-    },
-    {
         "model-name": "reservas",
         "resource-file": "reservas.json",
         "table-name": "reservas"
@@ -83,5 +78,15 @@
         "model-name": "incidencias_tipos",
         "resource-file": "incidencias_tipos.json",
         "table-name": "incidencias_tipos"
+    },
+    {
+        "model-name": "config_clientes",
+        "resource-file": "config_clientes.json",
+        "table-name": "config_clientes"
+    },
+    {
+        "model-name": "puestos",
+        "resource-file": "puestos.json",
+        "table-name": "puestos"
     }
 ]

@@ -58,7 +58,7 @@ class LoginController extends Controller
             $user = auth()->user();
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  
             $cliente=DB::table('clientes')->where('id_cliente',$user->id_cliente)->first();  
-            session(['CL'=>$config_cliente]);
+            session(['CL'=>(array)$config_cliente]);
             session(['logo_cliente'=>$cliente->img_logo]);
 
             auth()->user()->last_login = Carbon::now();

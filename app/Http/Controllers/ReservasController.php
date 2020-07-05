@@ -64,6 +64,7 @@ class ReservasController extends Controller
             ->where('id_usuario',Auth::user()->id)
             ->pluck('id_planta')
             ->toArray();
+        
 
         $reservados=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
@@ -82,10 +83,11 @@ class ReservasController extends Controller
                 }
             })
             ->where(function($q){
-                if(session('CL') && session('CL')->mca_restringir_usuarios_planta=='S'){
-                    $q->wherein('puestos.id_planta',$plantas_usuario);
+                if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
+                    $q->wherein('puestos.id_planta',$plantas_usuario??[]);
                 }
             })
+            ->where('puestos.mca_reservar','S')
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')

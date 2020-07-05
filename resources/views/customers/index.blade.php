@@ -48,7 +48,18 @@
 				<h3 class="panel-title">Clientes</h3>
 			</div>
 			<div class="panel-body">
-				<table id="myTable" class="table table-bordered table-condensed table-hover dataTable">
+				<table id="tabla"  data-toggle="table"
+                    data-locale="es-ES"
+                    data-search="true"
+                    data-show-columns="true"
+                    data-show-columns-toggle-all="true"
+                    data-page-list="[5, 10, 20, 30, 40, 50]"
+                    data-page-size="50"
+                    data-pagination="true" 
+                    data-show-pagination-switch="true"
+                    data-show-button-icons="true"
+                    data-toolbar="#all_toolbar"
+                    >
 					<thead>
 						<tr>
 							<th>Id</th>
@@ -75,8 +86,8 @@
 								<td>{{ $cus->plantas}}</td>
 								<td style="position: relative;" class="pt-2">
 									<div class="floating-like-gmail mt-2">
-										@if (checkPermissions(['Clientes'],["C"]))<a href="#" title="Editar cliente" data-id="{{ $cus->id_cliente }}" class="btn btn-xs btn-info add-tooltip btn_edit "><span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>@endif
-										@if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-usuario-{{$cus->id_cliente}}" title="Borrar cliente" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span></a>@endif
+										@if (checkPermissions(['Clientes'],["W"]))<a href="#" title="Editar cliente" data-id="{{ $cus->id_cliente }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $cus->id_cliente }})"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+										@if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-usuario-{{$cus->id_cliente}}" title="Borrar cliente" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
 										{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$cus->id_cliente}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
 									</div>
 									@if (checkPermissions(['Clientes'],["D"]))
@@ -149,30 +160,16 @@
       //stopPropagation()
 	});
 
-	$('.btn_edit').click(function(){
-		$('#editorCAM').load("{{ url('/clientes/edit/') }}"+"/"+$(this).data('id'), function(){
+	function edit(id){
+		$('#editorCAM').load("{{ url('/clientes/edit/') }}"+"/"+id, function(){
 			animateCSS('#editorCAM','bounceInRight');
 		});
-	})
+	}
 
 
     $('.td').click(function(event){
         editar( $(this).data('id'));
 	})
-	
-	$('.dataTable').dataTable({
-			"lengthChange": false,
-			"pageLength": 50,
-			"responsive": true,
-			"bSort": true,
-			"language": {
-				"paginate": {
-				"previous": '<i class="demo-psi-arrow-left"></i>',
-				"next": '<i class="demo-psi-arrow-right"></i>'
-				}
-			},
-			columnDefs: [ { targets: 'no-sort', orderable: false } ],
-		});
 
 	</script>
 

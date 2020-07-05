@@ -67,25 +67,215 @@
 							
 						</div>
 					</div>
-					<div class="row b-all rounded">
-						<div class="col-md-12 ">
-							<h3 class="panel-title">Configuracion del cliente</h3>
+					<input type="hidden" name="theme_type" id="theme_type" value="{{ $config->theme_type }}"> 
+					<input type="hidden" name="theme_name" id="theme_name"  value="{{ $config->theme_name }}"> 
+					<div class="row b-all rounded  p-b-10">
+						<div class="col-md-12 p-b-10">
+							<p class="text-main text-bold text-uppercase text-left">Configuracion de cliente</p>
+							<div class="col-md-2">
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_restringir_usuarios_planta"  id="mca_restringir_usuarios_planta" value="S" {{ $config->mca_restringir_usuarios_planta=='S'?'checked':'' }}> 
+								<label class="custom-control-label"   for="mca_restringir_usuarios_planta">Restringir plantas usuarios</label>
+							</div>
+							<div class="col-md-2">
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_limpieza"  id="mca_limpieza" value="S" {{ $config->mca_limpieza=='S'?'checked':'' }}> 
+								<label class="custom-control-label"   for="mca_limpieza">Funcion de limpieza</label>
+							</div>
+							<div class="col-md-2">
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_permitir_anonimo"  id="mca_permitir_anonimo" value="S" {{ $config->mca_permitir_anonimo=='S'?'checked':'' }}> 
+								<label class="custom-control-label"   for="mca_permitir_anonimo">Permitir escaneo anónimo</label>
+							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-2">
-								<label class="control-label">Token registro</label>
-									<div class="input-group mb-3">
-										<input type="text" name="token_1uso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($c) ? $c->token_1uso : ''}}">
-										<div class="input-group-btn">
-											@if(checkPermissions(['Clientes'],["C"]) || checkPermissions(['Empresas'],["W"]))<button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>@endif
+							
+							
+						</div>
+					</div>
+
+					<div class="row b-all rounded mt-3">
+						<div class="row">
+							<div class="col-lg-8" style="padding-left: 30px">
+								<div id="demo-theme">
+									<p class="text-main text-bold text-uppercase text-left">Tema de la aplicacion</p>
+									<hr class="new-section-xs">
+									<div class="clearfix demo-full-theme">
+										<div class="col-md-6">
+											<div class="media v-middle">
+												<div class="media-left demo-single-theme">
+													<a href="#" class="demo-theme demo-theme-light add-tooltip btn-scheme" data-theme="theme-light-full" data-type="full" data-title="Light"></a>
+												</div>
+												<div class="media-body">
+													<p class="text-bold text-main mar-no text-uppercase text-sm">Claro</p>
+													<small class="text-muted text-xs">Tema completamente claro</small>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="media v-middle">
+												<div class="media-left demo-single-theme">
+													<a href="#" class="demo-theme demo-theme-dark add-tooltip  btn-scheme" data-theme="theme-dark-full" data-type="full" data-title="Dark"></a>
+												</div>
+												<div class="media-body">
+													<p class="text-bold text-main mar-no text-uppercase text-sm">Oscuro</p>
+													<small class="text-muted text-xs">Tema completamente oscuro</small>
+												</div>
+											</div>
 										</div>
 									</div>
+									
+									<hr class="bord-no new-section-xs">
+									Resalte de color (Solo puede seleccionarse uno)
+									<div class="clearfix text-center demo-srow-scheme bg-gray-light pad-ver mar-top light">
+										<div class="demo-theme-btn col-md-6">
+											<p class="text-semibold text-uppercase text-xs text-muted">Moderno</p>
+											<div class="media">
+												<div class="media-left">
+													<img src="img/color-schemes-e.png">
+												</div>
+												<div class="media-body">
+													<p class="text-main text-bold text-sm mar-no">Modo cabecera completa</p>
+												</div>
+											</div>
+										</div>
+										<div class="demo-theme-btn col-md-6">
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-gray add-tooltip" data-theme="theme-gray" data-type="e" data-title="(E). Gray"></a>
+												<a href="#" class="demo-theme demo-theme-navy add-tooltip" data-theme="theme-navy" data-type="e" data-title="(E). Navy Blue"></a>
+												<a href="#" class="demo-theme demo-theme-ocean add-tooltip" data-theme="theme-ocean" data-type="e" data-title="(E). Ocean"></a>
+		
+												<a href="#" class="demo-theme demo-theme-lime add-tooltip" data-theme="theme-lime" data-type="e" data-title="(E). Lime"></a>
+												<a href="#" class="demo-theme demo-theme-purple add-tooltip" data-theme="theme-purple" data-type="e" data-title="(E). Purple"></a>
+												<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="e" data-title="(E). Dust"></a>
+		
+												<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="e" data-title="(E). Mint"></a>
+												<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="e" data-title="(E). Yellow"></a>
+												<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="e" data-title="(E). Well Red"></a>
+		
+												<a href="#" class="demo-theme demo-theme-coffee add-tooltip" data-theme="theme-coffee" data-type="e" data-title="(E). Coffee"></a>
+												<a href="#" class="demo-theme demo-theme-prickly-pear add-tooltip" data-theme="theme-prickly-pear" data-type="e" data-title="(E). Prickly pear"></a>
+												<a href="#" class="demo-theme demo-theme-dark add-tooltip" data-theme="theme-dark" data-type="e" data-title="(E). Dark"></a>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix text-center light">
+										<div class="demo-theme-btn col-md-3 pad-ver">
+											<p class="text-semibold text-uppercase text-xs text-muted">Cabecera</p>
+											<div class="mar-btm">
+												<img src="img/color-schemes-a.png" class="img-responsive">
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-gray add-tooltip" data-theme="theme-gray" data-type="a" data-title="(A). Gray"></a>
+												<a href="#" class="demo-theme demo-theme-navy add-tooltip" data-theme="theme-navy" data-type="a" data-title="(A). Navy Blue"></a>
+												<a href="#" class="demo-theme demo-theme-ocean add-tooltip" data-theme="theme-ocean" data-type="a" data-title="(A). Ocean"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-lime add-tooltip" data-theme="theme-lime" data-type="a" data-title="(A). Lime"></a>
+												<a href="#" class="demo-theme demo-theme-purple add-tooltip" data-theme="theme-purple" data-type="a" data-title="(A). Purple"></a>
+												<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="a" data-title="(A). Dust"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="a" data-title="(A). Mint"></a>
+												<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="a" data-title="(A). Yellow"></a>
+												<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="a" data-title="(A). Well Red"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-coffee add-tooltip" data-theme="theme-coffee" data-type="a" data-title="(A). Coffee"></a>
+												<a href="#" class="demo-theme demo-theme-prickly-pear add-tooltip" data-theme="theme-prickly-pear" data-type="a" data-title="(A). Prickly pear"></a>
+												<a href="#" class="demo-theme demo-theme-dark add-tooltip" data-theme="theme-dark" data-type="a" data-title="(A). Dark"></a>
+											</div>
+										</div>
+										<div class="demo-theme-btn col-md-3 pad-ver light">
+											<p class="text-semibold text-uppercase text-xs text-muted">Marca</p>
+											<div class="mar-btm">
+												<img src="img/color-schemes-b.png" class="img-responsive">
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-gray add-tooltip" data-theme="theme-gray" data-type="b" data-title="(B). Gray"></a>
+												<a href="#" class="demo-theme demo-theme-navy add-tooltip" data-theme="theme-navy" data-type="b" data-title="(B). Navy Blue"></a>
+												<a href="#" class="demo-theme demo-theme-ocean add-tooltip" data-theme="theme-ocean" data-type="b" data-title="(B). Ocean"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-lime add-tooltip" data-theme="theme-lime" data-type="b" data-title="(B). Lime"></a>
+												<a href="#" class="demo-theme demo-theme-purple add-tooltip" data-theme="theme-purple" data-type="b" data-title="(B). Purple"></a>
+												<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="b" data-title="(B). Dust"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="b" data-title="(B). Mint"></a>
+												<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="b" data-title="(B). Yellow"></a>
+												<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="b" data-title="(B). Well red"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-coffee add-tooltip" data-theme="theme-coffee" data-type="b" data-title="(B). Coofee"></a>
+												<a href="#" class="demo-theme demo-theme-prickly-pear add-tooltip" data-theme="theme-prickly-pear" data-type="b" data-title="(B). Prickly pear"></a>
+												<a href="#" class="demo-theme demo-theme-dark add-tooltip" data-theme="theme-dark" data-type="b" data-title="(B). Dark"></a>
+											</div>
+										</div>
+										<div class="demo-theme-btn col-md-3 pad-ver light">
+											<p class="text-semibold text-uppercase text-xs text-muted">Menú principal</p>
+											<div class="mar-btm">
+												<img src="img/color-schemes-c.png" class="img-responsive">
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-gray add-tooltip" data-theme="theme-gray" data-type="c" data-title="(C). Gray"></a>
+												<a href="#" class="demo-theme demo-theme-navy add-tooltip" data-theme="theme-navy" data-type="c" data-title="(C). Navy Blue"></a>
+												<a href="#" class="demo-theme demo-theme-ocean add-tooltip" data-theme="theme-ocean" data-type="c" data-title="(C). Ocean"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-lime add-tooltip" data-theme="theme-lime" data-type="c" data-title="(C). Lime"></a>
+												<a href="#" class="demo-theme demo-theme-purple add-tooltip" data-theme="theme-purple" data-type="c" data-title="(C). Purple"></a>
+												<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="c" data-title="(C). Dust"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="c" data-title="(C). Mint"></a>
+												<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="c" data-title="(C). Yellow"></a>
+												<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="c" data-title="(C). Well Red"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-coffee add-tooltip" data-theme="theme-coffee" data-type="c" data-title="(C). Coffee"></a>
+												<a href="#" class="demo-theme demo-theme-prickly-pear add-tooltip" data-theme="theme-prickly-pear" data-type="c" data-title="(C). Prickly pear"></a>
+												<a href="#" class="demo-theme demo-theme-dark add-tooltip" data-theme="theme-dark" data-type="c" data-title="(C). Dark"></a>
+											</div>
+										</div>
+										<div class="demo-theme-btn col-md-3 pad-ver light">
+											<p class="text-semibold text-uppercase text-xs text-muted">Barra superior</p>
+											<div class="mar-btm">
+												<img src="img/color-schemes-d.png" class="img-responsive">
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-gray add-tooltip" data-theme="theme-gray" data-type="d" data-title="(D). Gray"></a>
+												<a href="#" class="demo-theme demo-theme-navy add-tooltip" data-theme="theme-navy" data-type="d" data-title="(D). Navy Blue"></a>
+												<a href="#" class="demo-theme demo-theme-ocean add-tooltip" data-theme="theme-ocean" data-type="d" data-title="(D). Ocean"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-lime add-tooltip" data-theme="theme-lime" data-type="d" data-title="(D). Lime"></a>
+												<a href="#" class="demo-theme demo-theme-purple add-tooltip" data-theme="theme-purple" data-type="d" data-title="(D). Purple"></a>
+												<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="d" data-title="(D). Dust"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="d" data-title="(D). Mint"></a>
+												<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="d" data-title="(D). Yellow"></a>
+												<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="d" data-title="(D). Well Red"></a>
+											</div>
+											<div class="demo-justify-theme">
+												<a href="#" class="demo-theme demo-theme-coffee add-tooltip" data-theme="theme-coffee" data-type="d" data-title="(D). Coffee"></a>
+												<a href="#" class="demo-theme demo-theme-prickly-pear add-tooltip" data-theme="theme-prickly-pear" data-type="d" data-title="(D). Prickly pear"></a>
+												<a href="#" class="demo-theme demo-theme-dark add-tooltip" data-theme="theme-dark" data-type="d" data-title="(D). Dark"></a>
+											</div>
+										</div>
+									</div>
+		
+								</div>
 							</div>
 						</div>
 					</div>
-					{{csrf_field()}}
 
-					@if(checkPermissions(['Clientes'],["C"]) || checkPermissions(['Clientes'],["W"]))<button type="submit" class="btn btn-primary">Guardar</button>@endif
+
+					{{csrf_field()}}
+					<div class="row mt-2">
+						<div class="col-md-offset-11 col-md-12">
+							@if(checkPermissions(['Clientes'],["C"]) || checkPermissions(['Clientes'],["W"]))<button type="submit" class="btn btn-primary">Guardar</button>@endif
+						</div>
+					</div>
+					
 					</form>
 
 				</div>
@@ -94,7 +284,7 @@
 	</div>
 	<script>
 		$('.form-ajax').submit(form_ajax_submit);
-		
+
 		@if(checkPermissions(['Clientes'],["W"]))
 			$('#btn_generar_token').click(function(event){
 				$.get( "/clientes/gen_key")
@@ -108,6 +298,62 @@
 			if($("#token_1uso").val() == "")
 				$('#btn_generar_token').click();
 		@endif
+		
+		$('.btn-scheme').click(function(){
+			if($(this).data('title')=='Dark'){
+				$('.light').hide();
+			} else {
+				$('.light').show();
+			}
+				
+		})
+
+		if(localStorage.getItem('theme')=='theme-dark-full'){
+            $('.light').hide();
+        }
+
+		var demoSet             = $('#demo-nifty-settings'),
+            niftyContainer      = $('#container'),
+            niftyMainNav        = $('#mainnav-container'),
+            niftyAside          = $('#aside-container'),
+			demoSetBtn          = $('#demo-set-btn');
+
+
+
+        // COLOR SCHEMES
+        // =================================================================
+       
+
+        $('#demo-theme').on('click', '.demo-theme', function (e) {
+			$('#demo-theme').removeClass('active');
+			$('#demo-theme').removeClass('disabled');
+            e.preventDefault();
+            var el = $(this);
+            // if (el.hasClass('disabled') || el.hasClass('active')) {
+            //     return false;
+            // }
+			changeTheme(el.attr('data-theme'), el.attr('data-type'));
+			$('#theme_type').val(el.attr('data-type'));
+			$('#theme_name').val(el.attr('data-theme'));
+            //themeBtn.removeClass('active');
+            //el.addClass('active').tooltip('hide');
+            return false;
+        });
+
+
+        demoSet.on('click', function(e){
+            if (demoSet.hasClass('in')){
+                if ($(e.target).is(demoSet)) demoSet.removeClass('in');
+            }
+        });
+
+        demoSetBtn.on('click', function(){
+            demoSet.toggleClass('in');
+            return false;
+        });
+        $('#demo-btn-close-settings').on('click', function () {
+            demoSetBtn.trigger('click')
+        });
 	
 	</script>
 @include('layouts.scripts_panel')

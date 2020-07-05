@@ -3,6 +3,9 @@
         <div class="panel-heading">
             <div class="panel-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+			</div>
+            <div class="panel-control">
+                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
             </div>
             <h3 class="panel-title" id="titulo">Cancelar reserva de puesto</h3>
         </div>

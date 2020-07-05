@@ -57,9 +57,19 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="md-1 float-right" style="margin-top:22px">
-                        @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary">GUARDAR</button>@endif
+                    <div class="col-md-2 p-t-30">
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_acceso_anonimo"  id="mca_acceso_anonimo" value="S" {{ $puesto->mca_acceso_anonimo=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_acceso_anonimo">Permitir acceso anonimo</label>
                     </div>
+                    <div class="col-md-2  p-t-30">
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_reservar"  id="mca_reservar" value="S" {{ $puesto->mca_reservar=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_reservar">Permitir reserva</label>
+                    </div>
+                    <div class="row mt-2">
+						<div class="col-md-offset-11 col-md-12">
+							@if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary">GUARDAR</button>@endif
+						</div>
+					</div>
                 </div>
             </form>
         </div>

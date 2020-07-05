@@ -113,6 +113,9 @@
             $.niftyNav('collapse');
         }
 
+        if(localStorage.getItem('theme') && localStorage.getItem('themetype')){
+            changeTheme(localStorage.theme,localStorage.themetype)
+        }
 
 
         // Hide the searchbox and main navigation when click outside of the element

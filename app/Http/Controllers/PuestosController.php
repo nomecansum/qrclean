@@ -119,6 +119,8 @@ class PuestosController extends Controller
                 $puesto=puestos::find($r->id_puesto);
                 $puesto->update($r->all());
             }
+            $puesto->mca_acceso_anonimo=$r->mca_acceso_anonimo??'N';
+            $puesto->mca_reservar=$r->mca_reservar??'N';
             $puesto->save();
             savebitacora('puesto '.$r->etiqueta. ' actualizado',"Puestos","Update","OK");
             return [

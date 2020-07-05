@@ -42,7 +42,9 @@
                             <li class="dropdown-header">Acciones</li>
                             <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
                             @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
-                            @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
+                            @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
                         </ul>
                     </div>
                 </div>
@@ -133,9 +135,31 @@
             <div class="modal-header">
 
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
                     <h4 class="modal-title">¿Borrar puesto <span id="txt_borrar"></span>?</h4>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-info" href="" id="link_borrar">Si</a>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="anonimo-puesto" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div><h4 class="modal-title">Habilitar acceso anonimo para los puestos</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="checkbox" class="form-control  magic-checkbox chk_accion" name="mca_anonimo"  id="mca_anonimo" checked value="S"> 
+					<label class="custom-control-label" id="lbl_anonimo"  for="mca_anonimo">Habilitado</label>
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-info" href="" id="link_borrar">Si</a>
@@ -151,11 +175,8 @@
             <div class="modal-header">
                     <input type="hidden" name="tip_ronda" value="L" id="tip_ronda">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
                     <h3 class="modal-title">Crear ronda de <span class="tipo_ronda"></span></h3><br>
-                   
-                    
                 </div>
                 
                 <div class="modal-body" style="height: 250px">
@@ -172,8 +193,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
                     <a class="btn btn-info" id="btn_crear_ronda" href="javascript:void(0)">Si</a>
                     <button type="button" id="btn_cancel_ronda" data-dismiss="modal" class="btn btn-warning">No</button>
+                    
                 </div>
             </div>
         </div>
@@ -187,6 +210,14 @@
     //Menu
     $('.parametrizacion').addClass('active active-sub');
     $('.puestos').addClass('active-link');
+
+    $('.chk_accion').click(function(){
+        if($(this).is(':checked')){
+            $(this).parent().next('label').html('Habilitado');
+        } else {
+            $(this).parent().next('label').html('Deshabilitado');
+        }
+    })
 
     let searchIDs=[];
 

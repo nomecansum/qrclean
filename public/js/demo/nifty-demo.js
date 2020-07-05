@@ -14,7 +14,7 @@ $(document).on('nifty.ready', function () {
     var contentIndi = '<div id="demo-settings-load" class="demo-settings-load"><i class="text-main demo-pli-repeat-2 icon-3x fa-spin"></i><br><h4 id="demo-get-status" class="text-bold text-uppercase">Loading...</h4><p id="demo-get-status-text">Please wait while the content is loaded</p></div>';
     var settingsComp = '<div id="demo-nifty-settings" class="demo-nifty-settings"><button id="demo-set-btn" class="btn"><i class="demo-psi-gear"></i></button><div id="demo-set-content" class="demo-set-content"></div></div>';
 
-    $("body").append(settingsComp);
+    //$("body").append(settingsComp);
 
     $('#demo-set-btn').one('click', function(){
         $("#demo-nifty-settings").addClass("in");

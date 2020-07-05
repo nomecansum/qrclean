@@ -141,6 +141,17 @@ class HomeController extends Controller
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
+
+            if($id_usuario==0 && $p->mca_acceso_anonimo=='N'){
+                $respuesta=[
+                    'mensaje'=>"PUESTO NO DISPONIBLE: Debe iniciar sesion para poder coger este puesto",
+                    'icono' => '<i class="fad fa-bring-forward"></i>',
+                    'color'=>'danger',
+                    'puesto'=>$p,
+                    'disponibles'=>$disponibles
+                ];
+                return view('scan.result',compact('respuesta','reserva','config_cliente'));
+            }
             
             switch ($p->id_estado) {
                 case 1:

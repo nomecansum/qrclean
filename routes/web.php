@@ -116,6 +116,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/mapa','PuestosController@mapa');
         Route::post('/ronda_limpieza','PuestosController@ronda_limpieza');
         Route::get('/plano','PuestosController@plano');
+        Route::post('/anonimo','PuestosController@cambiar_anonimo');
+        Route::post('/mca_rerserva','PuestosController@cambiar_reserva');
     });
 
     Route::group(['prefix' => 'edificios'], function () {

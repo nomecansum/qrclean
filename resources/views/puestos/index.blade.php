@@ -30,7 +30,7 @@
                         <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false" title="Acciones sobre la seleccion de puestos">
                             <i class="fad fa-poll-people pt-2" style="font-size: 20px" aria-hidden="true"></i> Acciones <i class="dropdown-caret"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="">
+                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="" id="dropdown-acciones">
                             @if(checkPermissions(['Puestos'],['W']))
                                 <li class="dropdown-header">Cambiar estado</li>
                                 <li><a href="#" data-estado="1" class="btn_estado_check"><i class="fas fa-square text-success"></i> Disponible</a></li>
@@ -43,8 +43,8 @@
                             <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
                             @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
                             @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
-                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
-                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
                         </ul>
                     </div>
                 </div>
@@ -158,11 +158,31 @@
                         <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div><h4 class="modal-title">Habilitar acceso anonimo para los puestos</h4>
                 </div>
                 <div class="modal-body">
-                    <input type="checkbox" class="form-control  magic-checkbox chk_accion" name="mca_anonimo"  id="mca_anonimo" checked value="S"> 
+                    <input type="checkbox" class="form-control  magic-checkbox chk_accion" name="mca_anonimo" data-label="lbl_anonimo" id="mca_anonimo" checked value="S"> 
 					<label class="custom-control-label" id="lbl_anonimo"  for="mca_anonimo">Habilitado</label>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-info" href="" id="link_borrar">Si</a>
+                    <a class="btn btn-info" id="btn_si_anonimo" href="javascript:void(0)">Si</a>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="reserva-puesto" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div><h4 class="modal-title">Habilitar reserva para los puestos</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="checkbox" class="form-control  magic-checkbox chk_accion" name="mca_reserva" data-label="lbl_reserva" id="mca_reserva" checked value="S"> 
+					<label class="custom-control-label" id="lbl_reserva"  for="mca_reserva">Habilitado</label>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-info" id="btn_si_reserva" href="javascript:void(0)">Si</a>
                     <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
                 </div>
             </div>
@@ -213,11 +233,17 @@
 
     $('.chk_accion').click(function(){
         if($(this).is(':checked')){
-            $(this).parent().next('label').html('Habilitado');
+            $('#'+$(this).data('label')).html('Habilitado');
         } else {
-            $(this).parent().next('label').html('Deshabilitado');
+            $('#'+$(this).data('label')).html('Deshabilitado');
         }
     })
+
+    $('.btn_toggle_dropdown').click(function(){
+        $('#dropdown-acciones').toggle();
+    })
+
+    
 
     let searchIDs=[];
 
@@ -241,6 +267,51 @@
         $('.chkpuesto').not(this).prop('checked', this.checked);
     });
 
+    $('#btn_si_anonimo').click(function(){
+        console.log('anomino');
+        var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            exit();
+        }
+        if($('#mca_anonimo').is(':checked')){
+            estado='S';
+        } else {
+            estado='N';
+        }
+        $.post('{{url('/puestos/anonimo')}}', {_token: '{{csrf_token()}}',estado: estado ,lista_id:searchIDs}, function(data, textStatus, xhr) {
+            $('.modal').modal('hide');
+            toast_ok('Cambio de estado anonimo',data.mensaje);
+        })
+        .fail(function(err){
+            toast_error('Error',err.responseJSON.message);
+        });
+    })
+
+    $('#btn_si_reserva').click(function(){
+        console.log('reserva');
+        var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            exit();
+        }
+        if($('#mca_reserva').is(':checked')){
+            estado='S';
+        } else {
+            estado='N';
+        }
+        $.post('{{url('/puestos/mca_rerserva')}}', {_token: '{{csrf_token()}}',estado: estado ,lista_id:searchIDs}, function(data, textStatus, xhr) {
+            $('.modal').modal('hide');
+            toast_ok('Permiso de reserva',data.mensaje);
+        })
+        .fail(function(err){
+            toast_error('Error',err.responseJSON.message);
+        });
+    })
 
 
     $('.btn_estado_check').click(function(){

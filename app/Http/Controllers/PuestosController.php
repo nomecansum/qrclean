@@ -307,6 +307,41 @@ class PuestosController extends Controller
             'mensaje' => 'Ronda de '.$tipo_ronda.' '.$r->des_ronda.' creada para '.count($r->lista_id).' puestos y '.count($r->lista_limpiadores).' empleados de '.$tipo_ronda,
             //'url' => url('puestos')
         ];
+    }
 
+    public function cambiar_anonimo(Request $r){
+        $estado=$r->estado??'N';
+        $puestos=DB::table('puestos')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            }
+        })
+        ->wherein('id_puesto',$r->lista_id)
+        ->update(['mca_acceso_anonimo'=>$estado]);
+        savebitacora('Cambiado el acceso anonimo a '.$estado.' para los puestos '.implode(', ',$r->lista_id),"Puestos","cambiar_anonimo","OK");
+        return [
+            'title' => "Acceso anonimo",
+            'mensaje' => 'Cambiado el acceso anonimo a '.$estado.' para los puestos '.implode(', ',$r->lista_id),
+            //'url' => url('puestos')
+        ];
+    }
+
+    public function cambiar_reserva(Request $r){
+        $estado=$r->estado??'N';
+        $puestos=DB::table('puestos')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            }
+        })
+        ->wherein('id_puesto',$r->lista_id)
+        ->update(['mca_reservar'=>$estado]);
+        savebitacora('Cambiado el permiso de reserva a '.$estado.' para los puestos '.implode(', ',$r->lista_id),"Puestos","cambiar_reserva","OK");
+        return [
+            'title' => "Acceso anonimo",
+            'mensaje' => 'Cambiado el permiso de reserva a '.$estado.' para los puestos '.implode(', ',$r->lista_id),
+            //'url' => url('puestos')
+        ];
     }
 }

@@ -4,6 +4,9 @@
     <div class="panel">
 
         <div class="panel-heading">
+            <div class="panel-control">
+                <button class="btn btn-default" data-panel="dismiss" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
+            </div>
             <h3 class="panel-title">Editar planta</h3>
         </div>
 
@@ -37,3 +40,4 @@
 <script>
     $('.form-ajax').submit(form_ajax_submit);
 </script>
+@include('layouts.scripts_panel')

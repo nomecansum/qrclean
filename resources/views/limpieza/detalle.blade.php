@@ -94,7 +94,7 @@ try{
                 $puestos=$detalles->where('id_planta',$key_planta);
             @endphp
             @foreach($puestos as $p)
-                <div class="col-md-2 rounded add-tooltip divpuesto hover-this" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->cod_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto sin limpiar @else Limpiado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer; @else border: 1px solid #ccc; @endif">
+                <div class="col-md-2 rounded add-tooltip divpuesto_ronda" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->cod_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto prendiente de completar @else Completado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer; @else border: 1px solid #ccc; @endif">
                     {{ $p->cod_puesto }}<br>
                     @if(isset($p->user_audit))<i class="fas fa-male" style="color: {{ genColorCodeFromText("EMPLEADO".$p->user_audit,2) }}"></i> <span style="font-size: 12px">{!! beauty_fecha($p->fec_fin) !!}</span> @else --- @endif
                 </div>
@@ -106,10 +106,12 @@ try{
     
     id_user={{ Auth::user()->id }};
 
-    $('.divpuesto').click(function(){
+    $('.divpuesto_ronda').click(function(){
+        
         if(!$(this).data('user'))
         {
-            $.post("{{ url('/rondas/estado_puesto/') }}/", {_token:'{{csrf_token()}}',id:$(this).data('id'), user: id_user}, function(data, textStatus, xhr) {
+            console.log('actualizar');
+            $.post("{{ url('/rondas/estado_puesto_ronda') }}", {_token:'{{csrf_token()}}',id:$(this).data('id'), user: id_user}, function(data, textStatus, xhr) {
                 console.log(data);
                 if (data.error){
                     toast_error('ERROR',data.error);
@@ -121,6 +123,8 @@ try{
                 });
                 
             })   
+        } else {
+            console.log('no actualizar, ya esta hecho');
         }
        
     })

@@ -226,7 +226,7 @@
     <!--BootstrapJS [ RECOMMENDED ]-->
     <script src="{{ url('js/bootstrap.min.js') }}"></script>
     <!--NiftyJS [ RECOMMENDED ]-->
-    <script src="{{ url('js/nifty.min.js') }}"></script>
+    <script src="{{ url('js/nifty.js') }}"></script>
     <!--=================================================-->
     <!--Demo script [ DEMONSTRATION ]-->
     <script src="{{ url('js/demo/nifty-demo.js') }}"></script>

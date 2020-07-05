@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class rondas extends Model
+class incidencias_tipos extends Model
 {
     
     /**
@@ -18,14 +18,14 @@ class rondas extends Model
      *
      * @var string
      */
-    protected $table = 'rondas_limpieza';
+    protected $table = 'incidencias_tipos';
 
     /**
     * The database primary key value.
     *
     * @var string
     */
-    protected $primaryKey = 'id_ronda';
+    protected $primaryKey = 'id_tipo_incidencia';
 
     /**
      * Attributes that should be mass-assignable.
@@ -33,11 +33,18 @@ class rondas extends Model
      * @var array
      */
     protected $fillable = [
-                  'des_ronda',
-                  'fec_ronda',
+                  'des_tipo_incidencia',
                   'id_cliente',
-                  'user_creado',
-                  'tip_ronda'
+                  'mca_fijo',
+                  'param_url',
+                  'tip_metodo',
+                  'txt_destinos',
+                  'val_apikey',
+                  'val_body',
+                  'val_color',
+                  'val_content_type',
+                  'val_icono',
+                  'val_url'
               ];
 
     /**
@@ -65,23 +72,13 @@ class rondas extends Model
     }
 
     /**
-     * Get the User for this model.
+     * Get the incidencia for this model.
      *
-     * @return App\Models\User
+     * @return App\Models\Incidencia
      */
-    public function User()
+    public function incidencia()
     {
-        return $this->belongsTo('App\Models\User','user_creado','id');
-    }
-
-    /**
-     * Get the puestosRonda for this model.
-     *
-     * @return App\Models\PuestosRonda
-     */
-    public function puestosRonda()
-    {
-        return $this->hasOne('App\Models\PuestosRonda','num_ronda','id_ronda');
+        return $this->hasOne('App\Models\Incidencia','id_tipo_incidencia','id_tipo_incidencia');
     }
 
 

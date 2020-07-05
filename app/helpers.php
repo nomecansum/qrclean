@@ -437,6 +437,16 @@ function validar_acceso_tabla($id,$tabla){
             $campo="id_ronda";
             $ruta="rondas.index";
             break;
+        case "incidencias_tipos":
+            $descriptivo="tipo";
+            $campo="id_tipo_incidencia";
+            $ruta="incidencias_tipos.index";
+            break;
+        case "incidencias":
+            $descriptivo="incidencia";
+            $campo="id_incidencia";
+            $ruta="incidencias.index";
+            break;
         default:
             $descriptivo=$tabla;
     }

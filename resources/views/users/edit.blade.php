@@ -19,6 +19,9 @@
 
     <div class="panel">
         <div class="panel-heading">
+            <div class="panel-control">
+                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+            </div>
             <h3 class="panel-title">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</h3>
         </div>
         <div class="panel-body">
@@ -67,3 +70,4 @@
 	    $('.usuarios').addClass('active-link');
     </script>
 @endsection
+@include('layouts.scripts_panel')

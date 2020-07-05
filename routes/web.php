@@ -25,6 +25,8 @@ Route::get('/puesto/{puesto}','HomeController@getpuesto');
 Route::get('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
 Route::post('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
 
+Route::view('/prueba_mail','emails.mail_incidencia');
+
 Route::group(['prefix' => 'MKD'], function () {
     Route::get('/plano/{planta}/{token}','MKDController@plano');
     Route::get('/datos_plano/{planta}/{token}','MKDController@datos_plano');
@@ -140,9 +142,9 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::group(['prefix' => 'rondas'], function () {
         Route::get('/view/{id}/{print}', 'LimpiezaController@view')->name('rondas.view');
-        Route::post('/estado_puesto', 'LimpiezaController@estado_puesto')->name('rondas.estado_puesto');
+        Route::post('/estado_puesto_ronda', 'LimpiezaController@estado_puesto')->name('rondas.estado_puesto_ronda');
         Route::get('/index/{f1?}/{f2?}', 'LimpiezaController@index')->name('rondas.index');
-        Route::get('/completar_ronda/{id}/{empleado}', 'LimpiezaController@completar_ronda')->name('rondas.completar');
+        Route::get('/completar_ronda/{tipo}/{id}/{empleado}', 'LimpiezaController@completar_ronda')->name('rondas.completar');
         Route::get('/detallelimp/{id}', 'LimpiezaController@view_limpia')->name('rondas.detalle_limpiador');
         Route::get('/scan', 'LimpiezaController@scan')->name('rondas.estado_puesto');
     });
@@ -157,6 +159,19 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('loadMonthSchedule',['middleware'=>'permissions:["Reservas"],["R"]', 'uses' => 'ReservasController@loadMonthSchedule']);
 
         Route::post('/comprobar',['middleware'=>'permissions:["Reservas"],["W"]','uses' => 'ReservasController@comprobar_puestos']);
+        
+    });
+
+    Route::group(['prefix' => 'incidencias'], function () {
+        Route::get('/',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@index'])->name('incidencias.index');
+        Route::get('/create/{puesto}',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@nueva_incidencia'])->name('incidencias.nueva');
+        Route::get('/edit/{id}',['middleware'=>'permissions:["Reservas"],["C"]','uses' => 'IncidenciasController@edit']);
+        Route::post('/save',['middleware'=>'permissions:["Reservas"],["W"]','uses' => 'IncidenciasController@save']);
+        
+        Route::get('/tipos',['middleware'=>'permissions:["Tipos de incidencia"],["R"]', 'uses' => 'IncidenciasController@index_tipos'])->name('incidencias_tipos.index');
+        Route::post('/tipos/save',['middleware'=>'permissions:["Tipos de incidencia"],["W"]', 'uses' => 'IncidenciasController@tipos_save']);
+        Route::get('/tipos/edit/{id?}',['middleware'=>'permissions:["Tipos de incidencia"],["C"]', 'uses' => 'IncidenciasController@tipos_edit']);
+        
         
     });
 

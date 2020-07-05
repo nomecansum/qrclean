@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'SpotLinker'),
 
     /*
     |--------------------------------------------------------------------------
@@ -126,6 +126,7 @@ return [
 
     'url_base_scan'=>env('url_base_scan','https://qrclean.ddns.net/puesto/'),
     'id_perfil_personal_limpieza'=>10,
+    'id_perfil_personal_mantenimiento'=>11,
     //Rutas de los WKLHTML2PDF
     'BIN_SNAPPY_PDF'=>env('BIN_SNAPPY_PDF',"C:/Progra~1/wkhtmltopdf/bin/wkhtmltopdf.exe"),
     'BIN_SNAPPY_IMG'=>env('BIN_SNAPPY_IMG',"C:/Progra~1/wkhtmltopdf/bin/wkhtmltoimage.exe"),

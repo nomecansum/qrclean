@@ -453,28 +453,6 @@
         return true;
     }
 
-    // $('.dataTable').dataTable({
-    //         "lengthChange": false,
-    //         "pageLength":40,
-    //         "responsive": true,
-    //         "bSort": true,
-    //         "processing": true,
-    //         "scrollX": true,
-    //         "language": {
-    //             "paginate": {
-    //             "previous": '<i class="demo-psi-arrow-left"></i>',
-    //             "next": '<i class="demo-psi-arrow-right"></i>',
-    //             'loadingRecords': '<div class="load8"><div class="loader"></div></div>',
-    //             'processing': '<div class="load8"><div class="loader"></div></div>'
-    //             }
-    //         },
-    //         columnDefs: [ { targets: 'no-sort', orderable: false } ],
-    //         "drawCallback": function( settings ) {
-    //             $('.load8').hide();
-    //             //console.log(settings);
-    //         }
-    // });
-
     function cargar_combo(combo,ruta,selected=0,fire=0){
         $.ajax({
                 url: ruta
@@ -508,6 +486,6 @@
             return 'pink';
     }
 
-    
+
 
 </script>

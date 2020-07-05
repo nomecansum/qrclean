@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Scceso a puesto</h1>
+    <h1 class="page-header text-overflow pad-no">Acceso a puesto</h1>
 @endsection
 
 @section('styles')
@@ -27,6 +27,13 @@
             @endif
         </div>
         <div class="col-md-4"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="pad-all text-center font-bold" style="color: {{ $puesto->val_color }}; font-size: 22px">
+                <i class="{{ $puesto->val_icono }}"></i>[{{ $puesto->cod_puesto }}] - {{ $puesto->des_puesto }}
+            </div>
+        </div>
     </div>
     <div class="row" id="div_respuesta">
         <div class="col-md-3"></div>
@@ -59,12 +66,25 @@
                                     <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
                                 @break
                             @case(2)
-                                    <button class="btn btn-lg btn-warning btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
+                                    @if($puesto->id_usuario_usando==Auth::user()->id)
+                                        @if($config_cliente->mca_limpieza=='S')
+                                            <button class="btn btn-lg btn-purple btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
+                                        @else
+                                            <button class="btn btn-lg btn-purple btn_estado" data-estado="1"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
+                                        @endif
+                                    @endif
                                 @break
                             @default
                         @endswitch
                     </div>
                 </div>
+                @if($puesto->id_estado!=6)
+                    <div class="row mt-3">
+                        <div class="col-md-12 text-center">
+                            <button class="btn btn-lg btn-warning text-bold btn_incidencia" data-estado="6" data-id="{{$puesto->token}}"><i class="fad fa-exclamation-triangle"></i> Notificar una incidencia en este puesto</button>
+                        </div>
+                    </div>
+                @endif
             @endif
             @if(($puesto->id_estado>1 && isset($respuesta['disponibles'])) || $reserva)
                 <div class="row">
@@ -82,7 +102,7 @@
                 </div>
                 @if(Auth::check())
                     <div class="row">
-                        <div class="col-md-12 text-center">
+                        <div class="col-md-12 text-center mt-3">
                             <a class="btn btn-lg btn-primary text-2x rounded btn_otravez" href="{{ url('/scan_usuario/') }} "><i class="fad fa-qrcode fa-3x"></i> Escanear otra vez</a>
                         </div>
                     </div>
@@ -115,6 +135,10 @@
                 }
                 console.log(data);
             })
+        })
+
+        $('.btn_incidencia').click(function(){
+            window.location.replace("{{url('/incidencias/create')}}/"+$(this).data('id'));
         })
 
     </script>

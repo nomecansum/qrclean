@@ -39,8 +39,9 @@ class EdificiosController extends Controller
      */
     public function create()
     {
-        $Clientes = clientes::pluck('nom_cliente','id_cliente')->all();
-        
+        //$Clientes = clientes::pluck('nom_cliente','id_cliente')->all();
+        //$Clientes=lista_clientes();
+        $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
         return view('edificios.create', compact('Clientes'));
     }
 
@@ -83,7 +84,8 @@ class EdificiosController extends Controller
     {
         validar_acceso_tabla($id,"edificios");
         $edificios = edificios::findOrFail($id);
-        $Clientes = clientes::pluck('nom_cliente','id_cliente')->all();
+        $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
+        //$Clientes=lista_clientes();
         return view('edificios.edit', compact('edificios','Clientes'));
     }
 

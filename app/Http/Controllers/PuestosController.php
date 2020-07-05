@@ -264,7 +264,12 @@ class PuestosController extends Controller
 
     public function ronda_limpieza(Request $r){
         //Primero asegurarnos de que tiene acceso para los puestos
-
+        if($r->tip_ronda=='L')
+        {
+            $tipo_ronda="limpieza";
+        } else {
+            $tipo_ronda="mantenimiento";
+        }
         $puestos=DB::table('puestos')
             ->wherein('id_puesto',$r->lista_id)
             ->where(function($q){
@@ -283,7 +288,7 @@ class PuestosController extends Controller
             })
             ->get();
 
-        $ronda=rondas::create(['fec_ronda'=>Carbon::now(),'des_ronda'=>$r->des_ronda,'user_creado'=>Auth::user()->id,'id_cliente'=>Auth::user()->id_cliente]);
+        $ronda=rondas::create(['fec_ronda'=>Carbon::now(),'des_ronda'=>$r->des_ronda,'user_creado'=>Auth::user()->id,'id_cliente'=>Auth::user()->id_cliente, 'tip_ronda'=>$r->tip_ronda]);
         
         foreach($usuarios as $u){
             limpiadores::create(['id_ronda'=>$ronda->id_ronda,'id_limpiador'=>$u->id]);
@@ -291,11 +296,13 @@ class PuestosController extends Controller
         foreach($puestos as $p){
             puestos_ronda::create(['id_ronda'=>$ronda->id_ronda,'fec_inicio'=>Carbon::now(),'id_puesto'=>$p->id_puesto]);
         }
+        
+
         //dd($ronda);
-        savebitacora('Ruta de limpieza '.$r->des_ronda.' creada para '.count($r->lista_id).' puestos y '.count($r->lista_limpiadores).' empleados de limpieza',"Puestos","ronda_limpieza","OK");
+        savebitacora('Ruta de '.$tipo_ronda.' '.$r->des_ronda.' creada para '.count($r->lista_id).' puestos y '.count($r->lista_limpiadores).' empleados de '.$tipo_ronda,"Puestos","ronda_".$tipo_ronda,"OK");
         return [
-            'title' => "Ronda de limpieza",
-            'mensaje' => 'Ronda de limpieza '.$r->des_ronda.' creada para '.count($r->lista_id).' puestos y '.count($r->lista_limpiadores).' empleados de limpieza',
+            'title' => "Ronda de ".$tipo_ronda,
+            'mensaje' => 'Ronda de '.$tipo_ronda.' '.$r->des_ronda.' creada para '.count($r->lista_id).' puestos y '.count($r->lista_limpiadores).' empleados de '.$tipo_ronda,
             //'url' => url('puestos')
         ];
 

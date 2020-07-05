@@ -14,7 +14,7 @@ use Auth;
 
 class LimpiezaController extends Controller
 {
-    public function index($f1=0,$f2=0){
+    public function index($tipo="L",$f1=0,$f2=0){
 
         $f1=$f1==0?Carbon::now()->startOfMonth():Carbon::parse($f1);
         $f2=$f2==0?Carbon::now()->endOfMonth():Carbon::parse($f2);
@@ -46,6 +46,7 @@ class LimpiezaController extends Controller
                 }
             })
             ->whereBetween('fec_ronda',[$f1,$fhasta])
+            ->where('tip_ronda',$tipo)
             ->groupby('rondas_limpieza.id_ronda','fec_ronda','des_ronda','u1.name')
             ->orderby('id_ronda','desc')
             ->get();
@@ -61,7 +62,13 @@ class LimpiezaController extends Controller
             })
             ->whereBetween('fec_ronda',[$f1,$fhasta])
             ->get();
-        return view('limpieza.index',compact('rondas','detalles','usuarios','f1','f2'));
+        if($tipo=='L')
+        {
+            $entidades=["tipo"=>"limpieza","icono"=>"fad fa-broom","tipo_usuario"=>"limpiador","plural"=>"limpiadores","menu1"=>".limpieza","menu2"=>".rondas"]; 
+        } else {
+            $entidades=["tipo"=>"mantenimiento","icono"=>"fad fa-tools","tipo_usuario"=>"tecnico","plural"=>"tecnicos","menu1"=>".mantenimiento","menu2"=>".rondas_mant"]; 
+        }
+        return view('limpieza.index',compact('rondas','detalles','usuarios','f1','f2','entidades'));
     }
 
     public function view($id,$print=0){
@@ -147,7 +154,6 @@ class LimpiezaController extends Controller
     }
 
     public function estado_puesto(Request $r){
-        
         try{
             if(!$r->estado){ //Valor por defecto si no se pasa el estado al que queremos ir
                 $r->estado=1;
@@ -190,11 +196,17 @@ class LimpiezaController extends Controller
                 }
             })
             ->first();
+        if($ronda->tip_ronda=='L')
+        {
+            $tipo_ronda="limpieza";
+        } else {
+            $tipo_ronda="mantenimiento";
+        }
 
         try{
             $puesto=puestos_ronda::where('id_ronda',$id);
             $puesto->update(['user_audit'=>$empleado,'fec_fin'=>Carbon::now()]);
-            savebitacora('Completada ronda '.$ronda->des_ronda,"Ronda de limpieza","completar_ronda","OK");
+            savebitacora('Completada ronda '.$ronda->des_ronda,"Ronda de ".$tipo_ronda,"completar_ronda","OK");
             return [
                 'title' => "Rondas de limpieza",
                 'message' => 'Ronda completada',
@@ -212,7 +224,7 @@ class LimpiezaController extends Controller
     public function scan(){
         $estado_destino=1;
         $modo='cambio_estado';
-        $titulo='Marcar puesto como limpiado';
+        $titulo='Marcar puesto como disponible';
         $tipo_scan="limpieza";
         return view('scan',compact('estado_destino','modo','titulo','tipo_scan'));
     }

@@ -115,6 +115,7 @@ class CombosController extends Controller
     }
 
     public function combo_limpiadores(Request $r){
+
         $clientes=DB::table('puestos')
             ->join('clientes','clientes.id_cliente','puestos.id_cliente')
             ->wherein('puestos.id_puesto',$r->lista_id)
@@ -129,7 +130,15 @@ class CombosController extends Controller
         $usuarios=DB::table('users')
             ->join('clientes','clientes.id_cliente','users.id_cliente')
             ->wherein('users.id_cliente',array_keys($clientes->toarray()))
-            ->where('nivel_acceso',config('app.id_perfil_personal_limpieza'))
+            ->where(function($q) use($r){
+                if($r->tipo=='L')
+                    {   
+                        $q->where('nivel_acceso',config('app.id_perfil_personal_limpieza')); 
+                    } else {
+                        $q->where('nivel_acceso',config('app.id_perfil_personal_mantenimiento')); 
+                    }
+                            
+            })            
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('users.id_cliente',Auth::user()->id_cliente);

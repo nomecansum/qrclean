@@ -69,6 +69,9 @@
                                         @case(5)
                                             <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                             @break
+                                        @case(6)
+                                            <div class="bg-warning rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;"><i class="fad fa-exclamation-triangle"></i>
+                                            @break
                                         @default
                                     @endswitch
                                     {{$puesto->des_estado}}

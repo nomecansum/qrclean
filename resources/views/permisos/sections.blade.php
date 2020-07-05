@@ -90,12 +90,12 @@
 			                </thead>
 			                <tbody>
 			                	@foreach ($secciones as $secc)
-			                		<tr class="hover-this" data-href="{{url('sections/edit',$secc->cod_seccion)}}">
+			                		<tr class="hover-this">
 										<td>{{$secc->cod_seccion}}</td>
 										<td>{{$secc->des_seccion}}</td>
 										<td class="text-{{ $secc->val_tipo=='Seccion' ? 'info' : 'success' }}">{{ $secc->val_tipo}}</td>
 			                			<td style="position: relative;"><i class="{{ $secc->icono }}" style="font-size: 24px"></i> {{$secc->des_grupo}}
-			                				<div class="btn-group btn-group-xs pull-right floating-like-gmail" role="group">
+			                				<div class="btn-group btn-group-xs pull-right floating-like-gmail mt-2" role="group">
 			                					<a href="#"  class="btn btn-info btn_editar add-tooltip" title="Editar seccion" data-seccion="{{ $secc->cod_seccion }}" data-nombre="{{$secc->des_seccion}}" data-tipo="{{ $secc->val_tipo}}" data-grupo="{{$secc->des_grupo}}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>
 			                					<a href="#eliminar-usuario-{{$secc->cod_seccion}}" data-target="#eliminar-usuario-{{$secc->cod_seccion}}" title="Borrar seccion" data-toggle="modal" class="btn btn-danger add-tooltip"><span class="fa fa-trash" aria-hidden="true"></span></a>
 			                				</div>

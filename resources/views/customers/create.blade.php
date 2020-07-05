@@ -67,6 +67,22 @@
 							
 						</div>
 					</div>
+					<div class="row b-all rounded">
+						<div class="col-md-12 ">
+							<h3 class="panel-title">Configuracion del cliente</h3>
+						</div>
+						<div class="row">
+							<div class="col-md-2">
+								<label class="control-label">Token registro</label>
+									<div class="input-group mb-3">
+										<input type="text" name="token_1uso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($c) ? $c->token_1uso : ''}}">
+										<div class="input-group-btn">
+											@if(checkPermissions(['Clientes'],["C"]) || checkPermissions(['Empresas'],["W"]))<button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>@endif
+										</div>
+									</div>
+							</div>
+						</div>
+					</div>
 					{{csrf_field()}}
 
 					@if(checkPermissions(['Clientes'],["C"]) || checkPermissions(['Clientes'],["W"]))<button type="submit" class="btn btn-primary">Guardar</button>@endif
@@ -94,3 +110,4 @@
 		@endif
 	
 	</script>
+@include('layouts.scripts_panel')

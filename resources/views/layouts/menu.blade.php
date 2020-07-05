@@ -154,8 +154,25 @@
 
                         <!--Submenu-->
                         <ul class="collapse">
-                            @if(checkPermissions(['Rondas de limpieza'],['R']))<li class="rondas"><a href="/rondas/index/" class="text-nowrap"><i class="fad fa-broom"></i> Rondas limpieza</a></li> @endif
-                            @if(checkPermissions(['Scan'],['R']))<li class="scan_ronda"><a href="/rondas/scan" class="text-nowrap"><i class="fad fa-qrcode"></i> Scan</a></li> @endif
+                            @if(checkPermissions(['Rondas de limpieza'],['R']))<li class="rondas"><a href="/rondas/index/L/" class="text-nowrap"><i class="fad fa-broom"></i> Rondas limpieza</a></li> @endif
+                            @if(checkPermissions(['Scan limpieza'],['R']))<li class="scan_ronda"><a href="/rondas/scan" class="text-nowrap"><i class="fad fa-qrcode"></i> Scan</a></li> @endif
+                        </ul>
+                    </li>
+                    @endif
+
+                    @if(checkPermissions(['Mantenimiento'],['R']))
+                    <li class="mantenimiento">
+                        <a href="#">
+                            <i class="fad fa-tools"></i>
+                            @if(checkPermissions(['Parametrizacion'],['R']))<span class="menu-title">Mantenimiento</span> @endif
+                            <i class="arrow"></i>
+                        </a>
+
+                        <!--Submenu-->
+                        <ul class="collapse">
+                            @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant"><a href="/rondas/index/M/" class="text-nowrap"><i class="fad fa-tools"></i> Rondas mantenimiento</a></li> @endif
+                            @if(checkPermissions(['Incidencias'],['R']))<li class="rondas_mant"><a href="/incidencias/" class="text-nowrap"><i class="fad fa-exclamation-triangle"></i> Incidencias</a></li> @endif
+                            @if(checkPermissions(['Scan mantenimiento'],['R']))<li class="scan_mant"><a href="/rondas/scan" class="text-nowrap"><i class="fad fa-qrcode"></i> Scan</a></li> @endif
                         </ul>
                     </li>
                     @endif
@@ -176,6 +193,7 @@
                             @if(checkPermissions(['Perfiles'],['R']))<li class="perfiles"><a href="/profiles">Perfiles</a></li> @endif
                             @if(checkPermissions(['Secciones'],['R']))<li class="secciones"><a href="/sections">Secciones</a></li> @endif
                             @if(checkPermissions(['Permisos'],['R']))<li class="permisos"><a href="/profile-permissions">Permisos</a></li> @endif
+                            @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="tipos_incidencia"><a href="/incidencias/tipos">Tipos de incidencia</a></li> @endif
 
                         </ul>
                     </li>

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Rondas de limpieza</h1>
+    <h1 class="page-header text-overflow pad-no">Rondas de {{ $entidades['tipo'] }}</h1>
 @endsection
 
 @section('styles')
@@ -12,8 +12,8 @@
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
         <li class="breadcrumb-item">Configuracion</li>
-        <li class="breadcrumb-item">limpieza</li>
-        <li class="breadcrumb-item active">rondas de limpieza</li>
+        <li class="breadcrumb-item">{{ $entidades['tipo'] }}</li>
+        <li class="breadcrumb-item active">rondas de {{ $entidades['tipo'] }}</li>
     </ol>
 @endsection
 
@@ -23,7 +23,7 @@
 </div>
 <div class="panel">
     <div class="panel-heading">
-        <h3 class="panel-title">Rondas de limpieza</h3>
+        <h3 class="panel-title">Rondas de {{ $entidades['tipo'] }}</h3>
     </div>
     <div class="panel-body">
         <div id="all_toolbar">
@@ -51,7 +51,7 @@
                     <th data-sortable="true" class="text-center"  style="width: 50px"><i class="fad fa-building"></i> Edificios</th>
                     <th data-sortable="true" class="text-center" style="width: 50px"><i class="fad fa-layer-group"></i> Plantas</th>
                     <th data-sortable="true" class="text-center" style="width: 50px"><i class="fad fa-desktop-alt"></i> Puestos</th>
-                    <th data-sortable="true">Limpiadores</th>
+                    <th data-sortable="true">{{ $entidades['plural'] }}</th>
                     <th data-sortable="true"class="text-center" style="width: 100px">Completado</th>
                     <th></th>
                 </tr>
@@ -110,7 +110,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span></button>
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <span class="float-right" id="loading" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span><h1 class="modal-title">Ronda de limpieza <span class="idronda">#</span></h1>
+                <span class="float-right" id="loading" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span><h1 class="modal-title">Ronda de {{ $entidades['tipo'] }} <span class="idronda">#</span></h1>
             </div>
             <div class="modal-body" id="detalle_modal">
                 
@@ -131,8 +131,8 @@
     <script>
 
 
-        $('.limpieza').addClass('active active-sub');
-        $('.rondas').addClass('active-link');
+        $('{{ $entidades['menu1'] }}').addClass('active active-sub');
+        $('{{ $entidades['menu2'] }}').addClass('active-link');
        
 
         $('#tablarondas').on('click-cell.bs.table', function(e, value, row, $element){

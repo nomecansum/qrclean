@@ -81,12 +81,14 @@ class UsersController extends Controller
             $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
 
             users::create($data);
+            savebitacora('Usuario '.$request->email. ' creado',"Usuarios","Store","OK");
             return [
                 'title' => "Usuarios",
                 'message' => 'Usuario '.$request->name. ' creado con exito',
                 'url' => url('users')
             ];
         } catch (Exception $exception) {
+            savebitacora('ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage() ,"Usuarios","Store","ERROR");
             return [
                 'title' => "Usuarios",
                 'error' => 'ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage(),
@@ -146,6 +148,7 @@ class UsersController extends Controller
             $users = users::findOrFail($id);
             $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
             $users->update($data);
+            savebitacora('Usuario '.$request->email. ' actualizado',"Usuarios","Update","OK");
             return [
                 'title' => "Usuarios",
                 'message' => 'Usuario '.$request->name. ' actualizado con exito',
@@ -156,6 +159,7 @@ class UsersController extends Controller
         } catch (Exception $exception) {
             // flash('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage())->error();
             // return back()->withInput();
+            savebitacora('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage() ,"Usuarios","Update","ERROR");
             return [
                 'title' => "Usuarios",
                 'error' => 'ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage(),
@@ -178,11 +182,12 @@ class UsersController extends Controller
         try {
             $users = users::findOrFail($id);
             $users->delete();
-
+            savebitacora('Usuario '.$users->email. ' borrado',"Usuarios","Destroy","OK");
             flash('Usuario '.$id. ' eliminado con exito')->success();
             return redirect()->route('users.users.index');
         } catch (Exception $exception) {
             flash('ERROR: Ocurrio un error al eliminar el usuario '.$id.' '.$exception->getMessage())->error();
+            savebitacora('ERROR: Ocurrio un error borrando el usuario '.$users->name.' '.$exception->getMessage() ,"Usuarios","destroy","ERROR");
             return back()->withInput();
                 //->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
         }
@@ -253,6 +258,7 @@ class UsersController extends Controller
 
     public function addplanta($usuario,$planta){
         validar_acceso_tabla($usuario,'users');
+        savebitacora('Permiso de reserva en planta '.$planta. ' para el usuario '.$usuario,"Usuarios","addplanta","OK");
         $pl=plantas_usuario::insert(['id_planta'=>$planta,'id_usuario'=>$usuario]);
         return [
             'title' => "Asociar planta a usuario",
@@ -264,6 +270,7 @@ class UsersController extends Controller
     public function delplanta($usuario,$planta){
         validar_acceso_tabla($usuario,'users');
         $pl=plantas_usuario::where(['id_planta'=>$planta,'id_usuario'=>$usuario])->delete();
+        savebitacora('Quitado permiso de reserva en planta '.$planta. ' para el usuario '.$usuario,"Usuarios","addplanta","OK");
         return [
             'title' => "Asociar planta a usuario",
             'message' => 'Planta eliminada ',

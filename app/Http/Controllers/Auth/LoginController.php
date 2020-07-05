@@ -106,7 +106,7 @@ class LoginController extends Controller
 
             return redirect ('/');
         }else{
-            return response()->json(["Credenciales incorrectas, intente de nuevo"],422);
+            return response()->json(["result"=>"ERROR", "message"=>"Credenciales incorrectas, intente de nuevo"],422);
         }
     }
 }

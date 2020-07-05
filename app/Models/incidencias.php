@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class rondas extends Model
+class incidencias extends Model
 {
     
     /**
@@ -18,14 +18,14 @@ class rondas extends Model
      *
      * @var string
      */
-    protected $table = 'rondas_limpieza';
+    protected $table = 'incidencias';
 
     /**
     * The database primary key value.
     *
     * @var string
     */
-    protected $primaryKey = 'id_ronda';
+    protected $primaryKey = 'id_incicencia';
 
     /**
      * Attributes that should be mass-assignable.
@@ -33,11 +33,18 @@ class rondas extends Model
      * @var array
      */
     protected $fillable = [
-                  'des_ronda',
-                  'fec_ronda',
+                  'des_incidencia',
+                  'txt_incidencia',
+                  'id_usuario_apertura',
+                  'id_usuario_cierre',
+                  'fec_apertura',
+                  'fec_cierre',
+                  'id_tipo_incidencia',
+                  'img_attach1',
+                  'img_attach2',
                   'id_cliente',
-                  'user_creado',
-                  'tip_ronda'
+                  'id_puesto',
+                  'id_causa_cierre'
               ];
 
     /**
@@ -55,6 +62,16 @@ class rondas extends Model
     protected $casts = [];
     
     /**
+     * Get the User for this model.
+     *
+     * @return App\Models\User
+     */
+    public function User()
+    {
+        return $this->belongsTo('App\Models\User','id_usuario_cierre','id');
+    }
+
+    /**
      * Get the Cliente for this model.
      *
      * @return App\Models\Cliente
@@ -62,26 +79,6 @@ class rondas extends Model
     public function Cliente()
     {
         return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
-    }
-
-    /**
-     * Get the User for this model.
-     *
-     * @return App\Models\User
-     */
-    public function User()
-    {
-        return $this->belongsTo('App\Models\User','user_creado','id');
-    }
-
-    /**
-     * Get the puestosRonda for this model.
-     *
-     * @return App\Models\PuestosRonda
-     */
-    public function puestosRonda()
-    {
-        return $this->hasOne('App\Models\PuestosRonda','num_ronda','id_ronda');
     }
 
 

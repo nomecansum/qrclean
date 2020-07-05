@@ -36,11 +36,13 @@
                                 <li><a href="#" data-estado="1" class="btn_estado_check"><i class="fas fa-square text-success"></i> Disponible</a></li>
                                 <li><a href="#" data-estado="2" class="btn_estado_check"><i class="fas fa-square text-danger"></i> Usado</a></li>
                                 <li><a href="#" data-estado="3" class="btn_estado_check"><i class="fas fa-square text-info"></i> Limpieza</a></li>
+                                <li><a href="#" data-estado="6" class="btn_estado_check"><i class="fas fa-square text-warning"></i> Incidencia</a></li>
                             @endif
                             <li class="divider"></li>
                             <li class="dropdown-header">Acciones</li>
                             <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
-                            @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" ><i class="fad fa-broom"></i>Ronda de limpieza</a></li>@endif
+                            @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
+                            @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
                         </ul>
                     </div>
                 </div>
@@ -147,25 +149,25 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-
+                    <input type="hidden" name="tip_ronda" value="L" id="tip_ronda">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span></button>
                     <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                    <h3 class="modal-title">Crear ronda de limpieza</h3><br>
+                    <h3 class="modal-title">Crear ronda de <span class="tipo_ronda"></span></h3><br>
                    
                     
                 </div>
                 
                 <div class="modal-body" style="height: 250px">
                     <input type="hidden" id="listaID">
-                    Crear ronda de limpieza para <span id="cuenta_puestos_limpieza"></span> puestos.
+                    Crear ronda de <span class="tipo_ronda"></span> para <span id="cuenta_puestos_limpieza"></span> puestos.
                     <br><br>
                     <div class="form-group">
                         <label> Descripcion del trabajo</label>
                         <input type="text" class="form-control" name="des_ronda" id="des_ronda" id="listaID">
                     </div>
                     <div class="form-group">
-                        <label> Asignar a empleado de limpieza</label>
+                        <label> Asignar a empleado de <span class="tipo_ronda"></span></label>
                         <div id="divlimpiadores"></div>
                     </div>
                 </div>
@@ -262,7 +264,13 @@
         }
         $('#cuenta_puestos_limpieza').html(searchIDs.length);
         $('#des_ronda').val();
-        $.post('{{url('/combos/limpiadores')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs}, function(data, textStatus, xhr) {
+        if($(this).data('tipo')=='L'){
+            $('.tipo_ronda').html("limpieza");
+        } else {
+            $('.tipo_ronda').html("mantenimiento");
+        }
+        $('#tip_ronda').val($(this).data('tipo'));
+        $.post('{{url('/combos/limpiadores')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs, tipo:$(this).data('tipo')}, function(data, textStatus, xhr) {
             $('#divlimpiadores').html(data);
         })
         $('#ronda-limpieza').modal('show');
@@ -282,7 +290,7 @@
             toast_error('Error','Debe seleccionar algún empleado de limpieza');
             return;
         }
-        $.post('{{url('/puestos/ronda_limpieza')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs,lista_limpiadores: userIDs,des_ronda: $('#des_ronda').val()}, function(data, textStatus, xhr) {
+        $.post('{{url('/puestos/ronda_limpieza')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs,lista_limpiadores: userIDs,des_ronda: $('#des_ronda').val(),tip_ronda: $('#tip_ronda').val() }, function(data, textStatus, xhr) {
             console.log(data);
             toast_ok(data.title,data.mensaje);
         })

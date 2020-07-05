@@ -98,6 +98,7 @@ class HomeController extends Controller
             ->where('token',$puesto)
             ->first();
         
+        $config_cliente=DB::table('config_clientes')->where('id_cliente',$p->id_cliente)->first();
         
         $disponibles=DB::table('puestos')
             ->select('cod_puesto','des_puesto','val_color','val_icono')
@@ -138,7 +139,7 @@ class HomeController extends Controller
                     'puesto'=>$p,
                     'disponibles'=>$disponibles
                 ];
-                return view('scan.result',compact('respuesta','reserva'));
+                return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
             
             switch ($p->id_estado) {
@@ -152,7 +153,7 @@ class HomeController extends Controller
                     break;
                 case 2:
                     $respuesta=[
-                        'mensaje'=>"Puesto no disponible",
+                        'mensaje'=>"Puesto ocupado",
                         'icono' => '<i class="fad fa-lock-alt"></i>',
                         'color'=>'danger',
                         'puesto'=>$p,
@@ -170,18 +171,27 @@ class HomeController extends Controller
                     break;
                 case 4:
                     $respuesta=[
-                        'mensaje'=>"Puesto no disponible, PUESTO BLOQUEADO",
+                        'mensaje'=>"Puesto no disponible, PUESTO INOPERATIVO",
                         'icono' => '<i class="fad fa-bring-forward"></i>',
                         'color'=>'gray',
                         'puesto'=>$p,
                         'disponibles'=>$disponibles
                     ];
                     break;
-                case 4:
+                case 5:
                     $respuesta=[
                         'mensaje'=>"Puesto no disponible, PUESTO BLOQUEADO",
                         'icono' => '<i class="fad fa-bring-forward"></i>',
                         'color'=>'danger',
+                        'puesto'=>$p,
+                        'disponibles'=>$disponibles
+                    ];
+                    break;
+                case 6:
+                    $respuesta=[
+                        'mensaje'=>"Puesto no disponible, PUESTO AVERIADO",
+                        'icono' => '<i class="fad fa-exclamation-triangle"></i>',
+                        'color'=>'warning',
                         'puesto'=>$p,
                         'disponibles'=>$disponibles
                     ];
@@ -192,7 +202,7 @@ class HomeController extends Controller
             }
         }
         //savebitacora('Cambio de puestos QR anonimo'.$p->id_puesto. ' a estado '.$p->id_estado,"Home","getpuesto","OK");
-        return view('scan.result',compact('respuesta','reserva'));
+        return view('scan.result',compact('respuesta','reserva','config_cliente'));
     }
 
 
@@ -233,7 +243,8 @@ class HomeController extends Controller
             logpuestos::create(['id_puesto'=>$p->id_puesto,'id_estado'=>$estado,'id_user'=>Auth::user()->id??0,'fecha'=>Carbon::now()]);
             DB::table('puestos')->where('token',$puesto)->update([
                 'id_estado'=>$estado,
-                'fec_ult_estado'=>Carbon::now()
+                'fec_ult_estado'=>Carbon::now(),
+                'id_usuario_usando'=>$id_usuario,
             ]);
             DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
@@ -318,7 +329,7 @@ class HomeController extends Controller
 
     public function scan_usuario(){
         $estado_destino=1;
-        $modo='location';
+        $modo='usuario';
         $titulo='';
         $tipo_scan="main";
         return view('scan',compact('estado_destino','modo','titulo','tipo_scan'));

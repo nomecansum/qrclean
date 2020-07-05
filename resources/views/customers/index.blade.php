@@ -74,8 +74,8 @@
 								<td>{{ $cus->edificios}}</td>
 								<td>{{ $cus->plantas}}</td>
 								<td style="position: relative;" class="pt-2">
-									<div class="floating-like-gmail">
-										@if (checkPermissions(['Clientes'],["C"]))<a href="#" title="Editar cliente" data-id="{{ $cus->id_cliente }}" class="btn btn-xs btn-success add-tooltip btn_edit "><span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>@endif
+									<div class="floating-like-gmail mt-2">
+										@if (checkPermissions(['Clientes'],["C"]))<a href="#" title="Editar cliente" data-id="{{ $cus->id_cliente }}" class="btn btn-xs btn-info add-tooltip btn_edit "><span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>@endif
 										@if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-usuario-{{$cus->id_cliente}}" title="Borrar cliente" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span></a>@endif
 										{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$cus->id_cliente}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
 									</div>

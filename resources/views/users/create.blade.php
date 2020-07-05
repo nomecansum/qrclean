@@ -43,4 +43,4 @@
 
 @endsection
 
-
+@include('layouts.scripts_panel')

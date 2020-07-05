@@ -42,6 +42,7 @@
 
     $(document).ready(function(){
         $(document).trigger('nifty.ready');
+        
     });
 
 
@@ -81,7 +82,9 @@
             });
         });
 
+       // console.log(localStorage.getItem('collapsed'));
 
+       
 
         //Activate the Bootstrap Tooltips & Popovers
         var tooltip = $('.add-tooltip');
@@ -106,6 +109,9 @@
         $.niftyNav('bind');
         $.niftyAside('bind');
 
+        if(localStorage.getItem('collapsed')=='true'){
+            $.niftyNav('collapse');
+        }
 
 
 
@@ -1400,12 +1406,20 @@
 
 
                 var toggleBtn = $('.mainnav-toggle');
+                
                 if(toggleBtn.length){
                     toggleBtn.on('click', function(e){
                         e.preventDefault();
                         e.stopPropagation();
 
                         $('body').trigger('toggle.sidebar');
+                        niftyContainer      = $('#container');
+                        if(niftyContainer.hasClass('mainnav-sm')){
+                           localStorage.collapsed=false;
+                        }else{
+                            localStorage.collapsed=true;
+                        }
+                        console.log(localStorage.collapsed);
                         methods.toggle();
                     }
                 )};

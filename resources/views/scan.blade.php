@@ -172,10 +172,10 @@
                         console.log(data);
                         fin=setTimeout(ocultar_mensaje,5000);
                 })
-                .fail(function(data){
-                    $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> Codigo de sitio no reconocido');
-                    $('#mensaje_error').show();
-                });
+            @elseif($modo=='usuario' && isset($estado_destino))
+                puesto=url.split('/').pop();
+                console.log('Dinamica de usuario para '+puesto);
+                window.location.replace("{{ url('/puesto') }}/"+puesto);
             
             @endif
             }

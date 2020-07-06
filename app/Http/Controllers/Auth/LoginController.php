@@ -58,6 +58,10 @@ class LoginController extends Controller
             $user = auth()->user();
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  
             $cliente=DB::table('clientes')->where('id_cliente',$user->id_cliente)->first();  
+            if(isset($cliente->id_distribuidor)){
+                $distribuidor=DB::table('distribuidores')->where('id_distribuidor',$cliente->id_distribuidor)->first();
+                session(['DIS'=>(array)$distribuidor]);
+            }
             session(['CL'=>(array)$config_cliente]);
             session(['logo_cliente'=>$cliente->img_logo]);
 

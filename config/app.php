@@ -124,7 +124,7 @@ return [
     'cipher' => 'AES-256-CBC',
 
 
-    'url_base_scan'=>env('url_base_scan','https://qrclean.ddns.net/puesto/'),
+    'url_base_scan'=>env('URL_BASE_SCAN','https://qrclean.ddns.net/puesto/'),
     'id_perfil_personal_limpieza'=>10,
     'id_perfil_personal_mantenimiento'=>11,
     //Rutas de los WKLHTML2PDF

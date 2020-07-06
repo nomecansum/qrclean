@@ -88,5 +88,10 @@
         "model-name": "incidencias",
         "resource-file": "incidencias.json",
         "table-name": "incidencias"
+    },
+    {
+        "model-name": "causas_cierre",
+        "resource-file": "causas_cierres.json",
+        "table-name": "causas_cierre"
     }
 ]

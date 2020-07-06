@@ -62,8 +62,40 @@ class IncidenciasController extends Controller
             })
             ->where('incidencias.id_incidencia',$id)
             ->first();
-        
         return view('incidencias.fill-detalle-incidencia',compact('incidencia'));
+    }
+
+
+    public function get_detalle_scan($id){
+        if(strlen($id)>10){  //Es un token
+            $puesto=DB::table('puestos')
+                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+                ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+                ->where('token',$id)
+                ->first();
+        } else { //Es un id
+            $puesto=DB::table('puestos')
+                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+                ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+                ->where('id_puesto',$id)
+                ->first();
+        }
+        $incidencia=DB::table('incidencias')
+            ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->where('incidencias.id_puesto',$puesto->id_puesto)
+            ->wherenull('incidencias.fec_cierre')
+            ->first();
+        return view('incidencias.get_detalle_scan',compact('incidencia','puesto'));
     }
 
     public function delete($id){
@@ -90,6 +122,10 @@ class IncidenciasController extends Controller
             $inc->id_usuario_cierre=Auth::user()->id;
             $inc->save();
             savebitacora('Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',"Incidencias","cerrar","OK");
+            //Ponemos el estado del puesto a operativo
+            $puesto=puestos::find($inc->id_puesto);
+            $puesto->id_estado=1;
+            $puesto->save();
             return [
                 'title' => "Cerrar incidencia",
                 'message' => 'Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',

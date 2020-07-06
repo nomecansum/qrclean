@@ -61,21 +61,23 @@
                 @endif
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        @switch($puesto->id_estado)
-                            @case(1)
-                                    <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
-                                @break
-                            @case(2)
-                                    @if($puesto->id_usuario_usando==Auth::user()->id)
-                                        @if($config_cliente->mca_limpieza=='S')
-                                            <button class="btn btn-lg btn-purple btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
-                                        @else
-                                            <button class="btn btn-lg btn-purple btn_estado" data-estado="1"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
+                        @if($respuesta['operativo']==1)
+                            @switch($puesto->id_estado)
+                                @case(1)
+                                        <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
+                                    @break
+                                @case(2)
+                                        @if($puesto->id_usuario_usando==Auth::user()->id)
+                                            @if($config_cliente->mca_limpieza=='S')
+                                                <button class="btn btn-lg btn-purple btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
+                                            @else
+                                                <button class="btn btn-lg btn-purple btn_estado" data-estado="1"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
+                                            @endif
                                         @endif
-                                    @endif
-                                @break
-                            @default
-                        @endswitch
+                                    @break
+                                @default
+                            @endswitch
+                        @endif
                     </div>
                 </div>
                 @if($puesto->id_estado!=6)

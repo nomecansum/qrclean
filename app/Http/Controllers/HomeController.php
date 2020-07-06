@@ -120,7 +120,8 @@ class HomeController extends Controller
             $respuesta=[
                 'mensaje'=>"Error, puesto no encontrado",
                 'icono' => '<i class="fad fa-exclamation-triangle"></i>',
-                'color'=>'danger'
+                'color'=>'danger',
+                'operativo' => 0
             ];
             $reserva=null;
         } else {    
@@ -137,18 +138,20 @@ class HomeController extends Controller
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
-                    'disponibles'=>$disponibles
+                    'disponibles'=>$disponibles,
+                    'operativo' => 1
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
 
             if($id_usuario==0 && $p->mca_acceso_anonimo=='N'){
                 $respuesta=[
-                    'mensaje'=>"PUESTO NO DISPONIBLE: Debe iniciar sesion para poder coger este puesto",
+                    'mensaje'=>"PUESTO NO DISPONIBLE: Debe iniciar sesion para poder utilizar este puesto",
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
-                    'disponibles'=>$disponibles
+                    'disponibles'=>$disponibles,
+                    'operativo' => 0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -159,7 +162,8 @@ class HomeController extends Controller
                         'mensaje'=>"Puesto disponible",
                         'icono' => '<i class="fad fa-thumbs-up"></i>',
                         'color'=>'success',
-                        'puesto'=>$p
+                        'puesto'=>$p,
+                        'operativo' => 1
                     ];
                     break;
                 case 2:
@@ -168,7 +172,8 @@ class HomeController extends Controller
                         'icono' => '<i class="fad fa-lock-alt"></i>',
                         'color'=>'danger',
                         'puesto'=>$p,
-                        'disponibles'=>$disponibles
+                        'disponibles'=>$disponibles,
+                        'operativo' => 1
                     ];
                     break;
                 case 3:
@@ -177,7 +182,8 @@ class HomeController extends Controller
                         'icono' => '<i class="fad fa-exclamation-triangle"></i>',
                         'color'=>'warning',
                         'puesto'=>$p,
-                        'disponibles'=>$disponibles
+                        'disponibles'=>$disponibles,
+                        'operativo' => 1
                     ];
                     break;
                 case 4:
@@ -186,7 +192,8 @@ class HomeController extends Controller
                         'icono' => '<i class="fad fa-bring-forward"></i>',
                         'color'=>'gray',
                         'puesto'=>$p,
-                        'disponibles'=>$disponibles
+                        'disponibles'=>$disponibles,
+                        'operativo' => 0
                     ];
                     break;
                 case 5:
@@ -195,7 +202,8 @@ class HomeController extends Controller
                         'icono' => '<i class="fad fa-bring-forward"></i>',
                         'color'=>'danger',
                         'puesto'=>$p,
-                        'disponibles'=>$disponibles
+                        'disponibles'=>$disponibles,
+                        'operativo' => 0
                     ];
                     break;
                 case 6:
@@ -204,7 +212,8 @@ class HomeController extends Controller
                         'icono' => '<i class="fad fa-exclamation-triangle"></i>',
                         'color'=>'warning',
                         'puesto'=>$p,
-                        'disponibles'=>$disponibles
+                        'disponibles'=>$disponibles,
+                        'operativo' => 0
                     ];
                     break;
                 default:
@@ -346,4 +355,11 @@ class HomeController extends Controller
         return view('scan',compact('estado_destino','modo','titulo','tipo_scan'));
     }
 
+    public function scan_mantenimiento(){
+        $estado_destino=1;
+        $modo='incidencia';
+        $titulo='';
+        $tipo_scan="main";
+        return view('scan',compact('estado_destino','modo','titulo','tipo_scan'));
+    }
 }

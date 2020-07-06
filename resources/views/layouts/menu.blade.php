@@ -93,7 +93,11 @@
                 </div>
                 <!--================================-->
                 <!--End shortcut buttons-->
-
+                @if(session('DIS') && isset(session('DIS')['img_logo']))
+                    <div class="text-center">
+                        <img src="{{ url('/img/distribuidores/'.session('DIS')['img_logo']) }}" title="{{ session('DIS')['nom_distribuidor'] }}" style="width:50%">
+                    </div> 
+                @endif
 
                 <ul id="mainnav-menu" class="list-group">
 
@@ -172,7 +176,7 @@
                         <ul class="collapse">
                             @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant"><a href="/rondas/index/M/" class="text-nowrap"><i class="fad fa-tools"></i> Rondas mantenimiento</a></li> @endif
                             @if(checkPermissions(['Incidencias'],['R']))<li class="incidencias"><a href="/incidencias/" class="text-nowrap"><i class="fad fa-exclamation-triangle"></i> Incidencias</a></li> @endif
-                            @if(checkPermissions(['Scan mantenimiento'],['R']))<li class="scan_mant"><a href="/rondas/scan" class="text-nowrap"><i class="fad fa-qrcode"></i> Scan</a></li> @endif
+                            @if(checkPermissions(['Scan mantenimiento'],['R']))<li class="scan_mant"><a href="/scan_mantenimiento" class="text-nowrap"><i class="fad fa-qrcode"></i> Scan</a></li> @endif
                         </ul>
                     </li>
                     @endif
@@ -184,7 +188,6 @@
                                 <span class="menu-title">Configuracion</span> 
                             <i class="arrow"></i>
                         </a>
-
                         <!--Submenu-->
                         <ul class="collapse">
                             @if(checkPermissions(['Bitacora'],['R']))<li class="bitacora"><a href="/bitacoras">Bitacora</a></li> @endif
@@ -194,12 +197,12 @@
                             @if(checkPermissions(['Secciones'],['R']))<li class="secciones"><a href="/sections">Secciones</a></li> @endif
                             @if(checkPermissions(['Permisos'],['R']))<li class="permisos"><a href="/profile-permissions">Permisos</a></li> @endif
                             @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="tipos_incidencia"><a href="/incidencias/tipos">Tipos de incidencia</a></li> @endif
-
                         </ul>
                     </li>
                     @endif
-                    
                 </ul>
+
+                
 
 
                 <!--Widget-->

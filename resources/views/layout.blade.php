@@ -171,7 +171,7 @@
             <nav id="mainnav-container">
                 @if(Auth::check())
                     <div id="mainnav">
-                        @if(Auth::user()->nivel_acceso>=100)
+                        @if(Auth::user()->nivel_acceso>=10)
                             @include('layouts.menu')
                         @endif
                         @if(Auth::user()->nivel_acceso==1)

@@ -118,7 +118,7 @@
     </div>
 </div>
 
-
+{{ $modo }}
 @endsection
 
 
@@ -176,6 +176,10 @@
                 puesto=url.split('/').pop();
                 console.log('Dinamica de usuario para '+puesto);
                 window.location.replace("{{ url('/puesto') }}/"+puesto);
+            @elseif($modo=='incidencia')
+                puesto=url.split('/').pop();
+                console.log('Dinamica de mantenimiento para '+puesto);
+                window.location.replace("{{ url('/incidencias/get_detalle') }}/"+puesto);
             
             @endif
             }

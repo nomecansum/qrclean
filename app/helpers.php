@@ -471,27 +471,51 @@ function validar_acceso_tabla($id,$tabla){
     }
 }
 
-function color_porcentaje($pct){
+function color_porcentaje($pct,$modo="bootstrap"){
     
-    if($pct<50){
-        return "danger";
+    if($modo=="bootstrap"){
+        if($pct<50){
+            return "danger";
+        }
+    
+        if($pct>=50 && $pct<75){
+            return "warning";
+        }
+    
+        if($pct>=75 && $pct<100){
+            return "info";
+        }
+    
+        if($pct==100){
+            return "success";
+        }
+    
+        if($pct>100){
+            return "mint";
+        }
     }
-
-    if($pct>=50 && $pct<75){
-        return "warning";
+    if($modo=="hex"){
+        if($pct<50){
+            return "#ff6347";
+        }
+    
+        if($pct>=50 && $pct<75){
+            return "#ffd700";
+        }
+    
+        if($pct>=75 && $pct<100){
+            return "#1e90ff";
+        }
+    
+        if($pct==100){
+            return "#adff2f";
+        }
+    
+        if($pct>100){
+            return "#008000";
+        }
     }
-
-    if($pct>=75 && $pct<100){
-        return "info";
-    }
-
-    if($pct==100){
-        return "success";
-    }
-
-    if($pct>100){
-        return "mint";
-    }
+    
 }
 
 function color_porcentaje_inv($pct){

@@ -54,13 +54,13 @@
                     $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
                 @endphp
                 @foreach($plantas as $key=>$value)
-                    <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $value }}</h3>
+                    <h3 class="pad-all w-100 bg-gray rounded" style="font-size: 2vh">PLANTA {{ $value }}</h3>
                     @php
                         $puestos_planta=$puestos->where('id_planta',$key);
                     @endphp
                     <div class="d-flex flex-wrap">
                         @foreach($puestos_planta as $p)
-                            <div class="text-center font-bold rounded bg-{{ $p->val_color }} mr-2 mb-2 align-middle" style="width:100px; height: 100px; overflow: hidden;">
+                            <div class="text-center font-bold rounded bg-{{ $p->val_color }} mr-2 mb-2 align-middle" style="width:10vw; height: 10vw; overflow: hidden; font-size: 2vw;">
                                 <span class="h-100 align-middle">{{ $p->cod_puesto }}</span>
                             </div>
                             

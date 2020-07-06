@@ -164,7 +164,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::group(['prefix' => 'incidencias'], function () {
-        Route::get('/',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@index'])->name('incidencias.index');
+        Route::get('/{f1?}/{f2?}',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@index'])->name('incidencias.index');
         Route::get('/create/{puesto}',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@nueva_incidencia'])->name('incidencias.nueva');
         Route::get('/edit/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@edit']);
         Route::post('/save',['middleware'=>'permissions:["Incidencias"],["C"]','uses' => 'IncidenciasController@save']);

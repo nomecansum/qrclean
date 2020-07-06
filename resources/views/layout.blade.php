@@ -271,6 +271,7 @@
     @yield('scripts2')
     @yield('scripts3')
     @yield('scripts4')
+    @yield('scripts5')
 
 </body>
 </html>

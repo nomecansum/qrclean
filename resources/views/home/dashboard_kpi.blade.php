@@ -155,7 +155,7 @@
     pieSeries.hiddenState.properties.startAngle = -90;
     
     }); // end am4core.ready()
-    </script>
+</script>
 
 
 @endsection

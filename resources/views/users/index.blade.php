@@ -73,11 +73,10 @@
                     <thead>
                         <tr>
                             <th style="width:30px"></th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Perfil</th>
-                            <th>Ult acceso</th>
-                            <th></th>
+                            <th  data-sortable="true">Nombre</th>
+                            <th  data-sortable="true">Perfil</th>
+                            <th  data-sortable="true">Ult acceso</th>
+                            <th  data-sortable="true">Email</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -91,7 +90,6 @@
                                 @endif
                             </td>
                             <td class="pt-3">{{ $users->name }}</td>
-                            <td>{{ $users->email }}</td>
                             <td>
                                 @if(isset($users->cod_nivel))
                                     {{ DB::table('niveles_acceso')->where('cod_nivel',$users->cod_nivel)->value('des_nivel_acceso')}}
@@ -103,6 +101,7 @@
                             </td>
                             <td>{!! beauty_fecha($users->last_login) !!}</td>
                             <td style="vertical-align: middle">
+                                {{ $users->email }}
                                 <form method="POST" action="{!! route('users.users.destroy', $users->id) !!}" accept-charset="UTF-8">
                                 <input name="_method" value="DELETE" type="hidden">
                                 {{ csrf_field() }}

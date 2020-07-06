@@ -30,9 +30,11 @@
             <div class="input-group">
                 <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
                 <span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                <button id="btn-toggle" class="btn btn-mint float-right ml-3"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
             </div>
         </div>
-        <table id="tablarondas"  data-toggle="table"
+        <table id="tablarondas"  
+            data-toggle="table"
             data-locale="es-ES"
             data-search="true"
             data-show-columns="true"
@@ -134,8 +136,12 @@
         $('{{ $entidades['menu1'] }}').addClass('active active-sub');
         $('{{ $entidades['menu2'] }}').addClass('active-link');
        
+       $('#btn-toggle').click(function(){
+         $('#tablarondas').bootstrapTable('toggleView')
+       })
 
-        $('#tablarondas').on('click-cell.bs.table', function(e, value, row, $element){
+
+       $('#tablarondas').on('click-cell.bs.table', function(e, value, row, $element){
            //console.log($element._data.id);
            @if(Auth::user()->nivel_acceso==10)
                 window.location.href = '{{ url('/rondas/detallelimp/') }}/'+$element._data.id;

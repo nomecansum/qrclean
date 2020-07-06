@@ -51,6 +51,13 @@
 				<h3 class="panel-title">Incidencias abiertas</h3>
 			</div>
 			<div class="panel-body">
+				<div id="all_toolbar">
+					<div class="input-group">
+						<input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
+						<span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+						<button id="btn-toggle" class="btn btn-mint float-right ml-3 add-tooltip" title="Cambiar vista tabla/tarjetas"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
+					</div>
+				</div>
 				<table id="tabla"  data-toggle="table"
                     data-locale="es-ES"
                     data-search="true"
@@ -146,6 +153,10 @@
 	$('.mantenimiento').addClass('active active-sub');
 	$('.incidencias').addClass('active-link');
 
+	$('#btn-toggle').click(function(){
+         $('#tabla').bootstrapTable('toggleView')
+    })
+
 	$('.form_cierre').submit(form_ajax_submit);
 
 	$('.minicolors').minicolors({
@@ -165,6 +176,23 @@
           theme: 'bootstrap'
         });
     //$('#frm_contador').on('submit',form_ajax_submit);
+
+	 //Date range picker
+	 $('#fechas').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: '{{trans("general.date_format")}}',
+                applyLabel: "OK",
+                cancelLabel: "Cancelar",
+                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+                firstDay: {{trans("general.firstDayofWeek")}}
+            },
+            opens: 'right',
+        }, function(start_date, end_date) {
+            $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
+            window.location.href = '{{ url('/incidencias/') }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
+        });
 
 	function post_form_ajax(data){
 		console.log(data);

@@ -22,7 +22,11 @@ use Illuminate\Validation\Rule;
 class IncidenciasController extends Controller
 {
     //LISTADO DE INCIDENCIAS
-    public function index(){
+    public function index($f1=0,$f2=0){
+        $f1=$f1==0?Carbon::now()->startOfMonth()->subMonth():Carbon::parse($f1);
+        $f2=$f2==0?Carbon::now()->endOfMonth():Carbon::parse($f2);
+        $fhasta=clone($f2);
+        $fhasta=$fhasta->addDay();
         $incidencias=DB::table('incidencias')
             ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
@@ -35,8 +39,9 @@ class IncidenciasController extends Controller
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->whereBetween('fec_apertura',[$f1,$fhasta])
             ->get();
-        return view('incidencias.index',compact('incidencias'));
+        return view('incidencias.index',compact('incidencias','f1','f2'));
     }
 
     public function form_cierre($id){

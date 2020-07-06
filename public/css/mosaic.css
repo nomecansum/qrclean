@@ -364,3 +364,8 @@
 td{
   font-size: 14px;
 }
+
+.modal-content{
+  border: #aaa 5px dotted;
+  border-radius: 8px;
+}

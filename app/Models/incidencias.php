@@ -25,7 +25,7 @@ class incidencias extends Model
     *
     * @var string
     */
-    protected $primaryKey = 'id_incicencia';
+    protected $primaryKey = 'id_incidencia';
 
     /**
      * Attributes that should be mass-assignable.
@@ -33,18 +33,19 @@ class incidencias extends Model
      * @var array
      */
     protected $fillable = [
+                  'comentario_cierre',
                   'des_incidencia',
-                  'txt_incidencia',
-                  'id_usuario_apertura',
-                  'id_usuario_cierre',
                   'fec_apertura',
                   'fec_cierre',
-                  'id_tipo_incidencia',
-                  'img_attach1',
-                  'img_attach2',
+                  'id_causa_cierre',
                   'id_cliente',
                   'id_puesto',
-                  'id_causa_cierre'
+                  'id_tipo_incidencia',
+                  'id_usuario_apertura',
+                  'id_usuario_cierre',
+                  'img_attach1',
+                  'img_attach2',
+                  'txt_incidencia'
               ];
 
     /**
@@ -62,16 +63,6 @@ class incidencias extends Model
     protected $casts = [];
     
     /**
-     * Get the User for this model.
-     *
-     * @return App\Models\User
-     */
-    public function User()
-    {
-        return $this->belongsTo('App\Models\User','id_usuario_cierre','id');
-    }
-
-    /**
      * Get the Cliente for this model.
      *
      * @return App\Models\Cliente
@@ -79,6 +70,26 @@ class incidencias extends Model
     public function Cliente()
     {
         return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the IncidenciasTipo for this model.
+     *
+     * @return App\Models\IncidenciasTipo
+     */
+    public function IncidenciasTipo()
+    {
+        return $this->belongsTo('App\Models\IncidenciasTipo','id_tipo_incidencia','id_tipo_incidencia');
+    }
+
+    /**
+     * Get the User for this model.
+     *
+     * @return App\Models\User
+     */
+    public function User()
+    {
+        return $this->belongsTo('App\Models\User','id_usuario_cierre','id');
     }
 
 

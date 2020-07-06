@@ -39,6 +39,74 @@ class IncidenciasController extends Controller
         return view('incidencias.index',compact('incidencias'));
     }
 
+    public function form_cierre($id){
+        validar_acceso_tabla($id,'incidencias');
+        $causas_cierre=DB::table('causas_cierre')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+        return view('incidencias.fill-form-cerrar',compact('id','causas_cierre'));
+    }
+
+    public function detalle_incidencia($id){
+        $incidencia=DB::table('incidencias')
+            ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->where('incidencias.id_incidencia',$id)
+            ->first();
+        
+        return view('incidencias.fill-detalle-incidencia',compact('incidencia'));
+    }
+
+    public function delete($id){
+        try {
+            validar_acceso_tabla($id,"incidencias");
+            $incidencia = incidencias::findOrFail($id);
+            $incidencia->delete();
+            savebitacora('Incidencia ['.$incidencia->id_incidencia.'] '.$incidencia->des_incidencia.' borrada',"Incidencias","delete","OK");
+            return redirect()->route('incidencias.index')->with('success_message', 'Incidencia ['.$id.'] '.$incidencia->des_incidencia.' borrada.');
+        } catch (Exception $exception) {
+            savebitacora('ERROR: Ocurrio un error borrando la incidencia ['.$incidencia->id_incidencia.'] '.$exception->getMessage() ,"Incidencias","delete","ERROR");
+            return back()->withInput()
+                ->withErrors(['unexpected_error' => 'Ocurrio un error al borrar la incidencia ['.$id.'] '.mensaje_excepcion($exception)]);
+        }
+    }
+
+    public function cerrar(Request $r){
+        try {
+            validar_acceso_tabla($r->id_incidencia,'incidencias');
+            $inc=incidencias::find($r->id_incidencia);
+            $inc->id_causa_cierre=$r->id_causa_cierre;
+            $inc->comentario_cierre=$r->comentario_cierre;
+            $inc->fec_cierre=Carbon::now();
+            $inc->id_usuario_cierre=Auth::user()->id;
+            $inc->save();
+            savebitacora('Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',"Incidencias","cerrar","OK");
+            return [
+                'title' => "Cerrar incidencia",
+                'message' => 'Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',
+                'id'=> $inc->id_incidencia
+                //'url' => url('/incidencias')
+            ];
+        } catch (Exception $exception) {
+            savebitacora('ERROR: Ocurrio un error cerrando la incidencia ['.$r->id_incidencia.'] '.$exception->getMessage() ,"Incidencias","cerrar","ERROR");
+            return [
+                'title' => "Cerrar incidencia",
+                'error' => 'ERROR: Ocurrio un error cerrando la incidencia ['.$r->id_incidencia.'] '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+
+        }
+    }
+
 
     // GESTION DE TIPOS DE INCIDENCIA
     public function index_tipos(){

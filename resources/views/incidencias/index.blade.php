@@ -62,33 +62,35 @@
                     data-show-pagination-switch="true"
                     data-show-button-icons="true"
                     data-toolbar="#all_toolbar"
-                    >
+					>
 					<thead>
 						<tr>
-                            <th>Id</th>
-                            <th>Tipo</th>
-							<th>Incidencia</th>
-							<th>Puesto</th>
-							<th>Edificio</th>
-                            <th>Planta</th>
-                            <th>Fecha</th>
-							<th></th>
+                            <th data-sortable="true">Id</th>
+							<th data-sortable="true">Puesto</th>
+							<th data-sortable="true">Edificio</th>
+                            <th data-sortable="true">Planta</th>
+							<th data-sortable="true">Fecha</th>
+							<th data-sortable="true">Estado</th>
+							<th data-sortable="true">Tipo</th>
+							<th style="width: 30%" data-sortable="true">Incidencia</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach ($incidencias as $inc)
 							<tr class="hover-this" @if (checkPermissions(['Clientes'],["W"])) @endif>
 								<td>{{$inc->id_incidencia}}</td>
-								<td>{{$inc->des_tipo_incidencia}}</td>
-								<td>{{ $inc->des_incidencia}}</td>
+								
 								<td>{{ $inc->des_puesto}}</td>
                                 <td>{{ $inc->des_edificio}}</td>
                                 <td>{{ $inc->des_planta}}</td>
-                                <td>{!! beauty_fecha($inc->fec_apertura)!!}</td>
-								<td style="position: relative; width: 300px" class="pt-2" nowrap="nowrap">
-									<div class="floating-like-gmail mt-2">
-										@if (checkPermissions(['Incidencias'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $inc->id_incidencia }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $inc->id_incidencia }})"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
-                                        @if (checkPermissions(['Incidencias'],["W"]))<a href="#cerrar-incidencia-{{$inc->id_incidencia}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip "><span class="fad fa-thumbs-up pt-1" aria-hidden="true"></span> OK</a>@endif
+								<td>{!! beauty_fecha($inc->fec_apertura)!!}</td>
+								@if(isset($inc->fec_cierre)) <td class="bg-success text-xs text-white text-center">Cerrada</td> @else <td class="bg-pink  text-xs text-white text-center" id="cell{{$inc->id_incidencia}}">Abierta</td> @endif
+								<td>{{$inc->des_tipo_incidencia}}</td>
+								<td style="position: relative;" class="pt-2">
+									{{ $inc->des_incidencia}}
+									<div class="floating-like-gmail mt-2 w-100" style="width: 100%">
+										@if (checkPermissions(['Incidencias'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $inc->id_incidencia }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $inc->id_incidencia }})"><span class="fa fa-eye pt-1" aria-hidden="true"></span> Ver</a>@endif
+                                        @if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-id="{{ $inc->id_incidencia}}" id="boton-cierre{{ $inc->id_incidencia }}" onclick="cierre_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-thumbs-up pt-1" aria-hidden="true"></span> Cerrar</a>@endif
                                         @if (checkPermissions(['Incidencias'],["D"]))<a href="#eliminar-incidencia-{{$inc->id_incidencia}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
 										{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$inc->id_incidencia}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
 									</div>
@@ -99,6 +101,7 @@
 													<div class="modal-header"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i><b>
 														¿Borrar incidencia {{ $inc->des_incidencia}}?
 													</div>
+													
 													<div class="modal-footer">
 														<a class="btn btn-info" href="{{url('/incidencias/delete',$inc->id_incidencia)}}">Si</a>
 														<button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
@@ -107,21 +110,6 @@
 											</div>
 										</div>
                                     @endif
-                                    @if (checkPermissions(['Incidencias'],["W"]))
-										<div class="modal fade" id="cerrar-incidencia-{{$inc->id_incidencia}}">
-											<div class="modal-dialog modal-md">
-												<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-													<div class="modal-header"><i class="mdi mdi-thumb-up text-success mdi-48px"></i><b>
-														Cerrar incidencia {{ $inc->des_incidencia}}
-													</div>
-													<div class="modal-footer">
-														<a class="btn btn-info" href="{{url('/incidencias/delete',$inc->id_incidencia)}}">Si</a>
-														<button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									@endif
 								</td>
 							</tr>
 						@endforeach
@@ -131,25 +119,71 @@
 		</div>
 	</div>
 </div>
-
+<div class="modal fade" id="cerrar-incidencia">
+	<form method="POST" action="{{ url('/incidencias/cerrar') }}" accept-charset="UTF-8" class="form-horizontal form-ajax">	
+		@csrf
+		<div class="modal-dialog modal-md">
+			<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+				<div class="modal-header"><i class="mdi mdi-thumb-up text-success mdi-48px"></i><b>
+					Cerrar incidencia {{ $inc->des_incidencia}}
+				</div>
+				<div class="modal-body" id="body_cierre">
+					
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-info btn_cerrar_incidencia">Si</button>
+					<button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
 @endsection
 
 @section('scripts')
 	<script>
 
-	$('.configuracion').addClass('active active-sub');
-	$('.clientes').addClass('active-link');
+	$('.mantenimiento').addClass('active active-sub');
+	$('.incidencias').addClass('active-link');
 
-	$('#btn_nueva_puesto').click(function(){
-       $('#editorCAM').load("{{ url('/clientes/edit/0') }}", function(){
-		animateCSS('#editorCAM','bounceInRight');
-	   });
-	  // window.scrollTo(0, 0);
-      //stopPropagation()
-	});
+	$('.form_cierre').submit(form_ajax_submit);
+
+	$('.minicolors').minicolors({
+          control: $(this).attr('data-control') || 'hue',
+          defaultValue: $(this).attr('data-defaultValue') || '',
+          format: $(this).attr('data-format') || 'hex',
+          keywords: $(this).attr('data-keywords') || '',
+          inline: $(this).attr('data-inline') === 'true',
+          letterCase: $(this).attr('data-letterCase') || 'lowercase',
+          opacity: $(this).attr('data-opacity'),
+          position: $(this).attr('data-position') || 'bottom',
+          swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
+          change: function(value, opacity) {
+            if( !value ) return;
+            if( opacity ) value += ', ' + opacity;
+          },
+          theme: 'bootstrap'
+        });
+    //$('#frm_contador').on('submit',form_ajax_submit);
+
+	function post_form_ajax(data){
+		console.log(data);
+		$('#cell'+data.id).removeClass('bg-pink');
+		$('#cell'+data.id).addClass('bg-success');
+		$('#cell'+data.id).html('Cerrada');
+		$('#boton-cierre'+data.id).hide();
+	}
+   
+   function cierre_incidencia(id){
+		$('#body_cierre').load("{{ url('/incidencias/form_cierre/') }}/"+id);
+   }
+
+    $('#val_icono').iconpicker({
+        icon:'{{isset($t) ? ($t->val_icono) : ''}}'
+    });
 
 	function edit(id){
-		$('#editorCAM').load("{{ url('/clientes/edit/') }}"+"/"+id, function(){
+		$('#editorCAM').load("{{ url('/incidencias/edit/') }}"+"/"+id, function(){
 			animateCSS('#editorCAM','bounceInRight');
 		});
 	}

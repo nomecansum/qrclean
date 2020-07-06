@@ -144,7 +144,7 @@
                     </li>
                     @endif
 
-                    @if(checkPermissions(['Limpieza'],['R']))
+                    @if(checkPermissions(['Limpieza'],['R']) && session('CL')['mca_limpieza']=='S')
                     <li class="limpieza">
                         <a href="#">
                             <i class="fad fa-broom"></i>
@@ -171,7 +171,7 @@
                         <!--Submenu-->
                         <ul class="collapse">
                             @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant"><a href="/rondas/index/M/" class="text-nowrap"><i class="fad fa-tools"></i> Rondas mantenimiento</a></li> @endif
-                            @if(checkPermissions(['Incidencias'],['R']))<li class="rondas_mant"><a href="/incidencias/" class="text-nowrap"><i class="fad fa-exclamation-triangle"></i> Incidencias</a></li> @endif
+                            @if(checkPermissions(['Incidencias'],['R']))<li class="incidencias"><a href="/incidencias/" class="text-nowrap"><i class="fad fa-exclamation-triangle"></i> Incidencias</a></li> @endif
                             @if(checkPermissions(['Scan mantenimiento'],['R']))<li class="scan_mant"><a href="/rondas/scan" class="text-nowrap"><i class="fad fa-qrcode"></i> Scan</a></li> @endif
                         </ul>
                     </li>

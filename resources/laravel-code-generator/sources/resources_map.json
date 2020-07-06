@@ -70,11 +70,6 @@
         "table-name": "users"
     },
     {
-        "model-name": "incidencias",
-        "resource-file": "incidencias.json",
-        "table-name": "incidencias"
-    },
-    {
         "model-name": "incidencias_tipos",
         "resource-file": "incidencias_tipos.json",
         "table-name": "incidencias_tipos"
@@ -88,5 +83,10 @@
         "model-name": "puestos",
         "resource-file": "puestos.json",
         "table-name": "puestos"
+    },
+    {
+        "model-name": "incidencias",
+        "resource-file": "incidencias.json",
+        "table-name": "incidencias"
     }
 ]

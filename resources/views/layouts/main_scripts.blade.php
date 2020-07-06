@@ -273,13 +273,11 @@
             } else{
                 toast_ok(data.title,data.message);
             }
-
-            if (data.theme && data.is_auth) {
-                //console.log(data);
-                localStorage.setItem('theme',data.theme)
-                //$('#theme').attr('href','{{url('monster-admin/main')}}/css/colors/'+data.theme+'.css')
-            }
             $('.modal').modal('hide');
+
+            try{//Si tenemos defiinda la funcion de despues
+                post_form_ajax(data);
+            } catch(e){}
 
             setTimeout(()=>{
                 if(data.url=="reload()"){

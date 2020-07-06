@@ -83,7 +83,7 @@
                         <span class="menu-title">Home</span>
                         <i class="arrow"></i>
                     </a>
-                    @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
+                    @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan_usuario" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
                     @if(checkPermissions(['Reservas'],['R']))<li class="reservas"><a href="/reservas" class="text-nowrap"><i class="fad fa-calendar-alt"></i></i> <span class="menu-title">Reservar</span></a></li> @endif
                     {{-- <a href="{{ url('/puestos') }}">
                         <i class="fad fa-browser"></i>
@@ -93,7 +93,11 @@
                     
                 </ul>
 
-
+                @if(session('DIS') && isset(session('DIS')['img_logo']))
+                    <div class="text-center">
+                        <img src="{{ url('/img/distribuidores/'.session('DIS')['img_logo']) }}" title="{{ session('DIS')['nom_distribuidor'] }}" style="width:50%">
+                    </div> 
+                @endif
                 <!--Widget-->
                 <!--================================-->
                 {{-- <div class="mainnav-widget">

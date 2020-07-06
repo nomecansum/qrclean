@@ -31,52 +31,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //Datos de KPI
-        $puestos=DB::table('puestos')
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('id_cliente',Auth::user()->id_cliente);
-                }
-            })
-            ->get();
-        
-        $datos_quesito=DB::table('estados_puestos')
-            ->join('puestos','puestos.id_estado','estados_puestos.id_estado')
-            ->selectraw('des_estado, count(cod_puesto) as cuenta')
-            ->groupby('des_estado')
-            ->get();
-
-        $puestos_si=puestos::where(function($q){
-            if (!isAdmin()) {
-                $q->where('id_cliente',Auth::user()->id_cliente);
-            }
-        })
-        ->where('id_estado',1);
-       
-        $edificios=edificios::where(function($q){
-            if (!isAdmin()) {
-                $q->where('id_cliente',Auth::user()->id_cliente);
-            }
-        });
-        
-        $plantas=plantas::where(function($q){
-            if (!isAdmin()) {
-                $q->where('id_cliente',Auth::user()->id_cliente);
-            }
-        });
-
         
 
-        try{
-            $pct_completado=(100*$puestos_si->count()/$puestos->count());
-        } catch(\Exception $e){
-            $pct_completado=0;
-        }
-
-        //Datos de donut chart
+        $contenido_home=DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->home_page;
+        $contenido_home='home.'.$contenido_home;
    
 
-        return view('home',compact('puestos','edificios','plantas','pct_completado','datos_quesito'));
+        return view('home',compact('contenido_home'));
     }
 
     public function getsitio(Request $r){

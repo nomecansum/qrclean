@@ -46,7 +46,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 </div> --}}
 
 <div class="panel-body">
-	<table class="table table-calendar mb0 rounded" style="border: 1px solid #f2f7f8;">
+	<table class="table table-calendar mb0 rounded w-100" style="border: 1px solid #f2f7f8;">
 		<thead>
 			<tr>
 				<th>
@@ -60,13 +60,13 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 				</th>
 			</tr>
 			<tr style="background-color: #ffad76; color: #737887; border: 1px solid #f2f7f8; border-radius: 3px 3px 0 0; text-align: center; font-size: 12px">
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.longlunes') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.longmartes') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.longmiercoles') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.longjueves') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.longviernes') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.longsabado') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.longdomingo') }}</th>
+				<th style="width: 14.28%" class="text-center">{{ trans('strings.lunes') }}</th>
+				<th style="width: 14.28%" class="text-center">{{ trans('strings.martes') }}</th>
+				<th style="width: 14.28%" class="text-center">{{ trans('strings.miercoles') }}</th>
+				<th style="width: 14.28%" class="text-center">{{ trans('strings.jueves') }}</th>
+				<th style="width: 14.28%" class="text-center">{{ trans('strings.viernes') }}</th>
+				<th style="width: 14.28%" class="text-center">{{ trans('strings.sabado') }}</th>
+				<th style="width: 14.28%" class="text-center">{{ trans('strings.domingo') }}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -96,12 +96,12 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 							@endphp
 					
                             {{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
-							<td style="background-color: {{$color}}; height: 100px;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip  pt-3 td_calendar {{ $estado }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
+							<td style="background-color: {{$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip  pt-3 td_calendar {{ $estado }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
-                                <span class="font-bold" style="font-size: 26px; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
-								<span style="font-size: 11px; color: #fff; cursor: pointer">
+                                <span class="font-bold" style="font-size: 3vw; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
+								<span style="color: #fff; cursor: pointer">
 									@if($dia)
-									<b class="font-18 text-white"><i class="fad fa-desktop-alt"></i>{!! $descrip !!}</b><br>
+									<b class="text-white" style="font-size: 1.7vw">{!! $descrip !!}</b><br>
 									@endif
 								</span>
 							</td>

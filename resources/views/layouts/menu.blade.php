@@ -93,11 +93,7 @@
                 </div>
                 <!--================================-->
                 <!--End shortcut buttons-->
-                @if(session('DIS') && isset(session('DIS')['img_logo']))
-                    <div class="text-center">
-                        <img src="{{ url('/img/distribuidores/'.session('DIS')['img_logo']) }}" title="{{ session('DIS')['nom_distribuidor'] }}" style="width:50%">
-                    </div> 
-                @endif
+               
 
                 <ul id="mainnav-menu" class="list-group">
 
@@ -202,7 +198,11 @@
                     @endif
                 </ul>
 
-                
+                @if(session('DIS') && isset(session('DIS')['img_logo']))
+                    <div class="text-center">
+                        <img src="{{ url('/img/distribuidores/'.session('DIS')['img_logo']) }}" title="{{ session('DIS')['nom_distribuidor'] }}" style="width:50%">
+                    </div> 
+                @endif
 
 
                 <!--Widget-->

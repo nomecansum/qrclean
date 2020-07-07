@@ -27,7 +27,7 @@ class CustomersController extends Controller
         ->selectRaw('(SELECT count(plantas.id_planta) FROM plantas WHERE plantas.id_cliente = clientes.id_cliente) as plantas')
         ->where(function($q){
             if (!isAdmin()){
-                $q->WhereIn('clientes.id_cliente',Auth::user()->id_cliente);
+                $q->WhereIn('clientes.id_cliente',clientes());
             }
         })
         ->whereNull('clientes.fec_borrado')
@@ -46,7 +46,7 @@ class CustomersController extends Controller
             ->where('id_cliente',$id)
             ->where(function($q){
                 if (!isAdmin()){
-                    $q->WhereIn('clientes.id_cliente',Auth::user()->id_cliente);
+                    $q->WhereIn('clientes.id_cliente',clientes());
                 }
             })
             ->first();

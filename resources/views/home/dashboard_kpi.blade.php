@@ -11,12 +11,7 @@
         })
         ->get();
     
-    $datos_quesito=DB::table('estados_puestos')
-        ->join('puestos','puestos.id_estado','estados_puestos.id_estado')
-        ->selectraw('des_estado, count(cod_puesto) as cuenta')
-        ->groupby('des_estado')
-        ->get();
-
+    
     $puestos_si=puestos::where(function($q){
         if (!isAdmin()) {
             $q->where('id_cliente',Auth::user()->id_cliente);
@@ -105,59 +100,16 @@
     </div>
 </div>
 
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Estado {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
-    </div>
-    <div class="panel-body">
-        <div id="chartdiv" style="width:100%; height:300px;  ml-0"></div>
 
+
+<div class="row">
+    <div class="col-md-6">
+        @include('home.kpi_grafico_puestos')
+        @include('home.incidencias_abiertas')
+    </div>
+    <div class="col-md-6">
+        @include('home.calendario')
     </div>
 </div>
 
-@section('scripts3')
-    {{--  AMCharts  --}}
-    <script src="{{url('plugins')}}/amcharts4/core.js"></script>
-    <script src="{{url('plugins')}}/amcharts4/charts.js"></script>
-    <script src="{{url('plugins')}}/amcharts4/themes/material.js"></script>
-    <script src="{{url('plugins')}}/amcharts4/themes/animated.js"></script>
-    <script src="{{url('plugins')}}/amcharts4/themes/kelly.js"></script>
-    <script src="{{url('plugins')}}/amcharts4/lang/es_ES.js"></script>
-
-    <script src="/js/demo/nifty-demo.min.js"></script>
-
-<script>
-    am4core.ready(function() {
-    // Themes begin
-    am4core.useTheme(am4themes_animated);
-    //am4core.useTheme(am4themes_kelly);
-
-    // Themes end
-    // Create chart instance
-    var chart = am4core.create("chartdiv", am4charts.PieChart);
-
-    chart.legend = new am4charts.Legend();
-    
-    // Add data
-    chart.data = {!! json_encode($datos_quesito) !!};
-    
-    // Add and configure Series
-    var pieSeries = chart.series.push(new am4charts.PieSeries());
-    pieSeries.dataFields.value = "cuenta";
-    pieSeries.dataFields.category = "des_estado";
-    pieSeries.slices.template.stroke = am4core.color("#fff");
-    pieSeries.slices.template.strokeWidth = 2;
-    pieSeries.slices.template.strokeOpacity = 1;
-    
-    // This creates initial animation
-    pieSeries.hiddenState.properties.opacity = 1;
-    pieSeries.hiddenState.properties.endAngle = -90;
-    pieSeries.hiddenState.properties.startAngle = -90;
-    
-    }); // end am4core.ready()
-</script>
-
-
-@endsection
-
-@include('home.calendario')
+@include('home.rondas_pendientes')

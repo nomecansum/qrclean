@@ -28,7 +28,7 @@ class UsersController extends Controller
         ->join('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
         ->where(function($q){
             if (!isAdmin()) {
-                $q->where('users.id_cliente',Auth::user()->id_cliente);
+                $q->wherein('users.id_cliente',clientes());
             }
         })
         ->get();

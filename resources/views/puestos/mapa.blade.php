@@ -60,7 +60,7 @@
                     @endphp
                     <div class="d-flex flex-wrap">
                         @foreach($puestos_planta as $p)
-                            <div class="text-center font-bold rounded bg-{{ $p->val_color }} mr-2 mb-2 align-middle" style="width:10vw; height: 10vw; overflow: hidden; font-size: 2vw;">
+                            <div class="text-center font-bold rounded bg-{{ $p->val_color }} mr-2 mb-2 align-middle" style="width:8vw; height: 8vw; overflow: hidden; font-size: 1.6vw;">
                                 <span class="h-100 align-middle">{{ $p->cod_puesto }}</span>
                             </div>
                             

@@ -280,5 +280,12 @@ class UsersController extends Controller
         ];
     }
 
+    public function setdefcamera($id){
+        $u=users::find(Auth::user()->id);
+        $u->def_camera=$id;
+        $u->save();
+        return;
+    }
+
 }
 

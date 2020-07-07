@@ -209,6 +209,7 @@
             var currentScanTypeSelection = SCAN_TYPE_CAMERA;
             var codesFound = 0;
             var lastMessageFound = null;
+            var ultimacamara;
             const setPlaceholder = () => {
                 const placeholder = document.createElement("div");
                 placeholder.innerHTML = "";
@@ -300,16 +301,20 @@
                 option.innerHTML = name;
                 //loguear('ID: '+value);
                 cameraSelection.appendChild(option);
+                ultimacamara=camera.id;
             }
 
 
-            def_value=getCookie('cam_def');    
-            //loguear('def '+def_value);       
-            if(def_value!=null && def_value!=''){
-                $('#cameraSelection').val(def_value);
-            } else {
-                $('#cameraSelection').val(cameras[cameras.length-1].id);
-            }
+            //def_value=getCookie('cam_def');    
+            //def_value="{{ DB::table('users')->where('id',Auth::user()->id)->first()->def_camera }}";
+             //def_value="49f0663bc220da886abe9034b13315aee969281e65aaeac24390245272f17740";
+            // // loguear('def '+def_value);       
+            // if(def_value!=null && def_value!=''){
+            //     $('#cameraSelection').val(def_value);
+            // } else {
+            //     $('#cameraSelection').val(ultimacamara);
+            // }
+            $('#cameraSelection').val(ultimacamara);
             $('#cameraSelection').change();
             //loguear(cameras[cameras.length-1].id);
 
@@ -388,6 +393,7 @@
         $('#cameraSelection').change(function(){
             $('#stop_Button').click();
             setCookie('cam_def',$('#cameraSelection').val(),9999);
+            $.get("{{ url('/users/setdefcamera') }}/"+$('#cameraSelection').val())
             $('#scan_Button').click();
         })
 

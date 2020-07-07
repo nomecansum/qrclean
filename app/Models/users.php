@@ -44,7 +44,8 @@ class users extends Model
                   'nivel_acceso',
                   'id_cliente',
                   'val_timezone',
-                  'token_acceso'
+                  'token_acceso',
+                  'def_camera'
               ];
 
     /**

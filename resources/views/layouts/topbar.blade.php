@@ -38,14 +38,14 @@
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <li>
             <div class="custom-search-form">
-                <label class="btn btn-trans" for="search-input" data-toggle="collapse" data-target="#nav-searchbox">
+                {{--  <label class="btn btn-trans" for="search-input" data-toggle="collapse" data-target="#nav-searchbox">
                     <i class="demo-pli-magnifi-glass"></i>
-                </label>
-                <form>
+                </label>  --}}
+                {{--  <form>
                     <div class="search-container collapse" id="nav-searchbox">
                         <input id="search-input" type="text" class="form-control" placeholder="Type for search...">
                     </div>
-                </form>
+                </form>  --}}
             </div>
         </li>
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
@@ -55,7 +55,7 @@
     <ul class="nav navbar-top-links">
         <!--Notification dropdown-->
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <li class="dropdown">
+        {{--  <li class="dropdown">
             <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                 <i class="fa fa-bell"></i>
                 <span class="badge badge-header badge-danger"></span>
@@ -127,7 +127,7 @@
                     </a>
                 </div>
             </div>
-        </li>
+        </li>  --}}
         <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
         <!--End notifications dropdown-->
         <!--User dropdown-->

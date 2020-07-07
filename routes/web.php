@@ -59,6 +59,8 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::get('/addplanta/{usuario}/{planta}','UsersController@addplanta')->name('users.addplanta');
         Route::get('/delplanta/{usuario}/{planta}','UsersController@delplanta')->name('users.delplanta');
+
+        Route::get('/setdefcamera/{id}','UsersController@setdefcamera');
     });
 
     Route::group(['prefix' => 'filters'], function () {

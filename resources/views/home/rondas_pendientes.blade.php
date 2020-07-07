@@ -1,5 +1,10 @@
 @php
- 
+
+ if(!isset($tipo_ronda))
+    {
+        $tipo_ronda='M';
+    }
+    
  $rondas=DB::table('rondas_limpieza')
     ->join('limpiadores_ronda','limpiadores_ronda.id_ronda','rondas_limpieza.id_ronda')
     ->join('users as u1','rondas_limpieza.user_creado','u1.id')
@@ -16,7 +21,7 @@
             $q->where('limpiadores_ronda.id_limpiador',Auth::user()->id);
         }
     })
-    ->where('tip_ronda','M')
+    ->where('tip_ronda',$tipo_ronda)
     ->groupby('rondas_limpieza.id_ronda','fec_ronda','des_ronda','u1.name')
     ->orderby('id_ronda','desc')
     ->get();
@@ -30,7 +35,7 @@
                 $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
             }
         })
-        ->where('tip_ronda','M')
+        ->where('tip_ronda',$tipo_ronda)
         ->get();
 
 @endphp
@@ -61,7 +66,7 @@
 
 <div class="panel">
     <div class="panel-heading">
-        <h3 class="panel-title"><span class="font-bold text-2x" id="cuenta">{{ $rondas->count() }}</span> Rondas de mantenimiento con algun puesto pendiente {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
+        <h3 class="panel-title"><span class="font-bold text-2x" id="cuenta">{{ $rondas->count() }}</span> Rondas de {{ $tipo_ronda=='M'?'mantenimiento':'limpieza' }} con algun puesto pendiente {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
     </div>
     <div class="panel-body">
         @foreach($rondas as $r)

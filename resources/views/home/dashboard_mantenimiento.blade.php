@@ -8,6 +8,6 @@
 
 @include('home.tabla_incidencias')
 
-@include('home.rondas_pendientes')
+@include('home.rondas_pendientes',['tipo_ronda'=>'M'])
 
 @include('home.calendario')

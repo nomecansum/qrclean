@@ -66,12 +66,11 @@ class ReservasController extends Controller
             ->toArray();
         
 
-        $reservados=DB::table('reservas')
+        $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->where('puestos.id_edificio',$r->edificio)
             ->where('fec_reserva',adaptar_fecha($r->fecha)->format('Y-m-d'))
-            ->pluck('reservas.id_puesto')
-            ->toArray();
+            ->get();
         $puestos=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
@@ -105,7 +104,7 @@ class ReservasController extends Controller
             ->where('id_edificio',$r->edificio)
             ->get();
 
-        return view('reservas.comprobar',compact('reservados','puestos','edificios'));
+        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios'));
     }
 
     public function save(Request $r){

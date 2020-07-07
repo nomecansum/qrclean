@@ -2,7 +2,15 @@
     $edificio_ahora=0;
     $planta_ahora=0;
 @endphp
-
+<div class="row botones_accion">
+    <div class="col-md-8">
+        <span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
+    </div>
+    <div class="col-md-4 text-right">
+        <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar" style="color: #1e90ff"><i class="fad fa-th"></i> Mosaico</a>
+        <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar_plano"><i class="fad fa-map-marked-alt"></i> Plano</a>
+    </div>
+</div>
 @foreach ($edificios as $e)
 <div class="panel">
     <div class="panel-body">
@@ -17,7 +25,7 @@
             <div class="d-flex flex-wrap">
                 @foreach($puestos_planta as $p)
                 @php
-                    if(in_array($p->id_puesto,$reservados)){
+                    if(in_array($p->id_puesto,$reservas->pluck('reservas.id_puesto')->toArray())){
                         $color="LightCoral";
                         $clase_disp="";
                     }   else {
@@ -61,5 +69,12 @@
         $(this).addClass('bg-info');
         animateCSS('#des_puesto','zoomIn');
         $('#frm_contador').submit();
+    })
+
+    $('.boton_modo').click(function(){
+        $('#loadfilter').show();
+        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $(this).data('href')}, function(data, textStatus, xhr) {
+            $('#detalles_reserva').html(data);
+        });
     })
 </script>

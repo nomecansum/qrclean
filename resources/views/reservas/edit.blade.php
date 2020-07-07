@@ -36,6 +36,7 @@
                         @if(checkPermissions(['Reservas'],["W"]))<button type="submit" class="btn btn-primary btn_guardar">GUARDAR</button>@endif
                     </div>
                 </div>
+                
                 <div class="row">
                     <div class="col-md-12" id="detalles_reserva">
 
@@ -101,7 +102,7 @@
     });
 
     function comprobar_puestos(){
-        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val()}, function(data, textStatus, xhr) {
+        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: 'comprobar'}, function(data, textStatus, xhr) {
             $('#detalles_reserva').html(data);
         });
     }

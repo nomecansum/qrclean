@@ -46,6 +46,7 @@
         $('.disponible').each(function(){
             $(this).css('background-color',$(this).data('bgcolor'));
         });
+        
     });
 
     $('.disponible').click(function(){
@@ -59,5 +60,6 @@
         $(this).css('background-color','');
         $(this).addClass('bg-info');
         animateCSS('#des_puesto','zoomIn');
+        $('#frm_contador').submit();
     })
 </script>

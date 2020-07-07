@@ -289,7 +289,7 @@ class IncidenciasController extends Controller
 
             //Marcamos el puesto como chungo
             $puesto->id_estado=6;
-            $puesto->save;
+            $puesto->save();
 
             $this->post_procesado_incidencia($inc);
             

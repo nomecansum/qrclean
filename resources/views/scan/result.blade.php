@@ -82,8 +82,8 @@
                 </div>
                 @if($puesto->id_estado!=6)
                     <div class="row mt-3">
-                        <div class="col-md-12 text-center">
-                            <button class="btn btn-lg btn-warning text-bold btn_incidencia" data-estado="6" data-id="{{$puesto->token}}"><i class="fad fa-exclamation-triangle"></i> Notificar una incidencia en este puesto</button>
+                        <div class="col-md-11 text-center">
+                            <button class="btn btn-lg btn-warning text-bold btn_incidencia" data-estado="6" data-id="{{$puesto->token}}"><i class="fad fa-exclamation-triangle"></i> Notificar una incidencia <br>en este puesto</button>
                         </div>
                     </div>
                 @endif

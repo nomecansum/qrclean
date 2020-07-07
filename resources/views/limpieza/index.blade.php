@@ -55,7 +55,7 @@
                     <th data-sortable="true" class="text-center" style="width: 50px"><i class="fad fa-desktop-alt"></i> Puestos</th>
                     <th data-sortable="true">{{ $entidades['plural'] }}</th>
                     <th data-sortable="true"class="text-center" style="width: 100px">Completado</th>
-                    <th></th>
+                    {{--  <th></th>  --}}
                 </tr>
             </thead>
             <tbody>
@@ -89,13 +89,13 @@
                             <li>{{ $u }}</li>
                         @endforeach
                     </td>
-                    <td class="text-3x font-bold text-center text-{{ color_porcentaje($pct_completado) }}">
-                        {{ round($pct_completado) }} %
+                    <td class="text-center " >
+                        <span class="text-{{ color_porcentaje($pct_completado) }} font-bold " style="font-size: 3vw ">{{ round($pct_completado) }} %</span>
                     </td>
                     {{-- onclick="hoverdiv($(this),event,'toolbutton',{{ $puesto->id_puesto }},'{{ $puesto->cod_puesto }}','{{ $puesto->token }}');" --}}
-                    <td class="text-center opts">
+                    {{--  <td class="text-center opts">
                         <a href="javascript:void(0)" ><i class="fa fa-bars add-tooltip opts" title="Acciones"></i></a>
-                    </td>
+                    </td>  --}}
                 </tr>
                 {{-- <tr id="detalle_ronda_{{ $r->id_ronda }}" data-id="{{ $r->id_ronda }}" style="display: none:">
                     <td colspan="8"></td>

@@ -18,7 +18,7 @@
                         <label for="fechas">Fecha</label>
                         <div class="input-group">
                             <input type="text" class="form-control pull-left singledate" id="fechas" name="fechas" style="width: 120px" value="{{ $f1->format('d/m/Y')}}">
-                            <span class="btn input-group-text btn-mint"  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
+                            <span class="btn input-group-text btn-mint datepickerbutton" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
                         </div>
                     </div>
                     <div class="form-group col-md-2">

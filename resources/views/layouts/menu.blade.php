@@ -164,13 +164,13 @@
                     <li class="mantenimiento">
                         <a href="#">
                             <i class="fad fa-tools"></i>
-                            @if(checkPermissions(['Parametrizacion'],['R']))<span class="menu-title">Mantenimiento</span> @endif
+                            @if(checkPermissions(['Mantenimiento'],['R']))<span class="menu-title">Mantenimiento</span> @endif
                             <i class="arrow"></i>
                         </a>
 
                         <!--Submenu-->
                         <ul class="collapse">
-                            @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant"><a href="/rondas/index/M/" class="text-nowrap"><i class="fad fa-tools"></i> Rondas mantenimiento</a></li> @endif
+                            @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant"><a href="/rondas/index/M/" class="text-nowrap"><i class="fad fa-tools"></i> Rondas <br>mantenimiento</a></li> @endif
                             @if(checkPermissions(['Incidencias'],['R']))<li class="incidencias"><a href="/incidencias/" class="text-nowrap"><i class="fad fa-exclamation-triangle"></i> Incidencias</a></li> @endif
                             @if(checkPermissions(['Scan mantenimiento'],['R']))<li class="scan_mant"><a href="/scan_mantenimiento" class="text-nowrap"><i class="fad fa-qrcode"></i> Scan</a></li> @endif
                         </ul>

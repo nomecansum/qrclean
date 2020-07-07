@@ -33,7 +33,7 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-12 {{ $errors->has('txt_incidencia') ? 'has-error' : '' }}">
-                    <label for="txt_incidencia" class="control-label">Descripcion <span style="font-size: 9px">(separados por ; )</span></label>
+                    <label for="txt_incidencia" class="control-label">Descripcion</label>
                     <textarea class="form-control" name="txt_incidencia" type="text" id="txt_incidencia" value="" rows="4"></textarea>
                     {!! $errors->first('txt_incidencia', '<p class="help-block">:message</p>') !!}
                 </div>

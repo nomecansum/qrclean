@@ -116,7 +116,7 @@
 <script type="text/javascript" src="{{ url('plugins/Dynamic-Pie-Chart/js/min/jquery-progresspiesvg-min.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function(){ 
-        $('#cuenta').html("{{ $cuenta }}");
+        $('#cuenta').html("{{ $cuenta??0 }}");
     }, false);
 
 

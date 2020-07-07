@@ -10,8 +10,7 @@
             }
         })
         ->get();
-    
-    
+
     $puestos_si=puestos::where(function($q){
         if (!isAdmin()) {
             $q->where('id_cliente',Auth::user()->id_cliente);
@@ -42,9 +41,6 @@
     //Datos de donut chart   
 
 @endphp
-
-@include('home.accesos_directos')
-
 <div class="row">
     <div class="col-md-3">
         <div class="panel panel-purple panel-colorful media middle pad-all">
@@ -99,19 +95,3 @@
         </div>
     </div>
 </div>
-
-
-
-<div class="row">
-    <div class="col-md-6">
-        @include('home.kpi_grafico_puestos')
-        @include('home.incidencias_abiertas')
-    </div>
-    <div class="col-md-6">
-        @include('home.calendario')
-    </div>
-</div>
-
-@include('home.tabla_incidencias')
-
-@include('home.rondas_pendientes')

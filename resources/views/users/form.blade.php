@@ -106,7 +106,7 @@
                     <option value=""></option>
                     @foreach (\DB::table('clientes')->where(function($q){
                         if (!fullAccess()){
-                                $q->WhereIn('id_cliente',Auth::user()->id_cliente);
+                                $q->WhereIn('id_cliente',clientes());
                             }
                         })->wherenull('fec_borrado')->get() as $c)
                         <option {{isset($users) && $users->id_cliente == $c->id_cliente ? 'selected' : ''}} value="{{$c->id_cliente}}">{{$c->nom_cliente}}</option>

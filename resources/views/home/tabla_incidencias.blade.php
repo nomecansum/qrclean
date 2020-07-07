@@ -23,6 +23,9 @@
 @endphp
 
 <div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title"><span class="font-bold text-2x">{{ $incidencias->count() }}</span> Incidencias abiertas a {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
+    </div>
     <div class="panel-body">
         <table id="tabla"  
             data-toggle="table"

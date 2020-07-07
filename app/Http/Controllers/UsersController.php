@@ -13,6 +13,7 @@ use DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Auth;
 
 class UsersController extends Controller
 {
@@ -111,7 +112,8 @@ class UsersController extends Controller
     {
         validar_acceso_tabla($id,"users");
         $users = users::findOrFail($id);
-        $Perfiles = niveles_acceso::all();
+        $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->get();
+       // dd($Perfiles);
 
         return view('users.edit', compact('users','Perfiles'));
     }

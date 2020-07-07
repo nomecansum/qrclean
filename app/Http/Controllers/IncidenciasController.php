@@ -287,6 +287,10 @@ class IncidenciasController extends Controller
             $inc->img_attach2=$img2;
             $inc->save();
 
+            //Marcamos el puesto como chungo
+            $puesto->id_estado=6;
+            $puesto->save;
+
             $this->post_procesado_incidencia($inc);
             
             savebitacora('Incidencia de tipo '.$tipo->des_tipo_incidencia. ' '.$r->des_incidencia.' creada por '.Auth::user()->name,"Incidencias","save","OK");

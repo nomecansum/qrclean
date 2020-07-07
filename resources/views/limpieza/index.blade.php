@@ -29,7 +29,7 @@
         <div id="all_toolbar">
             <div class="input-group">
                 <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
-                <span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                 <button id="btn-toggle" class="btn btn-mint float-right ml-3"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
             </div>
         </div>
@@ -53,7 +53,7 @@
                     <th data-sortable="true" class="text-center"  style="width: 50px"><i class="fad fa-building"></i> Edificios</th>
                     <th data-sortable="true" class="text-center" style="width: 50px"><i class="fad fa-layer-group"></i> Plantas</th>
                     <th data-sortable="true" class="text-center" style="width: 50px"><i class="fad fa-desktop-alt"></i> Puestos</th>
-                    <th data-sortable="true">{{ $entidades['plural'] }}</th>
+                    <th data-sortable="true"  data-card-visible="false">{{ $entidades['plural'] }}</th>
                     <th data-sortable="true"class="text-center" style="width: 100px">Completado</th>
                     {{--  <th></th>  --}}
                 </tr>
@@ -84,13 +84,13 @@
                     <td class="td text-center text-2x" data-id="">{{ $cnt_edificios }}</td>
                     <td class="td text-center text-2x" data-id="">{{ $cnt_plantas }}</td>
                     <td class="td text-center text-2x" data-id="">{{ $cnt_puestos }}</td>
-                    <td class="td" data-id="">
+                    <td class="td" data-id="" >
                         @foreach(explode('#',$r->user_asignado) as $u)
                             <li>{{ $u }}</li>
                         @endforeach
                     </td>
                     <td class="text-center " >
-                        <span class="text-{{ color_porcentaje($pct_completado) }} font-bold " style="font-size: 3vw ">{{ round($pct_completado) }} %</span>
+                        <span class="text-{{ color_porcentaje($pct_completado) }} font-bold " style="font-size: 3.5vw ">{{ round($pct_completado) }} %</span>
                     </td>
                     {{-- onclick="hoverdiv($(this),event,'toolbutton',{{ $puesto->id_puesto }},'{{ $puesto->cod_puesto }}','{{ $puesto->token }}');" --}}
                     {{--  <td class="text-center opts">

@@ -387,6 +387,9 @@
             $('#cameraSelection').change();
         })
 
+        $(function(){
+            $('#footer').hide();
+        })
         
     </script>
 

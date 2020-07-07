@@ -142,6 +142,8 @@
         $('.btn_incidencia').click(function(){
             window.location.replace("{{url('/incidencias/create')}}/"+$(this).data('id'));
         })
-
+        $(function(){
+            $('#footer').hide();
+        })
     </script>
 @endsection

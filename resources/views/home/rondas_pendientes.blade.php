@@ -81,23 +81,23 @@
             @endphp
             @if($pct_completado<100)
                 <div class="row">
-                    <div class="col-md-2 text-2x">
+                    <div class="col-md-2 text-2x text-center">
                         {!! beauty_fecha($r->fec_ronda,0) !!}
                     </div>
                     <div class="col-md-2 text-3x font-bold text-center text-{{ color_porcentaje($pct_completado) }}">
                         <span class="pr around" data-color="{{ color_porcentaje($pct_completado,'hex') }}"><span class="outer"><span class="value">{{ round($pct_completado) }}</span><br>%</span></span>
                     </div>
                     
-                    <div class="col-md-2">
+                    <div class="col-md-2  text-center">
                         <i class="fad fa-building text-2x"></i> <span class="text-3x ml-2"> {{ $cnt_edificios }}</span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2  text-center">
                         <i class="fad fa-layer-group  text-2x"></i> <span class="text-3x ml-2"> {{ $cnt_plantas }}</span>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2  text-center">
                         <i class="fad fa-desktop-alt  text-2x"></i> <span class="text-3x ml-2"> {{ $cnt_puestos }}</span>
                     </div>
-                    <div class="col-md-2 font-16">
+                    <div class="col-md-2 font-16  text-center">
                         {{ $r->des_ronda }}
                     </div>
                     

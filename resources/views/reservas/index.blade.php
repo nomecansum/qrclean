@@ -25,12 +25,12 @@
         <br>
     </div>
     <div class="col-md-1 text-right">
-        <div class="btn-group btn-group-sm pull-right" role="group">
+        {{-- <div class="btn-group btn-group-sm pull-right" role="group">
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva reserva">
                 <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
                 <span>Nuevo</span>
             </a>
-        </div>
+        </div> --}}
     </div>
 </div>
 <div id="editorCAM" class="mt-2">

@@ -116,6 +116,9 @@
             </div>
         </div> --}}
     </div>
+    <div id="log">
+
+    </div>
 </div>
 
 @endsection
@@ -125,6 +128,12 @@
     <script src="{{ asset('/plugins/html5-qrcode/minified/html5-qrcode.min.js') }}"></script>
 
     <script>
+
+        function loguear(s){
+            $('#log').html($('#log').html()+'<br>'+s)
+            //console.log(s);
+        }
+
         @if($tipo_scan=="limpieza")
             $('.limpieza').addClass('active active-sub');
             $('.scan_ronda').addClass('active-link');
@@ -146,11 +155,11 @@
         function geturl(url){
             
             @if(!isset($modo) || (isset($modo) && $modo=='location'))
-                console.log('Get URL: '+url);
+                loguear('Get URL: '+url);
                 document.location.href=url;
             @elseif($modo=='cambio_estado' && isset($estado_destino))
                 puesto=url.split('/').pop();
-                console.log('Cambio estado '+puesto);
+                loguear('Cambio estado '+puesto);
                 $.post('{{url('/puesto/estado/')}}/'+puesto+'/{{ $estado_destino }}', {_token: '{{csrf_token()}}', data: url})
                 .done(function(data){
  //La respuesta es un mensaje JSON
@@ -168,23 +177,23 @@
                             $('#div_txt_mensaje').addClass('bg-danger');
                             $('#div_txt_mensaje').html('<i class="fad fa-exclamation-square"></i> '+data.mensaje);
                         }
-                        console.log(data);
+                        loguear(JSON.stringify(data));
                         fin=setTimeout(ocultar_mensaje,5000);
                 })
             @elseif($modo=='usuario' && isset($estado_destino))
                 puesto=url.split('/').pop();
-                console.log('Dinamica de usuario para '+puesto);
+                loguear('Dinamica de usuario para '+puesto);
                 window.location.replace("{{ url('/puesto') }}/"+puesto);
             @elseif($modo=='incidencia')
                 puesto=url.split('/').pop();
-                console.log('Dinamica de mantenimiento para '+puesto);
+                loguear('Dinamica de mantenimiento para '+puesto);
                 window.location.replace("{{ url('/incidencias/get_detalle') }}/"+puesto);
             
             @endif
             }
 
         function requestPermission(){
-            console.log('requestPermission');
+            //loguear('requestPermission');
             const scanRegionCamera = document.getElementById('scanTypeCamera');
             const scanButton = document.getElementById('scanButton');
             const stopButton = document.getElementById('stopButton');
@@ -207,11 +216,11 @@
                 document.getElementById('qr').appendChild(placeholder);
             }
             const setFeedback = message => {
-                console.log(message);
+                //loguear(message);
                 //feedbackContainer.innerHTML = message;
             }
             const setStatus = status => {
-               console.log('Status: '+ status);
+                loguear('Status: '+ status);
             }
 
             function resetmessage(){
@@ -228,7 +237,7 @@
                 lastMessageFound = qrCodeMessage;
                 //lastMessageFound = qrCodeMessage.toLocaleLowerCase();
                 //const result = document.createElement('div');
-                console.log(`[${codesFound}] Nuevo QR: ${qrCodeMessage}`);
+                loguear(`[${codesFound}] Nuevo QR: ${qrCodeMessage}`);
                 playaudio();
                 geturl(lastMessageFound);
                 //setTimeout(resetmessage, 5000);
@@ -274,29 +283,35 @@
 
             if (cameras && cameras.length) {
                 var camara = cameras[0].id;
-               console.log(cameras);
+                //loguear('Cameras '+JSON.stringify(cameras));
             }
 
             if (cameras.length == 0) {
-                console.log('Error camaras '+err);
+                loguear('Error camaras1 '+err);
                 $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> No se han encotnrado camaras');
                 $('#mensaje_error').show();
             }
             for (var i = 0; i < cameras.length; i++) {
                 const camera = cameras[i];
                 const value = camera.id;
-                const name = camera.label == null ? value : camera.label;
+                const name = (camera.label == null || camera.label=='') ? 'Camara '+(i+1) : camera.label;
                 const option = document.createElement('option');
                 option.value = value;
                 option.innerHTML = name;
+                //loguear('ID: '+value);
                 cameraSelection.appendChild(option);
             }
 
+
             def_value=getCookie('cam_def');    
-            console.log('def '+def_value);       
-            if(def_value!=null){
+            //loguear('def '+def_value);       
+            if(def_value!=null && def_value!=''){
                 $('#cameraSelection').val(def_value);
-            }   
+            } else {
+                $('#cameraSelection').val(cameras[cameras.length-1].id);
+            }
+            $('#cameraSelection').change();
+            //loguear(cameras[cameras.length-1].id);
 
             scan_Button.addEventListener('click', () => {
                 if (currentScanTypeSelection != SCAN_TYPE_CAMERA) return;
@@ -332,10 +347,11 @@
             html5QrCode.clear();
             setPlaceholder();
             removeClass(scanRegionCamera, "disabled");
-            setFeedback("Click 'Start Scanning' to <b>start scanning QR Code</b>");
+            //setFeedback("Click 'Start Scanning' to <b>start scanning QR Code</b>");
             setupCameraOption();
 
-            const cameraId = cameraSelection.value;
+            const cameraId = $('#cameraSelection').val();
+
             // Start scanning.
             html5QrCode.start(
                 cameraId,
@@ -354,7 +370,7 @@
                 });
 
             }).catch(err => {
-                console.log('Error camaras '+err);
+                loguear('Error camaras2 '+err);
                 $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> No se ha podido acceder a la camara. <br> Debe dar permiso de acceso a la camara a QRClean');
                 $('#mensaje_error').show();
                 $('#btn_requestPermission').show();

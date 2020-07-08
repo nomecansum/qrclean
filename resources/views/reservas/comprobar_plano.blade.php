@@ -91,38 +91,8 @@
         $('#frm_contador').submit();
     })
 
-    $('.boton_modo').click(function(){
-        $('#loadfilter').show();
-        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $(this).data('href')}, function(data, textStatus, xhr) {
-            $('#detalles_reserva').html(data);
-        });
-    })
+    $('.boton_modo').click(boton_modo_click);
 
-    function recolocar_puestos(posiciones){
-        $('.container').each(function(){
-            plano=$(this);
-            //console.log(plano.data('posiciones'));
-            
-            $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
-                
-                puesto=$('#puesto'+item.id);
-                console.log(item);
-                puesto.css('top',plano.height()*item.offsettop/100);
-                puesto.css('left',plano.width()*item.offsetleft/100);
-            });
-
-        }) 
-    }
-
-        
-
-    $(window).resize(function(){
-        recolocar_puestos();
-    })
-
-    $('.mainnav-toggle').click(function(){
-        recolocar_puestos();
-    })
-    recolocar_puestos();
+   setTimeout(recolocar_puestos, 800);
     
 </script>

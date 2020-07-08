@@ -71,10 +71,5 @@
         $('#frm_contador').submit();
     })
 
-    $('.boton_modo').click(function(){
-        $('#loadfilter').show();
-        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $(this).data('href')}, function(data, textStatus, xhr) {
-            $('#detalles_reserva').html(data);
-        });
-    })
+    $('.boton_modo').click(boton_modo_click);
 </script>

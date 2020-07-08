@@ -98,10 +98,10 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
                             {{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
 							<td style="background-color: {{$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip  pt-3 td_calendar {{ $estado }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
-                                <span class="font-bold" style="font-size: 3vw; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
+                                <span class="font-bold" style="font-size: 2.5vw; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
 								<span style="color: #fff; cursor: pointer">
 									@if($dia)
-									<b class="text-white" style="font-size: 1vw">{!! $descrip !!}</b><br>
+									<b class="text-white" style="font-size: 0.9vw">{!! $descrip !!}</b><br>
 									@endif
 								</span>
 							</td>

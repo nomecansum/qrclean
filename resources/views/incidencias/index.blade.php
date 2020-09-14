@@ -97,7 +97,7 @@
 									{{ $inc->des_incidencia}}
 									<div class="floating-like-gmail mt-2 w-100" style="width: 100%">
 										@if (checkPermissions(['Incidencias'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $inc->id_incidencia }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $inc->id_incidencia }})"><span class="fa fa-eye pt-1" aria-hidden="true"></span> Ver</a>@endif
-                                        @if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-id="{{ $inc->id_incidencia}}" id="boton-cierre{{ $inc->id_incidencia }}" onclick="cierre_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-thumbs-up pt-1" aria-hidden="true"></span> Cerrar</a>@endif
+                                        @if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-cierre{{ $inc->id_incidencia }}" onclick="cierre_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-thumbs-up pt-1" aria-hidden="true"></span> Cerrar</a>@endif
                                         @if (checkPermissions(['Incidencias'],["D"]))<a href="#eliminar-incidencia-{{$inc->id_incidencia}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
 										{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$inc->id_incidencia}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
 									</div>
@@ -132,7 +132,7 @@
 		<div class="modal-dialog modal-md">
 			<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
 				<div class="modal-header"><i class="mdi mdi-thumb-up text-success mdi-48px"></i><b>
-					Cerrar incidencia {{ $inc->des_incidencia}}
+					Cerrar incidencia <span id="des_incidencia_cerrar"></span>
 				</div>
 				<div class="modal-body" id="body_cierre">
 					
@@ -203,6 +203,7 @@
 	}
    
    function cierre_incidencia(id){
+	    $('#des_incidencia_cerrar').html($(this).data('desc'));
 		$('#body_cierre').load("{{ url('/incidencias/form_cierre/') }}/"+id);
    }
 

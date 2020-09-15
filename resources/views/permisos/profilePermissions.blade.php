@@ -53,7 +53,7 @@
 					$cuenta_secciones=$secciones->where('des_grupo',$grupo->des_grupo)->count();	
 				@endphp		
 				<li class="{{ ($primero===true) ? "active" :"" }}">
-					<a data-toggle="tab" href="#{{ $grupo->des_grupo }}" aria-expanded="true"><i class="{{ $grupo->icono }}"></i></span>&nbsp;&nbsp;{{ $grupo->des_grupo }} <span class="badge badge-purple">{{ $cuenta_secciones }}</span></a>
+					<a data-toggle="tab" href="#{{  str_replace(" ","_",$grupo->des_grupo) }}" aria-expanded="true"><i class="{{ $grupo->icono }}"></i></span>&nbsp;&nbsp;{{ $grupo->des_grupo }} <span class="badge badge-purple">{{ $cuenta_secciones }}</span></a>
 				</li>
 				@php $primero=false;	@endphp
 			@endforeach
@@ -62,7 +62,7 @@
 		<div class="tab-content" style="overflow: auto; overflow-y: hidden;">
 			@php $primero=true;	@endphp
                 @foreach($grupos as $grupo)
-                <div class="tab-pane {{ ($primero===true) ? "active" :"" }}  fade in" id="{{ $grupo->des_grupo }}" role="tabpanel">
+                <div class="tab-pane {{ ($primero===true) ? "active" :"" }}  fade in" id="{{ str_replace(" ","_",$grupo->des_grupo) }}" role="tabpanel">
                         @php $primero=false;	@endphp
                         <p class="text-main text-semibold">{{ $grupo->des_grupo }}</p>
                         <table class="table table-responsive table-hover   table-striped table-bordered mr-4" style="font-size:12px">

@@ -1,6 +1,6 @@
 <div class="panel" id="editor">
 	@php
-	
+		//dd($c);
 	@endphp
     <div class="panel">
         <div class="panel-heading">
@@ -27,19 +27,7 @@
 						
 					<div class="row">
 						
-						<div class="col-sm-3 text-center mt-3">
-							<img src="{{ isset($c) ? url('/img/clientes/images/',$c->img_logo) : ''}}" style="width: 100%" alt="" class="img-fluid ml-0">
-							<div class="form-group">
-								<label>Imagen</label><br>
-								<div class="custom-file">
-									<input type="file" accept=".jpg,.png,.gif,.svg" class="form-control  custom-file-input" name="img_logo" id="img_logo" lang="es">
-									<label class="custom-file-label" for="img_logo"></label>
-								</div>
-							</div>
-							
-							
-							
-						</div>
+						
 						<div class="col-sm-9">
 							<div class="row">
 								<div class="col-sm-6">
@@ -67,8 +55,44 @@
 							
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-md-12 p-b-10">
+							<p class="text-main text-bold text-uppercase text-left">Logos</p>
+						</div>
+					</div>
+					<div class="row mb-0">
+						<div class="col-md-6 text-center bg-gray-light pad-all">
+							<img src="img/img_logo_grande.png" style="width: 50px"> Logo grande (Home, informes)</label>
+						</div>
+						<div class="col-md-6 text-center mb-0 bg-gray-light pad-all">
+							<img src="img/img_logo_menu.png"  style="width: 50px"> Logo pequeño (Menu)
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 text-center b-all">
+							<img src="{{ isset($c) ? url('/img/clientes/images/',$c->img_logo) : ''}}" style="height: 150px; margin-top: 50px" alt="" class="img-fluid ml-0">
+							<div class="form-group">
+
+								<div class="custom-file">
+									<input type="file" accept=".jpg,.png,.gif,.svg" class="form-control  custom-file-input" name="img_logo" id="img_logo" lang="es">
+									<label class="custom-file-label" for="img_logo"></label>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 text-center b-all">
+							<img src="{{ isset($c) ? url('/img/clientes/images/',$c->img_logo_menu) : ''}}" style="height: 150px;  margin-top: 50px" alt="" class="img-fluid ml-0">
+							<div class="form-group">
+								<div class="custom-file">
+									<input type="file" accept=".jpg,.png,.gif,.svg" class="form-control  custom-file-input" name="img_logo_menu" id="img_logo_menu" lang="es">
+									<label class="custom-file-label" for="img_logo_menu"></label>
+								</div>
+							</div>
+						</div>
+					</div>
 					<input type="hidden" name="theme_type" id="theme_type" value="{{ $config->theme_type }}"> 
 					<input type="hidden" name="theme_name" id="theme_name"  value="{{ $config->theme_name }}"> 
+					<br>
+					<br>
 					<div class="row b-all rounded  p-b-10">
 						<div class="col-md-12 p-b-10">
 							<p class="text-main text-bold text-uppercase text-left">Configuracion de cliente</p>

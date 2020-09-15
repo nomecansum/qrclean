@@ -3,8 +3,8 @@
 <!--================================-->
 <div class="navbar-header">
     <a href="{{url('/')}}" class="navbar-brand">
-        @if(session('logo_cliente'))
-        <img src="{{ url('/img/clientes/images/'.session('logo_cliente')) }}" style="width: 57px; height: 59px" alt="" class="brand-icon">
+        @if(session('logo_cliente_menu'))
+        <img src="{{ url('/img/clientes/images/'.session('logo_cliente_menu')) }}" style="width: 57px; height: 59px" alt="" class="brand-icon">
         @else   
         <img src="/img/logo.png" alt="Spotlinker" class="brand-icon">
         @endif

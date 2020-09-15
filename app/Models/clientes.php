@@ -37,6 +37,7 @@ class clientes extends Model
                   'cod_tipo_cliente',
                   'fec_borrado',
                   'img_logo',
+                  'img_logo_menu',
                   'locked',
                   'mca_appmovil',
                   'mca_vip',

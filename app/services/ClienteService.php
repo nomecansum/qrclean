@@ -60,10 +60,10 @@ class ClienteService
         }     
     }
 
-    public function subir_imagen($r){
+    public function subir_imagen($r,$campo){
         $img_logo='';
-        if ($r->hasFile('img_logo')) {
-            $file = $r->file('img_logo');
+        if ($r->hasFile($campo)) {
+            $file = $r->file($campo);
             $path = public_path().'/img/clientes/images/';
             $img_logo = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
             $file->move($path,$img_logo);
@@ -74,7 +74,10 @@ class ClienteService
     public function insertar($r){
         $cl=new clientes;
         if ($r->hasFile('img_logo')) {
-            $cl->img_logo=$this->subir_imagen($r);
+            $cl->img_logo=$this->subir_imagen($r,'img_logo');
+        }
+        if ($r->hasFile('img_logo_menu')) {
+            $cl->img_logo_menu=$this->subir_imagen($r,'img_logo_menu');
         }
         $cl->nom_cliente = $r->nom_cliente;
         $cl->nom_contacto = $r->nom_contacto;
@@ -90,7 +93,10 @@ class ClienteService
     public function actualizar($r){
         $cl=clientes::find($r->id);
         if ($r->hasFile('img_logo')) {
-            $cl->img_logo=$this->subir_imagen($r);
+            $cl->img_logo=$this->subir_imagen($r,'img_logo');
+        }
+        if ($r->hasFile('img_logo_menu')) {
+            $cl->img_logo_menu=$this->subir_imagen($r,'img_logo_menu');
         }
         $cl->nom_cliente = $r->nom_cliente;
         $cl->nom_contacto = $r->nom_contacto;

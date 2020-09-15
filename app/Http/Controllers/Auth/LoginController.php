@@ -64,6 +64,7 @@ class LoginController extends Controller
             }
             session(['CL'=>(array)$config_cliente]);
             session(['logo_cliente'=>$cliente->img_logo]);
+            session(['logo_cliente_menu'=>$cliente->img_logo_menu]);
 
             auth()->user()->last_login = Carbon::now();
             auth()->user()->save();

@@ -105,10 +105,7 @@ class LoginController extends Controller
                     id_perfil=".auth()->user()->cod_nivel.") sq
             GROUP BY sq.des_seccion"));
             session(['P' => $permisos]);
-            
-            
             //session(['CL'=>$config_cliente]);
-
             return redirect ('/');
         }else{
             return response()->json(["result"=>"ERROR", "message"=>"Credenciales incorrectas, intente de nuevo"],422);

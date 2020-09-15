@@ -62,10 +62,10 @@
 					</div>
 					<div class="row mb-0">
 						<div class="col-md-6 text-center bg-gray-light pad-all">
-							<img src="img/img_logo_grande.png" style="width: 50px"> Logo grande (Home, informes)</label>
+							<img src="img/img_logo_grande.png" style="width: 50px"> Logo grande (Home, informes) <span style="font-size:8px"> 500px</span></label>
 						</div>
 						<div class="col-md-6 text-center mb-0 bg-gray-light pad-all">
-							<img src="img/img_logo_menu.png"  style="width: 50px"> Logo pequeño (Menu)
+							<img src="img/img_logo_menu.png"  style="width: 50px"> Logo pequeño (Menu) <span style="font-size:8px">55X55px</span>
 						</div>
 					</div>
 					<div class="row">

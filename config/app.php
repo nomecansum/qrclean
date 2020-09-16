@@ -172,8 +172,6 @@ return [
         /*
          * Package Service Providers...
          */
-
-        Barryvdh\Debugbar\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 
         /*

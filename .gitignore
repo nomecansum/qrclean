@@ -31,5 +31,4 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 *.zip
-public/img/clientes/
-/public/img/plantas/
+

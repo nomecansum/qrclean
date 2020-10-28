@@ -33,3 +33,4 @@ Homestead.json
 *.zip
 public/img/clientes/
 /public/img/plantas/
+public/img/users/

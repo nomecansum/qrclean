@@ -130,6 +130,9 @@ return [
     //Rutas de los WKLHTML2PDF
     'BIN_SNAPPY_PDF'=>env('BIN_SNAPPY_PDF',"C:/Progra~1/wkhtmltopdf/bin/wkhtmltopdf.exe"),
     'BIN_SNAPPY_IMG'=>env('BIN_SNAPPY_IMG',"C:/Progra~1/wkhtmltopdf/bin/wkhtmltoimage.exe"),
+
+    'img_disk'=>env('img_disk',"local"),
+    'upload_disk'=>env('upload_disk',"local"),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

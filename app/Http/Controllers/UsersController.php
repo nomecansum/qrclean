@@ -13,6 +13,7 @@ use DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Storage;
 use Auth;
 
 class UsersController extends Controller
@@ -71,9 +72,10 @@ class UsersController extends Controller
         try {
              if ($request->hasFile('img_usuario')) {
                 $file = $request->file('img_usuario');
-                $path = public_path().'/img/users/';
+                $path = '/img/users/';
                 $img_usuario = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                $file->move($path,$img_usuario);
+                //$file->move($path,$img_usuario);
+                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_usuario);
             }
 
             $data['img_usuario']=$img_usuario;

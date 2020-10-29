@@ -267,11 +267,11 @@ class IncidenciasController extends Controller
                     
                     $file = $r->file('img_attach'.$i);
                     $path = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
-                    if(config('app.upload_disk')!='s3'){
+
                         if(!File::exists($path)) {
                             File::makeDirectory($path);
                         }
-                    }
+
                     $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
                     // $img = Image::make($file);
                     // $img->resize(1000, null, function ($constraint) {

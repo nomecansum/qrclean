@@ -266,7 +266,8 @@ class IncidenciasController extends Controller
                 if ($r->hasFile('img_attach'.$i)) {
                     
                     $file = $r->file('img_attach'.$i);
-                    $path = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
+                    $path = config('app.ruta_public').'/uploads/incidencias/'.$puesto->id_cliente;
+                    $path_local = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
 
                         if(!File::exists($path)) {
                             File::makeDirectory($path);
@@ -279,7 +280,7 @@ class IncidenciasController extends Controller
                     // })->save($path.'/'.$$var);
                     
                     Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
-                    $file->move($path,$$var);
+                    $file->move($path_local,$$var);
                 }
                 $data[$var]=$$var;
             }

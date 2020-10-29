@@ -259,7 +259,7 @@ class IncidenciasController extends Controller
         $data=$this->getDataincidencia($r);
         $puesto=puestos::find($r->id_puesto);
         $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
-        try{
+        
             for ($i=0; $i <3 ; $i++) { 
                 $var="img".$i;
                 $$var='';
@@ -269,8 +269,8 @@ class IncidenciasController extends Controller
                     $path = config('app.ruta_public').'/uploads/incidencias/'.$puesto->id_cliente;
                     $path_local = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
 
-                        if(!File::exists($path)) {
-                            File::makeDirectory($path);
+                        if(!File::exists($path_local)) {
+                            File::makeDirectory($path_local);
                         }
 
                     $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
@@ -316,7 +316,7 @@ class IncidenciasController extends Controller
                 ];
             }
            
-            
+        try{    
             
         } catch (Exception $exception) {
 

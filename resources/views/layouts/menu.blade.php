@@ -26,7 +26,7 @@
                 <div class="profile-wrap text-center">
                     <div class="pad-btm">
                         @if(Auth::user()->img_usuario!="" && file_exists( public_path().'/img/users/'.Auth::user()->img_usuario))
-                        <img class="img-circle img-md" src="{{url('/img/users/'.Auth::user()->img_usuario)}}" alt="Profile Picture">
+                        <img class="img-circle img-md" src="{{Storage::disk(config('app.img_disk'))->url('img/users/'.Auth::user()->img_usuario)}}" alt="Profile Picture">
                         @else
                         {!! icono_nombre(Auth::user()->name) !!}
                         @endif

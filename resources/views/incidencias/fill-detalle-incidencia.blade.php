@@ -53,12 +53,12 @@
             <div class="row mt-3">
                 <div class="col-md-6">
                     @if($incidencia->img_attach1)
-                        <img src="{{ url('/uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}" style="width: 100%">
+                        <img src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}" style="width: 100%">
                     @endif
                 </div>
                 <div class="col-md-6">
-                    @if($incidencia->img_attach1)
-                        <img src="{{ url('/uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach2) }}" style="width: 100%">
+                    @if($incidencia->img_attach2)
+                        <img src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach2) }}" style="width: 100%">
                     @endif
                 </div>
             </div>

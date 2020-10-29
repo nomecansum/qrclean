@@ -133,6 +133,9 @@ return [
 
     'img_disk'=>env('img_disk',"local"),
     'upload_disk'=>env('upload_disk',"local"),
+    'ruta_public'=>env('ruta_public',public_path()),
+
+    'AWS_URL'=>env('AWS_URL','/'),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -171,6 +174,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Package Service Providers...

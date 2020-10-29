@@ -84,7 +84,7 @@
                         <tr class="hover-this" onclick="javascript: document.location='{{ route('users.users.edit', $users->id ) }}'">
                             <td class="center">
                                 @if (isset($users->img_usuario ) && $users->img_usuario!='')
-                                    <img src="{{ url('img/users/'.$users->img_usuario) }}" class="img-circle" style="height: 50px">
+                                    <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$users->img_usuario) }}" class="img-circle" style="height: 50px">
                                 @else
                                     {!! icono_nombre($users->name) !!}
                                 @endif

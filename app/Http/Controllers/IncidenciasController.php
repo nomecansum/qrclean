@@ -243,8 +243,8 @@ class IncidenciasController extends Controller
         $rules = [
             'des_incidencia' => 'required|string|min:1|max:500',
             'txt_incidencia' => 'nullable|string|min:1|max:65000',
-            'img_attach1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:4096',
-            'img_attach2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:4096',
+            'img_attach1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:14096',
+            'img_attach2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:14096',
             'id_puesto'=> 'required',
             'img1'=>'nullable',
             'img2'=>'nullable',
@@ -267,10 +267,18 @@ class IncidenciasController extends Controller
                     
                     $file = $r->file('img_attach'.$i);
                     $path = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
-                    if(!File::exists($path)) {
-                        File::makeDirectory($path);
+                    if(config('app.upload_disk')!='s3'){
+                        if(!File::exists($path)) {
+                            File::makeDirectory($path);
+                        }
                     }
                     $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+                    // $img = Image::make($file);
+                    // $img->resize(1000, null, function ($constraint) {
+                    //     $constraint->aspectRatio();
+                    // })->save($path.'/'.$$var);
+                    
+                    Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
                     $file->move($path,$$var);
                 }
                 $data[$var]=$$var;
@@ -290,15 +298,25 @@ class IncidenciasController extends Controller
             //Marcamos el puesto como chungo
             $puesto->id_estado=6;
             $puesto->save();
-
-            $this->post_procesado_incidencia($inc);
+            try{
+                $this->post_procesado_incidencia($inc);
+                savebitacora('Incidencia de tipo '.$tipo->des_tipo_incidencia. ' '.$r->des_incidencia.' creada por '.Auth::user()->name,"Incidencias","save","OK");
+                return [
+                    'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
+                    'message' => "Incidencia de tipo ".$tipo->des_tipo_incidencia.' creada. Muchas gracias',
+                    'url' => url('/')
+                ];
+            } catch(\Exception $exception){
+                savebitacora('ERROR: Ocurrio un error en el postprocesado de incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(). ' La incidencia se ha registrado correctamente pero no se ha podido procesar la accion de notificacion programada' ,"Incidencias","save","ERROR");
+                return [
+                    'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
+                    'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
+                    //'url' => url('sections')
+                ];
+            }
+           
             
-            savebitacora('Incidencia de tipo '.$tipo->des_tipo_incidencia. ' '.$r->des_incidencia.' creada por '.Auth::user()->name,"Incidencias","save","OK");
-            return [
-                'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
-                'message' => "Incidencia de tipo ".$tipo->des_tipo_incidencia.' creada. Muchas gracias',
-                'url' => url('/')
-            ];
+            
         } catch (Exception $exception) {
 
             savebitacora('ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","save","ERROR");

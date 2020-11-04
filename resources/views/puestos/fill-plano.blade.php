@@ -5,7 +5,7 @@
 @if(isset($pl->img_plano))
 {{--  {!! json_encode($pl->posiciones) !!}  --}}
     <div class="row container" id="plano{{ $pl->id_planta }}" data-posiciones="" data-id="{{ $pl->id_planta }}">
-        <img src="{{ url('img/plantas/'.$pl->img_plano) }}" style="width: 100%" id="img_fondo{{ $pl->id_planta }}">
+        <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$pl->img_plano) }}" style="width: 100%" id="img_fondo{{ $pl->id_planta }}">
         @php
             $left=0;
             $top=0;

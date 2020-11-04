@@ -75,9 +75,10 @@ class PlantasController extends Controller
         try {
             if ($request->hasFile('img_plano')) {
                 $file = $request->file('img_plano');
-                $path = public_path().'/img/plantas/';
+                $path = config('app.ruta_public').'/img/plantas/';
                 $img_planta = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                $file->move($path,$img_planta);
+                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_logo);
+                //$file->move($path,$img_planta);
                 $data['img_plano']=$img_planta;
             }
             plantas::create($data);
@@ -129,9 +130,9 @@ class PlantasController extends Controller
             validar_acceso_tabla($id,"plantas");
             if ($request->hasFile('img_plano')) {
                 $file = $request->file('img_plano');
-                $path = public_path().'/img/plantas/';
+                $path = config('app.ruta_public').'/img/plantas/';
                 $img_planta = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                $file->move($path,$img_planta);
+                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_logo);
                 $data['img_plano']=$img_planta;
             } 
             $plantas = plantas::findOrFail($id);

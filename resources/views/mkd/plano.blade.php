@@ -79,7 +79,7 @@
             @if(isset($plantas->img_plano))
             {{--  style="background-image: url('{{ url('img/plantas/'.$plantas->img_plano) }}'); background-repeat: no-repeat; background-size: contain;"  --}}
                 <div class="row container" id="plano" >
-                    <img src="{{ url('img/plantas/'.$plantas->img_plano) }}" style="width: 100%" id="img_fondo" class="container">
+                    <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="width: 100%" id="img_fondo" class="container">
                     @php
                         $left=0;
                         $top=0;

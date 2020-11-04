@@ -83,7 +83,7 @@
                             <td>{{ $plantas->des_planta }}</td>
                             <td>{{ $plantas->des_edificio }}</td>
                             <td>{{ $plantas->nom_cliente }}</td>
-                            <td class="text-center">@if(isset($plantas->img_plano))<img src="{{ url('img/plantas/'.$plantas->img_plano) }}" style="height: 50px">@endif</td>
+                            <td class="text-center">@if(isset($plantas->img_plano))<img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="height: 50px">@endif</td>
                             <td>
                                 <div class="btn-group btn-group-xs pull-right floating-like-gmail mt-3" role="group">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}

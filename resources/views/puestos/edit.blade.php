@@ -11,6 +11,8 @@
                 <div class="row">
                     <input type="hidden" name="id_puesto" value="{{ $puesto->id_puesto }}">
                     <input type="hidden" name="id_cliente" value="{{ Auth::user()->id_cliente }}">
+                    <input type="hidden" name="token" value="{{ $puesto->id_puesto!=0?$puesto->token:Illuminate\Support\Str::random(50) }}">
+
                     {{csrf_field()}}
                     <div class="form-group col-md-2">
                         <label for="cod_puesto">ID</label>

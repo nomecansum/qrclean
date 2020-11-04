@@ -78,7 +78,7 @@ class PlantasController extends Controller
                 $file = $request->file('img_plano');
                 $path = config('app.ruta_public').'/img/plantas/';
                 $img_planta = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_logo);
+                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_planta);
                 //$file->move($path,$img_planta);
                 $data['img_plano']=$img_planta;
             }
@@ -133,7 +133,7 @@ class PlantasController extends Controller
                 $file = $request->file('img_plano');
                 $path = config('app.ruta_public').'/img/plantas/';
                 $img_planta = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_logo);
+                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_planta);
                 $data['img_plano']=$img_planta;
             } 
             $plantas = plantas::findOrFail($id);

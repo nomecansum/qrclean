@@ -76,9 +76,8 @@ class CustomersController extends Controller
         try {
             //Insertar el cliente
             $c = $clsvc->insertar($r);
-            
             $config= new config_clientes;
-            $config->id_cliente=$c->id_cliente;
+            $config->id_cliente=$c;
             
             $config->update($r->all());
             $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';

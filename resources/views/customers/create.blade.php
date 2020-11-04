@@ -89,23 +89,23 @@
 							</div>
 						</div>
 					</div>
-					<input type="hidden" name="theme_type" id="theme_type" value="{{ $config->theme_type }}"> 
-					<input type="hidden" name="theme_name" id="theme_name"  value="{{ $config->theme_name }}"> 
+					<input type="hidden" name="theme_type" id="theme_type" value="{{ isset($config->theme_type)?$config->theme_type:'navy' }}"> 
+					<input type="hidden" name="theme_name" id="theme_name"  value="{{ isset($config->theme_name)?$config->theme_name:'e' }}"> 
 					<br>
 					<br>
 					<div class="row b-all rounded  p-b-10">
 						<div class="col-md-12 p-b-10">
 							<p class="text-main text-bold text-uppercase text-left">Configuracion de cliente</p>
 							<div class="col-md-2">
-								<input type="checkbox" class="form-control  magic-checkbox" name="mca_restringir_usuarios_planta"  id="mca_restringir_usuarios_planta" value="S" {{ $config->mca_restringir_usuarios_planta=='S'?'checked':'' }}> 
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_restringir_usuarios_planta"  id="mca_restringir_usuarios_planta" value="S" {{ isset($config->mca_restringir_usuarios_planta)&&$config->mca_restringir_usuarios_planta=='S'?'checked':'' }}> 
 								<label class="custom-control-label"   for="mca_restringir_usuarios_planta">Restringir plantas usuarios</label>
 							</div>
 							<div class="col-md-2">
-								<input type="checkbox" class="form-control  magic-checkbox" name="mca_limpieza"  id="mca_limpieza" value="S" {{ $config->mca_limpieza=='S'?'checked':'' }}> 
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_limpieza"  id="mca_limpieza" value="S" {{ isset($config->mca_limpieza)&&$config->mca_limpieza=='S'?'checked':'' }}> 
 								<label class="custom-control-label"   for="mca_limpieza">Funcion de limpieza</label>
 							</div>
 							<div class="col-md-2">
-								<input type="checkbox" class="form-control  magic-checkbox" name="mca_permitir_anonimo"  id="mca_permitir_anonimo" value="S" {{ $config->mca_permitir_anonimo=='S'?'checked':'' }}> 
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_permitir_anonimo"  id="mca_permitir_anonimo" value="S" {{ isset($config->mca_permitir_anonimo)&&$config->mca_permitir_anonimo=='S'?'checked':'' }}> 
 								<label class="custom-control-label"   for="mca_permitir_anonimo">Permitir escaneo anónimo</label>
 							</div>
 						</div>
@@ -378,6 +378,12 @@
         $('#demo-btn-close-settings').on('click', function () {
             demoSetBtn.trigger('click')
         });
+
+		$('input[type="file"]').change(function(e){
+			var fileName = e.target.files[0].name;
+			$(this).next('label').html(fileName);
+			//$('.custom-file-label').html(fileName);
+		});
 	
 	</script>
 @include('layouts.scripts_panel')

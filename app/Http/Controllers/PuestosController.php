@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 Use Carbon\Carbon;
 use PDF;
+use Illuminate\Support\Str;
 
 class PuestosController extends Controller
 {
@@ -343,5 +344,19 @@ class PuestosController extends Controller
             'mensaje' => 'Cambiado el permiso de reserva a '.$estado.' para los puestos '.implode(', ',$r->lista_id),
             //'url' => url('puestos')
         ];
+    }
+
+    public function generar_token(){
+
+        $puestos=DB::table('puestos')
+            ->wherenull('token')
+            ->get();
+
+        foreach($puestos as $p){
+            DB::table('puestos')->where('id_puesto',$p->id_puesto)->update([
+                'token'=>Str::random(50)
+            ]);
+        }
+
     }
 }

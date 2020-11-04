@@ -259,7 +259,7 @@ class IncidenciasController extends Controller
         $data=$this->getDataincidencia($r);
         $puesto=puestos::find($r->id_puesto);
         $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
-        
+        try{    
             for ($i=0; $i <3 ; $i++) { 
                 $var="img".$i;
                 $$var='';
@@ -312,11 +312,11 @@ class IncidenciasController extends Controller
                 return [
                     'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
                     'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
-                    //'url' => url('sections')
+                    'url' => url('/')
                 ];
             }
            
-        try{    
+       
             
         } catch (Exception $exception) {
 

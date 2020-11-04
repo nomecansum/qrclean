@@ -52,7 +52,7 @@ class CustomersController extends Controller
             ->first();
         }
         $config=DB::table('config_clientes')->where('id_cliente',$id)->first();
-        if(!isset($config)){
+        if(!isset($config) && $id!=0){
             $config= new config_clientes;
             $config->id_cliente=$id;
             $config->save();

@@ -70,7 +70,7 @@
 					</div>
 					<div class="row">
 						<div class="col-md-6 text-center b-all">
-							<img src="{{ isset($c) ? Storage::disk(config('app.img_disk'))->url('/img/clientes/images/',$c->img_logo) : ''}}" style="height: 150px; margin-top: 50px" alt="" class="img-fluid ml-0">
+							<img src="{{ isset($c) ? Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$c->img_logo) : ''}}" style="height: 150px; margin-top: 50px" alt="" class="img-fluid ml-0">
 							<div class="form-group">
 
 								<div class="custom-file">
@@ -80,7 +80,7 @@
 							</div>
 						</div>
 						<div class="col-md-6 text-center b-all">
-							<img src="{{ isset($c) ? Storage::disk(config('app.img_disk'))->url('/img/clientes/images/',$c->img_logo_menu) : ''}}" style="height: 150px;  margin-top: 50px" alt="" class="img-fluid ml-0">
+							<img src="{{ isset($c) ? Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$c->img_logo_menu) : ''}}" style="height: 150px;  margin-top: 50px" alt="" class="img-fluid ml-0">
 							<div class="form-group">
 								<div class="custom-file">
 									<input type="file" accept=".jpg,.png,.gif,.svg" class="form-control  custom-file-input" name="img_logo_menu" id="img_logo_menu" lang="es">

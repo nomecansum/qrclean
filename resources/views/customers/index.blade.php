@@ -77,7 +77,7 @@
 								<td>{{$cus->id_cliente}}</td>
 								<td class="text-center no-sort">
 									@isset($cus->img_logo)
-										<img src="{{Storage::disk(config('app.img_disk'))->url('img/clientes/images/',$cus->img_logo)}}" width="40px" alt="">
+										<img src="{{Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$cus->img_logo)}}" width="40px" alt="">
 									@endif
 								</td>
 								<td>{{$cus->nom_cliente}}</td>

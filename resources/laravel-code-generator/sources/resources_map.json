@@ -93,5 +93,15 @@
         "model-name": "causas_cierre",
         "resource-file": "causas_cierres.json",
         "table-name": "causas_cierre"
+    },
+    {
+        "model-name": "tags",
+        "resource-file": "tags.json",
+        "table-name": "tags"
+    },
+    {
+        "model-name": "tags_puestos",
+        "resource-file": "tags_puestos.json",
+        "table-name": "tags_puestos"
     }
 ]

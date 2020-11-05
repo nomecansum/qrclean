@@ -81,7 +81,7 @@
                     </thead>
                     <tbody>
                     @foreach($usersObjects as $users)
-                        <tr class="hover-this" onclick="javascript: document.location='{{ route('users.users.edit', $users->id ) }}'">
+                        <tr class="hover-this" data-id="{{ $users->id }}" data-href="{{ route('users.users.edit', $users->id ) }}">
                             <td class="center">
                                 @if (isset($users->img_usuario ) && $users->img_usuario!='')
                                     <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$users->img_usuario) }}" class="img-circle" style="height: 50px">
@@ -105,10 +105,10 @@
                                 <form method="POST" action="{!! route('users.users.destroy', $users->id) !!}" accept-charset="UTF-8">
                                 <input name="_method" value="DELETE" type="hidden">
                                 {{ csrf_field() }}
-                                    <div class="btn-group btn-group-xs pull-right floating-like-gmail" role="group">
-                                        <a href="{{ route('users.users.edit', $users->id ) }}" class="btn btn-info  add-tooltip" title="Editar Usuario"  style="float: left"><span class="fa fa-pencil pt-1" ></span></a>
-                                        <button type="submit" class="btn btn-danger add-tooltip" style="float: left" title="Borrar usuario" onclick="if(confirm(&quot;¿Seguro que quiere borrar el usuario?.&quot;)){document.location='{{ url('users/delete/'.$users->id) }}'}"  style="float: right">
-                                            <span class="fa fa-trash"></span>
+                                    <div class="pull-right floating-like-gmail" role="group">
+                                        <a href="{{ route('users.users.edit', $users->id ) }}" class="btn btn-xs btn-info  add-tooltip" title="Editar Usuario"  style="float: left"><span class="fa fa-pencil pt-1" ></span> Edit</a>
+                                        <button type="submit" class="btn btn-xs btn-danger add-toolti ml-1" style="float: left" title="Borrar usuario" onclick="if(confirm(&quot;¿Seguro que quiere borrar el usuario?.&quot;)){document.location='{{ url('users/delete/'.$users->id) }}'}"  style="float: right">
+                                            <span class="fa fa-trash"></span> Del
                                         </button>
                                     </div>
                                 </form>
@@ -127,5 +127,8 @@
     <script>
         $('.configuracion').addClass('active active-sub');
 	    $('.usuarios').addClass('active-link');
+        $('.hover-this').click(function(){
+            window.open($(this).data('href'),'_self');
+        })
     </script>
 @endsection

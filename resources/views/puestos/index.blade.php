@@ -5,7 +5,7 @@
 @endsection
 
 @section('styles')
-
+    <link href="{{ asset('/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('breadcrumb')
@@ -225,6 +225,7 @@
 @endsection
 
 @section('scripts')
+<script src="{{ asset('/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js') }}"></script>
 <script>
 
     //Menu

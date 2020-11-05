@@ -9,6 +9,8 @@ use App\Models\logpuestos;
 use App\Models\rondas;
 use App\Models\puestos_ronda;
 use App\Models\limpiadores;
+use App\Models\tags;
+use App\Models\tags_puestos;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -82,11 +84,18 @@ class PuestosController extends Controller
         if($id==0){
             $puesto=new puestos;
             $puesto->id=0;
+            $tags="";
         } else {
             validar_acceso_tabla($id,"puestos");
             $puesto=puestos::find($id);
+            $tags=DB::table('tags')
+                ->join('tags_puestos','tags.id_tag','tags_puestos.id_tag')
+                ->where('tags_puestos.id_puesto',$id)
+                ->pluck('nom_tag')
+                ->toarray();
+            $tags=implode(",",$tags);
         }
-        return view('puestos.edit',compact('puesto'));
+        return view('puestos.edit',compact('puesto','tags'));
 
     }
 
@@ -112,7 +121,7 @@ class PuestosController extends Controller
     public function update(Request $r){
         try{
 
-            
+           
             if($r->id_puesto==0){
                 $puesto=puestos::create($r->all());
             } else {
@@ -123,6 +132,39 @@ class PuestosController extends Controller
             $puesto->mca_acceso_anonimo=$r->mca_acceso_anonimo??'N';
             $puesto->mca_reservar=$r->mca_reservar??'N';
             $puesto->save();
+
+            //Procesamos los tags
+            //Borramos los tags que tenga el puesto
+            tags_puestos::where('id_puesto',$puesto->id_puesto)->delete();
+            //Y ahora insertamos los que vengan
+            $arr_tags=explode(",",$r->tags);
+            foreach($arr_tags as $tag){
+                //Primero a ver si existe el tag para el cleinte
+                $esta_tag=tags::where('nom_tag',$tag)->where('id_cliente',$r->id_cliente)->first();
+
+                if(!isset($esta_tag)){
+                    // $esta_tag= new tags;
+                    // $esta_tag->id_cliente=$r->id_cliente;
+                    // $esta_tag->nom_tag=$tag;
+                    // $esta_tag->save();
+                    DB::table('tags')->insert([
+                        'nom_tag'=>$tag,
+                        'id_cliente'=>$r->id_cliente
+                    ]);
+                    $esta_tag=tags::where('nom_tag',$tag)->where('id_cliente',$r->id_cliente)->first();
+                }
+                DB::table('tags_puestos')->insert([
+                    'id_tag'=>$esta_tag->id_tag,
+                    'id_puesto'=>$puesto->id_puesto
+                ]);
+                
+                // $tag_add=new tags_puestos;
+                // $tag_add->id_tag=$esta_tag;
+                // $tag_add->id_puesto=$puesto->id_puesto;
+                // $tag_add->save();
+            }
+
+           
             savebitacora('puesto '.$r->etiqueta. ' actualizado',"Puestos","Update","OK");
             return [
                 'title' => "puestos",

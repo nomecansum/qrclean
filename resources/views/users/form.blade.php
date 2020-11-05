@@ -86,7 +86,7 @@
             <div class="col-12">
                 <div class="form-group  {{ $errors->has('img_usuario') ? 'has-error' : '' }}">
                     <label for="img_usuario" class="preview preview1" style="background-image: url();">
-                        <img src="{{ isset($users) ? url('img/users/',$users->img_usuario) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid">
+                        <img src="{{ isset($users) ? Storage::disk(config('app.img_disk'))->url('img/users/',$users->img_usuario) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid">
                     </label>
                     <div class="custom-file">
                         <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input" name="img_usuario" id="img_usuario" lang="es" value="{{ isset($users) ? $users->img_usuario : ''}}">

@@ -10,6 +10,7 @@
             <form  action="{{url('puestos/update')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax">
                 <div class="row">
                     <input type="hidden" name="id_puesto" value="{{ $puesto->id_puesto }}">
+                    <input type="hidden" name="tags" value="" id="tags">
                     <input type="hidden" name="id_cliente" value="{{ Auth::user()->id_cliente }}">
                     <input type="hidden" name="token" value="{{ $puesto->id_puesto!=0?$puesto->token:Illuminate\Support\Str::random(50) }}">
 
@@ -67,9 +68,13 @@
                         <input type="checkbox" class="form-control  magic-checkbox" name="mca_reservar"  id="mca_reservar" value="S" {{ $puesto->mca_reservar=='S'?'checked':'' }}> 
                         <label class="custom-control-label"   for="mca_reservar">Permitir reserva</label>
                     </div>
+                    <div class="form-group col-md-12">
+                        <label for="planta">Tags</label>
+                        <input type="text" class="edit_tag" data-role="tagsinput" placeholder="Type to add a tag" size="17" value="{{ $tags }}">
+                    </div>
                     <div class="row mt-2">
-						<div class="col-md-offset-11 col-md-12">
-							@if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary">GUARDAR</button>@endif
+						<div class="col-md-12   text-right">
+							@if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary mr-2">GUARDAR</button>@endif
 						</div>
 					</div>
                 </div>
@@ -111,4 +116,19 @@
         $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$(this).val())
     })
 
+    $('.edit_tag').on("keypress", function(e) {
+            /* ENTER PRESSED*/
+            if (e.keyCode == 13) {
+                /* FOCUS ELEMENT */
+                e.preventDefault();
+                
+            }
+            
+        });
+    
+    $('.edit_tag').tagsinput();
+
+    $('.edit_tag').on('itemAdded', function(event) {
+        $('#tags').val($(".edit_tag").tagsinput('items'));
+    });
  </script>

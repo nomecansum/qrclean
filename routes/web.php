@@ -100,10 +100,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::group(['prefix' => 'clientes'], function() {
         Route::get('/',['middleware'=>'permissions:["Clientes"],["R"]', 'uses' => 'CustomersController@index'])->name('clientes.index');
-        Route::get('create',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@create']);
+        Route::get('create',['middleware'=>'permissions:["Clientes"],["C"]', 'uses' => 'CustomersController@create']);
         Route::post('save',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@save']);
         Route::get('edit/{id}',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@edit']);
-        Route::post('update',['middleware'=>'permissions:["Clientes"],["C"]', 'uses' => 'CustomersController@update']);
+        Route::post('update',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@update']);
         Route::get('delete/{id}',['middleware'=>'permissions:["Clientes"],["D"]', 'uses' => 'CustomersController@delete']);
         Route::get('gen_key',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@gen_key']);
     });

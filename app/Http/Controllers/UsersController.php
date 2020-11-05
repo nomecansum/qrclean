@@ -236,11 +236,7 @@ class UsersController extends Controller
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',$user->id_cliente);
-                }
-            })
+            ->where('puestos.id_cliente',$user->id_cliente)
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
@@ -250,11 +246,7 @@ class UsersController extends Controller
         ->select('id_edificio','des_edificio')
         ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
         ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
-        ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('edificios.id_cliente',$user->id_cliente);
-            }
-        })
+        ->where('edificios.id_cliente',$user->id_cliente)
         ->get();
 
         $plantas_usuario=DB::table('plantas_usuario')->where('id_usuario',$id)->pluck('id_planta')->toarray();

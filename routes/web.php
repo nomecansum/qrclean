@@ -28,6 +28,7 @@ Route::post('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
 Route::view('/prueba_mail','emails.mail_incidencia');
 Route::view('/test','test');
 Route::get('/token','PuestosController@generar_token');
+Route::get('/pwd_hash/{pwd}','UsersController@pwd_hash');
 
 Route::group(['prefix' => 'MKD'], function () {
     Route::get('/plano/{planta}/{token}','MKDController@plano');

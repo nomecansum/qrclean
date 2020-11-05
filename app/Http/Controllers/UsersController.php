@@ -290,5 +290,10 @@ class UsersController extends Controller
         return;
     }
 
+    public function pwd_hash($pwd){
+
+        return Hash::make($pwd);
+    }
+
 }
 

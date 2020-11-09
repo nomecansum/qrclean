@@ -64,13 +64,52 @@ class ReservasController extends Controller
             ->where('id_usuario',Auth::user()->id)
             ->pluck('id_planta')
             ->toArray();
-        
 
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','reservas.id_usuario','users.id')
             ->where('puestos.id_edificio',$r->edificio)
             ->where('fec_reserva',adaptar_fecha($r->fecha)->format('Y-m-d'))
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
             ->get();
+
+        $asignados_usuarios=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')    
+            ->where('id_usuario','<>',Auth::user()->id)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+
+        $asignados_miperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
+            ->where('id_perfil',Auth::user()->cod_nivel)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+        
+        $asignados_nomiperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
+            ->where('id_perfil','<>',Auth::user()->cod_nivel)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+
         $puestos=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
@@ -81,12 +120,16 @@ class ReservasController extends Controller
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 }
             })
-            ->where(function($q){
+            ->where(function($q) use($plantas_usuario){
                 if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
                     $q->wherein('puestos.id_planta',$plantas_usuario??[]);
                 }
             })
-            ->where('puestos.mca_reservar','S')
+            ->where(function($q){
+                if(!checkPermissions(['Mostrar puestos no reservables'],['R'])){
+                    $q->where('puestos.mca_reservar','S');
+                }
+            })
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
@@ -104,7 +147,7 @@ class ReservasController extends Controller
             ->where('id_edificio',$r->edificio)
             ->get();
 
-        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios'));
+        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
     }
 
     public function save(Request $r){

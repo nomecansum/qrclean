@@ -72,8 +72,10 @@ class HomeController extends Controller
         if(Auth::check())
             {
                 $id_usuario=Auth::user()->id;
+                $cod_nivel=Auth::user()->cod_nivel;
             } else {
                 $id_usuario=0;
+                $cod_nivel=0;
             }
 
         if(!isset($p)){
@@ -96,6 +98,46 @@ class HomeController extends Controller
             if($reserva){
                 $respuesta=[
                     'mensaje'=>"PUESTO RESERVADO",
+                    'icono' => '<i class="fad fa-bring-forward"></i>',
+                    'color'=>'danger',
+                    'puesto'=>$p,
+                    'disponibles'=>$disponibles,
+                    'operativo' => 1
+                ];
+                return view('scan.result',compact('respuesta','reserva','config_cliente'));
+            }
+
+            //Aqui vemos si el puesto lo tiene alguien permanentemente asignado
+            $asignados_usuarios=DB::table('puestos_asignados')
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                ->join('users','users.id','puestos_asignados.id_usuario')  
+                ->where('puestos.id_puesto',$p->id_puesto)  
+                ->where('id_usuario','<>',$id_usuario)
+                ->get();
+
+            if($asignados_usuarios){
+                $respuesta=[
+                    'mensaje'=>"PUESTO ASIGNADO PERMANENTEMENTE",
+                    'icono' => '<i class="fad fa-bring-forward"></i>',
+                    'color'=>'danger',
+                    'puesto'=>$p,
+                    'disponibles'=>$disponibles,
+                    'operativo' => 1
+                ];
+                return view('scan.result',compact('respuesta','reserva','config_cliente'));
+            }
+            
+            //Y aqui si el pñuesto esta reserrvado para un perfil en concreto
+            $asignados_nomiperfil=DB::table('puestos_asignados')
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')   
+                ->where('puestos.id_puesto',$p->id_puesto)    
+                ->where('id_perfil','<>',$cod_nivel)
+                ->get();
+
+            if($asignados_nomiperfil){
+                $respuesta=[
+                    'mensaje'=>"PUESTO RESERVADO P",
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
@@ -193,8 +235,10 @@ class HomeController extends Controller
         if(Auth::check())
             {
                 $id_usuario=Auth::user()->id;
+                $cod_nivel=Auth::user()->cod_nivel;
             } else {
                 $id_usuario=0;
+                $cod_nivel=0;
             }
         
         $p=DB::table('puestos')
@@ -221,6 +265,37 @@ class HomeController extends Controller
                     'mensaje'=>"El puesto esta reservado por otro usuario"
                 ];
             }
+
+             //Aqui vemos si el puesto lo tiene alguien permanentemente asignado
+             $asignados_usuarios=DB::table('puestos_asignados')
+             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+             ->join('users','users.id','puestos_asignados.id_usuario')  
+             ->where('puestos.id_puesto',$p->id_puesto)  
+             ->where('id_usuario','<>',$id_usuario)
+             ->get();
+
+         if($asignados_usuarios){
+            $respuesta=[
+                'tipo'=>'ERROR',
+                'mensaje'=>"El puesto esta asignado permanentemente"
+            ];
+         }
+         
+         //Y aqui si el pñuesto esta reserrvado para un perfil en concreto
+         $asignados_nomiperfil=DB::table('puestos_asignados')
+             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')   
+             ->where('puestos.id_puesto',$p->id_puesto)    
+             ->where('id_perfil','<>',$cod_nivel)
+             ->get();
+
+         if($asignados_nomiperfil){
+            $respuesta=[
+                'tipo'=>'ERROR',
+                'mensaje'=>"El puesto esta reservado"
+            ];
+         }
+
             logpuestos::create(['id_puesto'=>$p->id_puesto,'id_estado'=>$estado,'id_user'=>Auth::user()->id??0,'fecha'=>Carbon::now()]);
             DB::table('puestos')->where('token',$puesto)->update([
                 'id_estado'=>$estado,

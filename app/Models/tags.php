@@ -62,13 +62,13 @@ class tags extends Model
     }
 
     /**
-     * Get the tagsPuesto for this model.
+     * Get the tagsPuestos for this model.
      *
-     * @return App\Models\TagsPuesto
+     * @return Illuminate\Database\Eloquent\Collection
      */
-    public function tagsPuesto()
+    public function tagsPuestos()
     {
-        return $this->hasOne('App\Models\TagsPuesto','id_tag','id_tag');
+        return $this->hasMany('App\Models\TagsPuesto','id_tag','id_tag');
     }
 
 

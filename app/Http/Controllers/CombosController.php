@@ -52,6 +52,12 @@ class CombosController extends Controller
                 ->join('edificios','edificios.id_edificio','puestos.id_edificio')
                 ->join('plantas','plantas.id_planta','puestos.id_planta')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->get(),
+
+            "tags" => DB::table('tags')
+                ->select('clientes.id_cliente','clientes.nom_cliente','tags.id_tag','tags.nom_tag')
+                ->join('clientes','clientes.id_cliente','tags.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
                 ->get()
         ];
     }

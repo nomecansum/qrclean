@@ -17,12 +17,14 @@
                         data-search="true"
                         data-show-columns="true"
                         data-show-columns-toggle-all="true"
-                        data-page-list="[5, 10, 20, 30, 40, 50]"
+                        data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
                         data-page-size="50"
                         data-pagination="true" 
                         data-show-pagination-switch="true"
                         data-show-button-icons="true"
                         data-toolbar="#all_toolbar"
+                        data-buttons-class="secondary"
+                        data-show-button-text="true"
                         >
                         <thead>
                             <tr>
@@ -32,26 +34,36 @@
                                 <th data-sortable="true">Edificio</th>
                                 <th data-sortable="true">Planta</th>
                                 <th data-sortable="true">Puesto</th>
+                                <th data-sortable="true" title="Acceso anonimo permitido en el puesto" style="width: 20px">Anonimo</th>
+                                <th data-sortable="true" title="Reserva permitida en el puesto">Reserva</th>
+                                <th data-sortable="true" title="Puesto con asignacion fija">Fijo</th>
                                 <th data-sortable="true"class="text-center" style="width: 100px">Estado</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($puestos as $puesto)
-                            <tr class="hover-this">
+                            <tr class="hover-this" >
                                 <td class="text-center">
                                     <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chkp{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}">
                                     <label class="custom-control-label"   for="chkp{{ $puesto->id_puesto }}"></label>
                                 </td>
-                                <td class="thumb text-center" data-id="" >
+                                <td class="thumb text-center" data-id="">
                                     @isset($puesto->val_icono)
-                                        <i class="{{ $puesto->val_icono }} fa-2x" style="color:{{ $puesto->val_color }}"></i>
+                                        <i class="{{ $puesto->val_icono }} fa-2x {{ txt_blanco($puesto->color_puesto) }}"></i>
                                     @endisset
                                 </td>
                                 
                                 <td class="td" data-id="">{{ $puesto->des_edificio }}</td>
                                 <td class="td" data-id="">{{$puesto->des_planta}}</td>
-                                <td class="td" data-id=""><b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}</td>
+                                <td class="td" data-id="">
+                                    <div class="m-0"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ txt_blanco($puesto->color_puesto) }} ">
+                                        <b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}
+                                    </div>
+                                </td>
+                                <td class="text-center text-muted" >@if($puesto->mca_acceso_anonimo=='S') <i class="fas fa-circle"></i> @endif</td>
+                                <td class="text-center text-muted" >@if($puesto->mca_reservar=='S') <i class="fas fa-circle"  style="color: #70c2b4"></i> @endif</td>
+                                <td class="text-center text-muted" >@if(isset($puesto->id_usuario))<i class="fad fa-user" title="Puesto asignado al usuario {{ \App\Models\users::find($puesto->id_usuario)->name }}" style="color: #f4a462"></i> @endif @if(isset($puesto->id_perfil))<i class="fad fa-users" title="Puesto asignado a perfil {{ \App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso }}" style="color: #f4a462"></i> @endif</td>
                                 <td class="td text-center" data-id="">
                                     @switch($puesto->id_estado)
                                         @case(1)

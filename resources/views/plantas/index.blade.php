@@ -72,8 +72,8 @@
                             <th>Planta</th>
                             <th>Edificio</th>
                             <th>Cliente</th>
+                            <th>Puestos</th>
                             <th>Plano</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,13 +83,14 @@
                             <td>{{ $plantas->des_planta }}</td>
                             <td>{{ $plantas->des_edificio }}</td>
                             <td>{{ $plantas->nom_cliente }}</td>
-                            <td class="text-center">@if(isset($plantas->img_plano))<img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="height: 50px">@endif</td>
-                            <td>
-                                <div class="btn-group btn-group-xs pull-right floating-like-gmail mt-3" role="group">
+                            <td></td>
+                            <td class="text-center" style="position: relative">@if(isset($plantas->img_plano))<img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="height: 50px; position: absoluite">@endif
+                            
+                                <div class="pull-right floating-like-gmail mt-3" style="width: 140px;">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    <a href="#"  class="btn btn-info btn_editar add-tooltip" onclick="editar({{ $plantas->id_planta }})" title="Editar planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>
-                                    <a href="#"  class="btn btn-mint btn_puestos add-tooltip" onclick="puestos({{ $plantas->id_planta }})" title="Distribucion de puestos en la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-desktop-alt pt-1" aria-hidden="true"></span></a>
-                                    <a href="#eliminar-planta-{{$plantas->id_planta}}" data-target="#eliminar-planta-{{$plantas->id_planta}}" title="Borrar planta" data-toggle="modal" class="btn btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                                    <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $plantas->id_planta }})" title="Editar planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
+                                    <a href="#"  class="btn btn-xs btn-mint btn_puestos add-tooltip" onclick="puestos({{ $plantas->id_planta }})" title="Distribucion de puestos en la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-desktop-alt pt-1" aria-hidden="true"></span> Pos</a>
+                                    <a href="#eliminar-planta-{{$plantas->id_planta}}" data-target="#eliminar-planta-{{$plantas->id_planta}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$plantas->id_planta}}" style="display: none;">
                                     <div class="modal-dialog">

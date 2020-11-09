@@ -1,6 +1,7 @@
 @php
     //$hide=['cli'=>0,'cen'=>0,'dis'=>0,'col'=>0,'dep'=>0,'emp'=>0,'fec'=>0];
     use App\Models\estados;
+    use App\Models\tags;
 @endphp
 
 <div class="panel " style="padding-right: 10px" >
@@ -37,6 +38,15 @@
             <label>Planta</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="planta[]" id="multi-planta" ></select>
+                <div class="input-group-btn">
+                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" style="{{ (isset($hide['tag']) && $hide['tag']==1) ? 'display: none' : ''  }}">
+            <label>Tag</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tags[]" id="multi-tag" ></select>
                 <div class="input-group-btn">
                     <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
                 </div>
@@ -190,6 +200,16 @@
                     planta_c=val.id_planta;
                 }
                 $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            tag_c="";
+            $.each(data.tags, function(index, val) {
+                if(tag_c!=val.id_cliente){
+                    $('#multi-tag').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    tag_c=val.id_cliente;
+                }
+                $('#multi-tag').append('<option value="'+val.id_tag+'">'+val.nom_tag+'</option>');
             });
             $('#loadfilter').hide();
         });

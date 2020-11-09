@@ -4,7 +4,7 @@
             <div class="panel-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
             </div>
-            <h3 class="panel-title">Modificar puesto</h3>
+            <h3 class="panel-title">Modificar puesto {{ $puesto->id_puesto }}</h3>
         </div>
         <div class="panel-body">
             <form  action="{{url('puestos/update')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax">
@@ -16,11 +16,11 @@
 
                     {{csrf_field()}}
                     <div class="form-group col-md-2">
-                        <label for="cod_puesto">ID</label>
-                        <input required type="text" name="cod_puesto" id="cod_puesto" class="form-control" required value="{{$puesto->cod_puesto}}">
+                        <label for="cod_puesto">Identificador</label>
+                        <input type="text" name="cod_puesto" id="cod_puesto" class="form-control" value="{{$puesto->cod_puesto}}">
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="des_puesto">Nombre</label>
+                        <label for="des_puesto">Nombre descriptivo</label>
                         <input required type="text" name="des_puesto" id="des_puesto" class="form-control" required value="{{$puesto->des_puesto}}">
                     </div>
 
@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-md-2">
                         <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($puesto->val_color)?$puesto->val_Color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($puesto->val_color)?$puesto->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
                     <div class="col-sm-1">
                         <div class="form-group">
@@ -52,7 +52,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label for="planta">Planta</label>
                         <select name="id_planta" id="id_planta" class="form-control">
                             @foreach(DB::table('plantas')->where('id_cliente',Auth::user()->id_cliente)->where('id_edificio',$puesto->id_edificio)->get() as $planta)
@@ -62,7 +62,7 @@
                     </div>
                     <div class="col-md-2 p-t-30">
                         <input type="checkbox" class="form-control  magic-checkbox" name="mca_acceso_anonimo"  id="mca_acceso_anonimo" value="S" {{ $puesto->mca_acceso_anonimo=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_acceso_anonimo">Permitir acceso anonimo</label>
+                        <label class="custom-control-label"   for="mca_acceso_anonimo">Permitir anonimo</label>
                     </div>
                     <div class="col-md-2  p-t-30">
                         <input type="checkbox" class="form-control  magic-checkbox" name="mca_reservar"  id="mca_reservar" value="S" {{ $puesto->mca_reservar=='S'?'checked':'' }}> 
@@ -72,11 +72,30 @@
                         <label for="planta">Tags</label>
                         <input type="text" class="edit_tag" data-role="tagsinput" placeholder="Type to add a tag" size="17" value="{{ $tags }}">
                     </div>
-                    <div class="row mt-2">
-						<div class="col-md-12   text-right">
-							@if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary mr-2">GUARDAR</button>@endif
-						</div>
-					</div>
+                    <div class="form-group col-md-6">
+                        <label for="id_usuario">Asignar a usuario</label>
+                        <select name="id_usuario" id="id_usuario" class="form-control select2">
+                            <option value="0"></option>
+                            @foreach(DB::table('users')->where('id_cliente',Auth::user()->id_cliente)->orderby('name')->get() as $u)
+                                <option value="{{ $u->id}}" {{ isset($puesto->id_usuario) && $puesto->id_usuario==$u->id?'selected':'' }}>{{ $u->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="id_perfil">Asignar a perfil</label>
+                        <select name="id_perfil" id="id_perfil" class="form-control select2">
+                            <option value="0"></option>
+                            @foreach(DB::table('niveles_acceso')->wherein('id_cliente',[1,Auth::user()->id_cliente])->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->orderby('val_nivel_acceso')->orderby('des_nivel_acceso')->get() as $n)
+                                <option value="{{ $n->cod_nivel}}" {{ isset($puesto->id_perfil) && $puesto->id_perfil==$n->cod_nivel?'selected':'' }}>{{ $n->des_nivel_acceso }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                </div>
+                <div class="row mt-2 ">
+                    <div class="col-md-12   text-right ">
+                        @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary mr-2 btn_submit">GUARDAR</button>@endif  
+                    </div>
                 </div>
             </form>
         </div>
@@ -84,6 +103,11 @@
  </div>
 
  <script>
+     $('.btn_submit').click(function(){
+        //$('#frm_contador').submit();
+     })
+     $('#frm_contador').submit(form_ajax_submit);
+
     $('.minicolors').minicolors({
           control: $(this).attr('data-control') || 'hue',
           defaultValue: $(this).attr('data-defaultValue') || '',
@@ -102,7 +126,7 @@
         });
 
     //$('#frm_contador').on('submit',form_ajax_submit);
-    $('#frm_contador').submit(form_ajax_submit);
+    
 
     $('.demo-psi-cross').click(function(){
         $('#editor').hide();
@@ -131,4 +155,22 @@
     $('.edit_tag').on('itemAdded', function(event) {
         $('#tags').val($(".edit_tag").tagsinput('items'));
     });
+
+    $(function(){
+        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$('#id_edificio').val())
+    })
+
+    $(".select2").select2({
+        placeholder: "Seleccione",
+        allowClear: true,
+        width: "99.2%",
+    });
+
+    $('#id_perfil').on('select2:select', function (e) {
+        $('#id_usuario').val(null).trigger('change');
+    });
+    $('#id_usuario').on('select2:select', function (e) {
+        $('#id_perfil').val(null).trigger('change');
+    });
+
  </script>

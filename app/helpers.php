@@ -246,22 +246,25 @@ function acronimo($nombre,$height=10){
     return $acronym;
 }
 
-
-function icono_nombre($nombre,$height=50,$font=18){
-
+function iniciales ($nombre,$cantidad){
     try{
-        $padding=intdiv($height,11);
-        $rand=Str::random(9);
         $words = explode(" ", $nombre);
         $acronym = "";
         $i = 0;
         foreach ($words as $w) {
             $acronym .= $w[0];
-            if (++$i == 2) break;
+            if (++$i == $cantidad) break;
         }
     } catch(\Exception $e){
-        $acronym=substr($nombre,1,2);
+        $acronym=substr($nombre,1,$cantidad);
     }
+    return $acronym;
+}
+
+function icono_nombre($nombre,$height=50,$font=18){
+    $padding=intdiv($height,11);
+    $rand=Str::random(9);
+    $acronym = iniciales($nombre,2);
     //return '<span class="round" id="'.$rand.'" style="text-transform: uppercase; background-color: '.App\Classes\RandomColor::one().'">'.$acronym.'</span>';
     return '<span class="round" id="'.$rand.'" style="font-weight: bold; font-size: '.$font.'px; width: '.$height.'px;height: '.$height.'px; padding-top:'.$padding.'px; text-transform: uppercase; background-color: '.genColorCodeFromText($nombre).'" data-toggle="tooltip" data-placement="bottom" title="'.$nombre.'">'.$acronym.'</span>';
 }
@@ -469,6 +472,27 @@ function validar_acceso_tabla($id,$tabla){
         flash("ERROR: El ".$descriptivo." ".$id." no existe o no tienes acceso")->error();
         return redirect()->route($ruta);
     }
+}
+
+//Devuelve texto blanco o negro en funcion del color sobre el que esta
+function txt_blanco($hex) {
+    // returns brightness value from 0 to 255
+    // strip off any leading #
+    try{
+        $hex = str_replace('#', '', $hex);
+
+        $c_r = hexdec(substr($hex, 0, 2));
+        $c_g = hexdec(substr($hex, 2, 2));
+        $c_b = hexdec(substr($hex, 4, 2));
+
+        $result=(($c_r * 299) + ($c_g * 587) + ($c_b * 114)) / 1000;
+        if($result<130){
+            return "text-white";
+        }
+    } catch(\Exception $e){
+
+    }
+    
 }
 
 function color_porcentaje($pct,$modo="bootstrap"){

@@ -24,10 +24,12 @@ class PuestosController extends Controller
     public function index(){
 
         $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
@@ -39,12 +41,13 @@ class PuestosController extends Controller
 
 
     public function search(Request $r){
-
         $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
@@ -65,14 +68,20 @@ class PuestosController extends Controller
                     $q->whereIn('puestos.id_planta',$r->planta);
                 }
             })
-            ->whereExists(function($q) use($r){
+            ->where(function($q) use($r){
                 if ($r->puesto) {
                     $q->whereIn('puestos.id_puesto',$r->puesto);
                 }
             })
-            ->whereExists(function($q) use($r){
+            ->where(function($q) use($r){
                 if ($r->estado) {
                     $q->whereIn('puestos.id_estado',$r->estado);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tags) {
+                    $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                    $q->whereIn('puestos.id_puesto',$puestos_tags);
                 }
             })
             ->get();
@@ -87,7 +96,10 @@ class PuestosController extends Controller
             $tags="";
         } else {
             validar_acceso_tabla($id,"puestos");
-            $puesto=puestos::find($id);
+            $puesto=DB::table('puestos')
+                ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
+                ->where('puestos.id_puesto',$id)
+                ->first();
             $tags=DB::table('tags')
                 ->join('tags_puestos','tags.id_tag','tags_puestos.id_tag')
                 ->where('tags_puestos.id_puesto',$id)
@@ -143,10 +155,6 @@ class PuestosController extends Controller
                 $esta_tag=tags::where('nom_tag',$tag)->where('id_cliente',$r->id_cliente)->first();
 
                 if(!isset($esta_tag)){
-                    // $esta_tag= new tags;
-                    // $esta_tag->id_cliente=$r->id_cliente;
-                    // $esta_tag->nom_tag=$tag;
-                    // $esta_tag->save();
                     DB::table('tags')->insert([
                         'nom_tag'=>$tag,
                         'id_cliente'=>$r->id_cliente
@@ -157,11 +165,24 @@ class PuestosController extends Controller
                     'id_tag'=>$esta_tag->id_tag,
                     'id_puesto'=>$puesto->id_puesto
                 ]);
-                
-                // $tag_add=new tags_puestos;
-                // $tag_add->id_tag=$esta_tag;
-                // $tag_add->id_puesto=$puesto->id_puesto;
-                // $tag_add->save();
+            }
+
+            //Asignacion directa de puesto
+            if($r->id_usuario && $r->id_usuario>0){
+                DB::table('puestos_asignados')->where('id_puesto',$puesto->id_puesto)->delete();
+                DB::table('puestos_asignados')->insert([
+                    'id_puesto'=>$puesto->id_puesto,
+                    'id_usuario'=>$r->id_usuario
+                ]);
+               
+            }
+            if($r->id_perfil && $r->id_perfil>0){
+                DB::table('puestos_asignados')->where('id_puesto',$puesto->id_puesto)->delete();
+                DB::table('puestos_asignados')->insert([
+                    'id_puesto'=>$puesto->id_puesto,
+                    'id_perfil'=>$r->id_perfil
+                ]);
+               
             }
 
            
@@ -261,8 +282,37 @@ class PuestosController extends Controller
             }
         })
         ->get();
+
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','reservas.id_usuario','users.id')
+            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+
+        $asignados_usuarios=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')    
+            ->where('id_usuario','<>',Auth::user()->id)
+            ->get();
+
+        $asignados_miperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
+            ->where('id_perfil',Auth::user()->cod_nivel)
+            ->get();
         
-        return view('puestos.mapa',compact('puestos','edificios'));
+        $asignados_nomiperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
+            ->where('id_perfil','<>',Auth::user()->cod_nivel)
+            ->get();
+        
+        return view('puestos.mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
     }
 
     public function plano(){
@@ -303,8 +353,26 @@ class PuestosController extends Controller
                 }
             })
             ->get();
+
+        $asignados_usuarios=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')    
+            ->where('id_usuario','<>',Auth::user()->id)
+            ->get();
+
+        $asignados_miperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
+            ->where('id_perfil',Auth::user()->cod_nivel)
+            ->get();
         
-        return view('puestos.plano',compact('puestos','edificios','reservas'));
+        $asignados_nomiperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
+            ->where('id_perfil','<>',Auth::user()->cod_nivel)
+            ->get();
+        
+        return view('puestos.plano',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
     }
 
     public function ronda_limpieza(Request $r){
@@ -399,6 +467,97 @@ class PuestosController extends Controller
                 'token'=>Str::random(50)
             ]);
         }
+    }
 
+    public function modificar_puestos(Request $r){
+        //dd($r->all());
+        try{
+            $listaid=explode(",",$r->lista_id);
+            $cosas="";
+            $valores=[];
+            
+            if($r->des_puesto){
+                $valores["des_puesto"]=$r->des_puesto;
+                $cosas.=" | Nombre: ".$r->des_puesto;
+            }
+            if($r->id_estado){
+                $valores["id_estado"]=$r->id_estado;
+                $cosas.=" | Estado: ".$r->id_estado;
+            }
+            if($r->val_color){
+                $valores["val_color"]=$r->val_color;
+                $cosas.=" | Color: ".$r->val_color;
+            }
+            if($r->val_icono && $r->val_icono!="empty"){
+                $valores["val_icono"]=$r->val_icono;
+                $cosas.=" | Icono: ".$r->val_icono;
+            }
+            if($r->id_edificio){
+                $valores["id_edificio"]=$r->id_edificio;
+                $cosas.=" | Edificio: ".$r->id_edificio;
+            }
+            if($r->id_planta){
+                $valores["id_planta"]=$r->id_planta;
+                $cosas.=" | Planta: ".$r->id_planta;
+            }
+            if($r->id_perfil){
+                $valores["id_perfil"]=$r->id_perfil;
+                $cosas.=" | Perfil: ".$r->id_perfil;
+            }
+            if($r->tags){
+                //Procesamos los tags
+                $arr_tags=explode(",",$r->tags);
+                foreach($listaid as $id){
+                    //Borramos los tags que tenga el puesto
+                    tags_puestos::where('id_puesto',$id)->delete();
+                    $id_cliente=puestos::find($id)->id_cliente;
+                    //Y ahora insertamos los que vengan
+                    foreach($arr_tags as $tag){
+                        //Primero a ver si existe el tag para el cleinte
+                        $esta_tag=tags::where('nom_tag',$tag)->where('id_cliente',$id_cliente)->first();
+
+                        if(!isset($esta_tag)){
+                            DB::table('tags')->insert([
+                                'nom_tag'=>$tag,
+                                'id_cliente'=>$id_cliente
+                            ]);
+                            $esta_tag=tags::where('nom_tag',$tag)->where('id_cliente',$id_cliente)->first();
+                        }
+                        DB::table('tags_puestos')->insert([
+                            'id_tag'=>$esta_tag->id_tag,
+                            'id_puesto'=>$id
+                        ]);
+                    }
+                }
+                
+                $cosas.=" | Tags: ".$r->tags;
+            }
+            $puestos=puestos::wherein('id_puesto',$listaid)->update($valores);
+
+            savebitacora('Actualizacion masiva de puestos '.implode(";",$listaid)." Atributos modificados :".$cosas,"OK");
+            return [
+                'title' => "Borrar puestos",
+                'message' => 'Actualizacion masiva de puestos '.implode(";",$listaid)." Atributos modificados :".$cosas,
+                'url' => url('puestos')
+            ];
+        } catch(\Excveption $e){
+            return [
+                'title' => "puestos",
+                'error' => 'ERROR: Ocurrio un error actualizando los puestos '.$r->name.' '.mensaje_excepcion($exception),
+                //'url' => url('sections')
+            ];
+        }
+        
+    }
+
+    public function borrar_puestos(Request $r){
+     
+        savebitacora('Borrado masivo de puestos '.implode(";",$r->lista_id),"OK");
+        puestos::wherein('id_puesto',$r->lista_id)->delete();
+        return [
+            'title' => "Borrar puestos",
+            'message' => count($r->lista_id).' puestos borrados: '.implode(', ',$r->lista_id),
+            'url' => url('puestos')
+        ];
     }
 }

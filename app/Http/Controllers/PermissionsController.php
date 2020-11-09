@@ -112,7 +112,7 @@ class PermissionsController extends Controller
 			}
 		})
 		->get();
-		$tipos = $secciones->pluck('val_tipo', 'val_tipo')->toArray();
+		$tipos = ['Seccion','Permiso','Accion'];
 		$grupos = DB::table('secciones')->select('des_grupo','icono')->distinct()->get();
 
 		return view('permisos.sections',compact('secciones','grupos','tipos'));

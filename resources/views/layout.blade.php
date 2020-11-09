@@ -31,7 +31,7 @@
     {{-- MAterial design fonts --}}
     <link rel="stylesheet" href="{{ URL('/css/materialdesignicons.min.css') }}">
     {{--  FontAwesome  --}}
-    <link href="{{ asset('/plugins/fontawesome5/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/fontawesome6/css/all.min.css') }}" rel="stylesheet">
 
 
     <!--Mosaic custom CSS [ REQUIRED ]-->

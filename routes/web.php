@@ -123,6 +123,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/plano','PuestosController@plano');
         Route::post('/anonimo','PuestosController@cambiar_anonimo');
         Route::post('/mca_rerserva','PuestosController@cambiar_reserva');
+        Route::post('/borrar_puestos','PuestosController@borrar_puestos');
+        Route::post('/modificar_puestos','PuestosController@modificar_puestos');
     });
 
     Route::group(['prefix' => 'edificios'], function () {

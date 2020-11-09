@@ -9,7 +9,7 @@ return [
      |
      | Debugbar is enabled by default, when debug is set to true in app.php.
      | You can override the value by setting enable to true or false instead of null.
-     |
+     | 
      | You can provide an array of URI's that must be ignored (eg. 'api/*')
      |
      */
@@ -67,7 +67,7 @@ return [
      */
 
     'capture_ajax' => true,
-    'add_ajax_timing' => true,
+    'add_ajax_timing' => false,
 
     /*
      |--------------------------------------------------------------------------
@@ -79,7 +79,7 @@ return [
      |
      */
     'error_handler' => false,
-
+    
     /*
      |--------------------------------------------------------------------------
      | Clockwork integration
@@ -101,7 +101,7 @@ return [
      */
 
     'collectors' => [
-        'phpinfo'         => true,  // Php version
+        'phpinfo'         => false,  // Php version
         'messages'        => true,  // Messages
         'time'            => true,  // Time Datalogger
         'memory'          => true,  // Memory usage
@@ -111,7 +111,8 @@ return [
         'views'           => true,  // Views with their data
         'route'           => true,  // Current route information
         'auth'            => true, // Display Laravel authentication status
-        'gate'            => false,  // Display Laravel Gate checks
+        'models'          => false, // Display Laravel authentication status
+        'gate'            => false, // Display Laravel Gate checks
         'session'         => true,  // Display session data
         'symfony_request' => false,  // Only one can be enabled..
         'mail'            => false,  // Catch mail messages
@@ -122,7 +123,6 @@ return [
         'files'           => false, // Show the included files
         'config'          => false, // Display config settings
         'cache'           => false, // Display cache events
-        'models'          => false,  // Display models
     ],
 
     /*

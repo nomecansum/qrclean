@@ -68,7 +68,6 @@
     $('.sitio').click(function(){
         $('#des_puesto').html('');
         $('#des_puesto_form').html('');
-        
         $('#id_puesto').val(null);
         $('.disponible').removeClass('bg-info');
         $('.disponible').each(function(){

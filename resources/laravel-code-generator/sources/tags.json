@@ -44,7 +44,7 @@
             "css-class": "",
             "options": {},
             "html-value": null,
-            "validation": "nullable",
+            "validation": "required",
             "is-on-index": true,
             "is-on-show": true,
             "is-on-form": true,
@@ -55,7 +55,7 @@
             "is-unique": false,
             "is-primary": false,
             "comment": null,
-            "is-nullable": true,
+            "is-nullable": false,
             "is-header": false,
             "is-unsigned": false,
             "is-auto-increment": false,
@@ -133,14 +133,14 @@
     ],
     "relations": [
         {
-            "name": "tagsPuesto",
-            "type": "hasOne",
+            "name": "tagsPuestos",
+            "type": "hasMany",
             "params": [
                 "App\\Models\\TagsPuesto",
                 "id_tag",
                 "id_tag"
             ],
-            "field": "id"
+            "field": "id_puesto"
         }
     ],
     "indexes": [],

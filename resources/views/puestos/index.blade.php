@@ -6,6 +6,14 @@
 
 @section('styles')
     <link href="{{ asset('/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+        td .tooltip {
+            position:absolute
+        }
+        .enfrente {
+            z-index: 1100;
+        }
+    </style>
 @endsection
 
 @section('breadcrumb')
@@ -39,12 +47,16 @@
                                 <li><a href="#" data-estado="6" class="btn_estado_check"><i class="fas fa-square text-warning"></i> Incidencia</a></li>
                             @endif
                             <li class="divider"></li>
+                            <li class="dropdown-header">Atributos</li>
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#modificar-puesto" class="btn_modificar_puestos btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-pencil"></i> Modificar puestos</a></li>@endif
+                            <li class="divider"></li>
                             <li class="dropdown-header">Acciones</li>
                             <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
                             @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
                             @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
-                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
-                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
+                            @if(checkPermissions(['Puestos'],['D']))<li><a href="#" class="btn_borrar_puestos btn_toggle_dropdown"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar puestos</a> </li>@endif
                         </ul>
                     </div>
                 </div>
@@ -121,6 +133,8 @@
                 toast_error('Error',err);
             });
         }
+
+        
        
     </script>
     <div id="myFilter">
@@ -129,6 +143,123 @@
         @endif
     </div>
     
+    <div class="modal fade" id="borrar-puestos" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                    <h4 class="modal-title">¿Borrar <span id="cuenta_puestos_borrar"></span> puestos?</h4><br>
+                   
+                </div>
+                <div class="modal-body">
+                    Esta accion no puede deshacerse
+                </div>
+
+                <div class="modal-footer">
+                    <a class="btn btn-info" href="javascript:void(0)" id="borrar_muchos">Si</a>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modificar-puestos" style="display: none;">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <form  action="{{url('puestos/modificar_puestos')}}" method="POST" name="frm_modif_puestos" id="frm_modif_puestos" class="form-ajax">
+                    {{csrf_field()}}
+                    <input type="hidden" name="lista_id" id=lista_id_modif>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                        <h4 class="modal-title">Modificar datos de <span id="cuenta_puestos_borrar"></span> puestos</h4><br>
+                    
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="des_puesto">Nombre descriptivo</label>
+                                <input type="text" name="des_puesto" id="des_puesto" class="form-control" >
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="id_estado">Estado</label>
+                                <select name="id_estado" id="modif_id_estado"  class="form-control">
+                                    <option value=""></option>
+                                    @foreach(DB::table('estados_puestos')->get() as $estado)
+                                    <option value="{{ $estado->id_estado}}">{{ $estado->des_estado }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="val_color">Color</label><br>
+                                <input type="text" autocomplete="off" name="val_color" id="modif_val_color"  class="minicolors form-control" value="" />
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label>Icono</label><br>
+                                    <button type="button"  role="iconpicker" name="val_icono"  id="modif_val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker enfrente" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="id_edificio">Edificio</label>
+                                <select name="id_edificio" id="modif_id_edificio" class="form-control enfrente">
+                                    <option value=""></option>
+                                    @foreach(DB::table('edificios')->where('id_cliente',Auth::user()->id_cliente)->get() as $edificio)
+                                        <option value="{{ $edificio->id_edificio}}">{{ $edificio->des_edificio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="planta">Planta</label>
+                                <select name="id_planta" id="modif_id_planta" class="form-control">
+                                    <option value=""></option>
+                                    @foreach(DB::table('plantas')->where('id_cliente',Auth::user()->id_cliente)->get() as $planta)
+                                        <option value="{{ $planta->id_planta}}">{{ $planta->des_planta }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 p-t-30">
+                                <input type="checkbox" class="form-control  magic-checkbox" name="mca_acceso_anonimo"  id="modif_mca_acceso_anonimo" value="S"> 
+                                <label class="custom-control-label"   for="mca_acceso_anonimo">Anonimo</label>
+                            </div>
+                            <div class="col-md-2  p-t-30">
+                                <input type="checkbox" class="form-control  magic-checkbox" name="mca_reservar"  id="modif_mca_reservar" value="S"> 
+                                <label class="custom-control-label"   for="mca_reservar">Reserva</label>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="planta">Tags</label>
+                                <input type="text" class="edit_tag" data-role="tagsinput" placeholder="Type to add a tag" size="17" name="tags">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="id_perfil">Asignar a perfil</label>
+                                <select name="id_perfil" id="modif_id_perfil" class="form-control enfrente">
+                                    <option value=""></option>
+                                    @foreach(DB::table('niveles_acceso')->wherein('id_cliente',[1,Auth::user()->id_cliente])->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->orderby('val_nivel_acceso')->orderby('des_nivel_acceso')->get() as $n)
+                                        <option value="{{ $n->cod_nivel}}">{{ $n->des_nivel_acceso }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" id="modificar_muchos">Si</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="eliminar-puesto" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -175,7 +306,8 @@
                 <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div><h4 class="modal-title">Habilitar reserva para los puestos</h4>
+                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                        <h4 class="modal-title">Habilitar reserva para los puestos</h4>
                 </div>
                 <div class="modal-body">
                     <input type="checkbox" class="form-control  magic-checkbox chk_accion" name="mca_reserva" data-label="lbl_reserva" id="mca_reserva" checked value="S"> 
@@ -403,6 +535,79 @@
         $('#ronda-limpieza').modal('hide');
     });
 
+    $('.btn_borrar_puestos').click(function(){
+        //block_espere();
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            return;
+        }
+        $('#cuenta_puestos_borrar').html(searchIDs.length);
+        $('#borrar-puestos').modal('show');
+        //fin_espere();
+    });
+
+    $('#borrar_muchos').click(function(){
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); // 
+
+        $.post('{{url('/puestos/borrar_puestos')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs}, function(data, textStatus, xhr) {
+            console.log(data);
+            if(data.error){
+                toast_error(data.title,data.error);
+            } else if(data.alert){
+                toast_warning(data.title,data.alert);
+            } else{
+                toast_ok(data.title,data.message);
+            }
+        }) 
+        .fail(function(err){
+            toast_error('Error',err.responseJSON.message);
+        })
+        .always(function(data){
+            $('#borrar-puestos').modal('hide');  
+            if(data.url){
+                setTimeout(()=>{window.open(data.url,'_self')},3000);
+            } 
+            
+        });
+    })
+
+    $('#modificar_muchos').click(function(){
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); 
+        $('#lista_id_modif').val(searchIDs);
+        //$('#frm_modif_puestos').submit();
+    })
+
+    //$('#frm_modif_puestos').submit(form_ajax_submit);
+
+    $('.btn_modificar_puestos').click(function(){
+        //block_espere();
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            return;
+        }
+        $('#cuenta_puestos_modificar').html(searchIDs.length);
+        $('#modificar-puestos').modal('show');
+        //fin_espere();
+    });
+
+    $('#modif_val_icono').on('change', function(e) {
+        console.log(e.icon);
+        $('.modal').css('z-index', 10000);
+    });
+
+    $('#modif_val_icono').click(function() {
+        $('.modal').css('z-index', 1000);
+    });
 
 </script>
 @endsection

@@ -712,10 +712,10 @@
 	    return 'Ocultar/Mostrar paginación';
 	  },
 	  formatPaginationSwitchDown: function formatPaginationSwitchDown() {
-	    return 'Show pagination';
+	    return 'Mostrar paginacion';
 	  },
 	  formatPaginationSwitchUp: function formatPaginationSwitchUp() {
-	    return 'Hide pagination';
+	    return 'Ocultar paginacion';
 	  },
 	  formatRefresh: function formatRefresh() {
 	    return 'Refrescar';
@@ -733,7 +733,7 @@
 	    return 'Columnas';
 	  },
 	  formatColumnsToggleAll: function formatColumnsToggleAll() {
-	    return 'Toggle all';
+	    return 'Todas';
 	  },
 	  formatFullscreen: function formatFullscreen() {
 	    return 'Fullscreen';

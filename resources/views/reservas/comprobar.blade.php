@@ -1,6 +1,7 @@
 @php
     $edificio_ahora=0;
     $planta_ahora=0;
+    //dd($puestos);
 @endphp
 <div class="row botones_accion">
     <div class="col-md-8">
@@ -23,18 +24,65 @@
                 $puestos_planta=$puestos->where('id_planta',$key);
             @endphp
             <div class="d-flex flex-wrap">
-                @foreach($puestos_planta as $p)
+                @foreach($puestos_planta as $puesto)
                 @php
-                    if(in_array($p->id_puesto,$reservas->pluck('reservas.id_puesto')->toArray())){
+                    $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();  
+
+                    $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();  
+                    $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();  
+                    $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
+                    $title=$puesto->des_puesto;
+                    $borde="";
+                    if(isset($reserva)){
                         $color="LightCoral";
+                        $font_color="#fff";
                         $clase_disp="";
+                        $title="Reservado por ".$reserva->name." para hoy";
+                    } else if(isset($asignado_usuario)){
+                        $color="LightCoral";
+                        $font_color="#fff";
+                        $clase_disp="";
+                        $title="Puesto permanentemente asignado a ".$asignado_usuario->name;
+                        $borde="border: 3px solid #ff9f1a; border-radius: 16px";
+                    } else if(isset($asignado_otroperfil)){
+                        $color="LightCoral";
+                        $font_color="#fff";
+                        $clase_disp="";
+                        $title="Puesto reservado para  ".$asignado_otroperfil->des_nivel_acceso;
+                    } else if(isset($asignado_miperfil)){
+                        $color="#dff9d2";
+                        $font_color="##05688f";
+                        $clase_disp="disponible";
+                        $title="Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso;
+                        $borde="border: 3px solid #05688f; border-radius: 10px";
                     }   else {
                         $color="#dff9d2";
+                        $font_color="#aaa";
                         $clase_disp="disponible";
-                    }
+                    } 
+                    
+                    // if(in_array($p->id_puesto,$reservas->pluck('reservas.id_puesto')->toArray())){
+                    //     $color="LightCoral";
+                    //     $clase_disp="";
+                    // }   else {
+                    //     $color="#dff9d2";
+                    //     $clase_disp="disponible";
+                    // }
                 @endphp
-                    <div class="text-center rounded mr-2 mb-2 align-middle sitio {{ $clase_disp }}" data-id="{{ $p->id_puesto }}" data-bgcolor="{{ $color }}" data-desc="{{ $p->des_puesto }}" style="width:60px; height: 60px; overflow: hidden; background-color: {{ $color }}; border: 1px solid #999; cursor: pointer">
-                        <span class="h-100 align-middle" style="font-size: 12px">{{ $p->cod_puesto }}</span>
+                    <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{ $clase_disp }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: 60px ; width: 60px; background-color: {{ $color }}; color: {{ $font_color }}; {{ $borde }}">
+                        <span class="h-100 align-middle text-center" style="font-size: 0.8vw;">{{ $puesto->cod_puesto }}</span>
+                        @if(isset($reserva))<br>
+                            <span class="font-bold" style="font-size: 18px; color: #ff0">R</span>
+                        @endif
+                        @if(isset($asignado_usuario))<br>
+                            <span class="font-bold" style="font-size: 18px; color: #f4d35d">{{ iniciales($asignado_usuario->name,3) }}</span>
+                        @endif
+                        @if(isset($asignado_miperfil))<br>
+                            <span class="font-bold" style="font-size: 18px; color: #05688f"><i class="fad fa-users" style="color: #f4a462"></i></span>
+                        @endif
+                        @if(isset($asignado_otroperfil))<br>
+                            <span class="font-bold" style="font-size: 18px;"><i class="fad fa-users" style="color: #fff"></i></span>
+                        @endif
                     </div>
                     
                 @endforeach

@@ -23,8 +23,12 @@
 
     <div class="panel">
         <div class="panel-heading">
+            <div class="panel-control">
+                <button class="btn btn-default" data-panel="dismiss" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
+            </div>
             <h3 class="panel-title">Ubicacion de puestos en planta {{ $plantas->des_planta }}</h3>
         </div>
+    
 
         <div class="panel-body">
 
@@ -49,8 +53,8 @@
                             $top=0;
                         @endphp
                         @foreach($puestos as $puesto)
-                            <div class="text-center font-bold rounded add-tooltip bg-{{ $puesto->val_color }} align-middle flpuesto draggable" id="puesto{{ $puesto->id_puesto }}" title="{{ $puesto->des_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="top: {{ $top }}px; left: {{ $left }}px">
-                                <span class="h-100 align-middle" style="font-size: 10px;">{{ $puesto->cod_puesto }}</span>
+                            <div class="text-center font-bold rounded add-tooltip bg-{{ $puesto->val_color }} align-middle flpuesto draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $puesto->des_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="top: {{ $top }}px; left: {{ $left }}px; height: 3.4vw ; width: 3.4vw;">
+                                <span class="h-100 align-middle" style="font-size: 0.8vw;">{{ $puesto->cod_puesto }}</span>
                             </div>
                         @php
                             $left+=50;

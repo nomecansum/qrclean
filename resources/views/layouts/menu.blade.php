@@ -140,6 +140,7 @@
                             @if(checkPermissions(['Plantas'],['R']))<li class="plantas"><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li> @endif
                             @if(checkPermissions(['Puestos'],['R']))<li class="puestos"><a href="/puestos"> <i class="fad fa-desktop-alt"></i> Puestos</a></li> @endif
                             @if(checkPermissions(['Puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
+                            @if(checkPermissions(['Importar datos'],['W']))<li class="importar"> <a href="/import"><i class="fad fa-upload"></i> Importar datos</a></li> @endif
                         </ul>
                     </li>
                     @endif
@@ -186,13 +187,13 @@
                         </a>
                         <!--Submenu-->
                         <ul class="collapse">
-                            @if(checkPermissions(['Bitacora'],['R']))<li class="bitacora"><a href="/bitacoras">Bitacora</a></li> @endif
-                            @if(checkPermissions(['Clientes'],['R']))<li class="clientes"><a href="/clientes">Clientes</a></li> @endif
-                            @if(checkPermissions(['Usuarios'],['R']))<li class="usuarios"><a href="/users">Usuarios</a></li> @endif
-                            @if(checkPermissions(['Perfiles'],['R']))<li class="perfiles"><a href="/profiles">Perfiles</a></li> @endif
-                            @if(checkPermissions(['Secciones'],['R']))<li class="secciones"><a href="/sections">Secciones</a></li> @endif
-                            @if(checkPermissions(['Permisos'],['R']))<li class="permisos"><a href="/profile-permissions">Permisos</a></li> @endif
-                            @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="tipos_incidencia"><a href="/incidencias/tipos">Tipos de incidencia</a></li> @endif
+                            @if(checkPermissions(['Bitacora'],['R']))<li class="bitacora"><a href="/bitacoras"><i class="fad fa-clipboard-list"></i> Bitacora</a></li> @endif
+                            @if(checkPermissions(['Clientes'],['R']))<li class="clientes"><a href="/clientes"><i class="fad fa-user-tie"></i> Clientes</a></li> @endif
+                            @if(checkPermissions(['Usuarios'],['R']))<li class="usuarios"><a href="/users"><i class="fad fa-user"></i>Usuarios</a></li> @endif
+                            @if(checkPermissions(['Perfiles'],['R']))<li class="perfiles"><a href="/profiles"><i class="fad fa-users"></i>Perfiles</a></li> @endif
+                            @if(checkPermissions(['Secciones'],['R']))<li class="secciones"><a href="/sections"> <i class="fad fa-browser"></i>Secciones</a></li> @endif
+                            @if(checkPermissions(['Permisos'],['R']))<li class="permisos"><a href="/profile-permissions"><i class="fad fa-lock-alt"></i> Permisos</a></li> @endif
+                            @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="tipos_incidencia"><a href="/incidencias/tipos"> <i class="fad fa-exclamation-triangle"></i>Tipos de incidencia</a></li> @endif
                         </ul>
                     </li>
                     @endif

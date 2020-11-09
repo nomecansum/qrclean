@@ -32,14 +32,16 @@
 	<div class="col-md-7">
 		<br>
 	</div>
-	{{-- <div class="col-md-1 text-right">
+	<div class="col-md-1 text-right">
+		@if(checkPermissions(['Incidencias'],['C']))
 		<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva cliente">
+				<a href="#nueva-incidencia" id="btn_nueva_incidencia" class="btn btn-success" data-toggle="modal" title="Nueva incidencia">
 				<i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-				<span>Nuevo</span>
+				<span>Nueva</span>
 			</a>
 		</div>
-	</div> --}}
+		@endif
+	</div>
 </div>
 <div id="editorCAM" class="mt-2">
 
@@ -72,7 +74,8 @@
 					>
 					<thead>
 						<tr>
-                            <th data-sortable="true">Id</th>
+							<th data-sortable="true">Id</th>
+							<th></th>
 							<th data-sortable="true">Puesto</th>
 							<th data-sortable="true">Edificio</th>
                             <th data-sortable="true">Planta</th>
@@ -86,19 +89,25 @@
 						@foreach ($incidencias as $inc)
 							<tr class="hover-this" @if (checkPermissions(['Clientes'],["W"])) @endif>
 								<td>{{$inc->id_incidencia}}</td>
-								
+								<td><i class="{{ $inc->val_icono }} fa-2x" style="color:{{ $inc->val_color }}"></i></td>
 								<td>{{ $inc->des_puesto}}</td>
                                 <td>{{ $inc->des_edificio}}</td>
                                 <td>{{ $inc->des_planta}}</td>
 								<td>{!! beauty_fecha($inc->fec_apertura)!!}</td>
-								@if(isset($inc->fec_cierre)) <td class="bg-success text-xs text-white text-center">Cerrada</td> @else <td class="bg-pink  text-xs text-white text-center" id="cell{{$inc->id_incidencia}}">Abierta</td> @endif
-								<td>{{$inc->des_tipo_incidencia}}</td>
-								<td style="position: relative;" class="pt-2">
+								@if(isset($inc->fec_cierre)) <td class="bg-success text-xs text-white text-center" id="cell{{$inc->id_incidencia}}">Cerrada</td> @else <td class="bg-pink  text-xs text-white text-center" id="cell{{$inc->id_incidencia}}">Abierta</td> @endif
+								<td>
+									<div  style="width:100%: height: 100%; background-color: {{ $inc->val_color  }}; {{ txt_blanco($inc->val_color=='text-white')?'color: #fff':'color:#222' }}">
+										{{$inc->des_tipo_incidencia}}
+									</div>
+									
+								</td>
+								<td style="position: relative; vertical-align: middle" class="pt-2">
 									{{ $inc->des_incidencia}}
 									<div class="floating-like-gmail mt-2 w-100" style="width: 100%">
 										@if (checkPermissions(['Incidencias'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $inc->id_incidencia }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $inc->id_incidencia }})"><span class="fa fa-eye pt-1" aria-hidden="true"></span> Ver</a>@endif
                                         @if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-cierre{{ $inc->id_incidencia }}" onclick="cierre_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-thumbs-up pt-1" aria-hidden="true"></span> Cerrar</a>@endif
-                                        @if (checkPermissions(['Incidencias'],["D"]))<a href="#eliminar-incidencia-{{$inc->id_incidencia}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
+										@if (isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#reabrir-incidencia" title="Reabrir incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-reabrir" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-reabrir{{ $inc->id_incidencia }}" onclick="reabrir_incidencia({{ $inc->id_incidencia}})"><i class="fad fa-external-link-square-alt"></i> Reabrir</a>@endif
+										@if (checkPermissions(['Incidencias'],["D"]))<a href="#eliminar-incidencia-{{$inc->id_incidencia}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
 										{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$inc->id_incidencia}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
 									</div>
 									@if (checkPermissions(['Incidencias'],["D"]))
@@ -144,6 +153,43 @@
 			</div>
 		</div>
 	</form>
+</div>
+<div class="modal fade" id="nueva-incidencia">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+			<div class="modal-header"><i class="fad fa-plus-hexagon text-info fa-2x"></i><b>
+				Nueva incidencia 
+			</div>
+			<div class="modal-body">
+				<div class="form-group col-md-12">
+					<label for="id_cliente" class="control-label">Puesto</label>
+					<select class="form-control" id="id_puesto" name="id_puesto">
+						<option value="" ></option>
+						@php
+							$planta=0;
+							$edificio=0;	
+						@endphp
+						@foreach ($puestos as $puesto)
+							@if($edificio!= $puesto->id_edificio)
+								<optgroup label="{{ $puesto->des_edificio }}"></optgroup>
+								@php $edificio=$puesto->id_edificio @endphp
+							@endif
+							@if($planta!= $puesto->id_planta)
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<optgroup label="{{ $puesto->des_planta }}"></optgroup>
+								@php $planta=$puesto->id_planta @endphp
+							@endif
+							<option value="{{ $puesto->id_puesto }}" >
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $puesto->des_puesto }}
+							</option>
+						@endforeach
+					</select>
+						
+					{!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
+				</div>
+				
+			</div>
+		</div>
+	</div>
 </div>
 @endsection
 
@@ -207,6 +253,32 @@
 		$('#body_cierre').load("{{ url('/incidencias/form_cierre/') }}/"+id);
    }
 
+   function reabrir_incidencia(id){
+		$.post('{{url('/incidencias/reabrir')}}', {_token: '{{csrf_token()}}',id_incidencia:id}, function(data, textStatus, xhr) {
+            console.log(data);
+            if(data.error){
+                toast_error(data.title,data.error);
+            } else if(data.alert){
+                toast_warning(data.title,data.alert);
+            } else{
+				$('#cell'+id).removeClass('bg-success');
+				$('#cell'+id).addClass('bg-pink');
+				$('#cell'+id).html('Abierta');
+                toast_ok(data.title,data.message);
+				
+            }
+        }) 
+        .fail(function(err){
+            toast_error('Error',err.responseJSON.message);
+        })
+        .always(function(data){
+            if(data.url){
+                setTimeout(()=>{window.open(data.url,'_self')},3000);
+            } 
+            
+        });
+   }
+
     $('#val_icono').iconpicker({
         icon:'{{isset($t) ? ($t->val_icono) : ''}}'
     });
@@ -220,6 +292,10 @@
 
     $('.td').click(function(event){
         editar( $(this).data('id'));
+	})
+
+	$('#id_puesto').change(function(e){
+		window.open("{{ url('incidencias/create') }}/"+$('#id_puesto').val(),'_self');
 	})
 
 	</script>

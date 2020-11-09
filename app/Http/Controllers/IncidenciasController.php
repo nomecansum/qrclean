@@ -28,6 +28,7 @@ class IncidenciasController extends Controller
         $fhasta=clone($f2);
         $fhasta=$fhasta->addDay();
         $incidencias=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*')
             ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -40,8 +41,25 @@ class IncidenciasController extends Controller
                 }
             })
             ->whereBetween('fec_apertura',[$f1,$fhasta])
+            ->orderby('fec_apertura','desc')
             ->get();
-        return view('incidencias.index',compact('incidencias','f1','f2'));
+        
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos'));
     }
 
     public function form_cierre($id){
@@ -148,6 +166,37 @@ class IncidenciasController extends Controller
         }
     }
 
+    public function reabrir(Request $r){
+        try {
+            validar_acceso_tabla($r->id_incidencia,'incidencias');
+            $inc=incidencias::find($r->id_incidencia);
+            $inc->id_causa_cierre=null;
+            $inc->comentario_cierre=null;
+            $inc->fec_cierre=null;
+            $inc->id_usuario_cierre=null;
+            $inc->save();
+            savebitacora('Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' reabierta',"Incidencias","reabrir","OK");
+            //Ponemos el estado del puesto a operativo
+            $puesto=puestos::find($inc->id_puesto);
+            $puesto->id_estado=1;
+            $puesto->save();
+            return [
+                'title' => "Reabrir incidencia",
+                'message' => 'Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' reabierta',
+                'id'=> $inc->id_incidencia
+                //'url' => url('/incidencias')
+            ];
+        } catch (Exception $exception) {
+            savebitacora('ERROR: Ocurrio un error reabriendo la incidencia ['.$r->id_incidencia.'] '.$exception->getMessage() ,"Incidencias","reabrir","ERROR");
+            return [
+                'title' => "Reabrir incidencia",
+                'error' => 'ERROR: Ocurrio un error reabriendo la incidencia ['.$r->id_incidencia.'] '.$exception->getMessage(),
+                'url' => url('incidencias')
+            ];
+
+        }
+    }
+
 
     // GESTION DE TIPOS DE INCIDENCIA
     public function index_tipos(){
@@ -202,6 +251,13 @@ class IncidenciasController extends Controller
 
     //USUARIOS ABRIR INCIDENCIAS
     public function nueva_incidencia($puesto){
+        $referer = request()->headers->get('referer');
+        if(strpos($referer,'/puesto/')){
+            $referer='scan';
+        } else {
+            $referer='incidencias';
+        }
+
         if(strlen($puesto)>10){  //Es un token
             $puesto=DB::table('puestos')
                 ->join('clientes','puestos.id_cliente','clientes.id_cliente')
@@ -228,7 +284,7 @@ class IncidenciasController extends Controller
             ->orderby('mca_fijo')
             ->orderby('nom_cliente')
             ->get();
-        return view('incidencias.nueva_incidencia',compact('puesto','tipos'));
+        return view('incidencias.nueva_incidencia',compact('puesto','tipos','referer'));
     }
 
     
@@ -299,20 +355,25 @@ class IncidenciasController extends Controller
             //Marcamos el puesto como chungo
             $puesto->id_estado=6;
             $puesto->save();
+            if($r->referer=='incidencias'){
+                $url_vuelta='incidencias';
+            } else {
+                $url_vuelta='/';
+            }
             try{
                 $this->post_procesado_incidencia($inc);
                 savebitacora('Incidencia de tipo '.$tipo->des_tipo_incidencia. ' '.$r->des_incidencia.' creada por '.Auth::user()->name,"Incidencias","save","OK");
                 return [
                     'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
                     'message' => "Incidencia de tipo ".$tipo->des_tipo_incidencia.' creada. Muchas gracias',
-                    'url' => url('/')
+                    'url' => url($url_vuelta)
                 ];
             } catch(\Exception $exception){
                 savebitacora('ERROR: Ocurrio un error en el postprocesado de incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(). ' La incidencia se ha registrado correctamente pero no se ha podido procesar la accion de notificacion programada' ,"Incidencias","save","ERROR");
                 return [
                     'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
                     'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
-                    'url' => url('/')
+                    'url' => url($url_vuelta)
                 ];
             }
            

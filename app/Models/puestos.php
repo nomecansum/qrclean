@@ -45,7 +45,9 @@ class puestos extends Model
                   'val_icono',
                   'id_usuario_usando',
                   'mca_acceso_anonimo',
-                  'mca_reservar'
+                  'mca_reservar',
+                  'max_horas_reservar',
+                  'img_puesto'
               ];
 
     /**

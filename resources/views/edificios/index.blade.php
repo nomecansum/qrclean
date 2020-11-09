@@ -27,12 +27,14 @@
         <br>
     </div>
     <div class="col-md-1 text-right">
+        @if(checkPermissions(['Edificios'],['C']))
         <div class="btn-group btn-group-sm pull-right" role="group">
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo edificio">
                 <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
                 <span>Nuevo</span>
             </a>
         </div>
+        €endif
     </div>
 </div>
 <div id="editorCAM" class="mt-2">
@@ -83,8 +85,8 @@
                             <td>
                                 <div class="pull-right floating-like-gmail" role="group">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $edificios->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $edificios->id_edificio }})" title="Editar edificio" data-id="{{ $edificios->id_edificio }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
-                                    <a href="#eliminar-planta-{{$edificios->id_edificio}}" data-target="#eliminar-planta-{{$edificios->id_edificio}}" title="Borrar edificio" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>
+                                    @if(checkPermissions(['Edificios'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $edificios->id_edificio }})" title="Editar edificio" data-id="{{ $edificios->id_edificio }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                    @if(checkPermissions(['Edificios'],['D']))<a href="#eliminar-planta-{{$edificios->id_edificio}}" data-target="#eliminar-planta-{{$edificios->id_edificio}}" title="Borrar edificio" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$edificios->id_edificio}}" style="display: none;">
                                     <div class="modal-dialog">

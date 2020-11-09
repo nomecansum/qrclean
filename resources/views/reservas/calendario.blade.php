@@ -96,7 +96,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 							@endphp
 					
                             {{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
-							<td style="background-color: {{$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip  pt-3 td_calendar {{ $estado }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
+							<td style="background-color: {{$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip  pt-3 td_calendar {{ $estado }}" @if(Carbon\Carbon::parse($month.'-'.$days[$i])<=Carbon\Carbon::now()) data-past="1" @else data-past="0" @endif data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
                                 <span class="font-bold" style="font-size: 2.5vw; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
 								<span style="color: #fff; cursor: pointer">
@@ -127,7 +127,8 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 <script>
 	$('.td_calendar').click(function(){
 		$('#detalle_horario').hide();
-		if($(this).data('vacaciones')==0 && $(this).data('festivo')==0){
+		console.log($(this).data('past'));
+		if($(this).data('vacaciones')==0 && $(this).data('festivo')==0 && $(this).data('past')==0){
 			$('#detalle_horario').css({top: $(this).position().top+35, left: $(this).position().left+35, position:'absolute'});
 			$('#detalle_horario').show();
 			animateCSS('#detalle_horario','fadeIn');
@@ -146,17 +147,29 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 
 	$('.vacio').click(function(){
 		spshow('spin');
-		$('#editorCAM').load("{{ url('/reservas/create/') }}/"+$(this).data('fecha'), function(){
-			animateCSS('#editorCAM','bounceInRight');
+		if($(this).data('past')==0){
+			$('#editorCAM').load("{{ url('/reservas/create/') }}/"+$(this).data('fecha'), function(){
+				animateCSS('#editorCAM','bounceInRight');
+				sphide('spin');
+			});
+		} else {
+			toast_warning('Reservas','No se puede reservar en una fecha pasada');
 			sphide('spin');
-		});
+		}
+		
 	})
 
 	$('.ocupado').click(function(){
 		spshow('spin');
-		$('#editorCAM').load("{{ url('/reservas/edit/') }}/"+$(this).data('fecha'), function(){
-			animateCSS('#editorCAM','bounceInRight');
+		if($(this).data('past')==0){
+			$('#editorCAM').load("{{ url('/reservas/edit/') }}/"+$(this).data('fecha'), function(){
+				animateCSS('#editorCAM','bounceInRight');
+				sphide('spin');
+			});
+		} else {
+			toast_warning('Reservas','La reserva está caducada');
 			sphide('spin');
-		});
+		}
+		
 	})
 </script>

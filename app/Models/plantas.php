@@ -37,7 +37,8 @@ class plantas extends Model
                   'id_cliente',
                   'des_planta',
                   'img_plano',
-                  'posiciones'
+                  'posiciones',
+                  'num_orden',
               ];
 
     /**

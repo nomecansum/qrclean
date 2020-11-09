@@ -1,9 +1,19 @@
 
 <div class="row">
-    <div class="form-group col-md-12 {{ $errors->has('des_planta') ? 'has-error' : '' }}">
+    <div class="form-group col-md-11 {{ $errors->has('des_planta') ? 'has-error' : '' }}">
         <label for="des_planta" class="control-label">Nombre</label>
             <input class="form-control" required name="des_planta" type="text" id="des_planta" value="{{ old('des_planta', optional($plantas)->des_planta) }}" maxlength="50" placeholder="Enter des planta here...">
             {!! $errors->first('des_planta', '<p class="help-block">:message</p>') !!}
+    </div>
+    <div class="form-group col-md-1">
+        <label for="des_planta" class="control-label">Orden</label>
+        <select class="form-control" required id="num_orden" name="num_orden">
+            @for ($n=1; $n<26;$n++ )
+                <option value="{{ $n }}" {{ old('num_orden', optional($plantas)->num_orden) == $n ? 'selected' : '' }}>
+                    {{ $n }}
+                </option>
+            @endfor
+        </select>
     </div>
 </div>
 

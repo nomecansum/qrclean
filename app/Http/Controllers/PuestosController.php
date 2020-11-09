@@ -97,6 +97,8 @@ class PuestosController extends Controller
         } else {
             validar_acceso_tabla($id,"puestos");
             $puesto=DB::table('puestos')
+                ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario')
+                ->join('plantas','puestos.id_planta','plantas.id_planta')
                 ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
                 ->where('puestos.id_puesto',$id)
                 ->first();
@@ -133,7 +135,6 @@ class PuestosController extends Controller
     public function update(Request $r){
         try{
 
-           
             if($r->id_puesto==0){
                 $puesto=puestos::create($r->all());
             } else {
@@ -143,6 +144,15 @@ class PuestosController extends Controller
             }
             $puesto->mca_acceso_anonimo=$r->mca_acceso_anonimo??'N';
             $puesto->mca_reservar=$r->mca_reservar??'N';
+
+            if ($r->hasFile('img_puesto')) {
+                $file = $r->file('img_puesto');
+                $path = '/img/puestos/';
+                $img_puesto = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+                //$file->move($path,$img_usuario);
+                $puesto->img_puesto=$img_puesto;
+                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_puesto);
+            }
             $puesto->save();
 
             //Procesamos los tags
@@ -268,6 +278,7 @@ class PuestosController extends Controller
                 }
             })
             ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
             ->get();
@@ -328,6 +339,7 @@ class PuestosController extends Controller
                 }
             })
             ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
             ->get();

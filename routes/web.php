@@ -158,6 +158,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/scan', 'LimpiezaController@scan')->name('rondas.estado_puesto');
     });
 
+    Route::group(['prefix' => 'import'], function () {
+        Route::view('/', ['middleware'=>'permissions:["Importar datos"],["R"]', 'uses' => 'import/index'])->name('import.index');
+        Route::post('/process_import',['middleware'=>'permissions:["Importar datos"],["W"]', 'uses' => 'ImportController@process_import'])->name('import.process_import');
+    });
+
     Route::group(['prefix' => 'reservas'], function () {
         Route::get('/',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'ReservasController@index']);
         Route::get('/create/{fecha}',['middleware'=>'permissions:["Reservas"],["C"]','uses'=>'ReservasController@create']);
@@ -180,6 +185,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/edit/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@edit']);
         Route::post('/save',['middleware'=>'permissions:["Incidencias"],["C"]','uses' => 'IncidenciasController@save']);
         Route::post('/cerrar',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@cerrar']);
+        Route::post('/reabrir',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@reabrir']);
         Route::get('/form_cierre/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@form_cierre']);
         Route::get('/edit/{id}',['middleware'=>'permissions:["Incidencias"],["R"]','uses' => 'IncidenciasController@detalle_incidencia']);
         Route::get('/delete/{id}',['middleware'=>'permissions:["Incidencias"],["D"]','uses' => 'IncidenciasController@delete']);

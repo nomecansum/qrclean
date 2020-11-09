@@ -32,6 +32,10 @@ class PlantasController extends Controller
                     $q->where('plantas.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->orderby('plantas.id_cliente')
+            ->orderby('plantas.id_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.id_planta')
             ->get();
 
         return view('plantas.index', compact('plantasObjects'));
@@ -190,6 +194,7 @@ class PlantasController extends Controller
                 'des_planta' => 'nullable|string|min:0|max:50',
             'id_cliente' => 'nullable',
             'id_edificio' => 'nullable', 
+            'num_orden' => 'required', 
         ];
         
         $data = $request->validate($rules);

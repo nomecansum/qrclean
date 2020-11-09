@@ -7,6 +7,7 @@ use DB;
 use Carbon\Carbon;
 use Auth;
 use App\Models\reservas;
+use App\Models\puestos;
 
 
 class ReservasController extends Controller
@@ -131,6 +132,7 @@ class ReservasController extends Controller
                 }
             })
             ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
             ->get();
@@ -168,10 +170,14 @@ class ReservasController extends Controller
             //Borramos cualquier otra reserva que tuviese el usuarios par ese dia
             $antoerior=reservas::where('id_usuario',Auth::user()->id)->where('fec_reserva',adaptar_fecha($r->fechas)->format('Y-m-d'))->delete();
             //Insertamos la nueva
+            $puesto=puestos::find($r->id_puesto);
             $res=new reservas;
             $res->id_puesto=$r->id_puesto;
             $res->id_usuario=Auth::user()->id;
             $res->fec_reserva=adaptar_fecha($r->fechas);
+            if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar)){
+                $res->fec_fin_reserva=$res->fec_reserva->addDay($puesto->max_horas_reservar);   
+            }
             $res->id_cliente=Auth::user()->id_cliente;
             $res->save();
             return [

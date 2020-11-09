@@ -26,8 +26,6 @@
 					@endif
 						
 					<div class="row">
-						
-						
 						<div class="col-sm-9">
 							<div class="row">
 								<div class="col-sm-6">
@@ -49,6 +47,18 @@
 									<div class="form-group">
 										<label for="">Informacion de contacto</label>
 										<input type="text" name="nom_contacto" class="form-control" value="{{isset($c) ? $c->nom_contacto : ''}}">
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<div class="form-group">
+										<label for="">Distribuidor</label>
+										<select required name="id_distribuidor" id="id_distribuidor" class="form-control select2" style="width: 100%">
+											<option value=""></option>
+											@foreach (\DB::table('distribuidores')->get() as $d)
+												<option {{isset($c) && $c->id_distribuidor == $d->id_distribuidor ? 'selected' : ''}} value="{{$d->id_distribuidor}}">{{$d->nom_distribuidor}}</option>
+											@endforeach
+										</select>
+										
 									</div>
 								</div>
 							</div>
@@ -308,6 +318,8 @@
 	</div>
 	<script>
 		$('.form-ajax').submit(form_ajax_submit);
+
+		$('.select2').select2();
 
 		@if(checkPermissions(['Clientes'],["W"]))
 			$('#btn_generar_token').click(function(event){

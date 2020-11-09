@@ -119,10 +119,10 @@
                             <td>{{ $tipo->nom_cliente }}</td>
 
                             <td>
-                                <div class="btn-group btn-group-xs pull-right floating-like-gmail mt-2" role="group">
+                                <div class="pull-right floating-like-gmail mt-2" role="group">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tipo->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    <a href="#"  class="btn btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_tipo_incidencia }})" title="Editar tipo" data-id="{{ $tipo->id_tipo_incidencia }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>
-                                    <a href="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" data-target="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" title="Borrar tipo" data-toggle="modal" class="btn btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                                    <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_tipo_incidencia }})" title="Editar tipo" data-id="{{ $tipo->id_tipo_incidencia }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
+                                    <a href="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" data-target="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$tipo->id_tipo_incidencia}}" style="display: none;">
                                     <div class="modal-dialog">

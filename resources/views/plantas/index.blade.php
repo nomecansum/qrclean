@@ -27,12 +27,14 @@
             <br>
         </div>
         <div class="col-md-1 text-right">
+            @if(checkPermissions(['Plantas'],['C']))
             <div class="btn-group btn-group-sm pull-right" role="group">
                     <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva planta">
                     <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
                     <span>Nuevo</span>
                 </a>
             </div>
+            @endif
         </div>
     </div>
     <div id="editorCAM" class="mt-2">
@@ -88,9 +90,9 @@
                             
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 140px;">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $plantas->id_planta }})" title="Editar planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
-                                    <a href="#"  class="btn btn-xs btn-mint btn_puestos add-tooltip" onclick="puestos({{ $plantas->id_planta }})" title="Distribucion de puestos en la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-desktop-alt pt-1" aria-hidden="true"></span> Pos</a>
-                                    <a href="#eliminar-planta-{{$plantas->id_planta}}" data-target="#eliminar-planta-{{$plantas->id_planta}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>
+                                    @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $plantas->id_planta }})" title="Editar planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                    @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-mint btn_puestos add-tooltip" onclick="puestos({{ $plantas->id_planta }})" title="Distribucion de puestos en la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-desktop-alt pt-1" aria-hidden="true"></span> Pos</a>@endif
+                                    @if(checkPermissions(['Plantas'],['D']))<a href="#eliminar-planta-{{$plantas->id_planta}}" data-target="#eliminar-planta-{{$plantas->id_planta}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$plantas->id_planta}}" style="display: none;">
                                     <div class="modal-dialog">

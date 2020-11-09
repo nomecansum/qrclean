@@ -83,12 +83,12 @@
                     </div>
                     <div class="form-group col-md-12 {{ $errors->has('param_url') ? 'has-error' : '' }}">
                         <label for="des_edificio" class="control-label">Parametros URL</label>
-                        <input class="form-control" name="param_url" type="text" id="param_url" value="{{ old('param_url', optional($tipo)->vaparam_urll_url) }}" maxlength="200" placeholder="Enter Param URL here...">
+                        <input class="form-control" name="param_url" type="text" id="param_url" value="{{ old('param_url', optional($tipo)->vaparam_urll_url) }}" maxlength="1000" placeholder="Enter Param URL here...">
                         {!! $errors->first('param_url', '<p class="help-block">:message</p>') !!}
                     </div>
                     <div class="form-group col-md-8 {{ $errors->has('val_apikey') ? 'has-error' : '' }}">
                         <label for="val_apikey" class="control-label">API Key</label>
-                        <input class="form-control" name="val_apikey" type="text" id="val_apikey" value="{{ old('val_apikey', optional($tipo)->val_url) }}" maxlength="200" placeholder="Enter API Key here...">
+                        <input class="form-control" name="val_apikey" type="text" id="val_apikey" value="{{ old('val_apikey', optional($tipo)->val_url) }}" maxlength="500" placeholder="Enter API Key here...">
                         {!! $errors->first('val_apikey', '<p class="help-block">:message</p>') !!}
                     </div>
 
@@ -101,14 +101,14 @@
                 <div class="row opciones P">
                     <div class="form-group col-md-12 {{ $errors->has('val_body') ? 'has-error' : '' }}">
                         <label for="val_body" class="control-label">Body</label>
-                        <textarea class="form-control" name="val_body" type="text" id="val_body" value="" maxlength="200" placeholder="Enter URL here..." rows="8">{{ old('val_body', optional($tipo)->val_body) }}</textarea>
+                        <textarea class="form-control" name="val_body" type="text" id="val_body" value="" maxlength="65535" placeholder="Enter URL here..." rows="8">{{ old('val_body', optional($tipo)->val_body) }}</textarea>
                         {!! $errors->first('val_body', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
                 <div class="row opciones S M">
                     <div class="form-group col-md-12 {{ $errors->has('txt_destinos') ? 'has-error' : '' }}">
                         <label for="txt_destinos" class="control-label">Destinos <span style="font-size: 9px">(separados por ; )</span></label>
-                        <textarea class="form-control" name="txt_destinos" type="text" id="txt_destinos" value="" maxlength="200" placeholder="Enter Destinos here..." rows="4">{{ old('txt_destinos', optional($tipo)->txt_destinos) }}</textarea>
+                        <textarea class="form-control" name="txt_destinos" type="text" id="txt_destinos" value="" maxlength="65535" placeholder="Enter Destinos here..." rows="4">{{ old('txt_destinos', optional($tipo)->txt_destinos) }}</textarea>
                         {!! $errors->first('val_txt_destinosurl', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>

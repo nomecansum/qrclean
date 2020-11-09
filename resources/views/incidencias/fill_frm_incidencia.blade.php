@@ -15,6 +15,7 @@
         {{ csrf_field() }}
             <div class="row">
                 <input type="hidden" name="id_puesto" value="{{ $puesto->id_puesto }}">
+                <input type="hidden" name="referer" value="{{ $referer }}">
                 <div class="form-group col-md-8 {{ $errors->has('des_incidencia') ? 'has-error' : '' }}">
                     <label for="des_incidencia" class="control-label">Titulo</label>
                     <input class="form-control" required name="des_incidencia" type="text" id="des_incidencia"  maxlength="200" >

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Storage;
 use Auth;
+use Carbon;
 
 class UsersController extends Controller
 {
@@ -151,6 +152,7 @@ class UsersController extends Controller
                 $data["password"]=Hash::make($request->password);
             }
             $users = users::findOrFail($id);
+            $data["email_verified_at"]=Carbon::now();
             $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
             $users->update($data);
             savebitacora('Usuario '.$request->email. ' actualizado',"Usuarios","Update","OK");

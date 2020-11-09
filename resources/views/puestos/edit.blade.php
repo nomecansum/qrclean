@@ -7,7 +7,8 @@
             <h3 class="panel-title">Modificar puesto {{ $puesto->id_puesto }}</h3>
         </div>
         <div class="panel-body">
-            <form  action="{{url('puestos/update')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax">
+            <form  action="{{url('puestos/update')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax"  enctype="multipart/form-data">
+                
                 <div class="row">
                     <input type="hidden" name="id_puesto" value="{{ $puesto->id_puesto }}">
                     <input type="hidden" name="tags" value="" id="tags">
@@ -68,6 +69,11 @@
                         <input type="checkbox" class="form-control  magic-checkbox" name="mca_reservar"  id="mca_reservar" value="S" {{ $puesto->mca_reservar=='S'?'checked':'' }}> 
                         <label class="custom-control-label"   for="mca_reservar">Permitir reserva</label>
                     </div>
+                    <div class="form-group col-md-2">
+                        <label for="max_horas_reservar">Max reserva(horas)</label>
+                        <input type="number" min="1" max="999999" name="max_horas_reservar" id="max_horas_reservar" class="form-control" value="{{$puesto->max_horas_reservar}}">
+                    </div>
+
                     <div class="form-group col-md-12">
                         <label for="planta">Tags</label>
                         <input type="text" class="edit_tag" data-role="tagsinput" placeholder="Type to add a tag" size="17" value="{{ $tags }}">
@@ -91,6 +97,33 @@
                         </select>
                     </div>
                     
+                </div>
+                <div class="row mt-2 ">
+                    <div class="col-md-12   text-right ">
+                        @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary mr-2 btn_submit">GUARDAR</button>@endif  
+                    </div>
+                </div>
+                <div class="row mb-0">
+                    <div class="col-md-6 mb-0 p-0" style="padding-left: 18px">
+                        <label>Imagen</label>
+                    </div>
+                    <div class="col-md-6 p-0 pl-2">
+                        <label>Posicion en el plano</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 text-center b-all" style="padding-left: 18px">
+                        <img src="{{ isset($puesto) ? Storage::disk(config('app.img_disk'))->url('img/puestos/'.$puesto->img_puesto) : ''}}" style="width: 90%;  margin-top: 50px" alt="" class="img-fluid ml-0">
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="file" accept=".jpg,.png,.gif,.svg" class="form-control  custom-file-input" name="img_puesto" id="img_puesto" lang="es">
+                                <label class="custom-file-label" for="img_puesto"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6 text-center b-all" style="padding-left: 18px">
+                        @include('puestos.posicion_plano')
+                    </div>
                 </div>
                 <div class="row mt-2 ">
                     <div class="col-md-12   text-right ">
@@ -172,5 +205,11 @@
     $('#id_usuario').on('select2:select', function (e) {
         $('#id_perfil').val(null).trigger('change');
     });
+
+    $('input[type="file"]').change(function(e){
+			var fileName = e.target.files[0].name;
+			$(this).next('label').html(fileName);
+			//$('.custom-file-label').html(fileName);
+		});
 
  </script>

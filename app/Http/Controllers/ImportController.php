@@ -82,6 +82,10 @@ class ImportController extends Controller
     public function process_import(Request $r){
         try
         {
+            $directorio = public_path().'/uploads/temp/';
+            if(!File::exists($directorio)) {
+                File::makeDirectory($directorio);
+            }
 
             $directorio = public_path().'/uploads/temp/'.Auth::user()->id_cliente.'/';
 

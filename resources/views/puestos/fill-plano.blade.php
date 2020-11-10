@@ -12,8 +12,10 @@
             $left=0;
             $top=0;
             $puestos= DB::Table('puestos')
+                ->select('puestos.*','plantas.*','estados_puestos.val_color as color_estado')
                 ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
-                ->where('id_planta',$pl->id_planta)
+                ->join('plantas','puestos.id_planta','plantas.id_planta')
+                ->where('puestos.id_planta',$pl->id_planta)
                 ->get();
         @endphp
         @foreach($puestos as $puesto)
@@ -49,8 +51,9 @@
                     $borde="border: 3px solid #05688f; border-radius: 10px";
                 }   else {
                     $color="#dff9d2";
-                    $font_color="#fff";
+                    $font_color="#aaa";
                     $clase_disp="disponible";
+                    $borde="border: 5px solid ".$puesto->val_color??"#fff".";";
                 }    
                 // $title=$puesto->des_puesto;
                 // if(isset($reserva)){
@@ -60,7 +63,7 @@
                 //     $title="Puesto permanentemente asignado a ".$asignado_usuario->name;
                 // }
             @endphp
-            <div class="text-center font-bold rounded add-tooltip bg-{{ $puesto->val_color }} align-middle flpuesto draggable" title="{{ $title }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $borde }}">
+            <div class="text-center font-bold rounded add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="{{ $title }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $borde }}">
                 <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw;">
                         {{ $puesto->cod_puesto }}
                         @if(isset($reserva))<br>

@@ -34,7 +34,7 @@
                 <span>Nuevo</span>
             </a>
         </div>
-        €endif
+        @endif
     </div>
 </div>
 <div id="editorCAM" class="mt-2">

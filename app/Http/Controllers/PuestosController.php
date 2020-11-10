@@ -178,21 +178,23 @@ class PuestosController extends Controller
             }
 
             //Asignacion directa de puesto
+            DB::table('puestos_asignados')->where('id_puesto',$puesto->id_puesto)->delete();
             if($r->id_usuario && $r->id_usuario>0){
-                DB::table('puestos_asignados')->where('id_puesto',$puesto->id_puesto)->delete();
                 DB::table('puestos_asignados')->insert([
                     'id_puesto'=>$puesto->id_puesto,
                     'id_usuario'=>$r->id_usuario
                 ]);
                
+            } else {
+
             }
             if($r->id_perfil && $r->id_perfil>0){
-                DB::table('puestos_asignados')->where('id_puesto',$puesto->id_puesto)->delete();
                 DB::table('puestos_asignados')->insert([
                     'id_puesto'=>$puesto->id_puesto,
                     'id_perfil'=>$r->id_perfil
                 ]);
-               
+            } else {
+                
             }
 
            
@@ -268,6 +270,7 @@ class PuestosController extends Controller
     public function mapa(){
 
         $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -329,6 +332,7 @@ class PuestosController extends Controller
     public function plano(){
 
         $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')

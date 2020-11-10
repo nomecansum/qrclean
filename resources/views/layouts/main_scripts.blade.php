@@ -3,7 +3,7 @@
     let modal_open = false;   //Indica si hay ventanas modales abiertas
 
     //Locale de Moment
-    moment.locale('es');
+    moment.locale('es'); 
     
     //Para cambiar el tema de la plantilla
     var themeBtn = $('.demo-theme'),

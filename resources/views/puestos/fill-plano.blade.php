@@ -17,6 +17,8 @@
                 ->join('plantas','puestos.id_planta','plantas.id_planta')
                 ->where('puestos.id_planta',$pl->id_planta)
                 ->get();
+
+            $agent = new \Jenssegers\Agent\Agent;
         @endphp
         @foreach($puestos as $puesto)
             @php
@@ -48,12 +50,13 @@
                     $font_color="##05688f";
                     $clase_disp="disponible";
                     $title="Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso;
-                    $borde="border: 3px solid #05688f; border-radius: 10px";
+                    $borde="border: 3px solid #05688f; border-radius: 8px";
                 }   else {
                     $color="#dff9d2";
                     $font_color="#aaa";
                     $clase_disp="disponible";
-                    $borde="border: 5px solid ".$puesto->val_color??"#fff".";";
+                    $tam_borde=isMobile()?'3':'5';
+                    $borde="border: ".$tam_borde."px solid ".$puesto->val_color??"#fff".";";
                 }    
                 // $title=$puesto->des_puesto;
                 // if(isset($reserva)){
@@ -63,20 +66,20 @@
                 //     $title="Puesto permanentemente asignado a ".$asignado_usuario->name;
                 // }
             @endphp
-            <div class="text-center font-bold rounded add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="{{ $title }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $borde }}">
+            <div class="text-center rounded add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="{{ $title }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $borde }}">
                 <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw;">
                         {{ $puesto->cod_puesto }}
                         @if(isset($reserva))<br>
-                            <span class="font-bold" style="font-size: 18px; color: #ff0">R</span>
+                            <span class="font-bold"  style="font-size:  {{ $puesto->factor_letra+0.8 }}vw; color: #ff0">R</span>
                         @endif
                         @if(isset($asignado_usuario))<br>
-                            <span class="font-bold" style="font-size: 18px; color: #f4d35d">{{ iniciales($asignado_usuario->name,3) }}</span>
+                            <span class="font-bold"  style="font-size:  {{ $puesto->factor_letra+0.8 }}vw; color: #f4d35d; line-height: 0px">{{ iniciales($asignado_usuario->name,3) }}</span>
                         @endif
                         @if(isset($asignado_miperfil))<br>
-                            <span class="font-bold" style="font-size: 18px; color: #05688f"><i class="fad fa-users" style="color: #fff"></i></span>
+                            <span  style="font-size:  {{ $puesto->factor_letra+0.5 }}vw; color: #05688f; line-height: 0px"><i class="fad fa-users" style="color: #fff"></i></span>
                         @endif
                         @if(isset($asignado_otroperfil))<br>
-                            <span class="font-bold" style="font-size: 18px;"><i class="fad fa-users" style="color: #fff"></i></span>
+                            <span  style="font-size:  {{ $puesto->factor_letra+0.5 }}vw; line-height: 0px"><i class="fad fa-users" style="color: #fff"></i></span>
                         @endif
                 </span>
             </div>

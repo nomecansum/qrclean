@@ -19,7 +19,6 @@
             position: absolute;
             z-index: 1000;
             color: #FFFFFF;
-            font-weight: bold;
             font-size: 9px;
             width: 40px;
             height: 40px;

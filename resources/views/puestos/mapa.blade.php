@@ -94,24 +94,26 @@
                                     $color="#dff9d2";
                                     $font_color="#fff";
                                     $clase_disp="disponible";
+                                    $tam_borde=isMobile()?'3':'5';
+                                    $borde="border: ".$tam_borde."px solid ".$puesto->val_color??"#fff"."; border-radius: 5px;";
                                 }    
                             @endphp
                             {{-- <div class="text-center font-bold rounded bg-{{ $p->val_color }} mr-2 mb-2 align-middle" style="width:8vw; height: 8vw; overflow: hidden; font-size: 1.6vw;">
                                 <span class="h-100 align-middle">{{ $p->cod_puesto }}</span>
                             </div> --}}
-                            <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{ $clase_disp }} mr-2 mb-2 bg-{{ $puesto->val_color }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; color: {{ $font_color }}; {{ $borde }}">
-                                <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw;">{{ $puesto->cod_puesto }}</span>
+                            <div class="text-center rounded add-tooltip align-middle flpuesto draggable {{ $clase_disp }} mr-2 mb-2 bg-{{ $puesto->color_estado }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; color: {{ $font_color }}; {{ $borde }}">
+                                <span class="h-100 align-middle text-center mb-0" style="font-size: {{ $puesto->factor_letra }}vw;">{{ $puesto->cod_puesto }}</span>
                                 @if(isset($reserva))<br>
-                                    <span class="font-bold" style="font-size: 18px; color: #ff0">R</span>
+                                    <span  style="font-size: {{ $puesto->factor_letra+0.8 }}vw; color: #ff0">R</span>
                                 @endif
                                 @if(isset($asignado_usuario))<br>
-                                    <span class="font-bold" style="font-size: 18px; color: #f4d35d">{{ iniciales($asignado_usuario->name,3) }}</span>
+                                    <span  style="font-size: {{ $puesto->factor_letra+0.8 }}vw; color: #f4d35d; line-height: 0px">{{ iniciales($asignado_usuario->name,3) }}</span>
                                 @endif
                                 @if(isset($asignado_miperfil))<br>
-                                    <span class="font-bold" style="font-size: 18px; color: #05688f"><i class="fad fa-users" style="color: #fff"></i></span>
+                                    <span  style="font-size: {{ $puesto->factor_letra+0.5 }}vw; color: #05688f; "><i class="fad fa-users" style="color: #fff"></i></span>
                                 @endif
                                 @if(isset($asignado_otroperfil))<br>
-                                    <span class="font-bold" style="font-size: 18px;"><i class="fad fa-users" style="color: #fff"></i></span>
+                                    <span  style="font-size: {{ $puesto->factor_letra+0.5 }}vw;"><i class="fad fa-users" style="color: #fff"></i></span>
                                 @endif
                             </div>
                             

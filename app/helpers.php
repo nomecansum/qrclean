@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Models\users;
+use Jenssegers\Agent\Agent;
 
 function getProfilePic()
 {
@@ -129,6 +130,16 @@ function formatmysqldate2($date){
 
 function formatspdate($date){
     return \Carbon\Carbon::createFromFormat('Y-m-d H:i', $date)->format('d/m/Y H:i');
+}
+
+function isDesktop(){
+    $agent = new \Jenssegers\Agent\Agent;
+    return $agent->isDesktop();
+}
+
+function isMobile(){
+    $agent = new \Jenssegers\Agent\Agent;
+    return $agent->isMobile();
 }
 
 function decimal_to_time($dec)

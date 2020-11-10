@@ -43,7 +43,7 @@
                             <h6>{{trans('strings.download_template')}}</h6>
                             <section>
                                 
-                                <h4>Descarge la plantilla EXCEL para rellenar con los datos especificos de su empresa.</h4>
+                                <h4>Descarge la plantilla EXCEL para rellenar con los datos especificos de su empresa haciendo click el enlace.</h4>
                                 
                                 
                                 <br><br><br>
@@ -51,7 +51,7 @@
                                     <a class="link_excel hover-this" href="{{ url('plantilla_importacion.xlsx') }}" id="link_descarga">  
                                         <img src="{{ url('img/logo_excel.png') }}">
                                         <span><h2 id="nombre_fichero" style="color: #007233">
-                                            plantilla_importacion.xlsx
+                                            descarga_plantilla_importacion.xlsx
                                         </h2></span>
                                     </a>
                                 </div>

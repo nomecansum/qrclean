@@ -235,7 +235,7 @@ class ImportController extends Controller
                         $p->save();
                         
                         savebitacora("Creado puesto en importacion " . $p->id_puesto . " " . $p->cod_puesto, $p->id_cliente);
-                        $nombres_puestos .= "[".$p->id_puesto."] " . $u->des_puesto. "<br>";
+                        $nombres_puestos .= "[".$p->id_puesto."] " . $p->des_puesto. "<br>";
                     }
 
                     DB::commit();

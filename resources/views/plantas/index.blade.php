@@ -5,7 +5,8 @@
 @endsection
 
 @section('styles')
-
+    {{-- Boostrap Select --}}
+    <link href="{{ asset('/plugins/noUiSlider/nouislider.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('breadcrumb')
@@ -128,6 +129,8 @@
 @endsection
 
 @section('scripts')
+    <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
+    <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
     <script>
         $('.parametrizacion').addClass('active active-sub');
         $('.plantas').addClass('active-link');

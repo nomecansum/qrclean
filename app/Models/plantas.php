@@ -39,6 +39,8 @@ class plantas extends Model
                   'img_plano',
                   'posiciones',
                   'num_orden',
+                  'factor_letra',
+                  'factor_puesto'
               ];
 
     /**

@@ -27,7 +27,6 @@
                 @foreach($puestos_planta as $puesto)
                 @php
                     $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();  
-
                     $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();  
                     $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();  
                     $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
@@ -59,6 +58,7 @@
                         $color="#dff9d2";
                         $font_color="#aaa";
                         $clase_disp="disponible";
+                        $borde="border: 5px solid ".$puesto->val_color??"#fff".";";
                     } 
                     
                     // if(in_array($p->id_puesto,$reservas->pluck('reservas.id_puesto')->toArray())){
@@ -69,8 +69,8 @@
                     //     $clase_disp="disponible";
                     // }
                 @endphp
-                    <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{ $clase_disp }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: 60px ; width: 60px; background-color: {{ $color }}; color: {{ $font_color }}; {{ $borde }}">
-                        <span class="h-100 align-middle text-center" style="font-size: 0.8vw;">{{ $puesto->cod_puesto }}</span>
+                    <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{ $clase_disp }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; background-color: {{ $color }}; color: {{ $font_color }}; {{ $borde }}">
+                        <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw;">{{ $puesto->cod_puesto }}</span>
                         @if(isset($reserva))<br>
                             <span class="font-bold" style="font-size: 18px; color: #ff0">R</span>
                         @endif
@@ -120,4 +120,7 @@
     })
 
     $('.boton_modo').click(boton_modo_click);
+
+    var tooltip = $('.add-tooltip');
+    if (tooltip.length)tooltip.tooltip();
 </script>

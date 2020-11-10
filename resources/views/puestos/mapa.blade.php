@@ -99,8 +99,8 @@
                             {{-- <div class="text-center font-bold rounded bg-{{ $p->val_color }} mr-2 mb-2 align-middle" style="width:8vw; height: 8vw; overflow: hidden; font-size: 1.6vw;">
                                 <span class="h-100 align-middle">{{ $p->cod_puesto }}</span>
                             </div> --}}
-                            <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{ $clase_disp }} mr-2 mb-2 bg-{{ $puesto->val_color }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: 60px ; width: 60px;color: {{ $font_color }}; {{ $borde }}">
-                                <span class="h-100 align-middle text-center" style="font-size: 0.8vw;">{{ $puesto->cod_puesto }}</span>
+                            <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{ $clase_disp }} mr-2 mb-2 bg-{{ $puesto->val_color }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; color: {{ $font_color }}; {{ $borde }}">
+                                <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw;">{{ $puesto->cod_puesto }}</span>
                                 @if(isset($reserva))<br>
                                     <span class="font-bold" style="font-size: 18px; color: #ff0">R</span>
                                 @endif

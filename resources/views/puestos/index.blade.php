@@ -115,6 +115,7 @@
         function editar(){
             $('#editorCAM').load("{{ url('/puestos/edit/') }}"+"/"+id_fila, function(){
                 animateCSS('#editorCAM','bounceInRight');
+                $('#toolbutton').hide();
             });
         }
 

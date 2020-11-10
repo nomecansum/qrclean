@@ -60,8 +60,8 @@
                 //     $title="Puesto permanentemente asignado a ".$asignado_usuario->name;
                 // }
             @endphp
-            <div class="text-center font-bold rounded add-tooltip bg-{{ $puesto->val_color }} align-middle flpuesto draggable" title="{{ $title }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: 3.8vw ; width: 3.8vw;top: {{ $top }}px; left: {{ $left }}px; {{ $borde }}">
-                <span class="h-100 align-middle text-center" style="font-size: 0.8vw;">
+            <div class="text-center font-bold rounded add-tooltip bg-{{ $puesto->val_color }} align-middle flpuesto draggable" title="{{ $title }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $borde }}">
+                <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw;">
                         {{ $puesto->cod_puesto }}
                         @if(isset($reserva))<br>
                             <span class="font-bold" style="font-size: 18px; color: #ff0">R</span>

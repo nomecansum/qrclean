@@ -112,6 +112,7 @@ class ReservasController extends Controller
             ->get();
 
         $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')

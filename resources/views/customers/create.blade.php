@@ -52,7 +52,7 @@
 								<div class="col-sm-12">
 									<div class="form-group">
 										<label for="">Distribuidor</label>
-										<select required name="id_distribuidor" id="id_distribuidor" class="form-control select2" style="width: 100%">
+										<select name="id_distribuidor" id="id_distribuidor" class="form-control select2" style="width: 100%">
 											<option value=""></option>
 											@foreach (\DB::table('distribuidores')->get() as $d)
 												<option {{isset($c) && $c->id_distribuidor == $d->id_distribuidor ? 'selected' : ''}} value="{{$d->id_distribuidor}}">{{$d->nom_distribuidor}}</option>

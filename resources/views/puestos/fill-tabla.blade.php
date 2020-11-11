@@ -57,7 +57,7 @@
                                 <td class="td" data-id="">{{ $puesto->des_edificio }}</td>
                                 <td class="td" data-id="">{{$puesto->des_planta}}</td>
                                 <td class="td" data-id="">
-                                    <div class="m-0 rounded pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
+                                    <div class="m-0 rounded pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
                                         <b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}
                                     </div>
                                 </td>

@@ -29,7 +29,7 @@ class ReservasController extends Controller
         else $backMonth = $month->format('Y-n');
         $end=$month->copy()->endOfMonth();
         $reservas=DB::table('reservas')
-            ->select('reservas.fec_reserva','reservas.fec_fin_reserva','puestos.cod_puesto','puestos.des_puesto','edificios.des_edificio','plantas.des_planta')
+            ->selectraw('date(reservas.fec_reserva) as fec_reserva,reservas.fec_fin_reserva,puestos.cod_puesto,puestos.des_puesto,edificios.des_edificio,plantas.des_planta')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')

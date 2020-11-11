@@ -54,7 +54,13 @@
     </div>
     <div class="panel-body">
         @php
-            $plantas=plantas::where('id_edificio',$e->id_edificio)->get();
+            $plantas=plantas::where('id_edificio',$e->id_edificio)
+            ->where(function($q) use($plantas_usuario){
+                if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
+                    $q->wherein('id_planta',$plantas_usuario??[]);
+                }
+            })
+            ->get();
         @endphp
         @foreach($plantas as $pl)
             <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $pl->des_planta }}</h3>

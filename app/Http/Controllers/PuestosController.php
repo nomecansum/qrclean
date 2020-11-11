@@ -24,7 +24,7 @@ class PuestosController extends Controller
     public function index(){
 
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto')
+            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','estados_puestos.hex_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -42,7 +42,7 @@ class PuestosController extends Controller
 
     public function search(Request $r){
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto')
+            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','estados_puestos.hex_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -270,7 +270,7 @@ class PuestosController extends Controller
     public function mapa(){
 
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -332,7 +332,7 @@ class PuestosController extends Controller
     public function plano(){
 
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -517,7 +517,14 @@ class PuestosController extends Controller
                 $cosas.=" | Planta: ".$r->id_planta;
             }
             if($r->id_perfil){
-                $valores["id_perfil"]=$r->id_perfil;
+                //Asignacion directa de puesto
+                foreach($listaid as $id){
+                    DB::table('puestos_asignados')->where('id_puesto',$id)->delete();
+                    DB::table('puestos_asignados')->insert([
+                        'id_puesto'=>$id,
+                        'id_perfil'=>$r->id_perfil
+                    ]);
+                }
                 $cosas.=" | Perfil: ".$r->id_perfil;
             }
             if($r->tags){
@@ -548,7 +555,8 @@ class PuestosController extends Controller
                 
                 $cosas.=" | Tags: ".$r->tags;
             }
-            $puestos=puestos::wherein('id_puesto',$listaid)->update($valores);
+            if(sizeof($valores)>0)
+                $puestos=puestos::wherein('id_puesto',$listaid)->update($valores);
 
             savebitacora('Actualizacion masiva de puestos '.implode(";",$listaid)." Atributos modificados :".$cosas,"OK");
             return [

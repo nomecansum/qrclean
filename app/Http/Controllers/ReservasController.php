@@ -66,6 +66,13 @@ class ReservasController extends Controller
             ->pluck('id_planta')
             ->toArray();
 
+        $edificios_usuario=DB::table('plantas')
+            ->join('plantas_usuario','plantas_usuario.id_planta','plantas.id_planta')
+            ->where('plantas_usuario.id_usuario',Auth::user()->id)
+            ->pluck('id_edificio')
+            ->unique()
+            ->toArray();
+
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
@@ -112,7 +119,7 @@ class ReservasController extends Controller
             ->get();
 
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -147,10 +154,15 @@ class ReservasController extends Controller
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->where(function($q) use($edificios_usuario){
+                if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
+                    $q->wherein('edificios.id_edificio',$edificios_usuario??[]);
+                }
+            })
             ->where('id_edificio',$r->edificio)
             ->get();
 
-        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
+        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','plantas_usuario'));
     }
 
     public function save(Request $r){

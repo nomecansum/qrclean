@@ -74,7 +74,7 @@
                                             @break
                                         @case(3)
                                             <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @breake     
+                                            @break     
                                         @case(4)
                                             <div class="bg-secondary rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                             @break

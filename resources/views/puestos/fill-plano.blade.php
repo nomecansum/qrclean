@@ -93,7 +93,9 @@
         @endforeach
     </div>
     <script>
-        
+        var tooltip = $('.add-tooltip');
+        if (tooltip.length)tooltip.tooltip();
+
         try{
             posiciones={!! json_encode($pl->posiciones)??'[]' !!};
             //posiciones=JSON.parse(posiciones); 

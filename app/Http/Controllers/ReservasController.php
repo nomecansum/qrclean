@@ -176,6 +176,10 @@ class ReservasController extends Controller
             $res->id_puesto=$r->id_puesto;
             $res->id_usuario=Auth::user()->id;
             $res->fec_reserva=adaptar_fecha($r->fechas);
+            //Si no vienen horas las ponemos a 0
+            $res->fec_reserva->hour=0;
+            $res->fec_reserva->minute=0;
+            $res->fec_reserva->second=0;
             if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar)){
                 $res->fec_fin_reserva=$res->fec_reserva->addDay($puesto->max_horas_reservar);   
             }

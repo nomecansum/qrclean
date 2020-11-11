@@ -169,7 +169,7 @@ function adaptar_fecha($d){
             return Carbon::createFromFormat('d/m/Y', $d);
         }
         if (Carbon::createFromFormat('Y-m-d', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y', $d);
+            return Carbon::createFromFormat('Y-m-d', $d);
         }
         if (Carbon::parse($d)!== false) {
             return Carbon::parse($d);

@@ -61,13 +61,10 @@
                         $borde="border: 5px solid ".$puesto->val_color??"#fff".";";
                     } 
                     
-                    // if(in_array($p->id_puesto,$reservas->pluck('reservas.id_puesto')->toArray())){
-                    //     $color="LightCoral";
-                    //     $clase_disp="";
-                    // }   else {
-                    //     $color="#dff9d2";
-                    //     $clase_disp="disponible";
-                    // }
+                    if(isMobile()){
+                        $puesto->factor_puesto=$puesto->factor_puesto*3;
+                        $puesto->factor_letra=$puesto->factor_letra*3;
+                    }
                 @endphp
                     <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{ $clase_disp }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; background-color: {{ $color }}; color: {{ $font_color }}; {{ $borde }}">
                         <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw;">{{ $puesto->cod_puesto }}</span>

@@ -97,6 +97,10 @@
                                     $tam_borde=isMobile()?'3':'5';
                                     $borde="border: ".$tam_borde."px solid ".$puesto->val_color??"#fff"."; border-radius: 5px;";
                                 }    
+                                if(isMobile()){
+                                    $puesto->factor_puesto=$puesto->factor_puesto*3;
+                                    $puesto->factor_letra=$puesto->factor_letra*3;
+                                }
                             @endphp
                             {{-- <div class="text-center font-bold rounded bg-{{ $p->val_color }} mr-2 mb-2 align-middle" style="width:8vw; height: 8vw; overflow: hidden; font-size: 1.6vw;">
                                 <span class="h-100 align-middle">{{ $p->cod_puesto }}</span>
@@ -130,6 +134,9 @@
 
 @section('scripts')
     <script>
+        var tooltip = $('.add-tooltip');
+        if (tooltip.length)tooltip.tooltip();
+
         $('.parametrizacion').addClass('active active-sub');
         $('.mapa').addClass('active-link');
     </script>

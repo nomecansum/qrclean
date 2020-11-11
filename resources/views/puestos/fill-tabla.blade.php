@@ -57,7 +57,7 @@
                                 <td class="td" data-id="">{{ $puesto->des_edificio }}</td>
                                 <td class="td" data-id="">{{$puesto->des_planta}}</td>
                                 <td class="td" data-id="">
-                                    <div class="m-0"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ txt_blanco($puesto->color_puesto) }} ">
+                                    <div class="m-0 rounded pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
                                         <b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}
                                     </div>
                                 </td>
@@ -74,7 +74,7 @@
                                             @break
                                         @case(3)
                                             <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
+                                            @breake     
                                         @case(4)
                                             <div class="bg-secondary rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                             @break
@@ -131,5 +131,8 @@
             $('.chkpuesto').not(this).prop('checked', this.checked);
         });
     @endif
+
+    var tooltip = $('.add-tooltip');
+    if (tooltip.length)tooltip.tooltip();
     
 </script>

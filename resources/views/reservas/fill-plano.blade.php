@@ -35,34 +35,33 @@
             $title=$puesto->des_puesto;
             $borde="";
             if(isset($reserva)){
-                $color="LightCoral";
-                $font_color="#fff";
-                $clase_disp="";
-                $title="Reservado por ".$reserva->name." para hoy";
-            } else if(isset($asignado_usuario)){
-                $color="LightCoral";
-                $font_color="#fff";
-                $clase_disp="";
-                $title="Puesto permanentemente asignado a ".$asignado_usuario->name;
-                $borde="border: 3px solid #ff9f1a; border-radius: 16px";
-            } else if(isset($asignado_otroperfil)){
-                $color="LightCoral";
-                $font_color="#fff";
-                $clase_disp="";
-                $title="Puesto reservado para  ".$asignado_otroperfil->des_nivel_acceso;
-            } else if(isset($asignado_miperfil)){
-                $color="#dff9d2";
-                $font_color="##05688f";
-                $clase_disp="disponible";
-                $title="Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso;
-                $borde="border: 3px solid #05688f; border-radius: 10px";
-            }   else {
-                $color="#dff9d2";
-                $font_color="#aaa";
-                $clase_disp="disponible";
-                $tam_borde=isMobile()?'3':'5';
-                $borde="border: ".$tam_borde."px solid ".$puesto->val_color??"#fff".";";
-            } 
+                        $color="LightCoral";
+                        $font_color="#fff";
+                        $clase_disp="";
+                        $title="Reservado por ".$reserva->name." para hoy";
+                    } else if(isset($asignado_usuario)){
+                        $color="LightCoral";
+                        $font_color="#fff";
+                        $clase_disp="";
+                        $title="Puesto permanentemente asignado a ".$asignado_usuario->name;
+                        $borde="border: 3px solid #ff9f1a; border-radius: 16px";
+                    } else if(isset($asignado_otroperfil)){
+                        $color="#e8c468";
+                        $font_color="#fff";
+                        $clase_disp="";
+                        $title="Puesto reservado para  ".$asignado_otroperfil->des_nivel_acceso;
+                    } else if(isset($asignado_miperfil)){
+                        $color="#dff9d2";
+                        $font_color="#05688f";
+                        $clase_disp="disponible";
+                        $title="Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso;
+                        $borde="border: 3px solid #05688f; border-radius: 10px";
+                    }   else {
+                        $color="#dff9d2";
+                        $font_color="#aaa";
+                        $clase_disp="disponible";
+                        $borde="border: 5px solid ".$puesto->val_color??"#fff".";";
+                    } 
         @endphp
         <div class="text-center rounded add-tooltip align-middle flpuesto draggable {{ $clase_disp }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $color }}; color: {{ $font_color }}; {{ $borde }}">
             <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw;">{{ $puesto->cod_puesto }}</span>

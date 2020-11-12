@@ -101,7 +101,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
                                 <span class="font-bold" style="font-size: 2.5vw; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
 								<span style="color: #fff; cursor: pointer">
 									@if($dia)
-									<b class="text-white" style="font-size: 0.9vw">{!! $descrip !!}</b><br>
+									<b class="text-white" style="font-size: 1.4vw">{!! $descrip !!}</b><br>
 									@endif
 								</span>
 							</td>

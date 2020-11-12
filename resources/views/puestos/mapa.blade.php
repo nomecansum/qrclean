@@ -25,9 +25,12 @@
 @section('content')
         <div class="row botones_accion">
             <div class="col-md-8">
-
+                
             </div>
-            <div class="col-md-4 text-right">
+            <div class="col-md-2">
+                <img src="{{ url("img/img_leyenda.png") }}"> LEYENDA
+            </div>
+            <div class="col-md-2 text-right">
                 <a href="{{ url('puestos/mapa') }}" class="mr-2" style="color:#fff"><i class="fad fa-th"></i> Mosaico</a>
                 <a href="{{ url('puestos/plano') }}" class="mr-2"><i class="fad fa-map-marked-alt"></i> Plano</a>
             </div>
@@ -37,10 +40,10 @@
         <div class="panel">
             <div class="panel-heading bg-gray-dark">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-5">
                         <span class="text-2x ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}</span>
                     </div>
-                    <div class="col-md-7"></div>
+                    <div class="col-md-5"></div>
                     <div class="col-md-2 text-right">
                         <h4>
                             <span class="mr-2"><i class="fad fa-layer-group"></i> {{ $e->plantas }}</span>
@@ -67,8 +70,18 @@
                                 $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
                                 
                                 if(isMobile()){
-                                    $puesto->factor_puesto=$puesto->factor_puesto*4;
-                                    $puesto->factor_letra=$puesto->factor_letra*4;
+                                    if($puesto->factor_puesto<3.5){
+                                        $puesto->factor_puesto=12;
+                                        $puesto->factor_letra=2.8;
+                                    } else {
+                                        $puesto->factor_puesto=$puesto->factor_puesto*4;
+                                        $puesto->factor_letra=$puesto->factor_letra*4;
+                                    }
+                                    
+                                    
+                                } else if($puesto->factor_puesto<3.5){
+                                    $puesto->factor_puesto=3.7;
+                                    $puesto->factor_letra=0.8;
                                 }
                                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
                                

@@ -72,7 +72,9 @@
                                                 <li>PLANTA</li>
                                                 <li>EDIFICIO</li>
                                             </ul>
+                                            <span class="text-info"><i class="fad fa-info-circle"></i> Importante: Si esta añadiendo puestos sobre plantas o edificios existentes, el dato en esta columna debe coincidir EXACTAMENTE con el ya existente, de lo contrario se crearán nuevas</span>
                                             <br>
+                                            
                                             <h4 class="font-bold">Campos obligatorios en usuarios</h4>
                                             <ul>
                                                 <li>NOMBRE</li>
@@ -83,12 +85,16 @@
                                             <img src="{{ url('img/ejemplo_excel.png') }}">
                                         </div>
                                     </div>
-                                    <h4>Para estos campos, si no indica valor, se asignará el primero disponible por defecto</h4>
+                                    <h4>Para estos campos, si no indica valor, no se asignará nada</h4>
                                     <ul>
                                         <li>DESCRIPCION DEL PUESTO</li>
+                                        <li>FOTO DE USUARIO</li>
+                                        <li>EMAIL USUARIO ASIGNADO</li>
+                                    </ul>
+                                    <h4>Para estos campos, si no indica valor, se asume que es NO y si indica cualquier valor se asume que es SI</h4>
+                                    <ul>
                                         <li>ANONIMO</li>
                                         <li>RESERVA</li>
-                                        <li>FOTO DE USUARIO</li>
                                     </ul>
                                     <h4>Una vez rellenada la plantilla pulse "Siguiente"</h4>
                             </section>

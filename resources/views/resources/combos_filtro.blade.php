@@ -68,6 +68,10 @@
                     @foreach(estados::all() as $estado)
                         <option {{ $estado->id_estado==0?'selected':'' }} value="{{ $estado->id_estado }}">{{ $estado->des_estado }}</option>
                     @endforeach
+                        <option value="A">Anonimo</option>
+                        <option value="R">Reserva</option>
+                        <option value="P">Asignado a perfil</option>
+                        <option value="U">Asignado a usuario</option>
                 </select>
                 <div class="input-group-btn">
                     <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>

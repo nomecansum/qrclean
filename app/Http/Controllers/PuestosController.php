@@ -41,6 +41,15 @@ class PuestosController extends Controller
 
 
     public function search(Request $r){
+        if($r->estado){
+            $estados=$r->estado;
+            $estados=array_filter($r->estado, "ctype_digit");
+            $atributos=array_filter($r->estado, "ctype_alpha");
+        } else {
+            $estados=null;
+            $atributos=[];
+        }
+        
         $puestos=DB::table('puestos')
             ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','estados_puestos.hex_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -73,9 +82,23 @@ class PuestosController extends Controller
                     $q->whereIn('puestos.id_puesto',$r->puesto);
                 }
             })
-            ->where(function($q) use($r){
-                if ($r->estado) {
-                    $q->whereIn('puestos.id_estado',$r->estado);
+            ->where(function($q) use($r,$estados){
+                if ($estados) {
+                    $q->whereIn('puestos.id_estado',$estados);
+                }
+            })
+            ->where(function($q) use($r,$atributos){
+                if(in_array('A',$atributos)){
+                    $q->where('mca_acceso_anonimo','S');
+                }
+                if(in_array('R',$atributos)){
+                    $q->where('mca_reservar','S');
+                }
+                if(in_array('P',$atributos)){
+                    $q->wherenotnull('puestos_asignados.id_perfil');
+                }
+                if(in_array('U',$atributos)){
+                    $q->wherenotnull('puestos_asignados.id_usuario');
                 }
             })
             ->where(function($q) use($r){

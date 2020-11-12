@@ -33,11 +33,21 @@
                     $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"R");
                     $es_reserva="P";
                     if(isMobile()){
-                        $puesto->factor_puesto=$puesto->factor_puesto*3;
-                        $puesto->factor_letra=$puesto->factor_letra*3;
+                        if($puesto->factor_puesto<3.5){
+                            $puesto->factor_puesto=12;
+                            $puesto->factor_letra=2.8;
+                        } else {
+                            $puesto->factor_puesto=$puesto->factor_puesto*4;
+                            $puesto->factor_letra=$puesto->factor_letra*4;
+                        }
+                        
+                        
+                    } else if($puesto->factor_puesto<3.5){
+                        $puesto->factor_puesto=3.7;
+                        $puesto->factor_letra=0.8;
                     }
                 @endphp
-                    <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{  $cuadradito['clase_disp'] }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; background-color: {{  $cuadradito['color'] }}; color: {{  $cuadradito['font_color'] }}; {{  $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
+                    <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{  $cuadradito['clase_disp'] }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-opacity="{{ $cuadradito['transp']  }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; background-color: {{  $cuadradito['color'] }}; color: {{  $cuadradito['font_color'] }}; {{  $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
                         <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; color:#666">{{ $puesto->cod_puesto }}</span>
                         @include('resources.adornos_iconos_puesto')
                     </div>
@@ -77,6 +87,14 @@
     })
 
     $('.boton_modo').click(boton_modo_click);
+
+    $('.flpuesto').mouseover(function(){
+        $(this).css('opacity',1);
+    })
+
+    $('.flpuesto').mouseout(function(){
+        $(this).css('opacity',$(this).data('opacity'));
+    })
 
     var tooltip = $('.add-tooltip');
     if (tooltip.length)tooltip.tooltip();

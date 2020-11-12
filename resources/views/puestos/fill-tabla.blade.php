@@ -16,6 +16,7 @@
                         data-locale="es-ES"
                         data-search="true"
                         data-show-columns="true"
+                        data-show-toggle="true"
                         data-show-columns-toggle-all="true"
                         data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
                         data-page-size="50"
@@ -28,17 +29,17 @@
                         >
                         <thead>
                             <tr>
-                                <th style="width: 10px" class="no-sort"></th>
-                                <th style="width: 20px" class="no-sort"></th>
+                                <th style="width: 10px" class="no-sort"  data-switchable="false"></th>
+                                <th style="width: 20px" class="no-sort"  data-switchable="false"></th>
                                 
-                                <th data-sortable="true">Edificio</th>
-                                <th data-sortable="true">Planta</th>
+                                <th data-sortable="true" @if(isMobile()) data-visible="false" @endif>Edificio</th>
+                                <th data-sortable="true" @if(isMobile()) data-visible="false" @endif>Planta</th>
                                 <th data-sortable="true">Puesto</th>
-                                <th data-sortable="true" title="Acceso anonimo permitido en el puesto" style="width: 20px">Anonimo</th>
-                                <th data-sortable="true" title="Reserva permitida en el puesto">Reserva</th>
-                                <th data-sortable="true" title="Puesto con asignacion fija">Fijo</th>
+                                <th data-sortable="true" title="Acceso anonimo permitido en el puesto" style="width: 20px"  @if(isMobile()) data-visible="false" @endif>Anonimo</th>
+                                <th data-sortable="true" title="Reserva permitida en el puesto" @if(isMobile()) data-visible="false" @endif>Reserva</th>
+                                <th data-sortable="true" title="Puesto con asignacion fija" @if(isMobile()) data-visible="false" @endif>Fijo</th>
                                 <th data-sortable="true"class="text-center" style="width: 100px">Estado</th>
-                                <th></th>
+                                <th  data-switchable="false"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,10 +77,10 @@
                                             <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                             @break     
                                         @case(4)
-                                            <div class="bg-secondary rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                            <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                             @break
                                         @case(5)
-                                            <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                            <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                             @break
                                         @case(6)
                                             <div class="bg-warning rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;"><i class="fad fa-exclamation-triangle"></i>

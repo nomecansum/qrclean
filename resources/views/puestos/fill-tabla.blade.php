@@ -12,7 +12,7 @@
                         <div id="all_toolbar" class="ml-3">
                             <input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos">Todos</label>
                         </div>
-                        <table id="tablapuestos"  data-toggle="table"
+                        <table id="tablapuestos"  data-toggle="table" onclick="tabla_click()"
                         data-locale="es-ES"
                         data-search="true"
                         data-show-columns="true"
@@ -102,10 +102,10 @@
                     <div style="display: flex; flex-direction: row;">
                         <div class="pad-all rounded bg-white" style="border: 3px solid navy; background-color: #fff;">
                             <label>Acciones<span class="font-bold ml-2" id="nombrepuesto"></span></label><br>
-                            <div class="btn-group btn-group pull-right" role="group">
-                                <a href="#"  class="btn btn-primary btn_editar add-tooltip toolbutton"  title="Ver puesto"  data-id=""> <span class="fa fa-eye" aria-hidden="true"></span></a>
-                                @if(checkPermissions(['Puestos'],['W']))<a href="#"  class="btn btn-info btn_editar add-tooltip toolbutton" onclick="editar()" title="Editar puesto" data-id=""> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>@endif
-                                @if(checkPermissions(['Puestos'],['D']))<a href="#" data-target="#eliminar-puesto" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del toolbutton"><span class="fa fa-trash" aria-hidden="true"></span></a>@endif
+                            <div class="btn-group btn-group pull-right ml-1" role="group">
+                                {{--  <a href="#"  class="btn btn-primary btn_editar add-tooltip toolbutton"  title="Ver puesto"  data-id=""> <span class="fa fa-eye" aria-hidden="true"></span></a>  --}}
+                                @if(checkPermissions(['Puestos'],['W']))<a href="#"  class="btn btn-info btn_editar add-tooltip toolbutton ml-2" onclick="editar()" title="Editar puesto" data-id=""> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                @if(checkPermissions(['Puestos'],['D']))<a href="#" data-target="#eliminar-puesto" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del toolbutton"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                             </div>
                             <div class="btn-group btn-group pull-right" role="group">
                                 @if(checkPermissions(['Puestos'],['W']))
@@ -131,9 +131,18 @@
         $("#chktodos").click(function(){
             $('.chkpuesto').not(this).prop('checked', this.checked);
         });
-    @endif
+        
+        var tooltip = $('.add-tooltip');
+        if (tooltip.length)tooltip.tooltip();
 
-    var tooltip = $('.add-tooltip');
-    if (tooltip.length)tooltip.tooltip();
+        
+    }
+    @endif
+   function tabla_click(){
+    $('#toolbutton').hide();
+    //console.log('tabla_click');
+   }
+
+    
     
 </script>

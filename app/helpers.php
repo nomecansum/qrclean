@@ -104,6 +104,18 @@ function isAdmin(){
     }
 }
 
+function isSupervisor($id){
+    try{
+        $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
+        $usuario=users::findorfail($id);
+
+        $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->where('id_perfil',$usuario->cod_nivel)->first();
+        return isset($supervisores_perfil)&&$supervisores_perfil->mca_read=="1"?true:false;
+    } catch(\Exception $e){
+        return false;
+    }
+}
+
 function mensaje_excepcion($e){
     if(isAdmin()){
         return $e->getMessage().' {'.get_class($e).'}  ['.debug_backtrace()[1]['function'].']';

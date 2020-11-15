@@ -82,7 +82,7 @@
                         <label for="id_usuario">Asignar a usuario</label>
                         <select name="id_usuario" id="id_usuario" class="form-control select2">
                             <option value="0"></option>
-                            @foreach(DB::table('users')->where('id_cliente',Auth::user()->id_cliente)->orderby('name')->get() as $u)
+                            @foreach($usuarios as $u)
                                 <option value="{{ $u->id}}" {{ isset($puesto->id_usuario) && $puesto->id_usuario==$u->id?'selected':'' }}>{{ $u->name }}</option>
                             @endforeach
                         </select>
@@ -91,7 +91,7 @@
                         <label for="id_perfil">Asignar a perfil</label>
                         <select name="id_perfil" id="id_perfil" class="form-control select2">
                             <option value="0"></option>
-                            @foreach(DB::table('niveles_acceso')->wherein('id_cliente',[1,Auth::user()->id_cliente])->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->orderby('val_nivel_acceso')->orderby('des_nivel_acceso')->get() as $n)
+                            @foreach($perfiles as $n)
                                 <option value="{{ $n->cod_nivel}}" {{ isset($puesto->id_perfil) && $puesto->id_perfil==$n->cod_nivel?'selected':'' }}>{{ $n->des_nivel_acceso }}</option>
                             @endforeach
                         </select>
@@ -178,7 +178,6 @@
             if (e.keyCode == 13) {
                 /* FOCUS ELEMENT */
                 e.preventDefault();
-                
             }
             
         });

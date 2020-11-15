@@ -35,6 +35,12 @@ class PuestosController extends Controller
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                    $q->wherein('puestos.id_puesto',$puestos_usuario);
+                }
+            })
             ->get();
         return view('puestos.index',compact('puestos'));
     }
@@ -107,6 +113,12 @@ class PuestosController extends Controller
                     $q->whereIn('puestos.id_puesto',$puestos_tags);
                 }
             })
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                    $q->wherein('puestos.id_puesto',$puestos_usuario);
+                }
+            })
             ->get();
         return view('puestos.fill-tabla',compact('puestos','r'));
     }
@@ -131,8 +143,33 @@ class PuestosController extends Controller
                 ->pluck('nom_tag')
                 ->toarray();
             $tags=implode(",",$tags);
+
+            $usuarios=DB::table('users')
+                ->where('id_cliente',Auth::user()->id_cliente)
+                ->orderby('name')
+                ->where(function($q){
+                    if (isSupervisor(Auth::user()->id)) {
+                        $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',Auth::user()->id)->pluck('id')->toArray();
+                        $q->wherein('users.id',$usuarios_supervisados);
+                    }
+                })
+                ->get();
+
+            $perfiles=DB::table('niveles_acceso')
+                ->wherein('id_cliente',[1,Auth::user()->id_cliente])
+                ->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)
+                ->where(function($q){
+                    if (isSupervisor(Auth::user()->id)) {
+                        $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',Auth::user()->id)->pluck('cod_nivel')->toArray();
+                        $q->wherein('niveles_acceso.cod_nivel',$usuarios_supervisados);
+                    }
+                })
+                ->orderby('val_nivel_acceso')
+                ->orderby('des_nivel_acceso')
+                ->get();
+            
         }
-        return view('puestos.edit',compact('puesto','tags'));
+        return view('puestos.edit',compact('puesto','tags','usuarios','perfiles'));
 
     }
 
@@ -301,6 +338,12 @@ class PuestosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                    $q->wherein('puestos.id_puesto',$puestos_usuario);
                 }
             })
             ->orderby('edificios.des_edificio')

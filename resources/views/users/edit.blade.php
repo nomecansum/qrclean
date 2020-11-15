@@ -58,16 +58,35 @@
 
         </div>
     </div>
+    @if(isSupervisor($users->id))
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Puestos que puede gestionar como supervisor</h3>
+        </div>
+        <div class="panel-body" id="puestos_usuario">
 
+        </div>
+    </div>
+    @endif
 @endsection
 
 @section('scripts')
     <script>
         $(function(){
-            $('#plantas_usuario').load("{{ url('users/plantas/'.$users->id) }}")
+            $('#plantas_usuario').load("{{ url('users/plantas/'.$users->id) }}/1")
         });
+
         $('.configuracion').addClass('active active-sub');
 	    $('.usuarios').addClass('active-link');
+        @if(isSupervisor($users->id))
+            $(function(){
+                $('#puestos_usuario').load("{{ url('users/puestos_supervisor/'.$users->id) }}")
+            });
+        @endif
+        
+
+
+        
     </script>
 @endsection
 @include('layouts.scripts_panel')

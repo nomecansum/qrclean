@@ -151,6 +151,7 @@
             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                 <div class="font-bold text-center w100 mt-2">{{ Auth::user()->name }}</div>
                 <ul class="head-list">
+                    
                     <li>
                         <a href="{{ url('/users/'.Auth::user()->id.'/edit') }}"><i class="fad fa-user"></i> Mi Perfil</a>
                     </li>
@@ -163,9 +164,14 @@
                     <li>
                         <a href="{{ url('/lockscreen') }}"><i class="fad fa-user-lock"></i> Bloquear pantalla</a>
                     </li>
+                   
                     <li>
                         <a href="{{url('/logout')}}"><i class="fad fa-sign-out-alt"></i> Logout</a>
                     </li>
+                    @if(session('back_id') && session('back_id')!=Auth::user()->id)
+                        <li role="separator" class="divider"></li>
+                        <button class="btn btn-warning ml-5 mb-2" onclick="document.location='{{url('reback')}}'"> <i class="mdi mdi-format-rotate-90"></i> Volver a mi sesion</button>
+                    @endif
                 </ul>
             </div>
         </li>

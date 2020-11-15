@@ -53,7 +53,7 @@ class ReservasController extends Controller
         $f1=Carbon::parse($fecha);
         $reserva=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-            ->where('fec_reserva',$f1)
+            ->wheredate('fec_reserva',$f1)
             ->where('id_usuario',Auth::user()->id)
             ->first();
         return view('reservas.edit_del',compact('reserva','f1'));

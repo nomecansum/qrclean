@@ -31,7 +31,10 @@
     <div class="col-md-8">
         <span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
     </div>
-    <div class="col-md-4 text-right">
+    <div class="col-md-2 text-right">
+        <a href="#modal-leyenda" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
+    </div>
+    <div class="col-md-2 text-right">
         <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar" ><i class="fad fa-th"></i> Mosaico</a>
         <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar_plano" style="color: #1e90ff"><i class="fad fa-map-marked-alt"></i> Plano</a>
     </div>
@@ -69,6 +72,7 @@
     </div>
 </div>
 @endforeach
+@include('resources.leyenda_reservas')
 <script>
 
     $('.sitio').click(function(){

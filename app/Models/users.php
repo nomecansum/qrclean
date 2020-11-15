@@ -45,7 +45,9 @@ class users extends Model
                   'id_cliente',
                   'val_timezone',
                   'token_acceso',
-                  'def_camera'
+                  'def_camera',
+                  'email_expire_at',
+                  'id_usuario_supervisor'
               ];
 
     /**

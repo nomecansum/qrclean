@@ -45,9 +45,12 @@
 @section('content')
         <div class="row botones_accion">
             <div class="col-md-8">
-
+                
             </div>
-            <div class="col-md-4 text-right">
+            <div class="col-md-2 text-right">
+                <a href="#modal-leyenda" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
+            </div>
+            <div class="col-md-2 text-right">
                 <a href="{{ url('puestos/mapa') }}" class="mr-2" ><i class="fad fa-th"></i> Mosaico</a>
                 <a href="{{ url('puestos/plano') }}" class="mr-2" style="color:#fff"><i class="fad fa-map-marked-alt"></i> Plano</a>
             </div>
@@ -80,7 +83,7 @@
             </div>
         </div>
         @endforeach
-
+        @include('resources.leyenda_puestos')
 
 @endsection
 

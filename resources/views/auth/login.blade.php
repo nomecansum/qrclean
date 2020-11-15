@@ -31,7 +31,7 @@
 
         <div class="pad-all">
             <a href="{{ url('/reminder') }}" class="btn-link mar-rgt">Forgot password ?</a>
-            <a href="{{ url('/register') }}" class="btn-link mar-lft">Create a new account</a>
+            {{-- <a href="{{ url('/register') }}" class="btn-link mar-lft">Create a new account</a> --}}
         </div>
     </div>
 </div>

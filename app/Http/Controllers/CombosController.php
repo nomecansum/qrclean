@@ -52,6 +52,12 @@ class CombosController extends Controller
                 ->join('edificios','edificios.id_edificio','puestos.id_edificio')
                 ->join('plantas','plantas.id_planta','puestos.id_planta')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->where(function($q){
+                    if (isSupervisor(Auth::user()->id)) {
+                        $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                        $q->wherein('puestos.id_puesto',$puestos_usuario);
+                    }
+                })
                 ->get(),
 
             "tags" => DB::table('tags')
@@ -88,6 +94,12 @@ class CombosController extends Controller
                 ->join('plantas','plantas.id_planta','puestos.id_planta')
                 ->whereIn('clientes.id_cliente',$r->cliente)
                 ->wherein('edificios.id_edificio',$r->edificio)
+                ->where(function($q){
+                    if (isSupervisor(Auth::user()->id)) {
+                        $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                        $q->wherein('puestos.id_puesto',$puestos_usuario);
+                    }
+                })
                 ->get()
         ];
     }
@@ -117,6 +129,12 @@ class CombosController extends Controller
                 ->whereIn('clientes.id_cliente',$r->cliente)
                 ->wherein('edificios.id_edificio',$r->edificio)
                 ->wherein('plantas.id_planta',$r->planta)
+                ->where(function($q){
+                    if (isSupervisor(Auth::user()->id)) {
+                        $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                        $q->wherein('puestos.id_puesto',$puestos_usuario);
+                    }
+                })
                 ->get()
         ];
     }

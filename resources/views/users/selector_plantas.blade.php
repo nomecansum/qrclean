@@ -28,9 +28,9 @@
         @endphp
         <div class="d-flex flex-wrap">
             @foreach($plantas as $key=>$value)
-                <div class="font-bold rounded mr-2 mb-2 align-middle pad-all pastilla  add-tooltip" title="{{ $value }}" id="pastilla{{ $key }}" style="font-size: 12px; width: 200px; height: 46px; overflow: hidden;  {{ in_array($key,$plantas_usuario)?'background-color: #02c59b': 'background-color: #eae3b8' }}">
+                <div class="font-bold rounded mr-2 mb-2 align-middle pad-all pastilla  add-tooltip" title="{{ $value }}" id="pastilla{{ $key }}" style="font-size: 12px; width: 200px; height: 46px; overflow: hidden;  {{ $check&&in_array($key,$plantas_usuario)?'background-color: #02c59b': 'background-color: #eae3b8' }}">
                     <span class="h-100 align-middle" >
-                        <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $key }}" data-edificio="{{ $e->id_edificio }}" id="chkp{{ $key }}" value="{{ $key }}" {{ in_array($key,$plantas_usuario)?' checked ': '' }}>
+                        <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $key }}" data-edificio="{{ $e->id_edificio }}" id="chkp{{ $key }}" value="{{ $key }}" {{ $check&&in_array($key,$plantas_usuario)?' checked ': '' }}>
                         <label class="custom-control-label"   for="chkp{{ $key }}"></label>
                         {{ substr($value,0,21) }} {{ strlen($value)>19?'...':'' }}</span>
                 </div>
@@ -40,36 +40,45 @@
     </div>
 </div>
 @endforeach
-<script>
-    $('.chkpuesto').click(function(){
-        if($(this).is(':checked')){
-            $.get("{{ url('users/addplanta/'.$id) }}/"+$(this).data('id'),function(data){
-                $('#pastilla'+data.id).css("background-color",'#02c59b');
-            })
-        } else {
-            $.get("{{ url('users/delplanta/'.$id) }}/"+$(this).data('id'),function(data){
-                $('#pastilla'+data.id).css("background-color",'#eae3b8');
-            })
-        }
-    })
 
-    $('.chk_edificio').click(function(){
-        estado=$(this).is(':checked');
-        
-        console.log(estado);
-        $('[data-edificio='+$(this).data('id')+']').each(function(){
-            $(this).attr('checked',estado);
-            if(estado){
+
+    <script>
+        var tooltip = $('.add-tooltip');
+        if (tooltip.length)tooltip.tooltip();
+        @if($check)
+        //{{-- Esta logica solo se ejecuta cuando estamos en detalle de usuario, para los multiples la pongo en la pagina del listado de usuarios --}}
+        $('.chkpuesto').click(function(){
+            if($(this).is(':checked')){
                 $.get("{{ url('users/addplanta/'.$id) }}/"+$(this).data('id'),function(data){
                     $('#pastilla'+data.id).css("background-color",'#02c59b');
                 })
-            }
-            else  {
+            } else {
                 $.get("{{ url('users/delplanta/'.$id) }}/"+$(this).data('id'),function(data){
                     $('#pastilla'+data.id).css("background-color",'#eae3b8');
                 })
-            } 
+            }
         })
-    })
+        @endif
 
-</script>
+        $('.chk_edificio').click(function(){
+            estado=$(this).is(':checked');
+            
+            console.log(estado);
+            $('[data-edificio='+$(this).data('id')+']').each(function(){
+                $(this).attr('checked',estado);
+                @if($check)
+                 //{{-- Esta logica solo se ejecuta cuando estamos en detalle de usuario, para los multiples la pongo en la pagina del listado de usuarios --}}
+                    if(estado){
+                        $.get("{{ url('users/addplanta/'.$id) }}/"+$(this).data('id'),function(data){
+                            $('#pastilla'+data.id).css("background-color",'#02c59b');
+                        })
+                    }
+                    else  {
+                        $.get("{{ url('users/delplanta/'.$id) }}/"+$(this).data('id'),function(data){
+                            $('#pastilla'+data.id).css("background-color",'#eae3b8');
+                        })
+                    } 
+                @endif
+            })
+        })
+    </script>

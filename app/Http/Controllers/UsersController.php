@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Storage;
 use Auth;
-use Carbon;
+use Session;
+use Redirect;
+use \Carbon\Carbon;
 
 class UsersController extends Controller
 {
@@ -28,16 +30,42 @@ class UsersController extends Controller
     public function index()
     {
         $usersObjects = DB::table('users')
-        ->join('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
+        ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
         ->where(function($q){
             if (!isAdmin()) {
                 $q->wherein('users.id_cliente',clientes());
             }
         })
+        ->where(function($q){
+            if (isSupervisor(Auth::user()->id)) {
+                $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',Auth::user()->id)->pluck('id')->toArray();
+                $q->wherein('users.id',$usuarios_supervisados);
+            }
+        })
         ->get();
+
+        $supervisores_perfil=[0];
+        $supervisores_usuario=[0];
+
+    
+        $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
+
+        $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->get()->pluck('id_perfil')->unique();
+
+        $supervisores_usuario=DB::table('permisos_usuarios')->where('id_seccion',$permiso)->get()->pluck('id_usuario')->unique();
+
+        $supervisores=DB::table('users')
+            ->where(function ($q) use($supervisores_perfil,$supervisores_usuario){
+                $q->wherein('cod_nivel',$supervisores_perfil);
+                $q->orwherein('id',$supervisores_usuario);
+            })
+            ->orderby('name')
+            ->get();
+            
+
         //$usersObjects = users::with('grupo','perfile')->paginate(25);
 
-        return view('users.index', compact('usersObjects'));
+        return view('users.index', compact('usersObjects','supervisores'));
     }
 
     /**
@@ -191,7 +219,7 @@ class UsersController extends Controller
             $users->delete();
             savebitacora('Usuario '.$users->email. ' borrado',"Usuarios","Destroy","OK");
             flash('Usuario '.$id. ' eliminado con exito')->success();
-            return redirect()->route('users.users.index');
+            return redirect()->route('users.index');
         } catch (Exception $exception) {
             flash('ERROR: Ocurrio un error al eliminar el usuario '.$id.' '.$exception->getMessage())->error();
             savebitacora('ERROR: Ocurrio un error borrando el usuario '.$users->name.' '.$exception->getMessage() ,"Usuarios","destroy","ERROR");
@@ -200,6 +228,35 @@ class UsersController extends Controller
         }
     }
 
+    public function borrar_usuarios(Request $r)
+    {
+        try {
+            $id_ok=[];
+            foreach($r->lista_id as $id){
+                validar_acceso_tabla($id,"users");
+                $users = users::find($id);
+                if($users){
+                    $id_ok[]=$users->name;
+                    $users->delete();
+                    savebitacora('Usuario '.$users->email. ' borrado',"Usuarios","Destroy","OK");
+                }
+                
+                
+            }
+        } catch (Exception $exception) {
+            return [
+                'title' => "Usuarios",
+                'error' => 'ERROR: Ocurrio un error borrando los usuarios el usuario '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+        }
+
+        return [
+            'title' => "Usuarios",
+            'message' => 'Usuarios '.implode(",",$id_ok). ' borrados',
+            'url' => url('users')
+        ];
+    }
 
     /**
      * Get the request's data from the request.
@@ -228,8 +285,7 @@ class UsersController extends Controller
         return $data;
     }
 
-
-    public function plantas_usuario($id){
+    public function plantas_usuario($id,$check){
         validar_acceso_tabla($id,'users');
         $user=users::findorfail($id);
 
@@ -252,7 +308,7 @@ class UsersController extends Controller
         ->get();
 
         $plantas_usuario=DB::table('plantas_usuario')->where('id_usuario',$id)->pluck('id_planta')->toarray();
-        return view('users.selector_plantas',compact('puestos','edificios','plantas_usuario','id'));
+        return view('users.selector_plantas',compact('puestos','edificios','plantas_usuario','id','check'));
     }
 
     public function addplanta($usuario,$planta){
@@ -289,5 +345,219 @@ class UsersController extends Controller
         return Hash::make($pwd);
     }
 
+
+    public function reback(){
+        $this->authwith(session('back_id'));
+        session(['back_id'=>null]);
+        return redirect('/');
+    }
+
+    public function authwith($id)
+    {
+        $back_id=Auth::user()->id;
+        //validar_acceso_tabla($id,"cug_usuarios");
+        savebitacora("Relogin al usuario [".$id."]");
+        Auth::logout();
+        Auth::loginUsingId($id);
+
+        //session(['lang' => Auth::user()->lang]);
+        session(['back_id'=>$back_id]);
+        //Permisos del usuario
+        $permisos = DB::select(DB::raw("
+        SELECT
+                des_seccion,
+                max(mca_read)as mca_read,
+                max(mca_write) as mca_write,
+                max(mca_create) as mca_create,
+                max(mca_delete) as mca_delete
+        FROM
+            (SELECT
+                `permisos_usuarios`.`id_seccion`,
+                `permisos_usuarios`.`mca_read`,
+                `permisos_usuarios`.`mca_write`,
+                `permisos_usuarios`.`mca_create`,
+                `permisos_usuarios`.`mca_delete`,
+                `secciones`.`des_seccion`
+            FROM
+                `permisos_usuarios`
+                INNER JOIN `secciones` ON (`permisos_usuarios`.`id_seccion` = `secciones`.`cod_seccion`)
+            WHERE
+                `cod_usuario` = ".auth()->user()->id."
+            UNION
+            SELECT
+                `secciones_perfiles`.`id_seccion`,
+                `secciones_perfiles`.`mca_read`,
+                `secciones_perfiles`.`mca_write`,
+                `secciones_perfiles`.`mca_create`,
+                `secciones_perfiles`.`mca_delete`,
+                `secciones`.`des_seccion`
+            FROM
+                `secciones_perfiles`
+                INNER JOIN `secciones` ON (`secciones_perfiles`.`id_seccion` = `secciones`.`cod_seccion`)
+            WHERE
+                id_perfil=".auth()->user()->cod_nivel.") sq
+        GROUP BY sq.des_seccion"));
+        session(['P' => $permisos]);
+
+        //Imagen del usuario
+        $imagen=DB::table('users')
+        ->select('img_usuario')
+        ->where('id',Auth::user()->cod_usuario)
+        ->value('img_usuario');
+        session(['profile_pic'=>$imagen]);
+        Session::forget('id_cliente');
+
+        //Logo de cliente
+        $cliente=DB::table('clientes')->where('id_cliente',Auth::user()->cod_cliente)->first();
+
+        if(!empty($cliente->fec_borrado))
+           return response()->json(["Tu empresa se encuentra dada de baja en el sistema, para cualquier pregunta contacte al 917 373 295 "],422);
+
+        if($cliente && $cliente->img_logo!=''){
+            session(['logo_cliente' => $cliente->img_logo]);
+        }
+        else Session::forget('logo_cliente');
+    
+
+        savebitacora("Cambio de sesion del usuario",null);
+        return redirect('/');
+    }
+
+    public function asignar_plantas(Request $r){
+
+        try {
+            //Primero borramos lo que ya tuvieran si se ha escogido la opcion
+            if($r->borrar_ant){
+                DB::table('plantas_usuario')->wherein('id_usuario',$r->lista_id)->wherein('id_planta',$r->lista_plantas)->delete();
+            }
+            foreach($r->lista_id as $id){
+                foreach($r->lista_plantas as $p){
+                    DB::table('plantas_usuario')->insert([
+                        "id_usuario"=>$id,
+                        "id_planta"=>$p
+                    ]);
+                }
+                
+            }
+            savebitacora('Asignado permiso de  de reserva en plantas '.implode(",",$r->lista_plantas). ' para los usuarios '.implode(",",$r->lista_id),"Usuarios","asignar_plantas","OK");
+
+            return [
+                'title' => "Usuarios",
+                'message' => 'Asignado permiso de  de reserva en plantas '.implode(",",$r->lista_plantas). ' para los usuarios '.implode(",",$r->lista_id),
+                //'url' => url('users')
+            ];
+
+        } catch (Exception $exception) {
+            return [
+                'title' => "Usuarios",
+                'error' => 'ERROR: Ocurrio un error asignando permisos de planta a los usuarios '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+        }
+    }
+
+    public function asignar_supervisor(Request $r){
+        try {
+            $supervisor=$r->supervisor==0?null:$r->supervisor;
+            foreach($r->lista_id as $id){
+                DB::table('users')->where('id',$id)->update([
+                    "id_usuario_supervisor"=>$supervisor
+                ]);
+            }
+            savebitacora('Asignado supervisor' .$r->supervisor.' para los usuarios '.implode(",",$r->lista_id),"Usuarios","asignar_supervisor","OK");
+
+            return [
+                'title' => "Usuarios",
+                'message' =>'Asignado supervisor' .$r->supervisor.' para los usuarios '.implode(",",$r->lista_id),
+                //'url' => url('users')
+            ];
+
+        } catch (Exception $exception) {
+            return [
+                'title' => "Usuarios",
+                'error' => 'ERROR: Ocurrio un error asignando permisos de planta a los usuarios '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+        }
+    }
+
+    public function puestos_supervisor($id){
+        $usuario=users::find($id);
+
+        $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('puestos.id_cliente',$usuario->id_cliente)
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $edificios=DB::table('edificios')
+        ->select('id_edificio','des_edificio')
+        ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
+        ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
+        ->where('edificios.id_cliente',$usuario->id_cliente)
+        ->get();
+
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','reservas.id_usuario','users.id')
+            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where('reservas.id_cliente',$usuario->id_cliente)
+            ->get();
+
+        $asignados_usuarios=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')    
+            ->where('id_usuario','<>',$id)
+            ->get();
+
+        $asignados_miperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
+            ->where('id_perfil',$usuario->cod_nivel)
+            ->get();
+        
+        $asignados_nomiperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
+            ->where('id_perfil','<>',$usuario->cod_nivel)
+            ->get();
+
+        $puestos_check=DB::table('puestos_usuario_supervisor')->where('id_usuario',$id)->pluck('id_puesto')->toarray();
+        $checks=1; //Para que la vista muestre los checkbox
+        $id_check=$id;
+        $url_check="users/add_puesto_supervisor/";
+
+        
+        return view('puestos.content_mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','checks','puestos_check','id_check','url_check'));
+    }
+
+    public function add_puesto_supervisor($id,$puesto,$accion){
+        try {
+            if($accion=="A"){
+                DB::table('puestos_usuario_supervisor')->insert([
+                    "id_puesto"=>$puesto,
+                    "id_usuario"=>$id
+                ]);
+            } else {
+                DB::table('puestos_usuario_supervisor')->where(["id_puesto"=>$puesto,"id_usuario"=>$id])->delete();
+            }
+            return [
+                'result' => "OK"
+            ];
+        } catch (Exception $exception) {
+            return [
+                'result' => "ERROR",
+                'error' => 'ERROR: Ocurrio un error asignando puestos al usuarios '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+        }
+    }
 }
 

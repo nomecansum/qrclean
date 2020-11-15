@@ -86,6 +86,7 @@
         let token_fila=0;
 
         function hoverdiv(obj,e,divid,id,txt,token){
+            event.stopPropagation();
             if(id==id_fila){
                 $('#'+divid).hide();
                 id_fila=0;
@@ -96,7 +97,7 @@
             console.log(obj.position());
             
             console.log(e);
-            var left  =obj.position().left-280;
+            var left  =obj.position().left-300;
             var top  = obj.position().top+16;
 
 

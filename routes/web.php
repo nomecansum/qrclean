@@ -43,6 +43,11 @@ Route::get('/logout','Auth\LoginController@logout');
 
 
 Route::group(['middleware' => 'auth'], function() {
+
+    //Relogin
+    Route::get("relogin/{id}",['middleware' => 'permissions:["ReLogin"],["R"]', 'uses' => 'UsersController@authwith']);
+    Route::get("reback",'UsersController@reback');
+    
     //Pagina pricipal
     Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@index');
@@ -51,19 +56,25 @@ Route::group(['middleware' => 'auth'], function() {
     //
 
     Route::group(['prefix' => 'users'], function () {
-        Route::get('/', 'UsersController@index')->name('users.index');
-        Route::get('/create','UsersController@create')->name('users.users.create');
-        Route::get('/show/{users}','UsersController@show')->name('users.users.show');
-        Route::get('/{users}/edit','UsersController@edit')->name('users.users.edit');
-        Route::get('/plantas/{id}','UsersController@plantas_usuario')->name('users.plantas');
-        Route::post('/', 'UsersController@store')->name('users.users.store');
-        Route::post('users/{users}', 'UsersController@update')->name('users.users.update');
-        Route::delete('/users/{users}','UsersController@destroy')->name('users.users.destroy');
+        Route::get('/',['middleware'=>'permissions:["Usuarios"],["R"]','uses'=>'UsersController@index'])->name('users.index');
+        Route::get('/create',['middleware'=>'permissions:["Usuarios"],["C"]','uses'=>'UsersController@create'])->name('users.users.create');
+        Route::get('/show/{users}',['middleware'=>'permissions:["Usuarios"],["R"]','uses'=>'UsersController@show'])->name('users.users.show');
+        Route::get('/{users}/edit',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@edit'])->name('users.users.edit');
+        Route::get('/plantas/{id}/{check}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@plantas_usuario'])->name('users.plantas');
+        Route::post('/',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@store'] )->name('users.users.store');
+        Route::post('users/{users}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@update'])->name('users.users.update');
+        Route::get('/delete/{id}',['middleware'=>'permissions:["Usuarios"],["D"]','uses'=>'UsersController@destroy'])->name('users.users.destroy');
 
-        Route::get('/addplanta/{usuario}/{planta}','UsersController@addplanta')->name('users.addplanta');
-        Route::get('/delplanta/{usuario}/{planta}','UsersController@delplanta')->name('users.delplanta');
+        Route::get('/addplanta/{usuario}/{planta}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@addplanta'])->name('users.addplanta');
+        Route::get('/delplanta/{usuario}/{planta}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@delplanta'])->name('users.delplanta');
 
         Route::get('/setdefcamera/{id}','UsersController@setdefcamera');
+
+        Route::post('/borrar_usuarios',['middleware'=>'permissions:["Usuarios"],["D"]','uses'=>'UsersController@borrar_usuarios'])->name('users.users.delete_muchos');
+        Route::post('/asignar_plantas',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@asignar_plantas'])->name('users.users.asignar_plantas');
+        Route::post('/asignar_supervisor',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@asignar_supervisor'])->name('users.users.asignar_supervisor');
+        Route::get('/puestos_supervisor/{id}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@puestos_supervisor'])->name('users.puestos_supervisor');
+        Route::get('/add_puesto_supervisor/{id}/{puesto}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@add_puesto_supervisor'])->name('users.add_puesto_supervisor');
     });
 
     Route::group(['prefix' => 'filters'], function () {
@@ -111,20 +122,20 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'puestos'], function() {
         Route::get('/',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@index'])->name('puestos.index');
         Route::post('/',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@search']);
-	    Route::get('/edit/{id}',['middleware'=>'permissions:["Puestos"],["C"]', 'uses' => 'PuestosController@edit']);
-	    Route::post('/update',['middleware'=>'permissions:["Puestos"],["C"]', 'uses' => 'PuestosController@update']);
+	    Route::get('/edit/{id}',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@edit']);
+	    Route::post('/update',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@update']);
         Route::get('/delete/{id}',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@delete']);
-        Route::get('/ver_puesto/{id}',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@ver_puesto']);
+        Route::get('/ver_puesto/{id}',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@ver_puesto']);
         Route::get('/savesnapshot/{id}',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@savesnapshot']);
         Route::post('/accion_estado',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@accion_estado']);
         Route::Post('/print_qr','PuestosController@print_qr');
-        Route::get('/mapa','PuestosController@mapa');
-        Route::post('/ronda_limpieza','PuestosController@ronda_limpieza');
-        Route::get('/plano','PuestosController@plano');
-        Route::post('/anonimo','PuestosController@cambiar_anonimo');
-        Route::post('/mca_rerserva','PuestosController@cambiar_reserva');
-        Route::post('/borrar_puestos','PuestosController@borrar_puestos');
-        Route::post('/modificar_puestos','PuestosController@modificar_puestos');
+        Route::get('/mapa',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@mapa']);
+        Route::post('/ronda_limpieza',['middleware'=>'permissions:["Rondas de limpieza"],["R"]', 'uses' => 'PuestosController@ronda_limpieza']);
+        Route::get('/plano',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@plano']);
+        Route::post('/anonimo',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@cambiar_anonimo']);
+        Route::post('/mca_rerserva',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@cambiar_reserva']);
+        Route::post('/borrar_puestos',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@borrar_puestos']);
+        Route::post('/modificar_puestos',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@modificar_puestos']);
     });
 
     Route::group(['prefix' => 'edificios'], function () {

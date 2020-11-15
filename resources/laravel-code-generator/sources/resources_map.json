@@ -103,5 +103,20 @@
         "model-name": "users",
         "resource-file": "users.json",
         "table-name": "users"
+    },
+    {
+        "model-name": "tareas_programadas",
+        "resource-file": "tareas_programadas.json",
+        "table-name": "tareas"
+    },
+    {
+        "model-name": "tareas",
+        "resource-file": "tareas.json",
+        "table-name": "tareas_programadas"
+    },
+    {
+        "model-name": "logtarea",
+        "resource-file": "logtareas.json",
+        "table-name": "tareas_programadas_log"
     }
 ]

@@ -90,7 +90,65 @@ function lista_clientes(){
 }
 
 
+function isJson($string) {
+    try{
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    } catch(\Exception $e){
+        return false;
+    }
+    
+}
 
+function isxml($xmlstr){
+    try{
+        libxml_use_internal_errors(true);
+
+        $doc = simplexml_load_string($xmlstr);
+        $xml = explode("\n", $xmlstr);
+
+        if (!$doc) {
+            $errors = libxml_get_errors();
+
+            // foreach ($errors as $error) {
+            //     echo display_xml_error($error, $xml);
+            // }
+
+            libxml_clear_errors();
+            return false;
+        } else {
+            return true;
+        }
+    } catch(\Exception $e){
+        return false;
+    }
+}
+
+//Añadir ceros por la izquierda
+function lz($num)
+{
+    return (strlen($num) < 2) ? "0{$num}" : $num;
+}
+
+
+//Decodificar JSON mejorado
+function decodeComplexJson($string) { # list from www.json.org: (\b backspace, \f formfeed)
+    $string = preg_replace("/[\r\n]+/", "", $string); //Retornos de carro
+    $string = preg_replace('/[ ]{2,}|[\t]/', '', trim($string));  //tabs
+    $json = utf8_encode($string);
+    $json = json_decode($json);
+    return $json;
+}
+
+//Funcion para que las tareas programadas escriban su log
+function log_tarea($mensaje,$id,$tipo='info'){
+    DB::table('tareas_programadas_log')->insert([
+        'txt_log'=>$mensaje,
+        'cod_tarea'=>$id,
+        'tip_mensaje'=>$tipo,
+        'fec_log'=>Carbon::now()
+    ]);
+}
 
 function fullAccess(){
     return isAdmin();
@@ -175,20 +233,38 @@ function decimal_to_time($dec)
 
 }
 
+///Convertir fecha en español a mysql
 function adaptar_fecha($d){
+    if(!isset($d)){
+        return null;
+    }
+    try{
+        if (Carbon::createFromFormat('d/m/Y H:i:s', $d)!== false) {
+            return Carbon::createFromFormat('d/m/Y H:i:s', $d)->format('Y-m-d H:i:s');
+        }
+    } catch (\Exception $e){}
+    try{
+        if (Carbon::createFromFormat('d/m/Y H:i', $d)!== false) {
+            return Carbon::createFromFormat('d/m/Y H:i', $d)->format('Y-m-d H:i');
+        }
+    } catch (\Exception $e){}
     try{
         if (Carbon::createFromFormat('d/m/Y', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y', $d);
+            return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
         }
+    } catch (\Exception $e){}
+    try{
         if (Carbon::createFromFormat('Y-m-d', $d)!== false) {
-            return Carbon::createFromFormat('Y-m-d', $d);
+            return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
         }
+    } catch (\Exception $e){}
+    try{
         if (Carbon::parse($d)!== false) {
-            return Carbon::parse($d);
+            return Carbon::parse($d)->format('Y-m-d');
         }
-    } catch (\Exception $e){
-        return  $d." ".$e->getMessage();
-    }
+    } catch (\Exception $e){}
+    return  $d;
+
 }
 
 function random_readable_pwd($length=10){
@@ -224,6 +300,29 @@ function random_readable_pwd($length=10){
 
     return $pwd;
 
+}
+
+//Rellena en el texto pasado los comodines indicados por los corchetes con su correspondiente valor de la lista de datos. Esto es para las notificaciones de evebntos
+function comodines_texto($texto,$campos,$datos){
+    preg_match_all("/\[([^\]]*)\]/", $texto, $matches);
+    foreach($matches[0] as $match){
+        foreach($campos as $campo){
+            if($match==$campo->label){
+                $nom_campo=str_replace("[","",$campo->label);
+                $nom_campo=str_replace("]","",$nom_campo);
+                if($match=="[fecha]")
+                {
+                    $texto=str_replace("[fecha]",Carbon::now()->format('d/m/Y'),$texto);
+                } else if($match=="[hora]")
+                {
+                    $texto=str_replace("[hora]",Carbon::now()->format('H:i'),$texto);
+                } else {
+                    $texto=str_replace($match,$datos->$nom_campo,$texto);
+                }
+            }
+        }
+    }
+    return $texto;
 }
 
 

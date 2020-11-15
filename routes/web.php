@@ -43,6 +43,10 @@ Route::get('/logout','Auth\LoginController@logout');
 
 
 Route::group(['middleware' => 'auth'], function() {
+    // Scan
+    Route::get('/scan_usuario', 'HomeController@scan_usuario')->name('main_scan');
+    Route::get('/scan_mantenimiento', 'HomeController@scan_mantenimiento')->name('mantenimiento_scan');
+
 
     //Relogin
     Route::get("relogin/{id}",['middleware' => 'permissions:["ReLogin"],["R"]', 'uses' => 'UsersController@authwith']);
@@ -206,6 +210,25 @@ Route::group(['middleware' => 'auth'], function() {
         
     });
 
+    ////////////////////TAREAS////////////////////
+	Route::group(['prefix' => 'tasks'], function() {
+	    Route::get('/',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@index']);
+	    Route::get('/create',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@create']);
+	    Route::post('/save',['middleware' => 'permissions:["Tareas programadas"],["C"]', 'uses' => 'TareasController@save']);
+	    Route::get('/edit/{id}',['middleware' => 'permissions:["Tareas programadas"],["W"]', 'uses' => 'TareasController@edit']);
+	    Route::post('/update/{id}',['middleware' => 'permissions:["Tareas programadas"],["W"]', 'uses' => 'TareasController@update']);
+		Route::get('/delete/{id}',['middleware' => 'permissions:["Tareas programadas"],["D"]', 'uses' => 'TareasController@delete']);
+		Route::post('/param_comando/{id}',['middleware' => 'permissions:["Tareas programadas"],["W"]', 'uses' => 'TareasController@param_comando']);
+		Route::get('/detalle/{id}',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@detalle_tarea']);
+		Route::get('/log_tarea/{id}/{fecha}/{hora}',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@ver_log_tarea']);
+		Route::get('/cola/{id}/',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@ver_cola']);
+
+		Route::get('/runTask/{id}/',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@ejecutar_tarea_web']);
+		Route::get('/log_tarea/{id}/{fecha}',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@log_tarea_web']);
+		
+	});
+
+    ////////////////////////////   SECCIONES  PERFILES Y PERMISOS ////////////////////////////////
     Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);
     Route::get('permissions/getProfiles',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'PermissionsController@getProfiles']);
 	Route::post('addPermissions',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions']);
@@ -213,8 +236,8 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('addPermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions_user']);
     Route::post('removePermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions_user']);
 
-    Route::get('/scan_usuario', 'HomeController@scan_usuario')->name('main_scan');
-    Route::get('/scan_mantenimiento', 'HomeController@scan_mantenimiento')->name('mantenimiento_scan');
+    
+    
 
 });
 

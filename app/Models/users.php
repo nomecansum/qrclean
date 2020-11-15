@@ -65,6 +65,26 @@ class users extends Model
     protected $casts = [];
     
     /**
+     * Get the incidencias for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidencias()
+    {
+        return $this->hasMany('App\Models\Incidencia','id_usuario_apertura','id');
+    }
+
+    /**
+     * Get the puestos for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function puestos()
+    {
+        return $this->hasMany('App\Models\Puesto','id_usuario_usando','id');
+    }
+
+    /**
      * Get the plantasUsuarios for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -75,26 +95,15 @@ class users extends Model
     }
 
     /**
-     * Set the email_verified_at.
+     * Get the puestosAsignados for this model.
      *
-     * @param  string  $value
-     * @return void
+     * @return Illuminate\Database\Eloquent\Collection
      */
-    public function setEmailVerifiedAtAttribute($value)
+    public function puestosAsignados()
     {
-        $this->attributes['email_verified_at'] = !empty($value) ? \DateTime::createFromFormat('[% date_format %]', $value) : null;
+        return $this->hasMany('App\Models\PuestosAsignado','id_usuario','id');
     }
 
-    /**
-     * Get email_verified_at in array format
-     *
-     * @param  string  $value
-     * @return array
-     */
-    public function getEmailVerifiedAtAttribute($value)
-    {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
-    }
 
     /**
      * Get created_at in array format

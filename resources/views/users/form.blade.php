@@ -172,6 +172,32 @@
             </div>
         </div>
 </div>
+<div class="row rounded b-all">
+    <div class="col-md-3 mr-3">
+        <div class="form-group">
+            <label>Supervisor</label><br>
+            <select name="id_usuario_supervisor" id="id_usuario_supervisor" class="select2">
+                <option value=""></option>
+                @foreach ($supervisores as $c)
+                    <option {{isset($users) && $users->id_usuario_supervisor == $c->id ? 'selected' : ''}} value="{{$c->id}}">{{$c->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    @if(isset($users) && isSupervisor($users->id))
+        <div class="col-md-8">
+            <div class="form-group">
+                <label>Usuarios a los que supervisa</label><br>
+                <select name="lista_id[]" id="lista_id" class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple">
+                    <option value=""></option>
+                    @foreach ($usuarios_supervisables as $c)
+                        <option {{ in_array($c->id,$usuarios_supervisados) ? 'selected' : ''}} value="{{$c->id}}">{{$c->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    @endif
+</div>
 
 @section('scripts2')
 <script>

@@ -59,6 +59,11 @@ class UsersController extends Controller
                 $q->wherein('cod_nivel',$supervisores_perfil);
                 $q->orwherein('id',$supervisores_usuario);
             })
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->wherein('users.id_cliente',clientes());
+                }
+            })
             ->orderby('name')
             ->get();
             
@@ -144,9 +149,41 @@ class UsersController extends Controller
         validar_acceso_tabla($id,"users");
         $users = users::findOrFail($id);
         $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->get();
-       // dd($Perfiles);
+        // dd($Perfiles);
 
-        return view('users.edit', compact('users','Perfiles'));
+        $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
+
+        $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->get()->pluck('id_perfil')->unique();
+
+        $supervisores_usuario=DB::table('permisos_usuarios')->where('id_seccion',$permiso)->get()->pluck('id_usuario')->unique();
+
+        $supervisores=DB::table('users')
+            ->where(function ($q) use($supervisores_perfil,$supervisores_usuario){
+                $q->wherein('cod_nivel',$supervisores_perfil);
+                $q->orwherein('id',$supervisores_usuario);
+            })
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->wherein('users.id_cliente',clientes());
+                }
+            })
+            ->orderby('name')
+            ->get();
+
+        $usuarios_supervisables = DB::table('users')
+            ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->wherein('users.id_cliente',clientes());
+                }
+            })
+            ->where('users.id','<>',Auth::user()->id)
+            ->get();
+
+
+        $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',$id)->pluck('id')->toarray();
+
+        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables'));
     }
 
     /**
@@ -182,7 +219,20 @@ class UsersController extends Controller
             $users = users::findOrFail($id);
             $data["email_verified_at"]=Carbon::now();
             $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
+            $data["id_usuario_supervisor"]=$r->id_usuario_supervisor??null;
+
             $users->update($data);
+
+            //Añadimos los usuarios supervisados
+
+            if(isset($request->lista_id)){
+               users::where('id_usuario_supervisor',$id)->id_usuario_supervisor=null;
+                foreach($request->lista_id as $id_supervisado){
+                    DB::table('users')->where('id',$id_supervisado)->update([
+                        'id_usuario_supervisor'=>$id
+                    ]);
+                }
+            }
             savebitacora('Usuario '.$request->email. ' actualizado',"Usuarios","Update","OK");
             return [
                 'title' => "Usuarios",

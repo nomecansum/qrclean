@@ -130,6 +130,21 @@ function lz($num)
     return (strlen($num) < 2) ? "0{$num}" : $num;
 }
 
+//Devuelve el valor de cualquiera de los elementos del array de parametros de un comando para tareas/Eventos
+function valor($parametros,$nombre){
+    $salida=null;
+    try{
+        foreach($parametros as $param){
+            if($param->name==$nombre){
+                return $param->value;
+            }
+        }
+    } catch(\Exception $e){
+
+    }
+    return $salida;
+}
+
 
 //Decodificar JSON mejorado
 function decodeComplexJson($string) { # list from www.json.org: (\b backspace, \f formfeed)

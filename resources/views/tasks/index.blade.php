@@ -148,7 +148,7 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="card">
-					<div class="card-header bg-info text-white">
+					<div class="card-header bg-primary text-white">
 						<i class="mdi mdi-camera-timer mdi-24px"></i> {{__('tareas.estado_programacion_tareas')}}
 					</div>
 					<div class="card-body">
@@ -194,7 +194,7 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="card">
-					<div class="card-header bg-info text-white">
+					<div class="card-header bg-primary text-white">
 						<i class="mdi mdi-buffer mdi-24px"></i> {{__('tareas.colas_proceso')}}
 					</div>
 					<div class="card-body">

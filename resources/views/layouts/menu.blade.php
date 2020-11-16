@@ -194,7 +194,7 @@
                             @if(checkPermissions(['Secciones'],['R']))<li class="secciones"><a href="/sections"> <i class="fad fa-browser"></i>Secciones</a></li> @endif
                             @if(checkPermissions(['Permisos'],['R']))<li class="permisos"><a href="/profile-permissions"><i class="fad fa-lock-alt"></i> Permisos</a></li> @endif
                             @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="tipos_incidencia"><a href="/incidencias/tipos"> <i class="fad fa-exclamation-triangle"></i>Tipos de incidencia</a></li> @endif
-                            @if(checkPermissions(['Tareas programadas'],['R']))<li class="tareas_programadas"><a href="/tasks"> <i class="mdi mdi-camera-timer"></i>Tareas programadas</a></li> @endif
+                            @if(checkPermissions(['Tareas programadas'],['R']))<li class="tareas_programadas"><a href="/tasks" class="text-nowrap"> <i class="mdi mdi-camera-timer"></i>Tareas programadas</a></li> @endif
                         </ul>
                     </li>
                     @endif

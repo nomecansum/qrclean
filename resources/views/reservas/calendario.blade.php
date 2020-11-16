@@ -125,17 +125,17 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 </div>
 
 <script>
-	$('.td_calendar').click(function(){
-		$('#detalle_horario').hide();
-		console.log($(this).data('past'));
-		if($(this).data('vacaciones')==0 && $(this).data('festivo')==0 && $(this).data('past')==0){
-			$('#detalle_horario').css({top: $(this).position().top+35, left: $(this).position().left+35, position:'absolute'});
-			$('#detalle_horario').show();
-			animateCSS('#detalle_horario','fadeIn');
-			$('#contenido_detalle_horario').load("{{ url('/schedules/detalle_horario') }}/"+$(this).data('horario'));
-		}
+	// $('.td_calendar').click(function(){
+	// 	$('#detalle_horario').hide();
+	// 	console.log($(this).data('past'));
+	// 	if($(this).data('vacaciones')==0 && $(this).data('festivo')==0 && $(this).data('past')==0){
+	// 		$('#detalle_horario').css({top: $(this).position().top+35, left: $(this).position().left+35, position:'absolute'});
+	// 		$('#detalle_horario').show();
+	// 		animateCSS('#detalle_horario','fadeIn');
+	// 		$('#contenido_detalle_horario').load("{{ url('/schedules/detalle_horario') }}/"+$(this).data('horario'));
+	// 	}
 		
-	})
+	// })
 	$(function(){
 		$('#detalle_horario').hide();
 	})

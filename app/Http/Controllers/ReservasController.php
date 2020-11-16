@@ -77,7 +77,7 @@ class ReservasController extends Controller
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
             ->where('puestos.id_edificio',$r->edificio)
-            ->where('fec_reserva',adaptar_fecha($r->fecha)->format('Y-m-d'))
+            ->where('fec_reserva',adaptar_fecha($r->fecha))
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);

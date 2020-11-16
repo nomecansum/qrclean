@@ -208,9 +208,10 @@ class PlantasController extends Controller
         validar_acceso_tabla($id,'plantas');
         $plantas = plantas::findOrFail($id);
         $puestos= DB::Table('puestos')
-            ->select('puestos.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado')
+            ->select('puestos.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','plantas.factor_puesto','plantas.factor_letra','puestos.val_color as hex_color')
+            ->join('plantas','plantas.id_planta','puestos.id_planta')
             ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
-            ->where('id_planta',$id)
+            ->where('puestos.id_planta',$id)
             ->get();
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')

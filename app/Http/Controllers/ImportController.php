@@ -50,7 +50,7 @@ class ImportController extends Controller
 
     public function puesto_to_object($spreadsheet,$i){
 
-        $fila = $spreadsheet->setActiveSheetIndex(0)->rangeToArray('A'.$i.':F'.$i)[0];
+        $fila = $spreadsheet->setActiveSheetIndex(0)->rangeToArray('A'.$i.':G'.$i)[0];
         //error_log(json_encode($fila));
         $vacio=true;
         for($n=0;$n<6;$n++){
@@ -61,7 +61,6 @@ class ImportController extends Controller
         if ($vacio){ //Fila vacio, ya no hay mas que procesar
             return false;
         }
-
         $puesto = new Request([
             'cod_puesto' => $fila[0],
             'des_puesto' => $fila[1],
@@ -69,7 +68,8 @@ class ImportController extends Controller
             'des_planta' => $fila[3],
             'mca_anonimo' => $fila[4],
             'mca_reserva' => $fila[5],
-            'id_cliente' => Auth::user()->id_cliente
+            'id_cliente' => Auth::user()->id_cliente,
+            'usu_asignado' => $fila[6],
         ]);
         return $puesto;
     }
@@ -234,9 +234,19 @@ class ImportController extends Controller
                             $planta->id_edificio=$edificio->id_edificio;
                             $planta->save();
                         }
+                        
                         $p->id_edificio=$edificio->id_edificio;
                         $p->id_planta=$planta->id_planta;
                         $p->save();
+
+                        //Asignacion del puesto a usuario
+                        $usu_asignado=users::where('email',$puesto->usu_asignado)->first();
+                        if(isset($usu_asignado)){
+                            DB::table('puestos_asignados')->insert([
+                                "id_puesto"=>$p->id_puesto,
+                                "id_usuario"=>$usu_asignado->id
+                            ]);
+                        }
                         
                         savebitacora("Creado puesto en importacion " . $p->id_puesto . " " . $p->cod_puesto, $p->id_cliente);
                         $nombres_puestos .= "[".$p->id_puesto."] " . $p->des_puesto. "<br>";

@@ -476,6 +476,8 @@
         });
     });
 
+    
+
     $('.btn_qr').click(function(){
         //block_espere();
         searchIDs = $('.chkpuesto:checkbox:checked').map(function(){

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 Use Carbon\Carbon;
 use PDF;
 use Illuminate\Support\Str;
+use Redirect;
+
 
 class PuestosController extends Controller
 {
@@ -276,22 +278,30 @@ class PuestosController extends Controller
 
     public function print_qr(Request $r){
 
-        $puestos=DB::table('puestos')
-            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
-            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
-            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
-            })
-            ->wherein('id_puesto',$r->lista_id)
-            ->get();
+        if (!isset($r->lista_id)){
+            return Redirect::back();
+        }
+        try{
+            $puestos=DB::table('puestos')
+                ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+                ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+                ->where(function($q){
+                    if (!isAdmin()) {
+                        $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                    }
+                })
+                ->wherein('id_puesto',$r->lista_id)
+                ->get();
         
-        $filename='Codigos_QR Puestos_'.Auth::user()->id_cliente.'_.pdf';
-        $pdf = PDF::loadView('puestos.print_qr',compact('puestos'));
-        return $pdf->download($filename);
-        //return view('puestos.print_qr',compact('puestos'));
+            $filename='Codigos_QR Puestos_'.Auth::user()->id_cliente.'_.pdf';
+            $pdf = PDF::loadView('puestos.print_qr',compact('puestos'));
+            return $pdf->download($filename);
+            //return view('puestos.print_qr',compact('puestos'));
+        } catch(\Exception $e){
+            return Redirect::back();
+        }
+       
     }
 
     public function accion_estado(Request $r){

@@ -59,7 +59,7 @@ class limpiar_bitacora extends Command
                     "def": "60"
                 },
                 {
-                    "label": "Numero de dias acciones",
+                    "label": "Numero de dias reservas",
                     "name": "num_dias_reservas",
                     "tipo": "num",
                     "def": "120"
@@ -105,18 +105,18 @@ class limpiar_bitacora extends Command
         $this->escribelog_comando('debug','Bitacora - Dias a borrar, más de: '.$num_dias_bitacora);
         $this->escribelog_comando('debug','Borrando entradas de bitacora ');
         $affected=DB::table('bitacora')
-        ->whereraw("fec_bitacora < DATE_SUB(now(), interval ".$num_dias_bitacora." DAY)")
+        ->whereraw("fecha < DATE_SUB(now(), interval ".$num_dias_bitacora." DAY)")
         ->delete();
         $this->escribelog_comando('info',$affected.' filas borradas');
 
         $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG');
         $affected=DB::table('log_cambios_estado')
-        ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
+        ->whereraw("fecha < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
         ->delete();
 
         $this->escribelog_comando('debug','RESERVAS - Borrando entradas de RESERVAS');
         $affected=DB::table('reservas')
-        ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
+        ->whereraw("fec_reserva < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
         ->delete();
 
         $this->escribelog_comando('info',$affected.' filas borradas');

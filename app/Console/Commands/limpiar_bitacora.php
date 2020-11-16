@@ -60,9 +60,9 @@ class limpiar_bitacora extends Command
                 },
                 {
                     "label": "Numero de dias acciones",
-                    "name": "num_dias_acciones",
+                    "name": "num_dias_reservas",
                     "tipo": "num",
-                    "def": "20"
+                    "def": "120"
                 },
                 {
                     "label": "Numero de dias LOG",
@@ -98,27 +98,27 @@ class limpiar_bitacora extends Command
         $tarea=tareas::find($this->argument('id'));
         $parametros=json_decode($tarea->val_parametros);
         $num_dias_bitacora=valor($parametros,"num_dias_bitacora");
-        $num_dias_acciones=valor($parametros,"num_dias_acciones");
+        $num_dias_acciones=valor($parametros,"num_dias_reservas");
         $num_dias_log=valor($parametros,"num_dias_log");
 
 
         $this->escribelog_comando('debug','Bitacora - Dias a borrar, más de: '.$num_dias_bitacora);
         $this->escribelog_comando('debug','Borrando entradas de bitacora ');
-        $affected=DB::table('cug_bitacora')
+        $affected=DB::table('bitacora')
         ->whereraw("fec_bitacora < DATE_SUB(now(), interval ".$num_dias_bitacora." DAY)")
         ->delete();
         $this->escribelog_comando('info',$affected.' filas borradas');
 
-        $this->escribelog_comando('debug','Acciones - Borrando entradas de acciones de terminales');
-        $affected=DB::table('acciones_dispositivos')
-        ->whereraw("fecha_envio < DATE_SUB(now(), interval ".$num_dias_acciones." DAY)")
-        ->delete();
-        $this->escribelog_comando('info',$affected.' filas borradas');
-
         $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG');
-        $affected=DB::table('logs')
+        $affected=DB::table('log_cambios_estado')
         ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
         ->delete();
+
+        $this->escribelog_comando('debug','RESERVAS - Borrando entradas de RESERVAS');
+        $affected=DB::table('reservas')
+        ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
+        ->delete();
+
         $this->escribelog_comando('info',$affected.' filas borradas');
         $affected=DB::table('tareas_programadas_log')
         ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")

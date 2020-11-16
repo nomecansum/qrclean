@@ -19,6 +19,7 @@
                 ->get();
 
             $agent = new \Jenssegers\Agent\Agent;
+
         @endphp
         @foreach($puestos as $puesto)
             @php

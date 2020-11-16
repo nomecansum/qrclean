@@ -5,7 +5,27 @@
 @endsection
 
 @section('styles')
-
+    <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
+    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+        .container {
+            border: 1px solid #DDDDDD;
+            width: 100%;
+            position: relative;
+            padding: 0px;
+        }
+        .flpuesto {
+            float: left;
+            position: absolute;
+            z-index: 1000;
+            color: #FFFFFF;
+            font-size: 9px;
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+    </style>
 @endsection
 
 @section('breadcrumb')
@@ -15,9 +35,8 @@
 @section('content')
 @php
     $puesto=$respuesta['puesto']??null;
-    //dump($respuesta);
 @endphp
-
+    
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4 text-center">
@@ -30,9 +49,11 @@
     </div>
     <div class="row">
         <div class="col-md-12 text-center">
+            @if(isset($puesto))
             <div class="pad-all text-center font-bold" style="color: {{ $puesto->val_color }}; font-size: 22px">
                 <i class="{{ $puesto->val_icono }}"></i>[{{ $puesto->cod_puesto }}] - {{ $puesto->des_puesto }}
             </div>
+            @endif
         </div>
     </div>
     <div class="row" id="div_respuesta">
@@ -82,7 +103,7 @@
                 </div>
                 @if($puesto->id_estado!=6)
                     <div class="row mt-3">
-                        <div class="col-md-11 text-center">
+                        <div class="col-md-12 text-center">
                             <button class="btn btn-lg btn-warning text-bold btn_incidencia" data-estado="6" data-id="{{$puesto->token}}"><i class="fad fa-exclamation-triangle"></i> Notificar una incidencia <br>en este puesto</button>
                         </div>
                     </div>
@@ -100,6 +121,42 @@
                             <i class="{{ $disp->val_icono }}"></i>[{{ $disp->cod_puesto }}] - {{ $disp->des_puesto }}
                         </div>
                     @endforeach
+                   
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center" id="plano" style="padding-left: 8vw">
+                        @if(isset($respuesta['disponibles']) && Auth::check())
+                            @php
+                                $pl=App\Models\plantas::find($puesto->id_planta);  
+                                $reservas=DB::table('reservas')
+                                    ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+                                    ->join('users','reservas.id_usuario','users.id')
+                                    ->where('fec_reserva',Carbon\Carbon::now()->format('Y-m-d'))
+                                    ->where('reservas.id_cliente',Auth::user()->id_cliente)
+                                    ->get();
+
+                                $asignados_usuarios=DB::table('puestos_asignados')
+                                    ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                                    ->join('users','users.id','puestos_asignados.id_usuario')    
+                                    ->where('id_usuario','<>',Auth::user()->id)
+                                    ->get();
+
+                                $asignados_miperfil=DB::table('puestos_asignados')
+                                    ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                                    ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
+                                    ->where('id_perfil',Auth::user()->cod_nivel)
+                                    ->get();
+                                
+                                $asignados_nomiperfil=DB::table('puestos_asignados')
+                                    ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                                    ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
+                                    ->where('id_perfil','<>',Auth::user()->cod_nivel)
+                                    ->get();
+
+                            @endphp
+                            @include('puestos.fill-plano')
+                        @endif
                     </div>
                 </div>
                 @if(Auth::check())
@@ -145,5 +202,31 @@
         $(function(){
             $('#footer').hide();
         })
+
+        @if(isset($respuesta['disponibles']) && Auth::user())
+            function recolocar_puestos(posiciones){
+                $('.container').each(function(){
+                    plano=$(this);
+                    //console.log(plano.data('posiciones'));
+                    
+                    $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
+                        puesto=$('#puesto'+item.id);
+                        puesto.css('top',plano.height()*item.offsettop/100);
+                        puesto.css('left',plano.width()*item.offsetleft/100);
+                    });
+
+                }) 
+            }
+
+            
+
+            $(window).resize(function(){
+                recolocar_puestos();
+            })
+
+            $('.mainnav-toggle').click(function(){
+                recolocar_puestos();
+            })
+        @endif
     </script>
 @endsection

@@ -58,16 +58,10 @@ class HomeController extends Controller
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where('token',$puesto)
             ->first();
+
+        $config_cliente=null;
         
-        $config_cliente=DB::table('config_clientes')->where('id_cliente',$p->id_cliente)->first();
-        
-        $disponibles=DB::table('puestos')
-            ->select('cod_puesto','des_puesto','val_color','val_icono')
-            ->where('id_cliente',$p->id_cliente)
-            ->where('id_edificio',$p->id_edificio)
-            ->where('id_planta',$p->id_planta)
-            ->where('id_estado',1)
-            ->get();
+       
         //A ver si el usuario viene autentificado
         if(Auth::check())
             {
@@ -88,6 +82,16 @@ class HomeController extends Controller
             ];
             $reserva=null;
         } else {    
+            $config_cliente=DB::table('config_clientes')->where('id_cliente',$p->id_cliente)->first();
+        
+            $disponibles=DB::table('puestos')
+                ->select('cod_puesto','des_puesto','val_color','val_icono')
+                ->where('id_cliente',$p->id_cliente)
+                ->where('id_edificio',$p->id_edificio)
+                ->where('id_planta',$p->id_planta)
+                ->where('id_estado',1)
+                ->get();
+
             //Ahora comprobamos si el puesto esta reservado por alguien distinto a el usuario
             $reserva=DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
@@ -102,7 +106,7 @@ class HomeController extends Controller
                     'color'=>'danger',
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
-                    'operativo' => 1
+                    'operativo' => 0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -115,14 +119,14 @@ class HomeController extends Controller
                 ->where('id_usuario','<>',$id_usuario)
                 ->get();
 
-            if($asignados_usuarios){
+            if(!$asignados_usuarios->isEmpty()){
                 $respuesta=[
                     'mensaje'=>"PUESTO ASIGNADO PERMANENTEMENTE",
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
-                    'operativo' => 1
+                    'operativo' => 0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -135,14 +139,14 @@ class HomeController extends Controller
                 ->where('id_perfil','<>',$cod_nivel)
                 ->get();
 
-            if($asignados_nomiperfil){
+            if(!$asignados_nomiperfil->isEmpty()){
                 $respuesta=[
                     'mensaje'=>"PUESTO RESERVADO P",
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
-                    'operativo' => 1
+                    'operativo' => 0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }

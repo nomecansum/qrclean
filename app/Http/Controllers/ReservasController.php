@@ -170,7 +170,7 @@ class ReservasController extends Controller
 
         //Primero hay que comprobar que no han pillado el pñuesto mientras el usuario se lo pensabe
 
-        $ya_esta=reservas::where('id_puesto',$r->id_puesto)->where('fec_reserva',adaptar_fecha($r->fechas)->format('Y-m-d'))->first();
+        $ya_esta=reservas::where('id_puesto',$r->id_puesto)->where('fec_reserva',adaptar_fecha($r->fechas))->first();
         if($ya_esta){
             //Ya esta pillado
             return [
@@ -181,13 +181,14 @@ class ReservasController extends Controller
 
         } else{
             //Borramos cualquier otra reserva que tuviese el usuarios par ese dia
-            $antoerior=reservas::where('id_usuario',Auth::user()->id)->where('fec_reserva',adaptar_fecha($r->fechas)->format('Y-m-d'))->delete();
+  
+            $antoerior=reservas::where('id_usuario',Auth::user()->id)->where('fec_reserva',Carbon::parse(adaptar_fecha($r->fechas)))->delete();
             //Insertamos la nueva
             $puesto=puestos::find($r->id_puesto);
             $res=new reservas;
             $res->id_puesto=$r->id_puesto;
             $res->id_usuario=Auth::user()->id;
-            $res->fec_reserva=adaptar_fecha($r->fechas);
+            $res->fec_reserva=Carbon::parse(adaptar_fecha($r->fechas));
             //Si no vienen horas las ponemos a 0
             $res->fec_reserva->hour=0;
             $res->fec_reserva->minute=0;
@@ -200,7 +201,7 @@ class ReservasController extends Controller
             return [
                 'title' => "Reservas",
                 'mensaje' => 'Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,
-                'fecha' => adaptar_fecha($r->fechas)->format('Ymd'),
+                'fecha' => Carbon::parse(adaptar_fecha($r->fechas))->format('Ymd'),
                 //'url' => url('puestos')
             ];
         }

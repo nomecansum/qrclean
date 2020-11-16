@@ -82,6 +82,7 @@
 
                     </div>
                 @endif
+                @if(checkPermissions(['Plantas'],['C']))
                 <div class="row mt-3">
                     <div class="form-group col-md-3">
                         <label>Tamaño de puestos: </label> <span id="puesto-range-def-val"></span>
@@ -101,6 +102,7 @@
                         <input class="btn btn-primary" id="btn_guardar" type="submit" value="Guardar">
                     </div>
                 </div>
+                @endif
             </form>
 
         </div>

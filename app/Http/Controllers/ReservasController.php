@@ -61,6 +61,20 @@ class ReservasController extends Controller
 
 
     public function comprobar_puestos(Request $r){
+        //Primero comprobamos si tiene una reserva para ese dia
+
+        $reserva=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->where('fec_reserva',adaptar_fecha($r->fecha))
+            ->where('id_usuario',Auth::user()->id)
+            ->first();
+        if(isset($reserva)){
+            $f1=adaptar_fecha($r->fecha);
+            return view('reservas.edit_del',compact('reserva','f1'));
+        }
+        
+
+
         $plantas_usuario=DB::table('plantas_usuario')
             ->where('id_usuario',Auth::user()->id)
             ->pluck('id_planta')
@@ -162,7 +176,9 @@ class ReservasController extends Controller
             ->where('id_edificio',$r->edificio)
             ->get();
 
-        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','plantas_usuario'));
+        $tipo_vista=$r->tipo;
+
+        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','plantas_usuario','tipo_vista'));
     }
 
     public function save(Request $r){

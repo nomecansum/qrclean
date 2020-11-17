@@ -9,10 +9,7 @@
         @php
             $left=0;
             $top=0;
-            $puestos= DB::Table('puestos')
-                ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
-                ->where('id_planta',$puesto->id_planta)
-                ->get();
+
         @endphp
 
             @php
@@ -21,16 +18,8 @@
 
                 $color=$puesto->val_color?$puesto->val_color:"#dff9d2";
                 $font_color="#fff";
-            
-                // $title=$puesto->des_puesto;
-                // if(isset($reserva)){
-                //     $title="Reservado por ".$reserva->name." para hoy";
-                // }
-                // if(isset($asignado_usuario)){
-                //     $title="Puesto permanentemente asignado a ".$asignado_usuario->name;
-                // }
             @endphp
-            <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable" title="{{ $title }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $puesto->id_planta }}" style="background-color: {{ $puesto->val_color }}; height: 1.8vw ; width: 1.8vw;">
+            <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable" title="{{ $title }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $puesto->id_planta }}" style="background-color: {{ $puesto->hex_color }}; height: 1.8vw ; width: 1.8vw; border: 2px solid {{$puesto->val_color}}">
                 <span class="h-100 align-middle text-center" style="font-size: 0.4vw;">
                         {{ $puesto->cod_puesto }}
                 </span>

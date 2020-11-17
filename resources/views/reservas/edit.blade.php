@@ -13,6 +13,7 @@
                     <input type="hidden" name="id_cliente" value="{{ $reserva->id_cliente }}">
                     <input type="hidden" id="id_puesto" name="id_puesto" value="">
                     <input type="hidden" id="des_puesto_form" name="des_puesto" value="">
+                    <input type="hidden" name="tipo_vista" id="tipo_vista" value="comprobar">
                     {{csrf_field()}}
                     <div class="form-group col-md-3">
                         <label for="fechas">Fecha</label>
@@ -102,7 +103,7 @@
     });
 
     function comprobar_puestos(){
-        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: 'comprobar'}, function(data, textStatus, xhr) {
+        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val()}, function(data, textStatus, xhr) {
             $('#detalles_reserva').html(data);
         });
     }

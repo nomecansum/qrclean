@@ -145,7 +145,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 
 	fechacal="{{ $month }}";
 
-	$('.vacio').click(function(){
+	$('.td_calendar').click(function(){
 		spshow('spin');
 		if($(this).data('past')==0){
 			$('#editorCAM').load("{{ url('/reservas/create/') }}/"+$(this).data('fecha'), function(){
@@ -160,20 +160,20 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 		
 	})
 
-	$('.ocupado').click(function(){
-		spshow('spin');
-		if($(this).data('past')==0){
-			$('#editorCAM').load("{{ url('/reservas/edit/') }}/"+$(this).data('fecha'), function(){
-				animateCSS('#editorCAM','bounceInRight');
-				sphide('spin');
-				$('body, html').animate({scrollTop : 0}, 500);
-			});
-		} else {
-			toast_warning('Reservas','La reserva está caducada');
-			sphide('spin');
-		}
+	// $('.ocupado').click(function(){
+	// 	spshow('spin');
+	// 	if($(this).data('past')==0){
+	// 		$('#editorCAM').load("{{ url('/reservas/edit/') }}/"+$(this).data('fecha'), function(){
+	// 			animateCSS('#editorCAM','bounceInRight');
+	// 			sphide('spin');
+	// 			$('body, html').animate({scrollTop : 0}, 500);
+	// 		});
+	// 	} else {
+	// 		toast_warning('Reservas','La reserva está caducada');
+	// 		sphide('spin');
+	// 	}
 		
-	})
+	// })
 
 	
 </script>

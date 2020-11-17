@@ -3,6 +3,7 @@
     $planta_ahora=0;
     //dd($puestos);
 @endphp
+<input type="hidden" name="tipo_vista" id="tipo_vista" value="{{ $tipo_vista??'comprobar' }}">
 <div class="row botones_accion">
     <div class="col-md-8">
         <span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
@@ -102,4 +103,6 @@
 
     var tooltip = $('.add-tooltip');
     if (tooltip.length)tooltip.tooltip();
+
+    $('#tipo_vista').val('comprobar');
 </script>

@@ -103,5 +103,7 @@
     $('.boton_modo').click(boton_modo_click);
 
    setTimeout(recolocar_puestos, 800);
+
+   $('#tipo_vista').val('comprobar_plano');
     
 </script>

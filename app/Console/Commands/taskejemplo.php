@@ -65,17 +65,17 @@ class taskejemplo extends Command
                 },
                 {
                     "label": "Parametro lista multiple proveniente de BDD",
-                    "name": "cod_colectivo",
+                    "name": "id_planta",
                     "tipo": "list_db",
                     "multiple": true,
-                    "sql": "select cod_colectivo as id, des_colectivo as nombre from cug_colectivos where cod_colectivo>0"
+                    "sql": "select id_planta as id, des_planta as nombre from plantas where id_planta>0"
                 },
                 {
                     "label": "Parametro lista simple proveniente de BDD",
-                    "name": "cod_estado_civil",
+                    "name": "id_estado",
                     "tipo": "list_db",
                     "multiple": false,
-                    "sql": "select cod_estado_civil as id, des_estado_civil as nombre from cug_estado_civil"
+                    "sql": "select id_estado as id, des_estado as nombre from estados_puestos"
                 },
                 {
                     "label": "Parametro color",

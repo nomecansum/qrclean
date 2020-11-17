@@ -227,7 +227,9 @@ class UsersController extends Controller
             //Añadimos los usuarios supervisados
 
             if(isset($request->lista_id)){
-               users::where('id_usuario_supervisor',$id)->id_usuario_supervisor=null;
+                DB::table('users')->where('id_usuario_supervisor',$id)->update([
+                    'id_usuario_supervisor'=>null
+                ]);
                 foreach($request->lista_id as $id_supervisado){
                     DB::table('users')->where('id',$id_supervisado)->update([
                         'id_usuario_supervisor'=>$id

@@ -11,7 +11,7 @@
                     @endforeach
                 </select>
                 <div class="input-group-btn">
-                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>

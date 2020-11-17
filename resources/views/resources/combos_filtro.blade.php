@@ -20,7 +20,7 @@
                     @endforeach
                 </select>
                 <div class="input-group-btn">
-                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="edificio[]" id="multi-edificio"></select>
                 <div class="input-group-btn">
-                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="planta[]" id="multi-planta" ></select>
                 <div class="input-group-btn">
-                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tags[]" id="multi-tag" ></select>
                 <div class="input-group-btn">
-                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="puesto[]" id="multi-puesto" ></select>
                 <div class="input-group-btn">
-                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
@@ -74,7 +74,7 @@
                         <option value="U">Asignado a usuario</option>
                 </select>
                 <div class="input-group-btn">
-                    <button class="btn btn-info select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>

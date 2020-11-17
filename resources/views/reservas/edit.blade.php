@@ -33,7 +33,7 @@
                         <span style="font-size: 30px; font-weight: bolder; color: #888; margin-top:60px" id="des_puesto"></span>
                     </div>
                     <div class="md-1 float-right" style="margin-top:22px">
-                        @if(checkPermissions(['Reservas'],["W"]))<button type="submit" class="btn btn-primary btn_guardar">GUARDAR</button>@endif
+                        {{-- @if(checkPermissions(['Reservas'],["W"]))<button type="submit" class="btn btn-primary btn_guardar">GUARDAR</button>@endif --}}
                     </div>
                 </div>
                 

@@ -119,8 +119,8 @@
                     @foreach($usersObjects as $users)
                         <tr class="hover-this" data-id="{{ $users->id }}" data-href="{{ route('users.users.edit', $users->id ) }}">
                             <td class="text-center">
-                                <input type="checkbox" class="form-control chkuser magic-checkbox" name="lista_id[]" data-id="{{ $users->id }}" id="chkp{{ $users->id }}" value="{{ $users->id }}">
-                                <label class="custom-control-label"   for="chkp{{ $users->id }}"></label>
+                                <input type="checkbox" class="form-control chkuser magic-checkbox" name="lista_id[]" data-id="{{ $users->id }}" id="chku{{ $users->id }}" value="{{ $users->id }}">
+                                <label class="custom-control-label"   for="chku{{ $users->id }}"></label>
                             </td>
                             <td class="center">
                                 @if (isset($users->img_usuario ) && $users->img_usuario!='')
@@ -336,7 +336,7 @@
                 return $(this).val();
             }).get(); // 
 
-            searchPLs= $('.chkpuesto:checkbox:checked').map(function(){
+            searchPLs= $('.chkplanta:checkbox:checked').map(function(){
                 return $(this).val();
             }).get(); // 
 

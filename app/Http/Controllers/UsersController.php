@@ -29,6 +29,7 @@ class UsersController extends Controller
      */
     public function index()
     {
+        
         $usersObjects = DB::table('users')
         ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
         ->where(function($q){

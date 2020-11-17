@@ -59,6 +59,10 @@ class Kernel extends ConsoleKernel
         ///// TAREAS PROGRAMADAS CUCU 360/////////
         //////////////////////////////////////////
         $tasks = tareas::where('mca_activa','S')->get();
+        $directorio = storage_path().'/tareas/';
+        if(!File::exists($directorio)) {
+            File::makeDirectory($directorio);
+        }
         // Go through each task to dynamically set them up.
         Log::info(Carbon::now()->toDateTimeString().' Inicio de scheduler');
         foreach ($tasks as $task) {

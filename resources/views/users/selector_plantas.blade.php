@@ -30,8 +30,8 @@
             @foreach($plantas as $key=>$value)
                 <div class="font-bold rounded mr-2 mb-2 align-middle pad-all pastilla  add-tooltip" title="{{ $value }}" id="pastilla{{ $key }}" style="font-size: 12px; width: 200px; height: 46px; overflow: hidden;  {{ $check&&in_array($key,$plantas_usuario)?'background-color: #02c59b': 'background-color: #eae3b8' }}">
                     <span class="h-100 align-middle" >
-                        <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $key }}" data-edificio="{{ $e->id_edificio }}" id="chkp{{ $key }}" value="{{ $key }}" {{ $check&&in_array($key,$plantas_usuario)?' checked ': '' }}>
-                        <label class="custom-control-label"   for="chkp{{ $key }}"></label>
+                        <input type="checkbox" class="form-control chkplanta magic-checkbox" name="lista_id[]" data-id="{{ $key }}" data-edificio="{{ $e->id_edificio }}" id="chkpl{{ $key }}" value="{{ $key }}" {{ $check&&in_array($key,$plantas_usuario)?' checked ': '' }}>
+                        <label class="custom-control-label"   for="chkpl{{ $key }}"></label>
                         {{ substr($value,0,21) }} {{ strlen($value)>19?'...':'' }}</span>
                 </div>
             @endforeach
@@ -47,7 +47,7 @@
         if (tooltip.length)tooltip.tooltip();
         @if($check)
         //{{-- Esta logica solo se ejecuta cuando estamos en detalle de usuario, para los multiples la pongo en la pagina del listado de usuarios --}}
-        $('.chkpuesto').click(function(){
+        $('.chkplanta').click(function(){
             if($(this).is(':checked')){
                 $.get("{{ url('users/addplanta/'.$id) }}/"+$(this).data('id'),function(data){
                     $('#pastilla'+data.id).css("background-color",'#02c59b');

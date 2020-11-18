@@ -330,6 +330,7 @@
                 firstDay: {{trans("general.firstDayofWeek")}}
             },
             opens: 'right',
+            parentEl: "#asignar-puesto .modal-body" 
         });
 
         $('#link_borrar').click(function(){

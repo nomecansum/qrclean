@@ -566,8 +566,8 @@ class IncidenciasController extends Controller
             $accion->des_accion=$r->des_accion;
             $accion->fec_accion=Carbon::now();
             $accion->id_usuario=Auth::user()->id;
-            $accion->img_attach1=$data['img1']??null;
-            $accion->img_attach2=$data['img2']??null;
+            $accion->img_attach1=isset($data['img1'])?$data['img1']:null;
+            $accion->img_attach2=isset($data['img2'])?$data['img2']:null;
             $accion->save();
 
             return [
@@ -580,7 +580,7 @@ class IncidenciasController extends Controller
 
             savebitacora('ERROR: Ocurrio un error añadiendo la accion '.$e->getMessage() ,"Incidencias","add_accion","ERROR");
             return [
-                'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
+                'title' => "Añadir accion",
                 'error' => 'ERROR: Ocurrio un error añadiendo la accion '.$e->getMessage(),
                 //'url' => url('sections')
             ];

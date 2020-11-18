@@ -558,7 +558,12 @@ class IncidenciasController extends Controller
                 $data[$var]=$$var;
             }
             $acciones=incidencias_acciones::where('id_incidencia',$r->id_incidencia);
-            $cuenta=$acciones->count()+1;
+            if($acciones){
+                $cuenta=$acciones->count()+1;
+            } else {
+                $cuenta=1;
+            }
+           
             //Vamos a insertar
             $accion=new incidencias_acciones;
             $accion->id_incidencia=$incidencia->id_incidencia;

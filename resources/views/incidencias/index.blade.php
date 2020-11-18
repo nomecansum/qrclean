@@ -94,9 +94,9 @@
                                 <td>{{ $inc->des_edificio}}</td>
                                 <td>{{ $inc->des_planta}}</td>
 								<td>{!! beauty_fecha($inc->fec_apertura)!!}</td>
-								@if(isset($inc->fec_cierre)) <td class="bg-success text-xs text-white text-center" id="cell{{$inc->id_incidencia}}">Cerrada</td> @else <td class="bg-pink  text-xs text-white text-center" id="cell{{$inc->id_incidencia}}">Abierta</td> @endif
+								<td>@if(isset($inc->fec_cierre)) <div class="bg-success text-xs text-white text-center rounded b-all" style="padding: 5px" id="cell{{$inc->id_incidencia}}">Cerrada</div> @else  <div class="bg-pink  text-xs text-white text-center rounded b-all"  style="padding: 5px" id="cell{{$inc->id_incidencia}}">Abierta </div>@endif</td>  
 								<td>
-									<div  style="width:100%: height: 100%; background-color: {{ $inc->val_color  }}; {{ txt_blanco($inc->val_color=='text-white')?'color: #fff':'color:#222' }}">
+									<div class="rounded"  style="padding: 3px; width:100%: height: 100%; background-color: {{ $inc->val_color  }}; {{ txt_blanco($inc->val_color=='text-white')?'color: #fff':'color:#222' }}">
 										{{$inc->des_tipo_incidencia}}
 									</div>
 									

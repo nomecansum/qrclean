@@ -43,7 +43,7 @@
                     <span class="font-bold">Fecha: </span><span>{!! beauty_fecha($incidencia->fec_cierre) !!}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="font-bold">Causa cierre: </span><span>{{ App\Models\causas_cierre::find($incidencia->id_causa_cierre)->des_causa }}</span>
+                    <span class="font-bold">Causa cierre: </span><span>{{ App\Models\causas_cierre::find($incidencia->id_causa_cierre)->des_causa??'' }}</span>
                 </div>
                 <div class="col-md-12 mt-3">
                     {{ $incidencia->comentario_cierre }}

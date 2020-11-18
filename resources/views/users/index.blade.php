@@ -58,8 +58,8 @@
                             {{--  <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>  --}}
                             {{--  @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
                             @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif  --}}
-                            {{-- @if(checkPermissions(['Asignar puestos a supervisores'],['R']))<li><a href="#" class="btn_crear reserva" data-tipo="M"><i class="fad fa-desktop-alt"></i> Asignar puestos que puede supervisar</a></li>@endif
-                            @if(checkPermissions(['Crear reservas para otros'],['R']))<li><a href="#" class="btn_crear reserva" data-tipo="M"><i class="fad fa-calendar-alt"></i> Crear reserva para usuario</a></li>@endif --}}
+                            @if(checkPermissions(['Asignar puesto a usuario'],['R']))<li><a href="#" class="btn_crear reserva" data-tipo="M"><i class="fad fa-desktop-alt"></i> Asignar temporalmente puesto a usuario</a></li>@endif
+                            @if(checkPermissions(['Crear reservas para otros'],['R']))<li><a href="#" class="btn_crear reserva" data-tipo="M"><i class="fad fa-calendar-alt"></i> Crear reserva para usuario</a></li>@endif 
                             @if(checkPermissions(['Usuarios'],['D']))<li><a href="#" class="btn_borrar_usuarios btn_toggle_dropdown btn_search"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar usuarios</a> </li>@endif
                             {{--  @if(checkPermissions(['Usuarios'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Reservar puesto supervisor</a></li>@endif  --}}
                         </ul>

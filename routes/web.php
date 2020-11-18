@@ -195,6 +195,9 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/tipos',['middleware'=>'permissions:["Tipos de incidencia"],["R"]', 'uses' => 'IncidenciasController@index_tipos'])->name('incidencias_tipos.index');
         Route::post('/tipos/save',['middleware'=>'permissions:["Tipos de incidencia"],["W"]', 'uses' => 'IncidenciasController@tipos_save']);
         Route::get('/tipos/edit/{id?}',['middleware'=>'permissions:["Tipos de incidencia"],["C"]', 'uses' => 'IncidenciasController@tipos_edit']);
+        Route::get('/causas',['middleware'=>'permissions:["Causas de cierre"],["R"]', 'uses' => 'IncidenciasController@index_causas'])->name('incidencias_causas.index');
+        Route::post('/causas/save',['middleware'=>'permissions:["Causas de cierre"],["W"]', 'uses' => 'IncidenciasController@causas_save']);
+        Route::get('/causas/edit/{id?}',['middleware'=>'permissions:["Causas de cierre"],["C"]', 'uses' => 'IncidenciasController@causas_edit']);
 
         Route::get('/create/{puesto}',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@nueva_incidencia'])->name('incidencias.nueva');
         Route::get('/edit/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@edit']);

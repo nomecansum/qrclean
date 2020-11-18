@@ -79,7 +79,7 @@
                         <input type="text" class="edit_tag" data-role="tagsinput" placeholder="Type to add a tag" size="17" value="{{ $tags }}">
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="id_usuario">Asignar a usuario</label>
+                        <label for="id_usuario">Asignado permanentemente a usuario</label>
                         <select name="id_usuario" id="id_usuario" class="form-control select2">
                             <option value="0"></option>
                             @foreach($usuarios as $u)
@@ -88,7 +88,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="id_perfil">Asignar a perfil</label>
+                        <label for="id_perfil">Asignado permanentemente a perfil</label>
                         <select name="id_perfil" id="id_perfil" class="form-control select2">
                             <option value="0"></option>
                             @foreach($perfiles as $n)

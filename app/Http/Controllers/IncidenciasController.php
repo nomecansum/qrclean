@@ -249,6 +249,58 @@ class IncidenciasController extends Controller
         }
     }
 
+
+     // GESTION DE CAUSAS DE CIERRE DE INCIDENCIA
+     public function index_causas(){
+        // $tipos = DB::table('incidencias_tipos')
+        // ->join('clientes','clientes.id_cliente','incidencias_tipos.id_cliente')
+        // ->where(function($q){
+        //     if (!isAdmin()) {
+        //         $q->where('incidencias_tipos.id_cliente',Auth::user()->id_cliente);
+        //         $q->orwhere('incidencias_tipos.mca_fijo','S');
+        //     }
+        // })
+        // ->get();
+        // return view('incidencias.tipos.index', compact('tipos'));
+    }
+
+    public function causas_edit($id=0){
+        if($id==0){
+            $tipo=new incidencias_tipos();
+        } else {
+            $tipo = incidencias_tipos::findorfail($id);
+        }
+        $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
+        return view('incidencias.tipos.edit', compact('tipo','Clientes','id'));
+    }
+
+    public function causas_save(Request $r){
+        try {
+            if($r->id==0){
+                incidencias_tipos::create($r->all());
+            } else {
+                $tipo=incidencias_tipos::find($r->id);
+                $tipo->update($r->all());
+            }
+            savebitacora('Tipo de incidencia creado '.$r->des_tipo_incidencia,"Incidencias","tipos_save","OK");
+            return [
+                'title' => "Tipos de incidenica",
+                'message' => 'Tipo de incidencia '.$r->des_tipo_incidencia. ' actualizado con exito',
+                'url' => url('/incidencias/tipos')
+            ];
+        } catch (Exception $exception) {
+            // flash('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage())->error();
+            // return back()->withInput();
+            savebitacora('ERROR: Ocurrio un error creando tipo de incidencia '.$r->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","tipos_save","ERROR");
+            return [
+                'title' => "Tipos de incidenica",
+                'error' => 'ERROR: Ocurrio un error actualizando el tipo de incidencia '.$r->des_tipo_incidencia.' '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+
+        }
+    }
+
     //USUARIOS ABRIR INCIDENCIAS
     public function nueva_incidencia($puesto){
         $referer = request()->headers->get('referer');

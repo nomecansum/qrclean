@@ -168,7 +168,6 @@
                             @if(checkPermissions(['Mantenimiento'],['R']))<span class="menu-title">Mantenimiento</span> @endif
                             <i class="arrow"></i>
                         </a>
-
                         <!--Submenu-->
                         <ul class="collapse">
                             @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant"><a href="/rondas/index/M/" class="text-nowrap"><i class="fad fa-tools"></i> Rondas <br>mantenimiento</a></li> @endif
@@ -193,7 +192,20 @@
                             @if(checkPermissions(['Perfiles'],['R']))<li class="perfiles"><a href="/profiles"><i class="fad fa-users"></i>Perfiles</a></li> @endif
                             @if(checkPermissions(['Secciones'],['R']))<li class="secciones"><a href="/sections"> <i class="fad fa-browser"></i>Secciones</a></li> @endif
                             @if(checkPermissions(['Permisos'],['R']))<li class="permisos"><a href="/profile-permissions"><i class="fad fa-lock-alt"></i> Permisos</a></li> @endif
-                            @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="tipos_incidencia"><a href="/incidencias/tipos"> <i class="fad fa-exclamation-triangle"></i>Tipos de incidencia</a></li> @endif
+                            @if(checkPermissions(['Tipos de incidencia'],['R']))
+                            <li class="tipos_incidencia">
+                                <a href="#">
+                                    <i class="fad fa-exclamation-triangle"></i>
+                                    <span class="menu-title">  Incidencias</span>
+                                    <i class="arrow"></i>
+                                </a>
+                                <ul class="collapse">
+                                    @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="incidencias_tipos text-nowrap"><a href="/incidencias/tipos"> <i class="fad fa-exclamation-triangle"></i>Tipos de incidencia</a></li> @endif
+                                    @if(checkPermissions(['Causas de cierre'],['R']))<li class="incidencias_causas"><a href="/incidencias/causas"> <i class="fad fa-times-hexagon"></i>Causas de cierre</a></li> @endif
+                                </ul>
+                            </li>
+                            @endif
+                           
                             @if(checkPermissions(['Tareas programadas'],['R']))<li class="tareas_programadas"><a href="/tasks" class="text-nowrap"> <i class="mdi mdi-camera-timer"></i>Tareas programadas</a></li> @endif
                         </ul>
                     </li>

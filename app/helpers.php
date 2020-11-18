@@ -399,11 +399,14 @@ function iniciales ($nombre,$cantidad){
 }
 
 function icono_nombre($nombre,$height=50,$font=18){
+
     $padding=intdiv($height,11);
     $rand=Str::random(9);
     $acronym = iniciales($nombre,2);
+    $top_letras=0;
+    $left_letras=2;
     //return '<span class="round" id="'.$rand.'" style="text-transform: uppercase; background-color: '.App\Classes\RandomColor::one().'">'.$acronym.'</span>';
-    return '<span class="round" id="'.$rand.'" style="font-weight: bold; font-size: '.$font.'px; width: '.$height.'px;height: '.$height.'px; padding-top:'.$padding.'px; text-transform: uppercase; background-color: '.genColorCodeFromText($nombre).'" data-toggle="tooltip" data-placement="bottom" title="'.$nombre.'">'.$acronym.'</span>';
+    return '<div class="round add-tooltip" id="'.$rand.'" style="line-height: 50px; padding: 0px; font-weight: bold; font-size: '.$font.'px; width: '.$height.'px;height: '.$height.'px; text-transform: uppercase; background-color: '.genColorCodeFromText($nombre).'" data-toggle="tooltip" data-placement="bottom" title="'.$nombre.'"><span style="position: relative; top: '.$top_letras.'%; left:'.$left_letras.'%;">'.$acronym.'</span></div>';
 }
 
 function randomcolor(){

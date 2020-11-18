@@ -54,7 +54,7 @@
                         
                     @endphp
                     <div class="text-center rounded add-tooltip flpuesto draggable {{ $cuadradito['clase_disp'] }} p-0 mr-2 mb-2 bg-{{ $puesto->color_estado }}" id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}">
-                         @if(isset($checks)){{-- Mostrar checkbox para seleccionar los puestos --}}
+                         @if(isset($checks) && $checks==1){{-- Mostrar checkbox para seleccionar los puestos --}}
                             <div style="position: absolute; margin-top: 2em; margin-left: 2em">
                                 <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chkp{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}" {{ isset($puestos_check) && array_search($puesto->id_puesto,$puestos_check)?'checked':'' }}>
                                 <label class="custom-control-label"   for="chkp{{ $puesto->id_puesto }}"></label>

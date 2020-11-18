@@ -89,7 +89,7 @@
 						@foreach ($incidencias as $inc)
 							<tr class="hover-this" @if (checkPermissions(['Clientes'],["W"])) @endif>
 								<td>{{$inc->id_incidencia}}</td>
-								<td><i class="{{ $inc->val_icono }} fa-2x" style="color:{{ $inc->val_color }}"></i></td>
+								<td class="text-center"><i class="{{ $inc->val_icono }} fa-2x" style="color:{{ $inc->val_color }}"></i></td>
 								<td>{{ $inc->des_puesto}}</td>
                                 <td>{{ $inc->des_edificio}}</td>
                                 <td>{{ $inc->des_planta}}</td>
@@ -105,6 +105,7 @@
 									{{ $inc->des_incidencia}}
 									<div class="floating-like-gmail mt-2 w-100" style="width: 100%">
 										@if (checkPermissions(['Incidencias'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $inc->id_incidencia }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $inc->id_incidencia }})"><span class="fa fa-eye pt-1" aria-hidden="true"></span> Ver</a>@endif
+										@if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#accion-incidencia" title="Acciones incidencia" data-toggle="modal" class="btn btn-xs btn-warning add-tooltip btn-accion" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-accion{{ $inc->id_incidencia }}" onclick="accion_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-plus pt-1" aria-hidden="true"></span> Accion</a>@endif
                                         @if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-cierre{{ $inc->id_incidencia }}" onclick="cierre_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-thumbs-up pt-1" aria-hidden="true"></span> Cerrar</a>@endif
 										@if (isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#reabrir-incidencia" title="Reabrir incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-reabrir" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-reabrir{{ $inc->id_incidencia }}" onclick="reabrir_incidencia({{ $inc->id_incidencia}})"><i class="fad fa-external-link-square-alt"></i> Reabrir</a>@endif
 										@if (checkPermissions(['Incidencias'],["D"]))<a href="#eliminar-incidencia-{{$inc->id_incidencia}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
@@ -114,7 +115,7 @@
 										<div class="modal fade" id="eliminar-incidencia-{{$inc->id_incidencia}}">
 											<div class="modal-dialog modal-md">
 												<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-													<div class="modal-header"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i><b>
+													<div class="modal-header"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i>
 														¿Borrar incidencia {{ $inc->des_incidencia}}?
 													</div>
 													
@@ -140,7 +141,7 @@
 		@csrf
 		<div class="modal-dialog modal-md">
 			<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-				<div class="modal-header"><i class="mdi mdi-thumb-up text-success mdi-48px"></i><b>
+				<div class="modal-header"><i class="mdi mdi-thumb-up text-success mdi-48px"></i>
 					Cerrar incidencia <span id="des_incidencia_cerrar"></span>
 				</div>
 				<div class="modal-body" id="body_cierre">
@@ -154,10 +155,29 @@
 		</div>
 	</form>
 </div>
+<div class="modal fade" id="accion-incidencia">
+	<form method="POST" action="{{ url('/incidencias/accion') }}" accept-charset="UTF-8" class="form-horizontal form-ajax" enctype="multipart/form-data">	
+		@csrf
+		<div class="modal-dialog modal-md">
+			<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+				<div class="modal-header"><i class="fad fa-plus fa-2x"></i>
+					Añadir accion a la incidencia <span id="des_incidencia_accion"></span>
+				</div>
+				<div class="modal-body" id="body_accion">
+					
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-info btn_accion_incidencia">Si</button>
+					<button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
 <div class="modal fade" id="nueva-incidencia">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-			<div class="modal-header"><i class="fad fa-plus-hexagon text-info fa-2x"></i><b>
+			<div class="modal-header"><i class="fad fa-plus-hexagon text-info fa-2x"></i>
 				Nueva incidencia 
 			</div>
 			<div class="modal-body">
@@ -183,7 +203,6 @@
 							</option>
 						@endforeach
 					</select>
-						
 					{!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
 				</div>
 				
@@ -220,8 +239,7 @@
             if( opacity ) value += ', ' + opacity;
           },
           theme: 'bootstrap'
-        });
-    //$('#frm_contador').on('submit',form_ajax_submit);
+        })
 
 	 //Date range picker
 	 $('#fechas').daterangepicker({
@@ -251,6 +269,11 @@
    function cierre_incidencia(id){
 	    $('#des_incidencia_cerrar').html($(this).data('desc'));
 		$('#body_cierre').load("{{ url('/incidencias/form_cierre/') }}/"+id);
+   }
+
+   function accion_incidencia(id){
+	    $('#des_incidencia_accion').html($(this).data('desc'));
+		$('#body_accion').load("{{ url('/incidencias/form_accion/') }}/"+id);
    }
 
    function reabrir_incidencia(id){

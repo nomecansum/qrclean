@@ -39,7 +39,7 @@
                     {!! $errors->first('txt_incidencia', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
-            <div class=row">
+            <div class="row">
                 <div class="row" style="padding-left: 15px">
                     Imagen 1<br>
                 </div>
@@ -53,7 +53,7 @@
                         {!! $errors->first('img_attach1', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
-            <div class=row">
+            <div class="row">
                 <div class="row" style="padding-left: 15px">
                     Imagen 2<br>
                 </div>

@@ -9,6 +9,8 @@ use App\Models\logpuestos;
 use App\Models\rondas;
 use App\Models\incidencias_tipos;
 use App\Models\incidencias;
+use App\Models\causas_cierre;
+use App\Models\incidencias_acciones;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -70,9 +72,18 @@ class IncidenciasController extends Controller
         return view('incidencias.fill-form-cerrar',compact('id','causas_cierre'));
     }
 
+    public function form_accion($id){
+        validar_acceso_tabla($id,'incidencias');
+
+        return view('incidencias.fill-form-accion',compact('id'));
+    }
+
     public function detalle_incidencia($id){
+        validar_acceso_tabla($id,"incidencias");
         $incidencia=DB::table('incidencias')
+            ->select('incidencias.*','edificios.des_edificio','plantas.des_planta','users.name','users.img_usuario','puestos.cod_puesto','puestos.des_puesto','incidencias_tipos.*')
             ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->join('users','incidencias.id_usuario_apertura','users.id')
             ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
@@ -85,7 +96,11 @@ class IncidenciasController extends Controller
             })
             ->where('incidencias.id_incidencia',$id)
             ->first();
-        return view('incidencias.fill-detalle-incidencia',compact('incidencia'));
+        $acciones=DB::table('incidencias_acciones')
+            ->join('users','incidencias_acciones.id_usuario','users.id')
+            ->where('id_incidencia',$id)
+            ->get();
+        return view('incidencias.fill-detalle-incidencia',compact('incidencia','acciones'));
     }
 
 
@@ -232,7 +247,7 @@ class IncidenciasController extends Controller
             }
             savebitacora('Tipo de incidencia creado '.$r->des_tipo_incidencia,"Incidencias","tipos_save","OK");
             return [
-                'title' => "Tipos de incidenica",
+                'title' => "Tipos de incidencia",
                 'message' => 'Tipo de incidencia '.$r->des_tipo_incidencia. ' actualizado con exito',
                 'url' => url('/incidencias/tipos')
             ];
@@ -241,63 +256,91 @@ class IncidenciasController extends Controller
             // return back()->withInput();
             savebitacora('ERROR: Ocurrio un error creando tipo de incidencia '.$r->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","tipos_save","ERROR");
             return [
-                'title' => "Tipos de incidenica",
+                'title' => "Tipos de incidencia",
                 'error' => 'ERROR: Ocurrio un error actualizando el tipo de incidencia '.$r->des_tipo_incidencia.' '.$exception->getMessage(),
                 //'url' => url('sections')
             ];
 
+        }
+    }
+
+    public function tipos_delete($id=0){
+        try {
+            $tipo = incidencias_tipos::findorfail($id);
+
+            $tipo->delete();
+            savebitacora('Tipo de incidencia borrado '.$tipo->des_tipo_incidencia,"Incidencias","causas_save","OK");
+            flash('Tipo de incidencia '.$tipo->des_tipo_incidencia.' borrado')->success();
+            return back()->withInput();
+        } catch (Exception $exception) {
+            flash('ERROR: Ocurrio un error borrando Tipo de incidencia '.$tipo->des_tipo_incidencia.' '.$exception->getMessage())->error();
+            return back()->withInput();
         }
     }
 
 
      // GESTION DE CAUSAS DE CIERRE DE INCIDENCIA
      public function index_causas(){
-        // $tipos = DB::table('incidencias_tipos')
-        // ->join('clientes','clientes.id_cliente','incidencias_tipos.id_cliente')
-        // ->where(function($q){
-        //     if (!isAdmin()) {
-        //         $q->where('incidencias_tipos.id_cliente',Auth::user()->id_cliente);
-        //         $q->orwhere('incidencias_tipos.mca_fijo','S');
-        //     }
-        // })
-        // ->get();
-        // return view('incidencias.tipos.index', compact('tipos'));
+        $causas = DB::table('causas_cierre')
+        ->join('clientes','clientes.id_cliente','causas_cierre.id_cliente')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('causas_cierre.id_cliente',Auth::user()->id_cliente);
+                $q->orwhere('causas_cierre.mca_fija','S');
+            }
+        })
+        ->get();
+        return view('incidencias.causas.index', compact('causas'));
     }
 
     public function causas_edit($id=0){
         if($id==0){
-            $tipo=new incidencias_tipos();
+            $causa=new causas_cierre();
         } else {
-            $tipo = incidencias_tipos::findorfail($id);
+            $causa = causas_cierre::findorfail($id);
         }
         $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
-        return view('incidencias.tipos.edit', compact('tipo','Clientes','id'));
+        return view('incidencias.causas.edit', compact('causa','Clientes','id'));
     }
 
     public function causas_save(Request $r){
         try {
             if($r->id==0){
-                incidencias_tipos::create($r->all());
+                causas_cierre::create($r->all());
             } else {
-                $tipo=incidencias_tipos::find($r->id);
-                $tipo->update($r->all());
+                $causa=causas_cierre::find($r->id);
+                $causa->update($r->all());
             }
-            savebitacora('Tipo de incidencia creado '.$r->des_tipo_incidencia,"Incidencias","tipos_save","OK");
+            savebitacora('Causa de cierre actualizada '.$r->des_causa,"Incidencias","causas_save","OK");
             return [
-                'title' => "Tipos de incidenica",
-                'message' => 'Tipo de incidencia '.$r->des_tipo_incidencia. ' actualizado con exito',
-                'url' => url('/incidencias/tipos')
+                'title' => "Causas de cierre",
+                'message' => 'Causa de cierre '.$r->des_causa. ' actualizada',
+                'url' => url('/incidencias/causas')
             ];
         } catch (Exception $exception) {
             // flash('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage())->error();
             // return back()->withInput();
-            savebitacora('ERROR: Ocurrio un error creando tipo de incidencia '.$r->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","tipos_save","ERROR");
+            savebitacora('ERROR: Ocurrio un error actualizando causa de cierre '.$r->des_causa.' '.$exception->getMessage() ,"Incidencias","causas_save","ERROR");
             return [
-                'title' => "Tipos de incidenica",
-                'error' => 'ERROR: Ocurrio un error actualizando el tipo de incidencia '.$r->des_tipo_incidencia.' '.$exception->getMessage(),
-                //'url' => url('sections')
+                'title' => "Causas de cierre",
+                'error' => 'ERROR: Ocurrio un error actualizando causa de cierre '.$r->des_causa.' '.$exception->getMessage(),
+                //'url' => url('causas')
             ];
 
+        }
+    }
+
+    public function causas_delete($id=0){
+        try {
+            $causa = causas_cierre::findorfail($id);
+
+            $causa->delete();
+            savebitacora('Causa de cierre borrada '.$causa->des_causa,"Incidencias","causas_save","OK");
+            flash('Causa de cierre '.$causa->des_causa.' borrada')->success();
+            return back()->withInput();
+        } catch (Exception $exception) {
+            flash('ERROR: Ocurrio un error borrando causa de cierre '.$causa->des_causa.' '.$exception->getMessage())->error();
+            return back()->withInput();
         }
     }
 
@@ -483,5 +526,64 @@ class IncidenciasController extends Controller
                 break;
         }
 
+    }
+
+
+    public function add_accion(Request $r){
+        $data=[];
+        $incidencia=incidencias::find($r->id_incidencia);
+        try{    
+            for ($i=1; $i <3 ; $i++) { 
+                $var="img".$i;
+                $$var='';
+                if ($r->hasFile('img_attach'.$i)) {
+                    
+                    $file = $r->file('img_attach'.$i);
+                    $path = config('app.ruta_public').'/uploads/incidencias/'.$incidencia->id_cliente;
+                    $path_local = public_path().'/uploads/incidencias/'.$incidencia->id_cliente;
+
+                        if(!File::exists($path_local)) {
+                            File::makeDirectory($path_local);
+                        }
+
+                    $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+                    // $img = Image::make($file);
+                    // $img->resize(1000, null, function ($constraint) {
+                    //     $constraint->aspectRatio();
+                    // })->save($path.'/'.$$var);
+                    
+                    Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
+                    $file->move($path_local,$$var);
+                }
+                $data[$var]=$$var;
+            }
+            $acciones=incidencias_acciones::where('id_incidencia',$r->id_incidencia);
+            $cuenta=$acciones->count()+1;
+            //Vamos a insertar
+            $accion=new incidencias_acciones;
+            $accion->id_incidencia=$incidencia->id_incidencia;
+            $accion->num_accion=$cuenta;
+            $accion->des_accion=$r->des_accion;
+            $accion->fec_accion=Carbon::now();
+            $accion->id_usuario=Auth::user()->id;
+            $accion->img_attach1=$data['img1']??null;
+            $accion->img_attach2=$data['img2']??null;
+            $accion->save();
+
+            return [
+                'title' => "Añadir accion a la incidencia",
+                'message' => "Añadida accion para la incidencia ".$r->id_incidencia,
+                //'url' => url($url_vuelta)
+            ];
+
+        } catch (\Exception $e) {
+
+            savebitacora('ERROR: Ocurrio un error añadiendo la accion '.$e->getMessage() ,"Incidencias","add_accion","ERROR");
+            return [
+                'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
+                'error' => 'ERROR: Ocurrio un error añadiendo la accion '.$e->getMessage(),
+                //'url' => url('sections')
+            ];
+        } 
     }
 }

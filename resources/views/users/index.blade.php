@@ -4,7 +4,9 @@
     <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
     <style type="text-css">
-
+        .show-calendar{
+            z-indez: 15000;
+        }
     </style>
 @endsection
 
@@ -58,8 +60,8 @@
                             {{--  <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>  --}}
                             {{--  @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
                             @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif  --}}
-                            @if(checkPermissions(['Asignar puesto a usuario'],['R']))<li><a href="#" class="btn_crear reserva" data-tipo="M"><i class="fad fa-desktop-alt"></i> Asignar temporalmente puesto a usuario</a></li>@endif
-                            @if(checkPermissions(['Crear reservas para otros'],['R']))<li><a href="#" class="btn_crear reserva" data-tipo="M"><i class="fad fa-calendar-alt"></i> Crear reserva para usuario</a></li>@endif 
+                            @if(checkPermissions(['Asignar puesto a usuario'],['R']))<li><a href="#asignar-puesto" data-toggle="modal" class="btn_asignar_puesto reserva btn_search" data-tipo="M"><i class="fad fa-desktop-alt"></i> Asignar temporalmente puesto a usuario</a></li>@endif
+                            @if(checkPermissions(['Crear reservas para otros'],['R']))<li><a href="#crear-reserva" data-toggle="modal"  class="btn_crear_reserva reserva btn_search" data-tipo="M"><i class="fad fa-calendar-alt"></i> Crear reserva para usuario</a></li>@endif 
                             @if(checkPermissions(['Usuarios'],['D']))<li><a href="#" class="btn_borrar_usuarios btn_toggle_dropdown btn_search"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar usuarios</a> </li>@endif
                             {{--  @if(checkPermissions(['Usuarios'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Reservar puesto supervisor</a></li>@endif  --}}
                         </ul>
@@ -259,6 +261,55 @@
         </div>
     </div>
 
+    <div class="modal fade" id="crear-reserva" style="display: none;">
+        <div class="modal-dialog ">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                        <h4 class="modal-title">Crear nueva reserva para el usuario</h4>
+                </div>
+                
+                <div class="modal-body" id="">
+                    
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-info" id="btn_si_supervisor" href="javascript:void(0)">Si</a>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="asignar-puesto" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                        <h4 class="modal-title">Asignar temporalmente puesto a usuario</h4>
+                </div>
+                
+                <div class="modal-body" id="">
+
+                        <label>Fechas </label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->addMonth()->format('d/m/Y') }}">
+                            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                        
+                        </div>
+                    <div id="puestos_usuario_asignar"></div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-info" id="btn_si_supervisor" href="javascript:void(0)">Si</a>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
@@ -267,7 +318,20 @@
         $('.configuracion').addClass('active active-sub');
         $('.usuarios').addClass('active-link');
         
-        
+         //Date range picker
+         $('#fechas').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: '{{trans("general.date_format")}}',
+                applyLabel: "OK",
+                cancelLabel: "Cancelar",
+                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+                firstDay: {{trans("general.firstDayofWeek")}}
+            },
+            opens: 'right',
+        });
+
         $('#link_borrar').click(function(){
             console.log("{{ url('users/delete/') }}/"+$('#id_usuario_borrar').val());
             window.open("{{ url('users/delete/') }}/"+$('#id_usuario_borrar').val(),'_self');
@@ -368,7 +432,7 @@
             }).get(); // 
             if(searchIDs.length==0){
                 $('.modal').modal('hide');  
-                toast_error('Error','Debe seleccionar algún puesto');
+                toast_error('Error','Debe seleccionar algún usuario');
                 exit();
             }
         })
@@ -399,6 +463,15 @@
                 } 
                 
             });  
+        })
+
+        $('.btn_asignar_puesto').click(function(){
+            $('#puestos_usuario_asignar').load("{{ url('users/puestos_usuario/'.$users->id) }}", function(){
+                $('.flpuesto').click(function(){
+                    console.log($(this).data('id'));
+                })
+            });
+            
         })
 
     </script>

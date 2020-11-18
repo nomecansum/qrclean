@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/asignar_plantas',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@asignar_plantas'])->name('users.users.asignar_plantas');
         Route::post('/asignar_supervisor',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@asignar_supervisor'])->name('users.users.asignar_supervisor');
         Route::get('/puestos_supervisor/{id}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@puestos_supervisor'])->name('users.puestos_supervisor');
+        Route::get('/puestos_usuario/{id}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@puestos_usuario'])->name('users.puestos_usuario');
         Route::get('/add_puesto_supervisor/{id}/{puesto}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@add_puesto_supervisor'])->name('users.add_puesto_supervisor');
     });
 
@@ -195,9 +196,12 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/tipos',['middleware'=>'permissions:["Tipos de incidencia"],["R"]', 'uses' => 'IncidenciasController@index_tipos'])->name('incidencias_tipos.index');
         Route::post('/tipos/save',['middleware'=>'permissions:["Tipos de incidencia"],["W"]', 'uses' => 'IncidenciasController@tipos_save']);
         Route::get('/tipos/edit/{id?}',['middleware'=>'permissions:["Tipos de incidencia"],["C"]', 'uses' => 'IncidenciasController@tipos_edit']);
+        Route::get('/tipos/delete/{id?}',['middleware'=>'permissions:["Tipos de incidencia"],["D"]', 'uses' => 'IncidenciasController@tipos_delete']);
         Route::get('/causas',['middleware'=>'permissions:["Causas de cierre"],["R"]', 'uses' => 'IncidenciasController@index_causas'])->name('incidencias_causas.index');
         Route::post('/causas/save',['middleware'=>'permissions:["Causas de cierre"],["W"]', 'uses' => 'IncidenciasController@causas_save']);
-        Route::get('/causas/edit/{id?}',['middleware'=>'permissions:["Causas de cierre"],["C"]', 'uses' => 'IncidenciasController@causas_edit']);
+        Route::get('/causas/edit/{id?}',['middleware'=>'permissions:["Causas de cierre"],["W"]', 'uses' => 'IncidenciasController@causas_edit']);
+        Route::get('/causas/delete/{id?}',['middleware'=>'permissions:["Causas de cierre"],["D"]', 'uses' => 'IncidenciasController@causas_delete']);
+
 
         Route::get('/create/{puesto}',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@nueva_incidencia'])->name('incidencias.nueva');
         Route::get('/edit/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@edit']);
@@ -208,8 +212,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/edit/{id}',['middleware'=>'permissions:["Incidencias"],["R"]','uses' => 'IncidenciasController@detalle_incidencia']);
         Route::get('/delete/{id}',['middleware'=>'permissions:["Incidencias"],["D"]','uses' => 'IncidenciasController@delete']);
         Route::get('/get_detalle/{id?}',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@get_detalle_scan']);
+        Route::get('/form_accion/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@form_accion']);
         
         Route::get('/{f1?}/{f2?}',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@index'])->name('incidencias.index');
+
+        Route::post('/accion',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@add_accion']);
         
     });
 

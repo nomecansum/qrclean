@@ -591,6 +591,63 @@ class UsersController extends Controller
         return view('puestos.content_mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','checks','puestos_check','id_check','url_check'));
     }
 
+    public function puestos_usuario($id){
+        $usuario=users::find($id);
+
+        $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('puestos.id_cliente',$usuario->id_cliente)
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $edificios=DB::table('edificios')
+        ->select('id_edificio','des_edificio')
+        ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
+        ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
+        ->where('edificios.id_cliente',$usuario->id_cliente)
+        ->get();
+
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','reservas.id_usuario','users.id')
+            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where('reservas.id_cliente',$usuario->id_cliente)
+            ->get();
+
+        $asignados_usuarios=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')    
+            ->where('id_usuario','<>',$id)
+            ->get();
+
+        $asignados_miperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
+            ->where('id_perfil',$usuario->cod_nivel)
+            ->get();
+        
+        $asignados_nomiperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
+            ->where('id_perfil','<>',$usuario->cod_nivel)
+            ->get();
+
+        $puestos_check=[];
+        $checks=0; //Para que la vista muestre los checkbox
+        $id_check=$id;
+        $url_check="users/add_puesto_usuario/";
+
+        
+        return view('puestos.content_mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','checks','puestos_check','id_check','url_check'));
+    }
+
     public function add_puesto_supervisor($id,$puesto,$accion){
         try {
             if($accion=="A"){

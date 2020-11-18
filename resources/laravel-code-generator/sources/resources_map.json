@@ -118,5 +118,10 @@
         "model-name": "logtarea",
         "resource-file": "logtareas.json",
         "table-name": "tareas_programadas_log"
+    },
+    {
+        "model-name": "incidencias_acciones",
+        "resource-file": "incidencias_acciones.json",
+        "table-name": "incidencias_acciones"
     }
 ]

@@ -80,6 +80,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/puestos_supervisor/{id}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@puestos_supervisor'])->name('users.puestos_supervisor');
         Route::get('/puestos_usuario/{id}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@puestos_usuario'])->name('users.puestos_usuario');
         Route::get('/add_puesto_supervisor/{id}/{puesto}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@add_puesto_supervisor'])->name('users.add_puesto_supervisor');
+        Route::post('/asignar_temporal',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@asignar_temporal'])->name('users.asignar_temporal');
+        
     });
 
     Route::group(['prefix' => 'filters'], function () {

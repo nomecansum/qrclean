@@ -300,7 +300,7 @@
                         <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                     
                     </div>
-                    <div id="comprobar_puesto_asignar"></div>
+                    <div id="comprobar_puesto_asignar" class=" alert rounded b-all alert-warning mb-2 pad-all" style="display: none"></div>
                     <div id="puestos_usuario_asignar"></div>
                 </div>
                 <div class="modal-footer">
@@ -318,9 +318,11 @@
         
         $('.configuracion').addClass('active active-sub');
         $('.usuarios').addClass('active-link');
+        var tooltip = $('.add-tooltip');
+        if (tooltip.length)tooltip.tooltip();
+
         
-         //Date range picker
-         $('#fechas').daterangepicker({
+        $('#fechas').daterangepicker({
             autoUpdateInput: true,
             locale: {
                 format: '{{trans("general.date_format")}}',
@@ -355,9 +357,6 @@
         $('.btn_plantas').click(function(){
             $('#txt_cuerpo').load("{{ url('/users/plantas',Auth::user()->id) }}/0");
         })
-        
-        var tooltip = $('.add-tooltip');
-        if (tooltip.length)tooltip.tooltip();
 
         $('.btn_borrar_usuarios').click(function(){
             //block_espere();
@@ -477,6 +476,7 @@
                 exit();
             }
             $('#puestos_usuario_asignar').load("{{ url('users/puestos_usuario/') }}/"+searchIDs, function(){
+                $('#comprobar_puesto_asignar').html('');
                 $('.flpuesto').click(function(){
                     $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:$(this).data('id'),rango: $('#fechas').val(),id_usuario: searchIDs,accion: 'A'}, function(data, textStatus, xhr) {
                         
@@ -487,12 +487,14 @@
                             } else if(data.alert){
                                 toast_warning(data.title,data.alert);
                             } else{
-                                //$('.modal').modal('hide');  
+                                $('.modal').modal('hide');  
                                 toast_ok(data.title,data.message);
                             }
                         } else{ //Si lo que devuelve es una view, implica que hay que preguntar al usuario que vamos a hacer y por lo tanto hay que mostrarla en pantalla
                             console.log('view');
-                            console.log(data);
+                            $('#comprobar_puesto_asignar').show();
+                            $('#comprobar_puesto_asignar').html(data);
+                            animateCSS('#comprobar_puesto_asignar','bounceInRight');
                         }
                         
                     }) 

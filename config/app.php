@@ -135,6 +135,8 @@ return [
     'upload_disk'=>env('upload_disk',"local"),
     'ruta_public'=>env('ruta_public',public_path()),
 
+    'remitente_mail'=>env('MAIL_FROM_ADDRESS','spotdesking@gmail.com'),
+
     'AWS_URL'=>env('AWS_URL','/'),
     /*
     |--------------------------------------------------------------------------

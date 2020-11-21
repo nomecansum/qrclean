@@ -15,6 +15,15 @@
 <script>
     $('#btn_aceptar_asignacion').click(function(){
         $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:{{ $r->puesto }},rango: "{!! $r->rango !!}",id_usuario: {!! $r->id_usuario[0] !!},accion: 'C'}, function(data, textStatus, xhr) {
+            $('#comprobar_puesto_asignar').hide();
+            if(data.error){
+                toast_error(data.title,data.error);
+            } else if(data.alert){
+                toast_warning(data.title,data.alert);
+            } else{
+                $('.modal').modal('hide');  
+                toast_ok(data.title,data.message);
+            }
             
         }) 
     })

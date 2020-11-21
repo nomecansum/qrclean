@@ -8,7 +8,6 @@ use App\Models\tareas;
 use App\Models\logtarea;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\cucoWEB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 
@@ -58,6 +57,7 @@ class Kernel extends ConsoleKernel
         //////////////////////////////////////////
         ///// TAREAS PROGRAMADAS CUCU 360/////////
         //////////////////////////////////////////
+        Log::debug(implode('|',$commands));
         $tasks = tareas::where('mca_activa','S')->get();
         $directorio = storage_path().'/tareas/';
         if(!File::exists($directorio)) {
@@ -145,8 +145,8 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        //$this->load(__DIR__.'/Commands');
 
-        require base_path('routes/console.php');
+        require_once base_path('routes/console.php');
     }
 }

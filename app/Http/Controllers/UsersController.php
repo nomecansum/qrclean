@@ -8,6 +8,7 @@ use App\Models\niveles_acceso;
 use App\Models\users;
 use App\Models\puestos;
 use App\Models\plantas_usuario;
+use App\Models\puestos_asignados;
 use Illuminate\Http\Request;
 use Exception;
 use DB;
@@ -684,10 +685,11 @@ class UsersController extends Controller
         try {
             $puesto=puestos::find($r->puesto);
             $idusuario=is_array($r->id_usuario)?$r->id_usuario[0]:$r->id_usuario;
-            $usuario=users::find($r->id_usuario[0]);
+            $usuario=users::find($idusuario);
             $f = explode(' - ',$r->rango);
-            $f1 = adaptar_fecha($f[0]);
-            $f2 = adaptar_fecha($f[1]);
+            $f1 = Carbon::parse(adaptar_fecha($f[0]));
+            $f2 = Carbon::parse(adaptar_fecha($f[1]));
+           
             //Vamos a ver si alguien tiene ese puesto asignado permanentemente
             $puesto_asignado=DB::table('puestos_asignados')
                 ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
@@ -711,22 +713,24 @@ class UsersController extends Controller
                 if(!$puesto_asignado->isempty()){
                     $respuesta=[];
                     foreach ($puesto_asignado as $p){
-                        
-                        if(!$p->fec_desde){
+                        if(!$p->fec_desde){  //El usuario saliente tenia el puesto asignado indefinidamente
                             $str_respuesta="El puesto esta asignado permanentemente a ".$p->name.' como esta asignacion tiene prioridad sobre la permanante, se le notificará a '.$p->name.' que entre '.Carbon::parse($f1)->format('d/m/Y').' y '.Carbon::parse($f2)->format('d/m/Y').' no podrá usar su puesto';
                         } else {
+                            $p->fec_desde=Carbon::parse($p->fec_desde);
+                            $p->fec_hasta=Carbon::parse($p->fec_hasta); 
                             $str_respuesta='El puesto esta asignado temporalmente a '.$p->name.' entre el '.Carbon::parse($p->fec_desde)->format('d/m/Y').' y '.Carbon::parse($p->fec_hasta)->format('d/m/Y').' si continúa, se modificará la asignacion temporal de puesto y se notificará a '.$p->name.' que ';
-                            if($p->fec_desde>$f1 && $p->fec_hasta<$f2){
+                            if(($p->fec_desde>=$f1 && $p->fec_hasta<=$f2) || ($p->fec_desde==$f1 && $p->fec_hasta==$f2) || ($p->fec_desde>$f1 && $p->fec_hasta=$f2)){ //La nueva asignacion es mas grande que la actual--> Se cancela la existente
                                 $str_respuesta.=' se cancelará la asignacion temporal de puesto que tenía';
-                            }else if($p->fec_desde<$f1 && $p->fec_hasta>$f2){
-                                $str_respuesta.=' se producirá una interrupcion en el intervalo de su asignacion entre el '.Carbon::parse($p->fec_desde)->format('d/m/Y').' y '.Carbon::parse($p->fec_hasta)->format('d/m/Y');
-                            }else if($p->fec_desde>$f1 && $p->fec_hasta>$f2){
-                                $str_respuesta.=' su asignacion de puesto comenzará el '.Carbon::parse($f2)->format('d/m/Y');
-                            }else if($p->fec_hasta>$f1 && $p->fec_hasta<$f2){
-                                $str_respuesta.=' su asignacion de puesto acabará el '.Carbon::parse($f1)->format('d/m/Y');
+                            }else if($p->fec_desde<=$f1 && $p->fec_hasta>$f2){ //La nueva asignacion es mas pequeña que la actual y esta en medio de esta, se parte la existente en dos
+                                $str_respuesta.=' se producirá una interrupcion en el intervalo de su asignacion entre el '.$f1->format('d/m/Y').' y '.$f2->format('d/m/Y');
+                            }else if($p->fec_desde>$f1 && $p->fec_hasta>$f2){ //La nueva asignacion empieza enmedio de la actual y acaba despues --> se corta por la izquierda
+                                $str_respuesta.=' su asignacion de puesto comenzará el '.$f2->addDay()->format('d/m/Y');
+                            }else if($p->fec_hasta>$f1 && $p->fec_hasta<$f2){  //La nueva asignacion  empieza antes de la actual y acaba en medio ->se corta por la derecha
+                                $str_respuesta.=' su asignacion de puesto finalizará el '.$f1->subDay()->format('d/m/Y');
                             }
                         }
                         $respuesta[]=$str_respuesta;
+                        
                     }
                     return view('users.asignacion_temporal_pedir_confirmacion',compact('respuesta','r'));
                 }
@@ -739,14 +743,22 @@ class UsersController extends Controller
                     'id_tipo_asignacion'=>1
                 ]);
                 savebitacora('Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,"Usuarios","asignar_temporal","OK");
+                //Notificar al usuario entrante
+                $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted';
+                notificar_usuario($usuario,"Se le ha asignado un nuevo puesto",'emails.asignacion_puesto',$str_notificacion,1);
                 return [
                     'result' => "OK",
                     'title' => "Usuarios",
                     'message' =>'Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,
                 ];
             } else if($r->accion=="B") {  //Baja, borrar
-                savebitacora('Borrada asignacion del puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,"Usuarios","asignar_temporal","OK");
+                
                 DB::table('puestos_asignados')->where('key_id',$r->key_id)->delete();
+                savebitacora('Borrada asignacion del puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,"Usuarios","asignar_temporal","OK");
+                //Notificar al usuario
+                $str_notificacion=Auth::user()->name.' ha eliminado la asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') que tenía';
+                notificar_usuario($usuario,"Se eliminado la asignacion temporal de su puesto",'emails.asignacion_puesto',$str_notificacion,1);
+
                 return [
                     'result' => "OK",
                     'title' => "Usuarios",
@@ -754,16 +766,43 @@ class UsersController extends Controller
                 ];
 
             } else if($r->accion=="C") { //Confirmar  en caso de que en el alta haya habido algun liop
+                $str_respuesta="";
+                
                 foreach ($puesto_asignado as $p){
-                    if($p->fec_desde>$f1 && $p->fec_hasta<$f2){
-                        $str_respuesta.='Se ha cancelado la asignacion temporal de puesto que tenía '.$p->name.' para el intervalo entre '.Carbon::parse($f1)->format('d/m/Y').' y '.Carbon::parse($f2)->format('d/m/Y');
-                    }else if($p->fec_desde<$f1 && $p->fec_hasta>$f2){
-                        $str_respuesta.=' Se ha interrumpido  el intervalo de asignacion de puesto de '.$p->name.' entre el '.Carbon::parse($p->fec_desde)->format('d/m/Y').' y '.Carbon::parse($p->fec_hasta)->format('d/m/Y');
-                    }else if($p->fec_desde>$f1 && $p->fec_hasta>$f2){
-                        $str_respuesta.=' su asignacion de puesto comenzará el '.Carbon::parse($f2)->format('d/m/Y');
+                    $p->fec_desde=Carbon::parse($p->fec_desde);
+                    $p->fec_hasta=Carbon::parse($p->fec_hasta);
+                    $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') que entra en conflicto con una que usted tenia entre '.Carbon::parse($p->fec_desde)->format('d/m/Y').' y '.Carbon::parse($p->fec_hasta)->format('d/m/Y');
+                    if(($p->fec_desde>=$f1 && $p->fec_hasta<=$f2) || ($p->fec_desde==$f1 && $p->fec_hasta==$f2) || ($p->fec_desde>$f1 && $p->fec_hasta=$f2)){ //Se borra la asigancion que tenia
+                        DB::table('puestos_asignados')->where('key_id',$p->key_id)->delete();
+                        $str_respuesta='Se ha cancelado la asignacion temporal de puesto que tenía '.$p->name.' para el intervalo entre '.$f1->format('d/m/Y').' y '.$f2->format('d/m/Y');
+                    }else if($p->fec_desde<$f1 && $p->fec_hasta>$f2){ //Se parte la asignacion que tenia en dos, metiendo en medio la nueva
+                        $asignacion=puestos_asignados::find($p->key_id); //Cacho 1
+                        $fec_hasta_temp=$asignacion->fec_hasta;
+                        $asignacion->fec_hasta=$f1->subDay();
+                        $asignacion->save();
+
+                        $asignacion= new puestos_asignados;  //Creamos el cacho 2
+                        $asignacion->fec_desde->$f2->addDay();
+                        $asignacion->fec_hasta=$fec_hasta_temp;
+                        $asignacion->id_puesto=$puesto->id_puesto;
+                        $asignacion->id_usuario=$usuario->id;
+                        $asignacion->id_tipo_asignacion=1;
+                        $asignacion->save();
+                        $str_respuesta=' Se ha interrumpido  el intervalo de asignacion de puesto de '.$p->name.' entre el '.$f1->format('d/m/Y').' y '.$f2->format('d/m/Y');
+                    }else if($p->fec_desde>$f1 && $p->fec_hasta>$f2){ 
+                        $asignacion=puestos_asignados::find($p->key_id); 
+                        $asignacion->fec_desde=Carbon::parse($f2)->addDay();
+                        $asignacion->save();
+                        $str_respuesta=' su asignacion de puesto comenzará el '.$f2->addDay()->format('d/m/Y');
                     }else if($p->fec_hasta>$f1 && $p->fec_hasta<$f2){
-                        $str_respuesta.=' su asignacion de puesto acabará el '.Carbon::parse($f1)->format('d/m/Y');
+                        $asignacion=puestos_asignados::find($p->key_id); 
+                        $asignacion->fec_hasta=Carbon::parse($f1)->subDay();
+                        $asignacion->save();
+                        $str_respuesta=' su asignacion de puesto acabará el '.$f1->subDay()->format('d/m/Y');
                     }
+                    //Notificar al usuario saliente
+                    $user_puesto=users::find($p->id_usuario);
+                    notificar_usuario($user_puesto,"Se han producido cambios en su asignacion de puesto",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,1); 
                 }
                 //Si no hay nada mas, creamos la asignacion para el usuario
                 DB::table('puestos_asignados')->insert([
@@ -773,7 +812,15 @@ class UsersController extends Controller
                     'fec_hasta'=>$f2,
                     'id_tipo_asignacion'=>1
                 ]);
-                savebitacora('Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,"Usuarios","asignar_temporal","OK");
+                savebitacora('Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango.' '.$str_respuesta,"Usuarios","asignar_temporal","OK");
+                //Notificar al usuario entrante
+                $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted';
+                notificar_usuario($usuario,"Se le ha asignado un nuevo puesto",'emails.asignacion_puesto',$str_notificacion,1);
+                return [
+                    'result' => "OK",
+                    'title' => "Usuarios",
+                    'message' =>'Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,
+                ];
             }
             
         } catch (Exception $exception) {

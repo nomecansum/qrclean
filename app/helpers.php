@@ -341,12 +341,24 @@ function comodines_texto($texto,$campos,$datos){
 }
 
 
-function enviar_email($user,$from,$to,$to_name,$subject,$plantilla){
+function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1){
     try{
-        \Mail::send($plantilla, ['user' => $user], function ($m) use ($from,$to,$to_name,$subject) {
-            $m->from($from, 'Cuco360');
-            $m->to($to, $to_name)->subject($subject);
-        });
+        
+        switch ($metodo) {
+            case '1': //Mail
+                \Mail::send($plantilla, ['user' => $user,'body'=>$body], function ($m) use ($user,$subject) {
+                    if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                        $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
+                    } else {
+                        $m->to($user->email, $user->name)->subject($subject);
+                    }
+                    $m->from(config('mail.from.address'),config('mail.from.name'));
+                });
+                break;
+            case '2':  //Notificacion push
+                # code...
+                break;
+        }
     } catch(\Exception $e){
         return $e->getMessage();
     }

@@ -11,6 +11,7 @@ use App\Models\puestos_ronda;
 use App\Models\limpiadores;
 use App\Models\tags;
 use App\Models\tags_puestos;
+use App\Models\users;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -247,6 +248,10 @@ class PuestosController extends Controller
                     'id_puesto'=>$puesto->id_puesto,
                     'id_usuario'=>$r->id_usuario
                 ]);
+                //Notificar al usuario entrante
+                $usuario=users::find($r->id_usuario);
+                $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted';
+                notificar_usuario($usuario,"Se le ha asignado un nuevo puesto de forma indefinida",'emails.asignacion_puesto',$str_notificacion,1);
                
             } else {
 

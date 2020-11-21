@@ -130,6 +130,7 @@
                                 @else
                                     {!! icono_nombre($users->name) !!}
                                 @endif
+                                @if(config('app.env')=='dev')[#{{ $users->id }}]@endif
                             </td>
                             <td class="pt-3">{{ $users->name }}</td>
                             <td>
@@ -479,7 +480,6 @@
                 $('#comprobar_puesto_asignar').html('');
                 $('.flpuesto').click(function(){
                     $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:$(this).data('id'),rango: $('#fechas').val(),id_usuario: searchIDs,accion: 'A'}, function(data, textStatus, xhr) {
-                        
                         if(data.result){ //Si loque devuelve el controller es una respuesta tripo obbect es que todo ha ido bien o que ha habido un error chungo
                             console.log('RESULT');
                             if(data.error){

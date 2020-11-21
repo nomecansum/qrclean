@@ -87,7 +87,7 @@ class PlantasController extends Controller
                 $data['img_plano']=$img_planta;
             }
             plantas::create($data);
-
+            savebitacora('Planta '.$request->des_planta. ' creada',"Plantas","store","OK");
             return [
                 'title' => "Plantas",
                 'message' => 'Planta '.$request->des_planta. ' creada',
@@ -142,7 +142,7 @@ class PlantasController extends Controller
             } 
             $plantas = plantas::findOrFail($id);
             $plantas->update($data);
-
+            savebitacora('Planta '.$request->des_planta. ' actualizada',"Plantas","update","OK");
             return [
                 'title' => "Plantas",
                 'message' => 'Planta '.$request->des_planta. ' actualizada',
@@ -171,7 +171,7 @@ class PlantasController extends Controller
             validar_acceso_tabla($id,"plantas");
             $plantas = plantas::findOrFail($id);
             $plantas->delete();
-
+            savebitacora('Planta '.$plantas->des_planta. ' borrada',"Plantas","destroy","OK");
             return redirect()->route('plantas.plantas.index')
                 ->with('success_message', 'Planta borrada.');
         } catch (Exception $exception) {
@@ -228,6 +228,7 @@ class PlantasController extends Controller
         $planta->factor_puesto=$r->factor_puesto;
         $planta->factor_letra=$r->factor_letra;
         $planta->save();
+        savebitacora('Distribucion de puestos en  '.$planta->des_planta. ' actualizada',"Plantas","puestos_save","OK");
         return [
             'title' => "Plantas",
             'message' => 'Distribucion de puestos en  '.$planta->des_planta. ' actualizada',

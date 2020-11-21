@@ -20,6 +20,9 @@ use Auth;
 use Session;
 use Redirect;
 use \Carbon\Carbon;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class UsersController extends Controller
 {
@@ -222,7 +225,7 @@ class UsersController extends Controller
             $users = users::findOrFail($id);
             $data["email_verified_at"]=Carbon::now();
             $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
-            $data["id_usuario_supervisor"]=$r->id_usuario_supervisor??null;
+            $data["id_usuario_supervisor"]=$request->id_usuario_supervisor??null;
 
             $users->update($data);
 
@@ -593,6 +596,11 @@ class UsersController extends Controller
         return view('puestos.content_mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','checks','puestos_check','id_check','url_check'));
     }
 
+    /**
+     * @param mixed $id 
+     * @return View|Factory 
+     * @throws BindingResolutionException 
+     */
     public function puestos_usuario($id){
         $usuario=users::find($id);
 
@@ -611,6 +619,7 @@ class UsersController extends Controller
                     $q->wherein('puestos.id_puesto',$puestos_usuario);
                 }
             })
+            ->wherenotin('puestos.id_estado',[4,5])
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')

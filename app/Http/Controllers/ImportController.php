@@ -105,6 +105,7 @@ class ImportController extends Controller
 
             if (isset($fichero_plantilla))
             {
+                savebitacora('Iniciado proceso de importacion',"Importacion","process_import","OK");
                 if(File::extension($fichero_plantilla)=='xls')
                     $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xls();
                 else $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
@@ -256,7 +257,7 @@ class ImportController extends Controller
 
                     //Borramos el excel y la carpeta de importacion
                     File::deleteDirectory($directorio);
-					
+					savebitacora($cuenta_usuarios . " usuarios importados correctamente:<br>" . $nombres_usuarios . "<br>" .'<br>'. $cuenta_puestos . " puestos importados correctamente:<br>" . $nombres_puestos . "<br>" . $mensajes_adicionales,"Importacion","process_import","OK");
                     return [
                         'title' => 'Proceso de importacion finalizada con exito',
                         'message' => $cuenta_usuarios . " usuarios importados correctamente:<br>" . $nombres_usuarios . "<br>" .'<br>'. $cuenta_puestos . " puestos importados correctamente:<br>" . $nombres_puestos . "<br>" . $mensajes_adicionales,

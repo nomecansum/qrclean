@@ -298,12 +298,12 @@ class TareasController extends Controller
 			$tarea= new tareas;
 			$this->poner_datos_tarea($r,$tarea,$parametros);
 			$tarea->save();
-
+			savebitacora(trans('tareas.tarea')." ".$r->des_tarea." ".trans('tareas.added'),"Tareas","save","OK");
 			return [
 				'message' => trans('tareas.tarea')." ".$r->des_tarea." ".trans('tareas.added'),
 				'url' => url('tasks')
 			];
-			savebitacora(trans('tareas.creada_tarea')." ".$r->des_tarea);
+			
 			} catch(\Exception $e){
 				return [
 					'title' => trans('tareas.tareas_programadas'),
@@ -331,7 +331,7 @@ class TareasController extends Controller
 			$this->poner_datos_tarea($r,$tarea,$parametros);
 			$tarea->save();
 
-			savebitacora(trans('tareas.modificada_tarea_programada')." ".$r->des_tarea);
+			savebitacora(trans('tareas.tarea')." ".$r->des_tarea." modificada","Tareas","save","OK");
 			return [
 				'message' => trans('tareas.tarea')." ".$r->des_tarea." ".trans('tareas.modificada'),
 				'url' => url('tasks')
@@ -347,7 +347,9 @@ class TareasController extends Controller
 
 	public function delete($id)
 	{
+		$tarea=tareas::find($id);
 		DB::table('tareas_programadas')->where('COD_TAREA',$id)->delete();
+		savebitacora(trans('tareas.tarea')." ".$tarea->des_tarea." borrada","Tareas","delete","OK");
 		return back();
 	}
 
@@ -416,7 +418,8 @@ class TareasController extends Controller
                 'error' => trans('tareas.la_tarea_no_existe')." [".$id." - ".$comando."]",
             ];
         }
-        //Si nos han pasado paramentros en la llamada se los pasamos a la tarea, si no, cogera los que lleve por defecto
+		//Si nos han pasado paramentros en la llamada se los pasamos a la tarea, si no, cogera los que lleve por defecto
+		savebitacora("Ejecucion manual de la tarea ".$tarea->des_tarea,"Tareas","run_tarea","OK");
         Artisan::call("task:scaffold", ['name' => $request['name'], '--fieldsFile' => 'public/Product.json']);
 
         //artisan task:generaxmlactualidad 10 --tag=74,75,76,77,78,79,80,81,82,83,84 --disp=1000007,1002064,1000001,1000008,1000009,1000150,1000011,1000014,1000016,1000024,1000040,1000049,1000059,1000026,1000025,1000027,1000028
@@ -430,6 +433,7 @@ class TareasController extends Controller
 			log_tarea(trans('tareas.ejecucion_manual_tarea')." [".$tarea->cod_tarea."]".$tarea->des_tarea." ".trans('general.usuario')." ".Auth::user()->nom_usuario,$tarea->cod_tarea);
 			Artisan::call($tarea->signature,['id'=>$id,'origen'=>'W']);
 			Log_tarea(trans('tareas.fin_de_la_tarea')." [".$tarea->cod_tarea."] ".$tarea->des_tarea,$tarea->cod_tarea);
+			savebitacora("Ejecucion manual de la tarea ".$tarea->des_tarea,"Tareas","ejecutar_tarea_web","OK");
 				//dd(Artisan::output());
 				return [
 					'title' =>  trans('tareas.tareas_programadas'),

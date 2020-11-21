@@ -574,7 +574,7 @@ class IncidenciasController extends Controller
             $accion->img_attach1=isset($data['img1'])?$data['img1']:null;
             $accion->img_attach2=isset($data['img2'])?$data['img2']:null;
             $accion->save();
-
+            savebitacora("Añadida accion para la incidencia ".$r->id_incidencia,"Incidencias","add_accion","OK");
             return [
                 'title' => "Añadir accion a la incidencia",
                 'message' => "Añadida accion para la incidencia ".$r->id_incidencia,

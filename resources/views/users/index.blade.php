@@ -263,20 +263,28 @@
     </div>
 
     <div class="modal fade" id="crear-reserva" style="display: none;">
-        <div class="modal-dialog ">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
                         <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                        <h4 class="modal-title">Crear nueva reserva para el usuario</h4>
+                        <h4 class="modal-title">Crear reserva para usuario</h4>
                 </div>
                 
                 <div class="modal-body" id="">
+
+                    <label>Fechas </label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control pull-left rangepicker" id="fechas_reserva" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
+                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                     
+                    </div>
+                    <div id="comprobar_puesto_reserva" class=" alert rounded b-all alert-warning mb-2 pad-all" style="display: none"></div>
+                    <div id="puestos_usuario_reserva"></div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-info" id="btn_si_supervisor" href="javascript:void(0)">Si</a>
+                    <a class="btn btn-info" id="btn_si_reserva" href="javascript:void(0)">Si</a>
                     <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
                 </div>
             </div>
@@ -290,14 +298,14 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
                         <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                        <h4 class="modal-title">Asignar temporalmente puesto a usuario</h4>
+                        <h4 class="modal-title">Asignar temporalmente puesto a  usuario</h4>
                 </div>
                 
                 <div class="modal-body" id="">
 
                     <label>Fechas </label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->addMonth()->format('d/m/Y') }}">
+                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->addMonth()->format('d/m/Y') }}">
                         <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                     
                     </div>
@@ -305,8 +313,8 @@
                     <div id="puestos_usuario_asignar"></div>
                 </div>
                 <div class="modal-footer">
-                    <a class="btn btn-info" id="btn_si_supervisor" href="javascript:void(0)">Si</a>
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                    {{--  <a class="btn btn-info" id="btn_si_supervisor" href="javascript:void(0)">Si</a>  --}}
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -316,7 +324,6 @@
 
 @section('scripts')
     <script>
-        
         $('.configuracion').addClass('active active-sub');
         $('.usuarios').addClass('active-link');
         var tooltip = $('.add-tooltip');
@@ -335,6 +342,20 @@
             },
             opens: 'right',
             parentEl: "#asignar-puesto .modal-body" 
+        });
+
+        $('#fechas_reserva').daterangepicker({
+            autoUpdateInput: true,
+            locale: {
+                format: '{{trans("general.date_format")}}',
+                applyLabel: "OK",
+                cancelLabel: "Cancelar",
+                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+                firstDay: {{trans("general.firstDayofWeek")}}
+            },
+            opens: 'right',
+            parentEl: "#crear-reserva .modal-body" 
         });
 
         $('#link_borrar').click(function(){
@@ -503,8 +524,52 @@
                     });                 
                 })
             });
+        })
+
+        $('.btn_crear_reserva').click(function(){
+            searchIDs = $('.chkuser:checkbox:checked').map(function(){
+                return $(this).val();
+            }).get(); // 
+            if(searchIDs.length>1){
+                $('.modal').modal('hide');  
+                toast_warning('Error','Solo se puede hacer la reserva de 1 usuario a la vez');
+                exit();
+            }
+            $('#fechas_reserva').change();
             
         })
+
+        $('#fechas_reserva').change(function(){
+            console.log($(this).val());
+            searchIDs = $('.chkuser:checkbox:checked').map(function(){
+                return $(this).val();
+            }).get(); // 
+            fecres=$('#fechas_reserva').val();
+            fecres=fecres.split(' - ');
+            console.log(fecres);
+            fecdesde=moment(fecres[0],"DD/MM/YYYY").format('YYYY-MM-DD');
+            fechasta=moment(fecres[1],"DD/MM/YYYY").format('YYYY-MM-DD');
+            $('#puestos_usuario_reserva').load("{{ url('reservas/puestos_usuario/') }}/"+searchIDs+'/'+fecdesde+'/'+fechasta, function(){
+                $('#comprobar_puesto_reserva').html('');
+                $('.flpuesto').click(function(){
+                    $.post('{{url('/reservas/asignar_reserva_multiple')}}', {_token: '{{csrf_token()}}',puesto:$(this).data('id'),desde:fecdesde,hasta:fechasta,id_usuario: searchIDs,accion: 'A'}, function(data, textStatus, xhr) {
+                        console.log('RESULT');
+                        if(data.error){
+                            toast_error(data.title,data.error);
+                        } else if(data.alert){
+                            toast_warning(data.title,data.alert);
+                        } else{
+                            $('.modal').modal('hide');  
+                            toast_ok(data.title,data.message);
+                        }
+                    }) 
+                    .fail(function(err){
+                        toast_error('Error',err.responseJSON.message);
+                    });                 
+                })
+            });
+        })
+
 
     </script>
 @endsection

@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Auth;
 use App\Models\reservas;
 use App\Models\puestos;
-
+use App\Models\users;
 
 class ReservasController extends Controller
 {
@@ -214,6 +215,7 @@ class ReservasController extends Controller
             }
             $res->id_cliente=Auth::user()->id_cliente;
             $res->save();
+            savebitacora('Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,"Reservas","save","OK");
             return [
                 'title' => "Reservas",
                 'mensaje' => 'Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,
@@ -224,11 +226,11 @@ class ReservasController extends Controller
     }
 
     public function delete(Request $r){
-
         $reserva=reservas::where('id_usuario',Auth::user()->id)->where('id_reserva',$r->id)->first();
         
         if(isset($reserva)){
             $reserva->delete();
+            savebitacora('Reserva del puesto '.$r->des_puesto.' reservado para el dia '.$r->fecha.' Cancelada',"Reservas","delete","OK");
             return [
                 'title' => "Reservas",
                 'mensaje' => 'Reserva del puesto '.$r->des_puesto.' reservado para el dia '.$r->fecha.' Cancelada',
@@ -241,6 +243,122 @@ class ReservasController extends Controller
                 //'url' => url('sections')
             ];
         }
+    }
 
+    public function puestos_usuario($id,$desde,$hasta){
+        $usuario=users::find($id);
+
+        $plantas_usuario=DB::table('plantas_usuario')
+            ->where('id_usuario',$id)
+            ->pluck('id_planta')
+            ->toArray();
+
+        $edificios=DB::table('edificios')
+        ->select('id_edificio','des_edificio')
+        ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
+        ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
+        ->where('edificios.id_cliente',$usuario->id_cliente)
+        ->get();
+
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','reservas.id_usuario','users.id')
+            ->where(function($q) use($desde,$hasta){
+                $q->wherebetween('fec_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
+                $q->orwherebetween('fec_fin_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
+                $q->orwhere(function($q) use($desde,$hasta){
+                    $q->wherebetween('fec_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
+                    $q->wherenull('fec_fin_reserva');
+                });
+            })
+            ->where('reservas.id_cliente',$usuario->id_cliente)
+            ->get();
+
+        $puestos_reservados=$reservas->pluck('id_puesto')->unique()->toArray();
+
+        $puestos=DB::table('puestos')
+        ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+        ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+        ->join('plantas','puestos.id_planta','plantas.id_planta')
+        ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+        ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+        ->where('puestos.id_cliente',$usuario->id_cliente)
+        ->where(function($q){
+            if (isSupervisor(Auth::user()->id)) {
+                $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                $q->wherein('puestos.id_puesto',$puestos_usuario);
+            }
+        })
+        ->when($puestos_reservados, function($q) use($puestos_reservados){
+            $q->wherenotin('id_puesto',$puestos_reservados);
+        })
+        ->where(function($q) use($plantas_usuario){
+            if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
+                $q->wherein('puestos.id_planta',$plantas_usuario??[]);
+            }
+        })
+        ->wherenotin('puestos.id_estado',[4,5])
+        ->orderby('edificios.des_edificio')
+        ->orderby('plantas.num_orden')
+        ->orderby('plantas.des_planta')
+        ->orderby('puestos.des_puesto')
+        ->get();
+
+        //Estas tres querys hacen falta para la compatibilidad de la vista
+        $asignados_usuarios=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')    
+            ->where('id_usuario',0)
+            ->get();
+
+        $asignados_miperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
+            ->where('id_perfil',0)
+            ->get();
+        
+        $asignados_nomiperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
+            ->where('id_perfil',0)
+            ->get();
+
+        $puestos_check=[];
+        $checks=0; //Para que la vista muestre los checkbox
+        $id_check=$id;
+        $url_check="users/add_puesto_usuario/";
+        
+        return view('puestos.content_mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','checks','puestos_check','id_check','url_check'));
+    }
+
+    public function asignar_reserva_multiple(Request $r){
+
+        $usuario=users::find($r->id_usuario[0]);
+        $puesto=puestos::find($r->puesto);
+        $period = CarbonPeriod::create(Carbon::parse($r->desde), Carbon::parse($r->hasta));
+        foreach($period as $fecha){
+            $res=new reservas;
+            $res->id_puesto=$r->puesto;
+            $res->id_usuario=$usuario->id;
+            $res->fec_reserva=$fecha;
+            //Si no vienen horas las ponemos a 0
+            $res->fec_reserva->hour=0;
+            $res->fec_reserva->minute=0;
+            $res->fec_reserva->second=0;
+            if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar)){
+                $res->fec_fin_reserva=$res->fec_reserva->addDay($puesto->max_horas_reservar);   
+            }
+            $res->id_cliente=$usuario->id_cliente;
+            $res->save();
+        }
+        savebitacora('Reserva  de puesto '.$r->des_puesto.' creada para el usuario '.$usuario->name.' para el periodo  '.$r->desde.' - '.$r->hasta,"Reservas","asignar_reserva_multiple","OK");
+        $str_notificacion=Auth::user()->name.' ha creado una Reserva  del puesto '.$r->des_puesto.' para usted en el periodo  '.$r->desde.' - '.$r->hasta;
+        notificar_usuario($usuario,"Se le ha asignado un nuevo puesto",'emails.asignacion_puesto',$str_notificacion,1);
+        return [
+            'title' => "Reservas",
+            'message' => 'Reserva  de puesto '.$r->des_puesto.' creada para el usuario '.$usuario->name.' para el periodo  '.$r->desde.' - '.$r->hasta,
+            //'fecha' => Carbon::parse(adaptar_fecha($r->fechas))->format('Ymd'),
+            //'url' => url('puestos')
+        ];
     }
 }

@@ -153,7 +153,7 @@
                 <ul class="head-list">
                     
                     <li>
-                        <a href="{{ url('/users/'.Auth::user()->id.'/edit') }}"><i class="fad fa-user"></i> Mi Perfil</a>
+                        <a href="{{ url('/miperfil/'.Auth::user()->id) }}"><i class="fad fa-user"></i> Mi Perfil</a>
                     </li>
                     {{-- <li>
                         <a href="#"><span class="badge badge-danger pull-right">9</span><i class="demo-pli-mail icon-lg icon-fw"></i> Messages</a>

@@ -262,6 +262,52 @@ class UsersController extends Controller
         }
     }
 
+    public function update_perfil($id, Request $request)
+    {
+        validar_acceso_tabla($id,"users");
+       
+        
+        $data = $this->getData($request);
+        $users = users::findOrFail($id);
+        $img_usuario = $users->img_usuario;
+
+        try {
+            if ($request->hasFile('img_usuario')) {
+                $file = $request->file('img_usuario');
+                $path = config('app.ruta_public').'/img/users/';
+                $img_usuario = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+                //$file->move($path,$img_usuario);
+                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_usuario);
+                $users->img_usuario=$img_usuario;
+            }
+
+            if (isset($request->password)){
+                $users->password=Hash::make($request->password);
+            }
+            
+            $users->name=$request->name;
+            $users->email=$request->email;
+            $users->val_timezone=$request->val_timezone;
+            $users->save();
+
+        
+            savebitacora('Perfil de usuario '.$request->email. ' actualizado',"Usuarios","update_perfil","OK");
+            return [
+                'title' => "Usuarios",
+                'message' => 'Perfil de usuario '.$request->name. ' actualizado con exito',
+                'url' => url('/')
+            ];
+        } catch (Exception $exception) {
+            savebitacora('ERROR: Ocurrio un error actualizando el perfil de usuario '.$request->name.' '.$exception->getMessage() ,"Usuarios","update_perfil","ERROR");
+            return [
+                'title' => "Usuarios",
+                'error' => 'ERROR: Ocurrio un error actualizando el perfil deusuario '.$request->name.' '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+
+        }
+    }
+
     /**
      * Remove the specified users from the storage.
      *
@@ -637,7 +683,7 @@ class UsersController extends Controller
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
             ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
-            ->where('reservas.id_cliente',$usuario->id_cliente)
+            ->where('reservas.id_cliente',0)
             ->get();
 
         $asignados_usuarios=DB::table('puestos_asignados')
@@ -649,13 +695,13 @@ class UsersController extends Controller
         $asignados_miperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
-            ->where('id_perfil',$usuario->cod_nivel)
+            ->where('id_perfil',0)
             ->get();
         
         $asignados_nomiperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
-            ->where('id_perfil','<>',$usuario->cod_nivel)
+            ->where('id_perfil','<>',0)
             ->get();
 
         $puestos_check=[];
@@ -718,6 +764,15 @@ class UsersController extends Controller
                     });
                 })
                 ->get();
+            
+            $reservas=DB::table('reservas')
+                ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+                ->join('users','reservas.id_usuario','users.id')
+                ->where('puestos.id_puesto',$puesto->id_puesto)
+                ->wherebetween('fec_reserva',[$f1,$f2])
+                ->where('puestos.id_cliente',$usuario->id_cliente)
+                ->get();
+            
             if($r->accion=="A"){  //Alta, Añadir
                 if(!$puesto_asignado->isempty()){
                     $respuesta=[];
@@ -739,7 +794,9 @@ class UsersController extends Controller
                             }
                         }
                         $respuesta[]=$str_respuesta;
-                        
+                    }
+                    foreach($reservas as $res){
+                        $respuesta[]="Se cancelará la reserva que ".$res->name."  tiene para el día ".Carbon::parse($res->fec_reserva)->format('d/m/Y');
                     }
                     return view('users.asignacion_temporal_pedir_confirmacion',compact('respuesta','r'));
                 }
@@ -812,6 +869,15 @@ class UsersController extends Controller
                     //Notificar al usuario saliente
                     $user_puesto=users::find($p->id_usuario);
                     notificar_usuario($user_puesto,"Se han producido cambios en su asignacion de puesto",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,1); 
+                    savebitacora($str_notificacion.$str_respuesta,"Usuarios","asignar_temporal","OK");
+                }
+
+                foreach($reservas as $res){
+                    DB::table('reservas')->where('id_reserva',$res->id_reserva)->delete();
+                    $user_puesto=users::find($res->id_usuario);
+                    $str_respuesta=' Se ha cancelado su reserva de puesto que tenía para el día entre '.Carbon::parse($res->fec_reserva)->format('d/m/Y');
+                    savebitacora(' Se ha cancelado su reserva de puesto '.$puesto->cod_puesto.' al usuario '.$user_puesto->name.' para el dia  '.Carbon::parse($res->fec_reserva)->format('d/m/Y').' por una asignacion temporal de puesto creada por '.Auth::user()->name,"Usuarios","asignar_temporal","OK");
+                    notificar_usuario($user_puesto,"Se han producido cambios en su reserva de puesto",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,1); 
                 }
                 //Si no hay nada mas, creamos la asignacion para el usuario
                 DB::table('puestos_asignados')->insert([
@@ -841,6 +907,16 @@ class UsersController extends Controller
         }
 
 
+    }
+
+    public function miperfil($id){
+        validar_acceso_tabla($id,"users");
+        if($id!=Auth::user()->id){
+            return back();
+        }
+        $users = users::findOrFail($id);
+
+        return view('users.miperfil', compact('users',));
     }
 }
 

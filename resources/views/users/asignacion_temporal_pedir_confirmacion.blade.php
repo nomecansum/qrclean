@@ -14,6 +14,7 @@
 </div>
 <script>
     $('#btn_aceptar_asignacion').click(function(){
+        $('#spin_asignar').show();
         $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:{{ $r->puesto }},rango: "{!! $r->rango !!}",id_usuario: {!! $r->id_usuario[0] !!},accion: 'C'}, function(data, textStatus, xhr) {
             $('#comprobar_puesto_asignar').hide();
             if(data.error){
@@ -24,7 +25,7 @@
                 $('.modal').modal('hide');  
                 toast_ok(data.title,data.message);
             }
-            
+            $('#spin_asignar').hide();
         }) 
     })
 </script>

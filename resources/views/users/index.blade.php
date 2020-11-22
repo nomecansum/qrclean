@@ -269,6 +269,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
                         <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                        <span class="float-right" id="spin_reserva" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
                         <h4 class="modal-title">Crear reserva para usuario</h4>
                 </div>
                 
@@ -298,6 +299,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
                         <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                        <span class="float-right" id="spin_asignar" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
                         <h4 class="modal-title">Asignar temporalmente puesto a  usuario</h4>
                 </div>
                 
@@ -489,6 +491,7 @@
         })
 
         $('.btn_asignar_puesto').click(function(){
+            $('#spin_asignar').hide();
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
                 return $(this).val();
             }).get(); // 
@@ -500,6 +503,7 @@
             $('#puestos_usuario_asignar').load("{{ url('users/puestos_usuario/') }}/"+searchIDs, function(){
                 $('#comprobar_puesto_asignar').html('');
                 $('.flpuesto').click(function(){
+                    $('#spin_asignar').show();
                     $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:$(this).data('id'),rango: $('#fechas').val(),id_usuario: searchIDs,accion: 'A'}, function(data, textStatus, xhr) {
                         if(data.result){ //Si loque devuelve el controller es una respuesta tripo obbect es que todo ha ido bien o que ha habido un error chungo
                             console.log('RESULT');
@@ -516,6 +520,7 @@
                             $('#comprobar_puesto_asignar').show();
                             $('#comprobar_puesto_asignar').html(data);
                             animateCSS('#comprobar_puesto_asignar','bounceInRight');
+                            $('#spin_asignar').hide();
                         }
                         
                     }) 
@@ -527,6 +532,7 @@
         })
 
         $('.btn_crear_reserva').click(function(){
+            $('#spin_reserva').hide();
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
                 return $(this).val();
             }).get(); // 
@@ -552,6 +558,7 @@
             $('#puestos_usuario_reserva').load("{{ url('reservas/puestos_usuario/') }}/"+searchIDs+'/'+fecdesde+'/'+fechasta, function(){
                 $('#comprobar_puesto_reserva').html('');
                 $('.flpuesto').click(function(){
+                    $('#spin_reserva').show();
                     $.post('{{url('/reservas/asignar_reserva_multiple')}}', {_token: '{{csrf_token()}}',puesto:$(this).data('id'),desde:fecdesde,hasta:fechasta,id_usuario: searchIDs,accion: 'A'}, function(data, textStatus, xhr) {
                         console.log('RESULT');
                         if(data.error){
@@ -562,9 +569,11 @@
                             $('.modal').modal('hide');  
                             toast_ok(data.title,data.message);
                         }
+                        $('#spin_reserva').hide();
                     }) 
                     .fail(function(err){
                         toast_error('Error',err.responseJSON.message);
+                        $('#spin_reserva').hide();
                     });                 
                 })
             });

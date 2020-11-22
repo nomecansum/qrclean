@@ -48,8 +48,10 @@ Route::get('/logout','Auth\LoginController@logout');
 
 Route::group(['middleware' => 'auth'], function() {
 
-   
-
+    //mIPERFIL
+    Route::get('/miperfil/{id}','UsersController@miperfil')->name('users.miperfil');
+    Route::post('miperfil/update/{id}','UsersController@update_perfil')->name('users.update_perfil');
+    
     // Scan
     Route::get('/scan_usuario', 'HomeController@scan_usuario')->name('main_scan');
     Route::get('/scan_mantenimiento', 'HomeController@scan_mantenimiento')->name('mantenimiento_scan');

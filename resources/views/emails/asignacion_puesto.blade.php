@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md-12 text-center">
-        <img src="{{ url('/img/Mosaic_brand_300.png') }}">
+        <img src="{{ config('app.url_asset_mail').'/img/Mosaic_brand_300.png' }}">
         {{-- <img src="data:image/png;base64, {{ base64_encode(public_path('/img/Mosaic_brand_300.png')) }}" /> --}}
     </div>
 </div>

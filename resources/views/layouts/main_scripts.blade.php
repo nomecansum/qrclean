@@ -410,7 +410,7 @@
         event.preventDefault();
         $('#spin_login').show();
         $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
-            if (data.recover) {
+            if (data.expired) {
                 console.log("Enviado login")
                 toast_ok("Login", data.msg)
 

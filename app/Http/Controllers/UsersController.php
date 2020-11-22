@@ -753,7 +753,7 @@ class UsersController extends Controller
                 ]);
                 savebitacora('Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,"Usuarios","asignar_temporal","OK");
                 //Notificar al usuario entrante
-                $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted';
+                $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted en el intervalo '.$r->rango;
                 notificar_usuario($usuario,"Se le ha asignado un nuevo puesto",'emails.asignacion_puesto',$str_notificacion,1);
                 return [
                     'result' => "OK",

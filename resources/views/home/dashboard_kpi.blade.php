@@ -105,13 +105,18 @@
 <div class="row">
     <div class="col-md-6">
         @include('home.kpi_grafico_puestos')
-        @include('home.incidencias_abiertas')
+        @if(checkPermissions(['Incidencias'],['R']))
+            @include('home.incidencias_abiertas')
+        @endif
     </div>
     <div class="col-md-6">
-        @include('home.calendario')
+        @if(checkPermissions(['Reservas'],['R']))
+            @include('home.calendario')
+        @endif
     </div>
 </div>
-
-@include('home.tabla_incidencias')
+@if(checkPermissions(['Incidencias'],['R']))
+    @include('home.tabla_incidencias')
+@endif
 
 @include('home.rondas_pendientes')

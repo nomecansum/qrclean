@@ -22,6 +22,7 @@ class LoginController extends Controller
     |
     */
 
+
     use AuthenticatesUsers;
 
     /**
@@ -30,7 +31,6 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
-
     /**
      * Create a new controller instance.
      *
@@ -56,6 +56,9 @@ class LoginController extends Controller
         if (auth()->attempt(['email' => $request->input('email'), 'password' => $request->input('password')], $remember_me))
         {
             $user = auth()->user();
+            //Vamos a ver si tiene que cambiar la password
+           
+
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  
             $cliente=DB::table('clientes')->where('id_cliente',$user->id_cliente)->first();  
             if(isset($cliente->id_distribuidor)){
@@ -107,8 +110,13 @@ class LoginController extends Controller
             session(['P' => $permisos]);
             //session(['CL'=>$config_cliente]);
             return redirect ('/');
+            
         }else{
             return response()->json(["result"=>"ERROR", "message"=>"Credenciales incorrectas, intente de nuevo"],422);
         }
+    }
+
+    public function firstlogin(){
+        //dd(Auth::user());
     }
 }

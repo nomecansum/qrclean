@@ -138,6 +138,7 @@ return [
     'remitente_mail'=>env('MAIL_FROM_ADDRESS','spotdesking@gmail.com'),
 
     'AWS_URL'=>env('AWS_URL','/'),
+    'url_asset_mail'=>'https://spotdesking.spotlinker.com/',
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

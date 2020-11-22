@@ -17,7 +17,8 @@ class PermissionsController extends Controller
 		  DB::table('niveles_acceso')
 			->where('val_nivel_acceso','<=',$nivel_acceso)
 			->get();
-		return view('permisos.profiles',compact('niveles','nivel_acceso'));
+		$homepages=DB::table('niveles_acceso')->pluck('home_page')->unique()->toArray();
+		return view('permisos.profiles',compact('niveles','nivel_acceso','homepages'));
 	}
 	public function profilesEdit($id)
 	{
@@ -25,9 +26,10 @@ class PermissionsController extends Controller
         $niveles =
           DB::table('niveles_acceso')
             ->where('val_nivel_acceso','<=',$nivel_acceso)
-            ->get();
+			->get();
+		$homepages=DB::table('niveles_acceso')->pluck('home_page')->unique()->toArray();
 		$n = DB::table('niveles_acceso')->where('cod_nivel',$id)->first();
-		return view('permisos.profiles',compact('n', 'niveles', 'nivel_acceso'));
+		return view('permisos.profiles',compact('n', 'niveles', 'nivel_acceso','homepages'));
 	}
 	public function profilesSave(Request $r)
 	{
@@ -36,7 +38,8 @@ class PermissionsController extends Controller
 			DB::table('niveles_acceso')->where('cod_nivel',$r->id)->update(
 				[
 				    'des_nivel_acceso' => $r->des_nivel_acceso,
-				    'val_nivel_acceso' => $r->num_nivel_acceso
+					'val_nivel_acceso' => $r->num_nivel_acceso,
+					'home_page' => $r->home_page
 				]
 			);
 
@@ -47,7 +50,8 @@ class PermissionsController extends Controller
 			$n = DB::table('niveles_acceso')->insert(
 				[
 					'val_nivel_acceso' => $r->num_nivel_acceso,
-					'des_nivel_acceso' => $r->des_nivel_acceso
+					'des_nivel_acceso' => $r->des_nivel_acceso,
+					'home_page' => $r->home_page
 				]
 			);
 			$n = DB::table('niveles_acceso')->where('des_nivel_acceso',$r->des_nivel_acceso)->orderby('cod_nivel','desc')->first();
@@ -111,6 +115,7 @@ class PermissionsController extends Controller
 				$q->wherein('des_seccion',array_column(session('P'), 'des_seccion'));
 			}
 		})
+		->orderby('des_grupo')
 		->get();
 		$tipos = ['Seccion','Permiso','Accion'];
 		$grupos = DB::table('secciones')->select('des_grupo','icono')->distinct()->get();

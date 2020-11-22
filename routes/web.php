@@ -29,11 +29,15 @@ Route::view('/prueba_mail','emails.mail_incidencia');
 Route::view('/test','test');
 Route::get('/token','PuestosController@generar_token');
 Route::get('/pwd_hash/{pwd}','UsersController@pwd_hash');
+Route::view('/reminder','auth.passwords.email');
 
 Route::group(['prefix' => 'MKD'], function () {
     Route::get('/plano/{planta}/{token}','MKDController@plano');
     Route::get('/datos_plano/{planta}/{token}','MKDController@datos_plano');
-});   
+});  
+
+ //Cambiar pwd por defecto
+ Route::get('/firstlogin','Auth\LoginController@firstlogin')->name('firstlogin');
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -43,6 +47,9 @@ Route::get('/logout','Auth\LoginController@logout');
 
 
 Route::group(['middleware' => 'auth'], function() {
+
+   
+
     // Scan
     Route::get('/scan_usuario', 'HomeController@scan_usuario')->name('main_scan');
     Route::get('/scan_mantenimiento', 'HomeController@scan_mantenimiento')->name('mantenimiento_scan');

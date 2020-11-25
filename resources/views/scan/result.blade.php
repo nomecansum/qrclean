@@ -88,7 +88,7 @@
                                         <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
                                     @break
                                 @case(2)
-                                        @if($puesto->id_usuario_usando==Auth::user()->id)
+                                        @if((Auth::check() && $puesto->id_usuario_usando==Auth::user()->id) || (!Auth::check()&&$puesto->id_usuario_usando==null))
                                             @if($config_cliente->mca_limpieza=='S')
                                                 <button class="btn btn-lg btn-purple btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
                                             @else
@@ -98,6 +98,9 @@
                                     @break
                                 @default
                             @endswitch
+                        @endif
+                        @if($puesto->id_estado!=6)
+                            <button class="btn btn-lg btn-primary text-bold btn_login" data-id="{{$puesto->token}}"><i class="fad fa-user"></i> Iniciar sesion</button>
                         @endif
                     </div>
                 </div>
@@ -199,6 +202,11 @@
         $('.btn_incidencia').click(function(){
             window.location.replace("{{url('/incidencias/create')}}/"+$(this).data('id'));
         })
+
+        $('.btn_login').click(function(){
+            window.location.replace("{{url('/login')}}");
+        })
+
         $(function(){
             $('#footer').hide();
         })

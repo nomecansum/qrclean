@@ -30,7 +30,10 @@ class MKDController extends Controller
         $lista_ids=$puestos->pluck('id_puesto')->toArray();
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where(function($q){
+                $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+            })
             ->wherein('reservas.id_puesto',$lista_ids)
             ->get();
 

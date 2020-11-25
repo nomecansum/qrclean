@@ -32,7 +32,8 @@
                     <span class="h-100 align-middle" >
                         <input type="checkbox" class="form-control chkplanta magic-checkbox" name="lista_id[]" data-id="{{ $key }}" data-edificio="{{ $e->id_edificio }}" id="chkpl{{ $key }}" value="{{ $key }}" {{ $check&&in_array($key,$plantas_usuario)?' checked ': '' }}>
                         <label class="custom-control-label"   for="chkpl{{ $key }}"></label>
-                        {{ substr($value,0,21) }} {{ strlen($value)>19?'...':'' }}</span>
+                        {{ substr($value,0,21) }} {{ strlen($value)>19?'...':'' }}
+                    </span>
                 </div>
             @endforeach
         </div>

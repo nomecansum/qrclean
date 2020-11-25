@@ -106,22 +106,39 @@
 					<div class="row b-all rounded  p-b-10">
 						<div class="col-md-12 p-b-10">
 							<p class="text-main text-bold text-uppercase text-left">Configuracion de cliente</p>
-							<div class="col-md-2">
+							<div class="col-md-3">
 								<input type="checkbox" class="form-control  magic-checkbox" name="mca_restringir_usuarios_planta"  id="mca_restringir_usuarios_planta" value="S" {{ isset($config->mca_restringir_usuarios_planta)&&$config->mca_restringir_usuarios_planta=='S'?'checked':'' }}> 
 								<label class="custom-control-label"   for="mca_restringir_usuarios_planta">Restringir plantas usuarios</label>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-3">
 								<input type="checkbox" class="form-control  magic-checkbox" name="mca_limpieza"  id="mca_limpieza" value="S" {{ isset($config->mca_limpieza)&&$config->mca_limpieza=='S'?'checked':'' }}> 
 								<label class="custom-control-label"   for="mca_limpieza">Funcion de limpieza</label>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-3">
 								<input type="checkbox" class="form-control  magic-checkbox" name="mca_permitir_anonimo"  id="mca_permitir_anonimo" value="S" {{ isset($config->mca_permitir_anonimo)&&$config->mca_permitir_anonimo=='S'?'checked':'' }}> 
 								<label class="custom-control-label"   for="mca_permitir_anonimo">Permitir escaneo anónimo</label>
 							</div>
+							<div class="col-md-3">
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_reserva_horas"  id="mca_reserva_horas" value="S" {{ isset($config->mca_reserva_horas)&&$config->mca_reserva_horas=='S'?'checked':'' }}> 
+								<label class="custom-control-label"   for="mca_reserva_horas">Reservas por horas</label>
+							</div>
 						</div>
 						<div class="row">
-							
-							
+							<div class="col-md-12 p-b-10">
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="">Notificar a usuarios</label>
+										<select name="val_metodo_notificacion" id="val_metodo_notificacion" class="form-control ">
+											<option value="0"  {{isset($c) && $config->val_metodo_notificacion == 0 ? 'selected' : ''}}>No</option>
+											<option value="1"  {{isset($c) && $config->val_metodo_notificacion == 0 ? 'selected' : ''}}>e-mail</option>
+											{{--  <option value="2"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Notificacion APP</option>
+											<option value="3"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Ambas</option>  --}}
+											
+										</select>
+										
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 

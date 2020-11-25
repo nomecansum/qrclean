@@ -1,3 +1,11 @@
+<style type="text-css">
+    .noUi-pips-horizonta{
+        padding: 0px;
+        margin-top: 0px;
+        line-height: 0px
+    }
+
+</style>
 <div class="panel" id="editor">
     <div class="panel">
         <div class="panel-heading">
@@ -5,6 +13,7 @@
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
             </div>
             <h3 class="panel-title" id="titulo">Modificar reserva de puesto</h3>
+            <span style="font-size: 30px; font-weight: bolder; color: #888; margin-top:60px" id="des_puesto"></span>
         </div>
         <div class="panel-body">
             <form  action="{{url('reservas/save')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax">
@@ -14,6 +23,8 @@
                     <input type="hidden" id="id_puesto" name="id_puesto" value="">
                     <input type="hidden" id="des_puesto_form" name="des_puesto" value="">
                     <input type="hidden" name="tipo_vista" id="tipo_vista" value="comprobar">
+                    <input type="hidden" name="hora_inicio" id="hora_inicio" value="00:00">
+                    <input type="hidden" name="hora_fin" id="hora_fin" value="23:59">
                     {{csrf_field()}}
                     <div class="form-group col-md-3">
                         <label for="fechas">Fecha</label>
@@ -30,14 +41,15 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-5 pt-4">
-                        <span style="font-size: 30px; font-weight: bolder; color: #888; margin-top:60px" id="des_puesto"></span>
+                    @if(session('CL')['mca_reserva_horas']=='S')
+                    <div class="form-group col-md-7">
+                        <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas</label>
+                        <div id="hora-range-drg"></div><span id="hora-range-val" style="display: none"></span>
                     </div>
-                    <div class="md-1 float-right" style="margin-top:22px">
-                        {{-- @if(checkPermissions(['Reservas'],["W"]))<button type="submit" class="btn btn-primary btn_guardar">GUARDAR</button>@endif --}}
-                    </div>
+                    @endif
+                   
+                    
                 </div>
-                
                 <div class="row">
                     <div class="col-md-12" id="detalles_reserva">
 
@@ -91,7 +103,6 @@
 
     function prueba(){
         console.log('prueba');
-
     }
 
     $('.demo-psi-cross').click(function(){
@@ -103,7 +114,7 @@
     });
 
     function comprobar_puestos(){
-        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val()}, function(data, textStatus, xhr) {
+        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val()}, function(data, textStatus, xhr) {
             $('#detalles_reserva').html(data);
         });
     }
@@ -141,6 +152,72 @@
         }
     })
 
-    comprobar_puestos();
+    @if(session('CL')['mca_reserva_horas']=='S')
 
+        var aproximateHour = function (mins)
+        {
+        //http://greweb.me/2013/01/be-careful-with-js-numbers/
+        var minutes = Math.round(mins % 60);
+        if (minutes == 60 || minutes == 0)
+        {
+            return mins / 60;
+        }
+        return Math.trunc (mins / 60) + minutes / 100;
+        }
+
+
+        function filter_hour(value, type) {
+        return (value % 60 == 0) ? 1 : 0;
+        }
+
+
+        var r_def = document.getElementById('hora-range-drg');
+        var r_def_value = document.getElementById('hora-range-val');
+
+
+        noUiSlider.create(r_def,{
+            start : [480, 1080],
+            connect: true, 
+            behaviour: 'tap-drag', 
+            step: 15,
+            tooltips: true,
+            range : {'min': 0, 'max': 1439},
+            format:  wNumb({
+                    decimals: 2,
+                mark: ":",
+                    encoder: function(a){
+                return aproximateHour(a);
+                }
+                }),
+            // pips: {
+            //     mode : 'steps',  
+            //     format:  wNumb({
+            //     mark: ":",
+            //     decimals: 0,
+            //         encoder: function(a ){
+            //         return aproximateHour(a);
+            //     }
+            //         }),
+            //     filter : filter_hour,
+            //     stepped : true,
+            //     density:24
+            // }
+        });
+        r_def.noUiSlider.on('change', function( values, handle ) {
+            console.log(values);
+            $('#hora_inicio').val(values[0]);
+            $('#hora_fin').val(values[1]);
+            comprobar_puestos();
+            // r_def_value.innerHTML = values[handle];
+            // $('.texto_puesto').css('font-size',values[handle]+'vw');
+            // $('#factor_letra').val(values[handle]);
+        });
+
+        
+        values=r_def.noUiSlider.get();
+        $('#hora_inicio').val(values[0]);
+        $('#hora_fin').val(values[1]);
+    @endif
+
+    comprobar_puestos();
  </script>

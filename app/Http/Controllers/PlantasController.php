@@ -215,7 +215,10 @@ class PlantasController extends Controller
             ->get();
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where(function($q){
+                $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+            })
             ->get();
 
         return view('plantas.editor_puestos', compact('plantas','puestos','reservas'));

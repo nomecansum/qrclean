@@ -51,7 +51,7 @@
                         $puesto->factor_letra=0.8;
                     }
                 @endphp
-                    <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{  $cuadradito['clase_disp'] }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-opacity="{{ $cuadradito['transp']  }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; background-color: {{  $cuadradito['color'] }}; color: {{  $cuadradito['font_color'] }}; {{  $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
+                    <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{  $cuadradito['clase_disp'] }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-opacity="{{ $cuadradito['transp']  }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; background-color: {{  $cuadradito['color'] }}; color: {{  $cuadradito['font_color'] }}; {{  $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
                         <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; color:#666">{{ $puesto->cod_puesto }}</span>
                         @include('resources.adornos_iconos_puesto')
                     </div>

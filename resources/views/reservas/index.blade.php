@@ -7,6 +7,7 @@
 @section('styles')
     <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/noUiSlider/nouislider.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('breadcrumb')
@@ -45,15 +46,19 @@
         <div id="calendario"></div>
     </div>
 </div>
-
 @endsection
 
 
 @section('scripts')
+    <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
+    <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
     <script>
         $('.SECCION_MENU').addClass('active active-sub');
         $('.reservas').addClass('active-link');
 
+        function filter_hour(value, type) {
+        return (value % 60 == 0) ? 1 : 0;
+        }
 
         function loadMonth(month = null,type = null)
         {

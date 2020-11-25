@@ -121,6 +121,11 @@
             });
         }
 
+        function scan(){
+
+            window.open("{{ url('/puesto') }}"+"/"+token_fila, 'scan');
+        }
+
         function estado(est){
             $.get("{{ url('/puesto/estado/') }}/"+token_fila+"/"+est, function(data){
                 toast_ok('Cambio de estado',data.mensaje);

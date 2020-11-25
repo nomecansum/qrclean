@@ -7,6 +7,7 @@
         .show-calendar{
             z-indez: 15000;
         }
+       
     </style>
 @endsection
 
@@ -275,12 +276,13 @@
                 
                 <div class="modal-body" id="">
 
-                    <label>Fechas </label>
+                    <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control pull-left rangepicker" id="fechas_reserva" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
                         <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                     
                     </div>
+                    <label><span class="badge badge-primary">2</span> Seleccione puesto </label>
                     <div id="comprobar_puesto_reserva" class=" alert rounded b-all alert-warning mb-2 pad-all" style="display: none"></div>
                     <div id="puestos_usuario_reserva"></div>
                 </div>
@@ -305,12 +307,13 @@
                 
                 <div class="modal-body" id="">
 
-                    <label>Fechas </label>
+                    <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->addMonth()->format('d/m/Y') }}">
+                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
                         <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                     
                     </div>
+                    <label><span class="badge badge-primary">2</span> Seleccione puesto </label>
                     <div id="comprobar_puesto_asignar" class=" alert rounded b-all alert-warning mb-2 pad-all" style="display: none"></div>
                     <div id="puestos_usuario_asignar"></div>
                 </div>
@@ -500,35 +503,39 @@
                 toast_warning('Error','Solo se puede hacer la asignacion temporal de 1 usuario a la vez');
                 exit();
             }
-            $('#puestos_usuario_asignar').load("{{ url('users/puestos_usuario/') }}/"+searchIDs, function(){
-                $('#comprobar_puesto_asignar').html('');
-                $('.flpuesto').click(function(){
-                    $('#spin_asignar').show();
-                    $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:$(this).data('id'),rango: $('#fechas').val(),id_usuario: searchIDs,accion: 'A'}, function(data, textStatus, xhr) {
-                        if(data.result){ //Si loque devuelve el controller es una respuesta tripo obbect es que todo ha ido bien o que ha habido un error chungo
-                            console.log('RESULT');
-                            if(data.error){
-                                toast_error(data.title,data.error);
-                            } else if(data.alert){
-                                toast_warning(data.title,data.alert);
-                            } else{
-                                $('.modal').modal('hide');  
-                                toast_ok(data.title,data.message);
+            $('#fechas').change(function(){
+                $('#puestos_usuario_asignar').load("{{ url('users/puestos_usuario/') }}/"+searchIDs, function(){
+                    $('#comprobar_puesto_asignar').html('');
+                    $('.flpuesto').click(function(){
+                        $('#spin_asignar').show();
+                        $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:$(this).data('id'),rango: $('#fechas').val(),id_usuario: searchIDs,accion: 'A'}, function(data, textStatus, xhr) {
+                            if(data.result){ //Si loque devuelve el controller es una respuesta tripo obbect es que todo ha ido bien o que ha habido un error chungo
+                                console.log('RESULT');
+                                if(data.error){
+                                    toast_error(data.title,data.error);
+                                } else if(data.alert){
+                                    toast_warning(data.title,data.alert);
+                                } else{
+                                    $('.modal').modal('hide');  
+                                    toast_ok(data.title,data.message);
+                                }
+                            } else{ //Si lo que devuelve es una view, implica que hay que preguntar al usuario que vamos a hacer y por lo tanto hay que mostrarla en pantalla
+                                console.log('view');
+                                $('#comprobar_puesto_asignar').show();
+                                $('#comprobar_puesto_asignar').html(data);
+                                animateCSS('#comprobar_puesto_asignar','bounceInRight');
+                                $('#spin_asignar').hide();
                             }
-                        } else{ //Si lo que devuelve es una view, implica que hay que preguntar al usuario que vamos a hacer y por lo tanto hay que mostrarla en pantalla
-                            console.log('view');
-                            $('#comprobar_puesto_asignar').show();
-                            $('#comprobar_puesto_asignar').html(data);
-                            animateCSS('#comprobar_puesto_asignar','bounceInRight');
-                            $('#spin_asignar').hide();
-                        }
-                        
-                    }) 
-                    .fail(function(err){
-                        toast_error('Error',err.responseJSON.message);
-                    });                 
-                })
+                            
+                        }) 
+                        .fail(function(err){
+                            toast_error('Error',err.responseJSON.message);
+                        });                 
+                    })
+                });
             });
+
+            
         })
 
         $('.btn_crear_reserva').click(function(){
@@ -541,7 +548,7 @@
                 toast_warning('Error','Solo se puede hacer la reserva de 1 usuario a la vez');
                 exit();
             }
-            $('#fechas_reserva').change();
+            //$('#fechas_reserva').change();
             
         })
 

@@ -38,7 +38,9 @@ class config_clientes extends Model
                   'mca_limpieza',
                   'mca_permitir_anonimo',
                   'theme_type',
-                  'theme_name'
+                  'theme_name',
+                  'val_metodo_notificacion',
+                  'mca_reservar_horas'
               ];
 
     /**

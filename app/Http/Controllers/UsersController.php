@@ -611,7 +611,10 @@ class UsersController extends Controller
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
-            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where(function($q){
+                $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+            })
             ->where('reservas.id_cliente',$usuario->id_cliente)
             ->get();
 
@@ -619,6 +622,10 @@ class UsersController extends Controller
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('users','users.id','puestos_asignados.id_usuario')    
             ->where('id_usuario','<>',$id)
+            ->where(function($q) {
+                $q->wherenull('fec_desde');
+                $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+            })
             ->get();
 
         $asignados_miperfil=DB::table('puestos_asignados')
@@ -682,7 +689,10 @@ class UsersController extends Controller
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
-            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where(function($q){
+                $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+            })
             ->where('reservas.id_cliente',0)
             ->get();
 
@@ -690,6 +700,10 @@ class UsersController extends Controller
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('users','users.id','puestos_asignados.id_usuario')    
             ->where('id_usuario','<>',$id)
+            ->where(function($q){
+                $q->wherenull('fec_desde');
+                $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+            })
             ->get();
 
         $asignados_miperfil=DB::table('puestos_asignados')

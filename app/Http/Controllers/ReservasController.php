@@ -63,10 +63,13 @@ class ReservasController extends Controller
 
     public function comprobar_puestos(Request $r){
         //Primero comprobamos si tiene una reserva para ese dia
-
         $reserva=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->where('fec_reserva',adaptar_fecha($r->fecha))
+            ->where(function($q) use($r){
+                $q->where('fec_reserva',adaptar_fecha($r->fecha));
+                $q->orwhereraw("'".adaptar_fecha($r->fecha)."' between fec_reserva AND fec_fin_reserva");
+            })
             ->where('id_usuario',Auth::user()->id)
             ->first();
         if(isset($reserva)){
@@ -74,7 +77,8 @@ class ReservasController extends Controller
             return view('reservas.edit_del',compact('reserva','f1'));
         }
         
-
+        $fec_desde=Carbon::createFromFormat('d/m/Y H:i',$r->fecha.' '.$r->hora_inicio);
+        $fec_hasta=Carbon::createFromFormat('d/m/Y H:i',$r->fecha.' '.$r->hora_fin);
 
         $plantas_usuario=DB::table('plantas_usuario')
             ->where('id_usuario',Auth::user()->id)
@@ -92,7 +96,22 @@ class ReservasController extends Controller
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
             ->where('puestos.id_edificio',$r->edificio)
-            ->where('fec_reserva',adaptar_fecha($r->fecha))
+            ->where(function($q) use($r,$fec_desde,$fec_hasta){
+                if(session('CL')['mca_reserva_horas']=='S'){
+                    $q->where(function($q) use($fec_desde,$fec_hasta,$r){
+                      $q->wherenull('fec_fin_reserva');
+                      $q->where('fec_reserva',adaptar_fecha($r->fecha));
+                    });
+                    $q->orwhere(function($q) use($fec_desde,$fec_hasta,$r){
+                        $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                        $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                        $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
+                        $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
+                    });
+                } else {
+                    $q->where('fec_reserva',adaptar_fecha($r->fecha));
+                }
+            })
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
@@ -109,8 +128,19 @@ class ReservasController extends Controller
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->where(function($q) use($r){
+                $q->wherenull('fec_desde');
+                $q->orwhereraw("'".Carbon::parse(adaptar_fecha($r->fecha))."' between fec_desde AND fec_hasta");
+            })
             ->get();
-
+        if(isset($asignados_usuarios)){
+            $puestos_usuarios=$asignados_usuarios->pluck('id_puesto')->toArray();
+        } else{
+            $puestos_usuarios=[];
+        }
+        
+        
+            
         $asignados_miperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
@@ -132,6 +162,11 @@ class ReservasController extends Controller
                 }
             })
             ->get();
+        if(isset($asignados_nomiperfil)){
+                $puestos_nomiperfil=$asignados_nomiperfil->pluck('id_puesto')->toArray();
+            } else{
+                $puestos_nomiperfil=[];
+            }
 
         $puestos=DB::table('puestos')
             ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
@@ -154,6 +189,9 @@ class ReservasController extends Controller
                     $q->where('puestos.mca_reservar','S');
                 }
             })
+            ->wherenotin('puestos.id_estado',[4,5,6])
+            ->wherenotin('puestos.id_puesto',$puestos_usuarios)
+            ->wherenotin('puestos.id_puesto',$puestos_nomiperfil)
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
@@ -184,7 +222,8 @@ class ReservasController extends Controller
 
     public function save(Request $r){
         //dd($r->all());
-
+        $fec_desde=Carbon::createFromFormat('d/m/Y H:i',$r->fechas.' '.$r->hora_inicio);
+        $fec_hasta=Carbon::createFromFormat('d/m/Y H:i',$r->fechas.' '.$r->hora_fin);
         //Primero hay que comprobar que no han pillado el pñuesto mientras el usuario se lo pensabe
 
         $ya_esta=reservas::where('id_puesto',$r->id_puesto)->where('fec_reserva',adaptar_fecha($r->fechas))->first();
@@ -205,14 +244,11 @@ class ReservasController extends Controller
             $res=new reservas;
             $res->id_puesto=$r->id_puesto;
             $res->id_usuario=Auth::user()->id;
-            $res->fec_reserva=Carbon::parse(adaptar_fecha($r->fechas));
-            //Si no vienen horas las ponemos a 0
-            $res->fec_reserva->hour=0;
-            $res->fec_reserva->minute=0;
-            $res->fec_reserva->second=0;
-            if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar)){
-                $res->fec_fin_reserva=$res->fec_reserva->addDay($puesto->max_horas_reservar);   
-            }
+            $res->fec_reserva=$fec_desde;
+            $res->fec_fin_reserva=$fec_hasta;
+            // if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar)){
+            //     $res->fec_fin_reserva=$res->fec_reserva->addHour($puesto->max_horas_reservar);   
+            // }
             $res->id_cliente=Auth::user()->id_cliente;
             $res->save();
             savebitacora('Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,"Reservas","save","OK");
@@ -345,8 +381,8 @@ class ReservasController extends Controller
             $res->fec_reserva->hour=0;
             $res->fec_reserva->minute=0;
             $res->fec_reserva->second=0;
-            if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar)){
-                $res->fec_fin_reserva=$res->fec_reserva->addDay($puesto->max_horas_reservar);   
+            if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar) && session('CL')['mca_reserva_horas']=='S'){
+                $res->fec_fin_reserva=$res->fec_reserva->addHour($puesto->max_horas_reservar);   
             }
             $res->id_cliente=$usuario->id_cliente;
             $res->save();

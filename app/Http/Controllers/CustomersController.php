@@ -128,6 +128,7 @@ class CustomersController extends Controller
             $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';
             $config->mca_limpieza=$r->mca_limpieza??'N';
             $config->mca_permitir_anonimo=$r->mca_permitir_anonimo??'N';
+            $config->mca_reserva_horas=$r->mca_reserva_horas??'N';
             $config->save();
             
             Session::put('CL',$config->toArray());

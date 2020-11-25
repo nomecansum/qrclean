@@ -199,7 +199,7 @@ function mensaje_excepcion($e){
 
 function isCustomerAdmin(){
     try{
-        return Auth::User()->val_nivel_acceso == 200 ? true : false;
+        return Auth::User()->val_nivel_acceso >= 100 ? true : false;
     } catch(\Exception $e){
         return false;
     }
@@ -345,7 +345,11 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1){
     try{
         
         switch ($metodo) {
-            case '1': //Mail
+            case 0:
+                //No hacer nada
+            break;
+            case 1:
+            case 3: //Mail
                 \Mail::send($plantilla, ['user' => $user,'body'=>$body], function ($m) use ($user,$subject) {
                     if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
                         $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
@@ -355,7 +359,8 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1){
                     $m->from(config('mail.from.address'),config('mail.from.name'));
                 });
                 break;
-            case '2':  //Notificacion push
+            case 2:
+            case 3:  //Notificacion push
                 # code...
                 break;
         }

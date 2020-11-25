@@ -35,7 +35,10 @@ class HomeController extends Controller
 
         $contenido_home=DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->home_page;
         $contenido_home='home.'.$contenido_home;
-   
+
+        if(session('CL')==null){
+            return redirect('/logout');
+        }
 
         return view('home',compact('contenido_home'));
     }
@@ -95,7 +98,10 @@ class HomeController extends Controller
             //Ahora comprobamos si el puesto esta reservado por alguien distinto a el usuario
             $reserva=DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
-                ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+                ->where(function($q){
+                    $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                    $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+                })
                 ->where('id_usuario','<>',$id_usuario)
                 ->first();
 
@@ -117,6 +123,10 @@ class HomeController extends Controller
                 ->join('users','users.id','puestos_asignados.id_usuario')  
                 ->where('puestos.id_puesto',$p->id_puesto)  
                 ->where('id_usuario','<>',$id_usuario)
+                ->where(function($q){
+                    $q->wherenull('fec_desde');
+                    $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+                })
                 ->get();
 
             if(!$asignados_usuarios->isEmpty()){
@@ -158,7 +168,8 @@ class HomeController extends Controller
                     'color'=>'danger',
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
-                    'operativo' => 0
+                    'operativo' => 0,
+                    'hacer_login'=>1
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -241,7 +252,7 @@ class HomeController extends Controller
                 $id_usuario=Auth::user()->id;
                 $cod_nivel=Auth::user()->cod_nivel;
             } else {
-                $id_usuario=0;
+                $id_usuario=null;
                 $cod_nivel=0;
             }
         
@@ -260,7 +271,10 @@ class HomeController extends Controller
         } else {    
             $reserva=DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
-                ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+                ->where(function($q){
+                    $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                    $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+                })
                 ->where('id_usuario','<>',$id_usuario)
                 ->first();
             if($reserva){
@@ -276,6 +290,10 @@ class HomeController extends Controller
              ->join('users','users.id','puestos_asignados.id_usuario')  
              ->where('puestos.id_puesto',$p->id_puesto)  
              ->where('id_usuario','<>',$id_usuario)
+             ->where(function($q){
+                $q->wherenull('fec_desde');
+                $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+            })
              ->get();
 
          if($asignados_usuarios){

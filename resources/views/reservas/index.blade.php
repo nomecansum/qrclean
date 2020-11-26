@@ -98,7 +98,7 @@
 
         function boton_modo_click(){
             $('#loadfilter').show();
-                    $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $(this).data('href')}, function(data, textStatus, xhr) {
+                    $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $(this).data('href'), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val()}, function(data, textStatus, xhr) {
                         $('#detalles_reserva').html(data);
                         recolocar_puestos();
                     });

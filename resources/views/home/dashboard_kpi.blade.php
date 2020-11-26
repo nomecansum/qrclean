@@ -100,7 +100,7 @@
     </div>
 </div>
 
-
+@include('home.puesto_asignado')
 
 <div class="row">
     <div class="col-md-6">

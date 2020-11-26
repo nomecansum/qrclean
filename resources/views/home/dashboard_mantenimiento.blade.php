@@ -4,6 +4,8 @@
 
 @include('home.4_kpi')
 
+@include('home.puesto_asignado')
+
 @include('home.incidencias_abiertas')
 
 @include('home.tabla_incidencias')

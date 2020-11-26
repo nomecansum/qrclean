@@ -99,7 +99,10 @@ class HomeController extends Controller
             $reserva=DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
                 ->where(function($q){
-                    $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                    $q->where(function($q){
+                        $q->wherenull('fec_fin_reserva');
+                        $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                    });
                     $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
                 })
                 ->where('id_usuario','<>',$id_usuario)

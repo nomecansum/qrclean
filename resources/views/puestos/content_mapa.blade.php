@@ -9,8 +9,10 @@
         <div class="row">
             <div class="col-md-5">
                 <span class="text-2x ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}
-                    <input type="checkbox" class="form-control chk_edificio_puestos magic-checkbox" name="lista_id[]" data-id="{{ $e->id_edificio }}" id="chkep{{ $e->id_edificio }}" value="{{ $e->id_edificio }}">
-                    <label class="custom-control-label" for="chkep{{ $e->id_edificio }}"></label>
+                    @if(isset($checks) && $checks==1)    
+                        <input type="checkbox" class="form-control chk_edificio_puestos magic-checkbox" name="lista_id[]" data-id="{{ $e->id_edificio }}" id="chkep{{ $e->id_edificio }}" value="{{ $e->id_edificio }}">
+                        <label class="custom-control-label" for="chkep{{ $e->id_edificio }}"></label>
+                    @endif
                 </span>
             </div>
             <div class="col-md-5"></div>
@@ -29,15 +31,17 @@
         @if($plantas->isempty())
            
         <div class="row">
-            <div class="col-md-5 col-xs-offset-4 alert alert-warning">
-                El usuario no tiene asignada ninguna planta en la que pueda reservar, debe asignarle plantas en los detalles de usuario o utilizando la acción de "Asingar planta"
+            <div class="col-md-12  alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i> El usuario no tiene asignada ninguna planta en la que pueda reservar, debe asignarle plantas en los detalles de usuario o utilizando la acción de "Asignar planta"
             </div>
         </div>
         @endif
         @foreach($plantas as $key=>$value)
             <h3 class="pad-all w-100 bg-gray rounded" style="font-size: 2vh">PLANTA {{ $value }}
-                <input type="checkbox" class="form-control chk_planta_puestos magic-checkbox" name="lista_id[]" data-id="{{ $key }}" id="chkpp{{ $key }}" value="{{ $key }}">
-                <label class="custom-control-label" for="chkpp{{ $key }}"></label>
+                @if(isset($checks) && $checks==1)    
+                    <input type="checkbox" class="form-control chk_planta_puestos magic-checkbox" name="lista_id[]" data-id="{{ $key }}" id="chkpp{{ $key }}" value="{{ $key }}">
+                    <label class="custom-control-label" for="chkpp{{ $key }}"></label>
+                @endif
             </h3>
             @php
                 $puestos_planta=$puestos->where('id_planta',$key);

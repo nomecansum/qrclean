@@ -35,6 +35,7 @@
 @section('content')
 @php
     $puesto=$respuesta['puesto']??null;
+    //dd($puesto);
 @endphp
     
     <div class="row">
@@ -99,7 +100,7 @@
                                 @default
                             @endswitch
                         @endif
-                        @if($puesto->id_estado!=6)
+                        @if(isset($respuesta['hacer_login']) && $puesto->mca_acceso_anonimo=='N')
                             <button class="btn btn-lg btn-primary text-bold btn_login" data-id="{{$puesto->token}}"><i class="fad fa-user"></i> Iniciar sesion</button>
                         @endif
                     </div>

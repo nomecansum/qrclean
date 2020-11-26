@@ -47,12 +47,14 @@
                 <div class="row">
                     <div class="form-group col-md-2">
                         <label for="id_edificio">Edificio</label>
-                        <select name="id_edificio" id="id_edificio" class="form-control">
+                        <select name="id_edificio" id="id_edificio" class="form-control" data-planta="{{ $puesto->id_planta }}">
                             @foreach(DB::table('edificios')->where('id_cliente',Auth::user()->id_cliente)->get() as $edificio)
                                 <option value="{{ $edificio->id_edificio}}" {{ $puesto->id_edificio==$edificio->id_edificio?'selected':'' }}>{{ $edificio->des_edificio }}</option>
                             @endforeach
                         </select>
                     </div>
+                    @php
+                    @endphp
                     <div class="form-group col-md-3">
                         <label for="planta">Planta</label>
                         <select name="id_planta" id="id_planta" class="form-control">
@@ -170,7 +172,9 @@
     });
 
     $('#id_edificio').change(function(){
-        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$(this).val())
+        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$(this).val(), function(){
+           
+        });
     })
 
     $('.edit_tag').on("keypress", function(e) {
@@ -189,7 +193,11 @@
     });
 
     $(function(){
-        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$('#id_edificio').val())
+        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$('#id_edificio').val(), function(){
+            $('#id_planta').val({{ $puesto->id_planta }});
+            $('#id_planta option[value={{ $puesto->id_planta }}]').attr('selected','selected');
+        });
+        
     })
 
     $(".select2").select2({

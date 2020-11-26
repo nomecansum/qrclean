@@ -97,20 +97,16 @@ class ReservasController extends Controller
             ->join('users','reservas.id_usuario','users.id')
             ->where('puestos.id_edificio',$r->edificio)
             ->where(function($q) use($r,$fec_desde,$fec_hasta){
-                if(session('CL')['mca_reserva_horas']=='S'){
-                    $q->where(function($q) use($fec_desde,$fec_hasta,$r){
-                      $q->wherenull('fec_fin_reserva');
-                      $q->where('fec_reserva',adaptar_fecha($r->fecha));
-                    });
-                    $q->orwhere(function($q) use($fec_desde,$fec_hasta,$r){
-                        $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
-                        $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
-                        $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
-                        $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
-                    });
-                } else {
+                $q->where(function($q) use($fec_desde,$fec_hasta,$r){
+                    $q->wherenull('fec_fin_reserva');
                     $q->where('fec_reserva',adaptar_fecha($r->fecha));
-                }
+                });
+                $q->orwhere(function($q) use($fec_desde,$fec_hasta,$r){
+                    $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                    $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                    $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
+                    $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
+                });
             })
             ->where(function($q){
                 if (!isAdmin()) {
@@ -118,6 +114,11 @@ class ReservasController extends Controller
                 }
             })
             ->get();
+        if(isset($reservas)){
+            $puestos_reservados=$reservas->pluck('id_puesto')->toArray();
+        } else{
+            $puestos_reservados=[];
+        }
 
         $asignados_usuarios=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
@@ -163,10 +164,10 @@ class ReservasController extends Controller
             })
             ->get();
         if(isset($asignados_nomiperfil)){
-                $puestos_nomiperfil=$asignados_nomiperfil->pluck('id_puesto')->toArray();
-            } else{
-                $puestos_nomiperfil=[];
-            }
+            $puestos_nomiperfil=$asignados_nomiperfil->pluck('id_puesto')->toArray();
+        } else{
+            $puestos_nomiperfil=[];
+        }
 
         $puestos=DB::table('puestos')
             ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
@@ -192,6 +193,7 @@ class ReservasController extends Controller
             ->wherenotin('puestos.id_estado',[4,5,6])
             ->wherenotin('puestos.id_puesto',$puestos_usuarios)
             ->wherenotin('puestos.id_puesto',$puestos_nomiperfil)
+            ->wherenotin('puestos.id_puesto',$puestos_reservados)
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
@@ -309,36 +311,13 @@ class ReservasController extends Controller
             })
             ->where('reservas.id_cliente',$usuario->id_cliente)
             ->get();
+        if(isset($reservas)){
+            $puestos_reservados=$reservas->pluck('id_puesto')->toArray();
+        } else{
+            $puestos_reservados=[];
+        }
 
         $puestos_reservados=$reservas->pluck('id_puesto')->unique()->toArray();
-
-        $puestos=DB::table('puestos')
-        ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
-        ->join('edificios','puestos.id_edificio','edificios.id_edificio')
-        ->join('plantas','puestos.id_planta','plantas.id_planta')
-        ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
-        ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-        ->where('puestos.id_cliente',$usuario->id_cliente)
-        ->where(function($q){
-            if (isSupervisor(Auth::user()->id)) {
-                $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
-                $q->wherein('puestos.id_puesto',$puestos_usuario);
-            }
-        })
-        ->when($puestos_reservados, function($q) use($puestos_reservados){
-            $q->wherenotin('id_puesto',$puestos_reservados);
-        })
-        ->where(function($q) use($plantas_usuario){
-            if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
-                $q->wherein('puestos.id_planta',$plantas_usuario??[]);
-            }
-        })
-        ->wherenotin('puestos.id_estado',[4,5])
-        ->orderby('edificios.des_edificio')
-        ->orderby('plantas.num_orden')
-        ->orderby('plantas.des_planta')
-        ->orderby('puestos.des_puesto')
-        ->get();
 
         //Estas tres querys hacen falta para la compatibilidad de la vista
         $asignados_usuarios=DB::table('puestos_asignados')
@@ -346,6 +325,11 @@ class ReservasController extends Controller
             ->join('users','users.id','puestos_asignados.id_usuario')    
             ->where('id_usuario',0)
             ->get();
+        if(isset($asignados_usuarios)){
+            $puestos_usuarios=$asignados_usuarios->pluck('id_puesto')->toArray();
+        } else{
+            $puestos_usuarios=[];
+        }
 
         $asignados_miperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
@@ -358,6 +342,40 @@ class ReservasController extends Controller
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
             ->where('id_perfil',0)
             ->get();
+        if(isset($asignados_nomiperfil)){
+            $puestos_nomiperfil=$asignados_nomiperfil->pluck('id_puesto')->toArray();
+        } else{
+            $puestos_nomiperfil=[];
+        }
+
+        $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('puestos.id_cliente',$usuario->id_cliente)
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                    $q->wherein('puestos.id_puesto',$puestos_usuario);
+                }
+            })
+            ->when($puestos_reservados, function($q) use($puestos_reservados){
+                $q->wherenotin('id_puesto',$puestos_reservados);
+            })
+            ->where(function($q) use($plantas_usuario){
+                if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
+                    $q->wherein('puestos.id_planta',$plantas_usuario??[]);
+                }
+            })
+            ->wherenotin('puestos.id_estado',[4,5,6])
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
 
         $puestos_check=[];
         $checks=0; //Para que la vista muestre los checkbox

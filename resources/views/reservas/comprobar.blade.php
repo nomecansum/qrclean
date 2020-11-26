@@ -16,6 +16,13 @@
         <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar_plano"><i class="fad fa-map-marked-alt"></i> Plano</a>
     </div>
 </div>
+@if($edificios->isempty())
+    <div class="row">
+        <div class="col-md-12  alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> El usuario no tiene asignada ninguna planta en la que pueda reservar, debe asignarle plantas en los detalles de usuario o utilizando la acción de "Asignar planta"
+        </div>
+    </div>
+@endif
 @foreach ($edificios as $e)
 <div class="panel">
     <div class="panel-body">

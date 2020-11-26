@@ -659,25 +659,7 @@ class UsersController extends Controller
 
         $puestos_check=DB::table('puestos_usuario_supervisor')->where('id_usuario',$id)->pluck('id_puesto')->toarray();
 
-        $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
-            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
-            ->join('plantas','puestos.id_planta','plantas.id_planta')
-            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
-            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-            ->where('puestos.id_cliente',$usuario->id_cliente)
-            ->where(function($q){
-                if (isSupervisor(Auth::user()->id)) {
-                    $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
-                    $q->wherein('puestos.id_puesto',$puestos_usuario);
-                }
-            })
-            ->wherenotin('puestos.id_estado',[4,5])
-            ->orderby('edificios.des_edificio')
-            ->orderby('plantas.num_orden')
-            ->orderby('plantas.des_planta')
-            ->orderby('puestos.des_puesto')
-            ->get();
+        
 
         $edificios=DB::table('edificios')
         ->select('id_edificio','des_edificio')
@@ -695,6 +677,11 @@ class UsersController extends Controller
             })
             ->where('reservas.id_cliente',0)
             ->get();
+        if(isset($reservas)){
+            $puestos_reservados=$reservas->pluck('id_puesto')->toArray();
+        } else{
+            $puestos_reservados=[];
+        }
 
         $asignados_usuarios=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
@@ -705,6 +692,11 @@ class UsersController extends Controller
                 $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
             })
             ->get();
+        if(isset($asignados_usuarios)){
+            $puestos_usuarios=$asignados_usuarios->pluck('id_puesto')->toArray();
+        } else{
+            $puestos_usuarios=[];
+        }
 
         $asignados_miperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
@@ -716,6 +708,34 @@ class UsersController extends Controller
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
             ->where('id_perfil','<>',0)
+            ->get();
+        if(isset($asignados_nomiperfil)){
+            $puestos_nomiperfil=$asignados_nomiperfil->pluck('id_puesto')->toArray();
+        } else{
+            $puestos_nomiperfil=[];
+        }
+
+        $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('puestos.id_cliente',$usuario->id_cliente)
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                    $q->wherein('puestos.id_puesto',$puestos_usuario);
+                }
+            })
+            ->wherenotin('puestos.id_estado',[4,5,6])
+            ->wherenotin('puestos.id_puesto',$puestos_usuarios)
+            ->wherenotin('puestos.id_puesto',$puestos_nomiperfil)
+            ->wherenotin('puestos.id_puesto',$puestos_reservados)
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
             ->get();
 
         $puestos_check=[];

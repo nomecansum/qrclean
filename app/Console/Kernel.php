@@ -57,7 +57,7 @@ class Kernel extends ConsoleKernel
         //////////////////////////////////////////
         ///// TAREAS PROGRAMADAS CUCU 360/////////
         //////////////////////////////////////////
-        Log::debug(implode('|',$commands));
+        //Log::debug(implode('|',$commands));
         $tasks = tareas::where('mca_activa','S')->get();
         $directorio = storage_path().'/tareas/';
         if(!File::exists($directorio)) {

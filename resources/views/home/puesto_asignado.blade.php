@@ -56,8 +56,8 @@
     <div class="panel-body">
         @foreach($puestos as $puesto)
             @php
-                $puesto->factor_puesto=$puesto->factor_puesto*2;
-                $puesto->factor_letra=$puesto->factor_letra*2;
+                $puesto->factor_puesto=$puesto->factor_puesto*2??6;
+                $puesto->factor_letra=$puesto->factor_letra*2??1.3;
                 $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();   
                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
             @endphp

@@ -22,7 +22,7 @@
     $asignado_otroperfil=[];
 
     if(!$reservas->isempty()){
-        $puestos=DB::table('puestos')
+        $mispuestos=DB::table('puestos')
             ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -32,7 +32,7 @@
     }
         
     if(isset($asignado_usuario)){
-        $puestos=DB::table('puestos')
+        $mispuestos=DB::table('puestos')
             ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -45,8 +45,9 @@
             ->where('puestos.id_puesto',$asignado_usuario->id_puesto)
             ->get();
     }
+   
 @endphp
-@if(isset($puestos))
+@if(isset($mispuestos))
 <div class="panel">
     <div class="panel-heading">
         <div class="panel-title"><h2>{{ Carbon\Carbon::now()->locale('es')->isoformat('LLLL') }}</h2></div>
@@ -54,7 +55,7 @@
         
     </div>
     <div class="panel-body">
-        @foreach($puestos as $puesto)
+        @foreach($mispuestos as $puesto)
             @php
                 $puesto->factor_puesto=$puesto->factor_puesto*2??6;
                 $puesto->factor_letra=$puesto->factor_letra*2??1.3;

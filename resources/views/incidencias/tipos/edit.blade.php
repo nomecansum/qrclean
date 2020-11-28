@@ -74,6 +74,18 @@
                             <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
                         </div>
                     </div>
+                    <div class="form-group col-md-3 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
+                        <label for="id_estado_inicial" class="control-label">Estado inicial</label>
+                        <select class="form-control" required id="id_estado_inicial" name="id_estado_inicial">
+                            @foreach ($estados as $estado)
+                                <option value="{{ $estado->id_estado }}" {{ old('id_estado_inicial', optional($tipo)->id_estado_inicial) == $estado->id_estado ? 'selected' : '' }}>
+                                    {{ $estado->des_estado }}
+                                </option>
+                            @endforeach
+                        </select>
+                            
+                        {!! $errors->first('id_estado_inicial', '<p class="help-block">:message</p>') !!}
+                    </div>
                 </div>
                 <div class="row opciones P G">
                     <div class="form-group col-md-12 {{ $errors->has('val_url') ? 'has-error' : '' }}">

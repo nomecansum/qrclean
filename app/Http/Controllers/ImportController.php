@@ -211,13 +211,19 @@ class ImportController extends Controller
                     $highestRow = $spreadsheet->setActiveSheetIndex(0)->getHighestRow();
                     for ($i = 2; $i < ($cuenta_puestos+2); $i++) 
                     {
+                        
+                        
                         $puesto = $this->puesto_to_object($spreadsheet, $i);
+
+                        $anonimo=$puesto->mca_anonimo=='SI'?'S':'N';
+                        $m_res=$puesto->mca_reserva=='SI'?'S':'N';
+ 
                         $p=new puestos;
                         $p->cod_puesto=$puesto->cod_puesto;
                         $p->des_puesto=$puesto->des_puesto;
                         $p->id_cliente=Auth::user()->id_cliente;
-                        $p->mca_reservar=$puesto->mca_reservar?$puesto->mca_reservar:'S';
-                        $p->mca_acceso_anonimo=$puesto->mca_acceso_anonimo?$puesto->mca_acceso_anonimo:'S';
+                        $p->mca_reservar=$m_res;
+                        $p->mca_acceso_anonimo=$anonimo;
                         $p->token=Str::random(50);
                         //Edificio y planta
                         $edificio=edificios::where('des_edificio',$puesto->des_edificio)->first();

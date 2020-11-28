@@ -60,7 +60,7 @@
     <div class="row" id="div_respuesta">
         <div class="col-md-3"></div>
         <div class="col-md-6 text-3x text-center bg-{{$respuesta['color']}} rounded">
-            {!!$respuesta['icono']!!} {{$respuesta['mensaje']}}
+            {!!$respuesta['icono']!!} {!!$respuesta['mensaje']!!}
         </div>
         <div class="col-md-3"></div>
     </div>

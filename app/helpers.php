@@ -676,6 +676,11 @@ if (! function_exists('validar_acceso_tabla')) {
                 $campo="id_incidencia";
                 $ruta="incidencias.index";
                 break;
+            case "encuestas":
+                $descriptivo="encuesta";
+                $campo="id_encuesta";
+                $ruta="encuestas.index";
+                break;
             default:
                 $descriptivo=$tabla;
         }

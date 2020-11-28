@@ -214,6 +214,10 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/causas/save',['middleware'=>'permissions:["Causas de cierre"],["W"]', 'uses' => 'IncidenciasController@causas_save']);
         Route::get('/causas/edit/{id?}',['middleware'=>'permissions:["Causas de cierre"],["W"]', 'uses' => 'IncidenciasController@causas_edit']);
         Route::get('/causas/delete/{id?}',['middleware'=>'permissions:["Causas de cierre"],["D"]', 'uses' => 'IncidenciasController@causas_delete']);
+        Route::get('/estados',['middleware'=>'permissions:["Estados de incidencia"],["R"]', 'uses' => 'IncidenciasController@index_estados'])->name('incidencias_estados.index');
+        Route::post('/estados/save',['middleware'=>'permissions:["Estados de incidencia"],["W"]', 'uses' => 'IncidenciasController@estados_save']);
+        Route::get('/estados/edit/{id?}',['middleware'=>'permissions:["Estados de incidencia"],["W"]', 'uses' => 'IncidenciasController@estados_edit']);
+        Route::get('/estados/delete/{id?}',['middleware'=>'permissions:["Estados de incidencia"],["D"]', 'uses' => 'IncidenciasController@estados_delete']);
 
 
         Route::get('/create/{puesto}',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@nueva_incidencia'])->name('incidencias.nueva');
@@ -231,6 +235,16 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::post('/accion',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@add_accion']);
         
+    });
+
+    Route::group(['prefix' => 'encuestas'], function() {
+        Route::get('/',['middleware'=>'permissions:["Encuestas"],["R"]', 'uses' => 'EncuestasController@index'])->name('encuestas.index');
+        Route::get('create',['middleware'=>'permissions:["Encuestas"],["C"]', 'uses' => 'EncuestasController@create']);
+        Route::post('save',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@save']);
+        Route::get('edit/{id}',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@edit']);
+        Route::post('update',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@update']);
+        Route::get('delete/{id}',['middleware'=>'permissions:["Encuestas"],["D"]', 'uses' => 'EncuestasController@delete']);
+        Route::get('gen_key',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@gen_key']);
     });
 
     ////////////////////TAREAS////////////////////

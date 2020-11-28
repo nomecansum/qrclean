@@ -5,8 +5,9 @@
 @endphp
 
 <div class="panel " style="padding-right: 10px" >
-    <div class="panel-heading cursor-pointer" style="padding-top: 10px" id="headfiltro" >
-        <span class="mt-3 ml-2 font-18"><i class="fad fa-filter"></i> Filtro </span>
+    <div class="panel-heading cursor-pointer" style="padding-top: 2px" id="headfiltro" >
+        {{--  <span class="mt-3 ml-2 font-18"></span>  --}}
+        <div id="expand_campos" data-div="divfiltro"  class="expandir ml-2  font-18 p-t-10"><i class="fad fa-filter"></i> Filtro <a href=javascript:void(0); class="expand"><i class="fas fa-caret-right text-mint"></i></a></div>
         <span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
         {{-- <div id="loadfilter" class="load8"><div class="loader"></div></div> --}}
     </div>
@@ -372,5 +373,9 @@
 
     $('.select-all').css('height',46);
         //$(':checkbox').on('change', handleCheckboxClick);
+
+    $('.expand').click(function(){
+        $(this).find('i').toggleClass('fas fa-caret-right fas fa-caret-down');
+    });
 </script>
 @stop

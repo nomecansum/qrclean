@@ -141,38 +141,36 @@ class PuestosController extends Controller
                 ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
                 ->where('puestos.id_puesto',$id)
                 ->first();
-            $tags=DB::table('tags')
-                ->join('tags_puestos','tags.id_tag','tags_puestos.id_tag')
-                ->where('tags_puestos.id_puesto',$id)
-                ->pluck('nom_tag')
-                ->toarray();
-            $tags=implode(",",$tags);
-
-            $usuarios=DB::table('users')
-                ->where('id_cliente',Auth::user()->id_cliente)
-                ->orderby('name')
-                ->where(function($q){
-                    if (isSupervisor(Auth::user()->id)) {
-                        $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',Auth::user()->id)->pluck('id')->toArray();
-                        $q->wherein('users.id',$usuarios_supervisados);
-                    }
-                })
-                ->get();
-
-            $perfiles=DB::table('niveles_acceso')
-                ->wherein('id_cliente',[1,Auth::user()->id_cliente])
-                ->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)
-                ->where(function($q){
-                    if (isSupervisor(Auth::user()->id)) {
-                        $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',Auth::user()->id)->pluck('cod_nivel')->toArray();
-                        $q->wherein('niveles_acceso.cod_nivel',$usuarios_supervisados);
-                    }
-                })
-                ->orderby('val_nivel_acceso')
-                ->orderby('des_nivel_acceso')
-                ->get();
-            
         }
+        $usuarios=DB::table('users')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->orderby('name')
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',Auth::user()->id)->pluck('id')->toArray();
+                    $q->wherein('users.id',$usuarios_supervisados);
+                }
+            })
+            ->get();
+
+        $perfiles=DB::table('niveles_acceso')
+            ->wherein('id_cliente',[1,Auth::user()->id_cliente])
+            ->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',Auth::user()->id)->pluck('cod_nivel')->toArray();
+                    $q->wherein('niveles_acceso.cod_nivel',$usuarios_supervisados);
+                }
+            })
+            ->orderby('val_nivel_acceso')
+            ->orderby('des_nivel_acceso')
+            ->get();
+        $tags=DB::table('tags')
+            ->join('tags_puestos','tags.id_tag','tags_puestos.id_tag')               
+            ->where('tags_puestos.id_puesto',$id)
+            ->pluck('nom_tag')
+            ->toarray();
+        $tags=implode(",",$tags);
         return view('puestos.edit',compact('puesto','tags','usuarios','perfiles'));
 
     }

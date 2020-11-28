@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class incidencias_tipos extends Model
+class encuestas extends Model
 {
     
     /**
@@ -18,14 +18,14 @@ class incidencias_tipos extends Model
      *
      * @var string
      */
-    protected $table = 'incidencias_tipos';
+    protected $table = 'encuestas';
 
     /**
     * The database primary key value.
     *
     * @var string
     */
-    protected $primaryKey = 'id_tipo_incidencia';
+    protected $primaryKey = 'id_encuesta';
 
     /**
      * Attributes that should be mass-assignable.
@@ -33,19 +33,18 @@ class incidencias_tipos extends Model
      * @var array
      */
     protected $fillable = [
-                  'des_tipo_incidencia',
+                  'fec_fin',
+                  'fec_inicio',
                   'id_cliente',
-                  'id_estado_inicial',
-                  'mca_fijo',
-                  'param_url',
-                  'tip_metodo',
-                  'txt_destinos',
-                  'val_apikey',
-                  'val_body',
+                  'id_puesto',
+                  'id_tipo_encuesta',
+                  'list_perfiles',
+                  'mca_activa',
+                  'mca_anonima',
+                  'pregunta',
+                  'titulo',
                   'val_color',
-                  'val_content_type',
-                  'val_icono',
-                  'val_url'
+                  'val_icono'
               ];
 
     /**
@@ -73,23 +72,23 @@ class incidencias_tipos extends Model
     }
 
     /**
-     * Get the EstadosIncidencia for this model.
+     * Get the Puesto for this model.
      *
-     * @return App\Models\EstadosIncidencia
+     * @return App\Models\Puesto
      */
-    public function EstadosIncidencia()
+    public function Puesto()
     {
-        return $this->belongsTo('App\Models\EstadosIncidencia','id_estado_inicial','id_estado');
+        return $this->belongsTo('App\Models\Puesto','id_puesto','id_puesto');
     }
 
     /**
-     * Get the incidencias for this model.
+     * Get the EncuestasTipo for this model.
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return App\Models\EncuestasTipo
      */
-    public function incidencias()
+    public function EncuestasTipo()
     {
-        return $this->hasMany('App\Models\Incidencia','id_tipo_incidencia','id_tipo_incidencia');
+        return $this->belongsTo('App\Models\EncuestasTipo','id_tipo_encuesta','id_tipo_encuesta');
     }
 
 

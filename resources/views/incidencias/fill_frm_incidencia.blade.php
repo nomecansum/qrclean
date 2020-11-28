@@ -23,11 +23,9 @@
                 </div>
                 <div class="form-group col-md-4 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">
                     <label for="id_tipo_incidencia" class="control-label">Tipo</label>
-                    <select class="form-control" required id="id_tipo_incidencia" name="id_tipo_incidencia">
+                    <select class="form-control selectpicker" required id="id_tipo_incidencia" name="id_tipo_incidencia">
                         @foreach ($tipos as $tipo)
-                            <option value="{{ $tipo->id_tipo_incidencia }}">
-                                {{ $tipo->des_tipo_incidencia }}
-                            </option>
+                            <option value="{{ $tipo->id_tipo_incidencia }}" data-content="<i class='fa {{ $tipo->val_icono }}' aria-hidden='true' style='color: {{ $tipo->val_color }}'></i> {{ $tipo->des_tipo_incidencia }}"></option>
                         @endforeach
                     </select>
                 </div>   
@@ -76,4 +74,15 @@
 
     </div>
 </div>
-
+<script>
+    function iformat(icon) {
+        var originalOption = icon.element;
+        return $('<span><i class="mdi ' + $(originalOption).data('icon') + '"></i> ' + icon.text + '</span>');
+    }
+    $('.icons_select2').select2({
+		width: "100%",
+		templateSelection: iformat,
+		templateResult: iformat,
+		allowHtml: true
+	});
+</script>

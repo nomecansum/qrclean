@@ -65,11 +65,6 @@
         "table-name": "plantas"
     },
     {
-        "model-name": "incidencias_tipos",
-        "resource-file": "incidencias_tipos.json",
-        "table-name": "incidencias_tipos"
-    },
-    {
         "model-name": "config_clientes",
         "resource-file": "config_clientes.json",
         "table-name": "config_clientes"
@@ -128,5 +123,20 @@
         "model-name": "puestos_asignados",
         "resource-file": "puestos_asignados.json",
         "table-name": "puestos_asignados"
+    },
+    {
+        "model-name": "estados_incidencias",
+        "resource-file": "estados_incidencias.json",
+        "table-name": "estados_incidencias"
+    },
+    {
+        "model-name": "incidencias_tipos",
+        "resource-file": "incidencias_tipos.json",
+        "table-name": "incidencias_tipos"
+    },
+    {
+        "model-name": "encuestas",
+        "resource-file": "encuestas.json",
+        "table-name": "encuestas"
     }
 ]

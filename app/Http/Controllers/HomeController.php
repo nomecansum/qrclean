@@ -21,7 +21,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -139,6 +139,54 @@ class HomeController extends Controller
                     'color'=>'danger',
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
+                    'operativo' => 0
+                ];
+                return view('scan.result',compact('respuesta','reserva','config_cliente'));
+            }
+
+            //Y ahora vemos si el susodicho tiene asignado el puesto que se esta escaneando para darle la bienvenida
+            $asignados_ami=DB::table('puestos_asignados')
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                ->join('users','users.id','puestos_asignados.id_usuario')  
+                ->where('puestos.id_puesto',$p->id_puesto)  
+                ->where('id_usuario',$id_usuario)
+                ->where(function($q){
+                    $q->wherenull('fec_desde');
+                    $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+                })
+                ->get();
+
+            if(!$asignados_ami->isEmpty()){
+                $respuesta=[
+                    'mensaje'=>"Hola ".Auth::user()->name.' este es su puesto asignado para hoy ',
+                    'icono' => '<i class="fad fa-user"></i>',
+                    'color'=>'success',
+                    'puesto'=>$p,
+                    'disponibles'=>[],
+                    'operativo' => 1
+                ];
+                return view('scan.result',compact('respuesta','reserva','config_cliente'));
+            }
+
+            //Aqui vamos a ver si el pollo tiene asignado un puesto distinto al que esta escaneado para decirle que se peine y se vaya a su puesto
+            $puesto_mio_es_otro=DB::table('puestos_asignados')
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                ->join('users','users.id','puestos_asignados.id_usuario')  
+                ->where('puestos.id_puesto','<>',$p->id_puesto)  
+                ->where('id_usuario',$id_usuario)
+                ->where(function($q){
+                    $q->wherenull('fec_desde');
+                    $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+                })
+                ->get();
+
+            if(!$puesto_mio_es_otro->isEmpty()){
+                $respuesta=[
+                    'mensaje'=>"Hola ".Auth::user()->name.', para hoy usted tiene asignado el puesto '.$puesto_mio_es_otro->first()->cod_puesto.'.<br> <b>Debe utilizar ese puesto</b>',
+                    'icono' => '<i class="fad fa-bring-forward"></i>',
+                    'color'=>'danger',
+                    'puesto'=>$p,
+                    'disponibles'=>[],
                     'operativo' => 0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));

@@ -11,6 +11,8 @@ use App\Models\incidencias_tipos;
 use App\Models\incidencias;
 use App\Models\causas_cierre;
 use App\Models\incidencias_acciones;
+use App\Models\estados_incidencias;
+
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -64,6 +66,8 @@ class IncidenciasController extends Controller
         return view('incidencias.index',compact('incidencias','f1','f2','puestos'));
     }
 
+
+    //FORMULARIO DE CIERRE DE INCIDENCIA
     public function form_cierre($id){
         validar_acceso_tabla($id,'incidencias');
         $causas_cierre=DB::table('causas_cierre')
@@ -72,22 +76,34 @@ class IncidenciasController extends Controller
         return view('incidencias.fill-form-cerrar',compact('id','causas_cierre'));
     }
 
+
+    //FORMULARIO DE AÑADIR NUEVA ACCIOM
     public function form_accion($id){
         validar_acceso_tabla($id,'incidencias');
+        $estados = DB::table('estados_incidencias')
+            ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
+                    $q->orwhere('estados_incidencias.mca_fijo','S');
+                }
+            })
+        ->get();
 
-        return view('incidencias.fill-form-accion',compact('id'));
+        return view('incidencias.fill-form-accion',compact('id','estados'));
     }
 
     public function detalle_incidencia($id){
         validar_acceso_tabla($id,"incidencias");
         $incidencia=DB::table('incidencias')
-            ->select('incidencias.*','edificios.des_edificio','plantas.des_planta','users.name','users.img_usuario','puestos.cod_puesto','puestos.des_puesto','incidencias_tipos.*')
+            ->select('incidencias.*','edificios.des_edificio','plantas.des_planta','users.name','users.img_usuario','puestos.cod_puesto','puestos.des_puesto','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia')
             ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->join('users','incidencias.id_usuario_apertura','users.id')
             ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
                 if (!isAdmin()) {
@@ -224,6 +240,7 @@ class IncidenciasController extends Controller
             }
         })
         ->get();
+        
         return view('incidencias.tipos.index', compact('tipos'));
     }
 
@@ -234,7 +251,16 @@ class IncidenciasController extends Controller
             $tipo = incidencias_tipos::findorfail($id);
         }
         $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
-        return view('incidencias.tipos.edit', compact('tipo','Clientes','id'));
+        $estados = DB::table('estados_incidencias')
+            ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
+                    $q->orwhere('estados_incidencias.mca_fijo','S');
+                }
+            })
+        ->get();
+        return view('incidencias.tipos.edit', compact('tipo','Clientes','id','estados'));
     }
 
     public function tipos_save(Request $r){
@@ -279,8 +305,8 @@ class IncidenciasController extends Controller
     }
 
 
-     // GESTION DE CAUSAS DE CIERRE DE INCIDENCIA
-     public function index_causas(){
+    // GESTION DE CAUSAS DE CIERRE DE INCIDENCIA
+    public function index_causas(){
         $causas = DB::table('causas_cierre')
         ->join('clientes','clientes.id_cliente','causas_cierre.id_cliente')
         ->where(function($q){
@@ -340,6 +366,71 @@ class IncidenciasController extends Controller
             return back()->withInput();
         } catch (Exception $exception) {
             flash('ERROR: Ocurrio un error borrando causa de cierre '.$causa->des_causa.' '.$exception->getMessage())->error();
+            return back()->withInput();
+        }
+    }
+
+    // GESTION DE ESTADOS DE INCIDENCIA
+    public function index_estados(){
+        $estados = DB::table('estados_incidencias')
+        ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
+                $q->orwhere('estados_incidencias.mca_fijo','S');
+            }
+        })
+        ->get();
+        return view('incidencias.estados.index', compact('estados'));
+    }
+
+    public function estados_edit($id=0){
+        if($id==0){
+            $estado=new estados_incidencias();
+        } else {
+            $estado = estados_incidencias::findorfail($id);
+        }
+        $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
+        return view('incidencias.estados.edit', compact('estado','Clientes','id'));
+    }
+
+    public function estados_save(Request $r){
+        try {
+            if($r->id==0){
+                estados_incidencias::create($r->all());
+            } else {
+                $estado=estados_incidencias::find($r->id);
+                $estado->update($r->all());
+            }
+            savebitacora('Estado de incidencia actualizada '.$r->des_estado,"Incidencias","estados_save","OK");
+            return [
+                'title' => "Estados de incidencia",
+                'message' => 'Estado de incidencia '.$r->des_estado. ' actualizado',
+                'url' => url('/incidencias/estados')
+            ];
+        } catch (Exception $exception) {
+            // flash('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage())->error();
+            // return back()->withInput();
+            savebitacora('ERROR: Ocurrio un error actualizando estado de incidencia '.$r->des_estado.' '.$exception->getMessage() ,"Incidencias","estados_save","ERROR");
+            return [
+                'title' => "Estados de incidencia",
+                'error' => 'ERROR: Ocurrio un error actualizando estado de incidencia '.$r->des_estado.' '.$exception->getMessage(),
+                //'url' => url('causas')
+            ];
+
+        }
+    }
+
+    public function estados_delete($id=0){
+        try {
+            $estado = estados_incidencias::findorfail($id);
+
+            $estado->delete();
+            savebitacora('Estado de incidencia borrado '.$estado->des_estado,"Incidencias","causas_save","OK");
+            flash('Estado de incidencia '.$estado->des_estado.' borrada')->success();
+            return back()->withInput();
+        } catch (Exception $exception) {
+            flash('ERROR: Ocurrio un error borrando causa de cierre '.$estado->des_estado.' '.$exception->getMessage())->error();
             return back()->withInput();
         }
     }

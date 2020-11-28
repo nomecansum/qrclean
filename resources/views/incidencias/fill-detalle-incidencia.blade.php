@@ -6,13 +6,14 @@
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
             </div>
             <h3 class="panel-title" id="titulo">
-               Detalle de la incidencia
+               Detalle de la incidencia #{{ $incidencia->id_incidencia }}
             </h3>
         </div>
 
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-10"><h4>{{ $incidencia->des_incidencia }}</h4></div>
+                <div class="col-md-8"><h4>{{ $incidencia->des_incidencia }}</h4></div>
+                <div class="col-md-2"><h5>{!! $incidencia->estado_incidencia !!}</h5></div>
                 <div class="col-md-2"><h5>{!! beauty_fecha($incidencia->fec_apertura) !!}</h5></div>
             </div>
             <div class="row">

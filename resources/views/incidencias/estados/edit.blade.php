@@ -7,9 +7,9 @@
             </div>
             <h3 class="panel-title" id="titulo">
                 @if($id==0)
-                    Nueva causa de cierre
+                    Nuevo estado de incidencia
                 @else
-                    Editar causa de cierre
+                    Editar estado de incidencia
                 @endif
 
             </h3>
@@ -25,14 +25,14 @@
                 </ul>
             @endif
 
-            <form method="POST" action="{{ url('/incidencias/causas/save') }}" id="edit_causas_cierre_form" name="edit_causas_cierre_form" accept-charset="UTF-8" class="form-horizontal form-ajax">
+            <form method="POST" action="{{ url('/incidencias/estados/save') }}" id="edit_estado_form" name="edit_estado_form" accept-charset="UTF-8" class="form-horizontal form-ajax">
             {{ csrf_field() }}
                 <div class="row">
                         <input type="hidden" name="id" value="{{ $id }}">
                         <div class="form-group col-md-8 {{ $errors->has('des_tipo_incidencia') ? 'has-error' : '' }}">
-                            <label for="des_causa_cierre" class="control-label">Nombre</label>
-                            <input class="form-control" required name="des_causa" type="text" id="des_causa_cierre" value="{{ old('des_causa', optional($causa)->des_causa) }}" maxlength="200" placeholder="Enter nombre here...">
-                            {!! $errors->first('des_causa_cierre', '<p class="help-block">:message</p>') !!}
+                            <label for="des_estado" class="control-label">Nombre</label>
+                            <input class="form-control" required name="des_estado" type="text" id="des_estado" value="{{ old('des_estado', optional($estado)->des_estado) }}" maxlength="200" placeholder="Enter nombre here...">
+                            {!! $errors->first('des_estado', '<p class="help-block">:message</p>') !!}
                         </div>
 
 
@@ -40,7 +40,7 @@
                             <label for="id_cliente" class="control-label">Cliente</label>
                             <select class="form-control" required id="id_cliente" name="id_cliente">
                                 @foreach ($Clientes as $key => $Cliente)
-                                    <option value="{{ $key }}" {{ old('id_cliente', optional($causa)->id_cliente) == $key ? 'selected' : '' }}>
+                                    <option value="{{ $key }}" {{ old('id_cliente', optional($estado)->id_cliente) == $key ? 'selected' : '' }}>
                                         {{ $Cliente }}
                                     </option>
                                 @endforeach
@@ -54,7 +54,7 @@
                 <div class="row">
                     <div class="form-group col-md-2" style="margin-top: 7px">
                         <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($causa->val_color)?$causa->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($estado->val_color)?$estado->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
                     <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                         <div class="form-group">
@@ -64,10 +64,14 @@
                     </div>
                     @if(isAdmin())
                     <div class="col-md-2 p-t-30 mt-1">
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_fija"  id="mca_fija" value="S" {{ $causa->mca_fija=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_fija">Fija</label>
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_fijo"  id="mca_fijo" value="S" {{ $estado->mca_fijo=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_fijo">Fijo</label>
                     </div>
                     @endif
+                    <div class="col-md-2 p-t-30 mt-1">
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_cierre"  id="mca_cierre" value="S" {{ $estado->mca_cierre=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_cierre">Implica cierre</label>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -102,6 +106,6 @@
         });
 
         $('#val_icono').iconpicker({
-            icon:'{{isset($causa) ? ($causa->val_icono) : ''}}'
+            icon:'{{isset($estado) ? ($estado->val_icono) : ''}}'
         });
     </script>

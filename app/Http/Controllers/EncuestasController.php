@@ -45,6 +45,9 @@ class EncuestasController extends Controller
             ->pluck('nom_cliente','id_cliente')
             ->all();
         $tipos = DB::table('encuestas_tipos')->get();
+        $encuesta->id_tipo_encuesta=$tipos->first()->id_tipo_encuesta;
+        $encuesta->des_tipo_encuesta=$tipos->first()->des_tipo_encuesta;
+        $encuesta->img_tipo=$tipos->first()->img_tipo;
         
         return view('encuestas.edit', compact('encuesta','clientes','tipos'));
     }

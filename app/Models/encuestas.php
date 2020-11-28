@@ -33,18 +33,18 @@ class encuestas extends Model
      * @var array
      */
     protected $fillable = [
-                  'fec_fin',
-                  'fec_inicio',
                   'id_cliente',
-                  'id_puesto',
-                  'id_tipo_encuesta',
-                  'list_perfiles',
-                  'mca_activa',
-                  'mca_anonima',
-                  'pregunta',
                   'titulo',
-                  'val_color',
-                  'val_icono'
+                  'pregunta',
+                  'id_tipo_encuesta',
+                  'fec_inicio',
+                  'fec_fin',
+                  'mca_activa',
+                  'id_puesto',
+                  'mca_anonima',
+                  'list_perfiles',
+                  'val_icono',
+                  'val_color'
               ];
 
     /**
@@ -72,16 +72,6 @@ class encuestas extends Model
     }
 
     /**
-     * Get the Puesto for this model.
-     *
-     * @return App\Models\Puesto
-     */
-    public function Puesto()
-    {
-        return $this->belongsTo('App\Models\Puesto','id_puesto','id_puesto');
-    }
-
-    /**
      * Get the EncuestasTipo for this model.
      *
      * @return App\Models\EncuestasTipo
@@ -89,6 +79,16 @@ class encuestas extends Model
     public function EncuestasTipo()
     {
         return $this->belongsTo('App\Models\EncuestasTipo','id_tipo_encuesta','id_tipo_encuesta');
+    }
+
+    /**
+     * Get the Puesto for this model.
+     *
+     * @return App\Models\Puesto
+     */
+    public function Puesto()
+    {
+        return $this->belongsTo('App\Models\Puesto','id_puesto','id_puesto');
     }
 
 

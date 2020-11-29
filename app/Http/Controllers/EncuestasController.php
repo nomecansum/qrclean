@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\clientes;
 use App\Models\encuestas;
+use App\Models\encuestas_resultados;
 use App\Models\puestos;
 use App\Models\niveles_acceso;
 use Illuminate\Http\Request;
@@ -246,6 +247,65 @@ class EncuestasController extends Controller
         $encuesta=encuestas::where('token',$token)->first();
 
         return view('encuestas.ver_encuesta',compact('encuesta'));
+    }
+
+    public function save_data(Request $r){
+        //datos de la encuesta
+
+        $encuesta=encuestas::where('token',$r->id_encuesta)->first();
+        if (isset($encuesta)){
+            $resultado=new encuestas_resultados();
+            $resultado->id_encuesta=$encuesta->id_encuesta;
+            $resultado->fecha=Carbon::now();
+            $resultado->valor=$r->val;
+            $resultado->comentario=$r->comentario??null;
+            if(Auth::check() && $encuesta->mca_anonima=='N'){
+                $resultado->id_usuario=Auth::user()->id;
+            }
+            $resultado->save();
+        }
+        return [
+            'title' => "Encuestas",
+            'message' => 'Dato guardado',
+            //'url' => url('encuestas')
+        ]; 
+    }
+
+    public function resultados(Request $r){
+        validar_acceso_tabla($r->id_encuesta,"encuestas");
+        $encuesta=DB::table('encuestas')
+            ->where('id_encuesta',$r->id_encuesta)
+            ->first();
+
+        if(isset($r->fechas)){
+            $fechas=explode(" - ",$r->fechas);
+            $f1->fec_inicio=Carbon::parse(adaptar_fecha($fechas[0]));
+            $f2->fec_fin=Carbon::parse(adaptar_fecha($fechas[1]));
+        } else {
+            $f1=Carbon::now()->startOfMonth();
+            $f2=Carbon::now()->endOfMonth();
+        }
+        
+        $resultado=DB::table('encuestas_resultados')
+            ->whereBetween('fecha',[$f1,$f2])
+            ->orderby('fecha')
+            ->get();
+
+        $resultado_valor=DB::table('encuestas_resultados')
+            ->selectraw('valor as des_estado, count(id_resultado) as cuenta')
+            ->whereBetween('fecha',[$f1,$f2])
+            ->groupby('des_estado')
+            ->orderby('valor')
+            ->get();
+
+        $resultado_fecha=DB::table('encuestas_resultados')
+            ->selectraw('date(fecha) as fecha, count(id_resultado) as cuenta')
+            ->whereBetween('fecha',[$f1,$f2])
+            ->groupBy(\DB::raw('date(fecha)'))
+            ->orderby('fecha')
+            ->get();
+
+        return view('encuestas.fill_resultados',compact('resultado','encuesta','resultado_valor','resultado_fecha','r','f1','f2'));
     }
 
 

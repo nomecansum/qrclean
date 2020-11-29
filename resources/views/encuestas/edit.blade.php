@@ -127,9 +127,9 @@
                     <a href="{{ url('encuestas/get',$encuesta->token) }}" id="link_url" target="_blank"><h5 id="span_url">{{ url('encuestas/get',$encuesta->token) }}</h5></a>
                 </div>
                 <div class="form-group col-md-1 text-right mt-3">
-                    <a href="#modal_img"  class="btn  btn-warning add-tooltip  btn_url" id="btn_gen_qr" data-toggle="modal" title="Generar QR" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}> <span class="fad fa-qrcode pt-1" aria-hidden="true"></span> Ver QR</a>
+                    <a href="#modal_img"  class="btn  btn-warning add-tooltip  btn_url" id="btn_gen_qr" data-toggle="modal" title="Generar QR" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}"> <span class="fad fa-qrcode pt-1" aria-hidden="true"></span> Ver QR</a>
                     <a href="#"  class="btn  btn-info  add-tooltip btn_url" id="boton_url" title="Copiar URL" data-id="{{ $encuesta->id_encuesta }}" data-clipboard-text="{{ url('encuestas/get',$encuesta->token) }}"> <span class="fa fa-copy pt-1" aria-hidden="true"></span> Copiar</a>
-                    <a href="{{ url('encuestas/get',$encuesta->token) }}" target="_blank"  class="btn  btn-success  add-tooltip btn_url" id="boton_abrir" title="Abrir URL" data-id="{{ $encuesta->id_encuesta }}" data-urk="{{ url('encuestas/get',$encuesta->token) }}"> <i class="fad fa-external-link-square-alt"></i> Abrir</a>
+                    <a href="{{ url('encuestas/get',$encuesta->token) }}" target="_blank"  class="btn  btn-success  add-tooltip btn_url" id="boton_abrir" title="Abrir URL" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}"> <i class="fad fa-external-link-square-alt"></i> Abrir</a>
                 </div>
             </div>
             <div class="row">
@@ -169,7 +169,6 @@
             </div>
         </div>
     </div>
-</form>
 </div>
 
 <script src="{{ url('/plugins/clipboard-js/clipboard.js') }}"></script>
@@ -289,7 +288,7 @@
     })
 
     $('#btn_gen_qr').click(function(){
-        console.log($(this).data('clipboard-text'));
+        console.log($(this).data('url'));
         $.post('{{url('/gen_qr')}}', {_token:'{{csrf_token()}}',url: $(this).data('url')}, function(data, textStatus, xhr) {
             $('#img_accion').attr('src','data:image/png;base64, '+data);
 		});

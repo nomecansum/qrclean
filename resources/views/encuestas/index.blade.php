@@ -124,8 +124,8 @@
                             <td class="text-center">@if($enc->mca_anonima=='S') <i class="fas fa-circle text-info"></i> @endif</td>
                             
                             <td class="text-center" style="position: relative"  data-valign="middle">{!! beauty_fecha($enc->fec_inicio) !!} <i class="fas fa-arrow-right"></i> {!! beauty_fecha($enc->fec_fin) !!}
-                                <div class="pull-right floating-like-gmail mt-3" style="width: 140px;">
-                                    {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $enc->id_encuesta }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
+                                <div class="pull-right floating-like-gmail mt-3" style="width: 240px;">
+                                    <a href="#modal-resultados"  class="btn btn-xs btn-primary add-tooltip btn_result" data-toggle="modal" onclick="resultados('{{ $enc->id_encuesta }}')" title="Ver resultados" data-id="{{ $enc->id_encuesta }}"> <span class="fad fa-file-chart-line" aria-hidden="true"></span> Resultados</a>
                                     @if(checkPermissions(['Encuestas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $enc->id_encuesta }})" title="Editar planta" data-id="{{ $enc->id_encuesta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                                     @if(checkPermissions(['Encuestas'],['D']))<a href="#eliminar-planta-{{$enc->id_encuesta}}" data-target="#eliminar-planta-{{$enc->id_encuesta}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                                 </div>
@@ -160,6 +160,19 @@
         @endif
     
     </div>
+
+    <div class="modal fade" id="modal-resultados">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                <div class="modal-body" id="body_resultados">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -188,5 +201,12 @@
         })
 
         $('.imagen_tipo').css('width','30%');
+
+        function resultados(id){
+            console.log('Get resultados '+id);
+            $.post('{{url('/encuestas/resultados')}}', {_token:'{{csrf_token()}}',id_encuesta: id}, function(data, textStatus, xhr) {
+               $('#body_resultados').html(data);
+            });
+        }
     </script>
 @endsection

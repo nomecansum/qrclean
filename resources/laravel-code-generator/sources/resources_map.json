@@ -138,5 +138,10 @@
         "model-name": "encuestas",
         "resource-file": "encuestas.json",
         "table-name": "encuestas"
+    },
+    {
+        "model-name": "encuestas_resultados",
+        "resource-file": "encuestas_resultados.json",
+        "table-name": "encuestas_resultados"
     }
 ]

@@ -471,4 +471,10 @@ class HomeController extends Controller
         $tipo_scan="main";
         return view('scan',compact('estado_destino','modo','titulo','tipo_scan'));
     }
+
+    public function gen_qr(Request $r)
+    {
+        return base64_encode(QrCode::format('png')->size(230)->generate($r->url));
+    }
+
 }

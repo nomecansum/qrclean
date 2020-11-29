@@ -30,6 +30,7 @@ Route::view('/test','test');
 Route::get('/token','PuestosController@generar_token');
 Route::get('/pwd_hash/{pwd}','UsersController@pwd_hash');
 Route::view('/reminder','auth.passwords.email');
+Route::post('/gen_qr','HomeController@gen_qr');
 
 Route::group(['prefix' => 'MKD'], function () {
     Route::get('/plano/{planta}/{token}','MKDController@plano');
@@ -240,7 +241,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'encuestas'], function() {
         Route::get('/',['middleware'=>'permissions:["Encuestas"],["R"]', 'uses' => 'EncuestasController@index'])->name('encuestas.index');
         Route::get('create',['middleware'=>'permissions:["Encuestas"],["C"]', 'uses' => 'EncuestasController@create']);
-        Route::post('save',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@save']);
+        Route::post('save',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@store']);
         Route::get('edit/{id}',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@edit']);
         Route::post('update',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@update']);
         Route::get('delete/{id}',['middleware'=>'permissions:["Encuestas"],["D"]', 'uses' => 'EncuestasController@delete']);

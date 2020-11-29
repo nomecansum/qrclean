@@ -3,7 +3,7 @@
     use App\Models\estados;
     use App\Models\tags;
 @endphp
-
+@if(!(isset($hide['head']) || (isset($hide['head']) && ($hide['head']!==1))))
 <div class="panel " style="padding-right: 10px" >
     <div class="panel-heading cursor-pointer" style="padding-top: 2px" id="headfiltro" >
         {{--  <span class="mt-3 ml-2 font-18"></span>  --}}
@@ -12,7 +12,8 @@
         {{-- <div id="loadfilter" class="load8"><div class="loader"></div></div> --}}
     </div>
     <div class="panel-body" id="divfiltro" style="display: none" >
-        <div class="form-group" style="{{ ((!fullAccess() && count(clientes())==1) || (isset($hide['cli']) && $hide['cli']===1)) ? 'display: none' : ''}}">
+@endif
+        <div class="form-group col-md-12" style="{{ ((!fullAccess() && count(clientes())==1) || (isset($hide['cli']) && $hide['cli']===1)) ? 'display: none' : ''}}">
             <label>Cliente</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="cliente[]" id="multi-cliente">
@@ -21,48 +22,48 @@
                     @endforeach
                 </select>
                 <div class="input-group-btn">
-                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
-        <div class="form-group" style="{{ (isset($hide['edi']) && $hide['edi']==1) ? 'display: none' : ''  }}">
+        <div class="form-group  col-md-12" style="{{ (isset($hide['edi']) && $hide['edi']==1) ? 'display: none' : ''  }}">
             <label>Edificio</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="edificio[]" id="multi-edificio"></select>
                 <div class="input-group-btn">
-                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
         
-        <div class="form-group" style="{{ (isset($hide['pla']) && $hide['pla']==1) ? 'display: none' : ''  }}">
+        <div class="form-group  col-md-12" style="{{ (isset($hide['pla']) && $hide['pla']==1) ? 'display: none' : ''  }}">
             <label>Planta</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="planta[]" id="multi-planta" ></select>
                 <div class="input-group-btn">
-                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
-        <div class="form-group" style="{{ (isset($hide['tag']) && $hide['tag']==1) ? 'display: none' : ''  }}">
+        <div class="form-group  col-md-12" style="{{ (isset($hide['tag']) && $hide['tag']==1) ? 'display: none' : ''  }}">
             <label>Tag</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tags[]" id="multi-tag" ></select>
                 <div class="input-group-btn">
-                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
-        <div class="form-group" style="{{ (isset($hide['pue']) && $hide['pue']==1) ? 'display: none' : ''  }}">
+        <div class="form-group  col-md-12" style="{{ (isset($hide['pue']) && $hide['pue']==1) ? 'display: none' : ''  }}">
             <label>Puesto</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="puesto[]" id="multi-puesto" ></select>
                 <div class="input-group-btn">
-                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
-        <div class="form-group" style="{{ (isset($hide['est']) && $hide['est']==1) ? 'display: none' : ''  }}">
+        <div class="form-group  col-md-12" style="{{ (isset($hide['est']) && $hide['est']==1) ? 'display: none' : ''  }}">
             <label>Estado</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="estado[]" id="multi-estado" >
@@ -75,18 +76,20 @@
                         <option value="U">Asignado a usuario</option>
                 </select>
                 <div class="input-group-btn">
-                    <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button"><i class="fad fa-check-double"></i> todos</button>
+                    <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
-        <div class="row ">
+        
+        <div class="row" style="{{ (isset($hide['btn']) && $hide['btn']==1) ? 'display: none' : ''  }}">
             <div class="col-md-12 text-right mb-3">
                 <button id="btn_submit" class="btn btn-primary btn-lg float-right"><i class="fa fa-search"></i> {{ $etiqueta_boton??'Ver' }}</button>
             </div>
         </div>
+@if(!(isset($hide['head']) || (isset($hide['head']) && ($hide['head']!==1))))
     </div>
-    
 </div>
+@endif
 
 
 

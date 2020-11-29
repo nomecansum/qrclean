@@ -154,7 +154,7 @@ class UsersController extends Controller
     {
         validar_acceso_tabla($id,"users");
         $users = users::findOrFail($id);
-        $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->get();
+        $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();
         // dd($Perfiles);
 
         $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;

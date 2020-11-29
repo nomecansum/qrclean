@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 use App\Models\clientes;
 use App\Models\encuestas;
 use App\Models\puestos;
+use App\Models\niveles_acceso;
 use Illuminate\Http\Request;
 use Exception;
+use Str;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,7 @@ class EncuestasController extends Controller
     {
         $encuestas=DB::table('encuestas')
             ->join('clientes','clientes.id_cliente','encuestas.id_cliente')
+            ->join('encuestas_tipos','encuestas_tipos.id_tipo_encuesta','encuestas.id_tipo_encuesta')
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('encuestas.id_cliente',Auth::user()->id_cliente);
@@ -36,6 +39,7 @@ class EncuestasController extends Controller
      */
     public function create()
     {
+        
         $encuesta=new encuestas();
         $clientes = clientes::where(function($q){
                 if (!isAdmin()) {
@@ -48,8 +52,11 @@ class EncuestasController extends Controller
         $encuesta->id_tipo_encuesta=$tipos->first()->id_tipo_encuesta;
         $encuesta->des_tipo_encuesta=$tipos->first()->des_tipo_encuesta;
         $encuesta->img_tipo=$tipos->first()->img_tipo;
+        $encuesta->id_encuesta=0;
+        $encuesta->token=Str::random(64);
+        $perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();
         
-        return view('encuestas.edit', compact('encuesta','clientes','tipos'));
+        return view('encuestas.edit', compact('encuesta','clientes','tipos','perfiles'));
     }
 
     /**
@@ -61,6 +68,14 @@ class EncuestasController extends Controller
      */
     public function store(Request $r)
     {
+        $fechas=explode(" - ",$r->fechas);
+        $fechas[0]=Carbon::parse(adaptar_fecha($fechas[0]));
+        $fechas[1]=Carbon::parse(adaptar_fecha($fechas[1]));
+
+        if(isset($r->list_perfiles)){
+            $r->list_perfiles=implode(",",$r->list_perfiles);
+        }
+
         $data = $this->getData($r);
         try {
             
@@ -69,7 +84,7 @@ class EncuestasController extends Controller
             return [
                 'title' => "Encuestas",
                 'message' => 'Encuesta '.$r->titulo. ' creada',
-                'url' => url('plantas')
+                'url' => url('encuestas')
             ];
         } catch (Exception $exception) {
 
@@ -90,17 +105,27 @@ class EncuestasController extends Controller
      */
     public function edit($id)
     {
-        $encuesta = encuestas::findOrFail($id);
+        $encuesta=DB::table('encuestas')
+            ->join('clientes','clientes.id_cliente','encuestas.id_cliente')
+            ->join('encuestas_tipos','encuestas_tipos.id_tipo_encuesta','encuestas.id_tipo_encuesta')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('encuestas.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->where('id_encuesta',$id)
+            ->first();
         $tipos = DB::table('encuestas_tipos')->get();
         $clientes = clientes::where(function($q){
             if (!isAdmin()) {
                 $q->where('id_cliente',Auth::user()->id_cliente);
-            }
-        })
-        ->pluck('nom_cliente','id_cliente')
-        ->all();
+                }
+            })
+            ->pluck('nom_cliente','id_cliente')
+            ->all();
+        $perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();
 
-        return view('encuestas.edit', compact('encuesta','tipos','clientes'));
+        return view('encuestas.edit', compact('encuesta','tipos','clientes','perfiles'));
     }
 
     /**
@@ -122,7 +147,7 @@ class EncuestasController extends Controller
             return [
                 'title' => "Encuestas",
                 'message' => 'Encuesta '.$r->titulo. ' actualizada',
-                'url' => url('plantas')
+                'url' => url('encuestas')
             ];
         } catch (Exception $exception) {
 
@@ -157,6 +182,9 @@ class EncuestasController extends Controller
         }
     }
 
+
+    
+
     
     /**
      * Get the request's data from the request.
@@ -174,4 +202,6 @@ class EncuestasController extends Controller
         $data = $request->validate($rules);
         return $data;
     }
+
+
 }

@@ -99,14 +99,15 @@
                 >
                     <thead>
                         <tr>
-                            <th data-sortable="true" >ID</th>
-                            <th></th>
-                            <th data-sortable="true" >Tipo</th>
-                            <th data-sortable="true" >Titulo</th>
-                            <th data-sortable="true" >Cliente</th>
-                            <th>Act</th>
-                            <th>Anon</th>
-                            <th data-sortable="true" >Fechas</th>
+                            <th data-sortable="true" data-width="1%">ID</th>
+                            <th data-width="2%"></th>
+                            <th data-sortable="true">Titulo</th>
+                            <th data-sortable="true" data-width="200">Tipo</th>
+                            
+                            <th data-sortable="true"data-width="5%" >Cliente</th>
+                            <th data-width="1%">Act</th>
+                            <th data-width="1%">Anon</th>
+                            <th data-sortable="true" data-width="10%">Fechas</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,12 +116,14 @@
                             <td>{{ $enc->id_encuesta }}</td>
                             <td></td>
                             <td>{{ $enc->titulo }}</td>
-                            <td>tipo</td>
-                            <td>{{ $enc->nom_cliente }}</td>
-                            <td></td>
-                            <td></td>
+                            <td><img src="{{ url('/img',$enc->img_tipo) }}" id="img_tipo" class="imagen_tipo">  <span id="des_tipo" class="ml-3">{{ $enc->des_tipo_encuesta }}</span></td>
                             
-                            <td class="text-center" style="position: relative">{!! beauty_fecha($enc->fec_inicio) !!} <i class="fas fa-arrow-right"></i> {!! beauty_fecha($enc->fin) !!}
+                            
+                            <td>{{ $enc->nom_cliente }}</td>
+                            <td class="text-center">@if($enc->mca_activa=='S') <i class="fas fa-circle text-success"></i> @endif</td>
+                            <td class="text-center">@if($enc->mca_anonima=='S') <i class="fas fa-circle text-info"></i> @endif</td>
+                            
+                            <td class="text-center" style="position: relative"  data-valign="middle">{!! beauty_fecha($enc->fec_inicio) !!} <i class="fas fa-arrow-right"></i> {!! beauty_fecha($enc->fec_fin) !!}
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 140px;">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $enc->id_encuesta }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
                                     @if(checkPermissions(['Encuestas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $enc->id_encuesta }})" title="Editar planta" data-id="{{ $enc->id_encuesta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
@@ -183,5 +186,7 @@
         $('.td').click(function(event){
             editar( $(this).data('id'));
         })
+
+        $('.imagen_tipo').css('width','30%');
     </script>
 @endsection

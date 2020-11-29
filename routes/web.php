@@ -37,6 +37,9 @@ Route::group(['prefix' => 'MKD'], function () {
     Route::get('/datos_plano/{planta}/{token}','MKDController@datos_plano');
 });  
 
+//Visualizacion de la encuesta
+Route::get('/encuestas/get/{token}','EncuestasController@get_encuesta');
+
  //Cambiar pwd por defecto
  Route::get('/firstlogin','Auth\LoginController@firstlogin')->name('firstlogin');
 
@@ -246,6 +249,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('update',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@update']);
         Route::get('delete/{id}',['middleware'=>'permissions:["Encuestas"],["D"]', 'uses' => 'EncuestasController@delete']);
         Route::get('gen_key',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@gen_key']);
+
     });
 
     ////////////////////TAREAS////////////////////

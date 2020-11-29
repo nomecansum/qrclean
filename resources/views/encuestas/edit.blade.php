@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="form-group col-md-12 {{ $errors->has('titulo') ? 'has-error' : '' }}">
                     <label for="des_planta" class="control-label">Titulo</label>
-                        <input class="form-control" required name="titulo" type="text" id="titulo" value="{{ $encuesta->titulo }}" maxlength="50" placeholder="Enter titulo here...">
+                        <input class="form-control" required name="titulo" type="text" id="titulo" value="{{ $encuesta->titulo }}" maxlength="300" placeholder="Enter titulo here...">
                         {!! $errors->first('titulo', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
@@ -40,7 +40,7 @@
             <div class="row">
                 <div class="form-group col-md-12 {{ $errors->has('pregunta') ? 'has-error' : '' }}">
                     <label for="pregunta" class="control-label">Pregunta</label>
-                    <textarea  class="textarea_editor form-control" required name="pregunta" id="pregunta" rows="8" placeholder="Enter text ...">{!! $encuesta->pregunta !!}</textarea>
+                    <textarea  class="textarea_editor form-control" required name="pregunta" id="pregunta" rows="8" maxlength="5000" placeholder="Enter text ...">{!! $encuesta->pregunta !!}</textarea>
                         {!! $errors->first('pregunta', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
@@ -114,7 +114,7 @@
                 <div class="form-group col-md-12">
                     <label class="control-label">Token</label>
                     <div class="input-group mb-3">
-                        <input type="text" name="token_acceso" readonly=""  id="token_1uso"  class="form-control" value="{{$encuesta->token }}">
+                        <input type="text" name="token" readonly=""  id="token_1uso"  class="form-control" value="{{$encuesta->token }}">
                         <div class="input-group-btn">
                             <button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>
                         </div>
@@ -135,7 +135,7 @@
             <div class="row">
                 <div class="form-group col-md-12">
                     <label>Aplicar solo a perfiles</label><br>
-                    <select name="list_perfiles[]" id="list_perfiles" class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple">
+                    <select name="perfiles[]" id="list_perfiles" class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple">
                         <option value=""></option>
                         @foreach ($perfiles as $p)
                             <option {{ in_array($p->cod_nivel,explode(",",$encuesta->list_perfiles)) ? 'selected' : ''}} value="{{$p->cod_nivel}}">{{$p->des_nivel_acceso}}</option>
@@ -183,12 +183,44 @@
         width: "99.2%",
     });
 
+    //Ponemos los valores seleccionados que tengan los select2
+    
+
     var clipboard = new ClipboardJS('#boton_url');
 
     $('#id_cliente').change(function(){
         $("#multi-cliente").val($("#id_cliente").val());
-        $("#multi-cliente").change();
+        $("#multi-cliente").change(function(){
+            
+
+        });
     })
+
+    function end_update_filtros(){
+        string="{{ $encuesta->list_edificios }}"
+        var arr = string.split(',');
+        console.log(arr);
+        $('#multi-edificio').select2().val(arr);
+
+        string="{{ $encuesta->list_plantas }}"
+        var arr = string.split(',');
+        console.log(arr);
+        $('#multi-planta').select2().val(arr);
+
+
+        string="{{ $encuesta->list_puestos }}"
+        var arr = string.split(',');
+        console.log(arr);
+        $('#multi-puesto').select2().val(arr);
+
+
+        string="{{ $encuesta->list_tags }}"
+        var arr = string.split(',');
+        console.log(arr);
+        $('#multi-tag').select2().val(arr);
+
+ 
+    }
 
     $('#id_cliente').change();
 

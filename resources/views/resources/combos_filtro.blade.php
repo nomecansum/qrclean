@@ -221,6 +221,7 @@
             });
             $('#loadfilter').hide();
         });
+        try{ end_update_filtros() } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
         
     });
 
@@ -263,7 +264,7 @@
             });
             $('#loadfilter').hide();
         });
-       
+        //try{ end_update_filtros() } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
     });
 
     $('#multi-planta').change(function(event) {
@@ -290,7 +291,7 @@
             });
             $('#loadfilter').hide();
         });
-        
+        //try{ end_update_filtros() } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
     });
 
     $('#save-favorite-button').click(function(event) {

@@ -114,7 +114,7 @@
                     @foreach($encuestas as $enc)
                         <tr class="hover-this">
                             <td>{{ $enc->id_encuesta }}</td>
-                            <td></td>
+                            <td class="text-center"><i class="{{ $enc->val_icono }} fa-2x" style="color:{{ $enc->val_color }}"></i></td>
                             <td>{{ $enc->titulo }}</td>
                             <td><img src="{{ url('/img',$enc->img_tipo) }}" id="img_tipo" class="imagen_tipo">  <span id="des_tipo" class="ml-3">{{ $enc->des_tipo_encuesta }}</span></td>
                             
@@ -140,7 +140,7 @@
                                                 <h4 class="modal-title">¿Borrar encuesta {{$enc->titulo}}?</h4>
                                             </div>
                                             <div class="modal-footer">
-                                                <a class="btn btn-info" href="{{url('/enc/delete',$enc->id_encuesta)}}">Si</a>
+                                                <a class="btn btn-info" href="{{url('/encuestas/delete',$enc->id_encuesta)}}">Si</a>
                                                 <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
                                             </div>
                                         </div>

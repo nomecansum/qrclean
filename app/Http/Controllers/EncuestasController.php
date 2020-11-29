@@ -68,25 +68,39 @@ class EncuestasController extends Controller
      */
     public function store(Request $r)
     {
-        $fechas=explode(" - ",$r->fechas);
-        $fechas[0]=Carbon::parse(adaptar_fecha($fechas[0]));
-        $fechas[1]=Carbon::parse(adaptar_fecha($fechas[1]));
-
-        if(isset($r->list_perfiles)){
-            $r->list_perfiles=implode(",",$r->list_perfiles);
-        }
-
-        $data = $this->getData($r);
-        try {
+        //$data = $this->getData($r);
+        
             
-            encuestas::create($data);
+            $encuesta=encuestas::create($r->all());
+            if(isset($r->perfiles)){
+                $encuesta->list_perfiles=implode(",",$r->perfiles);
+            }
+            if(isset($r->edificio)){
+                $encuesta->list_edificios=implode(",",$r->edificio);
+            }
+            if(isset($r->planta)){
+                $encuesta->list_plantas=implode(",",$r->planta);
+            }
+            if(isset($r->tags)){
+                $encuesta->list_tags=implode(",",$r->tags);
+            }
+            if(isset($r->puesto)){
+                $encuesta->list_puestos=implode(",",$r->puesto);
+            }
+
+            $fechas=explode(" - ",$r->fechas);
+            $encuesta->fec_inicio=Carbon::parse(adaptar_fecha($fechas[0]));
+            $encuesta->fec_fin=Carbon::parse(adaptar_fecha($fechas[1]));
+            $encuesta->val_color=$r->val_color;
+            $encuesta->val_icono=$r->val_icono;
+            $encuesta->save();
             savebitacora('Encuesta '.$r->titulo. ' creada',"Encuestas","store","OK");
             return [
                 'title' => "Encuestas",
                 'message' => 'Encuesta '.$r->titulo. ' creada',
                 'url' => url('encuestas')
             ];
-        } catch (Exception $exception) {
+            try {} catch (Exception $exception) {
 
             return [
                 'title' => "Encuestas",
@@ -136,20 +150,44 @@ class EncuestasController extends Controller
      *
      * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
      */
-    public function update($id, Request $r)
+    public function update(Request $r)
     {
-        $data = $this->getData($request);
-        try {
-            validar_acceso_tabla($id,"encuestas");
-            $encuesta = encuestas::findOrFail($id);
-            $encuesta->update($data);
+     
+        //$data = $this->getData($r);
+        
+            validar_acceso_tabla($r->id_encuesta,"encuestas");
+            $encuesta = encuestas::findOrFail($r->id_encuesta);
+            $encuesta->update($r->all());
+            if(isset($r->perfiles)){
+                $encuesta->list_perfiles=implode(",",$r->perfiles);
+            }
+            if(isset($r->edificio)){
+                $encuesta->list_edificios=implode(",",$r->edificio);
+            }
+            if(isset($r->planta)){
+                $encuesta->list_plantas=implode(",",$r->planta);
+            }
+            if(isset($r->tags)){
+                $encuesta->list_tags=implode(",",$r->tags);
+            }
+            if(isset($r->puesto)){
+                $encuesta->list_puestos=implode(",",$r->puesto);
+            }
+
+            $fechas=explode(" - ",$r->fechas);
+            $encuesta->fec_inicio=Carbon::parse(adaptar_fecha($fechas[0]));
+            $encuesta->fec_fin=Carbon::parse(adaptar_fecha($fechas[1]));
+            $encuesta->val_color=$r->val_color;
+            $encuesta->val_icono=$r->val_icono;
+            $encuesta->save();
+
             savebitacora('Encuesta '.$r->titulo. ' actualizada',"Encuestas","update","OK");
             return [
                 'title' => "Encuestas",
                 'message' => 'Encuesta '.$r->titulo. ' actualizada',
                 'url' => url('encuestas')
             ];
-        } catch (Exception $exception) {
+            try {  } catch (Exception $exception) {
 
             return [
                 'title' => "Encuestas",
@@ -166,7 +204,7 @@ class EncuestasController extends Controller
      *
      * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
      */
-    public function destroy($id)
+    public function delete($id)
     {
         try {
             validar_acceso_tabla($id,"encuestas");
@@ -196,11 +234,18 @@ class EncuestasController extends Controller
     {
         $rules = [
                 'titulo' => 'required|string|min:0|max:300',
-            'id_cliente' => 'required',
-            'id_tipo_encuesta' => 'required'
+                'id_cliente' => 'required',
+                'id_tipo_encuesta' => 'required'
         ];
         $data = $request->validate($rules);
         return $data;
+    }
+
+    public function get_encuesta($token){
+
+        $encuesta=encuestas::where('token',$token)->first();
+
+        return view('encuestas.ver_encuesta',compact('encuesta'));
     }
 
 

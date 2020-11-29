@@ -253,6 +253,7 @@ return [
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
+        'QRCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 
     ],
 

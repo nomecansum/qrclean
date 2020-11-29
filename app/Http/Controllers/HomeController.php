@@ -11,6 +11,7 @@ use DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class HomeController extends Controller
 {
@@ -474,7 +475,7 @@ class HomeController extends Controller
 
     public function gen_qr(Request $r)
     {
-        return base64_encode(QrCode::format('png')->size(230)->generate($r->url));
+        return base64_encode(QRCode::format('png')->size(230)->generate($r->url));
     }
 
 }

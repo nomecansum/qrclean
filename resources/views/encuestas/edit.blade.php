@@ -127,8 +127,9 @@
                     <a href="{{ url('encuestas/get',$encuesta->token) }}" id="link_url" target="_blank"><h5 id="span_url">{{ url('encuestas/get',$encuesta->token) }}</h5></a>
                 </div>
                 <div class="form-group col-md-1 text-right mt-3">
-                    <a href="#modal_img"  class="btn  btn-warning add-tooltip btn_gen_qr btn_url" data-toggle="modal" title="Generar QR" data-id="{{ $encuesta->id_encuesta }}" data-clipboard-text="{{ url('encuestas/get',$encuesta->token) }}> <span class="fad fa-qrcode pt-1" aria-hidden="true"></span> Ver QR</a>
+                    <a href="#modal_img"  class="btn  btn-warning add-tooltip  btn_url" id="btn_gen_qr" data-toggle="modal" title="Generar QR" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}> <span class="fad fa-qrcode pt-1" aria-hidden="true"></span> Ver QR</a>
                     <a href="#"  class="btn  btn-info  add-tooltip btn_url" id="boton_url" title="Copiar URL" data-id="{{ $encuesta->id_encuesta }}" data-clipboard-text="{{ url('encuestas/get',$encuesta->token) }}"> <span class="fa fa-copy pt-1" aria-hidden="true"></span> Copiar</a>
+                    <a href="{{ url('encuestas/get',$encuesta->token) }}" target="_blank"  class="btn  btn-success  add-tooltip btn_url" id="boton_abrir" title="Abrir URL" data-id="{{ $encuesta->id_encuesta }}" data-urk="{{ url('encuestas/get',$encuesta->token) }}"> <i class="fad fa-external-link-square-alt"></i> Abrir</a>
                 </div>
             </div>
             <div class="row">
@@ -245,8 +246,10 @@
         .done(function( data, textStatus, jqXHR ) {
             $('#token_1uso').val(data);
             $('.btn_url').data('clipboard-text',"{{ url('encuestas/get') }}/"+data);
-            $('#link_url').attr('src',"{{ url('encuestas/get') }}/"+data);
+            $('.btn_url').data('url',"{{ url('encuestas/get') }}/"+data);
+            $('#link_url').attr('href',"{{ url('encuestas/get') }}/"+data);
             $('#span_url').html("{{ url('encuestas/get') }}/"+data);
+            $('#boton_abrir').attr('href',"{{ url('encuestas/get') }}/"+data);
         })
         .fail(function( jqXHR, textStatus, errorThrown ) {
                 console.log(errorThrown);
@@ -254,8 +257,9 @@
     })
 
     $('#btn_gen_qr').click(function(){
-        $.post('{{url('/gen_qr')}}', {_token:'{{csrf_token()}}',url: $(this).data('clipboard-text')}, function(data, textStatus, xhr) {
-			
+        console.log($(this).data('clipboard-text'));
+        $.post('{{url('/gen_qr')}}', {_token:'{{csrf_token()}}',url: $(this).data('url')}, function(data, textStatus, xhr) {
+            $('#img_accion').attr('src','data:image/png;base64, '+data);
 		});
     })
 

@@ -126,7 +126,7 @@
                             <td class="text-center" style="position: relative"  data-valign="middle">{!! beauty_fecha($enc->fec_inicio) !!} <i class="fas fa-arrow-right"></i> {!! beauty_fecha($enc->fec_fin) !!}
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 240px;">
                                     <a href="#modal-resultados"  class="btn btn-xs btn-primary add-tooltip btn_result" data-toggle="modal" onclick="resultados('{{ $enc->id_encuesta }}')" title="Ver resultados" data-id="{{ $enc->id_encuesta }}"> <span class="fad fa-file-chart-line" aria-hidden="true"></span> Resultados</a>
-                                    @if(checkPermissions(['Encuestas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $enc->id_encuesta }})" title="Editar planta" data-id="{{ $enc->id_encuesta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                    @if(checkPermissions(['Encuestas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $enc->id_encuesta }})" title="Editar encuesta" data-id="{{ $enc->id_encuesta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                                     @if(checkPermissions(['Encuestas'],['D']))<a href="#eliminar-planta-{{$enc->id_encuesta}}" data-target="#eliminar-planta-{{$enc->id_encuesta}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$enc->id_encuesta}}" style="display: none;">
@@ -190,6 +190,7 @@
         });
 
         function editar(id){
+            console.log('edit');
             $('#editorCAM').load("{{ url('/encuestas/edit/') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
             });

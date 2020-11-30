@@ -195,33 +195,7 @@
         });
     })
 
-    function end_update_filtros(){
-        string="{{ $encuesta->list_edificios }}"
-        var arr = string.split(',');
-        console.log(arr);
-        $('#multi-edificio').select2().val(arr);
 
-        string="{{ $encuesta->list_plantas }}"
-        var arr = string.split(',');
-        console.log(arr);
-        $('#multi-planta').select2().val(arr);
-
-
-        string="{{ $encuesta->list_puestos }}"
-        var arr = string.split(',');
-        console.log(arr);
-        $('#multi-puesto').select2().val(arr);
-
-
-        string="{{ $encuesta->list_tags }}"
-        var arr = string.split(',');
-        console.log(arr);
-        $('#multi-tag').select2().val(arr);
-
- 
-    }
-
-    $('#id_cliente').change();
 
 
     $('.form-ajax').submit(form_ajax_submit);

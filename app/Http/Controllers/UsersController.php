@@ -541,7 +541,6 @@ class UsersController extends Controller
                         "id_planta"=>$p
                     ]);
                 }
-                
             }
             savebitacora('Asignado permiso de  de reserva en plantas '.implode(",",$r->lista_plantas). ' para los usuarios '.implode(",",$r->lista_id),"Usuarios","asignar_plantas","OK");
 
@@ -770,7 +769,6 @@ class UsersController extends Controller
     }
 
     public function asignar_temporal(Request $r){
-
         try {
             $puesto=puestos::find($r->puesto);
             $idusuario=is_array($r->id_usuario)?$r->id_usuario[0]:$r->id_usuario;
@@ -849,6 +847,7 @@ class UsersController extends Controller
                 return [
                     'result' => "OK",
                     'title' => "Usuarios",
+                    'nocerrar'=> $r->nocerrar,
                     'message' =>'Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,
                 ];
             } else if($r->accion=="B") {  //Baja, borrar
@@ -862,6 +861,7 @@ class UsersController extends Controller
                 return [
                     'result' => "OK",
                     'title' => "Usuarios",
+                    'nocerrar'=> $r->nocerrar,
                     'message' =>'Borrada asignacion de puesto '.$puesto->cod_puesto.' para el usuario '.$usuario->name.' en el intervalo '.$r->rango,
                 ];
 
@@ -928,6 +928,7 @@ class UsersController extends Controller
                 return [
                     'result' => "OK",
                     'title' => "Usuarios",
+                    'nocerrar'=> $r->nocerrar,
                     'message' =>'Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,
                 ];
             }

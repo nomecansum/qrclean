@@ -7,6 +7,5 @@
     .text-white{
         color: #FFF !important;
     }
-
     
 </style>

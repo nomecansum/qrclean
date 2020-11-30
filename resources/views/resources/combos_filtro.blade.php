@@ -167,6 +167,7 @@
         $('#loadfilter').show();
         $('.multi2').empty();
         $.post('{{url('/filters/loadedificios')}}', {_token:'{{csrf_token()}}',cliente:$(this).val()}, function(data, textStatus, xhr) {
+            console.log('cliente');
             console.log(data);
             cliente="";
             $.each(data.edificios, function(index, val) {
@@ -220,8 +221,9 @@
                 $('#multi-tag').append('<option value="'+val.id_tag+'">'+val.nom_tag+'</option>');
             });
             $('#loadfilter').hide();
+            try{ end_update_filtros('cliente') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
         });
-        try{ end_update_filtros() } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
+        
         
     });
 
@@ -230,6 +232,8 @@
         $('#multi-planta').empty();
         $('#multi-puesto').empty();
        $.post('{{url('/filters/loadplantas')}}', {_token:'{{csrf_token()}}',centros:$(this).val(),cliente:$('#multi-cliente').val(),edificio:$('#multi-edificio').val()}, function(data, textStatus, xhr) {
+            console.log('edificio');
+            console.log(data);
             cliente_e="";
             edificio_e="";
             $.each(data.plantas, function(index, val) {
@@ -263,8 +267,9 @@
                 $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
             });
             $('#loadfilter').hide();
+            try{ end_update_filtros('edificio') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
         });
-        //try{ end_update_filtros() } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
+        
     });
 
     $('#multi-planta').change(function(event) {
@@ -274,6 +279,8 @@
             cliente_p="";
             edificio_p="";
             planta_p="";
+            console.log('planta');
+            console.log(data);
             $.each(data.puestos, function(index, val) {
                 if(cliente_p!=val.id_cliente){
                     $('#multi-puesto').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -290,8 +297,9 @@
                 $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
             });
             $('#loadfilter').hide();
+            try{ end_update_filtros('planta') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
         });
-        //try{ end_update_filtros() } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
+        
     });
 
     $('#save-favorite-button').click(function(event) {

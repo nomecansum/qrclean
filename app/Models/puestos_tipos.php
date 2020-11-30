@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class encuestas extends Model
+class puestos_tipos extends Model
 {
     
     /**
@@ -18,14 +18,14 @@ class encuestas extends Model
      *
      * @var string
      */
-    protected $table = 'encuestas';
+    protected $table = 'puestos_tipos';
 
     /**
     * The database primary key value.
     *
     * @var string
     */
-    protected $primaryKey = 'id_encuesta';
+    protected $primaryKey = 'id_tipo_puesto';
 
     /**
      * Attributes that should be mass-assignable.
@@ -33,24 +33,11 @@ class encuestas extends Model
      * @var array
      */
     protected $fillable = [
+                  'des_tipo_puesto',
+                  'mca_fijo',
                   'id_cliente',
-                  'titulo',
-                  'pregunta',
-                  'id_tipo_encuesta',
-                  'fec_inicio',
-                  'fec_fin',
-                  'mca_activa',
-                  'mca_anonima',
-                  'list_perfiles',
                   'val_icono',
-                  'val_color',
-                  'token',
-                  'list_puestos',
-                  'list_plantas',
-                  'list_edificios',
-                  'val_momento',
-                  'list_tags',
-                  'val_periodo_minimo'
+                  'val_color'
               ];
 
     /**
@@ -75,16 +62,6 @@ class encuestas extends Model
     public function Cliente()
     {
         return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
-    }
-
-    /**
-     * Get the EncuestasTipo for this model.
-     *
-     * @return App\Models\EncuestasTipo
-     */
-    public function EncuestasTipo()
-    {
-        return $this->belongsTo('App\Models\EncuestasTipo','id_tipo_encuesta','id_tipo_encuesta');
     }
 
 

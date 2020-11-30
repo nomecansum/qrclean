@@ -70,11 +70,6 @@
         "table-name": "config_clientes"
     },
     {
-        "model-name": "puestos",
-        "resource-file": "puestos.json",
-        "table-name": "puestos"
-    },
-    {
         "model-name": "incidencias",
         "resource-file": "incidencias.json",
         "table-name": "incidencias"
@@ -135,13 +130,23 @@
         "table-name": "incidencias_tipos"
     },
     {
+        "model-name": "encuestas_resultados",
+        "resource-file": "encuestas_resultados.json",
+        "table-name": "encuestas_resultados"
+    },
+    {
         "model-name": "encuestas",
         "resource-file": "encuestas.json",
         "table-name": "encuestas"
     },
     {
-        "model-name": "encuestas_resultados",
-        "resource-file": "encuestas_resultados.json",
-        "table-name": "encuestas_resultados"
+        "model-name": "puestos_tipos",
+        "resource-file": "puestos_tipos.json",
+        "table-name": "puestos_tipos"
+    },
+    {
+        "model-name": "puestos",
+        "resource-file": "puestos.json",
+        "table-name": "puestos"
     }
 ]

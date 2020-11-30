@@ -307,12 +307,20 @@
                 
                 <div class="modal-body" id="">
 
-                    <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
-                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
-                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
+                                <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                            </div>
+                        </div>
+                        <div class="col-md-8 pt-2">
+                            <input type="checkbox" class="form-control  magic-checkbox" name="nocerrar_asig"  id="nocerrar_asig" value="S"> 
+                            <label class="custom-control-label"   for="nocerrar_asig">No cerrar la ventana (voy a seleccionar varios)</label>
+                        </div>
                     </div>
+                    
                     <label><span class="badge badge-primary">2</span> Seleccione puesto </label>
                     <div id="comprobar_puesto_asignar" class=" alert rounded b-all alert-warning mb-2 pad-all" style="display: none"></div>
                     <div id="puestos_usuario_asignar"></div>
@@ -508,15 +516,19 @@
                     $('#comprobar_puesto_asignar').html('');
                     $('.flpuesto').click(function(){
                         $('#spin_asignar').show();
-                        $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:$(this).data('id'),rango: $('#fechas').val(),id_usuario: searchIDs,accion: 'A'}, function(data, textStatus, xhr) {
+                        $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:$(this).data('id'),rango: $('#fechas').val(),id_usuario: searchIDs,accion: 'A', nocerrar: $('#nocerrar_asig').is(':checked')}, function(data, textStatus, xhr) {
+                            console.log(data);
                             if(data.result){ //Si loque devuelve el controller es una respuesta tripo obbect es que todo ha ido bien o que ha habido un error chungo
-                                console.log('RESULT');
+                                
+                                $('#spin_asignar').hide();
                                 if(data.error){
                                     toast_error(data.title,data.error);
                                 } else if(data.alert){
                                     toast_warning(data.title,data.alert);
                                 } else{
-                                    $('.modal').modal('hide');  
+                                    if(data.nocerrar===false){
+                                        $('.modal').modal('hide');  
+                                    }
                                     toast_ok(data.title,data.message);
                                 }
                             } else{ //Si lo que devuelve es una view, implica que hay que preguntar al usuario que vamos a hacer y por lo tanto hay que mostrarla en pantalla

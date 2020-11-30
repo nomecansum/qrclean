@@ -15,26 +15,34 @@
 @section('content')
 @php
    //dd($encuesta);
+   $cookie=Cookie::get('encuesta');
+    //Illuminate\Support\Facades\Cookie::get()
 @endphp
-   <div class="row" id="selector">
-       <div class="col-md-12 text-center">
-           <h3>{{ $encuesta->pregunta }}</h3>
-           @if($encuesta->mca_anonima=='S')
-              <h6> (esta encuesta es anonima)</h6>
-           @endif
-       </div>
-       <div class="row" >
-           <div class="col-md-12 text-center">
-                @include('encuestas.selector',['tipo'=>$encuesta->id_tipo_encuesta])
-           </div>
-       </div>
-   </div>
+    @if(isset($cookie) && $cookie==$encuesta->id_encuesta)
+        <div class="col-md-4 col-xs-offset-4 text-center ">
+            <h3 class="text-danger"><i class="fas fa-stopwatch"></i> Lo sentimos, para volver a participar en esta encuesta tiene que haber transcurrido un minimo de {{ $encuesta->val_periodo_minimo }} minutos</h3>
+            
+        </div>
+    @else
+        <div class="row" id="selector">
+            <div class="col-md-12 text-center">
+                <h3>{{ $encuesta->pregunta }}</h3>
+                @if($encuesta->mca_anonima=='S')
+                    <h6> (esta encuesta es anonima)</h6>
+                @endif
+            </div>
+            <div class="row" >
+                <div class="col-md-12 text-center">
+                        @include('encuestas.selector',['tipo'=>$encuesta->id_tipo_encuesta])
+                </div>
+            </div>
+        </div>
+    @endif
 
    <div class="row" id="respuesta" style="display: none">
         <div class="col-md-12 text-center">
             <h1><i class="fad fa-thumbs-up fa-2x text-success"></i> ¡Muchas gracias por su colaboracion!</h1>
         </div>
-
    </div>
 
 @endsection

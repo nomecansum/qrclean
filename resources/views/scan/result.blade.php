@@ -35,7 +35,7 @@
 @section('content')
 @php
     $puesto=$respuesta['puesto']??null;
-    //dd($puesto);
+    $cookie=Cookie::get('encuesta');
 @endphp
     
     <div class="row">
@@ -64,6 +64,23 @@
         </div>
         <div class="col-md-3"></div>
     </div>
+    @if($respuesta['encuesta']!=0 && (!isset($cookie) || (isset($cookie) && $cookie!=$respuesta['encuesta'])))
+        @php
+            $encuesta=DB::table('encuestas')->where('id_encuesta',$respuesta['encuesta'])->first();   
+        @endphp
+        <div class="row" id="div_encuesta"  @if($encuesta->val_momento=='D') style="display: none" @endif>
+            <div class="col-md-6 col-xs-offset-3" id="pregunta">
+                <h4>{{ $encuesta->pregunta }}</h4>
+            </div>
+            <div class="col-md-12 text-center" id="selector">
+                @include('encuestas.selector',['tipo'=>$encuesta->id_tipo_encuesta])
+            </div>
+            <div class="col-md-12 text-center"  id="respuesta" style="display: none">
+                <h4><i class="fad fa-thumbs-up fa-2x text-success"></i> ¡Muchas gracias por su colaboracion!</h4>
+            </div>
+        </div>
+        
+    @endif
     <div class="row" id="div_mensaje_fin" style="display:none">
         <div class="col-md-3"></div>
         <div class="col-md-6 text-3x text-center rounded" id="div_txt_mensaje">
@@ -113,7 +130,7 @@
                     </div>
                 @endif
             @endif
-            @if(($puesto->id_estado>1 && isset($respuesta['disponibles'])) || $reserva)
+            @if((isset($respuesta['disponibles']) && Auth::check() && Auth::user()->id!=$puesto->id_usuario_usando) || $reserva)
                 <div class="row">
                     <div class="col-md-12 font-18 text-center mt-5">
                         En esta misma planta tiene los siguientes puestos disponibles:
@@ -130,7 +147,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-center" id="plano" style="padding-left: 8vw">
-                        @if(isset($respuesta['disponibles']) && Auth::check())
+                        @if(isset($respuesta['disponibles']) && Auth::check() && Auth::user()->id!=$puesto->id_usuario_usando)
                             @php
                                 $pl=App\Models\plantas::find($puesto->id_planta);  
                                 $reservas=DB::table('reservas')
@@ -163,14 +180,13 @@
                         @endif
                     </div>
                 </div>
-                @if(Auth::check())
-                    <div class="row">
-                        <div class="col-md-12 text-center mt-3">
-                            <a class="btn btn-lg btn-primary text-2x rounded btn_otravez" href="{{ url('/scan_usuario/') }} "><i class="fad fa-qrcode fa-3x"></i> Escanear otra vez</a>
-                        </div>
+            @endif
+            @if(Auth::check() && $puesto->id_estado!=1)
+                <div class="row">
+                    <div class="col-md-12 text-center mt-3">
+                        <a class="btn btn-lg btn-primary text-2x rounded btn_otravez" href="{{ url('/scan_usuario/') }} "><i class="fad fa-qrcode fa-3x"></i> Escanear otra vez</a>
                     </div>
-                @endif
-
+                </div>
             @endif
         </div>
     @endif
@@ -191,6 +207,9 @@
                     $('#div_txt_mensaje').addClass('bg-info');
                     $('#div_txt_mensaje').removeClass('bg-danger');
                     $('#div_txt_mensaje').html('<i class="fad fa-check-circle"></i> '+data.mensaje);
+                    @if(isset($encuesta->val_momento) && $encuesta->val_momento=='D')
+                        $('#div_encuesta').show();
+                    @endif
                 } else {
                     $('#div_txt_mensaje').removeClass('bg-info');
                     $('#div_txt_mensaje').addClass('bg-danger');
@@ -227,8 +246,6 @@
                 }) 
             }
 
-            
-
             $(window).resize(function(){
                 recolocar_puestos();
             })
@@ -236,6 +253,24 @@
             $('.mainnav-toggle').click(function(){
                 recolocar_puestos();
             })
+        @endif
+
+        @if($respuesta['encuesta']!=0 && (!isset($cookie) || (isset($cookie) && $cookie!=$respuesta['encuesta'])))
+            //Scripts para manejar la encuesta
+            id_encuesta='{{ $encuesta->token }}';
+            mca_anonima='{{ $encuesta->mca_anonima }}';
+            $('.valor').click(function(){
+                $(this).css('background-color','#7fff00')
+                console.log($(this).data('value'));
+                $.post('{{url('/encuestas/save_data')}}', {_token:'{{csrf_token()}}',val: $(this).data('value'), id_encuesta: id_encuesta, mca_anonima: mca_anonima}, function(data, textStatus, xhr) {
+                    console.log(data);
+                    $('#selector').hide();
+                    $('#pregunta').hide();
+                    $('#respuesta').show();
+                    animateCSS('#respuesta','bounceInRight');
+                });
+            })
+            $('.valor').css('cursor', 'pointer');
         @endif
     </script>
 @endsection

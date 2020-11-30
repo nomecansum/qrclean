@@ -12,6 +12,7 @@ use App\Models\limpiadores;
 use App\Models\tags;
 use App\Models\tags_puestos;
 use App\Models\users;
+use App\Models\puestos_tipos;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -171,7 +172,18 @@ class PuestosController extends Controller
             ->pluck('nom_tag')
             ->toarray();
         $tags=implode(",",$tags);
-        return view('puestos.edit',compact('puesto','tags','usuarios','perfiles'));
+
+        $tipos = DB::table('puestos_tipos')
+        ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                $q->orwhere('puestos_tipos.mca_fijo','S');
+            }
+        })
+        ->get();
+        
+        return view('puestos.edit',compact('puesto','tags','usuarios','perfiles','tipos'));
 
     }
 
@@ -306,6 +318,71 @@ class PuestosController extends Controller
             return Redirect::back();
         }
        
+    }
+
+     // GESTION DE TIPOS DE PUESTO
+     public function index_tipos(){
+        $tipos = DB::table('puestos_tipos')
+        ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                $q->orwhere('puestos_tipos.mca_fijo','S');
+            }
+        })
+        ->get();
+        
+        return view('puestos.tipos.index', compact('tipos'));
+    }
+
+    public function tipos_edit($id=0){
+        if($id==0){
+            $tipo=new puestos_tipos();
+        } else {
+            $tipo = puestos_tipos::findorfail($id);
+        }
+        $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
+       
+        return view('puestos.tipos.edit', compact('tipo','Clientes','id'));
+    }
+
+    public function tipos_save(Request $r){
+        try {
+            if($r->id==0){
+                puestos_tipos::create($r->all());
+            } else {
+                $tipo=puestos_tipos::find($r->id);
+                $tipo->update($r->all());
+            }
+            savebitacora('Tipo de puesto creado '.$r->des_tipo_puesto,"Puestos","tipos_save","OK");
+            return [
+                'title' => "Tipos de puesto",
+                'message' => 'Tipo de puesto '.$r->des_tipo_puesto. ' actualizado con exito',
+                'url' => url('/puestos/tipos')
+            ];
+        } catch (Exception $exception) {
+            savebitacora('ERROR: Ocurrio un error creando tipo de puesto '.$r->des_tipo_puesto.' '.$exception->getMessage() ,"Puestos","tipos_save","ERROR");
+            return [
+                'title' => "Tipos de puesto",
+                'error' => 'ERROR: Ocurrio un error actualizando el tipo de puesto '.$r->des_tipo_puesto.' '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+
+        }
+    }
+
+    public function tipos_delete($id=0){
+        try {
+            $tipo = puestos_tipos::findorfail($id);
+
+            $tipo->delete();
+            savebitacora('Tipo de puesto borrado '.$tipo->des_tipo_puesto,"Puestos","tipos_delete","OK");
+            flash('Tipo de puesto '.$tipo->des_tipo_puesto.' borrado')->success();
+            return back()->withInput();
+        } catch (Exception $exception) {
+            flash('ERROR: Ocurrio un error borrando Tipo de puesto '.$tipo->des_tipo_puesto.' '.$exception->getMessage())->error();
+            return back()->withInput();
+        }
     }
 
     public function accion_estado(Request $r){

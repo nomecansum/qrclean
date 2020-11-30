@@ -15,7 +15,7 @@
 <script>
     $('#btn_aceptar_asignacion').click(function(){
         $('#spin_asignar').show();
-        $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:{{ $r->puesto }},rango: "{!! $r->rango !!}",id_usuario: {!! $r->id_usuario[0] !!},accion: 'C'}, function(data, textStatus, xhr) {
+        $.post('{{url('/users/asignar_temporal')}}', {_token: '{{csrf_token()}}',puesto:{{ $r->puesto }},rango: "{!! $r->rango !!}",id_usuario: {!! $r->id_usuario[0] !!},accion: 'C',nocerrar: '{{ $r->nocerrar }}'}, function(data, textStatus, xhr) {
             $('#comprobar_puesto_asignar').hide();
             if(data.error){
                 toast_error(data.title,data.error);

@@ -47,7 +47,8 @@ class puestos extends Model
                   'mca_acceso_anonimo',
                   'mca_reservar',
                   'max_horas_reservar',
-                  'img_puesto'
+                  'img_puesto',
+                  'id_tipo_puesto'
               ];
 
     /**
@@ -105,6 +106,16 @@ class puestos extends Model
     }
 
     /**
+     * Get the PuestosTipo for this model.
+     *
+     * @return App\Models\PuestosTipo
+     */
+    public function PuestosTipo()
+    {
+        return $this->belongsTo('App\Models\PuestosTipo','id_tipo_puesto','id_tipo_puesto');
+    }
+
+    /**
      * Get the puestosRondas for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -122,6 +133,26 @@ class puestos extends Model
     public function logCambiosEstados()
     {
         return $this->hasMany('App\Models\Logpuesto','id_puesto','id_puesto');
+    }
+
+    /**
+     * Get the puestosAsignados for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function puestosAsignados()
+    {
+        return $this->hasMany('App\Models\PuestosAsignado','id_puesto','id_puesto');
+    }
+
+    /**
+     * Get the tagsPuesto for this model.
+     *
+     * @return App\Models\TagsPuesto
+     */
+    public function tagsPuesto()
+    {
+        return $this->hasOne('App\Models\TagsPuesto','id_puesto','id_puesto');
     }
 
 

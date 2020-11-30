@@ -46,7 +46,17 @@ class ReservasController extends Controller
         
         $reserva=new reservas;
         $f1=Carbon::parse($fecha);
-        return view('reservas.edit',compact('reserva','f1'));
+        $tipos = DB::table('puestos_tipos')
+        ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                $q->orwhere('puestos_tipos.mca_fijo','S');
+            }
+        })
+        ->orderby('id_tipo_puesto')
+        ->get();
+        return view('reservas.edit',compact('reserva','f1','tipos'));
     }
 
     public function edit($fecha){
@@ -188,6 +198,11 @@ class ReservasController extends Controller
             ->where(function($q){
                 if(!checkPermissions(['Mostrar puestos no reservables'],['R'])){
                     $q->where('puestos.mca_reservar','S');
+                }
+            })
+            ->where(function($q) use($r){
+                if($r->tipo_puesto>0){
+                    $q->where('id_tipo_puesto',$r->tipo_puesto);
                 }
             })
             ->wherenotin('puestos.id_estado',[4,5,6])

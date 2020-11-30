@@ -37,11 +37,15 @@
                         <label for="val_color">Color</label><br>
                         <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($puesto->val_color)?$puesto->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
-                    <div class="col-sm-1">
+                    <div class="col-md-1">
                         <div class="form-group">
                             <label>Icono</label><br>
                             <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
                         </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="max_horas_reservar">Max reserva(horas)</label>
+                        <input type="number" min="1" max="999999" name="max_horas_reservar" id="max_horas_reservar" class="form-control" value="{{$puesto->max_horas_reservar}}">
                     </div>
                 </div>
                 <div class="row">
@@ -71,9 +75,13 @@
                         <input type="checkbox" class="form-control  magic-checkbox" name="mca_reservar"  id="mca_reservar" value="S" {{ $puesto->mca_reservar=='S'?'checked':'' }}> 
                         <label class="custom-control-label"   for="mca_reservar">Permitir reserva</label>
                     </div>
-                    <div class="form-group col-md-2">
-                        <label for="max_horas_reservar">Max reserva(horas)</label>
-                        <input type="number" min="1" max="999999" name="max_horas_reservar" id="max_horas_reservar" class="form-control" value="{{$puesto->max_horas_reservar}}">
+                    <div class="form-group col-md-3">
+                        <label for="id_usuario">Tipo de puesto</label>
+                        <select name="id_tipo_puesto" id="id_tipo_puesto" class="form-control">
+                            @foreach($tipos as $t)
+                                <option value="{{ $t->id_tipo_puesto}}" {{ isset($puesto->id_tipo_puesto) && $puesto->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }}>{{ $t->des_tipo_puesto }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="form-group col-md-12">

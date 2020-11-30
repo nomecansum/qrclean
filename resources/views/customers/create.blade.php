@@ -26,7 +26,7 @@
 					@endif
 						
 					<div class="row">
-						<div class="col-sm-9">
+						<div class="col-sm-12">
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="form-group">
@@ -39,7 +39,7 @@
 									<div class="input-group mb-3">
 										<input type="text" name="token_1uso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($c) ? $c->token_1uso : ''}}">
 										<div class="input-group-btn">
-											@if(checkPermissions(['Clientes'],["C"]) || checkPermissions(['Empresas'],["W"]))<button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>@endif
+											@if(checkPermissions(['Clientes'],["W"]))<button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>@endif
 										</div>
 									</div>
 								</div>
@@ -49,7 +49,7 @@
 										<input type="text" name="nom_contacto" class="form-control" value="{{isset($c) ? $c->nom_contacto : ''}}">
 									</div>
 								</div>
-								<div class="col-sm-12">
+								<div class="col-sm-4">
 									<div class="form-group">
 										<label for="">Distribuidor</label>
 										<select name="id_distribuidor" id="id_distribuidor" class="form-control select2" style="width: 100%">
@@ -129,8 +129,8 @@
 									<div class="form-group">
 										<label for="">Notificar a usuarios</label>
 										<select name="val_metodo_notificacion" id="val_metodo_notificacion" class="form-control ">
-											<option value="0"  {{isset($c) && $config->val_metodo_notificacion == 0 ? 'selected' : ''}}>No</option>
-											<option value="1"  {{isset($c) && $config->val_metodo_notificacion == 0 ? 'selected' : ''}}>e-mail</option>
+											<option value="0"  {{isset($config->val_metodo_notificacion) && $config->val_metodo_notificacion == 0 ? 'selected' : ''}}>No</option>
+											<option value="1"  {{isset($config->val_metodo_notificacion) && $config->val_metodo_notificacion == 1 ? 'selected' : ''}}>e-mail</option>
 											{{--  <option value="2"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Notificacion APP</option>
 											<option value="3"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Ambas</option>  --}}
 											

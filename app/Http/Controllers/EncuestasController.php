@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cookie;
 
 class EncuestasController extends Controller
 {
@@ -94,6 +95,7 @@ class EncuestasController extends Controller
             $encuesta->fec_fin=Carbon::parse(adaptar_fecha($fechas[1]));
             $encuesta->val_color=$r->val_color;
             $encuesta->val_icono=$r->val_icono;
+            $encuesta->val_periodo_minimo=$r->val_periodo_minimo;
             $encuesta->save();
             savebitacora('Encuesta '.$r->titulo. ' creada',"Encuestas","store","OK");
             return [
@@ -153,9 +155,8 @@ class EncuestasController extends Controller
      */
     public function update(Request $r)
     {
-     
         //$data = $this->getData($r);
-        
+        try {  
             validar_acceso_tabla($r->id_encuesta,"encuestas");
             $encuesta = encuestas::findOrFail($r->id_encuesta);
             $encuesta->update($r->all());
@@ -180,6 +181,7 @@ class EncuestasController extends Controller
             $encuesta->fec_fin=Carbon::parse(adaptar_fecha($fechas[1]));
             $encuesta->val_color=$r->val_color;
             $encuesta->val_icono=$r->val_icono;
+            $encuesta->val_periodo_minimo=$r->val_periodo_minimo;
             $encuesta->save();
 
             savebitacora('Encuesta '.$r->titulo. ' actualizada',"Encuestas","update","OK");
@@ -188,7 +190,7 @@ class EncuestasController extends Controller
                 'message' => 'Encuesta '.$r->titulo. ' actualizada',
                 'url' => url('encuestas')
             ];
-            try {  } catch (Exception $exception) {
+            } catch (Exception $exception) {
 
             return [
                 'title' => "Encuestas",
@@ -249,6 +251,8 @@ class EncuestasController extends Controller
         return view('encuestas.ver_encuesta',compact('encuesta'));
     }
 
+
+
     public function save_data(Request $r){
         //datos de la encuesta
 
@@ -264,6 +268,8 @@ class EncuestasController extends Controller
             }
             $resultado->save();
         }
+
+        Cookie::queue('encuesta', $encuesta->id_encuesta, $encuesta->val_periodo_minimo);
         return [
             'title' => "Encuestas",
             'message' => 'Dato guardado',

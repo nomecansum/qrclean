@@ -41,15 +41,27 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group col-md-3">
+                        <label for="id_usuario">Tipo de puesto</label>
+                        <select name="id_tipo_puesto" id="id_tipo_puesto" class="form-control">
+                            @foreach($tipos as $t)
+                                <option value="{{ $t->id_tipo_puesto}}" {{ isset($puesto->id_tipo_puesto) && $puesto->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }}>{{ $t->des_tipo_puesto }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                   
+                    
+                </div>
+                <div class="row mt-2">
                     @if(session('CL')['mca_reserva_horas']=='S')
                     <div class="form-group col-md-7">
                         <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas</label>
                         <div id="hora-range-drg"></div><span id="hora-range-val" style="display: none"></span>
                     </div>
                     @endif
-                   
-                    
                 </div>
+            
                 <div class="row">
                     <div class="col-md-12" id="detalles_reserva">
 
@@ -114,12 +126,12 @@
     });
 
     function comprobar_puestos(){
-        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val()}, function(data, textStatus, xhr) {
+        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val()}, function(data, textStatus, xhr) {
             $('#detalles_reserva').html(data);
         });
     }
 
-    $('#id_edificio').change(function(){
+    $('#id_edificio, #id_tipo_puesto').change(function(){
        comprobar_puestos();
     })
 

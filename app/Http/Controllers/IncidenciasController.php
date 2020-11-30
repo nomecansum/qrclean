@@ -295,7 +295,7 @@ class IncidenciasController extends Controller
             $tipo = incidencias_tipos::findorfail($id);
 
             $tipo->delete();
-            savebitacora('Tipo de incidencia borrado '.$tipo->des_tipo_incidencia,"Incidencias","causas_save","OK");
+            savebitacora('Tipo de incidencia borrado '.$tipo->des_tipo_incidencia,"Incidencias","tipos_delete","OK");
             flash('Tipo de incidencia '.$tipo->des_tipo_incidencia.' borrado')->success();
             return back()->withInput();
         } catch (Exception $exception) {

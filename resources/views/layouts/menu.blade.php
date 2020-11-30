@@ -208,7 +208,7 @@
                                 </ul>
                             </li>
                             @endif
-                           
+                            @if(checkPermissions(['Tipos de puesto'],['R']))<li class="puestostipos text-nowrap"><a href="/puestos/tipos"> <i class="fal fa-desktop-alt"></i> Tipos de puesto</a></li> @endif
                             @if(checkPermissions(['Tareas programadas'],['R']))<li class="tareas_programadas"><a href="/tasks" class="text-nowrap"> <i class="mdi mdi-camera-timer"></i>Tareas programadas</a></li> @endif
                         </ul>
                     </li>

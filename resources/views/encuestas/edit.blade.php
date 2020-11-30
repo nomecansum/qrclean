@@ -106,7 +106,12 @@
                             <option value="0" {{ $encuesta->val_momento == 'D' ? 'selected' : '' }}>Al dejar sitio</option>
                     </select>
                 </div>
-                <div class="form-group col-md-6" >
+                <div class="form-group col-md-2 {{ $errors->has('val_periodo_minimo') ? 'has-error' : '' }}">
+                    <label for="val_periodo_minimo" class="control-label">Intervalo minimo votos</label>
+                        <input class="form-control" required name="val_periodo_minimo" type="number" id="val_periodo_minimo" value="{{ $encuesta->val_periodo_minimo }}" min="0" max="1440" placeholder="Enter periodo minimo">
+                        {!! $errors->first('val_periodo_minimo', '<p class="help-block">:message</p>') !!}
+                </div>
+                <div class="form-group col-md-3" >
                    
                 </div>
             </div>
@@ -165,6 +170,7 @@
                 <img style="width:100%" id="img_accion">
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="btn_download"><i class="fad fa-download"></i> Descargar</button>
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Cerrar</button>
             </div>
         </div>
@@ -183,17 +189,61 @@
     });
 
     //Ponemos los valores seleccionados que tengan los select2
-    
+    $(document).ready(function() {
+       //console.log($("#multi-planta"));
+      
+    });
+
+    // function end_update_filtros(entidad){
+    //     console.log('end update '+entidad)
+    //     $('#multi-planta').select2().val(61,);
+    //    //$('#multi-planta').trigger('change');
+    //    console.log($('#multi-planta').select2().val());
+    // }
+    function end_update_filtros(entidad){
+        string="{{ $encuesta->list_edificios }}"
+        var arr = string.split(',');
+        $('#multi-edificio').select2().val(arr);
+
+        string="{{ $encuesta->list_plantas }}"
+        var arr = string.split(',');
+        $('#multi-planta').select2().val(arr);
+
+        string="{{ $encuesta->list_puestos }}"
+        var arr = string.split(',');
+        $('#multi-puesto').select2().val(arr);
+
+        string="{{ $encuesta->list_tags }}"
+        var arr = string.split(',');
+        $('#multi-tag').select2().val(arr);
+
+        $('#multi-edificio').select2().val();
+        $('#multi-planta').select2().val();
+        $('#multi-puesto').select2().val();
+        $('#multi-tag').select2().val();
+    }
 
     var clipboard = new ClipboardJS('#boton_url');
 
     $('#id_cliente').change(function(){
         $("#multi-cliente").val($("#id_cliente").val());
         $("#multi-cliente").change(function(){
-            
-
+        
         });
     })
+
+    $('#btn_download').click(function(){
+        var gh = $('#img_accion').attr('src');
+
+        var a  = document.createElement('a');
+        a.href = gh;
+        a.download = 'QR.png';
+
+        a.click();
+    })
+
+
+
 
 
 

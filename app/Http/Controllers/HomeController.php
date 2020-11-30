@@ -63,6 +63,8 @@ class HomeController extends Controller
             ->where('token',$puesto)
             ->first();
 
+        
+
         $config_cliente=null;
         
        
@@ -75,6 +77,7 @@ class HomeController extends Controller
                 $id_usuario=0;
                 $cod_nivel=0;
             }
+        $encuesta=0;
 
         if(!isset($p)){
             //Error puesto no encontrado
@@ -86,8 +89,26 @@ class HomeController extends Controller
             ];
             $reserva=null;
         } else {    
+            $tags=DB::table('tags_puestos')->where('id_puesto',$p->id_puesto)->get();
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$p->id_cliente)->first();
         
+            //Vemos si el puesto tiene una encuesta activa que haya que mostrar en el escaneo
+            $encuesta=DB::table('encuestas')
+                ->whereraw("'".Carbon::now()->format('Y-m-d')."' between fec_inicio AND fec_fin")
+                ->where('mca_activa','S')
+                ->where(function($q) use($p,$tags){
+                    $q->orwhereraw('FIND_IN_SET('.$p->id_puesto.', list_puestos) <> 0');
+                    $q->orwhereraw('FIND_IN_SET('.$p->id_planta.', list_plantas) <> 0');
+                    $q->orwhereraw('FIND_IN_SET('.$p->id_edificio.', list_edificios) <> 0');
+                    $q->orwhere(function($q) use($tags){
+                        foreach($tags as $tag){
+                            $q->orwhereraw('FIND_IN_SET('.$tag->id_tag.', list_tags) <> 0');
+                        }
+                    });
+                })
+            ->orderby('id_encuesta','desc')
+            ->first();
+
             $disponibles=DB::table('puestos')
                 ->select('cod_puesto','des_puesto','val_color','val_icono')
                 ->where('id_cliente',$p->id_cliente)
@@ -116,7 +137,8 @@ class HomeController extends Controller
                     'color'=>'danger',
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
-                    'operativo' => 0
+                    'operativo' => 0,
+                    'encuesta'=>0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -140,7 +162,8 @@ class HomeController extends Controller
                     'color'=>'danger',
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
-                    'operativo' => 0
+                    'operativo' => 0,
+                    'encuesta'=>0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -164,7 +187,8 @@ class HomeController extends Controller
                     'color'=>'success',
                     'puesto'=>$p,
                     'disponibles'=>[],
-                    'operativo' => 1
+                    'operativo' => 1,
+                    'encuesta'=>(isset($encuesta->val_momento) && $encuesta->val_momento=="A")?$encuesta->id_encuesta:0,
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -188,7 +212,8 @@ class HomeController extends Controller
                     'color'=>'danger',
                     'puesto'=>$p,
                     'disponibles'=>[],
-                    'operativo' => 0
+                    'operativo' => 0,
+                    'encuesta'=>0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -208,7 +233,8 @@ class HomeController extends Controller
                     'color'=>'danger',
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
-                    'operativo' => 0
+                    'operativo' => 0,
+                    'encuesta'=>0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -221,7 +247,8 @@ class HomeController extends Controller
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
                     'operativo' => 0,
-                    'hacer_login'=>1
+                    'hacer_login'=>1,
+                    'encuesta'=>0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
@@ -233,7 +260,8 @@ class HomeController extends Controller
                         'icono' => '<i class="fad fa-thumbs-up"></i>',
                         'color'=>'success',
                         'puesto'=>$p,
-                        'operativo' => 1
+                        'operativo' => 1,
+                        'encuesta'=>(isset($encuesta->val_momento) && $encuesta->val_momento=="A")?$encuesta->id_encuesta:0,
                     ];
                     break;
                 case 2:
@@ -243,7 +271,8 @@ class HomeController extends Controller
                         'color'=>'danger',
                         'puesto'=>$p,
                         'disponibles'=>$disponibles,
-                        'operativo' => 1
+                        'operativo' => 1,
+                        'encuesta'=>(isset($encuesta->val_momento) && $encuesta->val_momento=="D")?$encuesta->id_encuesta:0,
                     ];
                     break;
                 case 3:
@@ -253,7 +282,8 @@ class HomeController extends Controller
                         'color'=>'warning',
                         'puesto'=>$p,
                         'disponibles'=>$disponibles,
-                        'operativo' => 1
+                        'operativo' => 1,
+                        'encuesta'=>0
                     ];
                     break;
                 case 4:
@@ -263,7 +293,8 @@ class HomeController extends Controller
                         'color'=>'gray',
                         'puesto'=>$p,
                         'disponibles'=>$disponibles,
-                        'operativo' => 0
+                        'operativo' => 0,
+                        'encuesta'=>0
                     ];
                     break;
                 case 5:
@@ -273,7 +304,8 @@ class HomeController extends Controller
                         'color'=>'danger',
                         'puesto'=>$p,
                         'disponibles'=>$disponibles,
-                        'operativo' => 0
+                        'operativo' => 0,
+                        'encuesta'=>0
                     ];
                     break;
                 case 6:
@@ -283,7 +315,8 @@ class HomeController extends Controller
                         'color'=>'warning',
                         'puesto'=>$p,
                         'disponibles'=>$disponibles,
-                        'operativo' => 0
+                        'operativo' => 0,
+                        'encuesta'=>0
                     ];
                     break;
                 default:
@@ -475,7 +508,7 @@ class HomeController extends Controller
 
     public function gen_qr(Request $r)
     {
-        return base64_encode(QRCode::format('png')->size(230)->generate($r->url));
+        return base64_encode(QRCode::format('png')->size(500)->generate($r->url));
     }
 
 }

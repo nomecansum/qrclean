@@ -80,7 +80,7 @@
 							<th data-sortable="true">Edificio</th>
                             <th data-sortable="true">Planta</th>
 							<th data-sortable="true">Fecha</th>
-							<th data-sortable="true">Estado</th>
+							<th data-sortable="true">Situacion</th>
 							<th data-sortable="true">Tipo</th>
 							<th style="width: 30%" data-sortable="true">Incidencia</th>
 						</tr>

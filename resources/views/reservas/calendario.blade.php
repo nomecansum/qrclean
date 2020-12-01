@@ -76,17 +76,19 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 					@for ($i=1;$i<=7;$i++)
 						@if (isset($days[$i]))
 							@php
-								$dia=$reservas->where('fec_reserva',Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d'))->first();
-								if($dia){
+								$dias=$reservas->where('fec_reserva',Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d'))->all();
+							@endphp
+					
+							
+							@php
+								if(count($dias)>0){
 									$color="#b3dbbf";
 									$borde="";
-									$descrip=$dia->cod_puesto;
-									$title=Carbon\Carbon::parse($dia->fec_reserva)->format('d/m/Y').chr(13)." Puesto: ".$descrip." - Edificio: ".$dia->des_edificio." - Planta: ".$dia->des_planta;
+									$title="";
 									$estado="ocupado";
 								} else {
 									$color = '#fff';
 									$borde="border: 2px solid #f2f7f8";
-									$descrip="";
 									$title="";
 									$estado="vacio";
 								}
@@ -94,17 +96,25 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 									$borde="border: 3px solid #1e90ff";
 								}
 
-								$dia_pasado=Carbon\Carbon::parse($month.'-'.$days[$i]) < Carbon\Carbon::now()->format('Y-m-d');
+								$dia_pasado=Carbon\Carbon::parse($month.'-'.$days[$i]) < Carbon\Carbon::now()->format('Y-m-d');	
 							@endphp
-					
-                            {{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
+							{{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
+							
 							<td style="background-color: {{$dia_pasado?'#dedede':$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" @if($dia_pasado) data-past="1" @else data-past="0" @endif data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
                                 <span class="font-bold" style="font-size: 2.5vw; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
 								<span style="color: #fff; cursor: pointer">
+									@foreach($dias as $dia)
+										@php
+											$icono=$dia->val_icono;
+											$ic_color=$dia->val_color;
+											$descrip=$dia->cod_puesto;
+											//$title=Carbon\Carbon::parse($dia->fec_reserva)->format('d/m/Y').chr(13)." Puesto: ".$descrip." - Edificio: ".$dia->des_edificio." - Planta: ".$dia->des_planta;	
+										@endphp
 									@if($dia)
-									<b class="text-white" style="font-size: 1.4vw">{!! $descrip !!}</b><br>
+									<b class="text-white" style="font-size: 1vw">@if($icono!="") <i class="{{ $icono }}  {{ txt_blanco($ic_color) }}"></i> @endif{!! $descrip !!}</b><br>
 									@endif
+									@endforeach
 								</span>
 							</td>
 						@else

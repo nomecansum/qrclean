@@ -43,10 +43,12 @@
                             <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
                         </div>
                     </div>
+                    @if(session('CL')['mca_reserva_horas']=='S')
                     <div class="form-group col-md-2">
                         <label for="max_horas_reservar">Max reserva(horas)</label>
                         <input type="number" min="1" max="999999" name="max_horas_reservar" id="max_horas_reservar" class="form-control" value="{{$puesto->max_horas_reservar}}">
                     </div>
+                    @endif
                 </div>
                 <div class="row">
                     <div class="form-group col-md-2">

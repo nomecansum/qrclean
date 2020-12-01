@@ -1,6 +1,11 @@
 
-    <div class="panel">
+<style type="text/css">
+    .popover {
+        z-index: 100000;
+    }
+</style>
 
+    <div class="panel">
         <div class="panel-heading">
             <div class="panel-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
@@ -55,12 +60,12 @@
                     
                     <div class="form-group col-md-2" style="margin-top: 7px">
                         <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_Color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
                     <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
+                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome6" class="btn btn-light iconpicker" data-align="right" data-search="true" data-rows="20" data-cols="25" data-search-text="Buscar..."></button>
                         </div>
                     </div>
                     @if(isAdmin())

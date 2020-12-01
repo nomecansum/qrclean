@@ -8,14 +8,48 @@
 </style>
 <div class="panel" id="editor">
     <div class="panel">
-        <div class="panel-heading">
+        {{-- <div class="panel-heading">
             <div class="panel-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
             </div>
-            <h3 class="panel-title" id="titulo">Modificar reserva de puesto</h3>
+            <h3 class="panel-title" id="titulo">Reserva de puesto</h3>
             <span style="font-size: 30px; font-weight: bolder; color: #888; margin-top:60px" id="des_puesto"></span>
-        </div>
+        </div> --}}
         <div class="panel-body">
+            @if(count($misreservas)>0)
+                <div class="row b-all rounded mb-2">
+                    <div class="col-md-12">
+                        <label for="fechas">Reservas activas para el día {{ $f1->format('d/m/Y')}}</label>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Periodo</th>
+                                        <th>Tipo</th>
+                                        <th>Puesto</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    @foreach($misreservas as $res)
+                                    <tr>
+                                        <td>{{ $res->id_reserva }}</td>
+                                        <td>{{ Carbon\Carbon::parse($res->fec_reserva)->format('H:i') }} @if($res->fec_fin_reserva!=null)<i class="fas fa-arrow-right"></i> {{ Carbon\Carbon::parse($res->fec_fin_reserva)->format('H:i') }}@endif</td>
+                                        <td style="color: {{ $res->val_color }}"><i class="{{ $res->val_icono }}"></i>{{ $res->des_tipo_puesto }}</td>
+                                        <td>{{ $res->cod_puesto }}</td>
+                                        <td><a href="javascript:void(0)" class="btn_del text-danger add-tooltip" title="Cancelar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-trash-alt"></i></a></td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            @endif
             <form  action="{{url('reservas/save')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax">
                 <div class="row">
                     <input type="hidden" name="id_reserva" value="{{ $reserva->id_reserva }}">
@@ -201,19 +235,6 @@
                 return aproximateHour(a);
                 }
                 }),
-            // pips: {
-            //     mode : 'steps',  
-            //     format:  wNumb({
-            //     mark: ":",
-            //     decimals: 0,
-            //         encoder: function(a ){
-            //         return aproximateHour(a);
-            //     }
-            //         }),
-            //     filter : filter_hour,
-            //     stepped : true,
-            //     density:24
-            // }
         });
         r_def.noUiSlider.on('change', function( values, handle ) {
             console.log(values);
@@ -230,6 +251,30 @@
         $('#hora_inicio').val(values[0]);
         $('#hora_fin').val(values[1]);
     @endif
+
+    $('.btn_del').click(function(){
+        $.post('{{url('/reservas/cancelar')}}', {_token: '{{csrf_token()}}',fecha: $(this).data('fecha'),id: $(this).data('id'), des_puesto: $(this).data('des_puesto')}, function(data, textStatus, xhr) {
+            
+        })
+        .done(function(data) {
+            console.log(data);
+            if(data.error){
+                mensaje_error_controlado(data);
+
+            } else if(data.alert){
+                mensaje_warning_controlado(data);
+            } else{
+                toast_ok(data.title,data.mensaje);
+                loadMonth();
+                $('#editorCAM').load("{{ url('/reservas/create/'.$f1->format('Y-m-d')) }}");
+                //animateCSS('#editor','fadeOut',$('#editor').html(''));
+            }
+            
+        })
+        .fail(function(err) {
+            mensaje_error_respuesta(err);
+        })
+    })
 
     comprobar_puestos();
  </script>

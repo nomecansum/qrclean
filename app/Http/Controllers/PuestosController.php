@@ -46,9 +46,19 @@ class PuestosController extends Controller
                 }
             })
             ->get();
-        return view('puestos.index',compact('puestos'));
-    }
 
+        $tipos = DB::table('puestos_tipos')
+            ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
+            })
+        ->get();
+
+        return view('puestos.index',compact('puestos','tipos'));
+    }
 
     public function search(Request $r){
         if($r->estado){
@@ -686,6 +696,14 @@ class PuestosController extends Controller
             if($r->id_planta){
                 $valores["id_planta"]=$r->id_planta;
                 $cosas.=" | Planta: ".$r->id_planta;
+            }
+            if($r->id_tipo_puesto){
+                $valores["id_tipo_puesto"]=$r->id_tipo_puesto;
+                $cosas.=" | Tipo de puesto: ".$r->id_tipo_puesto;
+            }
+            if($r->max_horas_reservar){
+                $valores["max_horas_reservar"]=$r->max_horas_reservar;
+                $cosas.=" | Tiempo maximo de reserva: ".$r->max_horas_reservar;
             }
             if($r->id_perfil){
                 //Asignacion directa de puesto

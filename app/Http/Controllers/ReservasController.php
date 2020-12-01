@@ -30,8 +30,9 @@ class ReservasController extends Controller
         else $backMonth = $month->format('Y-n');
         $end=$month->copy()->endOfMonth();
         $reservas=DB::table('reservas')
-            ->selectraw('date(reservas.fec_reserva) as fec_reserva,reservas.fec_fin_reserva,puestos.cod_puesto,puestos.des_puesto,edificios.des_edificio,plantas.des_planta')
+            ->selectraw('date(reservas.fec_reserva) as fec_reserva,reservas.fec_fin_reserva,puestos.cod_puesto,puestos.des_puesto,edificios.des_edificio,plantas.des_planta,puestos_tipos.val_icono,puestos_tipos.val_color')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->where('puestos.id_cliente',Auth::user()->id_cliente)
@@ -56,7 +57,14 @@ class ReservasController extends Controller
         })
         ->orderby('id_tipo_puesto')
         ->get();
-        return view('reservas.edit',compact('reserva','f1','tipos'));
+        //Primero comprobamos si tiene una reserva para ese dia
+        $misreservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+            ->whereraw("date(fec_reserva)='".$f1->format('Y-m-d')."'")
+            ->where('id_usuario',Auth::user()->id)
+            ->get();
+        return view('reservas.edit',compact('reserva','f1','tipos','misreservas'));
     }
 
     public function edit($fecha){
@@ -66,29 +74,18 @@ class ReservasController extends Controller
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->wheredate('fec_reserva',$f1)
             ->where('id_usuario',Auth::user()->id)
+            ->orderby('fec_reserva')
+            ->orderby('fec_fin_reserva')
             ->first();
         return view('reservas.edit_del',compact('reserva','f1'));
     }
 
 
     public function comprobar_puestos(Request $r){
-        //Primero comprobamos si tiene una reserva para ese dia
-        $reserva=DB::table('reservas')
-            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-            ->where('fec_reserva',adaptar_fecha($r->fecha))
-            ->where(function($q) use($r){
-                $q->where('fec_reserva',adaptar_fecha($r->fecha));
-                $q->orwhereraw("'".adaptar_fecha($r->fecha)."' between fec_reserva AND fec_fin_reserva");
-            })
-            ->where('id_usuario',Auth::user()->id)
-            ->first();
-        if(isset($reserva)){
-            $f1=adaptar_fecha($r->fecha);
-            return view('reservas.edit_del',compact('reserva','f1'));
-        }
-        
         $fec_desde=Carbon::createFromFormat('d/m/Y H:i',$r->fecha.' '.$r->hora_inicio);
         $fec_hasta=Carbon::createFromFormat('d/m/Y H:i',$r->fecha.' '.$r->hora_fin);
+        $intervalo=$fec_hasta->diffInminutes($fec_desde)/60;
+
 
         $plantas_usuario=DB::table('plantas_usuario')
             ->where('id_usuario',Auth::user()->id)
@@ -205,6 +202,14 @@ class ReservasController extends Controller
                     $q->where('id_tipo_puesto',$r->tipo_puesto);
                 }
             })
+            ->where(function($q) use($intervalo){
+                if(session('CL')['mca_reserva_horas']=='S'){
+                    $q->where('puestos.max_horas_reservar','>=',$intervalo);
+                    $q->orwherenull('puestos.max_horas_reservar');
+                    $q->orwhere('puestos.max_horas_reservar','0');
+                    $q->orwhere('puestos.max_horas_reservar','');
+                }
+            })
             ->wherenotin('puestos.id_estado',[4,5,6])
             ->wherenotin('puestos.id_puesto',$puestos_usuarios)
             ->wherenotin('puestos.id_puesto',$puestos_nomiperfil)
@@ -238,12 +243,60 @@ class ReservasController extends Controller
     }
 
     public function save(Request $r){
-        //dd($r->all());
         $fec_desde=Carbon::createFromFormat('d/m/Y H:i',$r->fechas.' '.$r->hora_inicio);
         $fec_hasta=Carbon::createFromFormat('d/m/Y H:i',$r->fechas.' '.$r->hora_fin);
-        //Primero hay que comprobar que no han pillado el pñuesto mientras el usuario se lo pensabe
+        $puesto=puestos::find($r->id_puesto);
 
-        $ya_esta=reservas::where('id_puesto',$r->id_puesto)->where('fec_reserva',adaptar_fecha($r->fechas))->first();
+        //Primero comprobamos si tiene una reserva para ese dia de ese tipo de puesto
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+            ->join('users','reservas.id_usuario','users.id')
+            ->where('puestos.id_tipo_puesto',$puesto->id_tipo_puesto)
+            ->where('reservas.id_usuario',Auth::user()->id)
+            ->where(function($q) use($r,$fec_desde,$fec_hasta){
+                $q->where(function($q) use($fec_desde,$fec_hasta,$r){
+                    $q->wherenull('fec_fin_reserva');
+                    $q->where('fec_reserva',adaptar_fecha($r->fecha));
+                });
+                $q->orwhere(function($q) use($fec_desde,$fec_hasta,$r){
+                    $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                    $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                    $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
+                    $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
+                });
+            })
+            ->where('puestos.id_cliente',Auth::user()->id_cliente)
+            ->first();
+
+        if(isset($reservas)){
+            return [
+                'title' => "Reservas",
+                'error' => 'Ya tiene una reserva para un puesto del tipo '.$reservas->des_tipo_puesto.' que coincide en todo o en parte con la reserva que intenta hacer, anule primero la reserva que entra en conflicto con ésta',
+                //'url' => url('sections')
+            ];
+        }
+
+        //Ahora hay que comprobar que no han pillado el pñuesto mientras el usuario se lo pensabe
+        $ya_esta=DB::table('reservas')
+        ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+        ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+        ->join('users','reservas.id_usuario','users.id')
+        ->where('puestos.id_puesto',$puesto->id_puesto)
+        ->where(function($q) use($r,$fec_desde,$fec_hasta){
+            $q->where(function($q) use($fec_desde,$fec_hasta,$r){
+                $q->wherenull('fec_fin_reserva');
+                $q->where('fec_reserva',adaptar_fecha($r->fecha));
+            });
+            $q->orwhere(function($q) use($fec_desde,$fec_hasta,$r){
+                $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
+                $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
+            });
+        })
+        ->where('puestos.id_cliente',Auth::user()->id_cliente)
+        ->first();
         if($ya_esta){
             //Ya esta pillado
             return [
@@ -257,7 +310,7 @@ class ReservasController extends Controller
   
             $antoerior=reservas::where('id_usuario',Auth::user()->id)->where('fec_reserva',Carbon::parse(adaptar_fecha($r->fechas)))->delete();
             //Insertamos la nueva
-            $puesto=puestos::find($r->id_puesto);
+            
             $res=new reservas;
             $res->id_puesto=$r->id_puesto;
             $res->id_usuario=Auth::user()->id;
@@ -316,16 +369,19 @@ class ReservasController extends Controller
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
-            ->where(function($q) use($desde,$hasta){
-                $q->wherebetween('fec_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
-                $q->orwherebetween('fec_fin_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
-                $q->orwhere(function($q) use($desde,$hasta){
-                    $q->wherebetween('fec_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
-                    $q->wherenull('fec_fin_reserva');
-                });
-            })
+            ->whereraw("date(fec_reserva) between '".Carbon::parse($desde)->format('Y-m-d')."' AND '".Carbon::parse($hasta)->format('Y-m-d')."'")
             ->where('reservas.id_cliente',$usuario->id_cliente)
             ->get();
+
+            // ->where(function($q) use($desde,$hasta){
+            //     $q->wherebetween('fec_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
+            //     $q->orwherebetween('fec_fin_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
+            //     $q->orwhere(function($q) use($desde,$hasta){
+            //         $q->wherebetween('fec_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
+            //         $q->wherenull('fec_fin_reserva');
+            //     });
+            // })
+            
         if(isset($reservas)){
             $puestos_reservados=$reservas->pluck('id_puesto')->toArray();
         } else{

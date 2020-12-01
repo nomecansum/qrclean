@@ -78,7 +78,6 @@ class UsersController extends Controller
 
         return view('users.index', compact('usersObjects','supervisores'));
     }
-
     /**
      * Show the form for creating a new users.
      *
@@ -91,7 +90,6 @@ class UsersController extends Controller
 
         return view('users.create', compact('Perfiles'));
     }
-
     /**
      * Store a new users in the storage.
      *
@@ -141,8 +139,6 @@ class UsersController extends Controller
             // return back()->withInput();
         }
     }
-
-
     /**
      * Show the form for editing the specified users.
      *
@@ -186,12 +182,10 @@ class UsersController extends Controller
             ->where('users.id','<>',Auth::user()->id)
             ->get();
 
-
         $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',$id)->pluck('id')->toarray();
 
         return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables'));
     }
-
     /**
      * Update the specified users in the storage.
      *
@@ -203,10 +197,7 @@ class UsersController extends Controller
     public function update($id, Request $request)
     {
         validar_acceso_tabla($id,"users");
-       
-        $img_usuario = "";
         $data = $this->getData($request);
-        
         try {
             if ($request->hasFile('img_usuario')) {
                 $file = $request->file('img_usuario');
@@ -214,9 +205,10 @@ class UsersController extends Controller
                 $img_usuario = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
                 //$file->move($path,$img_usuario);
                 Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_usuario);
+                $data['img_usuario']=$img_usuario;
             }
 
-            $data['img_usuario']=$img_usuario;
+            
 
             
             if (isset($request->password)){
@@ -307,7 +299,6 @@ class UsersController extends Controller
 
         }
     }
-
     /**
      * Remove the specified users from the storage.
      *
@@ -361,7 +352,6 @@ class UsersController extends Controller
             'url' => url('users')
         ];
     }
-
     /**
      * Get the request's data from the request.
      *

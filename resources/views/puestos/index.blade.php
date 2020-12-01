@@ -254,6 +254,21 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="form-group col-md-3">
+                                <label for="id_usuario">Tipo de puesto</label>
+                                <select name="id_tipo_puesto" id="id_tipo_puesto" class="form-control">
+                                    <option value=""></option>
+                                    @foreach($tipos as $t)
+                                        <option value="{{ $t->id_tipo_puesto}}" {{ isset($puesto->id_tipo_puesto) && $puesto->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }}>{{ $t->des_tipo_puesto }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @if(session('CL')['mca_reserva_horas']=='S')
+                                <div class="form-group col-md-2">
+                                    <label for="max_horas_reservar">Max reserva(horas)</label>
+                                    <input type="number" min="1" max="999999" name="max_horas_reservar" id="max_horas_reservar" class="form-control">
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer">

@@ -98,7 +98,7 @@
     }
 
     function mensaje_warning_controlado(data){
-        toast_warning(data.title,data.error);
+        toast_warning(data.title,data.alert);
     }
 
     //Mostrara un sweet alert indicando que hay algo leyendo en la pagina. Para quitarlo se llama a fin_espere()

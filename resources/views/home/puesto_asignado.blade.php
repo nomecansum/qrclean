@@ -2,10 +2,7 @@
     $reservas=DB::table('reservas')
         ->join('puestos','puestos.id_puesto','reservas.id_puesto')
         ->join('users','reservas.id_usuario','users.id')
-        ->where(function($q){
-            $q->where('fec_reserva',Carbon\Carbon::now()->format('Y-m-d'));
-            $q->orwhereraw("'".Carbon\Carbon::now()."' between fec_reserva AND fec_fin_reserva");
-        })
+        ->wheredate('fec_reserva',Carbon\Carbon::now()->format('Y-m-d'))
         ->where('reservas.id_usuario',Auth::user()->id)
         ->get();
     
@@ -23,18 +20,20 @@
 
     if(!$reservas->isempty()){
         $mispuestos=DB::table('puestos')
-            ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+            ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color','puestos_tipos.val_icono as icono_tipo', 'puestos_tipos.val_color as color_tipo','puestos_tipos.des_tipo_puesto')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
             ->wherein('puestos.id_puesto',$reservas->pluck('id_puesto')->toArray())
             ->get();
     }
-        
+
     if(isset($asignado_usuario)){
-        $mispuestos=DB::table('puestos')
-            ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+        $misasignados=DB::table('puestos')
+            ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color','puestos_tipos.val_icono as icono_tipo', 'puestos_tipos.val_color as color_tipo','puestos_tipos.des_tipo_puesto')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
             ->where('puestos_asignados.id_usuario','=',Auth::user()->id)
@@ -44,8 +43,12 @@
             })
             ->where('puestos.id_puesto',$asignado_usuario->id_puesto)
             ->get();
+            if(isset($mispuestos)){
+                $mispuestos=$mispuestos->merge($misasignados);
+            } else {
+                $mispuestos=$misasignados;
+            }
     }
-   
 @endphp
 @if(isset($mispuestos))
 <div class="panel">
@@ -58,7 +61,7 @@
         @foreach($mispuestos as $puesto)
             @php
                 $puesto->factor_puesto=$puesto->factor_puesto*2??6;
-                $puesto->factor_letra=$puesto->factor_letra*2??1.3;
+                $puesto->factor_letra=($puesto->factor_letra*2??1.3)/(strlen($puesto->cod_puesto)*0.25);
                 $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();   
                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
             @endphp
@@ -72,8 +75,8 @@
                     </div>
                 </div>
                 
-                <div class="col-md-8 text-primary mt-3">
-                    <h4>Tiene el puesto <b>{{ $puesto->des_puesto }}</b> {!! $cuadradito['title'] !!}</h4>
+                <div class="col-md-11 text-primary mt-3">
+                    <h4 style=""><span style="color: {{ $puesto->color_tipo }}">[<i class="{{ $puesto->icono_tipo }} }}"></i> {!! $puesto->des_tipo_puesto !!}]</span> <i class="fa fa-arrow-right"></i> Tiene el puesto <b>{{ $puesto->des_puesto }}</b> {!! $cuadradito['title'] !!}</h4>
                 </div>
             </div>
             

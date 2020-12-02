@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-md-2">
                         <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($puesto->val_color)?$puesto->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{$puesto->id_puesto==0?App\Classes\RandomColor::one(['luminosity' => 'bright']):$puesto->val_color??''}}" />
                     </div>
                     <div class="col-md-1">
                         <div class="form-group">
@@ -178,7 +178,7 @@
     })
 
     $('#val_icono').iconpicker({
-        icon:'{{isset($t) ? ($t->val_icono) : ''}}'
+        icon:'{{$puesto->val_icono??''}}'
     });
 
     $('#id_edificio').change(function(){

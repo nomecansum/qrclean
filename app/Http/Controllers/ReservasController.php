@@ -80,7 +80,6 @@ class ReservasController extends Controller
         return view('reservas.edit_del',compact('reserva','f1'));
     }
 
-
     public function comprobar_puestos(Request $r){
         $fec_desde=Carbon::createFromFormat('d/m/Y H:i',$r->fecha.' '.$r->hora_inicio);
         $fec_hasta=Carbon::createFromFormat('d/m/Y H:i',$r->fecha.' '.$r->hora_fin);
@@ -272,12 +271,36 @@ class ReservasController extends Controller
         if(isset($reservas)){
             return [
                 'title' => "Reservas",
-                'error' => 'Ya tiene una reserva para un puesto del tipo '.$reservas->des_tipo_puesto.' que coincide en todo o en parte con la reserva que intenta hacer, anule primero la reserva que entra en conflicto con ésta',
-                //'url' => url('sections')
+                'alert' => 'Ya tiene una reserva para un puesto del tipo '.$reservas->des_tipo_puesto.' que coincide en todo o en parte con la reserva que intenta hacer, anule primero la reserva que entra en conflicto con ésta',
             ];
         }
 
-        //Ahora hay que comprobar que no han pillado el pñuesto mientras el usuario se lo pensabe
+        //Despues comprobamos si tiene una asignacion para ese dia de ese tipo de puesto
+        $asignado=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+            ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+            ->join('users','puestos_asignados.id_usuario','users.id')
+            ->where('puestos.id_tipo_puesto',$puesto->id_tipo_puesto)
+            ->where('puestos_asignados.id_usuario',Auth::user()->id)
+            ->where(function($q) use($fec_desde,$fec_hasta){
+                $q->where(function($q){
+                    $q->wherenull('fec_desde');
+                    $q->orwherenull('fec_hasta');
+                });
+                $q->orwhereraw("'".$fec_desde->format('Y-m-d')."' between fec_desde AND fec_hasta");
+            })
+            
+            ->where('puestos.id_cliente',Auth::user()->id_cliente)
+            ->first();
+
+        if(isset($asignado)){
+            return [
+                'title' => "Reservas",
+                'alert' => 'Ya tiene un un puesto del tipo '.$asignado->des_tipo_puesto.' asignado para el '.$fec_desde->format('d/m/Y')
+            ];
+        }
+
+        //Ahora hay que comprobar que no han pillado el puesto mientras el usuario se lo pensabe
         $ya_esta=DB::table('reservas')
         ->join('puestos','puestos.id_puesto','reservas.id_puesto')
         ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
@@ -301,7 +324,7 @@ class ReservasController extends Controller
             //Ya esta pillado
             return [
                 'title' => "Reservas",
-                'error' => 'El puesto ya ha sido reservado mientras estaba eligiendo, elija otro',
+                'alert' => 'El puesto ya ha sido reservado mientras estaba eligiendo, elija otro',
                 //'url' => url('sections')
             ];
 

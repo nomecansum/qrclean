@@ -29,12 +29,15 @@
         $posiciones=json_decode(json_decode($puesto->posiciones));
         $top=0;
         $left=0;
-        foreach($posiciones as $pos){
-            if($pos->puesto==$puesto->cod_puesto){
-                $top=$pos->offsettop;
-                $left=$pos->offsetleft;
-            }
-        }   
+        if(isset($posiciones)){
+            foreach($posiciones as $pos){
+                if($pos->puesto==$puesto->cod_puesto){
+                    $top=$pos->offsettop;
+                    $left=$pos->offsetleft;
+                }
+            }   
+        }
+       
     @endphp
    
 

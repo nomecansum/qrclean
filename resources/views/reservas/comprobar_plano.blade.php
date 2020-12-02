@@ -103,7 +103,7 @@
         });
         $(this).css('background-color','');
         $(this).addClass('bg-info');
-        animateCSS('#des_puesto','zoomIn');
+        //animateCSS('#des_puesto','zoomIn');
         $('#frm_contador').submit();
     })
 

@@ -64,7 +64,16 @@ class ReservasController extends Controller
             ->whereraw("date(fec_reserva)='".$f1->format('Y-m-d')."'")
             ->where('id_usuario',Auth::user()->id)
             ->get();
-        return view('reservas.edit',compact('reserva','f1','tipos','misreservas'));
+
+        $plantas_usuario=DB::table('plantas_usuario')
+            ->select('plantas.*')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
+            ->where('id_usuario',Auth::user()->id)
+            ->get();
+
+        $reserva->id_planta=0;
+
+        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario'));
     }
 
     public function edit($fecha){
@@ -77,7 +86,14 @@ class ReservasController extends Controller
             ->orderby('fec_reserva')
             ->orderby('fec_fin_reserva')
             ->first();
-        return view('reservas.edit_del',compact('reserva','f1'));
+
+        $plantas_usuario=DB::table('plantas_usuario')
+            ->select('plantas.*')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
+            ->where('id_usuario',Auth::user()->id)
+            ->get();
+        
+        return view('reservas.edit_del',compact('reserva','f1','plantas_usuario'));
     }
 
     public function comprobar_puestos(Request $r){
@@ -209,6 +225,11 @@ class ReservasController extends Controller
                     $q->orwhere('puestos.max_horas_reservar','');
                 }
             })
+            ->where(function($q) use($r){
+                if($r->id_planta && $r->id_planta!=0){
+                    $q->where('puestos.id_planta',$r->id_planta);
+                }
+            })
             ->wherenotin('puestos.id_estado',[4,5,6])
             ->wherenotin('puestos.id_puesto',$puestos_usuarios)
             ->wherenotin('puestos.id_puesto',$puestos_nomiperfil)
@@ -237,8 +258,9 @@ class ReservasController extends Controller
             ->get();
 
         $tipo_vista=$r->tipo;
+        $id_planta=$r->id_planta;
 
-        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','plantas_usuario','tipo_vista'));
+        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','plantas_usuario','tipo_vista','id_planta'));
     }
 
     public function save(Request $r){

@@ -63,7 +63,7 @@
                     <div class="form-group col-md-3">
                         <label for="fechas">Fecha</label>
                         <div class="input-group">
-                            <input type="text" class="form-control pull-left singledate" id="fechas" name="fechas" style="width: 120px" value="{{ $f1->format('d/m/Y')}}">
+                            <input type="text" class="form-control pull-left singledate" id="fechas" name="fechas" style="width: 180px" value="{{ $f1->format('d/m/Y')}}">
                             <span class="btn input-group-text btn-mint datepickerbutton" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
                         </div>
                     </div>
@@ -71,7 +71,16 @@
                         <label for="id_edificio"><i class="fad fa-building"></i> Edificio</label>
                         <select name="id_edificio" id="id_edificio" class="form-control">
                             @foreach(DB::table('edificios')->where('id_cliente',Auth::user()->id_cliente)->get() as $edificio)
-                                <option value="{{ $edificio->id_edificio}}" {{ isset($puesto) && $puesto->id_edificio==$edificio->id_edificio?'selected':'' }}>{{ $edificio->des_edificio }}</option>
+                                <option value="{{ $edificio->id_edificio}}" {{ isset($reserva) && $reserva->id_edificio==$edificio->id_edificio?'selected':'' }}>{{ $edificio->des_edificio }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="planta">Planta</label>
+                        <select name="id_planta" id="id_planta" class="form-control">
+                            <option value="0">Cualquiera</option>
+                            @foreach($plantas_usuario as $p)
+                                <option value="{{ $p->id_planta}}" {{ isset($reserva->id_tipo_puesto) && $reserva->id_planta==$p->id_planta?'selected':'' }}>{{ $p->des_planta }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -79,10 +88,11 @@
                         <label for="id_usuario">Tipo de puesto</label>
                         <select name="id_tipo_puesto" id="id_tipo_puesto" class="form-control">
                             @foreach($tipos as $t)
-                                <option value="{{ $t->id_tipo_puesto}}" {{ isset($puesto->id_tipo_puesto) && $puesto->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }}>{{ $t->des_tipo_puesto }}</option>
+                                <option value="{{ $t->id_tipo_puesto}}" {{ isset($reserva->id_tipo_puesto) && $reserva->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }}>{{ $t->des_tipo_puesto }}</option>
                             @endforeach
                         </select>
                     </div>
+                    
                     
                    
                     
@@ -112,6 +122,22 @@
 
     //$('#frm_contador').on('submit',form_ajax_submit);
     comprobar_puestos();
+
+
+    $('#id_edificio').change(function(){
+        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$(this).val(), function(){
+            $('#id_planta').prepend("<option value='0'>Cualquiera</option>")
+        });
+    })
+
+    $(function(){
+        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$('#id_edificio').val(), function(){
+            $('#id_planta').val({{ $reserva->id_planta }});
+            $('#id_planta option[value={{ $reserva->id_planta }}]').attr('selected','selected');
+            $('#id_planta').prepend("<option value='0'>Cualquiera</option>")
+        });
+        
+    })
 
     $('#frm_contador').submit(function(event){
         event.preventDefault();
@@ -162,12 +188,12 @@
     });
 
     function comprobar_puestos(){
-        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val()}, function(data, textStatus, xhr) {
+        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val(),id_planta:$('#id_planta').val()}, function(data, textStatus, xhr) {
             $('#detalles_reserva').html(data);
         });
     }
 
-    $('#id_edificio, #id_tipo_puesto').change(function(){
+    $('#id_edificio, #id_tipo_puesto, #id_planta').change(function(){
        comprobar_puestos();
     })
 

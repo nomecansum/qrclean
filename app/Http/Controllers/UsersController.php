@@ -439,7 +439,6 @@ class UsersController extends Controller
         return Hash::make($pwd);
     }
 
-
     public function reback(){
         $this->authwith(session('back_id'));
         session(['back_id'=>null]);
@@ -637,7 +636,6 @@ class UsersController extends Controller
         
         return view('puestos.content_mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','checks','puestos_check','id_check','url_check'));
     }
-
     /**
      * @param mixed $id 
      * @return View|Factory 

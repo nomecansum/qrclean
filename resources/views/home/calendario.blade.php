@@ -15,7 +15,10 @@
             $('#spinner').show();
             $.post('{{url('reservas/loadMonthSchedule')}}', {_token:'{{csrf_token()}}',month: month,type:type,emp:'{{Auth::user()->id}}'}, function(data, textStatus, xhr) {
                 $('#calendario').html(data);
-            
+                $('.des_evento').css('font-size','0.6vw');
+                $('.des_evento').css('font-weight','normal');
+                $('.des_evento').css("overflow","hidden");
+                $('.dia').css('height','50px')
                 
                 $('.changeMonth').click(function(event) {
                     loadMonth($(this).data('month'),$(this).data('action'));
@@ -31,6 +34,8 @@
         $('#calendario').click(function(){
             window.location.replace("{{ url('/reservas') }}");
         })
+
+        
 
     </script>
 @endsection

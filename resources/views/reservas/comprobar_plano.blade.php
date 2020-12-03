@@ -70,6 +70,11 @@
                     $q->wherein('id_planta',$plantas_usuario??[]);
                 }
             })
+            ->where(function($q) use($id_planta){
+                if($id_planta && $id_planta!=0){
+                    $q->where('plantas.id_planta',$id_planta);
+                }
+            })
             ->get();
         @endphp
         @foreach($plantas as $pl)

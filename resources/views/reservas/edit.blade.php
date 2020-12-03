@@ -111,6 +111,8 @@
  <script>
 
     //$('#frm_contador').on('submit',form_ajax_submit);
+    comprobar_puestos();
+
     $('#frm_contador').submit(function(event){
         event.preventDefault();
         let form = $(this);
@@ -276,5 +278,5 @@
         })
     })
 
-    comprobar_puestos();
+    
  </script>

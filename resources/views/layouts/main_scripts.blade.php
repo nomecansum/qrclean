@@ -222,8 +222,10 @@
     });
 
     $('.select-all').click(function(event) {
-        element=$('#'+$(this).data('select'));
-        element.find('option').prop('selected', 'selected').end().select2();
+        //element=$('#'+$(this).data('select'));
+        //element.find('option').prop('selected', 'selected').end().select2();
+        //element.find('option').prop('selected', '').end().select2();
+        //element.val(null).trigger('change');
     });
 
     // when any modal is opening

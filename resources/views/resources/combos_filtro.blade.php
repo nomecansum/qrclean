@@ -39,7 +39,7 @@
         <div class="form-group  col-md-12" style="{{ (isset($hide['pla']) && $hide['pla']==1) ? 'display: none' : ''  }}">
             <label>Planta</label>
             <div class="input-group select2-bootstrap-append">
-                <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="planta[]" id="multi-planta" ></select>
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="planta[]" id="multi-planta" all="0" ></select>
                 <div class="input-group-btn">
                     <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
@@ -147,7 +147,11 @@
 
     $('.select-all').click(function(event) {
         $(this).parent().parent().find('select option').prop('selected', true)
-        $(this).parent().parent().find('select').select2();
+        $(this).parent().parent().find('select').select2({
+            placeholder: "Todos",
+            allowClear: true,
+            width: "99.2%",
+        });
         $(this).parent().parent().find('select').change();
     });
 

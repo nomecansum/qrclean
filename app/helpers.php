@@ -27,7 +27,7 @@ if (! function_exists('savebitacora')) {
     }
 
         \DB::table('bitacora')->insert([
-            'accion' => $des_bitacora,
+            'accion' => substr($des_bitacora,1,5000),
             'id_usuario' =>Auth::user()->id??0,
             'id_modulo' => $modulo,
             'id_seccion' => $seccion,
@@ -571,7 +571,6 @@ if (! function_exists('checkPermissions')) {
     }
 }
 
-
 if (! function_exists('beauty_fecha')) {
     function beauty_fecha($date,$mostrar_hora=-1){
         setlocale(LC_TIME, App::getLocale());
@@ -587,7 +586,6 @@ if (! function_exists('beauty_fecha')) {
         return "<b>".$fecha."</b> ".$hora;
     }
 }
-
 
 if (! function_exists('validar_request')) {
     function validar_request($r,$metodo_notif,$tipo,$reglas,$mensajes=[]){
@@ -631,7 +629,6 @@ if (! function_exists('validar_request')) {
         }
     }
 }
-
 
 if (! function_exists('validar_acceso_tabla')) {
     function validar_acceso_tabla($id,$tabla){

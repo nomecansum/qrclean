@@ -50,10 +50,10 @@ class ImportController extends Controller
 
     public function puesto_to_object($spreadsheet,$i){
 
-        $fila = $spreadsheet->setActiveSheetIndex(0)->rangeToArray('A'.$i.':G'.$i)[0];
+        $fila = $spreadsheet->setActiveSheetIndex(0)->rangeToArray('A'.$i.':H'.$i)[0];
         //error_log(json_encode($fila));
         $vacio=true;
-        for($n=0;$n<6;$n++){
+        for($n=0;$n<7;$n++){
             if($fila[$n]<>''){
                 $vacio=false;
             }
@@ -70,6 +70,7 @@ class ImportController extends Controller
             'mca_reserva' => $fila[5],
             'id_cliente' => Auth::user()->id_cliente,
             'usu_asignado' => $fila[6],
+            'update' => $fila[7],
         ]);
         return $puesto;
     }
@@ -217,8 +218,15 @@ class ImportController extends Controller
 
                         $anonimo=$puesto->mca_anonimo=='SI'?'S':'N';
                         $m_res=$puesto->mca_reserva=='SI'?'S':'N';
- 
-                        $p=new puestos;
+                        if($puesto->update=='' || $puesto->update=='N'){
+                            $p=new puestos;
+                        } else {
+                            $p=puestos::where('cod_puesto',$puesto->cod_puesto)->first();
+                            if(!isset($p)){
+                                $p=new puestos;
+                            }
+                        }
+                        
                         $p->cod_puesto=$puesto->cod_puesto;
                         $p->des_puesto=$puesto->des_puesto;
                         $p->id_cliente=Auth::user()->id_cliente;

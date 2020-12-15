@@ -150,6 +150,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/savesnapshot/{id}',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@savesnapshot']);
         Route::post('/accion_estado',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@accion_estado']);
         Route::Post('/print_qr','PuestosController@print_qr');
+        Route::Post('/export_qr','PuestosController@export_qr');
         Route::get('/mapa',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@mapa']);
         Route::post('/ronda_limpieza',['middleware'=>'permissions:["Rondas de limpieza"],["R"]', 'uses' => 'PuestosController@ronda_limpieza']);
         Route::get('/plano',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@plano']);

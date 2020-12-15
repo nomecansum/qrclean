@@ -95,6 +95,7 @@
                                     <ul>
                                         <li>ANONIMO</li>
                                         <li>RESERVA</li>
+                                        <li>ACTUALIZACION</li>
                                     </ul>
                                     <h4>Una vez rellenada la plantilla pulse "Siguiente"</h4>
                             </section>

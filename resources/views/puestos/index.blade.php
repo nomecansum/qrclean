@@ -55,6 +55,7 @@
                             <li class="divider"></li>
                             <li class="dropdown-header">Acciones</li>
                             <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
+                            <li><a href="#" class="btn_export_qr"><i class="fad fa-file-export"></i></i> Exportar QR</a></li>
                             @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
                             @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
                             @if(checkPermissions(['Puestos'],['D']))<li><a href="#" class="btn_borrar_puestos btn_toggle_dropdown"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar puestos</a> </li>@endif
@@ -509,6 +510,21 @@
         }
     //
         $('#frmpuestos').attr('action',"{{url('/puestos/print_qr')}}");
+        $('#frmpuestos').submit();
+        //
+    });
+
+    $('.btn_export_qr').click(function(){
+        //block_espere();
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            return;
+        }
+    //
+        $('#frmpuestos').attr('action',"{{url('/puestos/export_qr')}}");
         $('#frmpuestos').submit();
         //
     });

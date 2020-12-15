@@ -27,6 +27,7 @@
 <div class="panel">
     <div class="panel-body">
         @php
+        
             $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
         @endphp
         @foreach($plantas as $key=>$value)

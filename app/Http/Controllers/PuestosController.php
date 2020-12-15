@@ -20,6 +20,8 @@ Use Carbon\Carbon;
 use PDF;
 use Illuminate\Support\Str;
 use Redirect;
+use Excel;
+use App\Exports\ExportExcel;
 
 
 class PuestosController extends Controller
@@ -327,9 +329,34 @@ class PuestosController extends Controller
         } catch(\Exception $e){
             return Redirect::back();
         }
-       
     }
 
+    public function export_qr(Request $r){
+
+        if (!isset($r->lista_id)){
+            return Redirect::back();
+        }
+        try{
+            $puestos=DB::table('puestos')
+                ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+                ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+                ->where(function($q){
+                    if (!isAdmin()) {
+                        $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                    }
+                })
+                ->wherein('id_puesto',$r->lista_id)
+                ->get();
+        
+            $filename='Codigos_QR Puestos_'.Auth::user()->id_cliente.'_.xlsx';
+            libxml_use_internal_errors(true); //añadido por andriy para quitar los errores de libreria
+            //return view('puestos.qr_excel',compact('puestos','r'));
+            return Excel::download(new ExportExcel('puestos.qr_excel',compact('puestos','r')),$filename);
+        } catch(\Exception $e){
+            return Redirect::back();
+        }
+    }
      // GESTION DE TIPOS DE PUESTO
      public function index_tipos(){
         $tipos = DB::table('puestos_tipos')

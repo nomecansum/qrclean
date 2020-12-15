@@ -64,6 +64,16 @@ class puestos_tipos extends Model
         return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
     }
 
+    /**
+     * Get the puestos for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function puestos()
+    {
+        return $this->hasMany('App\Models\Puesto','id_tipo_puesto','id_tipo_puesto');
+    }
+
 
 
 }

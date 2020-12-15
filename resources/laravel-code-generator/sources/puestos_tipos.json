@@ -251,7 +251,18 @@
             "api-description": "The val color of the model."
         }
     ],
-    "relations": [],
+    "relations": [
+        {
+            "name": "puestos",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\Puesto",
+                "id_tipo_puesto",
+                "id_tipo_puesto"
+            ],
+            "field": "id_edificio"
+        }
+    ],
     "indexes": [],
     "auto-manage-created-and-updated-at": false,
     "table-name": "puestos_tipos",

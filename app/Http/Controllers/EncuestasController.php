@@ -89,6 +89,9 @@ class EncuestasController extends Controller
             if(isset($r->puesto)){
                 $encuesta->list_puestos=implode(",",$r->puesto);
             }
+            if(isset($r->tipo)){
+                $encuesta->list_tipos=implode(",",$r->tipo);
+            }
 
             $fechas=explode(" - ",$r->fechas);
             $encuesta->fec_inicio=Carbon::parse(adaptar_fecha($fechas[0]));
@@ -96,6 +99,8 @@ class EncuestasController extends Controller
             $encuesta->val_color=$r->val_color;
             $encuesta->val_icono=$r->val_icono;
             $encuesta->val_periodo_minimo=$r->val_periodo_minimo;
+            $encuesta->mca_activa=$r->mca_activa??'N';
+            $encuesta->mca_anonima=$r->mca_anonima??'N';
             $encuesta->save();
             savebitacora('Encuesta '.$r->titulo. ' creada',"Encuestas","store","OK");
             return [
@@ -156,7 +161,7 @@ class EncuestasController extends Controller
     public function update(Request $r)
     {
         //$data = $this->getData($r);
-        try {  
+        try {      
             validar_acceso_tabla($r->id_encuesta,"encuestas");
             $encuesta = encuestas::findOrFail($r->id_encuesta);
             $encuesta->update($r->all());
@@ -175,6 +180,9 @@ class EncuestasController extends Controller
             if(isset($r->puesto)){
                 $encuesta->list_puestos=implode(",",$r->puesto);
             }
+            if(isset($r->tipo)){
+                $encuesta->list_tipos=implode(",",$r->tipo);
+            }
 
             $fechas=explode(" - ",$r->fechas);
             $encuesta->fec_inicio=Carbon::parse(adaptar_fecha($fechas[0]));
@@ -182,6 +190,8 @@ class EncuestasController extends Controller
             $encuesta->val_color=$r->val_color;
             $encuesta->val_icono=$r->val_icono;
             $encuesta->val_periodo_minimo=$r->val_periodo_minimo;
+            $encuesta->mca_activa=$r->mca_activa??'N';
+            $encuesta->mca_anonima=$r->mca_anonima??'N';
             $encuesta->save();
 
             savebitacora('Encuesta '.$r->titulo. ' actualizada',"Encuestas","update","OK");
@@ -190,7 +200,8 @@ class EncuestasController extends Controller
                 'message' => 'Encuesta '.$r->titulo. ' actualizada',
                 'url' => url('encuestas')
             ];
-            } catch (Exception $exception) {
+           
+        } catch (Exception $exception) {
 
             return [
                 'title' => "Encuestas",

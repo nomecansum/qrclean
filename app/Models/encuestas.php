@@ -50,7 +50,8 @@ class encuestas extends Model
                   'list_edificios',
                   'val_momento',
                   'list_tags',
-                  'val_periodo_minimo'
+                  'val_periodo_minimo',
+                  'list_tipos'
               ];
 
     /**

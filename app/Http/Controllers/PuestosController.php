@@ -109,6 +109,11 @@ class PuestosController extends Controller
                     $q->whereIn('puestos.id_estado',$estados);
                 }
             })
+            ->where(function($q) use($r){
+                if ($r->tipo) {
+                    $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
+                }
+            })
             ->where(function($q) use($r,$atributos){
                 if(in_array('A',$atributos)){
                     $q->where('mca_acceso_anonimo','S');

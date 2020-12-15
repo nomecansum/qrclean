@@ -2,6 +2,7 @@
     //$hide=['cli'=>0,'cen'=>0,'dis'=>0,'col'=>0,'dep'=>0,'emp'=>0,'fec'=>0];
     use App\Models\estados;
     use App\Models\tags;
+    use App\Models\puestos_tipos;
 @endphp
 @if(!(isset($hide['head']) || (isset($hide['head']) && ($hide['head']!==1))))
 <div class="panel " style="padding-right: 10px" >
@@ -63,6 +64,24 @@
                 </div>
             </div>
         </div>
+        <div class="form-group  col-md-12" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
+            <label>Tipo de puesto</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipo[]" id="multi-tipo" >
+                    @foreach(puestos_tipos::where(function($q) {
+                        $q->where('id_cliente',Auth::user()->id_cliente);
+                        $q->orwhere('mca_fijo','S');
+                        })
+                        ->where('id_tipo_puesto','>',0)
+                        ->get() as $tipo)
+                        <option value="{{ $tipo->id_tipo_puesto }}">{{ $tipo->des_tipo_puesto }}</option>
+                    @endforeach
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
         <div class="form-group  col-md-12" style="{{ (isset($hide['est']) && $hide['est']==1) ? 'display: none' : ''  }}">
             <label>Estado</label>
             <div class="input-group select2-bootstrap-append">
@@ -80,6 +99,7 @@
                 </div>
             </div>
         </div>
+        
         
         <div class="row" style="{{ (isset($hide['btn']) && $hide['btn']==1) ? 'display: none' : ''  }}">
             <div class="col-md-12 text-right mb-3">

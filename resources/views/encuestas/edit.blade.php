@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="col-md-1 p-t-30 mt-1">
-                    <input type="checkbox" class="form-control  magic-checkbox" name="mca_fija"  id="mca_activa" value="S" {{ $encuesta->mca_activa=='S'?'checked':'' }}> 
+                    <input type="checkbox" class="form-control  magic-checkbox" name="mca_activa"  id="mca_activa" value="S" {{ $encuesta->mca_activa=='S'?'checked':'' }}> 
                     <label class="custom-control-label"   for="mca_activa">Activa</label>
                 </div>
                 <div class="col-md-1 p-t-30 mt-1">    
@@ -217,10 +217,15 @@
         var arr = string.split(',');
         $('#multi-tag').select2().val(arr);
 
+        string="{{ $encuesta->list_tipos }}"
+        var arr = string.split(',');
+        $('#multi-tipo').select2().val(arr);
+
         $('#multi-edificio').select2().val();
         $('#multi-planta').select2().val();
         $('#multi-puesto').select2().val();
         $('#multi-tag').select2().val();
+        $('#multi-tipo').select2().val();
     }
 
     var clipboard = new ClipboardJS('#boton_url');

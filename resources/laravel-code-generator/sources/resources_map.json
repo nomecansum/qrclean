@@ -135,9 +135,9 @@
         "table-name": "encuestas_resultados"
     },
     {
-        "model-name": "encuestas",
-        "resource-file": "encuestas.json",
-        "table-name": "encuestas"
+        "model-name": "puestos",
+        "resource-file": "puestos.json",
+        "table-name": "puestos"
     },
     {
         "model-name": "puestos_tipos",
@@ -145,8 +145,8 @@
         "table-name": "puestos_tipos"
     },
     {
-        "model-name": "puestos",
-        "resource-file": "puestos.json",
-        "table-name": "puestos"
+        "model-name": "encuestas",
+        "resource-file": "encuestas.json",
+        "table-name": "encuestas"
     }
 ]

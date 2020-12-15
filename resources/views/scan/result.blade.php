@@ -66,7 +66,7 @@
     </div>
     @if($respuesta['encuesta']!=0 && (!isset($cookie) || (isset($cookie) && $cookie!=$respuesta['encuesta'])))
         @php
-            $encuesta=DB::table('encuestas')->where('id_encuesta',$respuesta['encuesta'])->first();   
+            $encuesta=DB::table('encuestas')->where('id_encuesta',$respuesta['encuesta'])->first();  
         @endphp
         <div class="row" id="div_encuesta"  @if($encuesta->val_momento=='D') style="display: none" @endif>
             <div class="col-md-6 col-xs-offset-3" id="pregunta">

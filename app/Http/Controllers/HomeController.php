@@ -100,6 +100,7 @@ class HomeController extends Controller
                     $q->orwhereraw('FIND_IN_SET('.$p->id_puesto.', list_puestos) <> 0');
                     $q->orwhereraw('FIND_IN_SET('.$p->id_planta.', list_plantas) <> 0');
                     $q->orwhereraw('FIND_IN_SET('.$p->id_edificio.', list_edificios) <> 0');
+                    $q->orwhereraw('FIND_IN_SET('.$p->id_tipo_puesto.', list_tipos) <> 0');
                     $q->orwhere(function($q) use($tags){
                         foreach($tags as $tag){
                             $q->orwhereraw('FIND_IN_SET('.$tag->id_tag.', list_tags) <> 0');

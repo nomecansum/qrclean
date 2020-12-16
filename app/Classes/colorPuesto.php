@@ -31,6 +31,8 @@
 
 namespace App\Classes;
 
+use Carbon\Carbon;
+
 class colorPuesto
 {
     static function colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$origen="P"){
@@ -60,11 +62,16 @@ class colorPuesto
             if($origen=="R"){
                 $borde=$puesto->val_color?$puesto->val_color:"LightCoral";
             }
+            if(isset($reserva->fec_fin_reserva)){
+                $horas_reserva="de ".Carbon::parse($reserva->fec_reserva)->format('H:i')." a ".Carbon::parse($reserva->fec_fin_reserva)->format('H:i'); 
+            } else {
+                $horas_reserva="";
+            }
             return [
                 'color'=>"LightCoral",
                 'font_color'=>"#fff",
                 'clase_disp'=>"",
-                'title'=>"Reservado por ".$reserva->name." para hoy",
+                'title'=>"Reservado por ".$reserva->name." para hoy ".$horas_reserva,
                 'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
                 "transp"=>0.4
             ];

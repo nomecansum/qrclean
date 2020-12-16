@@ -22,6 +22,7 @@ use Illuminate\Support\Str;
 use Redirect;
 use Excel;
 use App\Exports\ExportExcel;
+use stdClass;
 
 
 class PuestosController extends Controller
@@ -199,8 +200,50 @@ class PuestosController extends Controller
             }
         })
         ->get();
+
+        $reservas=DB::table('reservas')
+            ->join('users','users.id','reservas.id_usuario')
+            ->where('id_puesto',$id)
+            ->get();
         
-        return view('puestos.edit',compact('puesto','tags','usuarios','perfiles','tipos'));
+        $asignaciones=DB::table('puestos_asignados')
+            ->leftjoin('users','users.id','puestos_asignados.id_usuario')
+            ->leftjoin('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')
+            ->where('id_puesto',$id)
+            ->get();
+        $eventos=[];
+        foreach($reservas as $res){
+            $e=new stdClass();
+            $e->title=$res->name;
+            $e->start=Carbon::parse($res->fec_reserva)->format('Y-m-d')."T".Carbon::parse($res->fec_reserva)->format('H:i:s');
+            if($res->fec_fin_reserva!=null){
+                $e->end=Carbon::parse($res->fec_fin_reserva)->format('Y-m-d')."T".Carbon::parse($res->fec_fin_reserva)->format('H:i:s');
+            } else {
+                $e->end=Carbon::parse($res->fec_reserva)->format('Y-m-d')."T00:00:00";
+            }
+            $e->className="success";
+            $eventos[]=$e;
+        }
+        foreach($asignaciones as $as){
+            $e=new stdClass();
+            if($as->id_usuario!=null){
+                $e->title=$as->name;
+            } else {
+                $e->title=$as->des_nivel_acceso;
+            }
+            if($as->fec_desde!=null){
+                $e->start=Carbon::parse($as->fec_desde)->format('Y-m-d')."T00:00:00";
+                $e->end=Carbon::parse($as->fec_hasta)->format('Y-m-d')."T00:00:00";
+            } else {
+                $e->start=Carbon::parse('2000-01-01')->format('Y-m-d')."T00:00:00";
+                $e->end=Carbon::parse('2050-01-01')->format('Y-m-d')."T00:00:00";
+            }
+            $e->className="warning";
+            $eventos[]=$e;
+        }
+        $eventos=json_encode($eventos);
+        
+        return view('puestos.edit',compact('puesto','tags','usuarios','perfiles','tipos','eventos'));
 
     }
 

@@ -142,6 +142,13 @@
                         @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary mr-2 btn_submit">GUARDAR</button>@endif  
                     </div>
                 </div>
+                <div class="row mt-2 ">
+                    <div class="col-md-2"></div>
+                    <div class="fluid col-md-8">
+                        <div id='demo-calendar'></div>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
             </form>
         </div>
     </div>
@@ -224,9 +231,34 @@
     });
 
     $('input[type="file"]').change(function(e){
-			var fileName = e.target.files[0].name;
-			$(this).next('label').html(fileName);
-			//$('.custom-file-label').html(fileName);
-		});
+        var fileName = e.target.files[0].name;
+        $(this).next('label').html(fileName);
+        //$('.custom-file-label').html(fileName);
+    });
+
+
+
+    // Initialize the calendar
+    // -----------------------------------------------------------------
+    $('#demo-calendar').fullCalendar({
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay,dayGridWeek'
+        },
+        editable: false,
+        droppable: false, // this allows things to be dropped onto the calendar
+        drop: function() {
+            // is the "remove after drop" checkbox checked?
+            if ($('#drop-remove').is(':checked')) {
+                // if so, remove the element from the "Draggable Events" list
+                $(this).remove();
+            }
+        },
+        eventLimit: true, // allow "more" link when too many events
+        locale: 'es',
+        firstDay: 1,
+        events: {!! $eventos !!}
+    });
 
  </script>

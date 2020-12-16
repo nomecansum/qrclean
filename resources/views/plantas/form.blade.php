@@ -55,7 +55,7 @@
                     <img src="{{ isset($plantas) ? Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid">
                 </label>
                 <div class="custom-file">
-                    <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input" name="img_plano" id="img_plano" lang="es" value="{{ isset($plantas) ? $plantas->img_plano : ''}}">
+                    <input type="file" accept=".jpg,.png,.gif,.jpeg" class="form-control  custom-file-input" name="img_plano" id="img_plano" lang="es" value="{{ isset($plantas) ? $plantas->img_plano : ''}}">
                     <label class="custom-file-label" for="img_plano"></label>
                 </div>
             </div>

@@ -73,7 +73,7 @@
                 <h4>{{ $encuesta->pregunta }}</h4>
             </div>
             <div class="col-md-12 text-center" id="selector">
-                @include('encuestas.selector',['tipo'=>$encuesta->id_tipo_encuesta])
+                @include('encuestas.selector',['tipo'=>$encuesta->id_tipo_encuesta,'comentarios'=>$encuesta->mca_mostrar_comentarios])
             </div>
             <div class="col-md-12 text-center"  id="respuesta" style="display: none">
                 <h4><i class="fad fa-thumbs-up fa-2x text-success"></i> ¡Muchas gracias por su colaboracion!</h4>
@@ -262,7 +262,7 @@
             $('.valor').click(function(){
                 $(this).css('background-color','#7fff00')
                 console.log($(this).data('value'));
-                $.post('{{url('/encuestas/save_data')}}', {_token:'{{csrf_token()}}',val: $(this).data('value'), id_encuesta: id_encuesta, mca_anonima: mca_anonima}, function(data, textStatus, xhr) {
+                $.post('{{url('/encuestas/save_data')}}', {_token:'{{csrf_token()}}',val: $(this).data('value'), id_encuesta: id_encuesta, mca_anonima: mca_anonima,comentario: $('#comentario').val()}, function(data, textStatus, xhr) {
                     console.log(data);
                     $('#selector').hide();
                     $('#pregunta').hide();

@@ -33,25 +33,26 @@ class encuestas extends Model
      * @var array
      */
     protected $fillable = [
-                  'id_cliente',
-                  'titulo',
-                  'pregunta',
-                  'id_tipo_encuesta',
-                  'fec_inicio',
                   'fec_fin',
+                  'fec_inicio',
+                  'id_cliente',
+                  'id_tipo_encuesta',
+                  'list_edificios',
+                  'list_perfiles',
+                  'list_plantas',
+                  'list_puestos',
+                  'list_tags',
+                  'list_tipos',
                   'mca_activa',
                   'mca_anonima',
-                  'list_perfiles',
-                  'val_icono',
-                  'val_color',
+                  'mca_mostrar_comentarios',
+                  'pregunta',
+                  'titulo',
                   'token',
-                  'list_puestos',
-                  'list_plantas',
-                  'list_edificios',
+                  'val_color',
+                  'val_icono',
                   'val_momento',
-                  'list_tags',
-                  'val_periodo_minimo',
-                  'list_tipos'
+                  'val_periodo_minimo'
               ];
 
     /**

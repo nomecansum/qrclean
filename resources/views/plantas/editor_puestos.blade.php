@@ -174,7 +174,7 @@
         start   : [ {{ $plantas->factor_puesto }} ],
         connect : 'lower',
         range   : {
-            'min': [  2 ],
+            'min': [  0.5 ],
             'max': [ 6 ]
         },
         format: wNumb({

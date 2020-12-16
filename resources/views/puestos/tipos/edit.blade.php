@@ -65,7 +65,7 @@
                     <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome6" class="btn btn-light iconpicker" data-align="right" data-search="true" data-rows="20" data-cols="25" data-search-text="Buscar..."></button>
+                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome6" class="btn btn-light iconpicker" data-align="right" data-placement="inline" data-search="true" data-rows="10" data-cols="15" data-search-text="Buscar..."></button>
                         </div>
                     </div>
                     @if(isAdmin())

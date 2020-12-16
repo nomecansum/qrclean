@@ -91,13 +91,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3" style="padding-top: 7px">
                     <label>Fechas </label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 33px; width: 300px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
+                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
                         <span class="btn input-group-text btn-mint" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
                     </div>
                 </div>
+                
                 <div class="form-group col-md-3">
                     <label for="val_momento" class="control-label">Momento en el que mostrarla</label>
                     <select class="form-control" required id="val_momento" name="val_momento">
@@ -111,7 +112,11 @@
                         <input class="form-control" required name="val_periodo_minimo" type="number" id="val_periodo_minimo" value="{{ $encuesta->val_periodo_minimo }}" min="0" max="1440" placeholder="Enter periodo minimo">
                         {!! $errors->first('val_periodo_minimo', '<p class="help-block">:message</p>') !!}
                 </div>
-                <div class="form-group col-md-3" >
+                <div class="col-md-1 p-t-30 mt-1">
+                    <input type="checkbox" class="form-control  magic-checkbox" name="mca_mostrar_comentarios"  id="mca_mostrar_comentarios" value="S" {{ $encuesta->mca_mostrar_comentarios=='S'?'checked':'' }}> 
+                    <label class="custom-control-label" for="mca_mostrar_comentarios">Feedback</label>
+                </div>
+                <div class="form-group col-md-2" >
                    
                 </div>
             </div>

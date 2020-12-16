@@ -33,7 +33,7 @@
             </div>
             <div class="row" >
                 <div class="col-md-12 text-center">
-                        @include('encuestas.selector',['tipo'=>$encuesta->id_tipo_encuesta])
+                        @include('encuestas.selector',['tipo'=>$encuesta->id_tipo_encuesta,'comentarios'=>$encuesta->mca_mostrar_comentarios])
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
     $('.valor').click(function(){
         $(this).css('background-color','#7fff00')
         console.log($(this).data('value'));
-        $.post('{{url('/encuestas/save_data')}}', {_token:'{{csrf_token()}}',val: $(this).data('value'), id_encuesta: "{{ $encuesta->token }}", mca_anonima: "{{ $encuesta->mca_anonima }}"}, function(data, textStatus, xhr) {
+        $.post('{{url('/encuestas/save_data')}}', {_token:'{{csrf_token()}}',val: $(this).data('value'), id_encuesta: "{{ $encuesta->token }}", mca_anonima: "{{ $encuesta->mca_anonima }}",comentario: $('#comentario').val()}, function(data, textStatus, xhr) {
            console.log(data);
            $('#selector').hide();
            $('#respuesta').show();

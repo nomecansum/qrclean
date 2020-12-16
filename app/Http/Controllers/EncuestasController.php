@@ -101,6 +101,7 @@ class EncuestasController extends Controller
             $encuesta->val_periodo_minimo=$r->val_periodo_minimo;
             $encuesta->mca_activa=$r->mca_activa??'N';
             $encuesta->mca_anonima=$r->mca_anonima??'N';
+            $encuesta->mca_mostrar_comentarios=$r->mca_mostrar_comentarios??'N';
             $encuesta->save();
             savebitacora('Encuesta '.$r->titulo. ' creada',"Encuestas","store","OK");
             return [
@@ -192,6 +193,7 @@ class EncuestasController extends Controller
             $encuesta->val_periodo_minimo=$r->val_periodo_minimo;
             $encuesta->mca_activa=$r->mca_activa??'N';
             $encuesta->mca_anonima=$r->mca_anonima??'N';
+            $encuesta->mca_mostrar_comentarios=$r->mca_mostrar_comentarios??'N';
             $encuesta->save();
 
             savebitacora('Encuesta '.$r->titulo. ' actualizada',"Encuestas","update","OK");
@@ -266,7 +268,6 @@ class EncuestasController extends Controller
 
     public function save_data(Request $r){
         //datos de la encuesta
-
         $encuesta=encuestas::where('token',$r->id_encuesta)->first();
         if (isset($encuesta)){
             $resultado=new encuestas_resultados();

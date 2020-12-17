@@ -6,7 +6,9 @@
 
 @section('styles')
     <link href="{{ asset('/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('/plugins/fullcalendar/fullcalendar.min.css') }}" rel="stylesheet">
+    {{--  <link href="{{ asset('/plugins/fullcalendar/fullcalendar.min.css') }}" rel="stylesheet">  --}}
+    <link href="{{ asset('/plugins/fullcalendar/lib/main.css') }}" rel="stylesheet">
+    
 	<link href="{{ asset('/plugins/fullcalendar/nifty-skin/fullcalendar-nifty.min.css') }}" rel="stylesheet">
     <style type="text/css">
         td .tooltip {
@@ -15,6 +17,7 @@
         .enfrente {
             z-index: 1100;
         }
+
     </style>
 @endsection
 
@@ -385,7 +388,9 @@
 @section('scripts')
 <script src="{{ asset('/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js') }}"></script>
 {{--  <script src="{{ asset('plugins/fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>  --}}
-<script src="{{ asset('plugins/fullcalendar/fullcalendar.min.js') }}"></script>
+{{--  <script src="{{ asset('plugins/fullcalendar/fullcalendar.min.js') }}"></script>  --}}
+<script src="{{ asset('plugins/fullcalendar/lib/locales/es.js') }}"></script>
+<script src="{{ asset('plugins/fullcalendar/lib/main.min.js') }}"></script>
 <script>
 
     //Menu

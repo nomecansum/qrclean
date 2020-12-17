@@ -240,25 +240,57 @@
 
     // Initialize the calendar
     // -----------------------------------------------------------------
-    $('#demo-calendar').fullCalendar({
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay,dayGridWeek'
-        },
-        editable: false,
-        droppable: false, // this allows things to be dropped onto the calendar
-        drop: function() {
-            // is the "remove after drop" checkbox checked?
-            if ($('#drop-remove').is(':checked')) {
-                // if so, remove the element from the "Draggable Events" list
-                $(this).remove();
-            }
-        },
-        eventLimit: true, // allow "more" link when too many events
-        locale: 'es',
-        firstDay: 1,
-        events: {!! $eventos !!}
-    });
+    var calendarEl = document.getElementById('demo-calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,listWeek'
+            },
+            editable: false,
+            droppable: false, // this allows things to be dropped onto the calendar
+            drop: function() {
+                // is the "remove after drop" checkbox checked?
+                if ($('#drop-remove').is(':checked')) {
+                    // if so, remove the element from the "Draggable Events" list
+                    $(this).remove();
+                }
+            },
+            eventLimit: true, // allow "more" link when too many events
+            locale: 'es',
+            firstDay: 1,
+            themeSystem: 'bootstrap',
+            moreLinkClick: "popover",
+            events: {!! $eventos !!}
+        });
+        calendar.render();
+
+    // $('.fc-dayGridMonth-button').html('Mes');
+    // $('.fc-timeGridWeek-button').html('Semana');
+    // $('.fc-listGridWeek-button').html('Lista');
+    $('.fc-event-title').css('font-size','10px');
+    $('.fc-event-title').css('font-weight','normal');
+    
+
+    // $('#demo-calendar').fullCalendar({
+    //     header: {
+    //         left: 'prev,next today',
+    //         center: 'title',
+    //         right: 'month,agendaWeek,agendaDay,dayGridWeek'
+    //     },
+    //     editable: false,
+    //     droppable: false, // this allows things to be dropped onto the calendar
+    //     drop: function() {
+    //         // is the "remove after drop" checkbox checked?
+    //         if ($('#drop-remove').is(':checked')) {
+    //             // if so, remove the element from the "Draggable Events" list
+    //             $(this).remove();
+    //         }
+    //     },
+    //     eventLimit: true, // allow "more" link when too many events
+    //     locale: 'es',
+    //     firstDay: 1,
+    //     events: {!! $eventos !!}
+    // });
 
  </script>

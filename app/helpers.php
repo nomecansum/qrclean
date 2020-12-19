@@ -790,6 +790,18 @@ if (! function_exists('color_porcentaje_inv')) {
     }
 }
 
+if (! function_exists('js_array')) {
+    function js_array($array)
+    {
+        function js_str($s)
+        {
+            return '"' . addcslashes($s, "\0..\37\"\\") . '"';
+        }
+        $temp = array_map('js_str', $array);
+        return '[' . implode(',', $temp) . ']';
+    }
+}
+
 if (! function_exists('authbyToken')) {
     function authbyToken($token){
         $usuario=users::where('token_acceso',$token)->first();

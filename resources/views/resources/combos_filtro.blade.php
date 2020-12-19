@@ -4,6 +4,8 @@
     use App\Models\tags;
     use App\Models\puestos_tipos;
 @endphp
+<link href="{{ asset('plugins/switchery/switchery.min.css') }}" rel="stylesheet">
+
 @if(!(isset($hide['head']) || (isset($hide['head']) && ($hide['head']!==1))))
 <div class="panel " style="padding-right: 10px" >
     <div class="panel-heading cursor-pointer" style="padding-top: 2px" id="headfiltro" >
@@ -47,7 +49,10 @@
             </div>
         </div>
         <div class="form-group  col-md-12" style="{{ (isset($hide['tag']) && $hide['tag']==1) ? 'display: none' : ''  }}">
-            <label>Tag</label>
+            <label>Tag
+                <input id="demo-sw-checkstate" name="andor" type="checkbox">
+                <span id="demo-sw-checkstate-field" class="label label-info">OR</span>
+            </label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tags[]" id="multi-tag" ></select>
                 <div class="input-group-btn">
@@ -159,7 +164,19 @@
 
 
 @section('scripts2')
+<script src="{{ asset('plugins/switchery/switchery.min.js') }}"></script>
 <script>
+
+    var changeCheckbox = document.getElementById('demo-sw-checkstate'), changeField = document.getElementById('demo-sw-checkstate-field');
+    new Switchery(changeCheckbox,{ size: 'small',color:'#489eed' })
+    changeCheckbox.onchange = function() {
+        if(changeCheckbox.checked){
+            changeField.innerHTML='AND'
+        } else {
+            changeField.innerHTML='OR'
+        }
+    };
+
 
     $(function(){
         $('#multi-cliente').change();

@@ -131,8 +131,21 @@ class PuestosController extends Controller
             })
             ->where(function($q) use($r){
                 if ($r->tags) {
-                    $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                   
+                    if($r->andor){//Busqueda con AND
+                        $puestos_tags=DB::table('tags_puestos')
+                            ->where(function($q2) use($r){
+                                foreach($r->tags as $tag){
+                                    $q2->where('id_tag',$tag);
+                                }
+                            })
+                            ->pluck('id_puesto')->toarray();
+                    } else { //Busqueda con OR
+                        $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                        dd($puestos_tags);
+                    }
                     $q->whereIn('puestos.id_puesto',$puestos_tags);
+                    
                 }
             })
             ->where(function($q){
@@ -191,6 +204,8 @@ class PuestosController extends Controller
             ->toarray();
         $tags=implode(",",$tags);
 
+        $tags_cliente=DB::table('tags')->where('id_cliente',Auth::user()->id_cliente)->pluck('nom_tag')->toarray();
+
         $tipos = DB::table('puestos_tipos')
         ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
         ->where(function($q){
@@ -243,7 +258,7 @@ class PuestosController extends Controller
         }
         $eventos=json_encode($eventos);
         
-        return view('puestos.edit',compact('puesto','tags','usuarios','perfiles','tipos','eventos'));
+        return view('puestos.edit',compact('puesto','tags','usuarios','perfiles','tipos','eventos','tags_cliente'));
 
     }
 

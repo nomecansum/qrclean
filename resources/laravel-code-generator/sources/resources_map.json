@@ -85,11 +85,6 @@
         "table-name": "tags_puestos"
     },
     {
-        "model-name": "tags",
-        "resource-file": "tags.json",
-        "table-name": "tags"
-    },
-    {
         "model-name": "users",
         "resource-file": "users.json",
         "table-name": "users"
@@ -148,5 +143,10 @@
         "model-name": "encuestas",
         "resource-file": "encuestas.json",
         "table-name": "encuestas"
+    },
+    {
+        "model-name": "tags",
+        "resource-file": "tags.json",
+        "table-name": "tags"
     }
 ]

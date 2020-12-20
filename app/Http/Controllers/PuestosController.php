@@ -131,20 +131,21 @@ class PuestosController extends Controller
             })
             ->where(function($q) use($r){
                 if ($r->tags) {
-                   
+                    
                     if($r->andor){//Busqueda con AND
                         $puestos_tags=DB::table('tags_puestos')
-                            ->where(function($q2) use($r){
-                                foreach($r->tags as $tag){
-                                    $q2->where('id_tag',$tag);
-                                }
-                            })
-                            ->pluck('id_puesto')->toarray();
+                            ->select('id_puesto')
+                            ->wherein('id_tag',$r->tags)
+                            ->groupby('id_puesto')
+                            ->havingRaw('count(id_tag)='.count($r->tags))
+                            ->pluck('id_puesto')
+                            ->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags);
                     } else { //Busqueda con OR
                         $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
-                        dd($puestos_tags);
+                        $q->whereIn('puestos.id_puesto',$puestos_tags); 
                     }
-                    $q->whereIn('puestos.id_puesto',$puestos_tags);
+                   
                     
                 }
             })

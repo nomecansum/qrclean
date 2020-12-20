@@ -166,6 +166,13 @@ Route::group(['middleware' => 'auth'], function() {
 
     });
 
+    Route::group(['prefix' => 'tags'], function () {
+        Route::get('/',['middleware'=>'permissions:["Tags"],["R"]', 'uses' => 'TagsController@index'])->name('tags.index');
+        Route::post('/save',['middleware'=>'permissions:["Tags"],["W"]', 'uses' => 'TagsController@save']);
+        Route::get('/edit/{id?}',['middleware'=>'permissions:["Tags"],["C"]', 'uses' => 'TagsController@edit']);
+        Route::get('/delete/{id?}',['middleware'=>'permissions:["Tags"],["D"]', 'uses' => 'TagsController@delete']);
+    });
+
     Route::group(['prefix' => 'edificios'], function () {
         Route::get('/', 'EdificiosController@index')->name('edificios.edificios.index');
         Route::get('/create','EdificiosController@create')->name('edificios.edificios.create');

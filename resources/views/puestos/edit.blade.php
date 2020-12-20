@@ -1,3 +1,10 @@
+<style type="text/css">
+#edit_tag .tt-dropdown-menu {
+  max-height: 150px;
+  overflow-y: auto;
+}
+</style>
+
 <div class="panel" id="editor">
     <div class="panel">
         <div class="panel-heading">
@@ -88,7 +95,7 @@
 
                     <div class="form-group col-md-12">
                         <label for="planta">Tags</label>
-                        <input type="text" class="edit_tag typeahead" data-role="tagsinput" placeholder="Type to add a tag" size="17" value="{{ $tags }}">
+                        <input type="text" class="edit_tag typeahead" data-role="tagsinput" id="edit_tag" placeholder="Type to add a tag" size="17" value="{{ $tags }}">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="id_usuario">Asignado permanentemente a usuario</label>
@@ -159,38 +166,8 @@
         //$('#frm_contador').submit();
      })
 
-    var substringMatcher = function(strs) {
-        return function findMatches(q, cb) {
-            var matches, substringRegex;
-            // an array that will be populated with substring matches
-            matches = [];
-            // regex used to determine if a string contains the substring `q`
-            substrRegex = new RegExp(q, 'i');
-            // iterate through the pool of strings and for any string that
-            // contains the substring `q`, add it to the `matches` array
-            $.each(strs, function(i, str) {
-            if (substrRegex.test(str)) {
-                matches.push(str);
-            }
-            });
 
-            cb(matches);
-        };
-    };
-
-        var lista_tags = {!! js_array($tags_cliente) !!};
-
-        $('.typeahead').typeahead({
-            hint: true,
-            highlight: true,
-            minLength: 1
-        },
-        {
-            name: 'tags',
-            source: substringMatcher(lista_tags)
-        });
-
-     $('#frm_contador').submit(form_ajax_submit);
+    $('#frm_contador').submit(form_ajax_submit);
 
     $('.minicolors').minicolors({
           control: $(this).attr('data-control') || 'hue',
@@ -232,10 +209,36 @@
                 /* FOCUS ELEMENT */
                 e.preventDefault();
             }
-            
         });
-    
-    $('.edit_tag').tagsinput();
+
+
+    var data = {!! js_array($tags_cliente) !!};
+    var lista_tags = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: $.map(data, function (elem) {
+            return {
+                name: elem
+            };
+        })
+    });
+    lista_tags.initialize();
+
+
+    $('.edit_tag').tagsinput({
+        typeaheadjs: [{
+            minLength: 1,
+            highlight: true,
+        },{
+            minlength: 1,
+            name: 'lista_tags',
+            displayKey: 'name',
+            valueKey: 'name',
+            source: lista_tags.ttAdapter()
+        }],
+        freeInput: true,
+        allowDuplicates: false,
+    });
 
     $('.edit_tag').on('itemAdded', function(event) {
         $('#tags').val($(".edit_tag").tagsinput('items'));

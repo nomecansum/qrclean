@@ -5,7 +5,14 @@
         line-height: 0px
     }
 
+    .select2-choices {
+        min-height: 150px;
+        max-height: 150px;
+        overflow-y: auto;
+    }
+
 </style>
+
 <div class="panel" id="editor">
     <div class="panel">
         {{-- <div class="panel-heading">
@@ -67,7 +74,7 @@
                             <span class="btn input-group-text btn-mint datepickerbutton" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
                         </div>
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label for="id_edificio"><i class="fad fa-building"></i> Edificio</label>
                         <select name="id_edificio" id="id_edificio" class="form-control">
                             @foreach(DB::table('edificios')->where('id_cliente',Auth::user()->id_cliente)->get() as $edificio)
@@ -76,7 +83,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="planta">Planta</label>
+                        <label for="planta"><i class="fad fa-layer-group"></i> Planta</label>
                         <select name="id_planta" id="id_planta" class="form-control">
                             <option value="0">Cualquiera</option>
                             @foreach($plantas_usuario as $p)
@@ -101,9 +108,20 @@
                     @if(session('CL')['mca_reserva_horas']=='S')
                     <div class="form-group col-md-7">
                         <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas</label>
-                        <div id="hora-range-drg"></div><span id="hora-range-val" style="display: none"></span>
+                        <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
                     </div>
                     @endif
+                    <div class="form-group col-md-5">
+                        <label>Tags
+                            <input id="andor" name="andor" type="checkbox">
+                            <span id="andor-field" class="label label-info">OR</span>
+                        </label>
+                        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tags[]" id="multi-tag" >
+                            @foreach(DB::table('tags')->where('id_cliente',Auth::user()->id_cliente)->get() as $tag)
+                                <option value="{{ $tag->id_tag}}">{{ $tag->nom_tag }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             
                 <div class="row">
@@ -123,12 +141,32 @@
     //$('#frm_contador').on('submit',form_ajax_submit);
     comprobar_puestos();
 
+    var changeCheckbox = document.getElementById('andor'), changeField = document.getElementById('andor-field');
+    new Switchery(changeCheckbox,{ size: 'small',color:'#489eed' })
+    changeCheckbox.onchange = function() {
+        if(changeCheckbox.checked){
+            changeField.innerHTML='AND';
+        } else {
+            changeField.innerHTML='OR';
+        }
+        //$('#andor').val(changeField.innerHTML);
+        //comprobar_puestos();
+    };
+    changeCheckbox.onclick = function() {
+        comprobar_puestos();
+    };
 
     $('#id_edificio').change(function(){
         $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$(this).val(), function(){
             $('#id_planta').prepend("<option value='0'>Cualquiera</option>")
         });
     })
+    $(".select2-filtro").select2({
+        placeholder: "Todos",
+        allowClear: true,
+        width: "99.2%",
+        height: "20px"
+    });
 
     $(function(){
         $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$('#id_edificio').val(), function(){
@@ -188,13 +226,13 @@
     });
 
     function comprobar_puestos(){
-        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val(),id_planta:$('#id_planta').val()}, function(data, textStatus, xhr) {
+        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val(),id_planta:$('#id_planta').val(),tags:$('#multi-tag').val(),andor:$('#andor').is(':checked')}, function(data, textStatus, xhr) {
             $('#detalles_reserva').html(data);
         });
     }
 
-    $('#id_edificio, #id_tipo_puesto, #id_planta').change(function(){
-       comprobar_puestos();
+    $('#id_edificio, #id_tipo_puesto, #id_planta, #multi-tag').change(function(){
+      comprobar_puestos();
     })
 
 

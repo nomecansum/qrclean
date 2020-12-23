@@ -9,9 +9,53 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use File;
 
 class MKDController extends Controller
 {
+    
+    public function index(){
+
+        $usuarios=DB::table('users')
+            ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->wherein('users.id_cliente',clientes());
+                }
+            })
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',Auth::user()->id)->pluck('id')->toArray();
+                    $q->wherein('users.id',$usuarios_supervisados);
+                }
+            })
+            ->where('nivel_acceso','<=',Auth::user()->nivel_acceso)
+            ->wherenotnull('token_acceso')
+            ->get();
+
+        $plantas=DB::Table('plantas')
+            ->join('edificios','edificios.id_edificio','plantas.id_edificio')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->orderby('plantas.id_cliente')
+            ->orderby('plantas.id_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.id_planta')
+            ->get();
+
+        $edificios = edificios::where(function($q){
+                if (!isAdmin()) {
+                    $q->where('id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+        
+        return view('mkd.index',compact('usuarios','plantas','edificios'));
+    }
+    
     public function plano($planta,$token){
 
         if(!authbyToken($token)){
@@ -79,4 +123,13 @@ class MKDController extends Controller
         $puestos=json_encode($puestos);
         return $puestos;       
     }
+
+    public function gen_config(Request $r){
+        // $destinationPath=public_path()."/uploads/json/".Auth::user()->id_cliente."/";
+        // $file = 'playerweb.json';
+        // if (!is_dir($destinationPath)) {  mkdir($destinationPath,0777,true);  }
+        // File::put($destinationPath.$file,json_encode($r->lista));
+        // return response()->download($destinationPath.$file);
+        return response(json_encode($r->lista));
+    }    
 }

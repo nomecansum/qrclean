@@ -491,8 +491,6 @@ class IncidenciasController extends Controller
             'img1'=>'nullable',
             'img2'=>'nullable',
         ];
-
-
         $data = $request->validate($rules);
         return $data;
     }

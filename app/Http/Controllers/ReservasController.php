@@ -230,6 +230,23 @@ class ReservasController extends Controller
                     $q->where('puestos.id_planta',$r->id_planta);
                 }
             })
+            ->where(function($q) use($r){
+                if ($r->tags) {
+                    if($r->andor=="true"){//Busqueda con AND
+                        $puestos_tags=DB::table('tags_puestos')
+                            ->select('id_puesto')
+                            ->wherein('id_tag',$r->tags)
+                            ->groupby('id_puesto')
+                            ->havingRaw('count(id_tag)='.count($r->tags))
+                            ->pluck('id_puesto')
+                            ->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags);
+                    } else { //Busqueda con OR
+                        $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags); 
+                    }
+                }
+            })
             ->wherenotin('puestos.id_estado',[4,5,6])
             ->wherenotin('puestos.id_puesto',$puestos_usuarios)
             ->wherenotin('puestos.id_puesto',$puestos_nomiperfil)

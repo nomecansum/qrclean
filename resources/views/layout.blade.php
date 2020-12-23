@@ -61,7 +61,8 @@
     <link href="{{ asset('/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     {{-- Boostrap Select --}}
     <link href="{{ asset('/plugins/bootstrap-select-master/css/bootstrap-select.min.css') }}" rel="stylesheet">
-
+    {{-- switchery switchs deslizable --}}
+    <link href="{{ asset('plugins/switchery/switchery.min.css') }}" rel="stylesheet">
 
     <!--=================================================
 
@@ -265,6 +266,9 @@
 
     {{-- Bootstrap select --}}
     <script src="{{ asset('/plugins/bootstrap-select-master/js/bootstrap-select.min.js') }}"></script>
+
+    {{-- switchery switchs deslizable --}}
+    <script src="{{ asset('plugins/switchery/switchery.min.js') }}"></script>
 
     @include('layouts.main_scripts')
     @yield('scripts')

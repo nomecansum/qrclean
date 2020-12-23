@@ -294,8 +294,11 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::post('addPermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@addPermissions_user']);
     Route::post('removePermissions_user',['middleware'=>'permissions:["Permisos"],["W"]','uses'=>'PermissionsController@removePermissions_user']);
 
-    
-    
+     ////////////////////////////   CONFIGURACION DE SEÑALETICA  ////////////////////////////////
+    Route::group(['prefix' => 'MKD'], function () {
+        Route::get('/','MKDController@index');
+        Route::post('/gen_config','MKDController@gen_config');
+    });  
 
 });
 

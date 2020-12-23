@@ -4,7 +4,7 @@
     use App\Models\tags;
     use App\Models\puestos_tipos;
 @endphp
-<link href="{{ asset('plugins/switchery/switchery.min.css') }}" rel="stylesheet">
+
 
 @if(!(isset($hide['head']) || (isset($hide['head']) && ($hide['head']!==1))))
 <div class="panel " style="padding-right: 10px" >
@@ -164,7 +164,7 @@
 
 
 @section('scripts2')
-<script src="{{ asset('plugins/switchery/switchery.min.js') }}"></script>
+
 <script>
 
     var changeCheckbox = document.getElementById('demo-sw-checkstate'), changeField = document.getElementById('demo-sw-checkstate-field');

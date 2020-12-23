@@ -145,8 +145,6 @@ class PuestosController extends Controller
                         $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
                         $q->whereIn('puestos.id_puesto',$puestos_tags); 
                     }
-                   
-                    
                 }
             })
             ->where(function($q){

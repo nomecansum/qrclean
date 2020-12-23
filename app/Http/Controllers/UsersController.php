@@ -452,6 +452,10 @@ class UsersController extends Controller
         savebitacora("Relogin al usuario [".$id."]");
         Auth::logout();
         Auth::loginUsingId($id);
+        Session::forget('P');
+        Session::forget('logo_cliente');
+        Session::forget('logo_cliente_menu');
+        Session::forget('id_cliente');
 
         //session(['lang' => Auth::user()->lang]);
         session(['back_id'=>$back_id]);
@@ -501,15 +505,24 @@ class UsersController extends Controller
         Session::forget('id_cliente');
 
         //Logo de cliente
-        $cliente=DB::table('clientes')->where('id_cliente',Auth::user()->cod_cliente)->first();
+        $config_cliente=DB::table('config_clientes')->where('id_cliente',Auth::user()->id_cliente)->first();  
+        $cliente=DB::table('clientes')->where('id_cliente',Auth::user()->id_cliente)->first();  
+        if(isset($cliente->id_distribuidor)){
+            $distribuidor=DB::table('distribuidores')->where('id_distribuidor',$cliente->id_distribuidor)->first();
+            session(['DIS'=>(array)$distribuidor]);
+        }
+        session(['CL'=>(array)$config_cliente]);
+        session(['logo_cliente'=>$cliente->img_logo]);
+        session(['logo_cliente_menu'=>$cliente->img_logo_menu]);
+        session(['id_cliente'=>$cliente->id_cliente]);
 
         if(!empty($cliente->fec_borrado))
            return response()->json(["Tu empresa se encuentra dada de baja en el sistema, para cualquier pregunta contacte al 917 373 295 "],422);
 
-        if($cliente && $cliente->img_logo!=''){
-            session(['logo_cliente' => $cliente->img_logo]);
-        }
-        else Session::forget('logo_cliente');
+        // if($cliente && $cliente->img_logo!=''){
+        //     session(['logo_cliente' => $cliente->img_logo]);
+        // }
+        // else Session::forget('logo_cliente');
     
 
         savebitacora("Cambio de sesion del usuario",null);

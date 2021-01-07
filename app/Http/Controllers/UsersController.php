@@ -85,10 +85,43 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //$Grupos = Grupo::pluck('grupo','id_grupo')->all();
-        $Perfiles = niveles_acceso::all();
 
-        return view('users.create', compact('Perfiles'));
+        $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();
+        // dd($Perfiles);
+
+        $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
+
+        $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->get()->pluck('id_perfil')->unique();
+
+        $supervisores_usuario=DB::table('permisos_usuarios')->where('id_seccion',$permiso)->get()->pluck('id_usuario')->unique();
+
+        $supervisores=DB::table('users')
+            ->where(function ($q) use($supervisores_perfil,$supervisores_usuario){
+                $q->wherein('cod_nivel',$supervisores_perfil);
+                $q->orwherein('id',$supervisores_usuario);
+            })
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->wherein('users.id_cliente',clientes());
+                }
+            })
+            ->orderby('name')
+            ->get();
+
+        $usuarios_supervisables = DB::table('users')
+            ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->wherein('users.id_cliente',clientes());
+                }
+            })
+            ->where('users.id','<>',Auth::user()->id)
+            ->get();
+
+        $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',0)->pluck('id')->toarray();
+
+        return view('users.create', compact('Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables'));
+
     }
     /**
      * Store a new users in the storage.

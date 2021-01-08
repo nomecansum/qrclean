@@ -31,8 +31,9 @@ class PuestosController extends Controller
     public function index(){
 
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','estados_puestos.hex_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto')
+            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','estados_puestos.hex_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
@@ -74,8 +75,9 @@ class PuestosController extends Controller
         }
         
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','estados_puestos.hex_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto')
+            ->select('puestos.*','edificios.*','plantas.*','estados_puestos.des_estado','estados_puestos.val_color','estados_puestos.hex_color','clientes.nom_cliente','clientes.id_cliente','puestos_asignados.id_usuario','puestos_asignados.id_perfil', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')

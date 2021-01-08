@@ -23,6 +23,7 @@ use \Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use stdClass;
 
 class UsersController extends Controller
 {
@@ -217,7 +218,47 @@ class UsersController extends Controller
 
         $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',$id)->pluck('id')->toarray();
 
-        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables'));
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','users.id','reservas.id_usuario')
+            ->where('reservas.id_usuario',$id)
+            ->get();
+        
+        $asignaciones=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+            ->leftjoin('users','users.id','puestos_asignados.id_usuario')
+            ->leftjoin('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')
+            ->where('puestos_asignados.id_usuario',$id)
+            ->get();
+        $eventos=[];
+        foreach($reservas as $res){
+            $e=new stdClass();
+            $e->title=$res->cod_puesto;
+            $e->start=Carbon::parse($res->fec_reserva)->format('Y-m-d')."T".Carbon::parse($res->fec_reserva)->format('H:i:s');
+            if($res->fec_fin_reserva!=null){
+                $e->end=Carbon::parse($res->fec_fin_reserva)->format('Y-m-d')."T".Carbon::parse($res->fec_fin_reserva)->format('H:i:s');
+            } else {
+                $e->end=Carbon::parse($res->fec_reserva)->format('Y-m-d')."T00:00:00";
+            }
+            $e->className="success";
+            $eventos[]=$e;
+        }
+        foreach($asignaciones as $as){
+            $e=new stdClass();
+            $e->title=$as->cod_puesto;
+            if($as->fec_desde!=null){
+                $e->start=Carbon::parse($as->fec_desde)->format('Y-m-d')."T00:00:00";
+                $e->end=Carbon::parse($as->fec_hasta)->format('Y-m-d')."T00:00:00";
+            } else {
+                $e->start=Carbon::parse('2000-01-01')->format('Y-m-d')."T00:00:00";
+                $e->end=Carbon::parse('2050-01-01')->format('Y-m-d')."T00:00:00";
+            }
+            $e->className="warning";
+            $eventos[]=$e;
+        }
+        $eventos=json_encode($eventos);
+
+        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos'));
     }
     /**
      * Update the specified users in the storage.

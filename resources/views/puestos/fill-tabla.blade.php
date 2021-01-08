@@ -50,8 +50,8 @@
                                     <label class="custom-control-label"   for="chkp{{ $puesto->id_puesto }}"></label>
                                 </td>
                                 <td class="thumb text-center" data-id="">
-                                    @isset($puesto->val_icono)
-                                        <i class="{{ $puesto->val_icono }} fa-2x {{ txt_blanco($puesto->color_puesto) }}"></i>
+                                    @isset($puesto->icono_tipo)
+                                        <i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i>
                                     @endisset
                                 </td>
                                 

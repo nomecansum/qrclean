@@ -56,7 +56,7 @@ class MKDController extends Controller
         return view('mkd.index',compact('usuarios','plantas','edificios'));
     }
     
-    public function plano($planta,$token){
+    public function plano($planta,$token,$view="plano"){
 
         if(!authbyToken($token)){
             $mensaje="No tiene permiso para ver esa informacion";
@@ -64,13 +64,17 @@ class MKDController extends Controller
         }
 
         validar_acceso_tabla($planta,'plantas');
-        $cliente=clientes::find(Auth::user()->id_cliente)->first();
+        
         $plantas = plantas::findOrFail($planta);
+        $cliente=clientes::find($plantas->id_cliente)->first();
         $edificio=edificios::find($plantas->id_edificio)->first();
         $puestos= DB::Table('puestos')
+            ->select('puestos.*','plantas.*','estados_puestos.val_color as color_estado','estados_puestos.hex_color','estados_puestos.des_estado')
             ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
-            ->where('id_planta',$planta)
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->where('puestos.id_planta',$planta)
             ->get();
+
         $lista_ids=$puestos->pluck('id_puesto')->toArray();
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
@@ -84,6 +88,7 @@ class MKDController extends Controller
                     $q->where('reservas.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->where('puestos.id_planta',$planta)
             ->get();
 
         $asignados_usuarios=DB::table('puestos_asignados')
@@ -94,21 +99,24 @@ class MKDController extends Controller
                 $q->wherenull('fec_desde');
                 $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
             })
+            ->where('puestos.id_planta',$planta)
             ->get();
 
         $asignados_miperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
             ->where('id_perfil',Auth::user()->cod_nivel)
+            ->where('puestos.id_planta',$planta)
             ->get();
         
         $asignados_nomiperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
             ->where('id_perfil','<>',Auth::user()->cod_nivel)
+            ->where('puestos.id_planta',$planta)
             ->get();
 
-        return view('mkd.plano',compact('plantas','puestos','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','cliente','edificio'));
+        return view('mkd.'.$view,compact('token','planta','view','plantas','puestos','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','cliente','edificio'));
         
     }
 
@@ -131,5 +139,6 @@ class MKDController extends Controller
         // File::put($destinationPath.$file,json_encode($r->lista));
         // return response()->download($destinationPath.$file);
         return response(json_encode($r->lista));
-    }    
+    } 
+    
 }

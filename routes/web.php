@@ -33,7 +33,7 @@ Route::view('/reminder','auth.passwords.email');
 Route::post('/gen_qr','HomeController@gen_qr');
 
 Route::group(['prefix' => 'MKD'], function () {
-    Route::get('/plano/{planta}/{token}','MKDController@plano');
+    Route::get('/plano/{planta}/{token}/{vista?}','MKDController@plano');
     Route::get('/datos_plano/{planta}/{token}','MKDController@datos_plano');
 });  
 

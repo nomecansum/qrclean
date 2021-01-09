@@ -9,7 +9,7 @@
     {{--  <link href="{{ asset('/plugins/fullcalendar/fullcalendar.min.css') }}" rel="stylesheet">  --}}
     <link href="{{ asset('/plugins/fullcalendar/lib/main.css') }}" rel="stylesheet">
     
-	<link href="{{ asset('/plugins/fullcalendar/nifty-skin/fullcalendar-nifty.min.css') }}" rel="stylesheet">
+	{{--  <link href="{{ asset('/plugins/fullcalendar/nifty-skin/fullcalendar-nifty.min.css') }}" rel="stylesheet">  --}}
     <style type="text/css">
         td .tooltip {
             position:absolute

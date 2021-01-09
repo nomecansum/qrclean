@@ -29,8 +29,9 @@
         $puestos_activos=$puestos->wherein('id_estado',[1,2,3])->count();
         $puestos_libres=$puestos->where('id_estado',1)->count();
         $puestos_reservados=$reservas->where('id_estado',1)->count();
-        $ocupados=$puestos_activos-$puestos_libres-$puestos_reservados;
-        $disponibles=$puestos_libres-$puestos_reservados;
+        $puestos_asignados=$asignados_usuarios->count();
+        $ocupados=$puestos_activos-$puestos_libres-$puestos_reservados-$puestos_asignados;
+        $disponibles=$puestos_libres-$puestos_reservados-$puestos_asignados;
         $pct_aforo=round(100*$ocupados/$puestos_activos);
         $pl=$plantas;
     @endphp
@@ -43,8 +44,8 @@
         </div>
         <div class="col-md-8">
             <div class="row">
-                <div class="col-md-6"><span style="font-size: 60px">{{ $edificio->des_edificio }}</span></div>
-                <div class="col-md-6"><span style="font-size: 60px">{{ $plantas->des_planta }}</span></div>
+                <div class="col-md-6"><span style="font-size: 40px">{{ $edificio->des_edificio }}</span></div>
+                <div class="col-md-6"><span style="font-size: 40px">{{ $plantas->des_planta }}</span></div>
             </div>
             <div class="row">
                 <div class="col-md-4 text-center text-2x">
@@ -143,17 +144,18 @@
         try{
             posiciones={!! json_encode($pl->posiciones)??'[]' !!};
             posiciones=$.parseJSON(posiciones); 
-            console.log(posiciones);
+            //console.log(posiciones);
         } catch($err){
             posiciones=[];
         }
-       
+        document.getElementById('plano{{ $pl->id_planta }}').setAttribute("data-posiciones", posiciones);
         function recolocar_puestos(posiciones){
             $('.container').each(function(){
                 plano=$(this);
+                console.log(posiciones);
                 //console.log(plano.data('posiciones'));
                 
-                $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
+                $.each(posiciones, function(i, item) {//console.log(item);
                     puesto=$('#puesto'+item.id);
                     puesto.css('top',plano.height()*item.offsettop/100);
                     puesto.css('left',plano.width()*item.offsetleft/100);
@@ -165,12 +167,17 @@
         
 
         $(window).resize(function(){
-            recolocar_puestos();
+            recolocar_puestos(posiciones);
         })
 
         $('.mainnav-toggle').click(function(){
-            recolocar_puestos();
+            recolocar_puestos(posiciones);
         })
+
+        $(function(){
+            recolocar_puestos(posiciones);
+        })
+        
         
     </script>
 @endsection

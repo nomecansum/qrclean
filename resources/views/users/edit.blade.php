@@ -65,6 +65,8 @@
                 <div class="col-md-1"></div>
                 <div class="fluid col-md-10">
                     <div id='demo-calendar'></div>
+                    <div id="events-popover-head" class="hide">Events</div>
+                    <div id="events-popover-content" class="hide">Test</div>
                 </div>
                 <div class="col-md-2"></div>
             </div>
@@ -94,6 +96,7 @@
 @section('scripts')
 <script src="{{ asset('plugins/fullcalendar/lib/main.min.js') }}"></script>
 <script src="{{ asset('plugins/fullcalendar/lib/locales/es.js') }}"></script>
+<script src="{{ asset('plugins/fullcalendar/tooltip.min.js') }}"></script>
     <script>
         $(function(){
             $('#plantas_usuario').load("{{ url('users/plantas/'.$users->id) }}/1")
@@ -118,21 +121,56 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,listWeek'
                 },
+                eventDidMount: function(info) {
+                    //console.log(info);
+                    var tooltip = new Tooltip(info.el, {
+                    title: info.event.extendedProps.description,
+                    placement: 'top',
+                    trigger: 'hover',
+                    container: 'body'
+                    });
+                },
+                eventLimit: 4,
+
+                eventLimitClick: function (cellInfo, jsEvent) {
+            
+                    $(cellInfo.dayEl).popover({
+                        html: true,
+                        placement: 'bottom',
+                        container: 'body',
+                        title: function () {
+                            return $("#events-popover-head").html();
+                        },
+                        content: function () {
+                            return $("#events-popover-content").html();
+                        }
+                    });
+
+                    $(cellInfo.dayEl).popover('show');
+                },
+                dayClick: function (cellInfo, jsEvent) {
+                    $(this).popover({
+                        html: true,
+                        placement: 'bottom',
+                        container: 'body',
+                        title: function () {
+                            return $("#events-popover-head").html();
+                        },
+                        content: function () {
+                            return $("#events-popover-content").html();
+                        }
+                    });
+
+                    $(this).popover('show');
+                },
                 editable: false,
                 droppable: false, // this allows things to be dropped onto the calendar
-                drop: function() {
-                    // is the "remove after drop" checkbox checked?
-                    if ($('#drop-remove').is(':checked')) {
-                        // if so, remove the element from the "Draggable Events" list
-                        $(this).remove();
-                    }
-                },
                 eventLimit: true, // allow "more" link when too many events
                 locale: 'es',
                 firstDay: 1,
                 themeSystem: 'bootstrap',
                 moreLinkClick: "popover",
-                dayMaxEvents: true,
+                dayMaxEventRows: 4,
                 events: {!! $eventos !!}
             });
             calendar.render();

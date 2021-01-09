@@ -10,7 +10,7 @@
     changeTheme = function (themeName, type) {
         var themeCSS = $('#theme'),
             fileext = '.min.css',
-            filename = 'css/themes/type-' + type + '/' + themeName + fileext;
+            filename = '/css/themes/type-' + type + '/' + themeName + fileext;
 
         if (themeCSS.length) {
             themeCSS.prop('href', filename);

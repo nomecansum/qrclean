@@ -226,13 +226,13 @@
     <!--JAVASCRIPT-->
     <!--=================================================-->
     <!--jQuery [ REQUIRED ]-->
-    <script src="{{ url('js/jquery.min.js') }}"></script>
+    <script src="{{ url('/js/jquery.min.js') }}"></script>
     <!--jQueryUI [ REQUIRED ]-->
     <script src="{{ url('/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <!--BootstrapJS [ RECOMMENDED ]-->
-    <script src="{{ url('js/bootstrap.min.js') }}"></script>
+    <script src="{{ url('/js/bootstrap.min.js') }}"></script>
     <!--NiftyJS [ RECOMMENDED ]-->
-    <script src="{{ url('js/nifty.js') }}"></script>
+    <script src="{{ url('/js/nifty.js') }}"></script>
     <!--=================================================-->
     <!--Demo script [ DEMONSTRATION ]-->
     {{--  <script src="{{ url('js/demo/nifty-demo.js') }}"></script>  --}}
@@ -268,7 +268,7 @@
     <script src="{{ asset('/plugins/bootstrap-select-master/js/bootstrap-select.min.js') }}"></script>
 
     {{-- switchery switchs deslizable --}}
-    <script src="{{ asset('plugins/switchery/switchery.min.js') }}"></script>
+    <script src="{{ asset('/plugins/switchery/switchery.min.js') }}"></script>
 
     @include('layouts.main_scripts')
     @yield('scripts')

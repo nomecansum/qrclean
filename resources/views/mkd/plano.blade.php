@@ -159,11 +159,11 @@
             recolocar_puestos(posiciones);
         })
         function refrescar(){
-            console.log('Refrescar');
-            $('.flpuesto').remove();
-            $.get("{{ url('/MKD/plano/'.$planta.'/'.$token.'/refresh') }}", function(data){
-                $('#puestos').html(data);
-            });  
+            // console.log('Refrescar');
+            // $('.flpuesto').remove();
+            // $.get("{{ url('/MKD/plano/'.$planta.'/'.$token.'/refresh') }}", function(data){
+            //     $('#puestos').html(data);
+            // });  
             //recolocar_puestos(posiciones);
             //$('.flpuesto').remove();
 

@@ -118,7 +118,7 @@
                             <th  data-sortable="true">Nombre</th>
                             <th  data-sortable="true">Perfil</th>
                             @if(!$hay_supervisores->isEmpty())
-                                <th>Supervisor</th>
+                                <th data-sortable="true">Supervisor</th>
                             @endif
                             <th  data-sortable="true">Ult acceso</th>
                             <th  data-sortable="true">Email</th>

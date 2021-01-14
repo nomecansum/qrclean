@@ -37,6 +37,7 @@ class UsersController extends Controller
     {
         
         $usersObjects = DB::table('users')
+        ->select('users.*','niveles_acceso.*','sup.name as nom_supervisor','sup.id as id_supervisor')
         ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
         ->where(function($q){
             if (!isAdmin()) {
@@ -49,7 +50,9 @@ class UsersController extends Controller
                 $q->wherein('users.id',$usuarios_supervisados);
             }
         })
+        ->leftjoin('users AS sup','users.id_usuario_supervisor', 'sup.id')
         ->get();
+
 
         $supervisores_perfil=[0];
         $supervisores_usuario=[0];

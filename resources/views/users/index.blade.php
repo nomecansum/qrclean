@@ -96,6 +96,9 @@
                 <div id="all_toolbar" class="ml-3">
                     <input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos">Todos</label>
                 </div>
+                @php
+                    $hay_supervisores=$usersObjects->wherenotnull('id_usuario_supervisor');  
+                @endphp
                 <table id="tablarondas"  data-toggle="table"
                     data-locale="es-ES"
                     data-search="true"
@@ -114,11 +117,17 @@
                             <th style="width: 30px" class="no-sort"  data-switchable="false"></th>
                             <th  data-sortable="true">Nombre</th>
                             <th  data-sortable="true">Perfil</th>
+                            @if(!$hay_supervisores->isEmpty())
+                                <th>Supervisor</th>
+                            @endif
                             <th  data-sortable="true">Ult acceso</th>
                             <th  data-sortable="true">Email</th>
                         </tr>
                     </thead>
                     <tbody>
+                    @php
+                        $hay_supervisores=$usersObjects->wherenotnull('id_usuario_supervisor');  
+                    @endphp
                     @foreach($usersObjects as $users)
                         <tr class="hover-this" data-id="{{ $users->id }}" data-href="{{ route('users.users.edit', $users->id ) }}">
                             <td class="text-center">
@@ -143,6 +152,9 @@
                                     </div>
                                 @endif
                             </td>
+                            @if(!$hay_supervisores->isEmpty())
+                                <td>{{ $users->nom_supervisor }}</td>
+                            @endif
                             <td>{!! beauty_fecha($users->last_login) !!}</td>
                             <td style="vertical-align: middle">
                                 {{ $users->email }}

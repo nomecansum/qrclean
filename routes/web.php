@@ -199,7 +199,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/view/{id}/{print}', 'LimpiezaController@view')->name('rondas.view');
         Route::post('/estado_puesto_ronda', 'LimpiezaController@estado_puesto')->name('rondas.estado_puesto_ronda');
         Route::get('/index/{f1?}/{f2?}', 'LimpiezaController@index')->name('rondas.index');
-        Route::get('/completar_ronda/{tipo}/{id}/{empleado}', 'LimpiezaController@completar_ronda')->name('rondas.completar');
+        Route::get('/completar_ronda/{id}/{empleado}', 'LimpiezaController@completar_ronda')->name('rondas.completar');
         Route::get('/detallelimp/{id}', 'LimpiezaController@view_limpia')->name('rondas.detalle_limpiador');
         Route::get('/scan', 'LimpiezaController@scan')->name('rondas.estado_puesto');
     });

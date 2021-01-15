@@ -112,6 +112,7 @@ class IncidenciasController extends Controller
             })
             ->where('incidencias.id_incidencia',$id)
             ->first();
+
         $acciones=DB::table('incidencias_acciones')
             ->join('users','incidencias_acciones.id_usuario','users.id')
             ->where('id_incidencia',$id)
@@ -224,7 +225,6 @@ class IncidenciasController extends Controller
                 'error' => 'ERROR: Ocurrio un error reabriendo la incidencia ['.$r->id_incidencia.'] '.$exception->getMessage(),
                 'url' => url('incidencias')
             ];
-
         }
     }
 
@@ -319,6 +319,7 @@ class IncidenciasController extends Controller
         return view('incidencias.causas.index', compact('causas'));
     }
 
+
     public function causas_edit($id=0){
         if($id==0){
             $causa=new causas_cierre();
@@ -328,6 +329,7 @@ class IncidenciasController extends Controller
         $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
         return view('incidencias.causas.edit', compact('causa','Clientes','id'));
     }
+
 
     public function causas_save(Request $r){
         try {
@@ -621,6 +623,7 @@ class IncidenciasController extends Controller
     public function add_accion(Request $r){
         $data=[];
         $incidencia=incidencias::find($r->id_incidencia);
+        $tipo=incidencias_tipos::find($incidencia->id_tipo_incidencia);
         try{    
             for ($i=1; $i <3 ; $i++) { 
                 $var="img".$i;
@@ -631,15 +634,10 @@ class IncidenciasController extends Controller
                     $path = config('app.ruta_public').'/uploads/incidencias/'.$incidencia->id_cliente;
                     $path_local = public_path().'/uploads/incidencias/'.$incidencia->id_cliente;
 
-                        if(!File::exists($path_local)) {
-                            File::makeDirectory($path_local);
-                        }
-
+                    if(!File::exists($path_local)) {
+                        File::makeDirectory($path_local);
+                    }
                     $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                    // $img = Image::make($file);
-                    // $img->resize(1000, null, function ($constraint) {
-                    //     $constraint->aspectRatio();
-                    // })->save($path.'/'.$$var);
                     
                     Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
                     $file->move($path_local,$$var);

@@ -4,7 +4,7 @@
     use App\Models\incidencias_tipos;
     use App\Models\users;
 
-    $inc=incidencias::find(3);
+    //$inc=incidencias::find(3);
     $tipo=incidencias_tipos::find($inc->id_tipo_incidencia);
     $puesto=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')

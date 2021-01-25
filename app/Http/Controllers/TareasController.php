@@ -255,9 +255,11 @@ class TareasController extends Controller
 
 		//dd(Carbon::parse($r->hora_inicio));
 		$dias_semana="";
-			if(is_array($r->dias_semana)){
-				$dias_semana=implode(",",$r->dias_semana);
-			}
+		if(is_array($r->dias_semana)){
+			$dias_semana=implode(",",$r->dias_semana);
+		} else {
+			$dias_semana="alldays";
+		}
 
 		if (isset($r->clientes)){
 			$r->clientes=implode(",",$r->clientes);

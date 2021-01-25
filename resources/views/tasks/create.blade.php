@@ -118,10 +118,7 @@
 										@endphp
 										<label>{{ __('tareas.dia_de_la_semana') }}</label><br>
 										<select class="form-control select2 select2-multiple" multiple name="dias_semana[]" id="dias_semana">
-											<option value="" ></option>
-	
-											<option {{ isset($t)&&in_array('weekdays',$dias_semana) ? 'selected' : ''}} value="weekdays">{{__('tareas.entre_semana')}}</option>
-											<option {{ isset($t)&&in_array('weekends',$dias_semana) ? 'selected' : ''}} value="weekends">{{__('tareas.fines_semana')}}</option>
+											<option {{ isset($t)&&in_array('alldays',$dias_semana)||count($dias_semana)==0 ? 'selected' : ''}} value="alldays">{{__('tareas.todos_los_dias')}}</option>
 											<option {{ isset($t)&&in_array('mondays',$dias_semana) ? 'selected' : ''}} value="mondays">{{__('general.lunes')}}</option>
 											<option {{ isset($t)&&in_array('tuesdays',$dias_semana) ? 'selected' : ''}} value="tuesdays">{{__('general.martes')}}</option>
 											<option {{ isset($t)&&in_array('wednesdays',$dias_semana) ? 'selected' : ''}} value="wednesdays">{{__('general.miercoles')}}</option>

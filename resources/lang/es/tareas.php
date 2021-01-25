@@ -58,6 +58,7 @@ return [
     'seleccione_un_comando' => 'Seleccione un comando',
     'dia_de_la_semana' => 'Dia de la semana',
     'ejecutar'=>'Run',
-    'desea_eliminar_tarea'=>'Borrar tarea'
+    'desea_eliminar_tarea'=>'Borrar tarea',
+    'todos_los_dias'=>'Todos los dias'
     
 ];

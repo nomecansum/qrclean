@@ -142,7 +142,8 @@ class HomeController extends Controller
                     'encuesta'=>0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
-            }
+            } 
+
 
             //Aqui vemos si el puesto lo tiene alguien permanentemente asignado
             $asignados_usuarios=DB::table('puestos_asignados')

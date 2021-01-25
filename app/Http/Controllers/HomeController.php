@@ -130,7 +130,7 @@ class HomeController extends Controller
                 })
                 ->where('id_usuario','<>',$id_usuario)
                 ->first();
-
+            
             if($reserva){
                 $respuesta=[
                     'mensaje'=>"PUESTO RESERVADO",
@@ -142,7 +142,19 @@ class HomeController extends Controller
                     'encuesta'=>0
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
-            } 
+            } else {
+                $mireserva=DB::table('reservas')
+                ->where('id_puesto',$p->id_puesto)
+                ->where(function($q){
+                    $q->where(function($q){
+                        $q->wherenull('fec_fin_reserva');
+                        $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                    });
+                    $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+                })
+                ->where('id_usuario',$id_usuario)
+                ->first();
+            }
 
 
             //Aqui vemos si el puesto lo tiene alguien permanentemente asignado
@@ -327,7 +339,7 @@ class HomeController extends Controller
             }
         }
         //savebitacora('Cambio de puestos QR anonimo'.$p->id_puesto. ' a estado '.$p->id_estado,"Home","getpuesto","OK");
-        return view('scan.result',compact('respuesta','reserva','config_cliente'));
+        return view('scan.result',compact('respuesta','reserva','mireserva','config_cliente'));
     }
 
 
@@ -413,7 +425,7 @@ class HomeController extends Controller
             ]);
             DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
-                ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+                ->wheredate('fec_reserva',Carbon::now()->format('Y-m-d'))
                 ->where('id_usuario',$id_usuario)
                 ->update(['fec_utilizada'=>Carbon::now()]);
             switch ($estado) {

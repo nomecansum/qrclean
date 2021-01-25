@@ -34,13 +34,14 @@ class config_clientes extends Model
      */
     protected $fillable = [
                   'max_dias_reserva',
-                  'mca_restringir_usuarios_planta',
                   'mca_limpieza',
                   'mca_permitir_anonimo',
-                  'theme_type',
+                  'mca_reserva_horas',
+                  'mca_restringir_usuarios_planta',
+                  'tam_qr',
                   'theme_name',
-                  'val_metodo_notificacion',
-                  'mca_reservar_horas'
+                  'theme_type',
+                  'val_metodo_notificacion'
               ];
 
     /**

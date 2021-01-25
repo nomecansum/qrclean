@@ -10,11 +10,6 @@
         "table-name": "camaras"
     },
     {
-        "model-name": "clientes",
-        "resource-file": "clientes.json",
-        "table-name": "clientes"
-    },
-    {
         "model-name": "edificios",
         "resource-file": "edificios.json",
         "table-name": "edificios"
@@ -63,11 +58,6 @@
         "model-name": "plantas",
         "resource-file": "plantas.json",
         "table-name": "plantas"
-    },
-    {
-        "model-name": "config_clientes",
-        "resource-file": "config_clientes.json",
-        "table-name": "config_clientes"
     },
     {
         "model-name": "incidencias",
@@ -148,5 +138,15 @@
         "model-name": "tags",
         "resource-file": "tags.json",
         "table-name": "tags"
+    },
+    {
+        "model-name": "clientes",
+        "resource-file": "clientes.json",
+        "table-name": "clientes"
+    },
+    {
+        "model-name": "config_clientes",
+        "resource-file": "config_clientes.json",
+        "table-name": "config_clientes"
     }
 ]

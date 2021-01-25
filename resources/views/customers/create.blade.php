@@ -138,6 +138,12 @@
 										
 									</div>
 								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="">Tamaño QR</label>
+										<input type="number" class="form-control" min="50" max="500"  required name="tam_qr" value="{{ $config->tam_qr??230 }}">
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -89,6 +89,15 @@
         </div>
         <div class="col-md-3"></div>
     </div>
+    @if($mireserva)
+    <div class="row" id="div_mireserva">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-1x text-center font-bold">
+            [Usted tiene reservado este puesto para hoy entre las {{ Carbon\Carbon::parse($mireserva->fec_reserva)->format('H:i') }} y las {{ Carbon\Carbon::parse($mireserva->fec_fin_reserva)->format('H:i') }}]
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    @endif
     @if(isset($puesto))
         <div id="div_botones">
             @if(!$reserva)

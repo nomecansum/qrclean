@@ -111,6 +111,7 @@ class liberarReserva extends Command
         //Primero sacar aquellas reservas 
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','users.id','reservas.id_usuario')
             ->where(function($q) use($tarea){
                 if(isset($tarea->clientes) && $tarea->clientes!=''){
                     $lista_clientes=explode(',',$tarea->clientes);
@@ -122,8 +123,21 @@ class liberarReserva extends Command
             
             ->wherenull('fec_utilizada')
             ->get();
-
-        dd($reservas);
+        $this->escribelog_comando_comando('info','Encontradas '.$reservas->count().' anulables'); 
+        foreach($reservas as $res){
+            //Marcamos las reservas como anuladas y les enviamos un mail a los afectados
+            $upd_res=DB::table('reservas')
+            ->where('id_reserva',$res->id_reserva)
+            ->update([
+                'fec_utilizada'=>Carbon::now(),
+                'mca_anulada'=>'S'
+            ]);
+            $this->escribelog_comando_comando('debug','Anulada reserva # '.$res->id_reserva.' de '.$res->name.' para el puesto '.$res->cod_puesto.' por no utilizarla a tiempo ['.Carbon::parse($res->fec_reserva)->format('d/m/Y H:i').'] -> ['.Carbon::now()->format('d/m/Y H:i').']  ('.Carbon::now()->diffForHumans(Carbon::parse($res->fec_reserva)).')'); 
+            savebitacora('Anulada reserva # '.$res->id_reserva.' de '.$res->name.' para el puesto '.$res->cod_puesto.' por no utilizarla a tiempo ['.Carbon::parse($res->fec_reserva)->format('d/m/Y H:i').'] -> ['.Carbon::now()->format('d/m/Y H:i').']',"Tareas programadas","liberarReserva","OK");
+            $body="Le notificamos que su reserva del puesto ".$res->cod_puesto." que tenía para hoy a las ".Carbon::parse($res->fec_reserva)->format('d/m/Y H:i')." ha sido anulada porque a las ".Carbon::now()->format('d/m/Y H:i')." (".Carbon::now()->diffForHumans(Carbon::parse($res->fec_reserva)).") no consta que haya hecho uso del puesto.<br>".chr(13);
+            $body.="Si quiere seguir haciendo uso del puesto puede volver a reservarlo o acceder a el directamente, siempre que no haya sido reservado por otro usuario";
+            notificar_usuario($res,'Anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1);
+        }
 
         //Actualiza la fechad de ultima ejecucion de la tarea
         $tarea->fec_ult_ejecucion=Carbon::now();

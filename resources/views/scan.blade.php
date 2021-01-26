@@ -130,7 +130,7 @@
     <script>
 
         function loguear(s){
-            $('#log').html($('#log').html()+'<br>'+s)
+            //$('#log').html($('#log').html()+'<br>'+s)
             //console.log(s);
         }
 

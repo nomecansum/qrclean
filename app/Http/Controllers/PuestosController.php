@@ -373,7 +373,13 @@ class PuestosController extends Controller
         if (!isset($r->lista_id)){
             return Redirect::back();
         }
-        try{
+        if(!is_array($r->lista_id)){
+            $r->lista_id=explode(",",$r->lista_id);
+        }
+        if(!isset($r->tam_qr)){
+            $r->request->add(['tam_qr' => session('CL')['tam_qr']]); //add request
+        }
+        
             $puestos=DB::table('puestos')
                 ->join('edificios','puestos.id_edificio','edificios.id_edificio')
                 ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -385,11 +391,14 @@ class PuestosController extends Controller
                 })
                 ->wherein('id_puesto',$r->lista_id)
                 ->get();
-        
-            $filename='Codigos_QR Puestos_'.Auth::user()->id_cliente.'_.pdf';
-            $pdf = PDF::loadView('puestos.print_qr',compact('puestos'));
-            return $pdf->download($filename);
-            //return view('puestos.print_qr',compact('puestos'));
+            if($r->formato && $r->formato=='PDF'){
+                $filename='Codigos_QR Puestos_'.Auth::user()->id_cliente.'_.pdf';
+                $pdf = PDF::loadView('puestos.print_qr',compact('puestos','r'));
+                return $pdf->download($filename);
+            } else {
+                return view('puestos.print_qr',compact('puestos','r'));
+            }
+        try{    
         } catch(\Exception $e){
             return Redirect::back();
         }
@@ -673,11 +682,16 @@ class PuestosController extends Controller
         }
         $puestos=DB::table('puestos')
             ->wherein('id_puesto',$r->lista_id)
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->orderby('puestos.id_edificio')
+            ->orderby('puestos.id_planta')
+            ->orderby('puestos.id_puesto')
             ->get();
 
         $usuarios=DB::table('users')
@@ -691,8 +705,33 @@ class PuestosController extends Controller
 
         $ronda=rondas::create(['fec_ronda'=>Carbon::now(),'des_ronda'=>$r->des_ronda,'user_creado'=>Auth::user()->id,'id_cliente'=>Auth::user()->id_cliente, 'tip_ronda'=>$r->tip_ronda]);
         
+        //Cuerpo del mensaje de notificacion
+        $body=Auth::user()->name. "ha creado una nueva ronda de ".$tipo_ronda." en la que usted debe participar <br>";
+            $body.="Puestos afectados <br>";
+            $planta="";
+            $edificio="";
+            $cuenta=0;
+            foreach($puestos as $p){
+                if($edificio!=$p->des_edificio){
+                    $edificio=$p->des_edificio;
+                    $body.="<br>".chr(13)."EDIFICIO ".$p->des_edificio;
+                }
+                if($planta!=$p->des_planta){
+                    $planta=$p->des_planta;
+                    $body.="<br>".chr(13)."PLANTA ".$p->des_planta."<br>".chr(13);
+                    $cuenta=0;
+                }
+                $body.=$p->cod_puesto."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                $cuenta++;
+                if($cuenta==8){
+                    $body.="<br>".chr(13)."<br>".chr(13);
+                    $cuenta=0;
+                }
+            }
+
         foreach($usuarios as $u){
             limpiadores::create(['id_ronda'=>$ronda->id_ronda,'id_limpiador'=>$u->id]);
+            notificar_usuario($u,'Creada nueva ronda de limpieza','emails.asignacion_puesto',$body,1);
         }
         foreach($puestos as $p){
             puestos_ronda::create(['id_ronda'=>$ronda->id_ronda,'fec_inicio'=>Carbon::now(),'id_puesto'=>$p->id_puesto]);

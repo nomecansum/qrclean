@@ -11,5 +11,5 @@
     </div>
 </div>
 <div class="row  text-center">
-    {{ $body }}
+    {!! $body !!}
 </div>

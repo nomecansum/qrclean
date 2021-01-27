@@ -12068,9 +12068,9 @@
         "table-name": "config_clientes",
         "migrations": [
             {
-                "name": "2021_01_25_175809_create_config_clientes_table",
+                "name": "2021_01_27_124754_create_config_clientes_table",
                 "class-name": "CreateConfigClientesTable",
-                "path": "C:\\WWW\\qrclean\\database\\migrations\\2021_01_25_175809_create_config_clientes_table.php",
+                "path": "C:\\WWW\\qrclean\\database\\migrations\\2021_01_27_124754_create_config_clientes_table.php",
                 "is-create": true,
                 "is-virtual": true,
                 "is-organized": false,
@@ -12336,6 +12336,48 @@
                             "api-key": "mca_restringir_usuarios_planta",
                             "is-api-visible": true,
                             "api-description": "The mca restringir usuarios planta of the model."
+                        },
+                        {
+                            "name": "modo_visualizacion_reservas",
+                            "labels": "Modo Visualizacion Reservas",
+                            "html-type": "select",
+                            "css-class": "",
+                            "options": {
+                                "P": "P",
+                                "M": "M"
+                            },
+                            "html-value": null,
+                            "validation": "nullable",
+                            "is-on-index": true,
+                            "is-on-show": true,
+                            "is-on-form": true,
+                            "data-type": "enum",
+                            "data-type-params": [
+                                1
+                            ],
+                            "data-value": "M",
+                            "is-index": false,
+                            "is-unique": false,
+                            "is-primary": false,
+                            "comment": "P: Plano\r\nM:Mapa",
+                            "is-nullable": true,
+                            "is-header": false,
+                            "is-unsigned": false,
+                            "is-auto-increment": false,
+                            "is-inline-options": false,
+                            "is-date": false,
+                            "date-format": "",
+                            "cast-as": "",
+                            "placeholder": "Enter modo visualizacion reservas here...",
+                            "delimiter": "; ",
+                            "range": [],
+                            "foreign-relation": null,
+                            "foreign-constraint": null,
+                            "on-store": null,
+                            "on-update": null,
+                            "api-key": "modo_visualizacion_reservas",
+                            "is-api-visible": true,
+                            "api-description": "The modo visualizacion reservas of the model."
                         },
                         {
                             "name": "tam_qr",

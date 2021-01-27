@@ -379,6 +379,7 @@ class PuestosController extends Controller
         if(!isset($r->tam_qr)){
             $r->request->add(['tam_qr' => session('CL')['tam_qr']]); //add request
         }
+        $layout="layout";
         
             $puestos=DB::table('puestos')
                 ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -392,11 +393,12 @@ class PuestosController extends Controller
                 ->wherein('id_puesto',$r->lista_id)
                 ->get();
             if($r->formato && $r->formato=='PDF'){
+                $layout="layout_simple";
                 $filename='Codigos_QR Puestos_'.Auth::user()->id_cliente.'_.pdf';
-                $pdf = PDF::loadView('puestos.print_qr',compact('puestos','r'));
+                $pdf = PDF::loadView('puestos.print_qr',compact('puestos','r','layout'));
                 return $pdf->download($filename);
             } else {
-                return view('puestos.print_qr',compact('puestos','r'));
+                return view('puestos.print_qr',compact('puestos','r','layout'));
             }
         try{    
         } catch(\Exception $e){

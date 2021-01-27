@@ -35,9 +35,9 @@ return [
     
     'pdf' => [
         'enabled' => true,
-        'binary' => env('BIN_SNAPPY_PDF', 'xvfb-run -a wkhtmltopdf'),
+        'binary' => env('BIN_SNAPPY_PDF', 'xvfb-run -a wkhtmltopdf  --enable-local-file-access'),
         'timeout' => 500,
-        'options' => ['load-error-handling'=>'ignore','load-media-error-handling'=>'ignore'],
+        'options' => ['load-error-handling'=>'ignore','load-media-error-handling'=>'ignore','enable-local-file-access'=>true],
         'env'     => [],
     ],
     

@@ -63,7 +63,7 @@
                     <input type="hidden" name="id_cliente" value="{{ $reserva->id_cliente }}">
                     <input type="hidden" id="id_puesto" name="id_puesto" value="">
                     <input type="hidden" id="des_puesto_form" name="des_puesto" value="">
-                    <input type="hidden" name="tipo_vista" id="tipo_vista" value="comprobar">
+                    <input type="hidden" name="tipo_vista" id="tipo_vista" value="{{ session('CL')['modo_visualizacion_reservas']=='P'?'comprobar_plano':'comprobar' }}">
                     <input type="hidden" name="hora_inicio" id="hora_inicio" value="00:00">
                     <input type="hidden" name="hora_fin" id="hora_fin" value="23:59">
                     {{csrf_field()}}

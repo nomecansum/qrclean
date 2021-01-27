@@ -1,5 +1,4 @@
-
-@extends('layout')
+@extends($layout)
 
 @section('content')
 @php
@@ -10,6 +9,7 @@
             $tam_fuente=14;
     }
 @endphp
+@if($layout!='layout_simple')
 <form method="POST" action="{{url('/puestos/print_qr')}}"  name="frm_qr" id="frm_qr">
     <div class="row b-all rounded mb-3  ml-3">
         
@@ -35,7 +35,9 @@
             </div>
 
     </div>
-    <div class="row ml-3" style="background-color: #fff" id="printarea">
+@endif
+<br><br>
+    <div class="row ml-5 mt-5 p-l-20" style="background-color: #fff" id="printarea">
         @foreach($puestos as $puesto)
             <div class="text-center pb-4 pr-4 mr-0 ml-0  cont_qr" style="width: {{ $r->tam_qr }}px; display: inline-block; border: 1px solid #ccc;">
                 <div class="mb-0 pb-0">

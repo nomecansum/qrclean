@@ -99,6 +99,7 @@
 							</div>
 						</div>
 					</div>
+					
 					<input type="hidden" name="theme_type" id="theme_type" value="{{ isset($config->theme_type)?$config->theme_type:'navy' }}"> 
 					<input type="hidden" name="theme_name" id="theme_name"  value="{{ isset($config->theme_name)?$config->theme_name:'e' }}"> 
 					<br>
@@ -122,7 +123,9 @@
 								<input type="checkbox" class="form-control  magic-checkbox" name="mca_reserva_horas"  id="mca_reserva_horas" value="S" {{ isset($config->mca_reserva_horas)&&$config->mca_reserva_horas=='S'?'checked':'' }}> 
 								<label class="custom-control-label"   for="mca_reserva_horas">Reservas por horas</label>
 							</div>
+							
 						</div>
+
 						<div class="row">
 							<div class="col-md-12 p-b-10">
 								<div class="col-md-2">
@@ -146,6 +149,15 @@
 								</div>
 							</div>
 						</div>
+						<DIV class="row">
+							<div class="col-md-3 ml-2">
+								<label for="modo_visualizacion_reservas">Vista por defecto en reservas</label>
+								<select name="modo_visualizacion_reservas" id="modo_visualizacion_reservas" class="form-control select2" style="width: 100%">
+									<option value="M" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='M'?'selected':'' }}>Mapa</option>
+									<option value="P" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='P'?'selected':'' }}>Plano</option>
+								</select>
+							</div>
+						</DIV>
 					</div>
 
 					<div class="row b-all rounded mt-3">

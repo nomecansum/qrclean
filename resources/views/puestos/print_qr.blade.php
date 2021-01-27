@@ -4,7 +4,12 @@
 @php
     
     try{
-        $tam_fuente=round(16*session('CL')['tam_qr']/230);
+        if (isset($r->tam_qr)){
+            $tf=$r->tam_qr;
+        } else {
+            $tf=session('CL')['tam_qr'];
+        }
+        $tam_fuente=round(15*$tf/230);
     }   catch(\Exception $e){
             $tam_fuente=14;
     }
@@ -35,12 +40,16 @@
             </div>
 
     </div>
+    @else
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/fontawesome6/css/all.min.css') }}" rel="stylesheet">
 @endif
 <br><br>
-    <div class="row ml-5 mt-5 p-l-20" style="background-color: #fff" id="printarea">
+    <div class="row" style="background-color: #fff" id="printarea" style="margin-left: 100px: margin-top:30px;">
         @foreach($puestos as $puesto)
-            <div class="text-center pb-4 pr-4 mr-0 ml-0  cont_qr" style="width: {{ $r->tam_qr }}px; display: inline-block; border: 1px solid #ccc;">
-                <div class="mb-0 pb-0">
+            <div class="text-center pb-4 pr-4 mr-0 ml-1  cont_qr" style="width: {{ $r->tam_qr }}px; display: inline-block; border: 1px solid #ccc;padding: 5px 5px 5px 5px">
+                <div class="mb-0 pb-0" style="">
                     <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size($r->tam_qr)->generate(config('app.url_base_scan').$puesto->token)) !!} ">
                     {{--  {{config('app.url_base_scan').$puesto->token}}  --}}
                 </div>

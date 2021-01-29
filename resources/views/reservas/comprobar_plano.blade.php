@@ -25,6 +25,35 @@
         overflow: hidden;
     }
     
+    .glow {
+        background-color: #1c87c9;
+        border: none;
+        color: #eeeeee;
+        cursor: pointer;
+        display: inline-block;
+        font-family: sans-serif;
+        font-size: 20px;
+        padding: 10px 10px;
+        text-align: center;
+        text-decoration: none;
+      }
+      @keyframes glowing {
+        0% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+        50% {
+          background-color: #49e819;
+          box-shadow: 0 0 20px #49e819;
+        }
+        100% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+      }
+      .glow {
+        animation: glowing 1300ms infinite;
+      }
 </style>
 
 <div class="row botones_accion">
@@ -78,8 +107,10 @@
             ->get();
         @endphp
         @foreach($plantas as $pl)
-            <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $pl->des_planta }}</h3>
-            @include('reservas.fill-plano')
+            <a id="planta{{ $pl->id_planta }}">
+                <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $pl->des_planta }}</h3>
+                @include('reservas.fill-plano')
+            </a>
         @endforeach
     </div>
 </div>

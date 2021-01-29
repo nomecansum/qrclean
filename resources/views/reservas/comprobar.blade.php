@@ -3,6 +3,37 @@
     $planta_ahora=0;
     //dd($puestos);
 @endphp
+<style>
+    .glow {
+        background-color: #1c87c9;
+        border: none;
+        color: #eeeeee;
+        cursor: pointer;
+        display: inline-block;
+        font-family: sans-serif;
+        font-size: 20px;
+        padding: 10px 10px;
+        text-align: center;
+        text-decoration: none;
+      }
+      @keyframes glowing {
+        0% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+        50% {
+          background-color: #49e819;
+          box-shadow: 0 0 20px #49e819;
+        }
+        100% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+      }
+      .glow {
+        animation: glowing 1300ms infinite;
+      }
+</style>
 <input type="hidden" name="tipo_vista" id="tipo_vista" value="{{ $tipo_vista??'comprobar' }}">
 <div class="row botones_accion">
     <div class="col-md-8">
@@ -31,6 +62,7 @@
             $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
         @endphp
         @foreach($plantas as $key=>$value)
+            <a id="planta{{ $key }}">
             <h3 class=" w-100 bg-gray rounded">PLANTA {{ $value }}</h3>
             @php
                 $puestos_planta=$puestos->where('id_planta',$key);
@@ -59,13 +91,25 @@
                         $puesto->factor_letra=0.8;
                     }
                 @endphp
+                   
+
+                    @if(session('CL')['modo_visualizacion_puestos']=='C')
                     <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{  $cuadradito['clase_disp'] }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-opacity="{{ $cuadradito['transp']  }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; background-color: {{  $cuadradito['color'] }}; color: {{  $cuadradito['font_color'] }}; {{  $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
                         <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; color:#666">{{ $puesto->cod_puesto }}</span>
                         @include('resources.adornos_iconos_puesto')
                     </div>
+                    @else
+                    <div class="text-center rounded add-tooltip align-middle flpuesto draggable " id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
+                        <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">
+                            <i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i><br>
+                            {{ $puesto->cod_puesto }}</span>
+                        {{--  @include('resources.adornos_iconos_puesto')  --}}
+                    </div>
+                    @endif
                     
                 @endforeach
             </div>
+            </a>
         @endforeach
     </div>
 </div>

@@ -38,6 +38,7 @@ class config_clientes extends Model
                   'mca_permitir_anonimo',
                   'mca_reserva_horas',
                   'mca_restringir_usuarios_planta',
+                  'modo_visualizacion_puestos',
                   'modo_visualizacion_reservas',
                   'tam_qr',
                   'theme_name',

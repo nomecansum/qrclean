@@ -260,6 +260,48 @@
             "api-description": "The mca restringir usuarios planta of the model."
         },
         {
+            "name": "modo_visualizacion_puestos",
+            "labels": "Modo Visualizacion Puestos",
+            "html-type": "select",
+            "css-class": "",
+            "options": {
+                "C": "C",
+                "I": "I"
+            },
+            "html-value": null,
+            "validation": "nullable",
+            "is-on-index": true,
+            "is-on-show": true,
+            "is-on-form": true,
+            "data-type": "enum",
+            "data-type-params": [
+                1
+            ],
+            "data-value": "C",
+            "is-index": false,
+            "is-unique": false,
+            "is-primary": false,
+            "comment": "C: Cuadro\r\nI:Icono",
+            "is-nullable": true,
+            "is-header": false,
+            "is-unsigned": false,
+            "is-auto-increment": false,
+            "is-inline-options": false,
+            "is-date": false,
+            "date-format": "",
+            "cast-as": "",
+            "placeholder": "Enter modo visualizacion puestos here...",
+            "delimiter": "; ",
+            "range": [],
+            "foreign-relation": null,
+            "foreign-constraint": null,
+            "on-store": null,
+            "on-update": null,
+            "api-key": "modo_visualizacion_puestos",
+            "is-api-visible": true,
+            "api-description": "The modo visualizacion puestos of the model."
+        },
+        {
             "name": "modo_visualizacion_reservas",
             "labels": "Modo Visualizacion Reservas",
             "html-type": "select",

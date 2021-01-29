@@ -10,9 +10,10 @@
         $left=0;
         $top=0;
         $puestos= DB::Table('puestos')
-            ->select('puestos.*','plantas.*','estados_puestos.val_color as color_estado','estados_puestos.hex_color','estados_puestos.des_estado')
+            ->select('puestos.*','plantas.*','estados_puestos.val_color as color_estado','estados_puestos.hex_color','estados_puestos.des_estado', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo')
             ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->where('puestos.id_planta',$pl->id_planta)
             ->where(function($q){
                 if (!isAdmin()) {
@@ -35,10 +36,19 @@
             $es_reserva="P";
             $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$es_reserva);
         @endphp
+        @if(session('CL')['modo_visualizacion_puestos']=='C')
         <div class="text-center rounded add-tooltip align-middle flpuesto draggable {{ $cuadradito['clase_disp'] }}" id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $cuadradito['color'] }}; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
             <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">{{ $puesto->cod_puesto }}</span>
             @include('resources.adornos_iconos_puesto')
         </div>
+        @else
+        <div class="text-center rounded add-tooltip align-middle flpuesto draggable " id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px;color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
+            <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#FFF">
+                <i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i><br>
+                {{ $puesto->cod_puesto }}</span>
+            {{--  @include('resources.adornos_iconos_puesto')  --}}
+        </div>
+        @endif
     @php
         $left+=50;
         if($left==500){

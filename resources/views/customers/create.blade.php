@@ -150,11 +150,18 @@
 							</div>
 						</div>
 						<DIV class="row">
-							<div class="col-md-3 ml-2">
-								<label for="modo_visualizacion_reservas">Vista por defecto en reservas</label>
-								<select name="modo_visualizacion_reservas" id="modo_visualizacion_reservas" class="form-control select2" style="width: 100%">
+							<div class="col-md-2 ml-2">
+								<label for="modo_visualizacion_reservas">Vista defecto en reservas</label>
+								<select name="modo_visualizacion_reservas" id="modo_visualizacion_reservas" class="form-control" style="width: 100%">
 									<option value="M" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='M'?'selected':'' }}>Mapa</option>
 									<option value="P" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='P'?'selected':'' }}>Plano</option>
+								</select>
+							</div>
+							<div class="col-md-2 ml-2">
+								<label for="modo_visualizacion_puestos">Representacion de puestos</label>
+								<select name="modo_visualizacion_puestos" id="modo_visualizacion_puestos" class="form-control" style="width: 100%">
+									<option value="C" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='C'?'selected':'' }}>Cuadro</option>
+									<option value="I" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='I'?'selected':'' }}>Icono</option>
 								</select>
 							</div>
 						</DIV>

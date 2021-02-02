@@ -160,8 +160,8 @@
 							<div class="col-md-2 ml-2">
 								<label for="modo_visualizacion_puestos">Representacion de puestos</label>
 								<select name="modo_visualizacion_puestos" id="modo_visualizacion_puestos" class="form-control" style="width: 100%">
-									<option value="C" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='C'?'selected':'' }}>Cuadro</option>
-									<option value="I" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='I'?'selected':'' }}>Icono</option>
+									<option value="C" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='C'?'selected':'' }}>Cuadro</option>
+									<option value="I" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='I'?'selected':'' }}>Icono</option>
 								</select>
 							</div>
 						</DIV>

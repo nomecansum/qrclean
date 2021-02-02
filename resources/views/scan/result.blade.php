@@ -45,7 +45,6 @@
 @php
     $puesto=$respuesta['puesto']??null;
     $cookie=Cookie::get('encuesta');
-
 @endphp
     
     <div class="row">

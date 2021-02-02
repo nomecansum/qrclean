@@ -211,6 +211,7 @@ class HomeController extends Controller
                 ->join('users','users.id','puestos_asignados.id_usuario')  
                 ->where('puestos.id_puesto','<>',$p->id_puesto)  
                 ->where('id_usuario',$id_usuario)
+                ->where('puestos.id_tipo_puesto',$p->id_tipo_puesto)
                 ->where(function($q){
                     $q->wherenull('fec_desde');
                     $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");

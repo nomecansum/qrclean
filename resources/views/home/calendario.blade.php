@@ -8,7 +8,7 @@
     </div>
 </div>
 
-@section('scripts4')
+@section('scripts5')
     <script>
         function loadMonth(month = null,type = null)
         {

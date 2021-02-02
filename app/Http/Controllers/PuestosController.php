@@ -533,10 +533,11 @@ class PuestosController extends Controller
     public function mapa(){
 
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
                 if (!isAdmin()) {
@@ -672,6 +673,79 @@ class PuestosController extends Controller
             ->get();
         
         return view('puestos.plano',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
+    }
+
+    function ver_en_mapa($id){
+        $cualpuesto=puestos::where('token',$id)->first();
+
+        $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->where('puestos.id_planta',$cualpuesto->id_planta)
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $edificios=DB::table('edificios')
+        ->where('edificios.id_edificio',$cualpuesto->id_edificio)
+        ->select('id_edificio','des_edificio')
+        ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
+        ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            }
+        })
+        ->where('id_edificio',$puestos->first()->id_edificio)
+        ->get();
+
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','reservas.id_usuario','users.id')
+            ->where(function($q){
+                $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+            })
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+
+        $asignados_usuarios=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')    
+            ->where('id_usuario','<>',Auth::user()->id)
+            ->where(function($q){
+                $q->wherenull('fec_desde');
+                $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+            })
+            ->get();
+
+        $asignados_miperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
+            ->where('id_perfil',Auth::user()->cod_nivel)
+            ->get();
+        
+        $asignados_nomiperfil=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
+            ->where('id_perfil','<>',Auth::user()->cod_nivel)
+            ->get();
+        
+        return view('puestos.plano',compact('puestos','cualpuesto','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
     }
 
     public function ronda_limpieza(Request $r){

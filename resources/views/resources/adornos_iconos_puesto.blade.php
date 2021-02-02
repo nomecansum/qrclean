@@ -10,4 +10,6 @@
     <span  style="font-size: {{ $puesto->factor_letra+0.5 }}vw; color: #05688f; line-height: 15px;"><i class="fad fa-user" style="color: {{ isset($es_reserva) && $es_reserva?"#339470":"#fff" }}"></i></span>
 @elseif(isset($asignado_otroperfil))<br>
     <span  style="font-size: {{ $puesto->factor_letra+0.5 }}vw; line-height: 15px;"><i class="fad fa-users" style="color: #fff"></i></span>
+@elseif(session('CL')['modo_visualizacion_puestos']=='I')
+<i class="{{ $puesto->icono_tipo??'' }} fa-2x" style="color: {{ $puesto->color_tipo??'' }}"></i><br>
 @endif

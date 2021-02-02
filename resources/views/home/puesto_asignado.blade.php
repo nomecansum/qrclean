@@ -65,7 +65,7 @@
                 $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();   
                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
             @endphp
-            <div class="row">
+            <div class="row filamipuesto hover-this" data-token="{{ $puesto->token }}" >
                 <div class="col-md-1">
                     <div class="text-center rounded mt-2 add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif {!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $puesto->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; {{ $cuadradito['borde'] }}">
                         <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ">
@@ -84,3 +84,12 @@
     </div>
 </div>
 @endif
+
+@section('scripts4')
+<script>
+    $('.filamipuesto').click(function(){
+        window.location.href="{{ url('/puestos/vmapa') }}/"+$(this).data('token');
+    })
+</script>
+
+@endsection

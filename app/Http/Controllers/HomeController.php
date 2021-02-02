@@ -22,7 +22,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -66,8 +66,6 @@ class HomeController extends Controller
         
 
         $config_cliente=null;
-        
-       
         //A ver si el usuario viene autentificado
         if(Auth::check())
             {
@@ -126,7 +124,7 @@ class HomeController extends Controller
                         $q->wherenull('fec_fin_reserva');
                         $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
                     });
-                    $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+                    $q->orwhereraw("'".Carbon::now()."' between DATE_SUB(fec_reserva,interval 15 MINUTE) AND DATE_ADD(fec_fin_reserva,interval 15 MINUTE)");
                 })
                 ->where('id_usuario','<>',$id_usuario)
                 ->first();
@@ -269,12 +267,29 @@ class HomeController extends Controller
             
             switch ($p->id_estado) {
                 case 1:
+                    $tiene_reserva=DB::table('reservas')
+                    ->where('id_puesto',$p->id_puesto)
+                    ->where(function($q){
+                        $q->where(function($q){
+                            $q->wheredate('fec_reserva',Carbon::now()->format('Y-m-d'));
+                            $q->where('fec_reserva','>',Carbon::now());
+                        });
+                    })
+                    ->where('id_usuario','<>',$id_usuario)
+                    ->get();
+
+                    $horarios_reserva="";
+                    foreach($tiene_reserva as $rv){
+                        $horarios_reserva.=Carbon::parse($rv->fec_reserva)->format('H:i').' - '.Carbon::parse($rv->fec_fin_reserva)->format('H:i').' | ';
+                    }
+                        
                     $respuesta=[
                         'mensaje'=>"Puesto disponible",
                         'icono' => '<i class="fad fa-thumbs-up"></i>',
                         'color'=>'success',
                         'puesto'=>$p,
                         'operativo' => 1,
+                        'tiene_reserva'=>$horarios_reserva,
                         'encuesta'=>(isset($encuesta->val_momento) && $encuesta->val_momento=="A")?$encuesta->id_encuesta:0,
                     ];
                     break;

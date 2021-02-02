@@ -157,7 +157,11 @@ class IncidenciasController extends Controller
         try {
             validar_acceso_tabla($id,"incidencias");
             $incidencia = incidencias::findOrFail($id);
+            $puesto=puestos::find($incidencia->id_puesto);
+           
             $incidencia->delete();
+            $puesto->id_estado=1;
+            $puesto->save();
             savebitacora('Incidencia ['.$incidencia->id_incidencia.'] '.$incidencia->des_incidencia.' borrada',"Incidencias","delete","OK");
             return redirect()->route('incidencias.index')->with('success_message', 'Incidencia ['.$id.'] '.$incidencia->des_incidencia.' borrada.');
         } catch (Exception $exception) {
@@ -177,10 +181,7 @@ class IncidenciasController extends Controller
             $inc->id_usuario_cierre=Auth::user()->id;
             $inc->save();
             savebitacora('Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',"Incidencias","cerrar","OK");
-            //Ponemos el estado del puesto a operativo
-            $puesto=puestos::find($inc->id_puesto);
-            $puesto->id_estado=1;
-            $puesto->save();
+            http://qrclean/puesto/d1ZOOLiLumXYpxB2xEPSf7ClPYr9dYidK0YfJBJ1MBCUtPNr5H
             return [
                 'title' => "Cerrar incidencia",
                 'message' => 'Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',
@@ -594,7 +595,11 @@ class IncidenciasController extends Controller
             case 'M':  //Mandar e-mail
                 $to_email = $tipo->txt_destinos;
                 Mail::send('emails.mail_incidencia', ['inc'=>$inc], function($message) use ($tipo, $to_email, $inc, $puesto) {
-                    $message->to($to_email, '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                    if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                        $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                    } else {
+                        $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                    }
                     $message->from(config('mail.from.address'),config('mail.from.name'));
                     if($inc->img_attach1)
                         $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);

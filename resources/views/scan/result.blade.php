@@ -24,6 +24,15 @@
             height: 40px;
             overflow: hidden;
         }
+        .blink_me {
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
         
     </style>
 @endsection
@@ -89,7 +98,7 @@
         </div>
         <div class="col-md-3"></div>
     </div>
-    @if($mireserva)
+    @if(isset($mireserva))
     <div class="row" id="div_mireserva">
         <div class="col-md-3"></div>
         <div class="col-md-6 text-1x text-center font-bold">
@@ -113,7 +122,14 @@
                         @if($respuesta['operativo']==1)
                             @switch($puesto->id_estado)
                                 @case(1)
+                                        
+                                        @if(isset($respuesta['tiene_reserva'])&&$respuesta['tiene_reserva']!="")
+                                        <span class="text-center bg-pink pad-all">
+                                            <i class="fad fa-exclamation-circle blink_me fa-2x"></i> Este puesto esta reservado en los horarios [{{ $respuesta['tiene_reserva'] }}] tengalo en cuenta porque tendrá que dejar el puesto libre en esos horarios
+                                        </span>
+                                        <br><br><br>
                                         <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
+                                        @endif
                                     @break
                                 @case(2)
                                         @if((Auth::check() && $puesto->id_usuario_usando==Auth::user()->id) || (!Auth::check()&&$puesto->id_usuario_usando==null))
@@ -191,7 +207,7 @@
                     </div>
                 </div>
             @endif
-            @if(Auth::check() && $puesto->id_estado!=1)
+            @if(Auth::check())
                 <div class="row">
                     <div class="col-md-12 text-center mt-3">
                         <a class="btn btn-lg btn-primary text-2x rounded btn_otravez" href="{{ url('/scan_usuario/') }} "><i class="fad fa-qrcode fa-3x"></i> Escanear otra vez</a>

@@ -71,6 +71,8 @@
                         $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
                         
                     @endphp
+
+                    
                     <div class="text-center rounded add-tooltip flpuesto draggable {{ $cuadradito['clase_disp'] }} p-0 mr-2 mb-2 bg-{{ $puesto->color_estado }}" id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}  @if(config('app.env')=='dev')[#{{ $puesto->id_puesto }}]@endif" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}"  data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}">
                          @if(isset($checks) && $checks==1){{-- Mostrar checkbox para seleccionar los puestos --}}
                             <div style="position: absolute; margin-top: 2em; margin-left: 2em">
@@ -80,6 +82,7 @@
                         @endif
                         <span class="h-100 mb-0 mt-0" style="font-size: {{ $puesto->factor_letra }}vw; color: {{ $cuadradito['font_color'] }}">{{ $puesto->cod_puesto }}</span>
                         @include('resources.adornos_iconos_puesto')
+                       
                     </div>
                     
                 @endforeach

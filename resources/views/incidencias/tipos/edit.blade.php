@@ -66,12 +66,12 @@
                     </div>
                     <div class="form-group col-md-2" style="margin-top: 7px">
                         <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($puesto->val_color)?$puesto->val_Color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
                     <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
+                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
                         </div>
                     </div>
                     <div class="form-group col-md-3 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
@@ -188,7 +188,7 @@
     $('#frm_contador').submit(form_ajax_submit);
 
     $('#val_icono').iconpicker({
-        icon:'{{isset($t) ? ($t->val_icono) : ''}}'
+        icon:'{{isset($tipo) ? ($tipo->val_icono) : ''}}'
     });
     </script>
     @include('layouts.scripts_panel')

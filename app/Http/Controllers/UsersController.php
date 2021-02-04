@@ -831,7 +831,7 @@ class UsersController extends Controller
                     "id_puesto"=>$puesto,
                     "id_usuario"=>$id
                 ]);
-            } else {
+            } else if($accion="D") {
                 DB::table('puestos_usuario_supervisor')->where(["id_puesto"=>$puesto,"id_usuario"=>$id])->delete();
             }
             return [

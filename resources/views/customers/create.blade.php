@@ -153,7 +153,7 @@
 							<div class="col-md-2 ml-2">
 								<label for="modo_visualizacion_reservas">Vista defecto en reservas</label>
 								<select name="modo_visualizacion_reservas" id="modo_visualizacion_reservas" class="form-control" style="width: 100%">
-									<option value="M" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='M'?'selected':'' }}>Mapa</option>
+									<option value="M" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='M'?'selected':'' }}>Mosaico (Puestos)</option>
 									<option value="P" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='P'?'selected':'' }}>Plano</option>
 								</select>
 							</div>

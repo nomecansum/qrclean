@@ -3,6 +3,7 @@
     if(!isset($id_check))
         $id_check="";
 @endphp
+
 @foreach ($edificios as $e)
 <div class="panel">
     <div class="panel-heading bg-gray-dark">
@@ -24,6 +25,7 @@
             </div>
         </div>
     </div>
+    puestos:
     <div class="panel-body">
         @php
             $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
@@ -114,6 +116,16 @@
         console.log(estado);
         $('[data-idedificio='+$(this).data('id')+']').each(function(){
             $(this).attr('checked',estado);
+            if(estado){
+                $.get("{{ url($url_check??'')."/".$id_check }}/"+$(this).data('id')+"/A",function(data){
+                    $('#puesto'+data.id).css("background-color",'#02c59b');
+                })
+            }
+            else  {
+                $.get("{{ url($url_check??'')."/".$id_check }}/"+$(this).data('id')+"/D",function(data){
+                    $('#puesto'+data.id).css("background-color",'#eae3b8');
+                })
+            } 
         })
     })
 
@@ -122,6 +134,17 @@
         console.log(estado);
         $('[data-idplanta='+$(this).data('id')+']').each(function(){
             $(this).attr('checked',estado);
+
+            if(estado){
+                $.get("{{ url($url_check??'')."/".$id_check }}/"+$(this).data('id')+"/A",function(data){
+                    $('#puesto'+data.id).css("background-color",'#02c59b');
+                })
+            }
+            else  {
+                $.get("{{ url($url_check??'')."/".$id_check }}/"+$(this).data('id')+"/D",function(data){
+                    $('#puesto'+data.id).css("background-color",'#eae3b8');
+                })
+            } 
         })
     })
 

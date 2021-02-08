@@ -32,7 +32,7 @@
             <table style="margin-left: auto; margin-right: auto;">
                 <tr>
                     @for($n=1;$n<=10;$n++)
-                        <td><div class=" valor inline" style="font-size: 54px; padding: 10px; font-weight: bold" data-value="{{ $n }}">{{ $n }}</div></td>
+                        <td><div class=" valor inline" style="font-size: 44px; padding: 10px; font-weight: bold" data-value="{{ $n }}">{{ $n }}</div></td>
                     @endfor
                 </tr>
             </table>

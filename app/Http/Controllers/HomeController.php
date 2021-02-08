@@ -224,7 +224,7 @@ class HomeController extends Controller
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
-                    'disponibles'=>[],
+                    'disponibles'=>null,
                     'operativo' => 0,
                     'encuesta'=>0
                 ];

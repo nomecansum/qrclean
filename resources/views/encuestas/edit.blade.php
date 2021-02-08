@@ -196,7 +196,8 @@
     //Ponemos los valores seleccionados que tengan los select2
     $(document).ready(function() {
        //console.log($("#multi-planta"));
-      
+
+       s=setTimeout('end_update_filtros()',3000);
     });
 
     // function end_update_filtros(entidad){
@@ -206,6 +207,8 @@
     //    console.log($('#multi-planta').select2().val());
     // }
     function end_update_filtros(entidad){
+        
+        console.log('end_update');
         string="{{ $encuesta->list_edificios }}"
         var arr = string.split(',');
         $('#multi-edificio').select2().val(arr);
@@ -231,6 +234,8 @@
         $('#multi-puesto').select2().val();
         $('#multi-tag').select2().val();
         $('#multi-tipo').select2().val();
+
+        
     }
 
     var clipboard = new ClipboardJS('#boton_url');

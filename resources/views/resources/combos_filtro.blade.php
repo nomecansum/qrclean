@@ -262,7 +262,7 @@
                 $('#multi-tag').append('<option value="'+val.id_tag+'">'+val.nom_tag+'</option>');
             });
             $('#loadfilter').hide();
-            try{ end_update_filtros('cliente') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
+            //try{ end_update_filtros('cliente') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
         });
         
         
@@ -308,7 +308,7 @@
                 $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
             });
             $('#loadfilter').hide();
-            try{ end_update_filtros('edificio') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
+            //try{ end_update_filtros('edificio') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
         });
         
     });
@@ -338,7 +338,7 @@
                 $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
             });
             $('#loadfilter').hide();
-            try{ end_update_filtros('planta') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
+            //try{ end_update_filtros('planta') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
         });
         
     });

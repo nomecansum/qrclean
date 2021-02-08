@@ -54,6 +54,8 @@ class EncuestasController extends Controller
         $encuesta->id_tipo_encuesta=$tipos->first()->id_tipo_encuesta;
         $encuesta->des_tipo_encuesta=$tipos->first()->des_tipo_encuesta;
         $encuesta->img_tipo=$tipos->first()->img_tipo;
+        $encuesta->fec_inicio=Carbon::now();
+        $encuesta->fec_fin=Carbon::now();
         $encuesta->id_encuesta=0;
         $encuesta->token=Str::random(64);
         $perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();

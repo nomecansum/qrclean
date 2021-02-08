@@ -1,3 +1,12 @@
+@if(isset($comentarios) && $comentarios=='S')
+<div class="row">
+    <div class="form-group col-md-12">
+        <label for="comentario" class="control-label text-left">Comentarios</label>
+        <textarea  class="textarea_editor form-control" name="comentario" id="comentario" rows="8" maxlength="5000" placeholder="Enter text ..."></textarea>
+            
+    </div>
+</div>
+@endif
 @switch($tipo)
     @case(1)
         <i class="fas fa-tired  fa-5x text-danger valor" data-value="1"></i>
@@ -40,16 +49,7 @@
     
     @default
 @endswitch
-@if(isset($comentarios) && $comentarios=='S')
-<div class="row">
-    <div class="form-group col-md-12">
-        <label for="comentario" class="control-label text-left">Comentarios</label>
-        <textarea  class="textarea_editor form-control" name="comentario" id="comentario" rows="8" maxlength="5000" placeholder="Enter text ..."></textarea>
-            
-    </div>
-</div>
 
-@endif
 
 {{--  <i class="fas fa-grin-alt fa-5x text-success"></i>
         <i class="fas fa-smile  fa-5x text-mint"></i>

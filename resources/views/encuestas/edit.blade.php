@@ -94,7 +94,7 @@
                 <div class="form-group col-md-3" style="padding-top: 7px">
                     <label>Fechas </label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{  Carbon\Carbon::parse($encuesta->fec_inicio)->format('d/m/Y')??Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::parse($encuesta->fec_fin)->format('d/m/Y')??Carbon\Carbon::now()->format('d/m/Y') }}">
+                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{  Carbon\Carbon::parse($encuesta->fec_inicio)->format('d/m/Y').' - '.Carbon\Carbon::parse($encuesta->fec_fin)->format('d/m/Y') }}">
                         <span class="btn input-group-text btn-mint" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
                     </div>
                 </div>
@@ -196,8 +196,9 @@
     //Ponemos los valores seleccionados que tengan los select2
     $(document).ready(function() {
        //console.log($("#multi-planta"));
-
-       s=setTimeout('end_update_filtros()',3000);
+        $('.scroll-top').click();
+       s=setTimeout('end_update_filtros()',2000);
+       
     });
 
     // function end_update_filtros(entidad){
@@ -207,7 +208,7 @@
     //    console.log($('#multi-planta').select2().val());
     // }
     function end_update_filtros(entidad){
-        
+        //window.scrollTo(0,0);
         console.log('end_update');
         string="{{ $encuesta->list_edificios }}"
         var arr = string.split(',');

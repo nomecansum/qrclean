@@ -117,7 +117,7 @@
             $('#lista_rep').empty();
             for (var i = 0; i < lista.length; i++) {
                 //Do something
-                $('#lista_rep').append('<li id="elem'+lista[i].id+'">'+lista[i].url+' <i class="fa fa-arrow-right"></i> '+lista[i].tiempo+' min <i class="fa fa-trash text-danger btn_trash ml-4" onclick="borrar('+lista[i].id+')"></i></li>');
+                $('#lista_rep').append('<li id="elem'+lista[i].id+'">'+lista[i].url+' <i class="fa fa-arrow-right"></i> '+lista[i].time+' min <i class="fa fa-trash text-danger btn_trash ml-4" onclick="borrar('+lista[i].id+')"></i></li>');
             }
         }
 

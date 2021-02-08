@@ -193,7 +193,9 @@
             console.log('edit');
             $('#editorCAM').load("{{ url('/encuestas/edit/') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
+               
             });
+           
         }
 
 

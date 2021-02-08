@@ -123,9 +123,9 @@
                                 @case(1)
                                         
                                         @if(isset($respuesta['tiene_reserva'])&&$respuesta['tiene_reserva']!="")
-                                        <span class="text-center bg-pink pad-all">
+                                        <div class="text-center bg-pink pad-all">
                                             <i class="fad fa-exclamation-circle blink_me fa-2x"></i> Este puesto esta reservado en los horarios [{{ $respuesta['tiene_reserva'] }}] tengalo en cuenta porque tendrá que dejar el puesto libre en esos horarios
-                                        </span>
+                                        </div>
                                         <br><br><br>
                                         @endif
                                         <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>

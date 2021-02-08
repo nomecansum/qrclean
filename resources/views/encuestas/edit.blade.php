@@ -94,7 +94,7 @@
                 <div class="form-group col-md-3" style="padding-top: 7px">
                     <label>Fechas </label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
+                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{  Carbon\Carbon::parse($encuesta->fec_inicio)->format('d/m/Y')??Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::parse($encuesta->fec_fin)->format('d/m/Y')??Carbon\Carbon::now()->format('d/m/Y') }}">
                         <span class="btn input-group-text btn-mint" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
                     </div>
                 </div>

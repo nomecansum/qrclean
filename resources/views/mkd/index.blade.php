@@ -125,7 +125,7 @@
             obj={};
             obj.url="{{ url('/MKD/plano') }}"+"/"+$('#id_planta').val()+"/"+$('#id_usuario').val();
             obj.id=num;
-            obj.tiempo=$('#intervalo').val();
+            obj.time=$('#intervalo').val();
             num++;
             lista.push(obj);     
             console.log(lista);

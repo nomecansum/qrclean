@@ -106,7 +106,7 @@ class Kernel extends ConsoleKernel
 	            })
 				->between(Carbon::parse($task->hora_inicio)->format('H:i'), Carbon::parse($task->hora_fin)->format('H:i'))
 				->after(function() use ($task) {
-	            	log_tarea("Fin de la tarea [".$task->cod_tarea."] " . $task->des_tarea, $task->cod_tarea);
+	            	log_tarea("Fin de la tarea php [".$task->cod_tarea."] " . $task->des_tarea, $task->cod_tarea);
 	            })
 				->onSuccess(function (Stringable $output) use ($task) {
 		             log_tarea("Tarea [".$task->cod_tarea."] " . $task->des_tarea . " se ha ejecutado correctamente. Resp: " . json_encode($output), $task->cod_tarea);

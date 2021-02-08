@@ -254,9 +254,9 @@ class HomeController extends Controller
 
             if($id_usuario==0 && $p->mca_acceso_anonimo=='N'){
                 $respuesta=[
-                    'mensaje'=>"PUESTO NO DISPONIBLE: Debe iniciar sesion para poder utilizar este puesto",
+                    'mensaje'=>"Debe iniciar sesion para poder utilizar este puesto",
                     'icono' => '<i class="fad fa-bring-forward"></i>',
-                    'color'=>'danger',
+                    'color'=>'warning',
                     'puesto'=>$p,
                     'disponibles'=>$disponibles,
                     'operativo' => 0,
@@ -350,7 +350,16 @@ class HomeController extends Controller
                     ];
                     break;
                 default:
-                    # code...
+                    $respuesta=[
+                        'mensaje'=>"",
+                        'icono' => '',
+                        'color'=>'white',
+                        'puesto'=>$p,
+                        'disponibles'=>null,
+                        'operativo' => 0,
+                        'encuesta'=>0
+                    ];
+                    $mireserva=null;
                     break;
             }
         }

@@ -127,8 +127,8 @@
                                             <i class="fad fa-exclamation-circle blink_me fa-2x"></i> Este puesto esta reservado en los horarios [{{ $respuesta['tiene_reserva'] }}] tengalo en cuenta porque tendrá que dejar el puesto libre en esos horarios
                                         </span>
                                         <br><br><br>
-                                        <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
                                         @endif
+                                        <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
                                     @break
                                 @case(2)
                                         @if((Auth::check() && $puesto->id_usuario_usando==Auth::user()->id) || (!Auth::check()&&$puesto->id_usuario_usando==null))

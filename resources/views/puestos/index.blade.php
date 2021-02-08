@@ -51,6 +51,7 @@
                                 <li><a href="#" data-estado="3" class="btn_estado_check"><i class="fas fa-square text-info"></i> Limpieza</a></li>
                                 <li><a href="#" data-estado="6" class="btn_estado_check"><i class="fas fa-square text-warning"></i> Incidencia</a></li>
                                 <li><a href="#" data-estado="5" class="btn_estado_check"><i class="fas fa-square text-secondary"></i> Bloqueado</a></li>
+                                <li><a href="#" data-estado="7" class="btn_estado_check"><i class="fas fa-square text-secondary"></i> No usable (encuesta)</a></li>
                             @endif
                             <li class="divider"></li>
                             <li class="dropdown-header">Atributos</li>

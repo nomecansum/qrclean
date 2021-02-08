@@ -266,6 +266,7 @@ class HomeController extends Controller
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
             
+            //dd($encuesta);
             switch ($p->id_estado) {
                 case 1:
                     $tiene_reserva=DB::table('reservas')
@@ -291,7 +292,7 @@ class HomeController extends Controller
                         'puesto'=>$p,
                         'operativo' => 1,
                         'tiene_reserva'=>$horarios_reserva,
-                        'encuesta'=>(isset($encuesta->val_momento) && $encuesta->val_momento=="A")?$encuesta->id_encuesta:0,
+                        'encuesta'=>(isset($encuesta->val_momento) && ($encuesta->val_momento=="A" || $encuesta->val_momento=="0"))?$encuesta->id_encuesta:0,
                     ];
                     break;
                 case 2:
@@ -302,7 +303,7 @@ class HomeController extends Controller
                         'puesto'=>$p,
                         'disponibles'=>$disponibles,
                         'operativo' => 1,
-                        'encuesta'=>(isset($encuesta->val_momento) && $encuesta->val_momento=="D")?$encuesta->id_encuesta:0,
+                        'encuesta'=>(isset($encuesta->val_momento) && ($encuesta->val_momento=="D" || $encuesta->val_momento=="0"))?$encuesta->id_encuesta:0,
                     ];
                     break;
                 case 3:
@@ -357,7 +358,7 @@ class HomeController extends Controller
                         'puesto'=>$p,
                         'disponibles'=>null,
                         'operativo' => 0,
-                        'encuesta'=>0
+                        'encuesta'=>(isset($encuesta->val_momento))?$encuesta->id_encuesta:0,
                     ];
                     $mireserva=null;
                     break;

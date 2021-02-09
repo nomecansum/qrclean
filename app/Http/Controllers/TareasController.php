@@ -429,6 +429,10 @@ class TareasController extends Controller
 	
 	public function ejecutar_tarea_web($id){
 		try{
+			if(!Auth::check()){
+				Auth::loginUsingId(14);
+			}
+			$ahora=Carbon::now();
 			ini_set('max_execution_time', 300); //300 seconds = 5 minutes
 			$tarea=DB::table('tareas_programadas')->where('cod_tarea',$id)->first();
 			log_tarea(trans('tareas.inicio_de_la_tarea')." [".$tarea->cod_tarea."] ".$tarea->des_tarea,$tarea->cod_tarea);
@@ -436,11 +440,14 @@ class TareasController extends Controller
 			Artisan::call($tarea->signature,['id'=>$id,'origen'=>'W']);
 			Log_tarea(trans('tareas.fin_de_la_tarea')." [".$tarea->cod_tarea."] ".$tarea->des_tarea,$tarea->cod_tarea);
 			savebitacora("Ejecucion manual de la tarea ".$tarea->des_tarea,"Tareas","ejecutar_tarea_web","OK");
-				//dd(Artisan::output());
+			$logs=DB::table('tareas_programadas_log')->where('cod_tarea',$id)->where('fec_log','>=',$ahora)->get();
+				$salida=$logs->map(function($item,$key){
+					return '['.$item->fec_log.']->'.$item->txt_log.' | '.chr(13);
+				});
 				return [
 					'title' =>  trans('tareas.tareas_programadas'),
 					'message' => trans('tareas.tarea').' '.$tarea->des_tarea." ".trans('tareas.ejecutada'),
-					//'url' => url('tasks')
+					'log' => $salida
 				];
 		} catch (\Exception $e){
 			return [

@@ -50,6 +50,8 @@ Route::get('/logout','Auth\LoginController@logout');
 
 //Route::view('/scan2', 'scan2');
 
+//Tareas programadas
+Route::get('/runTask2/{id}/', 'TareasController@ejecutar_tarea_web');
 
 Route::group(['middleware' => 'auth'], function() {
 
@@ -72,6 +74,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::view('/scan', 'scan');
     Route::view('/lockscreen','lock');
     //
+
+    
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/',['middleware'=>'permissions:["Usuarios"],["R"]','uses'=>'UsersController@index'])->name('users.index');

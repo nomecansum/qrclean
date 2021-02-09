@@ -94,19 +94,33 @@ class HomeController extends Controller
             $encuesta=DB::table('encuestas')
                 ->whereraw("'".Carbon::now()->format('Y-m-d')."' between fec_inicio AND fec_fin")
                 ->where('mca_activa','S')
-                ->where(function($q) use($p,$tags){
+                ->where(function($q) use($p){
                     $q->orwhereraw('FIND_IN_SET('.$p->id_puesto.', list_puestos) <> 0');
+                    $q->orwherenull('list_puestos');
+                })
+                ->where(function($q) use($p){
                     $q->orwhereraw('FIND_IN_SET('.$p->id_planta.', list_plantas) <> 0');
+                    $q->orwherenull('list_plantas');
+                })
+                ->where(function($q) use($p){
                     $q->orwhereraw('FIND_IN_SET('.$p->id_edificio.', list_edificios) <> 0');
+                    $q->orwherenull('list_edificios');
+                })
+                ->where(function($q) use($p){
                     $q->orwhereraw('FIND_IN_SET('.$p->id_tipo_puesto.', list_tipos) <> 0');
+                    $q->orwherenull('list_tipos');
+                })
+                ->where(function($q) use($p,$tags){    
                     $q->orwhere(function($q) use($tags){
                         foreach($tags as $tag){
                             $q->orwhereraw('FIND_IN_SET('.$tag->id_tag.', list_tags) <> 0');
                         }
                     });
+                    $q->orwherenull('list_tags');
                 })
             ->orderby('id_encuesta','desc')
             ->first();
+
 
             $disponibles=DB::table('puestos')
                 ->select('cod_puesto','des_puesto','val_color','val_icono')
@@ -268,6 +282,18 @@ class HomeController extends Controller
             
             //dd($encuesta);
             switch ($p->id_estado) {
+                case 7:  //Solo encuesta
+                    $respuesta=[
+                        'mensaje'=>"",
+                        'icono' => '',
+                        'color'=>'white',
+                        'puesto'=>$p,
+                        'disponibles'=>null,
+                        'operativo' => 0,
+                        'encuesta'=>(isset($encuesta->val_momento))?$encuesta->id_encuesta:0,
+                    ];
+                    $mireserva=null;
+                    break;
                 case 1:
                     $tiene_reserva=DB::table('reservas')
                     ->where('id_puesto',$p->id_puesto)
@@ -352,7 +378,7 @@ class HomeController extends Controller
                     break;
                 default:
                     $respuesta=[
-                        'mensaje'=>"",
+                        'mensaje'=>"Estado no definido",
                         'icono' => '',
                         'color'=>'white',
                         'puesto'=>$p,

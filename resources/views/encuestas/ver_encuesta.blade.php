@@ -26,7 +26,7 @@
     @else
         <div class="row" id="selector">
             <div class="col-md-12 text-center">
-                <h3>{{ $encuesta->pregunta }}</h3>
+                <h3>{!! $encuesta->pregunta !!}</h3>
                 @if($encuesta->mca_anonima=='S')
                     <h6> (esta encuesta es anonima)</h6>
                 @endif

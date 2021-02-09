@@ -36,7 +36,7 @@
                         <label for="id_estado">Estado</label>
                         <select name="id_estado" id="id_estado"  class="form-control">
                             @foreach(DB::table('estados_puestos')->get() as $estado)
-                            <option value="{{ $estado->id_estado}}">{{ $estado->des_estado }}</option>
+                            <option value="{{ $estado->id_estado}}" {{$puesto->id_estado==$estado->id_estado?'selected':''}}>{{ $estado->des_estado }}</option>
                             @endforeach
                         </select>
                     </div>

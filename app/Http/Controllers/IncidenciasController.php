@@ -271,6 +271,9 @@ class IncidenciasController extends Controller
             } else {
                 $tipo=incidencias_tipos::find($r->id);
                 $tipo->update($r->all());
+                $tipo->list_tipo_puesto=implode(",",$r->list_tipo_puesto);
+                $tipo->save();
+                
             }
             savebitacora('Tipo de incidencia creado '.$r->des_tipo_incidencia,"Incidencias","tipos_save","OK");
             return [
@@ -470,6 +473,10 @@ class IncidenciasController extends Controller
                     $q->orwhere('incidencias_tipos.mca_fijo','S');
                 }
                 })
+            ->where(function($q) use($puesto){
+                $q->wherenull('list_tipo_puesto');
+                $q->orwhereraw('FIND_IN_SET('.$puesto->id_tipo_puesto.', list_tipo_puesto) <> 0');
+            })
             ->orderby('mca_fijo')
             ->orderby('nom_cliente')
             ->get();

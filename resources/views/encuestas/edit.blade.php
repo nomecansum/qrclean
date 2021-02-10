@@ -102,9 +102,9 @@
                 <div class="form-group col-md-3">
                     <label for="val_momento" class="control-label">Momento en el que mostrarla</label>
                     <select class="form-control" required id="val_momento" name="val_momento">
-                            <option value="0" {{ $encuesta->val_momento == 0 ? 'selected' : '' }}>Independiente</option>
-                            <option value="0" {{ $encuesta->val_momento == 'A' ? 'selected' : '' }}>Al escanear sitio</option>
-                            <option value="0" {{ $encuesta->val_momento == 'D' ? 'selected' : '' }}>Al dejar sitio</option>
+                            <option value="0" {{ $encuesta->val_momento == '0' ? 'selected' : '' }}>Independiente</option>
+                            <option value="A" {{ $encuesta->val_momento == 'A' ? 'selected' : '' }}>Al escanear sitio</option>
+                            <option value="D" {{ $encuesta->val_momento == 'D' ? 'selected' : '' }}>Al dejar sitio</option>
                     </select>
                 </div>
                 <div class="form-group col-md-2 {{ $errors->has('val_periodo_minimo') ? 'has-error' : '' }}">
@@ -112,9 +112,9 @@
                         <input class="form-control" required name="val_periodo_minimo" type="number" id="val_periodo_minimo" value="{{ $encuesta->val_periodo_minimo }}" min="0" max="1440" placeholder="Enter periodo minimo">
                         {!! $errors->first('val_periodo_minimo', '<p class="help-block">:message</p>') !!}
                 </div>
-                <div class="col-md-1 p-t-30 mt-1">
+                <div class="col-md-2 p-t-30 mt-1">
                     <input type="checkbox" class="form-control  magic-checkbox" name="mca_mostrar_comentarios"  id="mca_mostrar_comentarios" value="S" {{ $encuesta->mca_mostrar_comentarios=='S'?'checked':'' }}> 
-                    <label class="custom-control-label" for="mca_mostrar_comentarios">Feedback</label>
+                    <label class="custom-control-label" for="mca_mostrar_comentarios">Pedir feedback</label>
                 </div>
                 <div class="form-group col-md-2" >
                    

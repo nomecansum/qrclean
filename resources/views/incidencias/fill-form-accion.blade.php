@@ -13,7 +13,7 @@
     <div class="col-md-12">
         <div class="form-group  {{ $errors->has('img_usuario') ? 'has-error' : '' }}">
             <div class="custom-file">
-                <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input" name="img_attach1" id="img_attach1" lang="es">
+                <input type="file"  accept=".jpg,.png,.gif,.mp4,.avi,.mpg" class="form-control  custom-file-input" name="img_attach1" id="img_attach1" lang="es">
                 <label class="custom-file-label" for="img_attach1"></label>
             </div>
         </div>

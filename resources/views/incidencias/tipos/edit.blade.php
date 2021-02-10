@@ -1,6 +1,8 @@
 
+    @php
+        use App\Models\puestos_tipos;   
+    @endphp
     <div class="panel">
-
         <div class="panel-heading">
             <div class="panel-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
@@ -85,6 +87,27 @@
                         </select>
                             
                         {!! $errors->first('id_estado_inicial', '<p class="help-block">:message</p>') !!}
+                    </div>
+                    <div class="form-group  col-md-12" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
+                        <label>Tipo de puesto</label>
+                        <div class="input-group select2-bootstrap-append">
+                            <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="list_tipo_puesto[]" id="multi-tipo" >
+                                @php
+                                    $tipos_puesto=explode(",",$tipo->list_tipo_puesto);
+                                @endphp
+                                @foreach(puestos_tipos::where(function($q) {
+                                    $q->where('id_cliente',Auth::user()->id_cliente);
+                                    $q->orwhere('mca_fijo','S');
+                                    })
+                                    ->where('id_tipo_puesto','>',0)
+                                    ->get() as $tipo)
+                                    <option value="{{ $tipo->id_tipo_puesto }}" {{ in_array($tipo->id_tipo_puesto,$tipos_puesto)?'selected':'' }}>{{ $tipo->des_tipo_puesto }}</option>
+                                @endforeach
+                            </select>
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row opciones P G">
@@ -189,6 +212,22 @@
 
     $('#val_icono').iconpicker({
         icon:'{{isset($tipo) ? ($tipo->val_icono) : ''}}'
+    });
+
+    $('.select-all').click(function(event) {
+        $(this).parent().parent().find('select option').prop('selected', true)
+        $(this).parent().parent().find('select').select2({
+            placeholder: "Todos",
+            allowClear: true,
+            width: "99.2%",
+        });
+        $(this).parent().parent().find('select').change();
+    });
+
+    $(".select2-filtro").select2({
+        placeholder: "Todos",
+        allowClear: true,
+        width: "99.2%",
     });
     </script>
     @include('layouts.scripts_panel')

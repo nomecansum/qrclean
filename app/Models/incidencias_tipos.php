@@ -34,18 +34,19 @@ class incidencias_tipos extends Model
      */
     protected $fillable = [
                   'des_tipo_incidencia',
-                  'id_cliente',
-                  'id_estado_inicial',
-                  'mca_fijo',
-                  'param_url',
                   'tip_metodo',
-                  'txt_destinos',
-                  'val_apikey',
+                  'val_url',
+                  'param_url',
                   'val_body',
-                  'val_color',
+                  'val_apikey',
                   'val_content_type',
+                  'txt_destinos',
+                  'mca_fijo',
+                  'id_cliente',
                   'val_icono',
-                  'val_url'
+                  'val_color',
+                  'id_estado_inicial',
+                  'list_tipo_puesto'
               ];
 
     /**

@@ -78,7 +78,7 @@
             $encuesta=DB::table('encuestas')->where('id_encuesta',$respuesta['encuesta'])->first();  
         @endphp
         <div class="row" id="div_encuesta"  @if($encuesta->val_momento=='D') style="display: none" @endif>
-            <div class="col-md-6 col-xs-offset-3" id="pregunta">
+            <div class="col-md-6 col-xs-offset-3 text-center" id="pregunta">
                 <h4>{{ $encuesta->pregunta }}</h4>
             </div>
             <div class="col-md-12 text-center" id="selector">

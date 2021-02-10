@@ -110,11 +110,6 @@
         "table-name": "estados_incidencias"
     },
     {
-        "model-name": "incidencias_tipos",
-        "resource-file": "incidencias_tipos.json",
-        "table-name": "incidencias_tipos"
-    },
-    {
         "model-name": "encuestas_resultados",
         "resource-file": "encuestas_resultados.json",
         "table-name": "encuestas_resultados"
@@ -148,5 +143,10 @@
         "model-name": "config_clientes",
         "resource-file": "config_clientes.json",
         "table-name": "config_clientes"
+    },
+    {
+        "model-name": "incidencias_tipos",
+        "resource-file": "incidencias_tipos.json",
+        "table-name": "incidencias_tipos"
     }
 ]

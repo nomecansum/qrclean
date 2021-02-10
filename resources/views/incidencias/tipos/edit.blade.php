@@ -100,8 +100,8 @@
                                     $q->orwhere('mca_fijo','S');
                                     })
                                     ->where('id_tipo_puesto','>',0)
-                                    ->get() as $tipo)
-                                    <option value="{{ $tipo->id_tipo_puesto }}" {{ in_array($tipo->id_tipo_puesto,$tipos_puesto)?'selected':'' }}>{{ $tipo->des_tipo_puesto }}</option>
+                                    ->get() as $tp)
+                                    <option value="{{ $tp->id_tipo_puesto }}" {{ in_array($tp->id_tipo_puesto,$tipos_puesto)?'selected':'' }}>{{ $tp->des_tipo_puesto }}</option>
                                 @endforeach
                             </select>
                             <div class="input-group-btn">
@@ -211,7 +211,7 @@
     $('#frm_contador').submit(form_ajax_submit);
 
     $('#val_icono').iconpicker({
-        icon:'{{isset($tipo) ? ($tipo->val_icono) : ''}}'
+        icon:'{{isset($tipo->val_icono) ? ($tipo->val_icono) : ''}}'
     });
 
     $('.select-all').click(function(event) {

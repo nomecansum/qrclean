@@ -18,7 +18,7 @@
                 <input type="hidden" name="referer" value="{{ $referer }}">
                 <div class="form-group col-md-8 {{ $errors->has('des_incidencia') ? 'has-error' : '' }}">
                     <label for="des_incidencia" class="control-label">Titulo</label>
-                    <input class="form-control" required name="des_incidencia" type="text" id="des_incidencia"  maxlength="200" >
+                    <input class="form-control"  name="des_incidencia" type="text" id="des_incidencia"  maxlength="200" >
                     {!! $errors->first('des_incidencia', '<p class="help-block">:message</p>') !!}
                 </div>
                 <div class="form-group col-md-4 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">

@@ -170,21 +170,33 @@ class EncuestasController extends Controller
             $encuesta->update($r->all());
             if(isset($r->perfiles)){
                 $encuesta->list_perfiles=implode(",",$r->perfiles);
+            } else {
+                $encuesta->list_perfiles=null;
             }
             if(isset($r->edificio)){
                 $encuesta->list_edificios=implode(",",$r->edificio);
+            } else {
+                $encuesta->list_edificios=null;
             }
             if(isset($r->planta)){
                 $encuesta->list_plantas=implode(",",$r->planta);
+            } else {
+                $encuesta->list_plantas=null;
             }
             if(isset($r->tags)){
                 $encuesta->list_tags=implode(",",$r->tags);
+            } else {
+                $encuesta->list_tags=null;
             }
             if(isset($r->puesto)){
                 $encuesta->list_puestos=implode(",",$r->puesto);
+            } else {
+                $encuesta->list_puestos=null;
             }
             if(isset($r->tipo)){
                 $encuesta->list_tipos=implode(",",$r->tipo);
+            } else {
+                $encuesta->list_tipos=null;
             }
 
             $fechas=explode(" - ",$r->fechas);

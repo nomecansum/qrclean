@@ -498,7 +498,7 @@ class IncidenciasController extends Controller
     protected function getDataincidencia(Request $request)
     {
         $rules = [
-            'des_incidencia' => 'required|string|min:1|max:500',
+            'des_incidencia' => 'nullable|string|min:1|max:500',
             'txt_incidencia' => 'nullable|string|min:1|max:65000',
             'img_attach1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:14096',
             'img_attach2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:14096',

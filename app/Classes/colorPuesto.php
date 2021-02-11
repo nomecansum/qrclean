@@ -37,7 +37,7 @@ class colorPuesto
 {
     static function colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$origen="P"){
         $tam_borde=isMobile()?$puesto->factor_puesto-1:$puesto->factor_puesto;
-        if ($puesto->id_estado==6){  //Incidencia
+        if ($puesto->mca_incidencia=='S'){  //Incidencia
             return [
                 'color'=>"#ffb300",
                 'font_color'=>"#fff",

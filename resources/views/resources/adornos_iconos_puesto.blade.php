@@ -1,4 +1,4 @@
-@if($puesto->id_estado==6)<br>
+@if($puesto->mca_incidencia=='S')<br>
     <span  style="font-size: {{ $puesto->factor_letra+0.5 }}vw; line-height: 15px;"><i class="fas fa-exclamation-triangle" style="color: #fff"></i></span>
 @elseif($puesto->id_estado==5)<br>
     <span  style="font-size: {{ $puesto->factor_letra+0.5 }}vw; line-height: 15px;"><i class="fas fa-ban" style="color: #fff"></i></span>

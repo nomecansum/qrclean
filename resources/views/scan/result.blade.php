@@ -79,7 +79,7 @@
         @endphp
         <div class="row" id="div_encuesta"  @if($encuesta->val_momento=='D') style="display: none" @endif>
             <div class="col-md-6 col-xs-offset-3 text-center" id="pregunta">
-                <h4>{{ $encuesta->pregunta }}</h4>
+                <h4>{!! $encuesta->pregunta !!}</h4>
             </div>
             <div class="col-md-12 text-center" id="selector">
                 @include('encuestas.selector',['tipo'=>$encuesta->id_tipo_encuesta,'comentarios'=>$encuesta->mca_mostrar_comentarios])
@@ -124,7 +124,7 @@
                                         
                                         @if(isset($respuesta['tiene_reserva'])&&$respuesta['tiene_reserva']!="")
                                         <div class="text-center bg-pink pad-all">
-                                            <i class="fad fa-exclamation-circle blink_me fa-2x"></i> Este puesto esta reservado en los horarios [{{ $respuesta['tiene_reserva'] }}] tengalo en cuenta porque tendrá que dejar el puesto libre en esos horarios
+                                            <i class="fad fa-exclamation-circle blink_me fa-2x"></i> Este puesto esta reservadoVa en los horarios [{{ $respuesta['tiene_reserva'] }}] tengalo en cuenta porque tendrá que dejar el puesto libre en esos horarios
                                         </div>
                                         <br><br><br>
                                         @endif
@@ -147,7 +147,7 @@
                         @endif
                     </div>
                 </div>
-                @if($puesto->id_estado!=6)
+                @if($puesto->mca_incidencia=='N')
                     <div class="row mt-3">
                         <div class="col-md-12 text-center">
                             <button class="btn btn-lg btn-warning text-bold btn_incidencia" data-estado="6" data-id="{{$puesto->token}}"><i class="fad fa-exclamation-triangle"></i> Notificar una incidencia <br>en este puesto</button>

@@ -160,7 +160,7 @@ class IncidenciasController extends Controller
             $puesto=puestos::find($incidencia->id_puesto);
            
             $incidencia->delete();
-            $puesto->id_estado=1;
+            $puesto->mca_incidencia='N';
             $puesto->save();
             savebitacora('Incidencia ['.$incidencia->id_incidencia.'] '.$incidencia->des_incidencia.' borrada',"Incidencias","delete","OK");
             return redirect()->route('incidencias.index')->with('success_message', 'Incidencia ['.$id.'] '.$incidencia->des_incidencia.' borrada.');
@@ -180,6 +180,10 @@ class IncidenciasController extends Controller
             $inc->fec_cierre=Carbon::now();
             $inc->id_usuario_cierre=Auth::user()->id;
             $inc->save();
+            $puesto=puestos::find($inc->id_puesto);
+            $puesto->mca_incidencia='N';
+            $puesto->save();
+            
             savebitacora('Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',"Incidencias","cerrar","OK");
             http://qrclean/puesto/d1ZOOLiLumXYpxB2xEPSf7ClPYr9dYidK0YfJBJ1MBCUtPNr5H
             return [
@@ -211,7 +215,7 @@ class IncidenciasController extends Controller
             savebitacora('Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' reabierta',"Incidencias","reabrir","OK");
             //Ponemos el estado del puesto a operativo
             $puesto=puestos::find($inc->id_puesto);
-            $puesto->id_estado=1;
+            $puesto->mca_incidencia='S';
             $puesto->save();
             return [
                 'title' => "Reabrir incidencia",
@@ -465,6 +469,7 @@ class IncidenciasController extends Controller
             return view('scan.puesto_no_encontrado',compact('puesto'));    
         }
         validar_acceso_tabla($puesto->id_puesto,'puestos');
+        $config=DB::table('config_clientes')->where('id_cliente',$puesto->id_cliente)->first();
         $tipos=DB::table('incidencias_tipos')
             ->join('clientes','incidencias_tipos.id_cliente','clientes.id_cliente')
             ->where(function($q) use($puesto){
@@ -480,7 +485,7 @@ class IncidenciasController extends Controller
             ->orderby('mca_fijo')
             ->orderby('nom_cliente')
             ->get();
-        return view('incidencias.nueva_incidencia',compact('puesto','tipos','referer'));
+        return view('incidencias.nueva_incidencia',compact('puesto','tipos','referer','config'));
     }
 
     
@@ -547,7 +552,7 @@ class IncidenciasController extends Controller
             $inc->save();
 
             //Marcamos el puesto como chungo
-            $puesto->id_estado=6;
+            $puesto->mca_incidencia='S';
             $puesto->save();
             if($r->referer=='incidencias'){
                 $url_vuelta='incidencias';

@@ -76,33 +76,42 @@
 						<tr>
 							<th data-sortable="true">Id</th>
 							<th></th>
+							<th data-sortable="true">Tipo</th>
 							<th data-sortable="true">Puesto</th>
 							<th data-sortable="true">Edificio</th>
                             <th data-sortable="true">Planta</th>
 							<th data-sortable="true">Fecha</th>
 							<th data-sortable="true">Situacion</th>
-							<th data-sortable="true">Tipo</th>
+							
 							<th style="width: 30%" data-sortable="true">Incidencia</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach ($incidencias as $inc)
+							@php
+								if(isset($inc->txt_incidencia) && $inc->txt_incidencia!=''){
+									$descripcion=substr($inc->txt_incidencia,0,50);
+								}
+								if(isset($inc->des_incidencia) && $inc->des_incidencia!=''){
+									$descripcion=substr($inc->des_incidencia,0,50);
+								}
+							@endphp
 							<tr class="hover-this" @if (checkPermissions(['Clientes'],["W"])) @endif>
 								<td>{{$inc->id_incidencia}}</td>
 								<td class="text-center"><i class="{{ $inc->val_icono }} fa-2x" style="color:{{ $inc->val_color }}"></i></td>
+								<td>
+									<div class="rounded"  style="padding: 3px; width:100%: height: 100%; background-color: {{ $inc->val_color  }}; {{ txt_blanco($inc->val_color=='text-white')?'color: #fff':'color:#222' }}">
+										{{$inc->des_tipo_incidencia}}
+									</div>
+								</td>
 								<td>{{ $inc->des_puesto}}</td>
                                 <td>{{ $inc->des_edificio}}</td>
                                 <td>{{ $inc->des_planta}}</td>
 								<td>{!! beauty_fecha($inc->fec_apertura)!!}</td>
 								<td>@if(isset($inc->fec_cierre)) <div class="bg-success text-xs text-white text-center rounded b-all" style="padding: 5px" id="cell{{$inc->id_incidencia}}">Cerrada</div> @else  <div class="bg-pink  text-xs text-white text-center rounded b-all"  style="padding: 5px" id="cell{{$inc->id_incidencia}}">Abierta </div>@endif</td>  
-								<td>
-									<div class="rounded"  style="padding: 3px; width:100%: height: 100%; background-color: {{ $inc->val_color  }}; {{ txt_blanco($inc->val_color=='text-white')?'color: #fff':'color:#222' }}">
-										{{$inc->des_tipo_incidencia}}
-									</div>
-									
-								</td>
+								
 								<td style="position: relative; vertical-align: middle" class="pt-2">
-									{{ $inc->des_incidencia}}
+									{{ $descripcion}}
 									<div class="floating-like-gmail mt-2 w-100" style="width: 100%">
 										@if (checkPermissions(['Incidencias'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $inc->id_incidencia }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $inc->id_incidencia }})"><span class="fa fa-eye pt-1" aria-hidden="true"></span> Ver</a>@endif
 										@if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#accion-incidencia" title="Acciones incidencia" data-toggle="modal" class="btn btn-xs btn-warning add-tooltip btn-accion" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-accion{{ $inc->id_incidencia }}" onclick="accion_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-plus pt-1" aria-hidden="true"></span> Accion</a>@endif
@@ -116,7 +125,7 @@
 											<div class="modal-dialog modal-md">
 												<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
 													<div class="modal-header"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i>
-														¿Borrar incidencia {{ $inc->des_incidencia}}?
+														¿Borrar incidencia {{ $descripcion}}?
 													</div>
 													
 													<div class="modal-footer">

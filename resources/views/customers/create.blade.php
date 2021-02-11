@@ -136,15 +136,31 @@
 											<option value="1"  {{isset($config->val_metodo_notificacion) && $config->val_metodo_notificacion == 1 ? 'selected' : ''}}>e-mail</option>
 											{{--  <option value="2"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Notificacion APP</option>
 											<option value="3"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Ambas</option>  --}}
-											
 										</select>
-										
 									</div>
 								</div>
 								<div class="col-md-2">
 									<div class="form-group">
 										<label for="">Tamaño QR</label>
 										<input type="number" class="form-control" min="50" max="500"  required name="tam_qr" value="{{ $config->tam_qr??230 }}">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="">Layout incidencias</label>
+										<select name="val_layout incidencias" id="val_layout incidencias" class="form-control ">
+											<option value="A"  {{isset($config->val_layout_incidencias) && $config->val_layout_incidencias == 'A' ? 'selected' : ''}}>Titulo y descripcion</option>
+											<option value="T"  {{isset($config->val_layout_incidencias) && $config->val_layout_incidencias == 'T' ? 'selected' : ''}}>Solo titulo</option>
+											<option value="D"  {{isset($config->val_layout_incidencias) && $config->val_layout_incidencias == 'D' ? 'selected' : ''}}>Solo descripcion</option>
+											{{--  <option value="2"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Notificacion APP</option>
+											<option value="3"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Ambas</option>  --}}
+										</select>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="">Imagenes incidencias</label>
+										<input type="number" class="form-control" min="0" max="2"  required name="num_imagenes_incidencias" value="{{ $config->num_imagenes_incidencias??1 }}">
 									</div>
 								</div>
 							</div>

@@ -1,5 +1,4 @@
 <div class="panel">
-
     <div class="panel-heading">
         <h3 class="panel-title" id="titulo">
             Crear incidencia para el puesto 
@@ -16,11 +15,13 @@
             <div class="row">
                 <input type="hidden" name="id_puesto" value="{{ $puesto->id_puesto }}">
                 <input type="hidden" name="referer" value="{{ $referer }}">
-                <div class="form-group col-md-8 {{ $errors->has('des_incidencia') ? 'has-error' : '' }}">
-                    <label for="des_incidencia" class="control-label">Titulo</label>
-                    <input class="form-control"  name="des_incidencia" type="text" id="des_incidencia"  maxlength="200" >
-                    {!! $errors->first('des_incidencia', '<p class="help-block">:message</p>') !!}
-                </div>
+                @if(isset($config->val_layout_incidencias) && ($config->val_layout_incidencias=='T' || $config->val_layout_incidencias=='A'))
+                    <div class="form-group col-md-8 {{ $errors->has('des_incidencia') ? 'has-error' : '' }}">
+                        <label for="des_incidencia" class="control-label">Titulo</label>
+                        <input class="form-control"  name="des_incidencia" type="text" id="des_incidencia"  maxlength="200" >
+                        {!! $errors->first('des_incidencia', '<p class="help-block">:message</p>') !!}
+                    </div>
+                @endif
                 <div class="form-group col-md-4 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">
                     <label for="id_tipo_incidencia" class="control-label">Tipo</label>
                     <select class="form-control selectpicker" required id="id_tipo_incidencia" name="id_tipo_incidencia">
@@ -30,6 +31,7 @@
                     </select>
                 </div>   
             </div>
+            @if((isset($config->val_layout_incidencias) && ($config->val_layout_incidencias=='D' || $config->val_layout_incidencias=='A')) || (!isset($config->val_layout_incidencias)))
             <div class="row">
                 <div class="form-group col-md-12 {{ $errors->has('txt_incidencia') ? 'has-error' : '' }}">
                     <label for="txt_incidencia" class="control-label">Descripcion</label>
@@ -37,6 +39,8 @@
                     {!! $errors->first('txt_incidencia', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
+            @endif
+            @if((isset($config->num_imagenes_incidencias) && $config->num_imagenes_incidencias>0) || (!isset($config->num_imagenes_incidencias)))
             <div class="row">
                 <div class="row" style="padding-left: 15px">
                     Imagen 1<br>
@@ -51,6 +55,8 @@
                         {!! $errors->first('img_attach1', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
+            @endif
+            @if(isset($config->num_imagenes_incidencias) && $config->num_imagenes_incidencias>1)
             <div class="row">
                 <div class="row" style="padding-left: 15px">
                     Imagen 2<br>
@@ -65,6 +71,7 @@
                         {!! $errors->first('img_attach2', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
+            @endif
             <div class="form-group">
                 <div class="col-md-12 text-right">
                     <input class="btn btn-primary" type="submit" value="Guardar">

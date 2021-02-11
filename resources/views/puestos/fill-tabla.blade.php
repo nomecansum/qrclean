@@ -66,27 +66,31 @@
                                 <td class="text-center text-muted" >@if($puesto->mca_reservar=='S') <i class="fas fa-circle"  style="color: #70c2b4"></i> @endif</td>
                                 <td class="text-center text-muted" >@if(isset($puesto->id_usuario))<i class="fad fa-user" title="Puesto asignado al usuario {{ \App\Models\users::find($puesto->id_usuario)->name }}" style="color: #f4a462"></i> @endif @if(isset($puesto->id_perfil))<i class="fad fa-users" title="Puesto asignado a perfil {{ \App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso }}" style="color: #f4a462"></i> @endif</td>
                                 <td class="td text-center" data-id="">
-                                    @switch($puesto->id_estado)
-                                        @case(1)
-                                            <div class="bg-success rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
-                                        @case(2)
-                                            <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
-                                        @case(3)
-                                            <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break     
-                                        @case(4)
-                                            <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
-                                        @case(5)
-                                            <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                            @break
-                                        @case(6)
-                                            <div class="bg-warning rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;"><i class="fad fa-exclamation-triangle"></i>
-                                            @break
-                                        @default
-                                    @endswitch
+                                    @if($puesto->mca_incidencia=='N')
+                                        @switch($puesto->id_estado)
+                                            @case(1)
+                                                <div class="bg-success rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @case(2)
+                                                <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @case(3)
+                                                <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break     
+                                            @case(4)
+                                                <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @case(5)
+                                                <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @case(7)
+                                                <div class="bg-white rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                @break
+                                            @default
+                                        @endswitch
+                                    @else
+                                        <div class="bg-warning rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;"><i class="fad fa-exclamation-triangle"></i>
+                                    @endif
                                     {{$puesto->des_estado}}
                                     </div>
                                 </td>

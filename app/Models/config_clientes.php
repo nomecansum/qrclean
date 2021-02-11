@@ -40,9 +40,11 @@ class config_clientes extends Model
                   'mca_restringir_usuarios_planta',
                   'modo_visualizacion_puestos',
                   'modo_visualizacion_reservas',
+                  'num_imagenes_incidencias',
                   'tam_qr',
                   'theme_name',
                   'theme_type',
+                  'val_layout_incidencias',
                   'val_metodo_notificacion'
               ];
 

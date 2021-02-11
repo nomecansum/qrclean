@@ -150,7 +150,8 @@
                         @endif
                     </div>
                 </div>
-                @if($puesto->mca_incidencia=='N' && Auth::check())
+                @if(Auth::check()) 
+                {{--  $puesto->mca_incidencia=='N' &&   --}}
                     <div class="row mt-3">
                         <div class="col-md-12 text-center">
                             <button class="btn btn-lg btn-warning text-bold btn_incidencia" data-estado="6" data-id="{{$puesto->token}}"><i class="fad fa-exclamation-triangle"></i> Notificar una incidencia <br>en este puesto</button>
@@ -279,7 +280,6 @@
                         puesto.css('top',plano.height()*item.offsettop/100);
                         puesto.css('left',plano.width()*item.offsetleft/100);
                     });
-
                 }) 
             }
 

@@ -91,7 +91,7 @@
                                     @else
                                         <div class="bg-warning rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;"><i class="fad fa-exclamation-triangle"></i>
                                     @endif
-                                    {{$puesto->des_estado}}
+                                    Incidencia
                                     </div>
                                 </td>
                                 <td class="text-center opts">

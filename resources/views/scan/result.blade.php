@@ -144,16 +144,28 @@
                         @endif
                         @if(isset($respuesta['hacer_login']) && $puesto->mca_acceso_anonimo=='N')
                             <button class="btn btn-lg btn-primary text-bold btn_login" data-id="{{$puesto->token}}"><i class="fad fa-user"></i> Iniciar sesion</button>
+                            @php
+                                $ya_esta_boton_login=1;   
+                            @endphp
                         @endif
                     </div>
                 </div>
-                @if($puesto->mca_incidencia=='N')
+                @if($puesto->mca_incidencia=='N' && Auth::check())
                     <div class="row mt-3">
                         <div class="col-md-12 text-center">
                             <button class="btn btn-lg btn-warning text-bold btn_incidencia" data-estado="6" data-id="{{$puesto->token}}"><i class="fad fa-exclamation-triangle"></i> Notificar una incidencia <br>en este puesto</button>
                         </div>
                     </div>
                 @endif
+            @endif
+            @if(!Auth::check())
+            <div class="row mt-3">
+                <div class="col-md-12 text-center">
+                   <span class="font-bold">Para poder notificar una incidencia en este puesto debe iniciar sesion<br><br></span>
+                   @if(!isset($ya_esta_boton_login))<button class="btn btn-lg btn-primary text-bold btn_login" data-id="{{$puesto->token}}"><i class="fad fa-user"></i> Iniciar sesion</button>@endif
+                </div>
+            </div>
+            
             @endif
             @if((isset($respuesta['disponibles']) && Auth::check() && Auth::user()->id!=$puesto->id_usuario_usando) || $reserva)
                 <div class="row">

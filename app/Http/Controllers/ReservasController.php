@@ -215,7 +215,7 @@ class ReservasController extends Controller
             })
             ->where(function($q) use($r){
                 if($r->tipo_puesto>0){
-                    $q->where('id_tipo_puesto',$r->tipo_puesto);
+                    $q->where('puestos.id_tipo_puesto',$r->tipo_puesto);
                 }
             })
             ->where(function($q) use($intervalo){

@@ -540,8 +540,8 @@ class IncidenciasController extends Controller
                 $data[$var]=$$var;
             }
             $inc=new incidencias;
-            $inc->des_incidencia=$data['des_incidencia'];
-            $inc->txt_incidencia=$data['txt_incidencia'];
+            $inc->des_incidencia=$data['des_incidencia']??null;
+            $inc->txt_incidencia=$data['txt_incidencia']??null;
             $inc->id_cliente=$puesto->id_cliente;
             $inc->id_usuario_apertura=Auth::user()->id;
             $inc->fec_apertura=Carbon::now();

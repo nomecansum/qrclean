@@ -21,7 +21,7 @@
         <div class="col-md-4"></div>
         <div class="col-md-4 text-center">
             @if(isset($puesto))
-            <img src="{{ !empty($puesto->img_logo) && file_exists(public_path().'/img/clientes/images/'.$puesto->img_logo) ? url('/img/clientes/images/'.$puesto->img_logo) : url('/img/logo.png') }}" style="width: 120px"><br>
+            <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" style="width: 13vw" alt="" onerror="this.src='{{ url('/img/logo.png') }}';">
             <h2>{{ $puesto->nom_cliente }}</h2>
             @endif
         </div>

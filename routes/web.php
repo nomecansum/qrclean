@@ -209,6 +209,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/scan', 'LimpiezaController@scan')->name('rondas.estado_puesto');
     });
 
+    Route::group(['prefix' => 'limpieza'], function () {
+        Route::get('/pendientes', ['middleware'=>'permissions:["Pendientes limpieza"],["R"]', 'uses' => 'LimpiezaController@pendientes'])->name('limpieza.pendientes');
+        //Route::post('/process_import',['middleware'=>'permissions:["Importar datos"],["W"]', 'uses' => 'ImportController@process_import'])->name('import.process_import');
+    });
+
     Route::group(['prefix' => 'import'], function () {
         Route::view('/', ['middleware'=>'permissions:["Importar datos"],["R"]', 'uses' => 'import/index'])->name('import.index');
         Route::post('/process_import',['middleware'=>'permissions:["Importar datos"],["W"]', 'uses' => 'ImportController@process_import'])->name('import.process_import');

@@ -17,7 +17,7 @@
                 </span>
             </div>
             <div class="col-md-5"></div>
-            <div class="col-md-2 text-right">
+            <div class="col-md-2 text-right  sp_edificio">
                 <h4>
                     <span class="mr-2"><i class="fad fa-layer-group"></i> {{ $e->plantas }}</span>
                     <span class="mr-2"><i class="fad fa-desktop-alt"></i> {{ $e->puestos }}</span>

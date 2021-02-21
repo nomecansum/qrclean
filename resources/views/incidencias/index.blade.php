@@ -50,7 +50,7 @@
 	<div class="col-12">
 		<div class="panel">
 			<div class="panel-heading">
-				<h3 class="panel-title">Incidencias abiertas</h3>
+				<h3 class="panel-title">Incidencias</h3>
 			</div>
 			<div class="panel-body">
 				<div id="all_toolbar">
@@ -89,6 +89,7 @@
 					<tbody>
 						@foreach ($incidencias as $inc)
 							@php
+								$descripcion="";
 								if(isset($inc->txt_incidencia) && $inc->txt_incidencia!=''){
 									$descripcion=substr($inc->txt_incidencia,0,50);
 								}

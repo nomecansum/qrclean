@@ -336,7 +336,7 @@ class PuestosController extends Controller
                 ]);
                 //Notificar al usuario entrante
                 $usuario=users::find($r->id_usuario);
-                $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted';
+                $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion indefinida del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted';
                 notificar_usuario($usuario,"Se le ha asignado un nuevo puesto de forma indefinida",'emails.asignacion_puesto',$str_notificacion,1);
                
             } else {
@@ -514,6 +514,9 @@ class PuestosController extends Controller
             $p=puestos::find($puesto->id_puesto);
             $p->id_estado=$r->estado;
             $p->fec_ult_estado=Carbon::now();
+            if($r->estado=1){
+                $p->id_usuario_usando=null;
+            }
             $p->save();
             //Lo añadimos al log
             logpuestos::create(['id_puesto'=>$puesto->id_puesto,'id_estado'=>$r->estado,'id_user'=>Auth::user()->id,'fecha'=>Carbon::now()]);

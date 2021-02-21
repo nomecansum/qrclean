@@ -51,7 +51,7 @@
 @section('scripts')
 <script>
     $('.valor').click(function(){
-        $(this).css('background-color','#7fff00')
+       /$(this).css('background-color','#7fff00')
         console.log($(this).data('value'));
         $.post('{{url('/encuestas/save_data')}}', {_token:'{{csrf_token()}}',val: $(this).data('value'), id_encuesta: "{{ $encuesta->token }}", mca_anonima: "{{ $encuesta->mca_anonima }}",comentario: $('#comentario').val()}, function(data, textStatus, xhr) {
            console.log(data);

@@ -20,11 +20,11 @@
         <i class="fas fa-smile fa-5x text-success valor" data-value="3"></i>
         @break
     @case(3)
-        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" data-value="1"></i>
-        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" data-value="2"></i>
-        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" data-value="3"></i>
-        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" data-value="4"></i>
-        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" data-value="5"></i>
+        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" id="est1" data-value="1"></i>
+        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" id="est2" data-value="2"></i>
+        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" id="est3" data-value="3"></i>
+        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" id="est4" data-value="4"></i>
+        <i class="fal fa-star  valor" style="color: #ffd700; font-size: 7vw" id="est5" data-value="5"></i>
         @break
     @case(4)
         <table style="margin-left: auto; margin-right: auto;">
@@ -46,7 +46,17 @@
         @break
     @default
 @endswitch
-
+@section('scripts5')
+<script>
+    $('.fa-star').click(function(){
+        val=$(this).data('value');
+        for(n=1; n<=val; n++){
+            $('#est'+n).removeClass('fal');
+            $('#est'+n).addClass('fas');
+        }
+    })
+</script>
+@endsection
 
 {{--  <i class="fas fa-grin-alt fa-5x text-success"></i>
         <i class="fas fa-smile  fa-5x text-mint"></i>

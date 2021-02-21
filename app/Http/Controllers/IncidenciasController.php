@@ -275,7 +275,7 @@ class IncidenciasController extends Controller
             } else {
                 $tipo=incidencias_tipos::find($r->id);
                 $tipo->update($r->all());
-                $tipo->list_tipo_puesto=implode(",",$r->list_tipo_puesto);
+                $tipo->list_tipo_puesto=implode(",",$r->tipos_puesto);
                 $tipo->save();
                 
             }

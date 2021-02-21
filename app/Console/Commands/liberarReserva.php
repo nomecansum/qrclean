@@ -119,8 +119,8 @@ class liberarReserva extends Command
                 }
             })
             ->wheredate('fec_reserva',Carbon::now()->format('Y-m-d'))
-            ->where('fec_reserva','<=',Carbon::now()->addMinutes($val_minutos))
-            
+            ->where('fec_reserva','<=',Carbon::now()->subMinutes($val_minutos))
+            ->wherenotnull('fec_fin_reserva')
             ->wherenull('fec_utilizada')
             ->get();
         $this->escribelog_comando_comando('info','Encontradas '.$reservas->count().' anulables'); 

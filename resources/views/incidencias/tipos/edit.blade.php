@@ -91,7 +91,7 @@
                     <div class="form-group  col-md-12" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
                         <label>Tipo de puesto</label>
                         <div class="input-group select2-bootstrap-append">
-                            <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="list_tipo_puesto[]" id="multi-tipo" >
+                            <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipos_puesto[]" id="multi-tipo" >
                                 @php
                                     $tipos_puesto=explode(",",$tipo->list_tipo_puesto);
                                 @endphp

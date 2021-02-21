@@ -10,7 +10,7 @@
             </h3>
         </div>
 
-        <div class="panel-body">
+        <div class="panel-body" style="font-size: 14px">
             <div class="row">
                 <div class="col-md-8"><h4>{{ $incidencia->des_incidencia }}</h4></div>
                 <div class="col-md-2"><h5>{!! $incidencia->estado_incidencia !!}</h5></div>
@@ -30,7 +30,7 @@
                     <span class="font-bold">Planta: </span><span>{{ $incidencia->des_planta }}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="font-bold">Puesto: </span><span>{{ $incidencia->des_puesto }}</span>
+                    <span class="font-bold">Puesto: </span><span>{{ nombrepuesto($incidencia) }}</span>
                 </div>
             </div>
             <div class="row mt-3">

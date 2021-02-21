@@ -47,6 +47,7 @@
         <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar_plano"><i class="fad fa-map-marked-alt"></i> Plano</a>
     </div>
 </div>
+
 @if($edificios->isempty())
     <div class="row">
         <div class="col-md-12  alert alert-warning">

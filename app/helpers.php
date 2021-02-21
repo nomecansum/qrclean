@@ -851,3 +851,32 @@ if (! function_exists('authbyToken')) {
         }
     }
 }
+
+if (! function_exists('nombrepuesto')) {
+    function nombrepuesto($puesto){
+        try{
+            if(isset(session('CL')['val_campo_puesto_mostrar'])){
+                switch (session('CL')['val_campo_puesto_mostrar']) {
+                    case 'D':
+                        return $puesto->des_puesto;
+                        break;
+                    case 'I':
+                        return $puesto->cod_puesto;
+                        break;
+                    case 'A':
+                        return '['.$puesto->cod_puesto.'] '.$puesto->des_puesto ;
+                        break;
+                    
+                    default:
+                        return '['.$puesto->cod_puesto.'] '.$puesto->des_puesto ;
+                        break;
+                }
+            } else {
+                return $puesto->des_puesto;
+            }
+        } catch(\Exception $e){
+            return $puesto->des_puesto;
+        }  
+
+    }
+}

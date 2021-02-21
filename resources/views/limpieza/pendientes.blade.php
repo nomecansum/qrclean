@@ -39,8 +39,8 @@
         var tooltip = $('.add-tooltip');
         if (tooltip.length)tooltip.tooltip();
 
-        $('.parametrizacion').addClass('active active-sub');
-        $('.mapa').addClass('active-link');
+        $('.limpieza').addClass('active active-sub');
+        $('.pendientes').addClass('active-link');
 
         function post_procesado(puesto){
             $('puesto'+puesto).hide();

@@ -7,6 +7,7 @@ use App\Models\puestos;
 use App\Models\edificios;
 use App\Models\plantas;
 use App\Models\logpuestos;
+use App\Models\users;
 use DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -322,8 +323,14 @@ class HomeController extends Controller
                     ];
                     break;
                 case 2:
+                    try{
+                        $usuario_usando=users::find($p->id_usuario_usando)->name;
+                        $usuario_usando=" por ".$usuario_usando;
+                    } catch(\Exception $e){
+                        $usuario_usando="";
+                    }
                     $respuesta=[
-                        'mensaje'=>"Puesto ocupado",
+                        'mensaje'=>"Puesto ocupado".$usuario_usando,
                         'icono' => '<i class="fad fa-lock-alt"></i>',
                         'color'=>'danger',
                         'puesto'=>$p,
@@ -473,7 +480,7 @@ class HomeController extends Controller
             DB::table('puestos')->where('token',$puesto)->update([
                 'id_estado'=>$estado,
                 'fec_ult_estado'=>Carbon::now(),
-                'id_usuario_usando'=>$id_usuario,
+                'id_usuario_usando'=>null,
             ]);
             DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
@@ -484,16 +491,19 @@ class HomeController extends Controller
                 case 1:
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." listo para ser usado de nuevo. Muchas gracias",
+                        'mensaje'=>"Puesto ".nombrepuesto($p)." listo para ser usado de nuevo. Muchas gracias",
                         'color'=>'success',
                         'label'=>$e->des_estado,
                         'id'=>$p->id_puesto,
                     ];
                     break;
                 case 2:
+                    DB::table('puestos')->where('token',$puesto)->update([
+                        'id_usuario_usando'=>$id_usuario,
+                    ]);
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." esta ahora ocupado por usted",
+                        'mensaje'=>"Puesto ".nombrepuesto($p)." esta ahora ocupado por usted",
                         'color'=>'danger',
                         'label'=>$e->des_estado,
                         'id'=>$p->id_puesto,
@@ -502,7 +512,7 @@ class HomeController extends Controller
                 case 3:
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." marcado para limpiar. Muchas gracias",
+                        'mensaje'=>"Puesto ".nombrepuesto($p)." marcado para limpiar. Muchas gracias",
                         'color'=>'info',
                         'label'=>$e->des_estado,
                         'id'=>$p->id_puesto,
@@ -511,7 +521,7 @@ class HomeController extends Controller
                 case 4:
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." marcado como inoperativo",
+                        'mensaje'=>"Puesto ".nombrepuesto($p)." marcado como inoperativo",
                         'color'=>'gray',
                         'label'=>$e->des_estado,
                         'id'=>$p->id_puesto,
@@ -520,7 +530,7 @@ class HomeController extends Controller
                 case 4:
                     $respuesta=[
                         'tipo'=>'OK',
-                        'mensaje'=>"Puesto ".$p->cod_puesto." marcado como bloqueado",
+                        'mensaje'=>"Puesto ".nombrepuesto($p)." marcado como bloqueado",
                         'color'=>'danger',
                         'label'=>$e->des_estado,
                         'id'=>$p->id_puesto,

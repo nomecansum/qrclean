@@ -159,7 +159,7 @@
                         <!--Submenu-->
                         <ul class="collapse">
                             @if(checkPermissions(['Rondas de limpieza'],['R']))<li class="rondas text-nowrap"><a href="/rondas/index/L" class="text-nowrap"><i class="fad fa-broom"></i> Rondas limpieza</a></li> @endif
-                            @if(checkPermissions(['Pendientes limpieza'],['R']))<li class="rondas text-nowrap"><a href="/limpieza/pendientes" class="text-nowrap"><i class="far fa-broom" style="color: #f00"></i> Pendientes limpieza</a></li> @endif
+                            @if(checkPermissions(['Pendientes limpieza'],['R']))<li class="pendientes text-nowrap"><a href="/limpieza/pendientes" class="text-nowrap"><i class="far fa-broom" style="color: #f00"></i> Pendientes limpieza</a></li> @endif
                             @if(checkPermissions(['Scan limpieza'],['R']))<li class="scan_ronda"><a href="/rondas/scan" class="text-nowrap"><i class="fad fa-qrcode"></i> Scan</a></li> @endif
                         </ul>
                     </li>

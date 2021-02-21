@@ -61,7 +61,7 @@
         <div class="col-md-12 text-center">
             @if(isset($puesto))
             <div class="pad-all text-center font-bold" style="color: {{ $puesto->val_color }}; font-size: 22px">
-                <i class="{{ $puesto->val_icono }}"></i>[{{ $puesto->cod_puesto }}] - {{ $puesto->des_puesto }}
+                <i class="{{ $puesto->val_icono }}"></i>{{ nombrepuesto($puesto) }}
             </div>
             @endif
         </div>
@@ -177,7 +177,7 @@
                 <div class="row">
                     @foreach($respuesta['disponibles'] as $disp)
                         <div class="col-md-4 pad-all font-18 text-center font-bold" style="color: {{ $disp->val_color }}">
-                            <i class="{{ $disp->val_icono }}"></i>[{{ $disp->cod_puesto }}] - {{ $disp->des_puesto }}
+                            <i class="{{ $disp->val_icono }}"></i>{{ nombrepuesto($puesto) }}
                         </div>
                     @endforeach
                    

@@ -54,7 +54,7 @@
                     {{--  {{config('app.url_base_scan').$puesto->token}}  --}}
                 </div>
                 <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr" style="color: {{$puesto->val_color}}; background-color: #fff; font-size: {{ $tam_fuente }}px">
-                    <i class="{{$puesto->val_icono}}"></i>  {{$puesto->des_puesto}}
+                    <i class="{{$puesto->val_icono}}"></i>  {{ nombrepuesto($puesto) }}
                 </div>
             </div>
     

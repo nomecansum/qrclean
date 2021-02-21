@@ -123,6 +123,10 @@
 								<input type="checkbox" class="form-control  magic-checkbox" name="mca_reserva_horas"  id="mca_reserva_horas" value="S" {{ isset($config->mca_reserva_horas)&&$config->mca_reserva_horas=='S'?'checked':'' }}> 
 								<label class="custom-control-label"   for="mca_reserva_horas">Reservas por horas</label>
 							</div>
+							<div class="col-md-3">
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_mostrar_nombre_usando"  id="mca_mostrar_nombre_usando" value="S" {{ isset($config->mca_mostrar_nombre_usando)&&$config->mca_mostrar_nombre_usando=='S'?'checked':'' }}> 
+								<label class="custom-control-label"   for="mca_mostrar_nombre_usando">Mostrar nombre que usa un puesto</label>
+							</div>
 							
 						</div>
 
@@ -180,6 +184,15 @@
 									<option value="I" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='I'?'selected':'' }}>Icono</option>
 								</select>
 							</div>
+							<div class="col-md-2 ml-2">
+								<label for="val_campo_puesto_mostrar">Mostrar nombre de puesto</label>
+								<select name="val_campo_puesto_mostrar" id="val_campo_puesto_mostrar" class="form-control" style="width: 100%">
+									<option value="D" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='D'?'selected':'' }}>Descripcion</option>
+									<option value="I" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='I'?'selected':'' }}>Identificador</option>
+									<option value="A" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='A'?'selected':'' }}>[Identif] Descripcion</option>
+								</select>
+							</div>
+							
 						</DIV>
 					</div>
 

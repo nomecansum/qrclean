@@ -121,7 +121,7 @@ class colorPuesto
             }
             return [
                 'color'=>"#dff9d2",
-                'font_color'=>"#fff",
+                'font_color'=>"#444",
                 'clase_disp'=>"disponible",
                 'title'=>$origen=="P"?$puesto->des_estado:"Disponible",
                 'borde'=>"border: ".$tam_borde."px solid ".$borde.";",

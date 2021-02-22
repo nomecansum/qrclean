@@ -67,7 +67,7 @@
                             
                             
                         } else if($puesto->factor_puesto<3.5){
-                            $puesto->factor_puesto=3.7;
+                            $puesto->factor_puesto=4.7;
                             $puesto->factor_letra=0.8;
                         }
                         $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
@@ -82,9 +82,9 @@
                                 <label class="custom-control-label"   for="chkp{{ $puesto->id_puesto }}"></label>
                             </div>
                         @endif
-                        <span class="h-100 mb-0 mt-0" style="font-size: {{ $puesto->factor_letra }}vw; color: {{ $cuadradito['font_color'] }}">{{ $puesto->cod_puesto }}</span>
+                        <div class="h-100 mb-0 mt-1" style="font-size: {{ $puesto->factor_letra }}vw; color: {{ $cuadradito['font_color'] }}; line-height: 12px">{{ strlen($puesto->cod_puesto)>15?substr($puesto->cod_puesto,0,15)."...":$puesto->cod_puesto }}
                         @include('resources.adornos_iconos_puesto')
-                       
+                        </div>
                     </div>
                     
                 @endforeach

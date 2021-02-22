@@ -27,7 +27,7 @@
     </div>
     <div class="panel-body">
         @php
-            dd(Storage::disk(config('app.img_disk')));
+            dd(Carbon\Carbon::now()->format('H:i:s'));
         @endphp 
     </div>
 </div>

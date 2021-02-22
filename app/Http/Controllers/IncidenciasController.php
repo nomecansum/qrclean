@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\puestos;
 use App\Models\logpuestos;
 use App\Models\rondas;
+use App\Models\users;
 use App\Models\incidencias_tipos;
 use App\Models\incidencias;
 use App\Models\causas_cierre;
@@ -185,7 +186,19 @@ class IncidenciasController extends Controller
             $puesto->save();
             
             savebitacora('Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',"Incidencias","cerrar","OK");
-            http://qrclean/puesto/d1ZOOLiLumXYpxB2xEPSf7ClPYr9dYidK0YfJBJ1MBCUtPNr5H
+            //Enviamos mail al uusario abriente
+            $des_causa=causas_cierre::find($inc->id_causa_cierre)->des_causa;
+            $usuario_abriente=users::find($inc->id_usuario_apertura);
+            $body="Tenemos el placer de comunicarle que la incidencia [".$inc->id_incidencia."] ".$inc->des_incidencia."Que usted abrió el  ".Carbon::parse($inc->fec_apertura)->format('d/m/Y')." ha sido cerrada por ".Auth::user()->name." Con el siguiente comentario:<br>".chr(13)." [".$des_causa."] ".$r->comentario_cierre;
+            Mail::send('emails.mail_cerrar_incidencia', ['inc'=>$inc,'body'=>$body], function($message) use ($inc, $puesto,$body) {
+                if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                    $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Confirmacion de cierre de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                } else {
+                    $message->to(explode(';',$usuario_abriente->email), '')->subject('Confirmacion de cierre de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                }
+                $message->from(config('mail.from.address'),config('mail.from.name'));
+            });
+
             return [
                 'title' => "Cerrar incidencia",
                 'message' => 'Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',
@@ -593,6 +606,7 @@ class IncidenciasController extends Controller
 
     public function post_procesado_incidencia($inc){
         $tipo=incidencias_tipos::find($inc->id_tipo_incidencia);
+        $usuario_abriente=users::find($inc->id_usuario_apertura);
         $puesto=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
@@ -633,6 +647,19 @@ class IncidenciasController extends Controller
                 # code...
                 break;
         }
+        //Enviamos mail al uusario abriente
+        Mail::send('emails.mail_incidencia', ['inc'=>$inc], function($message) use ($tipo, $to_email, $inc, $puesto) {
+            if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+            } else {
+                $message->to(explode(';',$usuario_abriente->email), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+            }
+            $message->from(config('mail.from.address'),config('mail.from.name'));
+            if($inc->img_attach1)
+                $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+            if($inc->img_attach2)
+                $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+        });
 
     }
 

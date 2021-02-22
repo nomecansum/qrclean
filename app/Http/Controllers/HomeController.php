@@ -134,6 +134,7 @@ class HomeController extends Controller
             //Ahora comprobamos si el puesto esta reservado por alguien distinto a el usuario
             $reserva=DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
+                ->join('users','users.id','reservas.id_usuario') 
                 ->where(function($q){
                     $q->where(function($q){
                         $q->wherenull('fec_fin_reserva');
@@ -141,12 +142,20 @@ class HomeController extends Controller
                     });
                     $q->orwhereraw("'".Carbon::now()."' between DATE_SUB(fec_reserva,interval 15 MINUTE) AND DATE_ADD(fec_fin_reserva,interval 15 MINUTE)");
                 })
-                ->where('id_usuario','<>',$id_usuario)
                 ->first();
             
-            if($reserva){
+            if(isset($reserva) && $reserva->id_usuario!=$id_usuario){
+                try{
+                    $usuario_usando="";
+                    if(session('CL')['mca_mostrar_nombre_usando']=='S'){
+                        $usuario_usando=$reservas->name;
+                        $usuario_usando=" por ".$usuario_usando;
+                    }
+                } catch(\Exception $e){
+                    $usuario_usando="";
+                }
                 $respuesta=[
-                    'mensaje'=>"PUESTO RESERVADO",
+                    'mensaje'=>"PUESTO RESERVADO ".$usuario_usando,
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
@@ -183,8 +192,17 @@ class HomeController extends Controller
                 ->get();
 
             if(!$asignados_usuarios->isEmpty()){
+                try{
+                    $usuario_usando="";
+                    if(session('CL')['mca_mostrar_nombre_usando']=='S'){
+                        $usuario_usando=$asignados_usuarios->first()->name;
+                        $usuario_usando=" a ".$usuario_usando;
+                    }
+                } catch(\Exception $e){
+                    $usuario_usando="";
+                }
                 $respuesta=[
-                    'mensaje'=>"PUESTO ASIGNADO PERMANENTEMENTE",
+                    'mensaje'=>"PUESTO ASIGNADO PERMANENTEMENTE ".$usuario_usando,
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
@@ -255,8 +273,17 @@ class HomeController extends Controller
                 ->get();
 
             if(!$asignados_nomiperfil->isEmpty()){
+                try{
+                    $usuario_usando="P";
+                    if(session('CL')['mca_mostrar_nombre_usando']=='S'){
+                        $usuario_usando=$asignados_nomiperfil->first()->des_nivel_acceso;
+                        $usuario_usando=" para ".$usuario_usando;
+                    }
+                } catch(\Exception $e){
+                    $usuario_usando="P";
+                }
                 $respuesta=[
-                    'mensaje'=>"PUESTO RESERVADO P",
+                    'mensaje'=>"PUESTO RESERVADO ".$usuario_usando,
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
@@ -324,8 +351,11 @@ class HomeController extends Controller
                     break;
                 case 2:
                     try{
-                        $usuario_usando=users::find($p->id_usuario_usando)->name;
-                        $usuario_usando=" por ".$usuario_usando;
+                        $usuario_usando="";
+                        if(session('CL')['mca_mostrar_nombre_usando']=='S'){
+                            $usuario_usando=users::find($p->id_usuario_usando)->name;
+                            $usuario_usando=" por ".$usuario_usando;
+                        }
                     } catch(\Exception $e){
                         $usuario_usando="";
                     }

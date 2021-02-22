@@ -77,7 +77,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     
 
-    Route::group(['prefix' => 'users','middleware' => 'forceSSL'], function () {
+    Route::group(['prefix' => 'users'], function () {
         Route::get('/',['middleware'=>'permissions:["Usuarios"],["R"]','uses'=>'UsersController@index'])->name('users.index');
         Route::get('/create',['middleware'=>'permissions:["Usuarios"],["C"]','uses'=>'UsersController@create'])->name('users.users.create');
         Route::get('/show/{users}',['middleware'=>'permissions:["Usuarios"],["R"]','uses'=>'UsersController@show'])->name('users.users.show');

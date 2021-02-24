@@ -175,12 +175,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    @foreach($respuesta['disponibles'] as $disp)
-                        <div class="col-md-4 pad-all font-18 text-center font-bold" style="color: {{ $disp->val_color }}">
-                            <i class="{{ $disp->val_icono }}"></i>{{ nombrepuesto($puesto) }}
-                        </div>
-                    @endforeach
-                   
+                    @if(isset($respuesta['disponibles']))
+                        @foreach($respuesta['disponibles'] as $disp)
+                            <div class="col-md-4 pad-all font-18 text-center font-bold" style="color: {{ $disp->val_color }}">
+                                <i class="{{ $disp->val_icono }}"></i>{{ nombrepuesto($puesto) }}
+                            </div>
+                        @endforeach
+                   @endif
                     </div>
                 </div>
                 <div class="row">

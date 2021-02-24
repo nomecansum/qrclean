@@ -102,8 +102,6 @@
         <div class="col-md-3"></div>
         <div class="col-md-6 text-1x text-center font-bold">
             [Usted tiene reservado este puesto para hoy entre las {{ Carbon\Carbon::parse($mireserva->fec_reserva)->format('H:i') }} y las {{ Carbon\Carbon::parse($mireserva->fec_fin_reserva)->format('H:i') }}]
-            <br>
-            <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
         </div>
         <div class="col-md-3"></div>
     </div>

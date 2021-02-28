@@ -12,6 +12,7 @@ use App\cucoWEB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Stringable;
+use App\Console\Commands\liberarReserva;
 
 class Kernel extends ConsoleKernel
 {
@@ -120,7 +121,7 @@ class Kernel extends ConsoleKernel
         //     //log_tarea("Config de tarea [".$task->cod_tarea."] " . $task->des_tarea . " Config: " . json_encode($sch), $task->cod_tarea);
         // }
 
-        $schedule->command('task:liberarReserva')->everyFiveMinutes();
+        $schedule->command(liberarReserva::class,[21])->everyFiveMinutes();
         // $colas_informes = ['InformesL', 'InformesM', 'InformesS'];
         // //Procesadores de colas
         // $schedule->command('queue:restart')->hourly();

@@ -356,6 +356,9 @@ class HomeController extends Controller
                             $usuario_usando=users::find($p->id_usuario_usando)->name;
                             $usuario_usando=" por ".$usuario_usando;
                         }
+                        if($p->id_usuario_usando==Auth::user()->id){
+                            $usuario_usando=" por usted";
+                        }
                     } catch(\Exception $e){
                         $usuario_usando="";
                     }

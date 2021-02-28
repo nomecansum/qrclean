@@ -235,6 +235,7 @@ class HomeController extends Controller
                     'operativo' => 1,
                     'encuesta'=>(isset($encuesta->val_momento) && $encuesta->val_momento=="A")?$encuesta->id_encuesta:0,
                 ];
+
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
 
@@ -435,6 +436,41 @@ class HomeController extends Controller
     }
 
 
+    function actualizar_estado_parking($estado,$id_usuario){
+         //Vamos a ver si tiene plaza de parking
+         $tiene_parking=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')  
+            ->where('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))  
+            ->where('id_usuario',$id_usuario)
+            ->where(function($q){
+                $q->wherenull('fec_desde');
+                $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+            })
+         ->first();
+         if(!isset($tiene_parking)){
+             //Si no lo tiene asignado a ver si lo tiene reservado
+             $tiene_parking=DB::table('reservas')
+                ->join('puestos','puestos.id_puesto','reservas.id_puesto')   
+                ->where('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))  
+                ->where(function($q){
+                    $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                    $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+                })
+                ->where('id_usuario',$id_usuario)
+                ->first();
+         }
+         if(isset($tiene_parking)){
+             logpuestos::create(['id_puesto'=>$tiene_parking->id_puesto,'id_estado'=>$estado,'id_user'=>Auth::user()->id??0,'fecha'=>Carbon::now()]);
+
+             DB::table('puestos')->where('id_puesto',$tiene_parking->id_puesto)->update([
+                 'id_estado'=>$estado,
+                 'fec_ult_estado'=>Carbon::now(),
+                 'id_usuario_usando'=>$estado==1?null:$id_usuario,
+             ]);
+         }
+
+    }
 
     public function estado_puesto($puesto,$estado){ 
         //A ver si el usuario viene autentificado
@@ -522,6 +558,7 @@ class HomeController extends Controller
                 ->update(['fec_utilizada'=>Carbon::now()]);
             switch ($estado) {
                 case 1:
+                    $this->actualizar_estado_parking($estado,$id_usuario);
                     $respuesta=[
                         'tipo'=>'OK',
                         'mensaje'=>"Puesto ".nombrepuesto($p)." listo para ser usado de nuevo. Muchas gracias",
@@ -534,6 +571,7 @@ class HomeController extends Controller
                     DB::table('puestos')->where('token',$puesto)->update([
                         'id_usuario_usando'=>$id_usuario,
                     ]);
+                    $this->actualizar_estado_parking($estado,$id_usuario);
                     $respuesta=[
                         'tipo'=>'OK',
                         'mensaje'=>"Puesto ".nombrepuesto($p)." esta ahora ocupado por usted",

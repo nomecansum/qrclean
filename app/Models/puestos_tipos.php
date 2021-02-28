@@ -37,7 +37,8 @@ class puestos_tipos extends Model
                   'mca_fijo',
                   'id_cliente',
                   'val_icono',
-                  'val_color'
+                  'val_color',
+                  'max_usos'
               ];
 
     /**

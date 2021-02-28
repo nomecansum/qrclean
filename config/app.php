@@ -139,6 +139,7 @@ return [
 
     'AWS_URL'=>env('AWS_URL','/'),
     'url_asset_mail'=>'https://spotdesking.spotlinker.com/',
+    'tipo_puesto_parking'=>2,
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

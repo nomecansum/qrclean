@@ -10,6 +10,7 @@ use Auth;
 use App\Models\reservas;
 use App\Models\puestos;
 use App\Models\users;
+use stdClass;
 
 class ReservasController extends Controller
 {
@@ -38,8 +39,41 @@ class ReservasController extends Controller
             ->where('puestos.id_cliente',Auth::user()->id_cliente)
             ->where('reservas.id_usuario',Auth::user()->id)
             ->wherebetween('fec_reserva',[$month,$end])
-            ->get();      
+            ->get();    
 
+
+        $asignados=DB::table('puestos_asignados')
+            ->selectraw("ifnull(date(puestos_asignados.fec_desde),'".$month."') as fec_desde,ifnull(date(puestos_asignados.fec_hasta),'".$end."') as fec_hasta,puestos.cod_puesto,puestos.des_puesto,edificios.des_edificio,plantas.des_planta,puestos_tipos.val_icono,puestos_tipos.val_color")
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+            ->leftjoin('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->where('id_usuario',Auth::user()->id)
+            ->where(function($q) use($month,$end){
+                $q->wherenull('fec_desde');
+                $q->orwhereraw("'".$month."' between fec_desde AND fec_hasta");
+                $q->orwhereraw("'".$end."' between fec_desde AND fec_hasta");
+                $q->orwherebetween('fec_desde',[$month,$end]);
+                $q->orwherebetween('fec_hasta',[$month,$end]);
+            })
+            ->get();
+        
+            foreach($asignados as $as){
+                $period = CarbonPeriod::create($as->fec_desde,$as->fec_hasta);
+                foreach($period as $p){
+                    $item=new stdclass();
+                    $item->fec_reserva=$p->format('Y-m-d');
+                    $item->fec_fin_reserva=$p->format('Y-m-d');
+                    $item->cod_puesto=$as->cod_puesto;
+                    $item->des_puesto=$as->des_puesto;
+                    $item->des_edificio=$as->des_edificio;
+                    $item->des_planta=$as->des_planta;
+                    $item->val_icono=$as->val_icono;
+                    $item->val_color=$as->val_color;
+                    $reservas->push($item);
+                }
+                
+            }
         return view('reservas.calendario',compact('backMonth','reservas'))->render();
     }
 

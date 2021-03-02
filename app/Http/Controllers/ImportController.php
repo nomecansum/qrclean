@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\puestos;
+use App\Models\puestos_asignados;
 use App\Models\edificios;
 use App\Models\plantas;
 use App\Models\users;
@@ -27,10 +28,10 @@ class ImportController extends Controller
 
     public function user_to_object($spreadsheet,$i){
 
-        $fila = $spreadsheet->setActiveSheetIndex(1)->rangeToArray('A'.$i.':F'.$i)[0];
+        $fila = $spreadsheet->setActiveSheetIndex(1)->rangeToArray('A'.$i.':L'.$i)[0];
         //error_log(json_encode($fila));
         $vacio=true;
-        for($n=0;$n<6;$n++){
+        for($n=0;$n<11;$n++){
             if($fila[$n]<>''){
                 $vacio=false;
             }
@@ -43,6 +44,15 @@ class ImportController extends Controller
             'name' => $fila[0],
             'email' => $fila[1],
             'foto' => $fila[2],
+            'parking' => $fila[3],
+            'puesto1' => $fila[4],
+            'puesto2' => $fila[5],
+            'puesto3' => $fila[6],
+            'supervisor' => $fila[7],
+            'plantas_reserva' => $fila[8],
+            'plantas_supervisor' => $fila[9],
+            'es_supervisor' => $fila[10],
+            'update' => $fila[11],
             'id_cliente' => Auth::user()->id_cliente
         ]);
         return $user;
@@ -145,7 +155,7 @@ class ImportController extends Controller
                 }
                 //Comprobamos los datos de usuarios
                 $highestRow = $spreadsheet->setActiveSheetIndex(1)->getHighestRow();
-                for ($i = 2; $i <= $highestRow; $i++) 
+                for ($i = 3; $i <= $highestRow; $i++) 
                 {
                     $user = $this->user_to_object($spreadsheet, $i);
                     if($user == false)
@@ -158,9 +168,9 @@ class ImportController extends Controller
                         if($user->name!='' && $user->email!=''){
                             $cuenta_usuarios++;
                             $u=users::where('email',$user->email)->first();
-                            if($u!=null){
+                            if($u!=null && $user->update!='SI'){
                                 $cuenta_errores++;
-                                $errores.='USUARIOS - Fila '.$i.' la direccin de email ya existe <br>';
+                                $errores.='USUARIOS - Fila '.$i.' la direccion de email ya existe <br>';
                             }
                         } else {
                             $cuenta_errores++;
@@ -185,14 +195,23 @@ class ImportController extends Controller
                 try
                 {
                     
-                    for ($i = 2; $i < ($cuenta_usuarios+2); $i++) 
+                    for ($i = 3; $i < ($cuenta_usuarios+3); $i++) 
                     {
                         $user = $this->user_to_object($spreadsheet, $i);
-                        $u=new users;
+                        if($user->update=='' || $user->update=='N' || $user->update=='NO'){
+                            $u=new users;
+                        } else {
+                            $u=users::where('email',$user->email)->first();
+                            if(!isset($u)){
+                                $u=new users;
+                            }
+                        }
+                        $es_supervisor=$user->es_supervisor=='SI'?'S':'N';
+
                         $u->email=$user->email;
                         $u->name=$user->name;
                         $u->id_cliente=Auth::user()->id_cliente;
-                        $u->password=Hash::make('NuevoUsuario');
+                        $u->password=Str::random(15);
                         $u->cod_nivel=1;
 
                         if ($user->foto!='') {
@@ -203,10 +222,18 @@ class ImportController extends Controller
                             Storage::disk(config('app.img_disk'))->putFileAs($path,$directorio.$user->foto,$img_usuario);
                             $u->img_usuario=$img_usuario;
                         }
+
+                        try{
+                            //Ahora rellenamos el supervisor
+                            $supervisor=users::where('email',$user->supervisor)->first();
+                            if(isset($supervisor)){
+                                $u->id_usuario_supervisor=$supervisor->id;
+                            }
+                        } catch (\Exception $e){
+                            $errores.='Supervisor '.$user->supervisor.' No encontrado <br>';
+                        }
+
                         $u->save();
-                        
-                        savebitacora("Creado usuario en importacion " . $u->id . " " . $u->name, $u->id_cliente);
-                        $nombres_usuarios .= "[".$u->id."] " . $u->name. "<br>";
                     }
 
                     $highestRow = $spreadsheet->setActiveSheetIndex(0)->getHighestRow();
@@ -218,7 +245,7 @@ class ImportController extends Controller
 
                         $anonimo=$puesto->mca_anonimo=='SI'?'S':'N';
                         $m_res=$puesto->mca_reserva=='SI'?'S':'N';
-                        if($puesto->update=='' || $puesto->update=='N'){
+                        if($puesto->update=='' || $puesto->update=='N' || $puesto->update=='NO'){
                             $p=new puestos;
                         } else {
                             $p=puestos::where('cod_puesto',$puesto->cod_puesto)->first();
@@ -269,12 +296,99 @@ class ImportController extends Controller
 
                     DB::commit();
 
+                    //Ahora la asignacion de puestos y plantas a usuarios, porque debe hacerse cuando tengamos los ID
+
+                    for ($i = 3; $i < ($cuenta_usuarios+3); $i++) 
+                    {
+                        $user = $this->user_to_object($spreadsheet, $i);
+                        $u=users::where('email',$user->email)->first();
+
+                        savebitacora("Creado usuario en importacion " . $u->id . " " . $u->name, $u->id_cliente);
+                        $nombres_usuarios .= "[".$u->id."] " . $u->name. "<br>";
+
+                        try{
+                            //Plantas asignadas reserva
+                            $lista_plantas=explode(",",$user->plantas_reserva);
+                            if(is_array($lista_plantas) && count($lista_plantas)>0){
+                                //Borramos las plantas que tenga asignadas el usuario
+                                DB::table('plantas_usuario')->where('id_usuario',$u->id)->delete();
+                            }
+                            $mensajes_adicionales.="<br> Añadir plantas usuario: ";
+                            foreach($lista_plantas as $pl){
+                                $esta_planta=plantas::where('id_planta',$pl)->orwhere('des_planta',$pl)->where('id_cliente',$user->id_cliente)->first();  
+                                $mensajes_adicionales.=" ".$pl;
+                                DB::table('plantas_usuario')->insert([
+                                    'id_usuario'=>$u->id,
+                                    'id_planta'=>$esta_planta->id_planta
+                                ]);
+                            }
+                        } catch (\Exception $e){
+                            $errores.='Error asignando planta a usuario '.$u->email.' '.mensaje_excepcion($e);
+                        }
+
+                        try{
+                            //Plantas asignadas supervisor
+                            $lista_plantas=explode(",",$user->plantas_supervisor);
+                            if(is_array($lista_plantas) && count($lista_plantas)>0){
+                                //Borramos las plantas que tenga asignadas el usuario
+                                DB::table('puestos_usuario_supervisor')->where('id_usuario',$u->id)->delete();
+                            }
+                            $mensajes_adicionales.="<br> Añadir plantas supervision: ";
+                            foreach($lista_plantas as $pl){
+                                $esta_planta=plantas::where('id_planta',$pl)->orwhere('des_planta',$pl)->where('id_cliente',$user->id_cliente)->first();  
+                                $puestos_supervisar=puestos::where('id_planta',$esta_planta->id_planta)->get();
+                                $mensajes_adicionales.=" ".$pl;
+                                foreach($puestos_supervisar as $ps){
+                                    DB::table('puestos_usuario_supervisor')->insert([
+                                        'id_usuario'=>$u->id,
+                                        'id_puesto'=>$ps->id_puesto
+                                    ]);
+                                }   
+                            }
+                        } catch (\Exception $e){
+                            $errores.='Error asignando planta a usuario para supervision '.$u->email.' '.mensaje_excepcion($e);
+                        }
+
+                        //Puestos asignados
+                        $campos_puestos=['parking','puesto1','puesto2','puesto3'];
+                        foreach($campos_puestos as $campo){
+                            try{
+                                //buscamos el puesto
+                                $puestoa=puestos::where( function($q) use($user,$campo){
+                                        $q->where('cod_puesto',$user->$campo);
+                                        $q->orwhere('id_puesto',$user->$campo);
+                                })
+                                ->where('id_cliente',$user->id_cliente)
+                                ->first();
+                                if(isset($puestoa)){
+                                    $pa=new puestos_asignados;
+                                    $pa->id_puesto=$puestoa->id_puesto;
+                                    $pa->id_usuario=$u->id;
+                                    $pa->id_tipo_asignacion=1;
+                                    $pa->save();
+                                }
+                                $esta=DB::table('plantas_usuario')->where(['id_usuario'=>$u->id,'id_planta'=>$puestoa->id_planta])->first();
+                               
+                                if(!$esta){
+                                    DB::table('plantas_usuario')->insert([
+                                        'id_usuario'=>$u->id,
+                                        'id_planta'=>$puestoa->id_planta
+                                    ]);
+                                }
+                                   
+                            } catch (\Exception $e){
+                                $errores.='Puesto para asignar '.$user->$campo.' No encontrado <br>';
+                            }
+                        }
+                        
+                    }
+
                     //Borramos el excel y la carpeta de importacion
                     File::deleteDirectory($directorio);
-					savebitacora($cuenta_usuarios . " usuarios importados correctamente:<br>" . $nombres_usuarios . "<br>" .'<br>'. $cuenta_puestos . " puestos importados correctamente:<br>" . $nombres_puestos . "<br>" . $mensajes_adicionales,"Importacion","process_import","OK");
+					savebitacora($cuenta_usuarios . " usuarios importados correctamente:<br>" . $nombres_usuarios . "<br>" .'<br>'. $cuenta_puestos . " puestos importados correctamente:<br>" . $nombres_puestos . "<br>" . $mensajes_adicionales." <br> Errores no criticos encontrados[".$errores."]","Importacion","process_import","OK");
                     return [
                         'title' => 'Proceso de importacion finalizada con exito',
-                        'message' => $cuenta_usuarios . " usuarios importados correctamente:<br>" . $nombres_usuarios . "<br>" .'<br>'. $cuenta_puestos . " puestos importados correctamente:<br>" . $nombres_puestos . "<br>" . $mensajes_adicionales,
+                        'message' => $cuenta_usuarios . " usuarios importados correctamente:<br>" . $nombres_usuarios . "<br>" .'<br>'. $cuenta_puestos . " puestos importados correctamente:<br>" . $nombres_puestos . "<br>" . $mensajes_adicionales. "<br> Errores no criticos encontrados[".$errores."]",
                         'tipo' => 'ok'
                     ];
                 } catch (Exception $e){

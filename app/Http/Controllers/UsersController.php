@@ -138,8 +138,11 @@ class UsersController extends Controller
     {
         //Vamos a comprbar el email, porque no puedo pasarlo por el validado
         if(DB::table('users')->where('email',$request->email)->exists()){
-            flash('ERROR: El e-mail ya existe '.$request->email)->error();
-            return back()->withInput();
+            return [
+                'title' => "Usuarios",
+                'error' => 'ERROR: El e-mail ya existe '.$request->email,
+                //'url' => url('users/'.$usuario.'/edit')
+            ];
         }
         $data = $this->getData($request);
 
@@ -158,19 +161,19 @@ class UsersController extends Controller
             $data["cod_nivel"]=$request->cod_nivel;
             $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
 
-            users::create($data);
+            $usuario=users::insertGetId($data);
             savebitacora('Usuario '.$request->email. ' creado',"Usuarios","Store","OK");
             return [
                 'title' => "Usuarios",
                 'message' => 'Usuario '.$request->name. ' creado con exito',
-                'url' => url('users')
+                'url' => url('users/'.$usuario.'/edit')
             ];
         } catch (Exception $exception) {
             savebitacora('ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage() ,"Usuarios","Store","ERROR");
             return [
                 'title' => "Usuarios",
                 'error' => 'ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage(),
-                'url' => url('users')
+                //'url' => url('users/'.$usuario.'/edit')
             ];
             // flash('ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage())->error();
             // return back()->withInput();
@@ -314,7 +317,7 @@ class UsersController extends Controller
             return [
                 'title' => "Usuarios",
                 'message' => 'Usuario '.$request->name. ' actualizado con exito',
-                'url' => url('users')
+                'url' => url('users/'.$id.'/edit')
             ];
             // flash('Usuario '.$request->name. 'actualizado con exito')->success();
             // return redirect()->route('users.users.index');

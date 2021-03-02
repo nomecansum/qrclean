@@ -82,15 +82,15 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 							
 							@php
 								if(count($dias)>0){
-									$color="#b3dbbf";
+									$color="#edf5e0";
 									$borde="";
 									$title="";
 									$estado="ocupado";
 								} else {
 									$color = '#fff';
-									$borde="border: 2px solid #f2f7f8";
+									$borde="border: 2px solid #999";
 									$title="";
-									$estado="vacio";
+									$estado="vacio"; 
 								}
 								if(Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d')==Carbon\Carbon::now()->format('Y-m-d')){
 									$borde="border: 3px solid #1e90ff";
@@ -103,7 +103,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 							<td style="background-color: {{$dia_pasado?'#dedede':$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip dia  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" @if($dia_pasado) data-past="1" @else data-past="0" @endif data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
                                 <span class="font-bold" style="font-size: 2.5vw; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
-								<span style="color: #fff; cursor: pointer">
+								<div style="color: #fff; cursor: pointer">
 									@foreach($dias as $dia)
 										@php
 											$icono=$dia->val_icono;
@@ -112,10 +112,10 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 											//$title=Carbon\Carbon::parse($dia->fec_reserva)->format('d/m/Y').chr(13)." Puesto: ".$descrip." - Edificio: ".$dia->des_edificio." - Planta: ".$dia->des_planta;	
 										@endphp
 									@if($dia)
-									<b class="text-white des_evento" style="font-size: 1vw">@if($icono!="") <i class="{{ $icono }}  {{ txt_blanco($ic_color) }}"></i> @endif{!! $descrip !!}</b><br>
+									<b class="des_evento" style="font-size: 1vw; color:#555">@if($icono!="") <i class="{{ $icono }}" style="color: {{ $ic_color }}"></i> @endif{!! $descrip !!}</b><br>
 									@endif
 									@endforeach
-								</span>
+								</div>
 							</td>
 						@else
 							<td></td>

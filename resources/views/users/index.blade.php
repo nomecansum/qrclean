@@ -350,7 +350,9 @@
 @section('scripts')
     <script>
         $('.configuracion').addClass('active active-sub');
+        $('.menu_usuarios').addClass('active active-sub');
         $('.usuarios').addClass('active-link');
+        
         var tooltip = $('.add-tooltip');
         if (tooltip.length)tooltip.tooltip();
 

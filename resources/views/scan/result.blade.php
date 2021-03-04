@@ -112,7 +112,7 @@
                 @if($puesto->id_estado<3)
                     <div class="row mt-5 mb-5">
                         <div class="col-md-12 pt-3 pb-3 text-2x text-center">
-                            ¿Que quiere hacer?
+                            ¿Que quiere hacer? [{{ Auth::check() }} - {{ $puesto->id_usuario_usando??'n/a' }}]
                         </div>
                     </div>
                 @endif
@@ -132,6 +132,7 @@
                                         <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
                                     @break
                                 @case(2)
+                                        
                                         @if((Auth::check() && $puesto->id_usuario_usando==Auth::user()->id) || (!Auth::check()&&$puesto->id_usuario_usando==null))
                                             @if($config_cliente->mca_limpieza=='S')
                                                 <button class="btn btn-lg btn-purple btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>

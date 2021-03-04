@@ -99,6 +99,12 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/puestos_usuario/{id}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@puestos_usuario'])->name('users.puestos_usuario');
         Route::get('/add_puesto_supervisor/{id}/{puesto}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@add_puesto_supervisor'])->name('users.add_puesto_supervisor');
         Route::post('/asignar_temporal',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@asignar_temporal'])->name('users.asignar_temporal');
+
+        Route::get('/plantas_usuarios',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@plantas_usuarios'])->name('users.plantas_usuarios');
+        Route::get('/puestos_supervisores',['middleware'=>'permissions:["Puestos supervisores"],["W"]','uses'=>'UsersController@puestos_supervisores'])->name('users.puestos_supervisores');
+
+        Route::get('/addtodaplanta/{estado}/{planta}',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@addtodaplanta'])->name('users.addtodaplanta');
+        Route::get('/addtodouser/{estado}/{usuario}',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@addtodouser'])->name('users.addtodouser');
         
     });
 

@@ -192,10 +192,36 @@
                         <ul class="collapse">
                             @if(checkPermissions(['Bitacora'],['R']))<li class="bitacora"><a href="/bitacoras"><i class="fad fa-clipboard-list"></i> Bitacora</a></li> @endif
                             @if(checkPermissions(['Clientes'],['R']))<li class="clientes"><a href="/clientes"><i class="fad fa-user-tie"></i> Clientes</a></li> @endif
-                            @if(checkPermissions(['Usuarios'],['R']))<li class="usuarios"><a href="/users"><i class="fad fa-user"></i> Usuarios</a></li> @endif
-                            @if(checkPermissions(['Perfiles'],['R']))<li class="perfiles"><a href="/profiles"><i class="fad fa-users"></i> Perfiles</a></li> @endif
-                            @if(checkPermissions(['Secciones'],['R']))<li class="secciones"><a href="/sections"> <i class="fad fa-browser"></i> Secciones</a></li> @endif
-                            @if(checkPermissions(['Permisos'],['R']))<li class="permisos"><a href="/profile-permissions"><i class="fad fa-lock-alt"></i> Permisos</a></li> @endif
+                            @if(checkPermissions(['Usuarios'],['R']))
+                               
+                                <li class="menu_usuarios">
+                                    <a href="#">
+                                        <i class="fad fa-user"></i>
+                                        <span class="menu-title">  Usuarios</span>
+                                        <i class="arrow"></i>
+                                    </a>
+                                    <ul class="collapse">
+                                        @if(checkPermissions(['Usuarios'],['R'])) <li class="usuarios"><a href="/users"><i class="fad fa-user"></i>Gestion usuarios</a></li>  @endif
+                                        @if(checkPermissions(['Plantas usuarios'],['R']))<li class="plantas_usuarios"><a href="/users/plantas_usuarios"> <i class="fas fa-layer-plus"></i> Asignacion de plantas</a></li> @endif
+                                        @if(checkPermissions(['Puestos supervisores'],['R']))<li class="puestos_supervisores"><a href="/users/puestos_supervisores"> <i class="fad fa-vector-square"></i> Supervision de puestos</a></li> @endif
+                                    </ul>
+                                </li>
+                            @endif
+                            @if(checkPermissions(['Permisos'],['R']))
+                                <li class="menu_permisos">
+                                    <a href="#">
+                                        <i class="fad fa-users"></i>
+                                        <span class="menu-title">  Permisos</span>
+                                        <i class="arrow"></i>
+                                    </a>
+                                    <ul class="collapse">
+                                        @if(checkPermissions(['Perfiles'],['R']))<li class="perfiles"><a href="/profiles"><i class="fad fa-users"></i> Perfiles</a></li> @endif
+                                        @if(checkPermissions(['Secciones'],['R']))<li class="secciones"><a href="/sections"> <i class="fad fa-browser"></i> Secciones</a></li> @endif
+                                        @if(checkPermissions(['Permisos'],['R']))<li class="permisos"><a href="/profile-permissions"><i class="fad fa-lock-alt"></i> Permisos</a></li> @endif
+                                    </ul>
+                                </li>
+                            @endif
+                            
                             @if(checkPermissions(['Tipos de incidencia'],['R']))
                             <li class="tipos_incidencia">
                                 <a href="#">
@@ -210,8 +236,20 @@
                                 </ul>
                             </li>
                             @endif
-                            @if(checkPermissions(['Tipos de puesto'],['R']))<li class="puestostipos text-nowrap"><a href="/puestos/tipos"> <i class="fal fa-desktop-alt"></i> Tipos de puesto</a></li> @endif
-                            @if(checkPermissions(['Tags'],['R']))<li class="tags text-nowrap"><a href="/tags"> <i class="fad fa-tags"></i> Tags</a></li> @endif
+                            @if(checkPermissions(['Parametrizacion'],['R']))
+                                <li class="menu_parametrizacion">
+                                    <a href="#">
+                                        <i class="fad fa-browser"></i>
+                                        <span class="menu-title">  Parametrizacion</span>
+                                        <i class="arrow"></i>
+                                    </a>
+                                    <ul class="collapse">
+                                        @if(checkPermissions(['Tipos de puesto'],['R']))<li class="puestostipos text-nowrap"><a href="/puestos/tipos"> <i class="fal fa-desktop-alt"></i> Tipos de puesto</a></li> @endif
+                                        @if(checkPermissions(['Tags'],['R']))<li class="tags text-nowrap"><a href="/tags"> <i class="fad fa-tags"></i> Tags</a></li> @endif
+                                    </ul>
+                                </li>
+                            @endif
+                            
                             @if(checkPermissions(['Tareas programadas'],['R']))<li class="tareas_programadas"><a href="/tasks" class="text-nowrap"> <i class="mdi mdi-camera-timer"></i>Tareas programadas</a></li> @endif
                         </ul>
                     </li>

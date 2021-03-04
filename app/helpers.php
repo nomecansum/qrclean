@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\users;
 use Jenssegers\Agent\Agent;
 
-if (! function_exists('getProfilePic')) {
+
     function getProfilePic()
     {
         $e = \DB::table('cug_empleados')->where('cod_empleado',Auth::user()->cod_empleado)->first();
@@ -17,9 +17,8 @@ if (! function_exists('getProfilePic')) {
         }
         return url('default.png');
     }
-}
 
-if (! function_exists('savebitacora')) {
+
     function savebitacora($des_bitacora,$modulo=null,$seccion=null,$tipo='OK')
     {
     if(isset(Auth::user()->name)){
@@ -35,9 +34,8 @@ if (! function_exists('savebitacora')) {
             'fecha' => Carbon::now()
         ]);
     }
-}
 
-if (! function_exists('clientes')) {
+
     function clientes()
     {
         try{
@@ -69,7 +67,6 @@ if (! function_exists('clientes')) {
             return [0];
         }
     }
-}
 
 if (! function_exists('puede_ver_cliente')) {
     function puede_ver_cliente($id){
@@ -421,7 +418,28 @@ if (! function_exists('notificar_usuario')) {
     }
 }
 
-if (! function_exists('acronimo')) {
+
+function tags($string, $encoding = 'UTF-8'){
+    $string = trim(strip_tags(html_entity_decode(urldecode($string))));
+    if(empty($string)){ return false; }
+
+    $stopWords = array('a','ante', 'bajo', 'con', 'contra','de', 'desde', 'durante','en', 'entre','hacia', 'hasta', 'mediante', 'para', 'por', 'pro', 'segun','sin', 'sobre', 'tras', 'via','los', 'las', 'una', 'unos', 'unas', 'este', 'estos', 'ese',
+    'esos', 'aquel', 'aquellos', 'esta', 'estas', 'esa', 'esas','aquella', 'aquellas', 'usted', 'nosotros', 'vosotros','ustedes', 'nos', 'les', 'nuestro', 'nuestra', 'vuestro','vuestra', 'mis', 'tus', 'sus', 'nuestros', 'nuestras',
+   'vuestros', 'vuestras','esto', 'que','Planta', '/','-');
+ 
+    $string = preg_replace('/\s\s+/i', '', $string); // replace whitespace
+   
+    $string = trim($string); // trim the string
+
+    $string = preg_replace('/[^a-zA-Z0-9À-ÿ -]/', '', $string); // only take alphanumerical characters, but keep the spaces and dashes too…
+    
+    $string = mb_strtolower($string,$encoding); // make it lowercase
+
+    $matchWords=preg_replace('/\b(' . implode('|', $stopWords) . ')\b/u', '', $string);
+    
+    return $matchWords;
+}
+
     function acronimo($nombre,$height=10){
 
         try{
@@ -450,7 +468,6 @@ if (! function_exists('acronimo')) {
         }
         return $acronym;
     }
-}
 
 if (! function_exists('iniciales')) {
     function iniciales ($nombre,$cantidad){

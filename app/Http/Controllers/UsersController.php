@@ -492,7 +492,8 @@ class UsersController extends Controller
         return [
             'title' => "Asociar planta a usuario",
             'message' => 'Planta asociada ',
-            'id' =>$planta
+            'id' =>$planta,
+            'user' =>$usuario
         ];
     }
 
@@ -503,7 +504,49 @@ class UsersController extends Controller
         return [
             'title' => "Asociar planta a usuario",
             'message' => 'Planta eliminada ',
-            'id' =>$planta
+            'id' =>$planta,
+            'user' =>$usuario
+        ];
+    }
+
+    public function addtodaplanta($estado,$planta){
+        validar_acceso_tabla($planta,'plantas');
+        
+        $usuarios=DB::table('users')->where('id_cliente',Auth::user('id_cliente'))->get();
+        
+            if($estado===true){
+                foreach($usuarios as $u){
+                    $pl=plantas_usuario::insert(['id_planta'=>$planta,'id_usuario'=>$u->id]);
+                }
+            } else {
+                DB::table('plantas_usuario')->where('id_planta',$planta)->delete();
+            }
+        savebitacora('Permiso de reserva en planta '.$planta. ' para todos los usuarios ',"Usuarios","addtodaplanta","OK");
+        return [
+            'title' => "Asociar planta a todos los usuarios",
+            'message' => 'Planta asociada ',
+            'planta' =>$planta,
+            'estado' =>$estado
+        ];
+    }
+
+    public function addtodouser($estado,$usuario){
+        validar_acceso_tabla($usuario,'users');
+
+        $plantas=DB::table('plantas')->where('id_cliente',Auth::user('id_cliente'))->get();
+        if($estado){
+            foreach($plantas as $p){
+                DB::table('plantas_usuario')->insert(['id_planta'=>$p->id_planta,'id_usuario'=>$usuario]);
+            }
+        } else {
+            DB::table('plantas_usuario')->where('id_usuario',$usuario)->delete();
+        }
+        savebitacora('Permiso de reserva del usuario '.$usuario. ' para todas las plantas ',"Usuarios","addtodouser","OK");
+        return [
+            'title' => "Asociar usuario a todas las plantas",
+            'message' => 'Usuario asociado ',
+            'usuario' =>$usuario,
+            'estado' =>$estado
         ];
     }
 
@@ -1033,6 +1076,27 @@ class UsersController extends Controller
         $users = users::findOrFail($id);
 
         return view('users.miperfil', compact('users',));
+    }
+
+    /** @return void  */
+    public function plantas_usuarios(){
+        $plantas=DB::table('plantas')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->orderby('des_planta')
+            ->get();
+
+        $usuarios=DB::table('users')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->orderby('name')
+            ->get();
+
+        $plantas_users=DB::table('plantas_usuario')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
+            ->select('plantas_usuario.*')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+
+        return view('users.gestor_plantas_usuarios',compact('plantas','usuarios','plantas_users'));
     }
 }
 

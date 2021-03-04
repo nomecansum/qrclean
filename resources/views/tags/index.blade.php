@@ -130,6 +130,7 @@
 @section('scripts')
     <script>
         $('.configuracion').addClass('active active-sub');
+        $('.menu_parametrizacion').addClass('active active-sub');
         $('.tags').addClass('active-link');
         
         $('#btn_nueva_puesto').click(function(){

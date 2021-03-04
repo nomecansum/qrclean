@@ -965,7 +965,7 @@ class PuestosController extends Controller
         } catch(\Excveption $e){
             return [
                 'title' => "puestos",
-                'error' => 'ERROR: Ocurrio un error actualizando los puestos '.$r->name.' '.mensaje_excepcion($exception),
+                'error' => 'ERROR: Ocurrio un error actualizando los puestos '.$r->name.' '.mensaje_excepcion($e),
                 //'url' => url('sections')
             ];
         }

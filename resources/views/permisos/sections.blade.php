@@ -160,6 +160,7 @@
 	}
 	
 	$('.configuracion').addClass('active active-sub');
+	$('.menu_permisos').addClass('active active-sub');
 	$('.secciones').addClass('active-link');
 	
 	$('.icons_select2').select2({

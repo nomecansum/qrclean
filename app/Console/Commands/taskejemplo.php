@@ -135,14 +135,12 @@ class taskejemplo extends Command
         //Las posibilidaddes de log son:  error    warning  debug    info   critical   notice    alert
         $this->escribelog_comando_comando('info','Inicio de la tarea programada ['.$this->argument('id').']'.__CLASS__); //__CLASS__ pone el nombre de la tarea
         //Sacamos los parametros de la tarea
-        $tarea=tareas::find($this->argument('id'));
-        $parametros=json_decode($tarea->val_parametros);
-        //Esta es la forma de recoger cualquiera de los parametros de la tarea
-        $num_dias=valor($parametros,"num_dias");
+        
         /////////////////////////////////////////////////////
         //          CODIGO PRINCIPAL DE LA TAREA           //
         ////////////////////////////////////////////////////7
         //Actualiza la fechad de ultima ejecucion de la tarea
+        $this->escribelog_comando_comando('info','YO estuve aqui');
         $tarea->fec_ult_ejecucion=Carbon::now();
         $tarea->save();
         $this->escribelog_comando_comando('info','Fin de la tarea '.__CLASS__);

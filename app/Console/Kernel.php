@@ -121,7 +121,10 @@ class Kernel extends ConsoleKernel
         //     //log_tarea("Config de tarea [".$task->cod_tarea."] " . $task->des_tarea . " Config: " . json_encode($sch), $task->cod_tarea);
         // }
 
-        $schedule->command(liberarReserva::class,[21])->everyFiveMinutes();
+        // $schedule->command(liberarReserva::class,[21])->everyFiveMinutes();
+        // $schedule->command(limpiar_bitacora::class,[1])->daily();
+        // $schedule->command(eventos::class,[31])->everyFiveMinutes();
+        $schedule->command(taskejemplo::class,[11])->everyFiveMinutes();
         // $colas_informes = ['InformesL', 'InformesM', 'InformesS'];
         // //Procesadores de colas
         // $schedule->command('queue:restart')->hourly();

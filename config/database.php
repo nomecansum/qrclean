@@ -43,7 +43,7 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-        'mysql_prod' => [
+        'mysql' => [
             'driver' => 'mysql',
             'url' => 'mysql://b85b12d8d76325:7bb31a74@eu-cdbr-west-03.cleardb.net/heroku_e3678739afb7ac4?reconnect=true',
             'host' => 'eu-cdbr-west-03.cleardb.net',

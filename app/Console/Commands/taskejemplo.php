@@ -141,8 +141,8 @@ class taskejemplo extends Command
         ////////////////////////////////////////////////////7
         //Actualiza la fechad de ultima ejecucion de la tarea
         $this->escribelog_comando_comando('info','YO estuve aqui');
-        $tarea->fec_ult_ejecucion=Carbon::now();
-        $tarea->save();
+        // $tarea->fec_ult_ejecucion=Carbon::now();
+        // $tarea->save();
         $this->escribelog_comando_comando('info','Fin de la tarea '.__CLASS__);
     }
 }

@@ -87,9 +87,10 @@ class liberarReserva extends Command
 
      function escribelog_comando_comando($tipo,$mensaje){
         Log::$tipo($mensaje);
+        log_tarea($mensaje,$this->argument('id'),$tipo);
         if($this->argument('origen')=='W')
         {
-            log_tarea($mensaje,$this->argument('id'),$tipo);
+           
         }
     } 
 

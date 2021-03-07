@@ -16,9 +16,7 @@
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->where('puestos.id_planta',$pl->id_planta)
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where(function($q){
                 if(!checkPermissions(['Mostrar puestos no reservables'],['R'])){

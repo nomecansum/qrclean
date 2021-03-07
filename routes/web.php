@@ -103,6 +103,12 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/plantas_usuarios',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@plantas_usuarios'])->name('users.plantas_usuarios');
         Route::get('/puestos_supervisores',['middleware'=>'permissions:["Puestos supervisores"],["W"]','uses'=>'UsersController@puestos_supervisores'])->name('users.puestos_supervisores');
 
+        Route::get('/supervisor_planta/{id}/{planta}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@supervisor_planta'])->name('users.supervisor_planta');
+        Route::get('/supervisor_edificio/{id}/{edificio}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@supervisor_edificio'])->name('users.supervisor_edificio');
+
+        
+        
+
         Route::get('/addtodaplanta/{estado}/{planta}',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@addtodaplanta'])->name('users.addtodaplanta');
         Route::get('/addtodouser/{estado}/{usuario}',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@addtodouser'])->name('users.addtodouser');
         
@@ -117,6 +123,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'combos'], function () {
         Route::post('/limpiadores', 'CombosController@combo_limpiadores');
         Route::get('/plantas/{id_edificio}', 'CombosController@combo_plantas');
+        Route::get('/edificios/{id_cliente}', 'CombosController@combo_edificios');
     });
 
     Route::group(['prefix' => 'bitacoras'], function () {

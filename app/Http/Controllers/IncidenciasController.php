@@ -41,9 +41,7 @@ class IncidenciasController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->whereBetween('fec_apertura',[$f1,$fhasta])
             ->orderby('fec_apertura','desc')
@@ -55,9 +53,7 @@ class IncidenciasController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
@@ -107,9 +103,7 @@ class IncidenciasController extends Controller
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where('incidencias.id_incidencia',$id)
             ->first();
@@ -144,9 +138,7 @@ class IncidenciasController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where('incidencias.id_puesto',$puesto->id_puesto)
             ->wherenull('incidencias.fec_cierre')

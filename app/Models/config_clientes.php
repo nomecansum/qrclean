@@ -33,21 +33,23 @@ class config_clientes extends Model
      * @var array
      */
     protected $fillable = [
+                  'hora_liberar_puestos',
                   'max_dias_reserva',
-                  'mca_restringir_usuarios_planta',
+                  'mca_liberar_puestos_auto',
                   'mca_limpieza',
+                  'mca_mostrar_nombre_usando',
                   'mca_permitir_anonimo',
-                  'theme_type',
-                  'theme_name',
                   'mca_reserva_horas',
-                  'val_metodo_notificacion',
-                  'tam_qr',
-                  'modo_visualizacion_reservas',
+                  'mca_restringir_usuarios_planta',
                   'modo_visualizacion_puestos',
-                  'val_layout_incidencias',
+                  'modo_visualizacion_reservas',
                   'num_imagenes_incidencias',
+                  'tam_qr',
+                  'theme_name',
+                  'theme_type',
                   'val_campo_puesto_mostrar',
-                  'mca_mostrar_nombre_usando'
+                  'val_layout_incidencias',
+                  'val_metodo_notificacion'
               ];
 
     /**

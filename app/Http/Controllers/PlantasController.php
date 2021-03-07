@@ -28,9 +28,7 @@ class PlantasController extends Controller
             ->join('clientes','clientes.id_cliente','plantas.id_cliente')
             ->join('edificios','edificios.id_edificio','plantas.id_edificio')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
             })
             ->orderby('plantas.id_cliente')
             ->orderby('plantas.id_edificio')
@@ -56,9 +54,7 @@ class PlantasController extends Controller
             ->pluck('nom_cliente','id_cliente')
             ->all();
         $Edificios = edificios::where(function($q){
-                if (!isAdmin()) {
-                    $q->where('id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('id_cliente',Auth::user()->id_cliente);
             })
             ->pluck('des_edificio','id_edificio')
             ->all();
@@ -113,8 +109,18 @@ class PlantasController extends Controller
     public function edit($id)
     {
         $plantas = plantas::findOrFail($id);
-        $Clientes = clientes::pluck('nom_cliente','id_cliente')->all();
-        $Edificios = edificios::pluck('des_edificio','id_edificio')->all();
+        $Clientes = clientes::where(function($q){
+            if (!isAdmin()) {
+                $q->where('id_cliente',Auth::user()->id_cliente);
+            }
+        })
+        ->pluck('nom_cliente','id_cliente')
+        ->all();
+        $Edificios = edificios::where(function($q){
+            $q->where('id_cliente',Auth::user()->id_cliente);
+        })
+        ->pluck('des_edificio','id_edificio')
+        ->all();
 
         return view('plantas.edit', compact('plantas','Clientes','Edificios'));
     }

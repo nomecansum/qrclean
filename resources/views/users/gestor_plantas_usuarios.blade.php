@@ -16,7 +16,7 @@
 	<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
 	<li class="breadcrumb-item">configuracion</li>
 	<li class="breadcrumb-item">usuarios</li>
-    <li class="breadcrumb-item">plabntas - usuarios</li>
+    <li class="breadcrumb-item">plantas - usuarios</li>
 	{{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
 </ol>
 @endsection

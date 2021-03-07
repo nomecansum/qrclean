@@ -131,9 +131,7 @@ class ReservasController extends Controller
                 });
             })
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->get();
         if(isset($reservas)){
@@ -147,9 +145,7 @@ class ReservasController extends Controller
             ->join('users','users.id','puestos_asignados.id_usuario')    
             ->where('id_usuario','<>',Auth::user()->id)
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where(function($q) use($r){
                 $q->wherenull('fec_desde');
@@ -169,9 +165,7 @@ class ReservasController extends Controller
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
             ->where('id_perfil',Auth::user()->cod_nivel)
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->get();
         
@@ -180,9 +174,7 @@ class ReservasController extends Controller
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
             ->where('id_perfil','<>',Auth::user()->cod_nivel)
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->get();
         if(isset($asignados_nomiperfil)){
@@ -199,9 +191,7 @@ class ReservasController extends Controller
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where(function($q) use($plantas_usuario){
                 if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){

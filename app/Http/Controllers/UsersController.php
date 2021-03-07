@@ -512,11 +512,12 @@ class UsersController extends Controller
     public function addtodaplanta($estado,$planta){
         validar_acceso_tabla($planta,'plantas');
         
-        $usuarios=DB::table('users')->where('id_cliente',Auth::user('id_cliente'))->get();
-        
-            if($estado===true){
+        $usuarios=DB::table('users')->where('id_cliente',Auth::user()->id_cliente)->get();
+            if($estado==true){
                 foreach($usuarios as $u){
-                    $pl=plantas_usuario::insert(['id_planta'=>$planta,'id_usuario'=>$u->id]);
+                    try{
+                        plantas_usuario::insert(['id_planta'=>$planta,'id_usuario'=>$u->id]);
+                    } catch(\Exception $e){}
                 }
             } else {
                 DB::table('plantas_usuario')->where('id_planta',$planta)->delete();
@@ -533,10 +534,12 @@ class UsersController extends Controller
     public function addtodouser($estado,$usuario){
         validar_acceso_tabla($usuario,'users');
 
-        $plantas=DB::table('plantas')->where('id_cliente',Auth::user('id_cliente'))->get();
+        $plantas=DB::table('plantas')->where('id_cliente',Auth::user()->id_cliente)->get();
         if($estado){
             foreach($plantas as $p){
-                DB::table('plantas_usuario')->insert(['id_planta'=>$p->id_planta,'id_usuario'=>$usuario]);
+                try{
+                        DB::table('plantas_usuario')->insert(['id_planta'=>$p->id_planta,'id_usuario'=>$usuario]);
+                    } catch(\Exception $e){}
             }
         } else {
             DB::table('plantas_usuario')->where('id_usuario',$usuario)->delete();
@@ -650,6 +653,26 @@ class UsersController extends Controller
 
         savebitacora("Cambio de sesion del usuario",null);
         return redirect('/');
+    }
+
+    public function plantas_usuarios(){
+        $plantas=DB::table('plantas')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->orderby('des_planta')
+            ->get();
+
+        $usuarios=DB::table('users')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->orderby('name')
+            ->get();
+
+        $plantas_users=DB::table('plantas_usuario')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
+            ->select('plantas_usuario.*')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+
+        return view('users.gestor_plantas_usuarios',compact('plantas','usuarios','plantas_users'));
     }
 
     public function asignar_plantas(Request $r){
@@ -892,6 +915,118 @@ class UsersController extends Controller
         }
     }
 
+    public function supervisor_planta($id,$planta,$accion){
+        try { 
+            $puestos=DB::table('puestos')->where('id_planta',$planta)->pluck('id_puesto')->toArray();
+            if($accion=="A"){
+                foreach($puestos as $p){
+                    try { 
+                        DB::table('puestos_usuario_supervisor')->insert([
+                            "id_puesto"=>$p,
+                            "id_usuario"=>$id
+                        ]);
+                    } catch (Exception $exception) {}
+                }
+                $estado=true;
+            } else if($accion="D") {
+                DB::table('puestos_usuario_supervisor')->wherein("id_puesto",$puestos)->where("id_usuario",$id)->delete();
+                $estado=false;
+            }
+            return [
+                'result' => "OK",
+                "estado" => $estado,
+                "planta" => $planta,
+                "usuario" => $id
+            ];
+        } catch (Exception $exception) {
+            return [
+                'result' => "ERROR",
+                'error' => 'ERROR: Ocurrio un error asignando puestos al usuarios '.$exception->getMessage(),
+                "planta" => $planta,
+                "usuario" => $id,
+                //'url' => url('sections')
+            ];
+        }
+    }
+
+    public function supervisor_edificio($id,$edificio,$accion){
+        try { 
+            $puestos=DB::table('puestos')->where('id_edificio',$edificio)->pluck('id_puesto')->toArray();
+            if($accion=="A"){
+                foreach($puestos as $p){
+                    try { 
+                        DB::table('puestos_usuario_supervisor')->insert([
+                            "id_puesto"=>$p,
+                            "id_usuario"=>$id
+                        ]);
+                    } catch (Exception $exception) {}
+                }
+                $estado=true;
+            } else if($accion="D") {
+                DB::table('puestos_usuario_supervisor')->wherein("id_puesto",$puestos)->where("id_usuario",$id)->delete();
+                $estado=false;
+            }
+            return [
+                'result' => "OK",
+                "estado" => $estado,
+                "edificio" => $edificio,
+                "usuario" => $id
+            ];
+        } catch (Exception $exception) {
+            return [
+                'result' => "ERROR",
+                'error' => 'ERROR: Ocurrio un error asignando puestos al usuarios '.$exception->getMessage(),
+                "edificio" => $edificio,
+                "usuario" => $id,
+                //'url' => url('sections')
+            ];
+        } 
+    }
+
+    public function puestos_supervisores(){
+        $puestos=DB::table('puestos')
+            ->where('puestos.id_cliente',Auth::user()->id_cliente)
+            ->orderby('id_edificio')
+            ->orderby('id_planta')
+            ->orderby('cod_puesto')
+            ->get();
+
+        $plantas=DB::table('plantas')
+            ->where('plantas.id_cliente',Auth::user()->id_cliente)
+            ->orderby('plantas.id_planta')
+            ->get();
+
+        $edificios=DB::table('edificios')
+            ->where('edificios.id_cliente',Auth::user()->id_cliente)
+            ->orderby('edificios.id_edificio')
+            ->get();
+
+        $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
+
+        $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->get()->pluck('id_perfil')->unique();
+
+        $supervisores_usuario=DB::table('permisos_usuarios')->where('id_seccion',$permiso)->get()->pluck('id_usuario')->unique();
+
+        $usuarios=DB::table('users')
+            ->where(function ($q) use($supervisores_perfil,$supervisores_usuario){
+                $q->wherein('cod_nivel',$supervisores_perfil);
+                $q->orwherein('id',$supervisores_usuario);
+            })
+            ->where(function($q){
+                $q->where('users.id_cliente',Auth::user()->id_cliente);
+            })
+            ->orderby('name')
+            ->get();
+
+        $lista_usuarios=$usuarios->pluck('id');
+
+        $puestos_users=DB::table('puestos_usuario_supervisor')
+            ->wherein('id_usuario',$lista_usuarios)
+            ->get();
+
+        return view('users.gestor_puestos_supervisores',compact('usuarios','puestos_users','puestos','plantas','edificios'));
+    }
+
     public function asignar_temporal(Request $r){
         try {
             $puesto=puestos::find($r->puesto);
@@ -1078,25 +1213,4 @@ class UsersController extends Controller
         return view('users.miperfil', compact('users',));
     }
 
-    /** @return void  */
-    public function plantas_usuarios(){
-        $plantas=DB::table('plantas')
-            ->where('id_cliente',Auth::user()->id_cliente)
-            ->orderby('des_planta')
-            ->get();
-
-        $usuarios=DB::table('users')
-            ->where('id_cliente',Auth::user()->id_cliente)
-            ->orderby('name')
-            ->get();
-
-        $plantas_users=DB::table('plantas_usuario')
-            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
-            ->select('plantas_usuario.*')
-            ->where('id_cliente',Auth::user()->id_cliente)
-            ->get();
-
-        return view('users.gestor_plantas_usuarios',compact('plantas','usuarios','plantas_users'));
-    }
 }
-

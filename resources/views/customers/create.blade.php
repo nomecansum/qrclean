@@ -127,6 +127,11 @@
 								<input type="checkbox" class="form-control  magic-checkbox" name="mca_mostrar_nombre_usando"  id="mca_mostrar_nombre_usando" value="S" {{ isset($config->mca_mostrar_nombre_usando)&&$config->mca_mostrar_nombre_usando=='S'?'checked':'' }}> 
 								<label class="custom-control-label"   for="mca_mostrar_nombre_usando">Mostrar nombre que usa un puesto</label>
 							</div>
+							<div class="col-md-3">
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_puestos_auto"  id="mca_liberar_puestos_auto" value="S" {{ isset($config->mca_liberar_puestos_auto)&&$config->mca_liberar_puestos_auto=='S'?'checked':'' }}> 
+								<label class="custom-control-label"   for="mca_liberar_puestos_auto">Liberar puestos automaticamente</label>
+							</div>
+							
 							
 						</div>
 
@@ -192,7 +197,10 @@
 									<option value="A" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='A'?'selected':'' }}>[Identif] Descripcion</option>
 								</select>
 							</div>
-							
+							<div class="form-group col-md-2" style="{{ $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
+								<label for="hora_liberar_puestos">Hora def. de liberacion puestos</label><br>
+								<input type="time" autocomplete="off" name="hora_liberar_puestos" id="hora_liberar_puestos"  style="width: 140px" class="form-control" value="{{isset($config->hora_liberar_puestos)?$config->hora_liberar_puestos:'23:59'}}" />
+							</div>
 						</DIV>
 					</div>
 
@@ -467,6 +475,15 @@
 			$(this).next('label').html(fileName);
 			//$('.custom-file-label').html(fileName);
 		});
+
+		$('#mca_liberar_puestos_auto').click(function(){
+			if($(this).is(':checked')){
+				$('#grupo_liberar').show();
+			} else{
+				$('#grupo_liberar').hide();
+			}
+			
+		})
 	
 	</script>
 @include('layouts.scripts_panel')

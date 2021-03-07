@@ -23,9 +23,7 @@ class EdificiosController extends Controller
         $edificiosObjects = DB::table('edificios')
         ->join('clientes','clientes.id_cliente','edificios.id_cliente')
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
-            }
+            $q->where('edificios.id_cliente',Auth::user()->id_cliente);
         })
         ->get();
 

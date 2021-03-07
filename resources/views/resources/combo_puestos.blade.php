@@ -7,9 +7,7 @@
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')

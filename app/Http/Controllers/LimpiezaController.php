@@ -238,9 +238,7 @@ class LimpiezaController extends Controller
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where('puestos.id_estado',3)
             ->orderby('edificios.des_edificio')

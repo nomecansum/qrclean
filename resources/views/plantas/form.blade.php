@@ -71,4 +71,8 @@
         var fileName = e.target.files[0].name;
         $('.custom-file-label').html(fileName);
     });
+
+    $('#id_cliente').change(function(){
+        $('#id_edificio').load("{{ url('/combos/edificios') }}/"+$(this).val());
+    })
 </script>

@@ -801,8 +801,8 @@
             "field": "fecha"
         },
         {
-            "name": "puestosAsignado",
-            "type": "hasOne",
+            "name": "puestosAsignados",
+            "type": "hasMany",
             "params": [
                 "App\\Models\\PuestosAsignado",
                 "id_puesto",

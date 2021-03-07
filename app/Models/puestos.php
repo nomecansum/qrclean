@@ -137,13 +137,13 @@ class puestos extends Model
     }
 
     /**
-     * Get the puestosAsignado for this model.
+     * Get the puestosAsignados for this model.
      *
-     * @return App\Models\PuestosAsignado
+     * @return Illuminate\Database\Eloquent\Collection
      */
-    public function puestosAsignado()
+    public function puestosAsignados()
     {
-        return $this->hasOne('App\Models\PuestosAsignado','id_puesto','id_puesto');
+        return $this->hasMany('App\Models\PuestosAsignado','id_puesto','id_puesto');
     }
 
     /**

@@ -39,9 +39,7 @@ class PuestosController extends Controller
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where(function($q){
                 if (isSupervisor(Auth::user()->id)) {
@@ -83,9 +81,7 @@ class PuestosController extends Controller
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where(function($q) use($r){
                 if ($r->cliente) {
@@ -543,9 +539,7 @@ class PuestosController extends Controller
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where(function($q){
                 if (isSupervisor(Auth::user()->id)) {
@@ -618,9 +612,7 @@ class PuestosController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
@@ -688,9 +680,7 @@ class PuestosController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->where('puestos.id_planta',$cualpuesto->id_planta)
             ->orderby('edificios.des_edificio')
@@ -764,9 +754,7 @@ class PuestosController extends Controller
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->orderby('puestos.id_edificio')
             ->orderby('puestos.id_planta')

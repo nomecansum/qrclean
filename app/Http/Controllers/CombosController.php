@@ -145,9 +145,7 @@ class CombosController extends Controller
             ->join('clientes','clientes.id_cliente','puestos.id_cliente')
             ->wherein('puestos.id_puesto',$r->lista_id)
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->pluck('nom_cliente','clientes.id_cliente')
             ->unique();
@@ -185,6 +183,19 @@ class CombosController extends Controller
             })
             ->get();
         return view('resources.combo_plantas',compact('plantas'));
+    }
+
+    public function combo_edificios($id_cliente){
+
+        $edificios=DB::table('edificios')
+            ->where('id_cliente',$id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+        return view('resources.combo_edificios',compact('edificios'));
     }
 
 }

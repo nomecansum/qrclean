@@ -23,9 +23,7 @@ class EncuestasController extends Controller
             ->join('clientes','clientes.id_cliente','encuestas.id_cliente')
             ->join('encuestas_tipos','encuestas_tipos.id_tipo_encuesta','encuestas.id_tipo_encuesta')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('encuestas.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
             })
             ->orderby('encuestas.id_cliente')
             ->orderby('encuestas.id_encuesta')

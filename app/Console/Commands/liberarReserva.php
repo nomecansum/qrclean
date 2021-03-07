@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\tareas;
+use App\Models\puestos;
+use App\Models\clientes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use App\cucoWEB;
@@ -139,6 +141,33 @@ class liberarReserva extends Command
             $body.="Si quiere seguir haciendo uso del puesto puede volver a reservarlo o acceder a el directamente, siempre que no haya sido reservado por otro usuario";
             notificar_usuario($res,'Anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1);
         }
+
+        $this->escribelog_comando_comando('info','Liberacion automatica de puestos usados'); 
+        //Ahora buscamos los puestos que deben liberarse automaticamente
+        $clientes_liberar=DB::table('config_clientes')
+            ->where('mca_liberar_puestos_auto','S')
+            ->pluck('id_cliente')
+            ->toArray();
+        $puestos_liberar=DB::table('puestos')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+            ->wherein('puestos.id_cliente',$clientes_liberar)
+            ->where(function($q){
+                $q->wherenull('fec_liberacion_auto');
+                $q->orwhere('fec_liberacion_auto','<',Carbon::now());
+            })
+            ->where('id_estado',2)
+            ->get();
+
+        $this->escribelog_comando_comando('info','Encontrados '.$puestos_liberar->count().' puestos para liberar'); 
+        foreach($puestos_liberar as $p){
+           $puesto=puestos::find($p->id_puesto);
+           $puesto->id_estado=1;
+           $puesto->fec_ult_estado=Carbon::now();
+           $puesto->id_usuario_usando=null;
+           $puesto->fec_liberacion_auto=Carbon::parse(Carbon::now()->addDay(1)->format('Y-m-d').' '.$p->hora_liberar);
+           $puesto->save();
+        }
+            
 
         //Actualiza la fechad de ultima ejecucion de la tarea
         $tarea->fec_ult_ejecucion=Carbon::now();

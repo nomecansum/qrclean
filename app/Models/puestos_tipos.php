@@ -34,11 +34,12 @@ class puestos_tipos extends Model
      */
     protected $fillable = [
                   'des_tipo_puesto',
-                  'mca_fijo',
+                  'hora_liberar',
                   'id_cliente',
-                  'val_icono',
+                  'max_usos',
+                  'mca_fijo',
                   'val_color',
-                  'max_usos'
+                  'val_icono'
               ];
 
     /**
@@ -74,7 +75,6 @@ class puestos_tipos extends Model
     {
         return $this->hasMany('App\Models\Puesto','id_tipo_puesto','id_tipo_puesto');
     }
-
 
 
 }

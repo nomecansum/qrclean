@@ -5,7 +5,10 @@
 @endphp
 
 @foreach ($edificios as $e)
-<div class="panel">
+@php
+    $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
+@endphp
+<div class="panel" id="panel{{ $e->id_edificio }}" style="{{ $plantas->isempty()?'display:none':'' }}">
     <div class="panel-heading bg-gray-dark">
         <div class="row">
             <div class="col-md-5">
@@ -27,9 +30,7 @@
     </div>
     puestos:
     <div class="panel-body">
-        @php
-            $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
-        @endphp
+        
         @if($plantas->isempty())
            
         <div class="row">
@@ -37,6 +38,9 @@
                 <i class="fas fa-exclamation-triangle"></i> El usuario no tiene asignada ninguna planta en la que pueda reservar, debe asignarle plantas en los detalles de usuario o utilizando la acción de "Asignar planta"
             </div>
         </div>
+        <script>
+            document.getElementById('panel{{ $e->id_edificio }}').display='none';
+        </script>
         @endif
         @foreach($plantas as $key=>$value)
             <h3 class="pad-all w-100 bg-gray rounded" style="font-size: 2vh">PLANTA {{ $value }}

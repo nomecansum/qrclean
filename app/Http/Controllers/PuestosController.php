@@ -558,9 +558,7 @@ class PuestosController extends Controller
         ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
         ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
-            }
+            $q->where('edificios.id_cliente',Auth::user()->id_cliente);
         })
         ->get();
 
@@ -572,9 +570,7 @@ class PuestosController extends Controller
                 $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
             })
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('reservas.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('reservas.id_cliente',Auth::user()->id_cliente);
             })
             ->get();
 
@@ -625,9 +621,7 @@ class PuestosController extends Controller
         ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
         ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
-            }
+            $q->where('edificios.id_cliente',Auth::user()->id_cliente);
         })
         ->get();
 
@@ -639,9 +633,7 @@ class PuestosController extends Controller
                 $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
             })
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('reservas.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('reservas.id_cliente',Auth::user()->id_cliente);
             })
             ->get();
 

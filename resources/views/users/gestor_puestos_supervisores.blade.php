@@ -7,16 +7,14 @@
 <style type="text/css">
 .vertical{
     writing-mode:tb-rl;
-    -webkit-transform:rotate(90deg);
-    -moz-transform:rotate(90deg);
-    -o-transform: rotate(90deg);
-    -ms-transform:rotate(90deg);
-    transform: rotate(90deg);
+    -webkit-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform:rotate(180deg);
+    transform: rotate(180deg);
     white-space:nowrap;
     display:block;
     bottom:0;
-    width:20px;
-    height:20px;
 }
 </style>
 @endsection
@@ -59,12 +57,12 @@
 				<h3 class="panel-title">Gestor de puestos para supervisores</h3>
 			</div>
 			<div class="panel-body">
-				<table id="myTable" class="table table-condensed table-hover table-vcenter table-responsive-lg">
+				<table id="myTable" class="table table-condensed table-hover table-responsive-lg">
 					<thead>
 						<tr>
                             <th style="width: 180px"></th>
                             @foreach($usuarios as $u)
-                                <th class="tduser text-center" data-usuario="{{ $u->id }}" data-checked="false">{{ $u->name }}</th>
+                                <th class="tduser text-center" data-usuario="{{ $u->id }}" style="font-size: 10px" data-checked="false"><div class="vertical" style="margin-left: 15px;">{{ $u->name }}</div></th>
                             @endforeach
 						</tr>
 					</thead>

@@ -4,7 +4,19 @@
 
 
 @section('styles')
-
+<style type="text/css">
+    .vertical{
+        writing-mode:tb-rl;
+        -webkit-transform:rotate(180deg);
+        -moz-transform:rotate(180deg);
+        -o-transform: rotate(180deg);
+        -ms-transform:rotate(180deg);
+        transform: rotate(180deg);
+        white-space:nowrap;
+        display:block;
+        bottom:0;
+    }
+    </style>
 @endsection
 
 @section('title')
@@ -45,13 +57,13 @@
 				<h3 class="panel-title">Gestor de plantas por usuarios</h3>
 			</div>
 			<div class="panel-body">
-				<table id="tabla" class="table table-condensed table-hover table-vcenter table-responsive-lg">
+				<table id="tabla" class="table table-condensed table-hover  table-responsive-lg">
 					<thead>
 						<tr>
 							
 							<th></th>
                             @foreach ($plantas as $planta)
-                                <th data-sortable="true" style="width: 100px" class="text-center tdplanta" data-checked="false" data-planta="{{ $planta->id_planta }}" title="{{ $planta->des_planta }}">{{ acronimo(str_replace('Planta ','',$planta->des_planta)) }}</th>
+                                <th data-sortable="true" style="font-size: 10px;" class="tdplanta" data-checked="false" data-planta="{{ $planta->id_planta }}" title="{{ $planta->des_planta }}"><div class="vertical" style="margin-left: 10px;">{{ acronimo($planta->des_planta,30) }}</div></th>
                             @endforeach
 						</tr>
 					</thead>

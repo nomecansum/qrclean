@@ -83,7 +83,7 @@
             <div class="col-md-3 text-right">
                 <a href="{{ url('puestos/lista') }}" class="mr-2" ><i class="fad fa-list"></i> Lista</a>
                 <a href="{{ url('puestos/mapa') }}" class="mr-2" ><i class="fad fa-th"></i> Mosaico</a>
-                <a href="{{ url('puestos/plano') }}" class="mr-2" style="color:#fff"><i class="fad fa-map-marked-alt"></i> Plano</a>
+                <a href="{{ url('puestos/plano') }}" class="mr-2" style="color: #1e1ed3; font-weight: bold"><i class="fad fa-map-marked-alt"></i> Plano</a>
             </div>
         </div>
    

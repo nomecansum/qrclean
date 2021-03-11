@@ -21,12 +21,12 @@ function getProfilePic()
 
 function savebitacora($des_bitacora,$modulo=null,$seccion=null,$tipo='OK')
 {
-if(isset(Auth::user()->name)){
-    $user=Auth::user()->name;
-}
+    if(isset(Auth::user()->name)){
+        $user=Auth::user()->name;
+    }
 
     \DB::table('bitacora')->insert([
-        'accion' => substr($des_bitacora,1,5000),
+        'accion' => substr($des_bitacora,0,5000),
         'id_usuario' =>Auth::user()->id??0,
         'id_modulo' => $modulo,
         'id_seccion' => $seccion,

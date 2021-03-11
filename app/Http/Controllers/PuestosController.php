@@ -531,13 +531,15 @@ class PuestosController extends Controller
 
     public function mapa(){
 
+
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','puestos_tipos.des_tipo_puesto','users.name as usuario_usando')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->leftjoin('users','puestos.id_usuario_usando','users.id')
             ->where(function($q){
                 $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
@@ -596,7 +598,7 @@ class PuestosController extends Controller
             ->where('id_perfil','<>',Auth::user()->cod_nivel)
             ->get();
         
-        return view('puestos.mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
+        return view('puestos.'.collect(request()->segments())->last(),compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
     }
 
     public function plano(){
@@ -962,4 +964,6 @@ class PuestosController extends Controller
             'url' => url('puestos')
         ];
     }
+
+    
 }

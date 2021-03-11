@@ -150,6 +150,7 @@ class liberarReserva extends Command
             ->toArray();
         $puestos_liberar=DB::table('puestos')
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+            ->join('usuarios','usuarios.id_usuario_usando','puestos.id_usuario_usando')
             ->wherein('puestos.id_cliente',$clientes_liberar)
             ->where(function($q){
                 $q->wherenull('fec_liberacion_auto');
@@ -166,6 +167,7 @@ class liberarReserva extends Command
            $puesto->id_usuario_usando=null;
            $puesto->fec_liberacion_auto=Carbon::parse(Carbon::now()->addDay(1)->format('Y-m-d').' '.$p->hora_liberar);
            $puesto->save();
+           savebitacora('Liberado automaticamente puesto '.$p->cod_puesto.' ocupado por '.$p->name,"Tareas programadas","liberarReserva","OK");
         }
             
 

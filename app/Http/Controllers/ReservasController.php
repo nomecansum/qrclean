@@ -573,4 +573,53 @@ class ReservasController extends Controller
             //'url' => url('puestos')
         ];
     }
+
+    public function cancelar_reserva_puesto($id){
+        $p=DB::table('puestos')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('token',$id)
+            ->first();
+        
+        if(!isset($p)){
+            //Error puesto no encontrado
+            return [
+                'tipo'=>'ERROR',
+                'mensaje'=>"Error, puesto no encontrado"
+            ];
+        } else {    
+            //A ver si tiene reserva
+            $reserva=DB::table('reservas')
+                ->where('id_puesto',$p->id_puesto)
+                ->where(function($q){
+                    $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                    $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+                })
+                ->get();
+
+            if($reserva->count()==1){
+                $res=reservas::find($reserva->first()->id_reserva);
+                $res->mca_anulada='S';
+                $res->fec_utilizada=Carbon::now();
+                $res->save();
+                savebitacora("Cancelada reserva ".$res->id_reserva. "por el administrador","Reservas","cancelar_reserva_puesto","OK");
+                return [
+                    'tipo'=>'OK',
+                    'mensaje'=>"Reserva ".$res->id_reserva." cancelada",
+                    'id'=>$p->id_puesto
+                ];
+            } else if($reserva->count()>1) {
+            return [
+                'tipo'=>'Warning',
+                'mensaje'=>"El puesto tiene varias reservas para hoy",
+                'reservas'=>$reserva
+            ];
+            } else {
+                return [
+                    'tipo'=>'OK',
+                    'mensaje'=>"El puesto no tenia reservas para hoy"
+                ];
+            }
+         }
+    }
 }

@@ -28,7 +28,7 @@
             </div>
         </div>
     </div>
-    puestos:
+
     <div class="panel-body">
         
         @if($plantas->isempty())

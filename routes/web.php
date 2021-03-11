@@ -171,6 +171,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/mapa',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@mapa']);
         Route::post('/ronda_limpieza',['middleware'=>'permissions:["Rondas de limpieza"],["R"]', 'uses' => 'PuestosController@ronda_limpieza']);
         Route::get('/plano',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@plano']);
+        Route::get('/lista',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@mapa']);
         Route::post('/anonimo',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@cambiar_anonimo']);
         Route::post('/mca_rerserva',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@cambiar_reserva']);
         Route::post('/borrar_puestos',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@borrar_puestos']);
@@ -245,6 +246,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/comprobar_plano',['middleware'=>'permissions:["Reservas"],["W"]','uses' => 'ReservasController@comprobar_plano']);
         Route::get('/puestos_usuario/{id}/{desde}/{hasta}',['middleware'=>'permissions:["Reservas"],["W"]','uses'=>'ReservasController@puestos_usuario'])->name('reservas.puestos_usuario');
         Route::post('/asignar_reserva_multiple',['middleware'=>'permissions:["Reservas"],["W"]','uses' => 'ReservasController@asignar_reserva_multiple']);
+
+        Route::get('/cancelar_puesto/{id}',['middleware'=>'permissions:["Reservas"],["D"]','uses'=>'ReservasController@cancelar_reserva_puesto'])->name('reservas.cancelar_reserva_puesto');
     });
 
     Route::group(['prefix' => 'incidencias'], function () {

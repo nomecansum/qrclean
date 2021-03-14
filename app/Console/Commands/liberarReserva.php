@@ -157,7 +157,7 @@ class liberarReserva extends Command
                 $q->orwhere('fec_liberacion_auto','<',Carbon::now());
             })
             ->where('id_estado',2)
-            ->dd();
+            ->get();
 
         $this->escribelog_comando_comando('info','Encontrados '.$puestos_liberar->count().' puestos para liberar'); 
         foreach($puestos_liberar as $p){

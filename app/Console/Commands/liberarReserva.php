@@ -150,14 +150,14 @@ class liberarReserva extends Command
             ->toArray();
         $puestos_liberar=DB::table('puestos')
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
-            ->join('usuarios','usuarios.id_usuario_usando','puestos.id_usuario_usando')
+            ->join('users','users.id','puestos.id_usuario_usando')
             ->wherein('puestos.id_cliente',$clientes_liberar)
             ->where(function($q){
                 $q->wherenull('fec_liberacion_auto');
                 $q->orwhere('fec_liberacion_auto','<',Carbon::now());
             })
             ->where('id_estado',2)
-            ->get();
+            ->dd();
 
         $this->escribelog_comando_comando('info','Encontrados '.$puestos_liberar->count().' puestos para liberar'); 
         foreach($puestos_liberar as $p){

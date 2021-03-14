@@ -198,7 +198,7 @@
 								</select>
 							</div>
 							<div class="form-group col-md-2" style="{{ $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
-								<label for="hora_liberar_puestos">Hora def. de liberacion puestos</label><br>
+								<label for="hora_liberar_puestos">Hora def. de liberar</label><br>
 								<input type="time" autocomplete="off" name="hora_liberar_puestos" id="hora_liberar_puestos"  style="width: 140px" class="form-control" value="{{isset($config->hora_liberar_puestos)?$config->hora_liberar_puestos:'23:59'}}" />
 							</div>
 						</DIV>

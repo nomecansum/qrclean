@@ -112,7 +112,7 @@
                 @if($puesto->id_estado<3)
                     <div class="row mt-5 mb-5">
                         <div class="col-md-12 pt-3 pb-3 text-2x text-center">
-                            ¿Que quiere hacer? [{{ Auth::check() }} - {{ $puesto->id_usuario_usando??'n/a' }}]
+                            ¿Que quiere hacer?
                         </div>
                     </div>
                 @endif

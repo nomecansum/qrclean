@@ -181,6 +181,21 @@
                     </li>
                     @endif
 
+                    @if(checkPermissions(['Informes'],['R']))
+                    <li class="informes">
+                        <a href="#">
+                            <i class="fad fa-file-chart-pie"></i>
+                            @if(checkPermissions(['Informes'],['R']))<span class="menu-title">Informes</span> @endif
+                            <i class="arrow"></i>
+                        </a>
+                        <!--Submenu-->
+                        <ul class="collapse">
+                            @if(checkPermissions(['Informes > Uso de puestos'],['R']))<li class="rondas_mant text-nowrap"><a href="/rondas/index/M/" class="text-nowrap"><i class="fad fa-tools"></i> Uso de puestos</li> @endif
+                            @if(checkPermissions(['Informes > Puestos por usuario'],['R']))<li class="incidencias"><a href="/incidencias/" class="text-nowrap"><i class="fad fa-exclamation-triangle"></i> Puestos por usuario</a></li> @endif
+                        </ul>
+                    </li>
+                    @endif
+
                     @if(checkPermissions(['Configuracion'],['R']))
                     <li class="configuracion">
                         <a href="#">

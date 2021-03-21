@@ -12,14 +12,14 @@
             <input type="hidden" name="url_orig" id="url_orig" value="{{url($_SERVER['REQUEST_URI'])}}">
             <input type="hidden" name="cod_informe_programado" id="cod_informe_programado"  value=0>
             <input type="hidden" value="{{isset($inf->id_cliente)?$inf->id_cliente:Auth::user()->id_cliente}}" name="id_cliente">
-            <div class="card border-primary border">
-                <div class="card-header bg-transparent text-primary" style="font-size: 24px">
+            <div class="panel border-primary border">
+                <div class="panel-heading bg-transparent text-primary" style="font-size: 24px">
                     <i class="mdi mdi-calendar-clock"></i> Programar este informe</h2>
                     <button type="button" class="btn btn-primary mt-0 btn-xs p-0 pl-2 pr-2" onclick="showbody();">
                         <i class="mdi mdi-arrow-down-drop-circle mdi-18px"></i>
                     </button>
                 </div>
-                <div class="card-body mt-0" style="display:none" id="body_programar" id="btn_det_programar">
+                <div class="panel-body mt-0" style="display:none" id="body_programar" id="btn_det_programar">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">

@@ -37,65 +37,41 @@
 				{{csrf_field()}}
 				<input type="hidden" value="{{Auth::user()->id_cliente}}" name="id_cliente">
 				@include('resources.combos_filtro',[$hide=['cli'=>1,'est'=>1,'head'=>1,'btn'=>1]])
-				{{-- <div class="row">
-					<div class="col-md-3">
-						<div class="form-group">
-							<label>Agrupar</label>
-							<select name="type" class="form-control">
-								<option value="empleado">Por empleado</option>
-								<option value="nom_departamento">Por departamento</option>
-								<option value="des_centro">Por centro</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="col-md-3">
-						<div class="form-group">
-							<label>Ordenar por</label>
-							<select name="order" class="form-control">
-								<option value="ape_empleado">Nombre de empleado</option>
-								<option value="cod_interno">ID de empleado</option>
-							</select>
-						</div>
-					</div> --}}
-					<div class="col-md-3" style="padding-left: 15px">
-						@include('resources.combo_fechas')
-					</div>
-					<div class="col-md-2">
-						<div class="form-group">
-							<label>Formato</label>
-							<select class="form-control selectpicker" required id="output" name="output">
-								<option value="pantalla" data-content="<i class='fas fa-desktop' style='color: #4682b4'></i> Pantalla"> </option>
-								<option value="pdf" data-content="<i class='fas fa-file-pdf' style='color: #b22222'></i> PDF"> </option>
-								<option value="excel" data-content="<i class='fas fa-file-excel' style='color: #2e8b57'></i> Excel"> </option>
-							</select>
-						</div>
-					</div>
-
-					<div class="col-md-2" id="orientation" style="display: none">
-						<div class="form-group">
-							<label>Orientacion</label>
-							<select class="form-control selectpicker" required id="orientation" name="orientation">
-								<option value="pantalla" data-content="<i class='far fa-rectangle-landscape'></i> Horizontal"> </option>
-								<option value="pdf" data-content="<i class='far fa-rectangle-portrait'></i> Vertical"> </option>
-							</select>
-						</div>
+				<div class="col-md-3" style="padding-left: 15px">
+					@include('resources.combo_fechas')
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label>Formato</label>
+						<select class="form-control selectpicker" required id="output" name="output">
+							<option value="pantalla" data-content="<i class='fas fa-desktop' style='color: #4682b4'></i> Pantalla"> </option>
+							<option value="pdf" data-content="<i class='fas fa-file-pdf' style='color: #b22222'></i> PDF"> </option>
+							<option value="excel" data-content="<i class='fas fa-file-excel' style='color: #2e8b57'></i> Excel"> </option>
+						</select>
 					</div>
 				</div>
-				
+
+				<div class="col-md-2" id="orientation" style="display: none">
+					<div class="form-group">
+						<label>Orientacion</label>
+						<select class="form-control selectpicker" required id="orientation" name="orientation">
+							<option value="pantalla" data-content="<i class='far fa-rectangle-landscape'></i> Horizontal"> </option>
+							<option value="pdf" data-content="<i class='far fa-rectangle-portrait'></i> Vertical"> </option>
+						</select>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-md-12 text-right">
 						<button id="btn_submit" class="btn btn-primary btn-lg mb-2 mr-2" style="margin-top:10px"><i class="mdi mdi-file-document"></i> Obtener informe</button>
 					</div>
 				</div>
-				
 			</form>
 		@endif
 	</div>
 </div>
 @include('resources.programacion_informe')
 <br>
-<div class="table m-t-40 overflow-hidden">
+<div class="table m-t-40 overflow-hidden table-vcenter">
 
 	@include('resources.informes_imprimir_resumen')
 	<table class="table table-bordered table-condensed table-hover" style="font-size: 12px;">
@@ -123,6 +99,8 @@
             $('#orientation').show();
         } else $('#orientation').hide();
     })
+
+	//$('footer').hide();
 
 </script>
 @endsection

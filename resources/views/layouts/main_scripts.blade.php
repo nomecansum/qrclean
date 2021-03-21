@@ -552,9 +552,14 @@
             //console.log("complete");
             form.find('[type="submit"]').attr('disabled',false);
         });
-
-
-
     });
+
+    $('.btn_print').click(function(){
+        $('#myFilter').printThis({
+            importCSS: true,
+            importStyle: true,
+            footer: "<img src='{{ url('/img/Mosaic_brand_20.png') }}' class='float-right'>"
+        });
+    })
 
 </script>

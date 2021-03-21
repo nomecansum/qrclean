@@ -52,27 +52,15 @@
 	@endphp	
 	@if($informe->count()>0)
 		<tr>
-			<td colspan="8">
+			<td @if($r->output!=="excel") colspan="2" @endif>
 				@include('resources.cabecera_cliente_informes')
 			</td>
 		</tr>
 		<tr>
-			<td colspan="8" class="text-center">
+			<td  @if($r->output!=="excel") colspan="2" class="text-center" @endif>
 				<h4 class="text-muted">Periodo {!! beauty_fecha($f1,0) !!} <i class="mdi mdi-arrow-right-bold"></i> {!! beauty_fecha($f2,0) !!}</h4>
 			</td>
 		</tr>
-		{{--  <tr>
-			<th  @if($r->document!="excel")style="width: 40px"@else style="width: 5px" @endif>{{trans('strings.id')}}</th>
-			<th  @if($r->document!="excel")style="width: 30%"@else style="width: 50px" @endif>{{trans('strings.employee')}}</th>
-			@if(permiso_cliente('selector_centro_departamento'))
-				<th @if($r->document!="excel")style="width: 15%"@else style="width: 20px" @endif>{{trans('strings.center')}}</th>
-				<th @if($r->document!="excel")style="width: 15%"@else style="width: 20px" @endif>{{trans('strings._centers.department')}}</th>
-			@endif
-			@if(permiso_cliente('mostrar_dispositivos_empleado'))
-				<th @if($r->document!="excel")style="width: 20%"@else style="width: 20px" @endif>{{trans('strings.device')}}</th>
-			@endif
-			<th @if($r->document!="excel")style="width: 10%"@else style="width: 15px" @endif>Fecha</th>
-		</tr>  --}}
 	@endif
 	
 	@foreach ($usuarios as $u)
@@ -82,10 +70,12 @@
 		@endphp	
 		<tr>
 			<td style="width: 60px" class="text-center">
-				@if (isset($inf->first()->img_usuario ) && $inf->first()->img_usuario!='')
-					<img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$inf->first()->img_usuario) }}" class="img-circle" style="height: 50px">
-				@else
-					{!! icono_nombre($inf->first()->name) !!}
+				@if($r->output!=="excel")
+					@if (isset($inf->first()->img_usuario ) && $inf->first()->img_usuario!='' && $r->output!=="excel" )
+						<img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$inf->first()->img_usuario) }}" class="img-circle" style="height: 50px">
+					@else
+						{!! icono_nombre($inf->first()->name) !!}
+					@endif
 				@endif
 			</td>
 			<td>
@@ -93,7 +83,7 @@
 			</td>
 		</tr>
 		<tr>
-			<td></td>
+			@if($r->output!=="excel")<td></td>@endif
 			<td>
 				@foreach($fechas as $f)
 				<ul>
@@ -120,7 +110,7 @@
 
 
 <script>
-	$('#resumen_informe').html(" {{ $cnt_fechas }} Dias | {{ $filas }} Filas ");
+	$('#resumen_informe').html(" {{ $cnt_fechas }} Dias | {{ $filas }} Filas  | {{ round($executionTime,2) }} seg ");
 	$('#request_orig').val('{!! json_encode($r->all()) !!}');
 	$('#controller').val('users');
 </script>

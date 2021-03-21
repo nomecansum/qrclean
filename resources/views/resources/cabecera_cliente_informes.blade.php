@@ -3,11 +3,11 @@
     use Carbon\Carbon;
     $cl = clientes::find($cliente);
 @endphp
-@if($r->document=="pdf" || $r->document=="excel")
+@if($r->output=="pdf" || $r->output=="excel")
     <table style="width:100%">
         <tr>
             <td class="text-center">
-                @if($r->document!="excel")<img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$cl->img_logo) }}" style="width: 180px; margin-top: 20px" alt="" onerror="this.src='{{ url('/img/logo.png') }}';">@endif<br>
+                @if($r->output!=="excel")<img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$cl->img_logo) }}" style="width: 180px; margin-top: 20px" alt="" onerror="this.src='{{ url('/img/logo.png') }}';">@endif<br>
                 {{ $cl->nom_cliente }}
             </td>
             <td class="text-center">

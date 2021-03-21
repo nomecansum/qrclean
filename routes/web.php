@@ -316,6 +316,9 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::group(['prefix' => 'reports'], function() {
 	    Route::get('/users',['middleware' => 'permissions:["Informes > Puestos por usuario"],["R"]', 'uses' => 'ReportsController@users_index']);
 	    Route::post('/users/filter',['middleware' => 'permissions:["Informes > Puestos por usuario"],["R"]', 'uses' => 'ReportsController@users']);
+
+        Route::get('/puestos',['middleware' => 'permissions:["Informes > Uso de puestos"],["R"]', 'uses' => 'ReportsController@puestos_index']);
+	    Route::post('/puestos/filter',['middleware' => 'permissions:["Informes > Uso de puestos"],["R"]', 'uses' => 'ReportsController@puestos']);
 		
 	});
 

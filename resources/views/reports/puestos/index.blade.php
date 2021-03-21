@@ -1,135 +1,103 @@
 @extends('layout')
+
+@section('title')
+    <h1 class="page-header text-overflow pad-no">Informe uso de puestos</h1>
+@endsection
+
+@section('styles')
+
+@endsection
+
+@section('breadcrumb')
+    <ol class="breadcrumb">
+        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+		<li class="breadcrumb-item">Informes</li>
+        <li class="breadcrumb-item">Informe uso de puestos</li>
+    </ol>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row page-titles">
-        <div class="col-md-6 col-12 align-self-center">
-            <h3 class="text-themecolor mb-0 mt-0">{{trans('strings.reports')}}</h3>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url('/') }}">{{trans('strings.home')}}</a></li>
-				<li class="breadcrumb-item">{{trans('strings.reports')}}</li>
-				<li class="breadcrumb-item active">Informe de uso de puestos</li>
-            </ol>
-        </div>
-        <div class="col-md-6 col-4 align-self-center">
-            <a href="{{url('/')}}" class="btn float-right hidden-sm-down btn-warning"><i class="mdi mdi-chevron-double-left"></i> {{trans('strings.back')}}</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-				<h2>Informe de accesos</h2>
-			<div class="card">
-				@php
-					$total = 0;
-					//Solo para depuracion
-					use Carbon\Carbon;
-					if(config('app.manolo') == 1){
-                        $startdate=Carbon::parse("2020-09-01");
-                        $enddate=Carbon::parse("2020-09-31");
-					}
-					$controller="reports";//Este es el nombre de metodo a ejecutar para la programacion de informes
-				@endphp
-			    <div class="card-body">
-
-			    	@if (checkPermissions(['Informes'],["R"]))
-					<form action="{{url('/reports/puestos/filter')}}" method="POST" class="ajax-filter">
-						{{csrf_field()}}
-						<input type="hidden" value="{{Auth::user()->cod_cliente}}" name="id_cliente">
-						@include('resources.combos_filtro',[$hide=['btn'=>1]])
-						{{-- <div class="row">
-							<div class="col-md-3">
-								<div class="form-group">
-									<label>Agrupar</label>
-									<select name="type" class="form-control">
-										<option value="empleado">Por empleado</option>
-										<option value="nom_departamento">Por departamento</option>
-										<option value="des_centro">Por centro</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class="form-group">
-									<label>Ordenar por</label>
-									<select name="order" class="form-control">
-										<option value="ape_empleado">Nombre de empleado</option>
-										<option value="cod_interno">ID de empleado</option>
-									</select>
-								</div>
-							</div> --}}
-
-							<div class="col-md-3">
-								<div class="form-group">
-									<label>Formato</label>
-									<select name="document" id="document" class="form-control select2 select2-hidden-accessible icons_select2">
-										<option value="pantalla" data-icon="mdi mdi-monitor"> Pantalla</option>
-										<option value="pdf" data-icon="mdi mdi-file-pdf"> PDF</option>
-										<option value="excel" data-icon="mdi mdi-file-excel"> Excel</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="col-md-2" id="orientation" style="display: none">
-								<div class="form-group">
-									<label>Orientacion</label>
-									<select name="orientation"  class="form-control select2 select2-hidden-accessible icons_select2" >
-										<option value="h" data-icon="mdi mdi-crop-landscape">Horizontal</option>
-										<option value="v" selected data-icon="mdi mdi-crop-portrait">Vertical</option>
-									</select>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-12">
-							<button id="btn_submit" class="btn btn-primary btn-lg"><i class="mdi mdi-file-document"></i> Obtener informe</button>
-						</div>
-					</form>
+@php
+	$total = 0;
+	//Solo para depuracion
+	use Carbon\Carbon;
+	if(config('app.manolo') == 1){
+		$f1=Carbon::parse("2020-09-01");
+		$f2=Carbon::parse("2020-09-31");
+	}
+	$controller="reports";//Este es el nombre de metodo a ejecutar para la programacion de informes
+@endphp
+<div class="panel">
+	<div class="panel-heading">
+		<h3 class="panel-title">Informe de uso de puestos</h3>
+		<span class="float-right" id="spin" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
+	</div>
+	<div class="panel-body">
+		@if (checkPermissions(['Informes'],["R"]))
+			<form action="{{url('/reports/puestos/filter')}}" method="POST" class="ajax-filter">
+				{{csrf_field()}}
+				<input type="hidden" value="{{Auth::user()->id_cliente}}" name="id_cliente">
+				@include('resources.combos_filtro',[$hide=['cli'=>1,'est'=>1,'head'=>1,'btn'=>1,'usu'=>1]])
+				<div class="col-md-3" style="padding-left: 15px">
+					@include('resources.combo_fechas')
 				</div>
-					@endif
-					@include('resources.programacion_informe')
-					<br>
-			        <div class="table-responsive m-t-40 overflow-hidden">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label>Formato</label>
+						<select class="form-control selectpicker" required id="output" name="output">
+							<option value="pantalla" data-content="<i class='fas fa-desktop' style='color: #4682b4'></i> Pantalla"> </option>
+							<option value="pdf" data-content="<i class='fas fa-file-pdf' style='color: #b22222'></i> PDF"> </option>
+							<option value="excel" data-content="<i class='fas fa-file-excel' style='color: #2e8b57'></i> Excel"> </option>
+						</select>
+					</div>
+				</div>
 
-						@include('resources.informes_imprimir_resumen')
-			            <table class="table table-bordered table-condensed table-hover tablesaw" style="font-size: 12px">
-			            	<tbody id="myFilter" >
-			            	</tbody>
-			            </table>
-			        </div>
-			    </div>
-			</div>
-        </div>
-    </div>
+				<div class="col-md-2" id="orientation" style="display: none">
+					<div class="form-group">
+						<label>Orientacion</label>
+						<select class="form-control selectpicker" required id="orientation" name="orientation">
+							<option value="pantalla" data-content="<i class='far fa-rectangle-landscape'></i> Horizontal"> </option>
+							<option value="pdf" data-content="<i class='far fa-rectangle-portrait'></i> Vertical"> </option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 text-right">
+						<button id="btn_submit" class="btn btn-primary btn-lg mb-2 mr-2" style="margin-top:10px"><i class="mdi mdi-file-document"></i> Obtener informe</button>
+					</div>
+				</div>
+			</form>
+		@endif
+	</div>
+</div>
+@include('resources.programacion_informe')
+<br>
+<div class="table m-t-40 overflow-hidden table-vcenter">
+
+	@include('resources.informes_imprimir_resumen')
+	<table class="table table-bordered table-condensed table-hover" style="font-size: 12px;">
+		<tbody id="myFilter" >
+		</tbody>
+	</table>
 </div>
 @php
-    $nombre_empresa = trans('strings._reports.report_accesos') . " ";
-    $___cl = \DB::table('cug_clientes')->where('cod_cliente',Auth::user()->cod_cliente)->first();
+    $nombre_empresa = "Informe de uso de puestos" . " ";
+    $___cl = \DB::table('clientes')->where('id_cliente',Auth::user()->id_cliente)->first();
     if(isset($___cl) && ($___cl->nom_cliente))
         $nombre_empresa .= $___cl->nom_cliente;
     else $nombre_empresa .= "SPOTDESKING";
 @endphp
 @endsection
 
-@section('scripts2')
+@section('scripts4')
 <script>
 	document.title = '{{$nombre_empresa}}';
+	$('.informes').addClass('active active-sub');
+    $('.inf_puestos').addClass('active-link');
 
-	function iformat(icon) {
-		var originalOption = icon.element;
-		return $('<span><i class="mdi ' + $(originalOption).data('icon') + '"></i> ' + icon.text + '</span>');
-	}
-	$('.icons_select2').select2({
-		width: "100%",
-		templateSelection: iformat,
-		templateResult: iformat,
-		allowHtml: true,
-		minimumResultsForSearch: -1,
-	});
-
-	$('#document').change(function(){
+	$('#output').change(function(){
         if($(this).val()=="pdf"){
             $('#orientation').show();
         } else $('#orientation').hide();
     })
-
 </script>
 @endsection

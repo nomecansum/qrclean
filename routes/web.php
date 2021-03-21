@@ -312,6 +312,13 @@ Route::group(['middleware' => 'auth'], function() {
 		
 	});
 
+    ////////////////////TAREAS////////////////////
+	Route::group(['prefix' => 'reports'], function() {
+	    Route::get('/users',['middleware' => 'permissions:["Informes > Puestos por usuario"],["R"]', 'uses' => 'ReportsController@users_index']);
+	    Route::post('/users/filter',['middleware' => 'permissions:["Informes > Puestos por usuario"],["R"]', 'uses' => 'ReportsController@users']);
+		
+	});
+
     ////////////////////////////   SECCIONES  PERFILES Y PERMISOS ////////////////////////////////
     Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);
     Route::get('permissions/getProfiles',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'PermissionsController@getProfiles']);

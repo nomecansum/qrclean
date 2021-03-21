@@ -3,6 +3,7 @@
     use App\Models\estados;
     use App\Models\tags;
     use App\Models\puestos_tipos;
+    use App\Models\users;
 @endphp
 
 
@@ -101,6 +102,23 @@
                 </select>
                 <div class="input-group-btn">
                     <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group  col-md-12" style="{{ (isset($hide['usu']) && $hide['usu']==1) ? 'display: none' : ''  }}">
+            <label>Usuario</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="user[]" id="multi-user" >
+                    @foreach(users::where(function($q) {
+                        $q->where('id_cliente',Auth::user()->id_cliente);
+                        })
+                        ->orderby('name')
+                        ->get() as $user)
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    @endforeach
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>

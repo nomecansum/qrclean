@@ -155,7 +155,7 @@
                 
             </div>
             <div class="row">
-                @include('resources.combos_filtro',[$hide=['cli'=>1,'est'=>1,'head'=>1,'btn'=>1]])
+                @include('resources.combos_filtro',[$hide=['cli'=>1,'est'=>1,'head'=>1,'btn'=>1,'usu'=>1]])
             </div>
            
             <div class="row">

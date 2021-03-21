@@ -507,6 +507,54 @@
             return 'pink';
     }
 
+    //formularios de informes
 
+    $('.ajax-filter').submit(function(event) {
+        block_espere("Obteniendo datos...");
+        let form = $(this);
+        let tipo = form.find('[name="output"]').val();
+
+        if (tipo == 'pantalla') {
+            event.preventDefault();
+        }
+        $('#action_orig').val($(this).attr('action'));
+
+        $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
+            block_espere("Renderizando datos...");
+            @if (checkPermissions(['Informes programados'],["W"]))
+                if($('#div_programar_informe').length)
+                {
+                    $('#request_orig').val(request_orig);
+                    $('#div_programar_informe').show();
+                    animateCSS('#div_programar_informe','bounceInRight');
+                }
+            @endif
+            if($('.btn_print').length)
+            {
+                $('.btn_print').show();
+                animateCSS('.btn_print','zoomIn');
+            }
+
+            if (tipo == 'pantalla') {
+                $('#myFilter').html(data);
+            }
+            fin_espere();
+
+        })
+        .fail(function(err) {
+            let error = JSON.parse(err.responseText);
+            console.log(error);
+
+            toast_error("{{trans('strings.error')}}",error.message);
+        })
+        .always(function() {
+            fin_espere();
+            //console.log("complete");
+            form.find('[type="submit"]').attr('disabled',false);
+        });
+
+
+
+    });
 
 </script>

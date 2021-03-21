@@ -190,8 +190,9 @@
                         </a>
                         <!--Submenu-->
                         <ul class="collapse">
-                            @if(checkPermissions(['Informes > Uso de puestos'],['R']))<li class="rondas_mant text-nowrap"><a href="/rondas/index/M/" class="text-nowrap"><i class="fad fa-tools"></i> Uso de puestos</li> @endif
-                            @if(checkPermissions(['Informes > Puestos por usuario'],['R']))<li class="incidencias"><a href="/incidencias/" class="text-nowrap"><i class="fad fa-exclamation-triangle"></i> Puestos por usuario</a></li> @endif
+                            @if(checkPermissions(['Informes > Uso de puestos'],['R']))<li class="inf_puestos text-nowrap"><a href="/reports/puestos" class="text-nowrap"><i class="fad fa-file-alt"></i> Uso de puestos</a></li> @endif
+                            @if(checkPermissions(['Informes > Puestos por usuario'],['R']))<li class="inf_usuarios"><a href="/reports/users" class="text-nowrap"><i class="fad fa-file-alt"></i> Puestos por usuario</a></li> @endif
+                            @if(checkPermissions(['Informes > Reservas canceladas'],['R']))<li class="inf_reservas"><a href="/reports/reservas" class="text-nowrap"><i class="fad fa-file-alt"></i> Reservas canceladas</a></li> @endif
                         </ul>
                     </li>
                     @endif

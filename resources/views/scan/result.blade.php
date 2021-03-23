@@ -170,7 +170,7 @@
             </div>
             
             @endif
-            @if((isset($respuesta['disponibles']) && Auth::check() && Auth::user()->id!=$puesto->id_usuario_usando) || $reserva)
+            @if((isset($respuesta['disponibles']) && is_array($respuesta['disponibles'])) && count($respuesta['disponibles'])>0)&& Auth::check() && Auth::user()->id!=$puesto->id_usuario_usando) || $reserva)
                 <div class="row">
                     <div class="col-md-12 font-18 text-center mt-5">
                         En esta misma planta tiene los siguientes puestos disponibles:

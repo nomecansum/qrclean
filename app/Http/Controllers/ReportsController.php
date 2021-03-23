@@ -36,7 +36,7 @@ class ReportsController extends Controller
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
         $informe=DB::table('puestos')
-        ->select('puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.des_edificio','plantas.des_planta','clientes.nom_cliente','users.name','users.img_usuario','clientes.id_cliente','puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','log_cambios_estado.id_user')
+        ->select('puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.des_edificio','plantas.des_planta','clientes.nom_cliente','users.name','users.img_usuario','clientes.id_cliente','puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','log_cambios_estado.id_user','log_cambios_estado.id_estado','log_cambios_estado.fecha as fecha_log')
         ->selectraw("date(log_cambios_estado.fecha) as fecha")
         ->join('edificios','puestos.id_edificio','edificios.id_edificio')
         ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
@@ -100,11 +100,25 @@ class ReportsController extends Controller
                 $q->wherein('puestos.id_puesto',$puestos_usuario);
             }
         })
-        ->where('log_cambios_estado.id_Estado',1)
+        ->wherein('log_cambios_estado.id_estado',[1,2])
         ->orderby('users.name')
         ->orderby('log_cambios_estado.fecha')
         ->wherebetween('log_cambios_estado.fecha',[$f1,$f2])
         ->get();
+
+
+        $lista_puestos=$informe->pluck('id_puesto')->unique();
+
+        $reservas=DB::table('reservas')
+            ->wherein('id_puesto',$lista_puestos)
+            ->wherebetween('fec_reserva',[$f1,$f2])
+            ->get();
+
+        $incidencias=DB::table('incidencias')
+            ->wherein('id_puesto',$lista_puestos)
+            ->wherebetween('fec_apertura',[$f1,$f2])
+            ->get();
+
 
         $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
         ///////////////////////////////////////////////////
@@ -123,16 +137,16 @@ class ReportsController extends Controller
         switch($r->output){
             case "pantalla":
                 if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
-                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe, 'executionTime' => $executionTime));
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe, "reservas" => $reservas, "incidencias" => $incidencias, 'executionTime' => $executionTime));
                 } else {  //Navegacion
-                    return view($view,compact('informe','r','executionTime'))->render();
+                    return view($view,compact('informe','reservas','incidencias','r','executionTime'))->render();
                 }
 
             break;
 
             case "pdf":
                 $orientation = $r->orientation == 'h' ? 'landscape' : 'portrait';
-                $pdf = PDF::loadView($view,compact('informe','r','executionTime'));
+                $pdf = PDF::loadView($view,compact('informe','reservas','incidencias','r','executionTime'));
                 $pdf->setPaper('legal', $orientation);
                 $filename = str_replace(' ', '_', $prepend . '_' . $nombre_informe . '.pdf');
                 $fichero = storage_path() . "/exports/" . $filename;
@@ -162,10 +176,10 @@ class ReportsController extends Controller
                 $fichero = storage_path()."/exports/".$filename;
 				libxml_use_internal_errors(true); //para quitar los errores de libreria
                 if(isset($r->email_schedule) && $r->email_schedule == 1) { //Programado
-                    Excel::store(new ExportExcel($view, compact('informe','r','executionTime')),$filename,'exports');
+                    Excel::store(new ExportExcel($view, compact('informe','reservas','incidencias','r','executionTime')),$filename,'exports');
                     $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
                 } else {  //Navegacion
-                    return Excel::download(new ExportExcel($view,compact('informe','r','executionTime')),$filename);
+                    return Excel::download(new ExportExcel($view,compact('informe','r','reservas','incidencias','executionTime')),$filename);
                 }
             break;
         }

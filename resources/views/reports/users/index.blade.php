@@ -71,13 +71,13 @@
 </div>
 @include('resources.programacion_informe')
 <br>
-<div class="table m-t-40 overflow-hidden table-vcenter">
-
-	@include('resources.informes_imprimir_resumen')
-	<table class="table table-bordered table-condensed table-hover" style="font-size: 12px;">
-		<tbody id="myFilter" >
-		</tbody>
-	</table>
+<div class="panel" id="panel_result">
+	<div class="panel-body">
+		@include('resources.informes_imprimir_resumen')
+		<div id="myFilter" >
+		</div>
+	</div>
+	
 </div>
 @php
     $nombre_empresa = trans('strings._reports.report_accesos') . " ";
@@ -99,6 +99,10 @@
             $('#orientation').show();
         } else $('#orientation').hide();
     })
+
+	$('#btn_submit').click(function(){
+		$('#panel_result').show();
+	})
 
 	//$('footer').hide();
 

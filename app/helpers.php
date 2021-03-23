@@ -7,6 +7,9 @@ use App\Models\users;
 use App\Models\config_clientes;
 use Jenssegers\Agent\Agent;
 
+function stripAccents($str) {
+    return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+}
 
 function getProfilePic()
 {
@@ -418,6 +421,7 @@ function acronimo($nombre,$height=10){
 
 function iniciales ($nombre,$cantidad){
     try{
+        $nombre=stripAccents($nombre);
         $words = explode(" ", $nombre);
         $acronym = "";
         $i = 0;

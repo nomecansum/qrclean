@@ -142,6 +142,7 @@ class HomeController extends Controller
                     });
                     $q->orwhereraw("'".Carbon::now()."' between DATE_SUB(fec_reserva,interval 15 MINUTE) AND DATE_ADD(fec_fin_reserva,interval 15 MINUTE)");
                 })
+                ->where('mca_anulada','N')
                 ->first();
             
             if(isset($reserva) && $reserva->id_usuario!=$id_usuario){
@@ -175,6 +176,7 @@ class HomeController extends Controller
                     $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
                 })
                 ->where('id_usuario',$id_usuario)
+                ->where('mca_anulada','N')
                 ->first();
             }
 

@@ -551,6 +551,7 @@ class HomeController extends Controller
             DB::table('puestos')->where('token',$puesto)->update([
                 'id_estado'=>$estado,
                 'fec_ult_estado'=>Carbon::now(),
+                'fec_liberacion_auto'=>Carbon::now()->endOfDay(),
                 'id_usuario_usando'=>null,
             ]);
             DB::table('reservas')

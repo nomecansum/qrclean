@@ -73,9 +73,9 @@
                         <label class="custom-control-label"   for="mca_fijo">Fijo</label>
                     </div>
                     @endif
-                    <div class="form-group col-md-1" style="margin-top: 7px">
+                    <div class="form-group col-md-2" style="margin-top: 7px">
                         <label for="max_usos">Usos simultaneo</label><br>
-                        <input type="number" autocomplete="off" min="1" max="20" name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
+                        <input type="number" autocomplete="off" min="1" max="20" style="width: 100px"  name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
                     </div>
                     <div class="form-group col-lg-1" style="margin-top: 7px">
                         <label for="max_usos">Liberar a las</label><br>

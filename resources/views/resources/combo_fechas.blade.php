@@ -9,7 +9,7 @@
 <script>
 //Date range picker
 $('#fechas').daterangepicker({
-    autoUpdateInput: false,
+    autoUpdateInput: true,
     locale: {
         format: '{{trans("general.date_format")}}',
         applyLabel: "OK",

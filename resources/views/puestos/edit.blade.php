@@ -5,7 +5,7 @@
 }
 </style>
 
-<div class="panel" id="editor">
+<div class="panel editor" id="editor">
     <div class="panel">
         <div class="panel-heading">
             <div class="panel-control">
@@ -67,6 +67,7 @@
                         </select>
                     </div>
                     @php
+
                     @endphp
                     <div class="form-group col-md-3">
                         <label for="planta">Planta</label>
@@ -122,6 +123,51 @@
                         @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary mr-2 btn_submit">GUARDAR</button>@endif  
                     </div>
                 </div>
+                
+                <div class="row b-all rounded pad-all mb-3" id="divsalas" @if(!in_array($puesto->id_tipo_puesto,config('app.tipo_puesto_sala'))) style="display:none" @endif>
+                    <div class="col-md-12">
+                        <label class="font-bold">Sala de reunion</label>
+                    </div>
+                    
+                    <div class="form-group col-md-2">
+                        <label for="val_capacidad">Capacidad</label>
+                        <input type="number" min="1" max="40" name="val_capacidad" id="val_capacidad" class="form-control" value="{{$puesto->val_capacidad??1}}">
+                    </div>
+                    <div class="form-group col-md-10">
+                        <label for="val_capacidad">Observaciones</label>
+                        <input type="text" name="obs_sala" id="obs_sala" class="form-control" value="{{$puesto->obs_sala??''}}">
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fad fa-projector fa-2x"></i>
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_proyector"  id="mca_proyector" value="S" {{ isset($puesto->mca_proyector)&&$puesto->mca_proyector=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_proyector"> Proyector</label>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fad fa-tv-alt fa-2x"></i>
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_pantalla"  id="mca_pantalla" value="S" {{ isset($puesto->mca_pantalla)&&$puesto->mca_pantalla=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_pantalla"> Pantalla</label>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fad fa-webcam fa-2x"></i>
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_videoconferencia"  id="mca_videoconferencia" value="S" {{ isset($puesto->mca_videoconferencia)&&$puesto->mca_videoconferencia=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_videoconferencia"> Videoconferencia</label>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fad fa-volume-up fa-2x"></i>
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_manos_libres"  id="mca_manos_libres" value="S" {{ isset($puesto->mca_manos_libres)&&$puesto->mca_manos_libres=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_manos_libres"> Manos Libres</label>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fad fa-chalkboard fa-2x"></i>
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_pizarra"  id="mca_pizarra" value="S" {{ isset($puesto->mca_pizarra)&&$puesto->mca_pizarra=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_pizarra"> Pizarra</label>
+                    </div>
+                    <div class="col-md-2">
+                        <i class="fad fa-chalkboard-teacher fa-2x"></i>
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_pizarra_digital"  id="mca_pizarra_digital" value="S" {{ isset($puesto->mca_pizarra_digital)&&$puesto->mca_pizarra_digital=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_pizarra_digital"> Pizarra digital</label>
+                    </div>
+                </div>
                 <div class="row mb-0">
                     <div class="col-md-6 mb-0 p-0" style="padding-left: 18px">
                         <label>Imagen</label>
@@ -162,6 +208,19 @@
  </div>
  <script src="{{ asset('plugins/typeahead-js/main.js') }}"></script>
  <script>
+     
+    var tipos_puestos_sala=[{{ implode(',', config('app.tipo_puesto_sala')) }}];
+    $('#id_tipo_puesto').change(function(){
+        console.log(tipos_puestos_sala);
+        console.log(parseInt($(this).val()));
+        console.log($.inArray(parseInt($(this).val()),tipos_puestos_sala));
+        if($.inArray(parseInt($(this).val()),tipos_puestos_sala)){
+            $('#divsalas').hide();
+        }  else {
+            $('#divsalas').show();
+        }
+    });
+
      $('.btn_submit').click(function(){
         //$('#frm_contador').submit();
      })
@@ -300,32 +359,8 @@
         });
         calendar.render();
 
-    // $('.fc-dayGridMonth-button').html('Mes');
-    // $('.fc-timeGridWeek-button').html('Semana');
-    // $('.fc-listGridWeek-button').html('Lista');
     $('.fc-event-title').css('font-size','10px');
     $('.fc-event-title').css('font-weight','normal');
     
-
-    // $('#demo-calendar').fullCalendar({
-    //     header: {
-    //         left: 'prev,next today',
-    //         center: 'title',
-    //         right: 'month,agendaWeek,agendaDay,dayGridWeek'
-    //     },
-    //     editable: false,
-    //     droppable: false, // this allows things to be dropped onto the calendar
-    //     drop: function() {
-    //         // is the "remove after drop" checkbox checked?
-    //         if ($('#drop-remove').is(':checked')) {
-    //             // if so, remove the element from the "Draggable Events" list
-    //             $(this).remove();
-    //         }
-    //     },
-    //     eventLimit: true, // allow "more" link when too many events
-    //     locale: 'es',
-    //     firstDay: 1,
-    //     events: {!! $eventos !!}
-    // });
 
  </script>

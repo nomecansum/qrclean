@@ -185,6 +185,24 @@ class CombosController extends Controller
         return view('resources.combo_plantas',compact('plantas'));
     }
 
+    public function combo_plantas_salas($id_edificio){
+
+        $plantas=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.des_planta')
+            ->join('puestos','plantas.id_planta','puestos.id_planta')
+            ->where('plantas.id_edificio',$id_edificio)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_sala'))
+            ->distinct()
+            ->get();
+        return view('resources.combo_plantas',compact('plantas'));
+    }
+
+
     public function combo_edificios($id_cliente){
 
         $edificios=DB::table('edificios')

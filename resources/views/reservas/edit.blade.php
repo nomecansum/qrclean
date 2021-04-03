@@ -57,7 +57,6 @@
                         </div>
                         
                     </div>
-                    
                 </div>
             @endif
             <form  action="{{url('reservas/save')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax">
@@ -72,10 +71,15 @@
                     {{csrf_field()}}
                     <div class="form-group col-md-3">
                         <label for="fechas">Fecha</label>
-                        <div class="input-group">
+                        {{--  <div class="input-group">
                             <input type="text" class="form-control pull-left singledate" id="fechas" name="fechas" style="width: 180px" value="{{ $f1->format('d/m/Y')}}">
                             <span class="btn input-group-text btn-mint datepickerbutton" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
+                        </div>  --}}
+                        <div class="input-group">
+                            <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f1->format('d/m/Y') }}">
+                            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                         </div>
+
                     </div>
                     <div class="form-group col-md-3">
                         <label for="id_edificio"><i class="fad fa-building"></i> Edificio</label>
@@ -229,6 +233,7 @@
     });
 
     function comprobar_puestos(){
+        console.log($('#fechas').val());
         $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val(),id_planta:$('#id_planta').val(),tags:$('#multi-tag').val(),andor:$('#andor').is(':checked')}, function(data, textStatus, xhr) {
             $('#detalles_reserva').html(data);
         });
@@ -239,26 +244,45 @@
     })
 
 
-    $('.singledate').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        //autoUpdateInput : false,
-        autoApply: true,
-        locale: {
-            format: '{{trans("general.date_format")}}',
-            applyLabel: "OK",
-            cancelLabel: "Cancelar",
-            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-            firstDay: {{trans("general.firstDayofWeek")}}
-        }
+    // $('.singledate').daterangepicker({
+    //     singleDatePicker: true,
+    //     showDropdowns: true,
+    //     //autoUpdateInput : false,
+    //     autoApply: true,
+    //     locale: {
+    //         format: '{{trans("general.date_format")}}',
+    //         applyLabel: "OK",
+    //         cancelLabel: "Cancelar",
+    //         daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+    //         monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+    //         firstDay: {{trans("general.firstDayofWeek")}}
+    //     }
        
-    },
-    function(date) {
-        $('#fechas').val(moment(date).format('D/M/Y'));
-        $('#fechas').data('fecha',moment(date).format('Y-MM-DD'));
-        comprobar_puestos();
-    });
+    // },
+    // function(date) {
+    //     $('#fechas').val(moment(date).format('D/M/Y'));
+    //     $('#fechas').data('fecha',moment(date).format('Y-MM-DD'));
+    //     comprobar_puestos();
+    // });
+    $('#fechas').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                format: '{{trans("general.date_format")}}',
+                applyLabel: "OK",
+                cancelLabel: "Cancelar",
+                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+                firstDay: {{trans("general.firstDayofWeek")}}
+            },
+            "maxSpan": {"days": {{ config_cliente('max_dias_reserva',Auth::user()->id_cliente) }}},
+            opens: 'right',
+        }, function(start_date, end_date) {
+            $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
+            $('#fechas').data('fecha_inicio',moment(start_date).format('Y-MM-DD'));
+            $('#fechas').data('fecha_fin',moment(start_date).format('Y-MM-DD'));
+            //window.location.href = '{{ url('/rondas/index/') }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
+            comprobar_puestos();
+        });
 
     $('.btn_guardar').click(function(){
         if($('#id_puesto').val()==null || $('#id_puesto').val()==""){

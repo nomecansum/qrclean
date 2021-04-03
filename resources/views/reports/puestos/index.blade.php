@@ -74,7 +74,7 @@
 <div class="table m-t-40 overflow-hidden table-vcenter">
 
 	@include('resources.informes_imprimir_resumen')
-	<table class="table table-bordered table-condensed table-hover" style="font-size: 12px;">
+	<table class="table table-bordered table-condensed table-hover  table-striped" style="font-size: 12px;">
 		<tbody id="myFilter" >
 		</tbody>
 	</table>

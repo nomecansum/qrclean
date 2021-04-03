@@ -51,7 +51,13 @@ class liberarReserva extends Command
                     "label": "Minutos de cortesia",
                     "name": "val_minutos",
                     "tipo": "num",
-                    "def": "15"
+                    "def": "30"
+                },
+                {
+                    "label": "Minutos de preaviso",
+                    "name": "val_preaviso",
+                    "tipo": "num",
+                    "def": "10"
                 },
                 {
                     "label": "Aplicar a puestos del tipo",
@@ -108,10 +114,12 @@ class liberarReserva extends Command
         $parametros=json_decode($tarea->val_parametros);
         //Esta es la forma de recoger cualquiera de los parametros de la tarea
         $val_minutos=valor($parametros,"val_minutos");
+        $val_preaviso=valor($parametros,"val_preaviso");
         /////////////////////////////////////////////////////
         //          CODIGO PRINCIPAL DE LA TAREA           //
         ////////////////////////////////////////////////////7   
         //Primero sacar aquellas reservas 
+        $this->escribelog_comando_comando('debug','Buscando reservas anulables'); 
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','users.id','reservas.id_usuario')
@@ -142,15 +150,46 @@ class liberarReserva extends Command
             notificar_usuario($res,'Anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1);
         }
 
-        $this->escribelog_comando_comando('info','Liberacion automatica de puestos usados'); 
+        $lista_reservas=$reservas->pluck('id_reserva')->toArray();
+        //Preaviso de anulacion
+        $this->escribelog_comando_comando('debug','Buscando preavisos de anulacion de reserva'); 
+        $preavisos=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','users.id','reservas.id_usuario')
+            ->where(function($q) use($tarea){
+                if(isset($tarea->clientes) && $tarea->clientes!=''){
+                    $lista_clientes=explode(',',$tarea->clientes);
+                    $q->wherein('id_clientes',$lista_clientes);
+                }
+            })
+            ->wheredate('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where('fec_reserva','<=',Carbon::now()->subMinutes($val_preaviso))
+            ->wherenotnull('fec_fin_reserva')
+            ->wherenull('fec_utilizada')
+            ->wherenotin('reservas.id_reserva',$lista_reservas)
+            ->get();
+        
+            $this->escribelog_comando_comando('info','Encontrados '.$preavisos->count().' preavisos'); 
+
+
+        foreach($preavisos as $res){
+            //Se manda un mail a los usuarios para recordarles que deben hacer chek-in en el puesto o se le anulara la reserva
+            $this->escribelog_comando_comando('debug','Mandar preaviso de anulacion de reserva # '.$res->id_reserva.' de '.$res->name.' para el puesto '.$res->cod_puesto.' por no utilizarla a tiempo ['.Carbon::parse($res->fec_reserva)->format('d/m/Y H:i').'] -> ['.Carbon::now()->format('d/m/Y H:i').']  ('.Carbon::now()->diffForHumans(Carbon::parse($res->fec_reserva)).')'); 
+            //savebitacora('Anulada reserva # '.$res->id_reserva.' de '.$res->name.' para el puesto '.$res->cod_puesto.' por no utilizarla a tiempo ['.Carbon::parse($res->fec_reserva)->format('d/m/Y H:i').'] -> ['.Carbon::now()->format('d/m/Y H:i').']',"Tareas programadas","liberarReserva","OK");
+            $body="Estimado usuario:<br>No consta que haya hecho ckeck-in del puesto ".$res->cod_puesto." que tenía para hoy a las ".Carbon::parse($res->fec_reserva)->format('d/m/Y H:i')." le recordamos que si no hace uso del mismo ".$val_minutos." despues de la hora en la que lo tenia reservado, se anulará automáticamente su reserva y el puesto podrá ser reservado por otra persona<br>".chr(13);
+            $body.="Si quiere seguir haciendo uso del puesto puede volver a reservarlo o acceder a el directamente, siempre que no haya sido reservado por otro usuario";
+            notificar_usuario($res,'Preaviso de anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1);
+        }
+
         //Ahora buscamos los puestos que deben liberarse automaticamente
+        $this->escribelog_comando_comando('info','Liberacion automatica de puestos usados'); 
         $clientes_liberar=DB::table('config_clientes')
             ->where('mca_liberar_puestos_auto','S')
             ->pluck('id_cliente')
             ->toArray();
         $puestos_liberar=DB::table('puestos')
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
-            ->join('users','users.id','puestos.id_usuario_usando')
+            ->leftjoin('users','users.id','puestos.id_usuario_usando')
             ->wherein('puestos.id_cliente',$clientes_liberar)
             ->where(function($q){
                 $q->wherenull('fec_liberacion_auto');
@@ -167,6 +206,8 @@ class liberarReserva extends Command
            $puesto->id_usuario_usando=null;
            $puesto->fec_liberacion_auto=Carbon::parse(Carbon::now()->addDay(1)->format('Y-m-d').' '.$p->hora_liberar);
            $puesto->save();
+           $body="Estimado ".$p->name.chr(13).'<br> Hoy olvido liberar el puesto '.$p->cod_puesto.' que estaba utilizando. El puesto ha sido marcado como disponible automaticamente por la plataforma. <br>Recuerde liberar su puesto una vez termine de utilizarlo, de esa forma puede permitir que alguno de sus compañeros pueda utilizarlo tambien.<br><br>Gracias  ' ;
+           notificar_usuario($p,'Liberado automaticamente puesto '.$p->cod_puesto.' ocupado por usted','emails.plantilla_generica',$body,config_cliente('val_metodo_notificacion',$p->id_cliente));
            savebitacora('Liberado automaticamente puesto '.$p->cod_puesto.' ocupado por '.$p->name,"Tareas programadas","liberarReserva","OK");
         }
             

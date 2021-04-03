@@ -13,6 +13,7 @@ use App\Models\tags;
 use App\Models\tags_puestos;
 use App\Models\users;
 use App\Models\puestos_tipos;
+use App\Models\salas;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -164,10 +165,11 @@ class PuestosController extends Controller
         } else {
             validar_acceso_tabla($id,"puestos");
             $puesto=DB::table('puestos')
-                ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+                ->select('puestos.*','plantas.*','salas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
                 ->join('plantas','puestos.id_planta','plantas.id_planta')
                 ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
                 ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
+                ->leftjoin('salas','puestos.id_puesto','salas.id_puesto')
                 ->where('puestos.id_puesto',$id)
                 ->first();
         }
@@ -206,10 +208,8 @@ class PuestosController extends Controller
         $tipos = DB::table('puestos_tipos')
         ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-                $q->orwhere('puestos_tipos.mca_fijo','S');
-            }
+            $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+            $q->orwhere('puestos_tipos.mca_fijo','S');
         })
         ->get();
 
@@ -272,6 +272,8 @@ class PuestosController extends Controller
         validar_acceso_tabla($id,"puestos");
         $puesto=puestos::find($id);
         $puesto->delete();
+        $sala=salas::where('id_puesto',$id);
+        $sala->delete();
         flash('puesto '.$puesto->etiqueta.' Borrada')->success();
         savebitacora('puesto '.$puesto->etiqueta. ' borrado',"Puestos","delete","OK");
         return redirect('/puestos');
@@ -347,12 +349,33 @@ class PuestosController extends Controller
                 
             }
 
+            //Salas de reuniones
+            if(in_array($r->id_tipo_puesto,config('app.tipo_puesto_sala'))) {
+                $sala=salas::where('id_puesto',$puesto->id_puesto)->first();
+                if(!isset($sala)){
+                    $sala=new salas;
+                }
+                $sala->val_capacidad=$r->val_capacidad;
+                $sala->obs_sala=$r->obs_sala;
+                $sala->id_puesto=$puesto->id_puesto;
+                $sala->id_cliente=$r->id_cliente;
+                $sala->mca_proyector=$r->mca_proyector?'S':'N';
+                $sala->mca_pantalla=$r->mca_pantalla?'S':'N';
+                $sala->mca_videoconferencia=$r->mca_videoconferencia?'S':'N';
+                $sala->mca_manos_libres=$r->mca_manos_libres?'S':'N';
+                $sala->mca_pizarra=$r->mca_pizarra?'S':'N';
+                $sala->mca_pizarra_digital=$r->mca_pizarra_digital?'S':'N';
+                $sala->save();
+            } else{
+                DB::table('salas')->where('id_puesto',$puesto->id_puesto)->delete();
+            }
+
            
             savebitacora('puesto '.$r->etiqueta. ' actualizado',"Puestos","Update","OK");
             return [
                 'title' => "puestos",
                 'message' => 'puesto '.$r->etiqueta. ' actualizado',
-                'url' => url('puestos')
+                //'url' => url('puestos')
             ];
         } catch (Exception $exception) {
             return [

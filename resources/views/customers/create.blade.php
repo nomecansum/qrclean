@@ -182,14 +182,14 @@
 									<option value="P" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='P'?'selected':'' }}>Plano</option>
 								</select>
 							</div>
-							<div class="col-md-2 ml-2">
+							<div class="col-md-2">
 								<label for="modo_visualizacion_puestos">Representacion de puestos</label>
 								<select name="modo_visualizacion_puestos" id="modo_visualizacion_puestos" class="form-control" style="width: 100%">
 									<option value="C" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='C'?'selected':'' }}>Cuadro</option>
 									<option value="I" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='I'?'selected':'' }}>Icono</option>
 								</select>
 							</div>
-							<div class="col-md-2 ml-2">
+							<div class="col-md-2">
 								<label for="val_campo_puesto_mostrar">Mostrar nombre de puesto</label>
 								<select name="val_campo_puesto_mostrar" id="val_campo_puesto_mostrar" class="form-control" style="width: 100%">
 									<option value="D" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='D'?'selected':'' }}>Descripcion</option>
@@ -199,7 +199,16 @@
 							</div>
 							<div class="form-group col-md-2" style="{{ $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
 								<label for="hora_liberar_puestos">Hora def. de liberar</label><br>
-								<input type="time" autocomplete="off" name="hora_liberar_puestos" id="hora_liberar_puestos"  style="width: 140px" class="form-control" value="{{isset($config->hora_liberar_puestos)?$config->hora_liberar_puestos:'23:59'}}" />
+								<input type="time" autocomplete="off" name="hora_liberar_puestos" id="hora_liberar_puestos"   class="form-control" value="{{isset($config->hora_liberar_puestos)?$config->hora_liberar_puestos:'23:59'}}" />
+							</div>
+							<div class="form-group col-md-2">
+								<label for="max_dias_reserva">Max Dias Reserva</label><br>
+								<select name="max_dias_reserva incidencias" id="max_dias_reserva incidencias"  class="form-control ">
+									@for ($n=1;$n<=31;$n++)
+										<option value={{$n}}>{{ $n }}</option>
+									@endfor
+									
+								</select>
 							</div>
 						</DIV>
 					</div>

@@ -20,6 +20,7 @@
 	$total = 0;
 	//Solo para depuracion
 	use Carbon\Carbon;
+	
 	if(config('app.manolo') == 1){
 		$f1=Carbon::parse("2020-09-01");
 		$f2=Carbon::parse("2020-09-31");

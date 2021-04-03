@@ -116,6 +116,7 @@ class PermissionsController extends Controller
 			}
 		})
 		->orderby('des_grupo')
+		->orderby('des_seccion')
 		->get();
 		$tipos = ['Seccion','Permiso','Accion'];
 		$grupos = DB::table('secciones')->select('des_grupo','icono')->distinct()->get();

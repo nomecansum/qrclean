@@ -70,4 +70,9 @@ function cancelar(){
     });
 }
 
+function tabla_click(){
+    $('#toolbutton').hide();
+    //console.log('tabla_click');
+   }
+
 </script>

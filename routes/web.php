@@ -123,6 +123,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'combos'], function () {
         Route::post('/limpiadores', 'CombosController@combo_limpiadores');
         Route::get('/plantas/{id_edificio}', 'CombosController@combo_plantas');
+        Route::get('/plantas_salas/{id_edificio}', 'CombosController@combo_plantas_salas');
         Route::get('/edificios/{id_cliente}', 'CombosController@combo_edificios');
     });
 
@@ -312,15 +313,34 @@ Route::group(['middleware' => 'auth'], function() {
 		
 	});
 
-    ////////////////////TAREAS////////////////////
+    ////////////////////INFORMES////////////////////
 	Route::group(['prefix' => 'reports'], function() {
 	    Route::get('/users',['middleware' => 'permissions:["Informes > Puestos por usuario"],["R"]', 'uses' => 'ReportsController@users_index']);
 	    Route::post('/users/filter',['middleware' => 'permissions:["Informes > Puestos por usuario"],["R"]', 'uses' => 'ReportsController@users']);
 
         Route::get('/puestos',['middleware' => 'permissions:["Informes > Uso de puestos"],["R"]', 'uses' => 'ReportsController@puestos_index']);
 	    Route::post('/puestos/filter',['middleware' => 'permissions:["Informes > Uso de puestos"],["R"]', 'uses' => 'ReportsController@puestos']);
+
+        Route::get('/canceladas',['middleware' => 'permissions:["Informes > Reservas canceladas"],["R"]', 'uses' => 'ReportsController@canceladas_index']);
+	    Route::post('/canceladas/filter',['middleware' => 'permissions:["Informes > Reservas canceladas"],["R"]', 'uses' => 'ReportsController@canceladas']);
 		
 	});
+
+     ////////////////////GESTION DE SALAS DE REUNIONES////////////////////
+    Route::group(['prefix' => 'salas'], function () {
+        Route::get('/reservas/{sala?}',['middleware'=>'permissions:["Reservas salas"],["R"]','uses'=>'SalasController@reservas']);
+        Route::get('/dia/{fecha?}',['middleware'=>'permissions:["Reservas salas"],["R"]','uses'=>'SalasController@dia']);
+        Route::get('/crear_reserva',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@crear_reserva']);
+        Route::post('/comprobar',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@comprobar']);
+        Route::get('/{sala?}',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@index'])->where('sala', '[0-9]+');
+
+        Route::get('/mis_reservas',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@mis_reservas']);
+        Route::get('/mkd/{sala?}',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@mkd'])->where('sala', '[0-9]+');
+
+       
+        
+        
+    });
 
     ////////////////////////////   SECCIONES  PERFILES Y PERMISOS ////////////////////////////////
     Route::get('profile-permissions',['middleware'=>'permissions:["Permisos"],["R"]','uses'=>'PermissionsController@profilePermissions']);

@@ -11,7 +11,23 @@
 	$f1 = adaptar_fecha($date[0]);
 	$f2 = adaptar_fecha($date[1]);
 @endphp
-@if($r->document=="pdf" || (isset($r->email_schedule)&&$r->email_schedule==1))
+@if($r->output=="pdf" || (isset($r->email_schedule)&&$r->email_schedule==1))
+<style type="text/css">
+	thead {
+		display: table-row-group;
+	}
+	tr {
+		page-break-before: always;
+		page-break-after: always;
+		page-break-inside: avoid;
+	}
+	table {
+		word-wrap: break-word;
+	}
+	table td {
+		word-break: break-all;
+	}
+</style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ url('/css/nifty.min.css') }}" rel="stylesheet">
@@ -27,7 +43,7 @@
 
 
 @if($clientes->isEmpty())
-	@if($r->document=="pdf" || $r->document=="excel")
+	@if($r->output=="pdf" || $r->output=="excel")
 	<table class="table table-bordered table-condensed table-hover table-informes" style="font-size: 12px">
 		<tbody id="myFilter" >
 	@endif
@@ -35,7 +51,7 @@
 		<h4 class="text-muted">Periodo {!! beauty_fecha($f1,0) !!} <i class="mdi mdi-arrow-right-bold"></i> {!! beauty_fecha($f2,0) !!}</h4>		
 		<h3 class="text-warning">No hay datos para mostrar</h3>
 	</div>
-	@if($r->document=="pdf" || $r->document=="excel")
+	@if($r->output=="pdf" || $r->output=="excel")
 		</tbody>
 	</table>
 	@endif
@@ -43,8 +59,8 @@
 
 
 @foreach($clientes as $cliente)
-	@if($r->document=="pdf" || $r->document=="excel")
-		<table class="table table-bordered table-condensed table-hover table-informes" style="font-size: 12px">
+	@if($r->output=="pdf" || $r->output=="excel")
+		<table class="table table-bordered table-condensed table-hover table-informes table-striped" style="font-size: 12px">
 			<tbody id="myFilter" >
 	@endif
 	@php
@@ -64,22 +80,22 @@
 	@endif
 	<tr class="font-bold">
 		<td></td>
-		<td colspan="4" class="text-center">Cambios de estado</td>
-		<td colspan="3" class="text-center">Incidencias</td>
-		<td colspan="3" class="text-center">Reservas</td>
+		<td colspan="4" class="text-center" @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Cambios de estado</td>
+		<td colspan="3" class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Incidencias</td>
+		<td colspan="3" class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Reservas</td>
 	</tr>
 	<tr class="text-center font-bold">
-		<td>Puesto</td>
-		<td>Usado</td>
-		<td>Disponible</td>
-		<td>Limpieza</td>
-		<td>Total</td>
-		<td>Abiertas</td>
-		<td>Cerradas</td>
-		<td>Total</td>
-		<td>Utilizadas</td>
-		<td>Anuladas</td>
-		<td>Total</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Puesto</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Usado</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Disponible</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Limpieza</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Total</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Abiertas</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Cerradas</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Total</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Utilizadas</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Anuladas</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Total</td>
 	</tr>
 	@foreach ($inf as $puesto)
 		@php
@@ -96,7 +112,7 @@
 		@endphp	
 		@if($cambios->count()>0 || $res_total->count()>0 || $inc_total->count()>0)
 			<tr class="text-center">
-				<td>
+				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>
 					@isset($puesto->icono_tipo)
 						<i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i>
 					@endisset
@@ -104,21 +120,21 @@
 				<td>{{ $usado->count() }}</td>
 				<td>{{ $disponible->count() }}</td>
 				<td>{{ $limpieza->count() }}</td>
-				<td>{{ $cambios->count() }}</td>
-				<td>{{ $inc_total->count() }}</td>
+				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $cambios->count() }}</td>
 				<td>{{ $inc_abiertas->count() }}</td>
 				<td>{{ $inc_cerradas->count() }}</td>
-				<td>{{ $res_usadas->count() }}</td>
+				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $inc_total->count() }}</td>
+				<td>{{ $res_usadas->count()-$res_anuladas->count() }}</td>
 				<td>{{ $res_anuladas->count() }}</td>
-				<td>{{ $res_total->count() }}</td>
+				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $res_total->count() }}</td>
 			</tr>
 		@endif
 	@endforeach
-	@if($r->document=="pdf" || $r->document=="excel")
+	@if($r->output=="pdf" || $r->output=="excel")
 		</tbody>
 	</table>
 	@endif
-	@if($r->document=="pdf")<div style="page-break-after:always;"></div>@endif
+	@if($r->output=="pdf")<div style="page-break-after:always;"></div>@endif
 @endforeach
 <script>
 	$('#resumen_informe').html(" {{ $cnt_fechas }} Dias | {{ $filas }} Filas  | {{ round($executionTime,2) }} seg ");

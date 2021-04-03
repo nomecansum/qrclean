@@ -13,3 +13,9 @@
 <div class="row  text-center">
     {!! $body !!}
 </div>
+<br>
+<br>
+<div class="row  text-center text-muted">
+    Muchas gracias por su colaboración, este e-mail no acepta mensajes entrantes. Para cualquier duda por favor, acceda a la solución y a través de un nuevo escaneo háganoslo saber, muy gustosamente, estaremos encantados de ayudarle .Un cordial saludo
+</div>
+

@@ -3,7 +3,17 @@
     use Carbon\Carbon;
     $cl = clientes::find($cliente);
 @endphp
-@if($r->output=="pdf" || $r->output=="excel")
+@if($r->output=="excel")
+            {{ $cl->nom_cliente }}
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|      
+            @isset($nombre_informe)
+            {{$nombre_informe}}
+            @endisset
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;|      
+            {{ Carbon::now()->locale('es_ES')->isoFormat('lll')  }}
+
+
+@elseif($r->output=="pdf")
     <table style="width:100%">
         <tr>
             <td class="text-center">

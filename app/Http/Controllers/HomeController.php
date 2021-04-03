@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -443,7 +443,7 @@ class HomeController extends Controller
          $tiene_parking=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('users','users.id','puestos_asignados.id_usuario')  
-            ->where('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))  
+            ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))  
             ->where('id_usuario',$id_usuario)
             ->where(function($q){
                 $q->wherenull('fec_desde');
@@ -454,7 +454,7 @@ class HomeController extends Controller
              //Si no lo tiene asignado a ver si lo tiene reservado
              $tiene_parking=DB::table('reservas')
                 ->join('puestos','puestos.id_puesto','reservas.id_puesto')   
-                ->where('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))  
+                ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))  
                 ->where(function($q){
                     $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
                     $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");

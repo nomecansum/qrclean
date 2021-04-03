@@ -26,6 +26,7 @@
                         data-toolbar="#all_toolbar"
                         data-buttons-class="secondary"
                         data-show-button-text="true"
+                        data-search-on-enter-key="true"
                         >
                         <thead>
                             <tr>
@@ -146,10 +147,7 @@
 
         
     @endif
-   function tabla_click(){
-    $('#toolbutton').hide();
-    //console.log('tabla_click');
-   }
+   
 
 
     

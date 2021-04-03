@@ -125,7 +125,22 @@
                         <i class="arrow"></i>
                     </a> --}}
                     @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan_usuario" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
-                    @if(checkPermissions(['Reservas'],['R']))<li class="reservas"><a href="/reservas" class="text-nowrap"><i class="fad fa-calendar-alt"></i></i> <span class="menu-title">Reservar</span></a></li> @endif
+                    {{-- @if(checkPermissions(['Reservas'],['R']))<li class="reservas"><a href="/reservas" class="text-nowrap"><i class="fad fa-calendar-alt"></i></i> <span class="menu-title">Reservar</span></a></li> @endif --}}
+                    @if(checkPermissions(['Reservas'],['R']))
+                    <li class="reservas">
+                        <a href="#">
+                            <i class="fad fa-calendar-alt"></i>
+                            @if(checkPermissions(['Reservas'],['R']))<span class="menu-title">Reservas</span> @endif
+                            <i class="arrow"></i>
+                        </a>
+                        
+                        <!--Submenu-->
+                        <ul class="collapse">
+                            @if(checkPermissions(['Reservas puestos'],['R']))<li class="reservas_puestos"><a href="/reservas" class="text-nowrap"><i class="fad fa-chair-office"></i> Puestos</a></li> @endif
+                            @if(checkPermissions(['Reservas salas'],['R']))<li class="reservas_salas"><a href="/salas/reservas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas</a></li> @endif
+                        </ul>
+                    </li>
+                    @endif
                     @if(checkPermissions(['Parametrizacion'],['R']))
                     <li class="parametrizacion">
                         <a href="#">
@@ -139,6 +154,7 @@
                             @if(checkPermissions(['Edificios'],['R']))<li class="edificios"><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li> @endif
                             @if(checkPermissions(['Plantas'],['R']))<li class="plantas"><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li> @endif
                             @if(checkPermissions(['Puestos'],['R']))<li class="puestos"><a href="/puestos"> <i class="fad fa-desktop-alt"></i> Puestos</a></li> @endif
+                            @if(checkPermissions(['Salas'],['R']))<li class="salas"><a href="/salas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas reunion</a></li> @endif
                             @if(checkPermissions(['Puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
                             @if(checkPermissions(['Encuestas'],['R']))<li class="encuestas"><a href="/encuestas"><i class="fad fa-poll-h"></i> Encuestas</a></li> @endif
                             @if(checkPermissions(['Señaletica'],['R']))<li class="mkd"><a href="/MKD"><i class="fad fa-sign"></i> Señaletica</a></li> @endif
@@ -192,7 +208,7 @@
                         <ul class="collapse">
                             @if(checkPermissions(['Informes > Uso de puestos'],['R']))<li class="inf_puestos text-nowrap"><a href="/reports/puestos" class="text-nowrap"><i class="fad fa-file-alt"></i> Uso de puestos</a></li> @endif
                             @if(checkPermissions(['Informes > Puestos por usuario'],['R']))<li class="inf_usuarios"><a href="/reports/users" class="text-nowrap"><i class="fad fa-file-alt"></i> Puestos por usuario</a></li> @endif
-                            @if(checkPermissions(['Informes > Reservas canceladas'],['R']))<li class="inf_reservas"><a href="/reports/reservas" class="text-nowrap"><i class="fad fa-file-alt"></i> Reservas canceladas</a></li> @endif
+                            @if(checkPermissions(['Informes > Reservas canceladas'],['R']))<li class="inf_reservas"><a href="/reports/canceladas" class="text-nowrap"><i class="fad fa-file-alt"></i> Reservas canceladas</a></li> @endif
                         </ul>
                     </li>
                     @endif

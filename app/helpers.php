@@ -342,13 +342,12 @@ function comodines_texto($texto,$campos,$datos){
 
 function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1){
     try{
-        
         switch ($metodo) {
             case 0:
                 //No hacer nada
             break;
-            case 1:
-            case 3: //Mail
+            case 1: //Mail
+                
                 \Mail::send($plantilla, ['user' => $user,'body'=>$body], function ($m) use ($user,$subject) {
                     if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
                         $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
@@ -364,6 +363,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1){
                 break;
         }
     } catch(\Exception $e){
+        dump($e);
         return $e->getMessage();
     }
     return true;
@@ -819,7 +819,7 @@ function nombrepuesto($puesto){
 
 }
 
-function config_cliente($clave,$cliente){
+function config_cliente($clave,$cliente=null){
     try{
         if (!isset($cliente)){
             $cliente=Auth::user()->id_cliente;

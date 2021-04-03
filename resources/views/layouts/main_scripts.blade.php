@@ -200,7 +200,7 @@
     $('.singledate').daterangepicker({
         singleDatePicker: true,
         showDropdowns: true,
-        //autoUpdateInput : false,
+        autoUpdateInput : true,
         //autoApply: true,
         locale: {
             format: '{{trans("general.date_format")}}',
@@ -276,8 +276,10 @@
                 toast_ok(data.title,data.message);
             }
             $('.modal').modal('hide');
+           
 
             try{//Si tenemos defiinda la funcion de despues
+                animateCSS('.editor','fadeOut',$('.editor').hide());
                 post_form_ajax(data);
             } catch(e){}
 

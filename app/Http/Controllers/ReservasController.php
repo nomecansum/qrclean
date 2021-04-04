@@ -472,6 +472,7 @@ class ReservasController extends Controller
             'title' => "Reservas",
             'mensaje' => 'Puesto '.$r->des_puesto.' reservado. Identificadores de reserva: '.implode(",",$id_reserva),
             'fecha' => '['.$fec_desde->format('d/m/Y H:i').' - '.$fec_hasta->format('d/m/Y H:i').']',
+            'fec_ver' => $fec_desde->format('Y-m-d'),
             //'url' => url('puestos')
         ];
     

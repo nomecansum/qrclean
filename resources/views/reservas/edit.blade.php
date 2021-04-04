@@ -209,10 +209,11 @@
             } else if(data.alert){
                 mensaje_warning_controlado(data);
             } else{
+                animateCSS('#editor','fadeOut',$('#editor').html(''));
                 toast_ok(data.title,data.mensaje);
                 loadMonth();
                 animateCSS('#TD'+data.fecha,'flip');
-                animateCSS('#editor','fadeOut',$('#editor').html(''))
+                
             }
             
         })

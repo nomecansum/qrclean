@@ -147,7 +147,8 @@
             } else{
                 toast_ok(data.title,data.mensaje);
                 animateCSS('#editor','fadeOut',$('#editor').html(''));
-                //comprobar_puestos();
+
+                $('#detalles_reserva').load("/salas/dia/"+data.fec_ver);
                 $('#misreservas').load("/salas/mis_reservas");
                 $('#div_fechas').show();
             }

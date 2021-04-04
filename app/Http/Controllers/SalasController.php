@@ -319,7 +319,7 @@ class SalasController extends Controller
                 }
             })
             ->wherenotin('puestos.id_estado',[4,5,6])
-            ->where(function($q) use($r){
+            ->where(function($q) use($r,$puestos_reservados){
                 if($r->sala==0){
                     $q->wherenotin('puestos.id_puesto',$puestos_reservados);
                 }

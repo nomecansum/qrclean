@@ -376,27 +376,27 @@ class ReservasController extends Controller
 
             //Ahora hay que comprobar que no han pillado el puesto mientras el usuario se lo pensabe
             $ya_esta=DB::table('reservas')
-                                        ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-                                        ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
-                                        ->join('users','reservas.id_usuario','users.id')
-                                        ->where('puestos.id_puesto',$puesto->id_puesto)
-                                        ->where(function($q) use($r,$fec_desde,$fec_hasta){
-                                            $q->where(function($q) use($fec_desde,$fec_hasta,$r){
-                                                $q->wherenull('fec_fin_reserva');
-                                                $q->where('fec_reserva',adaptar_fecha($r->fecha));
-                                            });
-                                            $q->orwhere(function($q) use($fec_desde,$fec_hasta,$r){
-                                                $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
-                                                $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
-                                                $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
-                                                $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
-                                            });
-                                        })
-                                        ->where('puestos.id_cliente',Auth::user()->id_cliente)
-                                        ->first();
+                ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+                ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+                ->join('users','reservas.id_usuario','users.id')
+                ->where('puestos.id_puesto',$puesto->id_puesto)
+                ->where(function($q) use($r,$fec_desde,$fec_hasta){
+                    $q->where(function($q) use($fec_desde,$fec_hasta,$r){
+                        $q->wherenull('fec_fin_reserva');
+                        $q->where('fec_reserva',adaptar_fecha($r->fecha));
+                    });
+                    $q->orwhere(function($q) use($fec_desde,$fec_hasta,$r){
+                        $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                        $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                        $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
+                        $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
+                    });
+                })
+                ->where('puestos.id_cliente',Auth::user()->id_cliente)
+                ->first();
 
             if($ya_esta){//Ya esta pillado
-                $mensajes_error[]='El puesto ya ha sido reservado mientras estaba eligiendo, elija otro';
+                $mensajes_error[]='El puesto no esta disponible en el horario ['.beauty_fecha($fec_desde).' - '.beauty_fecha($fec_hasta).'] elija otro'.chr(13);
             }
         }
         if(count($mensajes_error)>0){

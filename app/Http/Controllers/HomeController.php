@@ -25,7 +25,6 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
-
     /**
      * Show the application dashboard.
      *
@@ -437,7 +436,6 @@ class HomeController extends Controller
         return view('scan.result',compact('respuesta','reserva','mireserva','config_cliente'));
     }
 
-
     function actualizar_estado_parking($estado,$id_usuario){
          //Vamos a ver si tiene plaza de parking
          $tiene_parking=DB::table('puestos_asignados')
@@ -619,8 +617,6 @@ class HomeController extends Controller
         
         return $respuesta;
     }
-
-
 
     public function getqr($sitio){
 

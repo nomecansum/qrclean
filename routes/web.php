@@ -35,6 +35,7 @@ Route::post('/gen_qr','HomeController@gen_qr');
 Route::group(['prefix' => 'MKD'], function () {
     Route::get('/plano/{planta}/{token}/{vista?}','MKDController@plano');
     Route::get('/datos_plano/{planta}/{token}','MKDController@datos_plano');
+    Route::get('/sala/{sala?}','SalasController@mkd')->where('sala', '[0-9]+');
 });  
 
 //Visualizacion de la encuesta
@@ -74,6 +75,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::view('/scan', 'scan');
     Route::view('/lockscreen','lock');
     //
+
+    //Escaneo de sala
+    Route::get('/sala/{sala}','SalasController@getpuesto');
 
     
 
@@ -331,11 +335,12 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/reservas/{sala?}',['middleware'=>'permissions:["Reservas salas"],["R"]','uses'=>'SalasController@reservas']);
         Route::get('/dia/{fecha?}',['middleware'=>'permissions:["Reservas salas"],["R"]','uses'=>'SalasController@dia']);
         Route::get('/crear_reserva',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@crear_reserva']);
+        Route::get('/crear_reserva/sala/{sala}',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@crear_reserva']);
         Route::post('/comprobar',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@comprobar']);
         Route::get('/{sala?}',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@index'])->where('sala', '[0-9]+');
 
         Route::get('/mis_reservas',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@mis_reservas']);
-        Route::get('/mkd/{sala?}',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@mkd'])->where('sala', '[0-9]+');
+        
 
        
         

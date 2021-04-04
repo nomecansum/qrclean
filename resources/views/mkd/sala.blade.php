@@ -13,24 +13,30 @@
         use Carbon\Carbon;
     @endphp
     <div class="row">
+        <div class="col-md-12 text-center">
+            <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" style="width: 13vw" alt="" onerror="this.src='{{ config('app.url_asset_mail').'/img/Mosaic_brand_300.png' }}';">
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12 text-center font-bold text-3x">
             {{ $sala->des_puesto }}
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-12 text-center">
             <img src="{{ isset($sala) ? Storage::disk(config('app.img_disk'))->url('img/puestos/'.$sala->img_puesto) : ''}}" style="width: 90%;" alt="" class="img-fluid ml-0">
         </div>
     </div>
-    <div class="row text-center" style="padding-left: 100px">
-        <div class="d-flex flex-lg-nowrap flex-wrap mr-2 add-tooltip" title="Capacidad"><i class="fad fa-users fa-2x"></i><span class="text-2x font-bold">{{$sala->val_capacidad}}</span></div>
-        <div class="d-flex flex-lg-nowrap mr-2 add-tooltip" title="Maximo tiempo de reserva"><i class="fad fa-clock fa-2x"></i><span class="text-2x font-bold">{{$sala->max_horas_reservar}}h</span></div>
-        <div class="d-flex flex-lg-nowrap mr-2 add-tooltip" title="Proyector"><i class="fad fa-projector fa-2x text-info" style="{{ $sala->mca_proyector=='N'?'color:#ddd':'' }}"></i></div>
-        <div class="d-flex flex-lg-nowrap mr-2 add-tooltip" title="Pantalla"><i class="fad fa-tv-alt fa-2x  text-info"  style="{{ $sala->mca_pantalla=='N'?'color:#ddd':'' }}"></i></div>
-        <div class="d-flex flex-lg-nowrap mr-2 add-tooltip" title="Videoconferencia"><i class="fad fa-webcam fa-2x  text-info" style="{{ $sala->mca_videoconferencia=='N'?'color:#ddd':'' }}"></i></div>
-        <div class="d-flex flex-lg-nowrap mr-2 add-tooltip" title="Manos libres"><i class="fad fa-volume-up fa-2x  text-info" style="{{ $sala->mca_manos_libres=='N'?'color:#ddd':'' }}"></i></div>
-        <div class="d-flex flex-lg-nowrap mr-2 add-tooltip" title="Pizarra"><i class="fad fa-chalkboard fa-2x  text-info" style="{{ $sala->mca_pizarra=='N'?'color:#ddd':'' }}"></i></div>
-        <div class="d-flex flex-lg-nowrap mr-2 add-tooltip" title="Pizarra digital"><i class="fad fa-chalkboard-teacher fa-2x  text-info" style="{{ $sala->mca_pizarra_digital=='N'?'color:#ddd':'' }}"></i></div>
+    <div class="row text-center mb-3 mt-3" style="padding-left: 100px">
+        <div class="d-flex flex-wrap  add-tooltip" title="Capacidad" style="margin-right: 2vw"><i class="fad fa-users" style="font-size: 2.8vw;"></i><span class="font-bold" style="font-size: 3.5vw; margin-top: -10px">{{$sala->val_capacidad}}</span></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Maximo tiempo de reserva" style="margin-right: 2vw"><i class="fad fa-clock" style="font-size: 2.8vw"></i><span class="font-bold" style="font-size: 3.5vw; margin-top: -10px">{{$sala->max_horas_reservar}}h</span></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Proyector" style="margin-right: 2vw"><i class="fad fa-projector text-info" style="font-size: 2.8vw;{{ $sala->mca_proyector=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Pantalla" style="margin-right: 2vw"><i class="fad fa-tv-alt  text-info"  style="font-size: 2.8vw;{{ $sala->mca_pantalla=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Videoconferencia" style="margin-right: 2vw"><i class="fad fa-webcam  text-info" style="font-size: 2.8vw;{{ $sala->mca_videoconferencia=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Manos libres" style="margin-right: 2vw"><i class="fad fa-volume-up  text-info" style="font-size: 2.8vw;{{ $sala->mca_manos_libres=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Pizarra" style="margin-right: 2vw"><i class="fad fa-chalkboard  text-info" style="font-size: 2.8vw;{{ $sala->mca_pizarra=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Pizarra digital" style="margin-right: 2vw"><i class="fad fa-chalkboard-teacher  text-info" style="font-size: 2.8vw;{{ $sala->mca_pizarra_digital=='N'?'color:#eee':'' }}"></i></div>
     </div>
     <div class="row">
         <div class="col-md-1">

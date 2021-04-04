@@ -81,6 +81,8 @@ class SalasController extends Controller
             ->wherein('reservas.id_puesto',$lista_puestos)
             ->where('reservas.id_usuario',Auth::user()->id)
             ->wheredate('reservas.fec_reserva','>=',Carbon::now())
+            ->orderby('reservas.fec_reserva')
+            ->orderby('reservas.id_puesto')
             ->get();
 
         return view('salas.reserva',compact('salas','reservas','misreservas'));
@@ -136,7 +138,7 @@ class SalasController extends Controller
         return view('salas.lista_salas',compact('salas','reservas','misreservas','fecha'));
     }
 
-    public function crear_reserva(){
+    public function crear_reserva($sala=0){
         $reserva=new reservas;
         $f1=Carbon::now();
         $plantas_usuario=DB::table('plantas_usuario')
@@ -167,7 +169,7 @@ class SalasController extends Controller
             ->orderby('id_tipo_puesto')
             ->get();
 
-        return view('salas.edit_reserva', compact('reserva','f1','plantas_usuario','tipos','edificios'));
+        return view('salas.edit_reserva', compact('reserva','f1','plantas_usuario','tipos','edificios','sala'));
     }
 
     public function comprobar(Request $r){
@@ -207,7 +209,11 @@ class SalasController extends Controller
                 ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
                 ->join('users','reservas.id_usuario','users.id')
                 ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_sala'))
-                ->where('puestos.id_edificio',$r->edificio)
+                ->where(function($q) use($r){
+                    if($r->id_edificio!=null){
+                        $q->where('puestos.id_edificio',$r->edificio);
+                    }
+                })
                 ->where(function($q) use($r,$fec_desde,$fec_hasta){
                     $q->where(function($q) use($fec_desde,$fec_hasta,$r){
                         $q->wherenull('fec_fin_reserva');
@@ -222,6 +228,11 @@ class SalasController extends Controller
                 })
                 ->where(function($q){
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                })
+                ->where(function($q) use($r){
+                    if($r->sala!=0){
+                        $q->where('puestos.id_puesto',$r->sala);
+                    }
                 })
                 ->get();
             $puestos_reservados=array_merge($puestos_reservados,$reservas->pluck('id_puesto')->toArray());
@@ -238,7 +249,11 @@ class SalasController extends Controller
                 ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
                 ->join('users','reservas.id_usuario','users.id')
                 ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_sala'))
-                ->where('puestos.id_edificio',$r->edificio)
+                ->where(function($q) use($r){
+                    if($r->id_edificio!=null){
+                        $q->where('puestos.id_edificio',$r->edificio);
+                    }
+                })
                 ->where(function($q) use($r,$fec_desde,$fec_hasta){
                     $q->where(function($q) use($fec_desde,$fec_hasta,$r){
                         $q->wherenull('fec_fin_reserva');
@@ -252,9 +267,15 @@ class SalasController extends Controller
                 ->where(function($q){
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 })
+                ->where(function($q) use($r){
+                    if($r->sala!=0){
+                        $q->where('puestos.id_puesto',$r->sala);
+                    }
+                })
                 ->get();
             $reservas_total=$reservas_total->merge($reservas);
         }
+
         $salas=DB::table('puestos')
             ->select('puestos.*','edificios.*','plantas.*','clientes.*','salas.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','puestos_tipos.des_tipo_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -292,8 +313,17 @@ class SalasController extends Controller
                     $q->where('puestos.id_planta',$r->id_planta);
                 }
             })
+            ->where(function($q) use($r){
+                if($r->sala!=0){
+                    $q->where('puestos.id_puesto',$r->sala);
+                }
+            })
             ->wherenotin('puestos.id_estado',[4,5,6])
-            ->wherenotin('puestos.id_puesto',$puestos_reservados)
+            ->where(function($q) use($r){
+                if($r->sala==0){
+                    $q->wherenotin('puestos.id_puesto',$puestos_reservados);
+                }
+            })
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
@@ -334,6 +364,8 @@ class SalasController extends Controller
             ->wherein('reservas.id_puesto',$lista_puestos)
             ->where('reservas.id_usuario',Auth::user()->id)
             ->wheredate('reservas.fec_reserva','>=',Carbon::now())
+            ->orderby('reservas.fec_reserva')
+            ->orderby('reservas.id_puesto')
             ->get();
 
         return view('salas.mis_reservas',compact('misreservas'));
@@ -356,5 +388,26 @@ class SalasController extends Controller
             ->get();
 
         return view('mkd.sala',compact('sala','reservas'));
+    }
+    //https://192.168.1.103/sala/doqgPaOTjN3SJEmdlgNdL4KRBaHfCRCwHgNDW7RbfRHPTruznO
+    public function getpuesto($token){
+        $sala=DB::table('puestos')
+            ->join('salas','salas.id_puesto','puestos.id_puesto')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('token',$token)
+            ->where(function($q){
+                $q->where('salas.id_cliente',Auth::user()->id_cliente);
+            })
+            ->first();
+
+        $reservas=DB::table('reservas')
+            ->join('users','reservas.id_usuario','users.id')
+            ->where('reservas.id_puesto',$sala->id_puesto)
+            ->wheredate('reservas.fec_reserva',Carbon::now())
+            ->get();
+
+        return view('salas.scan',compact('sala','reservas'));
+
     }
 }

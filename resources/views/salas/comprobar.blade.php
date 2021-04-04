@@ -3,10 +3,16 @@
         $reserva_sala=$reservas->where('id_puesto',$sala->id_puesto);
         $link="res_sala";
     @endphp
-        @include('salas.fill_sala')
+    @include('salas.fill_sala')
 @endforeach
 
 <script>
+
+    @if($salas->isEmpty())
+        $('.btn_reservar').hide();
+    @else
+        $('.btn_reservar').show();
+    @endif
 
 $('.res_sala').hover(function(){
     $('.res_sala').removeClass('bg-gray');

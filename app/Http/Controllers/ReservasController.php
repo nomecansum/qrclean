@@ -11,6 +11,8 @@ use App\Models\reservas;
 use App\Models\puestos;
 use App\Models\users;
 use stdClass;
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Event;
 
 class ReservasController extends Controller
 {
@@ -398,6 +400,7 @@ class ReservasController extends Controller
             if($ya_esta){//Ya esta pillado
                 $mensajes_error[]='El puesto no esta disponible en el horario ['.beauty_fecha($fec_desde).' - '.beauty_fecha($fec_hasta).'] elija otro'.chr(13);
             }
+
         }
         if(count($mensajes_error)>0){
             return [
@@ -425,6 +428,45 @@ class ReservasController extends Controller
             $res->save();
             savebitacora('Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,"Reservas","save","OK");
             $id_reserva[]=$res->id_reserva;
+        }
+        if(isset($r->mca_ical) && $r->mca_ical=='S'){
+            $det_puesto=puestos::find($r->id_puesto);
+            if(isset($r->salas)){
+                $des_evento="Reserva de sala de reunion [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto;
+                $tipo="la sala de reunion";
+            } else {
+                $des_evento="Reserva de puesto [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto;
+                $tipo="el puesto";
+            }
+            $body="Tiene reservado ".$tipo. " [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto." con los siguientes identificadores de reserva: ".implode(",",$id_reserva);
+            $subject="Detalles de su reserva con Spotdesking";
+            $user=users::find(Auth::user()->id);
+            $cal=Calendar::create('Reserva de puestos Spotdesking');
+            foreach($period as $p){
+                $evento=Event::create()
+                    ->name($des_evento)
+                    ->description($body)
+                    ->uniqueIdentifier(implode(",",$id_reserva))
+                    ->organizer(Auth::user()->email, Auth::user()->name)
+                    ->createdAt(Carbon::now())
+                    ->startsAt(Carbon::parse($p->format('Y-m-d').' '.$r->hora_inicio))
+                    ->endsAt(Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin));
+                $cal->event($evento);
+            }
+
+            $cal=$cal->get();
+            \Mail::send('emails.plantilla_generica', ['user' => $user,'body'=>$body], function ($m) use ($user,$subject,$cal) {
+                if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                    $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
+                } else {
+                    $m->to($user->email, $user->name)->subject($subject);
+                }
+                $m->from(config('mail.from.address'),config('mail.from.name'));
+                $m->attachData($cal,"reserva_".Auth::user()->id."_".Carbon::now()->format('Ymdhi').".ics",[
+                    'mime'=>'text/calendar'
+                ]);
+            });
+           
         }
         return [
             'title' => "Reservas",

@@ -86,6 +86,10 @@
                         <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
                     </div>
                     @endif
+                    <div class="col-md-4 text-center mt-5">
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_ical"  id="mca_ical" value="S"> 
+						<label class="custom-control-label"   for="mca_ical">Añadir a mi calendario</label>
+                    </div>
                 </div>                
             </form>
         </div>
@@ -143,7 +147,7 @@
             } else{
                 toast_ok(data.title,data.mensaje);
                 animateCSS('#editor','fadeOut',$('#editor').html(''));
-                comprobar_puestos();
+                //comprobar_puestos();
                 $('#misreservas').load("/salas/mis_reservas");
                 $('#div_fechas').show();
             }

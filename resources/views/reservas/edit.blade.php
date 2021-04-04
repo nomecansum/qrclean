@@ -130,6 +130,12 @@
                         </select>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_ical"  id="mca_ical" value="S"> 
+						<label class="custom-control-label" for="mca_ical">Añadir a mi calendario</label>
+                    </div>
+                </div>
             
                 <div class="row">
                     <div class="col-md-12" id="detalles_reserva">

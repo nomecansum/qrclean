@@ -309,8 +309,8 @@ class EncuestasController extends Controller
 
         if(isset($r->fechas)){
             $fechas=explode(" - ",$r->fechas);
-            $f1->fec_inicio=Carbon::parse(adaptar_fecha($fechas[0]));
-            $f2->fec_fin=Carbon::parse(adaptar_fecha($fechas[1]));
+            $f1=Carbon::parse(adaptar_fecha($fechas[0]));
+            $f2=Carbon::parse(adaptar_fecha($fechas[1]));
         } else {
             $f1=Carbon::now()->startOfMonth();
             $f2=Carbon::now()->endOfMonth();

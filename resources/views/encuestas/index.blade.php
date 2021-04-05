@@ -164,7 +164,7 @@
     <div class="modal fade" id="modal-resultados">
         <div class="modal-dialog modal-lg">
             <div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <div class="modal-body" id="body_resultados">
+                <div class="modal-body body_resultados" id="body_resultados">
                     
                 </div>
                 <div class="modal-footer">

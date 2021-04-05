@@ -1,7 +1,7 @@
 <div class="panel">
 <div class="panel-heading">
     <div class="input-group mb-3">
-        <input type="text" class="form-control pull-left rangepicker" id="fechas_resul" name="fechas" style="height: 33px; width: 300px" value="{{ Carbon\Carbon::now()->startOfMonth()->format('d/m/Y').' - '.Carbon\Carbon::now()->endOfMonth()->format('d/m/Y') }}">
+        <input type="text" class="form-control pull-left" id="fechas_resul" name="fechas" style="height: 33px; width: 300px" value="{{ Carbon\Carbon::now()->startOfMonth()->format('d/m/Y').' - '.Carbon\Carbon::now()->endOfMonth()->format('d/m/Y') }}">
         <span class="btn input-group-text btn-mint" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
     </div>
 </div>
@@ -32,7 +32,8 @@
 
 <script>
     $('#fechas_resul').on('apply.daterangepicker',function(){
-        $.post('{{url('/encuestas/resultados')}}', {_token:'{{csrf_token()}}',id_encuesta: {{ $encuesta->id_encuesta }},fechas: $('#fechas').val()}, function(data, textStatus, xhr) {
+        console.log('Refresh '+$('#fechas').val());
+        $.post('{{url('/encuestas/resultados')}}', {_token:'{{csrf_token()}}',id_encuesta: {{ $encuesta->id_encuesta }},fechas: $('#fechas_resul').val()}, function(data, textStatus, xhr) {
                $('#body_resultados').html(data);
             });
     })

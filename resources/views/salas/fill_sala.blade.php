@@ -3,6 +3,10 @@
     if(!isset($reserva_sala)){
         $reserva_sala=[];
     }
+
+    $tamano_iconos="1.4em";
+    $tamano_letra="2.0em";
+    $margin="2vw";
 @endphp
 
 <div class="row mb-4 {{ $link??'' }}" data-id="{{ $sala->id_puesto }}" data-desc="{{ $sala->des_puesto }}">
@@ -17,15 +21,15 @@
         <img src="{{ isset($sala) ? Storage::disk(config('app.img_disk'))->url('img/puestos/'.$sala->img_puesto) : ''}}" style="width: 90%;" alt="" class="img-fluid ml-0">
     </div>
     <div class="col-md-8">
-        <div class="row mt-2 mb-2">
-            <div class="d-flex flex-wrap  add-tooltip" title="Capacidad" style="margin-right: 2vw"><i class="fad fa-users" style="font-size: 1.6vw;"></i><span class="font-bold" style="font-size: 2vw; margin-top: -10px">{{$sala->val_capacidad}}</span></div>
-            <div class="d-flex flex-wrap  add-tooltip" title="Maximo tiempo de reserva" style="margin-right: 2vw"><i class="fad fa-clock" style="font-size: 1.6vw"></i><span class="font-bold" style="font-size: 2vw; margin-top: -10px">{{$sala->max_horas_reservar}}h</span></div>
-            <div class="d-flex flex-wrap  add-tooltip" title="Proyector" style="margin-right: 2vw"><i class="fad fa-projector text-info" style="font-size: 1.6vw;{{ $sala->mca_proyector=='N'?'color:#eee':'' }}"></i></div>
-            <div class="d-flex flex-wrap  add-tooltip" title="Pantalla" style="margin-right: 2vw"><i class="fad fa-tv-alt  text-info"  style="font-size: 1.6vw;{{ $sala->mca_pantalla=='N'?'color:#eee':'' }}"></i></div>
-            <div class="d-flex flex-wrap  add-tooltip" title="Videoconferencia" style="margin-right: 2vw"><i class="fad fa-webcam  text-info" style="font-size: 1.6vw;{{ $sala->mca_videoconferencia=='N'?'color:#eee':'' }}"></i></div>
-            <div class="d-flex flex-wrap  add-tooltip" title="Manos libres" style="margin-right: 2vw"><i class="fad fa-volume-up  text-info" style="font-size: 1.6vw;{{ $sala->mca_manos_libres=='N'?'color:#eee':'' }}"></i></div>
-            <div class="d-flex flex-wrap  add-tooltip" title="Pizarra" style="margin-right: 2vw"><i class="fad fa-chalkboard  text-info" style="font-size: 1.6vw;{{ $sala->mca_pizarra=='N'?'color:#eee':'' }}"></i></div>
-            <div class="d-flex flex-wrap  add-tooltip" title="Pizarra digital" style="margin-right: 2vw"><i class="fad fa-chalkboard-teacher  text-info" style="font-size: 1.6vw;{{ $sala->mca_pizarra_digital=='N'?'color:#eee':'' }}"></i></div>
+        <div class="row mt-2 mb-2" style="margin-left: {{ $margin}}">
+            <div class="d-flex flex-wrap  add-tooltip" title="Capacidad" style="margin-right: {{ $margin}}"><i class="fad fa-users" style="font-size: {{ $tamano_iconos}};"></i><span class="font-bold" style="font-size: {{ $tamano_letra}}; margin-top: -10px">{{$sala->val_capacidad}}</span></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Maximo tiempo de reserva" style="margin-right: {{ $margin}}"><i class="fad fa-clock" style="font-size: {{ $tamano_iconos}}"></i><span class="font-bold" style="font-size: {{ $tamano_letra}}; margin-top: -10px">{{$sala->max_horas_reservar}}h</span></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Proyector" style="margin-right: {{ $margin}}"><i class="fad fa-projector text-info" style="font-size: {{ $tamano_iconos}};{{ $sala->mca_proyector=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Pantalla" style="margin-right: {{ $margin}}"><i class="fad fa-tv-alt  text-info"  style="font-size: {{ $tamano_iconos}};{{ $sala->mca_pantalla=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Videoconferencia" style="margin-right: {{ $margin}}"><i class="fad fa-webcam  text-info" style="font-size: {{ $tamano_iconos}};{{ $sala->mca_videoconferencia=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Manos libres" style="margin-right: {{ $margin}}"><i class="fad fa-volume-up  text-info" style="font-size: {{ $tamano_iconos}};{{ $sala->mca_manos_libres=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Pizarra" style="margin-right: {{ $margin}}"><i class="fad fa-chalkboard  text-info" style="font-size: {{ $tamano_iconos}};{{ $sala->mca_pizarra=='N'?'color:#eee':'' }}"></i></div>
+            <div class="d-flex flex-wrap  add-tooltip" title="Pizarra digital" style="margin-right: {{ $margin}}"><i class="fad fa-chalkboard-teacher  text-info" style="font-size: {{ $tamano_iconos}};{{ $sala->mca_pizarra_digital=='N'?'color:#eee':'' }}"></i></div>
         </div>
         <div class="row">
             <div class="col-md-12">

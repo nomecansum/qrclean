@@ -67,7 +67,7 @@ return [
      */
 
     'capture_ajax' => true,
-    'add_ajax_timing' => false,
+    'add_ajax_timing' => true,
 
     /*
      |--------------------------------------------------------------------------

@@ -43,11 +43,11 @@
         <h3 class="panel-title">¿Que quiere hacer?</h3>
     </div>
     <div class="panel-body">
-        <div class="row">
+        <div class="row text-center">
             <div class="col-md-1">
      
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 mb-3">
                 <div class="btn-group">
                     <div class="dropdown">
                         <button class="btn btn-primary dropdown-toggle btn-lg" data-toggle="dropdown" type="button" aria-expanded="false">
@@ -66,8 +66,8 @@
             <div class="col-md-2">
                 
             </div>
-            <div class="col-md-4">
-                <button class="btn btn-success btn-lg" id="btn_nueva_puesto"> Crear una reserva </button> 
+            <div class="col-md-4 mb-3">
+                <button class="btn btn-success btn-lg" id="btn_nueva_puesto">&nbsp;&nbsp;&nbsp; Crear una reserva &nbsp;&nbsp;&nbsp;</button> 
                 
             </div>
         </div>

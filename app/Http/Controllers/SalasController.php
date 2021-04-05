@@ -375,9 +375,6 @@ class SalasController extends Controller
 
         $sala=DB::table('salas')
             ->join('puestos','salas.id_puesto','puestos.id_puesto')
-            ->where(function($q){
-                $q->where('salas.id_cliente',Auth::user()->id_cliente);
-            })
             ->where('salas.id_puesto',$sala)
             ->first();
 

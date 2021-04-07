@@ -4,7 +4,6 @@
   overflow-y: auto;
 }
 </style>
-
 <div class="panel editor" id="editor">
     <div class="panel">
         <div class="panel-heading">
@@ -15,7 +14,7 @@
         </div>
         <div class="panel-body">
             <form  action="{{url('puestos/update')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax"  enctype="multipart/form-data">
-                
+               
                 <div class="row">
                     <input type="hidden" name="id_puesto" value="{{ $puesto->id_puesto }}">
                     <input type="hidden" name="tags" value="" id="tags">

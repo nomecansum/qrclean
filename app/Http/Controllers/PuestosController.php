@@ -165,7 +165,8 @@ class PuestosController extends Controller
         } else {
             validar_acceso_tabla($id,"puestos");
             $puesto=DB::table('puestos')
-                ->select('puestos.*','plantas.*','salas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+                ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color',
+                'salas.val_capacidad','salas.mca_proyector','salas.mca_pantalla','salas.mca_videoconferencia','salas.id_cliente','salas.obs_sala','salas.mca_manos_libres','salas.mca_pizarra','salas.mca_pizarra_digital','salas.id_sala')
                 ->join('plantas','puestos.id_planta','plantas.id_planta')
                 ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
                 ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')

@@ -203,9 +203,9 @@
 							</div>
 							<div class="form-group col-md-2">
 								<label for="max_dias_reserva">Max Dias Reserva</label><br>
-								<select name="max_dias_reserva incidencias" id="max_dias_reserva incidencias"  class="form-control ">
+								<select name="max_dias_reserva" id="max_dias_reserva"  class="form-control ">
 									@for ($n=1;$n<=31;$n++)
-										<option value={{$n}}>{{ $n }}</option>
+										<option value={{$n}}  {{  isset($config->max_dias_reserva)&&$config->max_dias_reserva==$n?'selected':''  }}>{{ $n }}</option>
 									@endfor
 									
 								</select>

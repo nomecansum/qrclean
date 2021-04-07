@@ -86,8 +86,8 @@
 	</tr>
 	<tr class="text-center font-bold">
 		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Puesto</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Usado</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Disponible</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Check-in</td>
+		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Check-out</td>
 		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Limpieza</td>
 		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Total</td>
 		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Abiertas</td>

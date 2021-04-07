@@ -26,7 +26,6 @@
                         data-toolbar="#all_toolbar"
                         data-buttons-class="secondary"
                         data-show-button-text="true"
-                        data-search-on-enter-key="true"
                         >
                         <thead>
                             <tr>

@@ -59,7 +59,6 @@ if(!isset($id_check))
                 data-show-button-text="true"
                 data-group-by="true"
                 data-group-by-field="shape"
-                data-search-on-enter-key="true"
                 >
                 <thead>
                     <tr data-fila="{{ $cuenta_fila }}">

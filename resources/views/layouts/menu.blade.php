@@ -137,7 +137,7 @@
                         <!--Submenu-->
                         <ul class="collapse">
                             @if(checkPermissions(['Reservas puestos'],['R']))<li class="reservas_puestos"><a href="/reservas" class="text-nowrap"><i class="fad fa-chair-office"></i> Puestos</a></li> @endif
-                            @if(checkPermissions(['Reservas salas'],['R']) && session('CL')['mca_salas']=='S'))<li class="reservas_salas"><a href="/salas/reservas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas</a></li> @endif
+                            @if(checkPermissions(['Reservas salas'],['R']) && session('CL')['mca_salas']=='S')<li class="reservas_salas"><a href="/salas/reservas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas</a></li> @endif
                         </ul>
                     </li>
                     @endif

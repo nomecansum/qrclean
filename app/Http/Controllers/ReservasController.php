@@ -91,6 +91,11 @@ class ReservasController extends Controller
                 $q->orwhere('puestos_tipos.mca_fijo','S');
             }
         })
+        ->where(function($q){
+            if(config_cliente('mca_salas',Auth::user()->id_cliente)=='S'){
+                $q->wherenotin('puestos_tipos.id_tipo_puesto',config('app.tipo_puesto_sala'));
+            }
+        })
         ->orderby('id_tipo_puesto')
         ->get();
         //Primero comprobamos si tiene una reserva para ese dia

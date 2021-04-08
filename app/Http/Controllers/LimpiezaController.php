@@ -68,7 +68,7 @@ class LimpiezaController extends Controller
         } else {
             $entidades=["tipo"=>"mantenimiento","icono"=>"fad fa-tools","tipo_usuario"=>"tecnico","plural"=>"tecnicos","menu1"=>".mantenimiento","menu2"=>".rondas_mant"]; 
         }
-        return view('limpieza.index',compact('rondas','detalles','usuarios','f1','f2','entidades'));
+        return view('limpieza.index',compact('rondas','detalles','usuarios','f1','f2','entidades','tipo'));
     }
 
     public function view($id,$print=0){

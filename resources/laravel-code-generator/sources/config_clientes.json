@@ -381,6 +381,48 @@
             "api-description": "The mca restringir usuarios planta of the model."
         },
         {
+            "name": "mca_salas",
+            "labels": "Mca Salas",
+            "html-type": "select",
+            "css-class": "",
+            "options": {
+                "S": "S",
+                "N": "N"
+            },
+            "html-value": null,
+            "validation": "nullable",
+            "is-on-index": true,
+            "is-on-show": true,
+            "is-on-form": true,
+            "data-type": "enum",
+            "data-type-params": [
+                1
+            ],
+            "data-value": "S",
+            "is-index": false,
+            "is-unique": false,
+            "is-primary": false,
+            "comment": null,
+            "is-nullable": true,
+            "is-header": false,
+            "is-unsigned": false,
+            "is-auto-increment": false,
+            "is-inline-options": false,
+            "is-date": false,
+            "date-format": "",
+            "cast-as": "",
+            "placeholder": "Enter mca salas here...",
+            "delimiter": "; ",
+            "range": [],
+            "foreign-relation": null,
+            "foreign-constraint": null,
+            "on-store": null,
+            "on-update": null,
+            "api-key": "mca_salas",
+            "is-api-visible": true,
+            "api-description": "The mca salas of the model."
+        },
+        {
             "name": "modo_visualizacion_puestos",
             "labels": "Modo Visualizacion Puestos",
             "html-type": "select",

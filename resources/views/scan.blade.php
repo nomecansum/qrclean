@@ -153,7 +153,6 @@
         }
 
         function geturl(url){
-            
             @if(!isset($modo) || (isset($modo) && $modo=='location'))
                 loguear('Get URL: '+url);
                 document.location.href=url;
@@ -183,8 +182,12 @@
                 })
             @elseif($modo=='usuario' && isset($estado_destino))
                 puesto=url.split('/').pop();
+                if (url.indexOf('sala')!=0){
+                    window.location.replace("{{ url('/sala') }}/"+puesto);
+                } else {
+                    window.location.replace("{{ url('/puesto') }}/"+puesto);
+                }
                 loguear('Dinamica de usuario para '+puesto);
-                window.location.replace("{{ url('/puesto') }}/"+puesto);
             @elseif($modo=='incidencia')
                 puesto=url.split('/').pop();
                 loguear('Dinamica de mantenimiento para '+puesto);

@@ -131,11 +131,15 @@ class CustomersController extends Controller
             $config->mca_permitir_anonimo=$r->mca_permitir_anonimo??'N';
             $config->mca_reserva_horas=$r->mca_reserva_horas??'N';
             $config->mca_mostrar_nombre_usando=$r->mca_mostrar_nombre_usando??'N';
+            $config->mca_salas=$r->mca_salas??'N';
+            $config->hora_liberar_puestos=$r->hora_liberar_puestos;
             $config->save();
             
             Session::put('CL',$config->toArray());
 
             savebitacora("Actualizados datos de cliente ".$r->nom_cliente,$r->id_cliente);
+
+            
 
             return [
                 'title' => 'Clientes',

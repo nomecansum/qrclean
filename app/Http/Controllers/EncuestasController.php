@@ -318,12 +318,14 @@ class EncuestasController extends Controller
         
         $resultado=DB::table('encuestas_resultados')
             ->whereBetween('fecha',[$f1,$f2])
+            ->where('id_encuesta',$r->id_encuesta)
             ->orderby('fecha')
             ->get();
 
         $resultado_valor=DB::table('encuestas_resultados')
             ->selectraw('valor as des_estado, count(id_resultado) as cuenta')
             ->whereBetween('fecha',[$f1,$f2])
+            ->where('id_encuesta',$r->id_encuesta)
             ->groupby('des_estado')
             ->orderby('valor')
             ->get();
@@ -331,6 +333,7 @@ class EncuestasController extends Controller
         $resultado_fecha=DB::table('encuestas_resultados')
             ->selectraw('date(fecha) as fecha, count(id_resultado) as cuenta')
             ->whereBetween('fecha',[$f1,$f2])
+            ->where('id_encuesta',$r->id_encuesta)
             ->groupBy(\DB::raw('date(fecha)'))
             ->orderby('fecha')
             ->get();

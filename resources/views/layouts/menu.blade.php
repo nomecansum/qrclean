@@ -137,7 +137,7 @@
                         <!--Submenu-->
                         <ul class="collapse">
                             @if(checkPermissions(['Reservas puestos'],['R']))<li class="reservas_puestos"><a href="/reservas" class="text-nowrap"><i class="fad fa-chair-office"></i> Puestos</a></li> @endif
-                            @if(checkPermissions(['Reservas salas'],['R']))<li class="reservas_salas"><a href="/salas/reservas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas</a></li> @endif
+                            @if(checkPermissions(['Reservas salas'],['R']) && session('CL')['mca_salas']=='S'))<li class="reservas_salas"><a href="/salas/reservas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas</a></li> @endif
                         </ul>
                     </li>
                     @endif
@@ -154,7 +154,7 @@
                             @if(checkPermissions(['Edificios'],['R']))<li class="edificios"><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li> @endif
                             @if(checkPermissions(['Plantas'],['R']))<li class="plantas"><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li> @endif
                             @if(checkPermissions(['Puestos'],['R']))<li class="puestos"><a href="/puestos"> <i class="fad fa-desktop-alt"></i> Puestos</a></li> @endif
-                            @if(checkPermissions(['Salas'],['R']))<li class="salas"><a href="/salas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas reunion</a></li> @endif
+                            @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas"><a href="/salas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas reunion</a></li> @endif
                             @if(checkPermissions(['Puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
                             @if(checkPermissions(['Encuestas'],['R']))<li class="encuestas"><a href="/encuestas"><i class="fad fa-poll-h"></i> Encuestas</a></li> @endif
                             @if(checkPermissions(['Señaletica'],['R']))<li class="mkd"><a href="/MKD"><i class="fad fa-sign"></i> Señaletica</a></li> @endif

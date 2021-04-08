@@ -174,7 +174,7 @@
             opens: 'right',
         }, function(start_date, end_date) {
             $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
-            window.location.href = '{{ url('/rondas/index/') }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
+            window.location.href = '{{ url('/rondas/index/') }}/{{ $tipo }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
         });
 
         $('#btn_completar').click(function(){

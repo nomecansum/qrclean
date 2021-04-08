@@ -11,8 +11,33 @@
             <h4>Resultados de la encuesta: {{ $encuesta->titulo }}</h4>
         </div>
     </div>
+    
     <div id="chartdiv_puestos" style="width:100%; height:300px;  ml-0"></div>
-
+    <div class="row">
+        <div class="col-md-12">
+            @switch($encuesta->id_tipo_encuesta)
+                @case(1)
+                    <i class="fas fa-tired  fa-2x text-danger valor" data-value="1"></i> 1
+                    <i class="fas fa-frown  fa-2x text-warning valor" data-value="2"></i> 2
+                    <i class="fas fa-meh-rolling-eyes  fa-2x text-primary valor" data-value="3"></i> 3
+                    <i class="fas fa-smile  fa-2x text-mint valor" data-value="4"></i> 4
+                    <i class="fas fa-grin-alt fa-2x text-success valor" data-value="5"></i> 5
+                    @break
+                @case(2)
+                    <i class="fas fa-frown  fa-2x text-danger valor" data-value="1"></i> 1
+                    <i class="fas fa-meh  fa-2x text-warning valor" data-value="2"></i> 2
+                    <i class="fas fa-smile fa-2x text-success valor" data-value="3"></i> 3
+                    @break
+                @case(3)
+                    <i class="fal fa-star  valor" style="color: #ffd700; font-size: 2vw" id="est1" data-value="1"></i>
+                    <i class="fal fa-star  valor" style="color: #ffd700; font-size: 2vw" id="est2" data-value="2"></i>
+                    <i class="fal fa-star  valor" style="color: #ffd700; font-size: 2vw" id="est3" data-value="3"></i>
+                    <i class="fal fa-star  valor" style="color: #ffd700; font-size: 2vw" id="est4" data-value="4"></i>
+                    <i class="fal fa-star  valor" style="color: #ffd700; font-size: 2vw" id="est5" data-value="5"></i>
+                    @break
+            @endswitch
+        </div>
+    </div>
     <label class="mt-5">Votos por fecha</label>
     <div id="chartdiv" style="width:100%; height:300px;  ml-0"></div>
 

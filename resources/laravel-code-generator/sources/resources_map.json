@@ -135,11 +135,6 @@
         "table-name": "incidencias_tipos"
     },
     {
-        "model-name": "config_clientes",
-        "resource-file": "config_clientes.json",
-        "table-name": "config_clientes"
-    },
-    {
         "model-name": "puestos_tipos",
         "resource-file": "puestos_tipos.json",
         "table-name": "puestos_tipos"
@@ -153,5 +148,10 @@
         "model-name": "salas",
         "resource-file": "salas.json",
         "table-name": "salas"
+    },
+    {
+        "model-name": "config_clientes",
+        "resource-file": "config_clientes.json",
+        "table-name": "config_clientes"
     }
 ]

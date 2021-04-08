@@ -41,6 +41,7 @@ class config_clientes extends Model
                   'mca_permitir_anonimo',
                   'mca_reserva_horas',
                   'mca_restringir_usuarios_planta',
+                  'mca_salas',
                   'modo_visualizacion_puestos',
                   'modo_visualizacion_reservas',
                   'num_imagenes_incidencias',
@@ -76,6 +77,26 @@ class config_clientes extends Model
         return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
     }
 
+    /**
+     * Set the hora_liberar_puestos.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setHoraLiberarPuestosAttribute($value)
+    {
+        $this->attributes['hora_liberar_puestos'] = !empty($value) ?$value : null;
+    }
 
+    /**
+     * Get hora_liberar_puestos in array format
+     *
+     * @param  string  $value
+     * @return array
+     */
+    public function getHoraLiberarPuestosAttribute($value)
+    {
+        return $value;
+    }
 
 }

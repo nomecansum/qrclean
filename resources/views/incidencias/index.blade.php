@@ -52,9 +52,10 @@
 			<div class="panel-heading">
 				<h3 class="panel-title">Incidencias</h3>
 			</div>
-			<form method="post" name="form_puestos" id="formbuscador" action="{{ url('/incidencias') }}" class="form-horizontal form-ajax">
+			<form method="post" name="form_puestos" id="formbuscador" action="{{ url('/incidencias') }}" class="form-horizontal ajax-filter">
 				@csrf
 				<input type="hidden" name="document" value="pantalla">
+				<input type="hidden" name="output" value="pantalla">
 				@include('resources.combos_filtro',[])
 				<div class="col-md-3" style="padding-left: 15px">
 					@include('resources.combo_fechas')
@@ -71,8 +72,44 @@
 				</div>
 				<br>
 			</form>
-			<div class="panel-body" id="filter">
-				@include('incidencias.fill_tabla_incidencias')
+			<div class="panel-body">
+				{{-- <div id="all_toolbar">
+					<div class="input-group">
+						<input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
+						<span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+						<button id="btn-toggle" class="btn btn-mint float-right ml-3 add-tooltip" title="Cambiar vista tabla/tarjetas"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
+					</div>
+				</div> --}}
+				<table id="tabla"  data-toggle="table"
+					data-locale="es-ES"
+					data-search="true"
+					data-show-columns="true"
+					data-show-columns-toggle-all="true"
+					data-page-list="[5, 10, 20, 30, 40, 50]"
+					data-page-size="50"
+					data-pagination="true" 
+					data-show-pagination-switch="true"
+					data-show-button-icons="true"
+					data-toolbar="#all_toolbar"
+					>
+					<thead>
+						<tr>
+							<th data-sortable="true">Id</th>
+							<th></th>
+							<th data-sortable="true">Tipo</th>
+							<th data-sortable="true">Puesto</th>
+							<th data-sortable="true">Edificio</th>
+							<th data-sortable="true">Planta</th>
+							<th data-sortable="true">Fecha</th>
+							<th data-sortable="true">Situacion</th>
+							
+							<th style="width: 30%" data-sortable="true">Incidencia</th>
+						</tr>
+					</thead>
+					<tbody  id="myFilter">
+					@include('incidencias.fill_tabla_incidencias')
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -164,7 +201,7 @@
     })
 
 	$('.form_cierre').submit(form_ajax_submit);
-	$('.formbuscador').submit(form_ajax_submit);
+	//$('.formbuscador').submit(ajax_filter);
 
 	$(function(){
 		$('#fechas, #ac').change(function(){

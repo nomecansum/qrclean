@@ -5,6 +5,7 @@
     use App\Models\puestos_tipos;
     use App\Models\users;
     use App\Models\estados_incidencias;
+    use App\Models\incidencias_tipos;
 @endphp
 
 
@@ -80,6 +81,7 @@
                         $q->orwhere('mca_fijo','S');
                         })
                         ->where('id_tipo_puesto','>',0)
+                        ->orderby('des_tipo_puesto')
                         ->get() as $tipo)
                         <option value="{{ $tipo->id_tipo_puesto }}">{{ $tipo->des_tipo_puesto }}</option>
                     @endforeach
@@ -115,8 +117,27 @@
                         $q->orwhere('mca_fijo','S');
                         })
                         ->where('id_estado','>',0)
+                        ->orderby('des_estado')
                         ->get() as $estado)
                         <option value="{{ $estado->id_estado }}">{{ $estado->des_estado }}</option>
+                    @endforeach
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group  col-md-12" style="{{ (isset($hide['tip_inc']) && $hide['tip_inc']==1) ? 'display: none' : ''  }}">
+            <label>Tipo incidencia</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipoinc[]" id="multi-tipoinc" >
+                    @foreach(incidencias_tipos::where(function($q) {
+                        $q->where('id_cliente',Auth::user()->id_cliente);
+                        $q->orwhere('mca_fijo','S');
+                        })
+                        ->orderby('des_tipo_incidencia')
+                        ->get() as $tipo)
+                        <option value="{{ $tipo->id_tipo_incidencia }}">{{ $tipo->des_tipo_incidencia }}</option>
                     @endforeach
                 </select>
                 <div class="input-group-btn">
@@ -131,6 +152,7 @@
                     @foreach(users::where(function($q) {
                         $q->where('id_cliente',Auth::user()->id_cliente);
                         })
+                        ->orderby('name')
                         ->orderby('name')
                         ->get() as $user)
                         <option value="{{ $user->id }}">{{ $user->name }}</option>

@@ -64,6 +64,139 @@ class IncidenciasController extends Controller
         return view('incidencias.index',compact('incidencias','f1','f2','puestos'));
     }
 
+    
+    //LISTADO DE INCIDENCIAS
+    public function search(Request $r){
+        $f = explode(' - ',$r->fechas);
+        $f1 = adaptar_fecha($f[0]);
+        $f2 = adaptar_fecha($f[1]);
+
+        if($r->estado){
+            $estados=$r->estado;
+            $estados=array_filter($r->estado, "ctype_digit");
+            $atributos=array_filter($r->estado, "ctype_alpha");
+        } else {
+            $estados=null;
+            $atributos=[];
+        }
+
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            })
+            ->where(function($q) use($r){
+                if ($r->cliente) {
+                    $q->WhereIn('puestos.id_cliente',$r->cliente);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->edificio) {
+                    $q->WhereIn('puestos.id_edificio',$r->edificio);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->planta) {
+                    $q->whereIn('puestos.id_planta',$r->planta);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->puesto) {
+                    $q->whereIn('puestos.id_puesto',$r->puesto);
+                }
+            })
+            ->where(function($q) use($r,$estados){
+                if ($estados) {
+                    $q->whereIn('puestos.id_estado',$estados);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tipo) {
+                    $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
+                }
+            })
+            ->where(function($q) use($r,$atributos){
+                if(in_array('A',$atributos)){
+                    $q->where('mca_acceso_anonimo','S');
+                }
+                if(in_array('R',$atributos)){
+                    $q->where('mca_reservar','S');
+                }
+                if(in_array('P',$atributos)){
+                    $q->wherenotnull('puestos_asignados.id_perfil');
+                }
+                if(in_array('U',$atributos)){
+                    $q->wherenotnull('puestos_asignados.id_usuario');
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tags) {
+                    
+                    if($r->andor){//Busqueda con AND
+                        $puestos_tags=DB::table('tags_puestos')
+                            ->select('id_puesto')
+                            ->wherein('id_tag',$r->tags)
+                            ->groupby('id_puesto')
+                            ->havingRaw('count(id_tag)='.count($r->tags))
+                            ->pluck('id_puesto')
+                            ->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags);
+                    } else { //Busqueda con OR
+                        $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags); 
+                    }
+                }
+            })
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                    $q->wherein('puestos.id_puesto',$puestos_usuario);
+                }
+            })
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $lista_puestos=$puestos->pluck('id_puesto')->toArray();
+
+        $incidencias=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*')
+            ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            })
+            ->wherein('incidencias.id_puesto',$lista_puestos)
+            ->whereBetween('fec_apertura',[$f1,$f2])
+            ->where(function($q) use($r){
+                if($r->ac=='B'){
+                    $q->wherenotnull('fec_cierre');
+                }
+                if($r->ac=='A'){
+                    $q->wherenull('fec_cierre');
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tipoinc) {
+                    $q->whereIn('incidencias.id_tipo_incidencia',$r->tipoinc);
+                }
+            })
+            ->orderby('fec_apertura','desc')
+            ->get();
+        $f1=Carbon::parse($f1);
+        $f2=Carbon::parse($f2);
+
+        return view('incidencias.fill_tabla_incidencias',compact('incidencias','f1','f2','puestos','r'));
+    }
 
     //FORMULARIO DE CIERRE DE INCIDENCIA
     public function form_cierre($id){

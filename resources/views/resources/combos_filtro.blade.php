@@ -4,6 +4,7 @@
     use App\Models\tags;
     use App\Models\puestos_tipos;
     use App\Models\users;
+    use App\Models\estados_incidencias;
 @endphp
 
 
@@ -89,7 +90,7 @@
             </div>
         </div>
         <div class="form-group  col-md-12" style="{{ (isset($hide['est']) && $hide['est']==1) ? 'display: none' : ''  }}">
-            <label>Estado</label>
+            <label>Estado puesto</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="estado[]" id="multi-estado" >
                     @foreach(estados::all() as $estado)
@@ -99,6 +100,24 @@
                         <option value="R">Reserva</option>
                         <option value="P">Asignado a perfil</option>
                         <option value="U">Asignado a usuario</option>
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group  col-md-12" style="{{ (isset($hide['est_inc']) && $hide['est_inc']==1) ? 'display: none' : ''  }}">
+            <label>Estado incidencia</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipo[]" id="multi-tipo" >
+                    @foreach(estados_incidencias::where(function($q) {
+                        $q->where('id_cliente',Auth::user()->id_cliente);
+                        $q->orwhere('mca_fijo','S');
+                        })
+                        ->where('id_estado','>',0)
+                        ->get() as $estado)
+                        <option value="{{ $estado->id_estado }}">{{ $estado->des_estado }}</option>
+                    @endforeach
                 </select>
                 <div class="input-group-btn">
                     <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>

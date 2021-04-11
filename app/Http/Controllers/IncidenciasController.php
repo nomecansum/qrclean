@@ -44,6 +44,7 @@ class IncidenciasController extends Controller
                 $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->whereBetween('fec_apertura',[$f1,$fhasta])
+            ->wherenull('incidencias.fec_cierre')
             ->orderby('fec_apertura','desc')
             ->get();
         

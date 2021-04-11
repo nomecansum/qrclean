@@ -256,6 +256,8 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::group(['prefix' => 'incidencias'], function () {
+        Route::get('/',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@index'])->name('incidencias.index');
+        Route::post('/',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@search'])->name('incidencias.search');
         Route::get('/tipos',['middleware'=>'permissions:["Tipos de incidencia"],["R"]', 'uses' => 'IncidenciasController@index_tipos'])->name('incidencias_tipos.index');
         Route::post('/tipos/save',['middleware'=>'permissions:["Tipos de incidencia"],["W"]', 'uses' => 'IncidenciasController@tipos_save']);
         Route::get('/tipos/edit/{id?}',['middleware'=>'permissions:["Tipos de incidencia"],["C"]', 'uses' => 'IncidenciasController@tipos_edit']);
@@ -281,7 +283,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/get_detalle/{id?}',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@get_detalle_scan']);
         Route::get('/form_accion/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@form_accion']);
         
-        Route::get('/{f1?}/{f2?}',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@index'])->name('incidencias.index');
+        
 
         Route::post('/accion',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@add_accion']);
         

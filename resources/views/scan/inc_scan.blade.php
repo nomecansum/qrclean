@@ -137,7 +137,6 @@
         }
 
         function geturl(url){
-            
             @if(!isset($modo) || (isset($modo) && $modo=='location'))
                 loguear('Get URL: '+url);
                 document.location.href=url;
@@ -146,7 +145,7 @@
                 loguear('Cambio estado '+puesto);
                 $.post('{{url('/puesto/estado/')}}/'+puesto+'/{{ $estado_destino }}', {_token: '{{csrf_token()}}', data: url})
                 .done(function(data){
- //La respuesta es un mensaje JSON
+                         //La respuesta es un mensaje JSON
                         $('#div_botones').hide();
                         $('#div_respuesta').hide();
                         $('#div_mensaje_fin').show();
@@ -168,7 +167,11 @@
             @elseif($modo=='usuario' && isset($estado_destino))
                 puesto=url.split('/').pop();
                 loguear('Dinamica de usuario para '+puesto);
-                window.location.replace("{{ url('/puesto') }}/"+puesto);
+                if (url.indexOf('sala')!=-1){
+                    window.location.replace("{{ url('/sala') }}/"+puesto);
+                } else {
+                    window.location.replace("{{ url('/puesto') }}/"+puesto);
+                }
             @elseif($modo=='incidencia')
                 puesto=url.split('/').pop();
                 loguear('Dinamica de mantenimiento para '+puesto);
@@ -289,16 +292,6 @@
                 ultimacamara=camera.id;
             }
 
-
-            //def_value=getCookie('cam_def');    
-            //def_value="{{ DB::table('users')->where('id',Auth::user()->id)->first()->def_camera }}";
-             //def_value="49f0663bc220da886abe9034b13315aee969281e65aaeac24390245272f17740";
-            // // loguear('def '+def_value);       
-            // if(def_value!=null && def_value!=''){
-            //     $('#cameraSelection').val(def_value);
-            // } else {
-            //     $('#cameraSelection').val(ultimacamara);
-            // }
             $('#cameraSelection').val(ultimacamara);
             $('#cameraSelection').change();
             //loguear(cameras[cameras.length-1].id);

@@ -182,7 +182,7 @@
                 })
             @elseif($modo=='usuario' && isset($estado_destino))
                 puesto=url.split('/').pop();
-                if (url.indexOf('sala')!=0){
+                if (url.indexOf('sala')!=-1){
                     window.location.replace("{{ url('/sala') }}/"+puesto);
                 } else {
                     window.location.replace("{{ url('/puesto') }}/"+puesto);

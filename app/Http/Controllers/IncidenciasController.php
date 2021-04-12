@@ -33,8 +33,10 @@ class IncidenciasController extends Controller
         $fhasta=clone($f2);
         $fhasta=$fhasta->addDay();
         $incidencias=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*')
-            ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa')
+            ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
+            ->join('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
             ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
@@ -165,7 +167,9 @@ class IncidenciasController extends Controller
         $lista_puestos=$puestos->pluck('id_puesto')->toArray();
 
         $incidencias=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa')
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+            ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
             ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -178,7 +182,7 @@ class IncidenciasController extends Controller
             ->wherein('incidencias.id_puesto',$lista_puestos)
             ->whereBetween('fec_apertura',[$f1,$f2])
             ->where(function($q) use($r){
-                if($r->ac=='B'){
+                if($r->ac=='C'){
                     $q->wherenotnull('fec_cierre');
                 }
                 if($r->ac=='A'){

@@ -191,6 +191,13 @@
 @endsection
 
 @section('scripts')
+	{{--  AMCharts  --}}
+	<script src="{{url('plugins')}}/amcharts4/core.js"></script>
+	<script src="{{url('plugins')}}/amcharts4/charts.js"></script>
+	<script src="{{url('plugins')}}/amcharts4/themes/material.js"></script>
+	<script src="{{url('plugins')}}/amcharts4/themes/animated.js"></script>
+	<script src="{{url('plugins')}}/amcharts4/themes/kelly.js"></script>
+	<script src="{{url('plugins')}}/amcharts4/lang/es_ES.js"></script>
 	<script>
 
 	$('.mantenimiento').addClass('active active-sub');

@@ -16,6 +16,10 @@ class PermissionsController extends Controller
 		$niveles =
 		  DB::table('niveles_acceso')
 			->where('val_nivel_acceso','<=',$nivel_acceso)
+			->where(function($q){
+				$q->where('id_cliente',Auth::user()->id_cliente);
+				$q->orwhere('mca_fijo','S');
+			})
 			->get();
 		$homepages=DB::table('niveles_acceso')->pluck('home_page')->unique()->toArray();
 		return view('permisos.profiles',compact('niveles','nivel_acceso','homepages'));
@@ -39,6 +43,8 @@ class PermissionsController extends Controller
 				[
 				    'des_nivel_acceso' => $r->des_nivel_acceso,
 					'val_nivel_acceso' => $r->num_nivel_acceso,
+					'id_cliente' => $r->id_cliente,
+					'mca_fijo' => isset($r->mca_fijo)?'S':'N',
 					'home_page' => $r->home_page
 				]
 			);
@@ -51,6 +57,8 @@ class PermissionsController extends Controller
 				[
 					'val_nivel_acceso' => $r->num_nivel_acceso,
 					'des_nivel_acceso' => $r->des_nivel_acceso,
+					'id_cliente' => $r->id_cliente,
+					'mca_fijo' => isset($r->mca_fijo)?'S':'N',
 					'home_page' => $r->home_page
 				]
 			);

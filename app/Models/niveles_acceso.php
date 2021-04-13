@@ -35,7 +35,9 @@ class niveles_acceso extends Model
     protected $fillable = [
                   'val_nivel_acceso',
                   'des_nivel_acceso',
-                  'cod_cliente'
+                  'id_cliente',
+                  'home_page',
+                  'mca_fijo'
               ];
 
     /**
@@ -52,6 +54,15 @@ class niveles_acceso extends Model
      */
     protected $casts = [];
     
+    /**
+     * Get the puestosAsignados for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function puestosAsignados()
+    {
+        return $this->hasMany('App\Models\PuestosAsignado','id_perfil','cod_nivel');
+    }
 
 
 

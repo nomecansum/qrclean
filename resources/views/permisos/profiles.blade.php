@@ -48,7 +48,7 @@
 	
 							<div class="form-group col-md-2">
 								<label for="">Nivel</label>
-								<input type="number" name="num_nivel_acceso" id="num_nivel_acceso" min="0" max="{{ isset($nivel_acceso) ? $nivel_acceso : Auth::user()->nivel_acceso }}" class="form-control" required value="{{isset($n) ? $n->val_nivel_acceso : ''}}">
+								<input type="number" name="num_nivel_acceso" id="num_nivel_acceso" min="0" max="{{ Auth::user()->nivel_acceso }}" class="form-control" required value="{{isset($n) ? $n->val_nivel_acceso : ''}}">
 							</div>
 						</div>
 						<div class="row">
@@ -70,7 +70,23 @@
 									@endforeach
 								</select>
 							</div>
-							<div class="col-md-5"></div>
+							<div class="form-group col-md-3 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
+								<label for="id_cliente" class="control-label">Cliente</label>
+								<select class="form-control" required id="id_cliente" name="id_cliente">
+									@foreach (lista_clientes() as $cl)
+										<option value="{{ $cl->id_cliente }}" {{ isset($n) && old('id_cliente', optional($n)->id_cliente) == $cl->id_cliente ? 'selected' : '' }}>
+											{{ $cl->nom_cliente }}
+										</option>
+									@endforeach
+								</select>
+								{!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
+							</div>
+							@if(isAdmin())
+							<div class="col-md-2 p-t-20 mt-1">
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_fijo"  id="mca_fijo" value="S" {{ isset($n) && $n->mca_fijo=='S'?'checked':'' }}> 
+								<label class="custom-control-label"   for="mca_fijo">Fijo</label>
+							</div>
+							@endif
 							<div class="col-md-1">
 								<button type="submit" class="btn btn-primary float-right    " style="margin-top: 25px">Guardar</button>
 							</div>
@@ -97,7 +113,9 @@
 			                    <tr>
 									<th>ID  </th>
 									<th style="width: 2%">Nivel</th>
+									@if(isAdmin())<th style="width: 2%">Fijo</th>@endif
 			                        <th>Pefil</th>
+									
 			                    </tr>
 			                </thead>
 			                <tbody>
@@ -105,11 +123,17 @@
 			                		<tr class="hover-this" data-perfil="{{$nivel->cod_nivel}}" data-nombre="{{$nivel->des_nivel_acceso}}"  data-num="{{$nivel->val_nivel_acceso}}">
 										<td style="width:4%">{{$nivel->cod_nivel}}</td>
 										<td>{{$nivel->val_nivel_acceso}}</td>
+										<td>
+											<input type="checkbox" class="form-control  magic-checkbox" readonly  value="S" {{ $nivel->mca_fijo=='S'?'checked':'' }}> 
+											<label class="custom-control-label" readonly  for="mca_fijo{{ $nivel->cod_nivel }}"></label>
+										</td>
 			                			<td style="position: relative;">{{$nivel->des_nivel_acceso}}
-                                            <div class="floating-like-gmail pull-right pt-3" role="group">
+                                            @if($nivel->mca_fijo=='S' and isAdmin())
+											<div class="floating-like-gmail pull-right pt-3" role="group">
                                                 <a href="#" class="btn btn-info btn-xs btn_editar pt-2  add-tooltip" title="Editar perfil"  data-perfil="{{$nivel->cod_nivel}}" data-nombre="{{$nivel->des_nivel_acceso}}"  data-num="{{$nivel->val_nivel_acceso}}"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
                                                 <a href="#eliminar-usuario-{{$nivel->cod_nivel}}" data-toggle="modal" data-perfil="{{$nivel->cod_nivel}}" data-nombre="{{$nivel->des_nivel_acceso}}"  data-num="{{$nivel->val_nivel_acceso}}" class="btn btn-danger  btn-xs add-tooltip" title="Borrar perfil" ><span class="fa fa-trash" aria-hidden="true"></span> Del</a>
                                             </div>
+											@endif
                                             <div class="modal fade" id="eliminar-usuario-{{$nivel->cod_nivel}}">
                                                 <div class="modal-dialog modal-sm">
                                                     <div class="modal-content"><div><img src="/img/logo_enaire_20.png" class="float-right"></div>

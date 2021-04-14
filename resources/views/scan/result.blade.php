@@ -45,6 +45,7 @@
 @php
     $puesto=$respuesta['puesto']??null;
     $cookie=Cookie::get('encuesta');
+    //dd($respuesta);
 @endphp
     
     <div class="row">
@@ -122,17 +123,15 @@
                         @if($respuesta['operativo']==1)
                             @switch($puesto->id_estado)
                                 @case(1)
-                                        
                                         @if(isset($respuesta['tiene_reserva'])&&$respuesta['tiene_reserva']!="")
-                                        <div class="text-center bg-pink pad-all">
-                                            <i class="fad fa-exclamation-circle blink_me fa-2x"></i> Este puesto esta reservadoVa en los horarios [{{ $respuesta['tiene_reserva'] }}] tengalo en cuenta porque tendrá que dejar el puesto libre en esos horarios
-                                        </div>
-                                        <br><br><br>
+                                            <div class="text-center bg-pink pad-all">
+                                                <i class="fad fa-exclamation-circle blink_me fa-2x"></i> Este puesto esta reservadoVa en los horarios [{{ $respuesta['tiene_reserva'] }}] tengalo en cuenta porque tendrá que dejar el puesto libre en esos horarios
+                                            </div>
+                                            <br><br><br>
                                         @endif
                                         <button class="btn btn-lg btn-success text-bold btn_estado" data-estado="2" data-id="{{$puesto->token}}">Voy a utilizar este puesto</button>
                                     @break
                                 @case(2)
-                                        
                                         @if((Auth::check() && $puesto->id_usuario_usando==Auth::user()->id) || (!Auth::check()&&$puesto->id_usuario_usando==null))
                                             @if($config_cliente->mca_limpieza=='S')
                                                 <button class="btn btn-lg btn-purple btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>

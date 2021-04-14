@@ -55,7 +55,6 @@ class HomeController extends Controller
 
     }
 
-
     public function getpuesto($puesto){ 
         $p=DB::table('puestos')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -227,6 +226,12 @@ class HomeController extends Controller
                 ->get();
 
             if(!$asignados_ami->isEmpty()){
+                if ($p->id_estado==1){
+                    $enc_toca=(isset($encuesta->val_momento) && ($encuesta->val_momento=="A" || $encuesta->val_momento=="0"))?$encuesta->id_encuesta:0;
+                } else {
+                    $enc_toca=(isset($encuesta->val_momento) && ($encuesta->val_momento=="D" || $encuesta->val_momento=="0"))?$encuesta->id_encuesta:0;
+                }
+                    
                 $respuesta=[
                     'mensaje'=>"Hola ".Auth::user()->name.' este es su puesto asignado para hoy ',
                     'icono' => '<i class="fad fa-user"></i>',
@@ -234,7 +239,7 @@ class HomeController extends Controller
                     'puesto'=>$p,
                     'disponibles'=>[],
                     'operativo' => 1,
-                    'encuesta'=>(isset($encuesta->val_momento) && $encuesta->val_momento=="A")?$encuesta->id_encuesta:0,
+                    'encuesta'=>$enc_toca,
                 ];
 
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));

@@ -472,6 +472,7 @@ class HomeController extends Controller
                  'id_estado'=>$estado,
                  'fec_ult_estado'=>Carbon::now(),
                  'id_usuario_usando'=>$estado==1?null:$id_usuario,
+                 'fec_liberacion_auto'=>Carbon::now()->endOfDay(),
              ]);
          }
 

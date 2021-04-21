@@ -123,10 +123,12 @@
 			                		<tr class="hover-this" data-perfil="{{$nivel->cod_nivel}}" data-nombre="{{$nivel->des_nivel_acceso}}"  data-num="{{$nivel->val_nivel_acceso}}">
 										<td style="width:4%">{{$nivel->cod_nivel}}</td>
 										<td>{{$nivel->val_nivel_acceso}}</td>
+										@if(isAdmin())
 										<td>
 											<input type="checkbox" class="form-control  magic-checkbox" readonly  value="S" {{ $nivel->mca_fijo=='S'?'checked':'' }}> 
 											<label class="custom-control-label" readonly  for="mca_fijo{{ $nivel->cod_nivel }}"></label>
 										</td>
+										@endif
 			                			<td style="position: relative;">{{$nivel->des_nivel_acceso}}
                                             @if($nivel->mca_fijo=='S' and isAdmin())
 											<div class="floating-like-gmail pull-right pt-3" role="group">

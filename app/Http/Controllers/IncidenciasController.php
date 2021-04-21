@@ -67,7 +67,7 @@ class IncidenciasController extends Controller
     }
 
     
-    //LISTADO DE INCIDENCIAS
+    //BUSCAR INCIDENCIAS
     public function search(Request $r){
         $f = explode(' - ',$r->fechas);
         $f1 = adaptar_fecha($f[0]);
@@ -202,6 +202,269 @@ class IncidenciasController extends Controller
         return view('incidencias.fill_tabla_incidencias',compact('incidencias','f1','f2','puestos','r'));
     }
 
+    //USUARIOS ABRIR INCIDENCIAS
+    public function nueva_incidencia($puesto){
+        $referer = request()->headers->get('referer');
+        if(strpos($referer,'/puesto/')){
+            $referer='scan';
+        } else {
+            $referer='incidencias';
+        }
+
+        if(strlen($puesto)>10){  //Es un token
+            $puesto=DB::table('puestos')
+                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+                ->where('token',$puesto)
+                ->first();
+        } else { //Es un id
+            $puesto=DB::table('puestos')
+                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+                ->where('id_puesto',$puesto)
+                ->first();
+        }
+        if(!isset($puesto)){
+            return view('scan.puesto_no_encontrado',compact('puesto'));    
+        }
+        validar_acceso_tabla($puesto->id_puesto,'puestos');
+        $config=DB::table('config_clientes')->where('id_cliente',$puesto->id_cliente)->first();
+        $tipos=DB::table('incidencias_tipos')
+            ->join('clientes','incidencias_tipos.id_cliente','clientes.id_cliente')
+            ->where(function($q) use($puesto){
+                if (!isAdmin()) {
+                    $q->where('incidencias_tipos.id_cliente',$puesto->id_cliente);
+                    $q->orwhere('incidencias_tipos.mca_fijo','S');
+                }
+                })
+            ->where(function($q) use($puesto){
+                $q->wherenull('list_tipo_puesto');
+                $q->orwhereraw('FIND_IN_SET('.$puesto->id_tipo_puesto.', list_tipo_puesto) <> 0');
+            })
+            ->orderby('mca_fijo')
+            ->orderby('nom_cliente')
+            ->get();
+        return view('incidencias.nueva_incidencia',compact('puesto','tipos','referer','config'));
+    }
+
+    /**
+     * Get the request's data from the request.
+     *
+     * @param Illuminate\Http\Request\Request $request
+     * @return array
+     */
+    protected function getDataincidencia(Request $request)
+    {
+        $rules = [
+            'des_incidencia' => 'nullable|string|min:1|max:500',
+            'txt_incidencia' => 'nullable|string|min:1|max:65000',
+            'img_attach1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:14096',
+            'img_attach2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:14096',
+            'id_puesto'=> 'required',
+            'img1'=>'nullable',
+            'img2'=>'nullable',
+        ];
+        $data = $request->validate($rules);
+        return $data;
+    }
+    
+    public function save(Request $r){
+        $data=$this->getDataincidencia($r);
+        $puesto=puestos::find($r->id_puesto);
+        $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
+        try{    
+            for ($i=0; $i <3 ; $i++) { 
+                $var="img".$i;
+                $$var='';
+                if ($r->hasFile('img_attach'.$i)) {
+                    
+                    $file = $r->file('img_attach'.$i);
+                    $path = config('app.ruta_public').'/uploads/incidencias/'.$puesto->id_cliente;
+                    $path_local = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
+
+                        if(!File::exists($path_local)) {
+                            File::makeDirectory($path_local);
+                        }
+
+                    $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+                    // $img = Image::make($file);
+                    // $img->resize(1000, null, function ($constraint) {
+                    //     $constraint->aspectRatio();
+                    // })->save($path.'/'.$$var);
+                    
+                    Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
+                    $file->move($path_local,$$var);
+                }
+                $data[$var]=$$var;
+            }
+            $inc=new incidencias;
+            $inc->des_incidencia=$data['des_incidencia']??null;
+            $inc->txt_incidencia=$data['txt_incidencia']??null;
+            $inc->id_cliente=$puesto->id_cliente;
+            $inc->id_usuario_apertura=Auth::user()->id;
+            $inc->fec_apertura=Carbon::now();
+            $inc->id_tipo_incidencia=$r->id_tipo_incidencia;
+            $inc->id_puesto=$puesto->id_puesto;
+            $inc->img_attach1=$img1;
+            $inc->img_attach2=$img2;
+            $inc->save();
+
+            //Marcamos el puesto como chungo
+            $puesto->mca_incidencia='S';
+            $puesto->save();
+            if($r->referer=='incidencias'){
+                $url_vuelta='incidencias';
+            } else {
+                $url_vuelta='/';
+            }
+            try{
+                $this->post_procesado_incidencia($inc);
+                savebitacora('Incidencia de tipo '.$tipo->des_tipo_incidencia. ' '.$r->des_incidencia.' creada por '.Auth::user()->name,"Incidencias","save","OK");
+                return [
+                    'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
+                    'message' => "Incidencia de tipo ".$tipo->des_tipo_incidencia.' creada. Muchas gracias',
+                    'url' => url($url_vuelta)
+                ];
+            } catch(\Exception $exception){
+                savebitacora('ERROR: Ocurrio un error en el postprocesado de incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(). ' La incidencia se ha registrado correctamente pero no se ha podido procesar la accion de notificacion programada' ,"Incidencias","save","ERROR");
+                return [
+                    'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
+                    'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
+                    'url' => url($url_vuelta)
+                ];
+            }
+           
+       
+            
+        } catch (Exception $exception) {
+
+            savebitacora('ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","save","ERROR");
+            return [
+                'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
+                'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+        } 
+    }
+
+    public function add_accion(Request $r){
+        $data=[];
+        $incidencia=incidencias::find($r->id_incidencia);
+        $tipo=incidencias_tipos::find($incidencia->id_tipo_incidencia);
+        try{    
+            for ($i=1; $i <3 ; $i++) { 
+                $var="img".$i;
+                $$var='';
+                if ($r->hasFile('img_attach'.$i)) {
+                    
+                    $file = $r->file('img_attach'.$i);
+                    $path = config('app.ruta_public').'/uploads/incidencias/'.$incidencia->id_cliente;
+                    $path_local = public_path().'/uploads/incidencias/'.$incidencia->id_cliente;
+
+                    if(!File::exists($path_local)) {
+                        File::makeDirectory($path_local);
+                    }
+                    $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+                    
+                    Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
+                    $file->move($path_local,$$var);
+                }
+                $data[$var]=$$var;
+            }
+            $acciones=incidencias_acciones::where('id_incidencia',$r->id_incidencia);
+            if($acciones){
+                $cuenta=$acciones->count()+1;
+            } else {
+                $cuenta=1;
+            }
+           
+            //Vamos a insertar
+            $accion=new incidencias_acciones;
+            $accion->id_incidencia=$incidencia->id_incidencia;
+            $accion->num_accion=$cuenta;
+            $accion->des_accion=$r->des_accion;
+            $accion->fec_accion=Carbon::now();
+            $accion->id_usuario=Auth::user()->id;
+            $accion->img_attach1=isset($data['img1'])?$data['img1']:null;
+            $accion->img_attach2=isset($data['img2'])?$data['img2']:null;
+            $accion->save();
+            savebitacora("Añadida accion para la incidencia ".$r->id_incidencia,"Incidencias","add_accion","OK");
+            return [
+                'title' => "Añadir accion a la incidencia",
+                'message' => "Añadida accion para la incidencia ".$r->id_incidencia,
+                //'url' => url($url_vuelta)
+            ];
+
+        } catch (\Exception $e) {
+
+            savebitacora('ERROR: Ocurrio un error añadiendo la accion '.$e->getMessage() ,"Incidencias","add_accion","ERROR");
+            return [
+                'title' => "Añadir accion",
+                'error' => 'ERROR: Ocurrio un error añadiendo la accion '.$e->getMessage(),
+                //'url' => url('sections')
+            ];
+        } 
+    }
+
+    //PROCESADO DE INCIDENCIAS->ENVIARLA A TERCEROS SISTEMAS
+
+    public function post_procesado_incidencia($inc){
+        $tipo=incidencias_tipos::find($inc->id_tipo_incidencia);
+        $usuario_abriente=users::find($inc->id_usuario_apertura);
+        $puesto=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('id_puesto',$inc->id_puesto)
+            ->first();
+        switch ($tipo->tip_metodo) {
+            case 'S':  //Mandar SMS
+               
+                break;
+            case 'M':  //Mandar e-mail
+                $to_email = $tipo->txt_destinos;
+                Mail::send('emails.mail_incidencia', ['inc'=>$inc], function($message) use ($tipo, $to_email, $inc, $puesto) {
+                    if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                        $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                    } else {
+                        $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                    }
+                    $message->from(config('mail.from.address'),config('mail.from.name'));
+                    if($inc->img_attach1)
+                        $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+                    if($inc->img_attach2)
+                        $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+                });
+                break;
+            case 'P': //HTTP Post
+                
+                break;
+            case 'G': //HTTP Get
+                
+                break;
+            case 'L': //Spotlinker
+                
+                break;
+                                                    
+            default:
+                # code...
+                break;
+        }
+        //Enviamos mail al uusario abriente
+        Mail::send('emails.mail_incidencia', ['inc'=>$inc], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
+            if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+            } else {
+                $message->to(explode(';',$usuario_abriente->email), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+            }
+            $message->from(config('mail.from.address'),config('mail.from.name'));
+            if($inc->img_attach1)
+                $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+            if($inc->img_attach2)
+                $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+        });
+
+    }
+
     //FORMULARIO DE CIERRE DE INCIDENCIA
     public function form_cierre($id){
         validar_acceso_tabla($id,'incidencias');
@@ -210,7 +473,6 @@ class IncidenciasController extends Controller
             ->get();
         return view('incidencias.fill-form-cerrar',compact('id','causas_cierre'));
     }
-
 
     //FORMULARIO DE AÑADIR NUEVA ACCIOM
     public function form_accion($id){
@@ -588,268 +850,5 @@ class IncidenciasController extends Controller
         }
     }
 
-    //USUARIOS ABRIR INCIDENCIAS
-    public function nueva_incidencia($puesto){
-        $referer = request()->headers->get('referer');
-        if(strpos($referer,'/puesto/')){
-            $referer='scan';
-        } else {
-            $referer='incidencias';
-        }
-
-        if(strlen($puesto)>10){  //Es un token
-            $puesto=DB::table('puestos')
-                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-                ->where('token',$puesto)
-                ->first();
-        } else { //Es un id
-            $puesto=DB::table('puestos')
-                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-                ->where('id_puesto',$puesto)
-                ->first();
-        }
-        if(!isset($puesto)){
-            return view('scan.puesto_no_encontrado',compact('puesto'));    
-        }
-        validar_acceso_tabla($puesto->id_puesto,'puestos');
-        $config=DB::table('config_clientes')->where('id_cliente',$puesto->id_cliente)->first();
-        $tipos=DB::table('incidencias_tipos')
-            ->join('clientes','incidencias_tipos.id_cliente','clientes.id_cliente')
-            ->where(function($q) use($puesto){
-                if (!isAdmin()) {
-                    $q->where('incidencias_tipos.id_cliente',$puesto->id_cliente);
-                    $q->orwhere('incidencias_tipos.mca_fijo','S');
-                }
-                })
-            ->where(function($q) use($puesto){
-                $q->wherenull('list_tipo_puesto');
-                $q->orwhereraw('FIND_IN_SET('.$puesto->id_tipo_puesto.', list_tipo_puesto) <> 0');
-            })
-            ->orderby('mca_fijo')
-            ->orderby('nom_cliente')
-            ->get();
-        return view('incidencias.nueva_incidencia',compact('puesto','tipos','referer','config'));
-    }
-
     
-    /**
-     * Get the request's data from the request.
-     *
-     * @param Illuminate\Http\Request\Request $request
-     * @return array
-     */
-    protected function getDataincidencia(Request $request)
-    {
-        $rules = [
-            'des_incidencia' => 'nullable|string|min:1|max:500',
-            'txt_incidencia' => 'nullable|string|min:1|max:65000',
-            'img_attach1' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:14096',
-            'img_attach2' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,mp4,avi,mpg|max:14096',
-            'id_puesto'=> 'required',
-            'img1'=>'nullable',
-            'img2'=>'nullable',
-        ];
-        $data = $request->validate($rules);
-        return $data;
-    }
-    
-    public function save(Request $r){
-        $data=$this->getDataincidencia($r);
-        $puesto=puestos::find($r->id_puesto);
-        $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
-        try{    
-            for ($i=0; $i <3 ; $i++) { 
-                $var="img".$i;
-                $$var='';
-                if ($r->hasFile('img_attach'.$i)) {
-                    
-                    $file = $r->file('img_attach'.$i);
-                    $path = config('app.ruta_public').'/uploads/incidencias/'.$puesto->id_cliente;
-                    $path_local = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
-
-                        if(!File::exists($path_local)) {
-                            File::makeDirectory($path_local);
-                        }
-
-                    $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                    // $img = Image::make($file);
-                    // $img->resize(1000, null, function ($constraint) {
-                    //     $constraint->aspectRatio();
-                    // })->save($path.'/'.$$var);
-                    
-                    Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
-                    $file->move($path_local,$$var);
-                }
-                $data[$var]=$$var;
-            }
-            $inc=new incidencias;
-            $inc->des_incidencia=$data['des_incidencia']??null;
-            $inc->txt_incidencia=$data['txt_incidencia']??null;
-            $inc->id_cliente=$puesto->id_cliente;
-            $inc->id_usuario_apertura=Auth::user()->id;
-            $inc->fec_apertura=Carbon::now();
-            $inc->id_tipo_incidencia=$r->id_tipo_incidencia;
-            $inc->id_puesto=$puesto->id_puesto;
-            $inc->img_attach1=$img1;
-            $inc->img_attach2=$img2;
-            $inc->save();
-
-            //Marcamos el puesto como chungo
-            $puesto->mca_incidencia='S';
-            $puesto->save();
-            if($r->referer=='incidencias'){
-                $url_vuelta='incidencias';
-            } else {
-                $url_vuelta='/';
-            }
-            try{
-                $this->post_procesado_incidencia($inc);
-                savebitacora('Incidencia de tipo '.$tipo->des_tipo_incidencia. ' '.$r->des_incidencia.' creada por '.Auth::user()->name,"Incidencias","save","OK");
-                return [
-                    'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
-                    'message' => "Incidencia de tipo ".$tipo->des_tipo_incidencia.' creada. Muchas gracias',
-                    'url' => url($url_vuelta)
-                ];
-            } catch(\Exception $exception){
-                savebitacora('ERROR: Ocurrio un error en el postprocesado de incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(). ' La incidencia se ha registrado correctamente pero no se ha podido procesar la accion de notificacion programada' ,"Incidencias","save","ERROR");
-                return [
-                    'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
-                    'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
-                    'url' => url($url_vuelta)
-                ];
-            }
-           
-       
-            
-        } catch (Exception $exception) {
-
-            savebitacora('ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","save","ERROR");
-            return [
-                'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
-                'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
-                //'url' => url('sections')
-            ];
-        } 
-    }
-
-    //PROCESADO DE INCIDENCIAS->ENVIARLA A TERCEROS SISTEMAS
-
-    public function post_procesado_incidencia($inc){
-        $tipo=incidencias_tipos::find($inc->id_tipo_incidencia);
-        $usuario_abriente=users::find($inc->id_usuario_apertura);
-        $puesto=DB::table('puestos')
-            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
-            ->join('plantas','puestos.id_planta','plantas.id_planta')
-            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
-            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-            ->where('id_puesto',$inc->id_puesto)
-            ->first();
-        switch ($tipo->tip_metodo) {
-            case 'S':  //Mandar SMS
-               
-                break;
-            case 'M':  //Mandar e-mail
-                $to_email = $tipo->txt_destinos;
-                Mail::send('emails.mail_incidencia', ['inc'=>$inc], function($message) use ($tipo, $to_email, $inc, $puesto) {
-                    if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
-                        $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-                    } else {
-                        $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-                    }
-                    $message->from(config('mail.from.address'),config('mail.from.name'));
-                    if($inc->img_attach1)
-                        $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
-                    if($inc->img_attach2)
-                        $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
-                });
-                break;
-            case 'P': //HTTP Post
-                
-                break;
-            case 'G': //HTTP Get
-                
-                break;
-            case 'L': //Spotlinker
-                
-                break;
-                                                    
-            default:
-                # code...
-                break;
-        }
-        //Enviamos mail al uusario abriente
-        Mail::send('emails.mail_incidencia', ['inc'=>$inc], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
-            if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
-                $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-            } else {
-                $message->to(explode(';',$usuario_abriente->email), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-            }
-            $message->from(config('mail.from.address'),config('mail.from.name'));
-            if($inc->img_attach1)
-                $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
-            if($inc->img_attach2)
-                $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
-        });
-
-    }
-
-
-    public function add_accion(Request $r){
-        $data=[];
-        $incidencia=incidencias::find($r->id_incidencia);
-        $tipo=incidencias_tipos::find($incidencia->id_tipo_incidencia);
-        try{    
-            for ($i=1; $i <3 ; $i++) { 
-                $var="img".$i;
-                $$var='';
-                if ($r->hasFile('img_attach'.$i)) {
-                    
-                    $file = $r->file('img_attach'.$i);
-                    $path = config('app.ruta_public').'/uploads/incidencias/'.$incidencia->id_cliente;
-                    $path_local = public_path().'/uploads/incidencias/'.$incidencia->id_cliente;
-
-                    if(!File::exists($path_local)) {
-                        File::makeDirectory($path_local);
-                    }
-                    $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                    
-                    Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
-                    $file->move($path_local,$$var);
-                }
-                $data[$var]=$$var;
-            }
-            $acciones=incidencias_acciones::where('id_incidencia',$r->id_incidencia);
-            if($acciones){
-                $cuenta=$acciones->count()+1;
-            } else {
-                $cuenta=1;
-            }
-           
-            //Vamos a insertar
-            $accion=new incidencias_acciones;
-            $accion->id_incidencia=$incidencia->id_incidencia;
-            $accion->num_accion=$cuenta;
-            $accion->des_accion=$r->des_accion;
-            $accion->fec_accion=Carbon::now();
-            $accion->id_usuario=Auth::user()->id;
-            $accion->img_attach1=isset($data['img1'])?$data['img1']:null;
-            $accion->img_attach2=isset($data['img2'])?$data['img2']:null;
-            $accion->save();
-            savebitacora("Añadida accion para la incidencia ".$r->id_incidencia,"Incidencias","add_accion","OK");
-            return [
-                'title' => "Añadir accion a la incidencia",
-                'message' => "Añadida accion para la incidencia ".$r->id_incidencia,
-                //'url' => url($url_vuelta)
-            ];
-
-        } catch (\Exception $e) {
-
-            savebitacora('ERROR: Ocurrio un error añadiendo la accion '.$e->getMessage() ,"Incidencias","add_accion","ERROR");
-            return [
-                'title' => "Añadir accion",
-                'error' => 'ERROR: Ocurrio un error añadiendo la accion '.$e->getMessage(),
-                //'url' => url('sections')
-            ];
-        } 
-    }
 }

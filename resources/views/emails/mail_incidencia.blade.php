@@ -23,7 +23,7 @@
     </div>
 </div>
 <div class="row  text-center">
-    El usuario {{ $usuario->name }} ( <a href="mailto:{{ $usuario->email }}"> {{ $usuario->email }} </a> ) ha creado una incidencia el {!! beauty_fecha($inc->fec_apertura) !!} en el puesto {{ $puesto->des_puesto }}, edificio {{ $puesto->des_edificio  }} | {{ $puesto->des_planta }} 
+    El usuario {{ $usuario->name }} ( <a href="mailto:{{ $usuario->email }}"> {{ $usuario->email }} </a> ) ha creado una incidencia de tipo <b>{{ $tipo->des_tipo_incidencia }}</b> el {!! beauty_fecha($inc->fec_apertura) !!} en el puesto {{ $puesto->des_puesto }}, edificio {{ $puesto->des_edificio  }} | {{ $puesto->des_planta }} 
 </div>
 <div class="row  text-center" style="margin-top: 10px; font-weight: bold">
     {{ $inc->des_incidencia }}

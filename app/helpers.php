@@ -5,6 +5,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Models\users;
 use App\Models\config_clientes;
+use App\Models\clientes;
 use Jenssegers\Agent\Agent;
 
 function stripAccents($str) {
@@ -128,7 +129,7 @@ function isxml($xmlstr){
     }
 }
 
-//Añadir ceros por la izquierda
+//Añadir ceros por la izquierda\
 function lz($num)
 {
     return (strlen($num) < 2) ? "0{$num}" : $num;
@@ -347,8 +348,8 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1){
                 //No hacer nada
             break;
             case 1: //Mail
-                
-                \Mail::send($plantilla, ['user' => $user,'body'=>$body], function ($m) use ($user,$subject) {
+                $cliente=clientes::find($user->id_cliente);
+                \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente], function ($m) use ($user,$subject) {
                     if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
                         $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
                     } else {

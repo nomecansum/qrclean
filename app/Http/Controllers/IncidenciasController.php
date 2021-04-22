@@ -422,7 +422,7 @@ class IncidenciasController extends Controller
                 break;
             case 'M':  //Mandar e-mail
                 $to_email = $tipo->txt_destinos;
-                Mail::send('emails.mail_incidencia', ['inc'=>$inc], function($message) use ($tipo, $to_email, $inc, $puesto) {
+                Mail::send('emails.mail_incidencia', ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto) {
                     if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
                         $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                     } else {
@@ -450,7 +450,7 @@ class IncidenciasController extends Controller
                 break;
         }
         //Enviamos mail al uusario abriente
-        Mail::send('emails.mail_incidencia', ['inc'=>$inc], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
+        Mail::send('emails.mail_incidencia', ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
             if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
                 $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
             } else {

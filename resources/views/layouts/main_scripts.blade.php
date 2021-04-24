@@ -388,7 +388,7 @@
             block_espere("Renderizando datos...");
 
             if (tipo == 'pantalla') {
-                $('body').scrollTo('#myFilter');
+                //$('body').scrollTo('#myFilter');
                 $('#divfiltro').toggle();
                 $('#myFilter').html(data);
             }
@@ -542,7 +542,6 @@
             if (tipo == 'pantalla') {
                 $('#myFilter').html(data);
                 $('#divfiltro').toggle();
-                $('#myFilter').html(data);
             }
             fin_espere();
 

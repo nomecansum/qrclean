@@ -74,6 +74,7 @@
         </div>
         <div class="col-md-3"></div>
     </div>
+
     @if($respuesta['encuesta']!=0 && (!isset($cookie) || (isset($cookie) && $cookie!=$respuesta['encuesta'])))
         @php
             $encuesta=DB::table('encuestas')->where('id_encuesta',$respuesta['encuesta'])->first();  
@@ -150,6 +151,7 @@
                             @endphp
                         @endif
                     </div>
+                        
                 </div>
                 @if(Auth::check()) 
                 {{--  $puesto->mca_incidencia=='N' &&   --}}
@@ -230,7 +232,11 @@
             @endif
         </div>
     @endif
-
+    <div class="row mt-3" id="boton_home" style="display:none">
+        <div class="col-md-12 text-center">
+            <a class="btn btn-lg btn-mint text-2x rounded btn_home" href="{{ url('/') }} "><i class="fa fa-home"></i> Inicio</a>
+        </div>
+    </div>
 @endsection
 
 
@@ -250,6 +256,12 @@
                     @if(isset($encuesta->val_momento) && $encuesta->val_momento=='D')
                         $('#div_encuesta').show();
                     @endif
+                    
+                    if(data.mostrar_boton_home==1){
+                        $('#boton_home').show();
+                        animateCSS('#boton_home','rubberBand');
+                        console.log('mostrar home');
+                    }
                 } else {
                     $('#div_txt_mensaje').removeClass('bg-info');
                     $('#div_txt_mensaje').addClass('bg-danger');

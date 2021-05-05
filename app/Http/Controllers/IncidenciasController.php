@@ -305,6 +305,7 @@ class IncidenciasController extends Controller
             $inc->id_puesto=$puesto->id_puesto;
             $inc->img_attach1=$img1;
             $inc->img_attach2=$img2;
+            $inc->id_estado_vuelta_puesto=$puesto->id_estado;
             $inc->save();
 
             //Marcamos el puesto como chungo
@@ -575,6 +576,7 @@ class IncidenciasController extends Controller
             $inc->save();
             $puesto=puestos::find($inc->id_puesto);
             $puesto->mca_incidencia='N';
+            $puesto->id_estado=$inc->id_estado_vuelta_puesto??1;
             $puesto->save();
             
             savebitacora('Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' cerrada',"Incidencias","cerrar","OK");
@@ -611,17 +613,20 @@ class IncidenciasController extends Controller
     public function reabrir(Request $r){
         try {
             validar_acceso_tabla($r->id_incidencia,'incidencias');
+            $puesto=puestos::find($inc->id_puesto);
+            $puesto->mca_incidencia='S';
+            $puesto->save();
+
             $inc=incidencias::find($r->id_incidencia);
             $inc->id_causa_cierre=null;
             $inc->comentario_cierre=null;
             $inc->fec_cierre=null;
             $inc->id_usuario_cierre=null;
+            $inc->id_estado_vuelta_puesto=$puesto->id_estado;
             $inc->save();
             savebitacora('Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' reabierta',"Incidencias","reabrir","OK");
             //Ponemos el estado del puesto a operativo
-            $puesto=puestos::find($inc->id_puesto);
-            $puesto->mca_incidencia='S';
-            $puesto->save();
+            
             return [
                 'title' => "Reabrir incidencia",
                 'message' => 'Incidencia ['.$inc->id_incidencia.'] '.$inc->des_incidencia.' reabierta',

@@ -33,19 +33,21 @@ class incidencias extends Model
      * @var array
      */
     protected $fillable = [
-                  'comentario_cierre',
                   'des_incidencia',
-                  'fec_apertura',
-                  'fec_cierre',
-                  'id_causa_cierre',
-                  'id_cliente',
-                  'id_puesto',
-                  'id_tipo_incidencia',
+                  'txt_incidencia',
                   'id_usuario_apertura',
                   'id_usuario_cierre',
+                  'fec_apertura',
+                  'fec_cierre',
+                  'id_tipo_incidencia',
                   'img_attach1',
                   'img_attach2',
-                  'txt_incidencia'
+                  'id_cliente',
+                  'id_puesto',
+                  'id_causa_cierre',
+                  'comentario_cierre',
+                  'id_estado',
+                  'id_estado_vuelta_puesto'
               ];
 
     /**
@@ -63,13 +65,13 @@ class incidencias extends Model
     protected $casts = [];
     
     /**
-     * Get the Cliente for this model.
+     * Get the User for this model.
      *
-     * @return App\Models\Cliente
+     * @return App\Models\User
      */
-    public function Cliente()
+    public function User()
     {
-        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+        return $this->belongsTo('App\Models\User','id_usuario_cierre','id');
     }
 
     /**
@@ -83,13 +85,33 @@ class incidencias extends Model
     }
 
     /**
-     * Get the User for this model.
+     * Get the Cliente for this model.
      *
-     * @return App\Models\User
+     * @return App\Models\Cliente
      */
-    public function User()
+    public function Cliente()
     {
-        return $this->belongsTo('App\Models\User','id_usuario_cierre','id');
+        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the EstadosIncidencia for this model.
+     *
+     * @return App\Models\EstadosIncidencia
+     */
+    public function EstadosIncidencia()
+    {
+        return $this->belongsTo('App\Models\EstadosIncidencia','id_estado','id_estado');
+    }
+
+    /**
+     * Get the incidenciasAcciones for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidenciasAcciones()
+    {
+        return $this->hasMany('App\Models\IncidenciasAccione','id_incidencia','id_incidencia');
     }
 
 

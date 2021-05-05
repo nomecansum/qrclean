@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+       // $this->middleware('auth');
     }
     /**
      * Show the application dashboard.
@@ -572,6 +572,7 @@ class HomeController extends Controller
                         'color'=>'success',
                         'label'=>$e->des_estado,
                         'id'=>$p->id_puesto,
+                        'mostrar_boton_home'=>1,
                     ];
                     break;
                 case 2:
@@ -585,6 +586,7 @@ class HomeController extends Controller
                         'color'=>'danger',
                         'label'=>$e->des_estado,
                         'id'=>$p->id_puesto,
+                        'mostrar_boton_home'=>1,
                     ];
                     break;
                 case 3:
@@ -594,6 +596,7 @@ class HomeController extends Controller
                         'color'=>'info',
                         'label'=>$e->des_estado,
                         'id'=>$p->id_puesto,
+                        'mostrar_boton_home'=>1,
                     ];
                     break;
                 case 4:

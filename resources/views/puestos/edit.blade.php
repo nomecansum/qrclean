@@ -52,8 +52,11 @@
                     @if(session('CL')['mca_reserva_horas']=='S')
                     <div class="form-group col-md-2">
                         <label for="max_horas_reservar">Max reserva(horas)</label>
-                        <input type="number" min="1" max="999999" name="max_horas_reservar" id="max_horas_reservar" class="form-control" value="{{$puesto->max_horas_reservar}}">
+                        <input type="text" autocomplete="off" name="max_horas_reservar" id="max_horas_reservar"   class="form-control hourMask" value="{{isset($puesto->max_horas_reservar)?decimal_to_time($puesto->max_horas_reservar):'23:59'}}" />
+                       {{--  <input type="number" min="1" max="999999" name="max_horas_reservar" id="max_horas_reservar" class="form-control" value="{{$puesto->max_horas_reservar}}">  --}}
+                        
                     </div>
+                    
                     @endif
                 </div>
                 <div class="row">
@@ -206,6 +209,8 @@
     </div>
  </div>
  <script src="{{ asset('plugins/typeahead-js/main.js') }}"></script>
+ 
+
  <script>
      
     var tipos_puestos_sala=[{{ implode(',', config('app.tipo_puesto_sala')) }}];
@@ -360,6 +365,9 @@
 
     $('.fc-event-title').css('font-size','10px');
     $('.fc-event-title').css('font-weight','normal');
+    
+
+    Inputmask({regex:"^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$"}).mask('.hourMask');
     
 
  </script>

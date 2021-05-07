@@ -318,6 +318,11 @@ class ReservasController extends Controller
         $tipo_vista=$r->tipo;
         $id_planta=$r->id_planta;
 
+        //Actualizadmos la config del usaurio para mostrarle siempre ese tipo de vista
+        $u=users::find(Auth::user()->id);
+        $u->val_vista_puestos=$r->tipo;
+        $u->save();
+
         return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','plantas_usuario','tipo_vista','id_planta'));
     }
 

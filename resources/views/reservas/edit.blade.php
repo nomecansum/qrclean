@@ -65,7 +65,7 @@
                     <input type="hidden" name="id_cliente" value="{{ $reserva->id_cliente }}">
                     <input type="hidden" id="id_puesto" name="id_puesto" value="">
                     <input type="hidden" id="des_puesto_form" name="des_puesto" value="">
-                    <input type="hidden" name="tipo_vista" id="tipo_vista" value="{{ session('CL')['modo_visualizacion_reservas']=='P'?'comprobar_plano':'comprobar' }}">
+                    <input type="hidden" name="tipo_vista" id="tipo_vista" value="{{ Auth::user()->val_vista_puestos??'comprobar' }}">
                     <input type="hidden" name="hora_inicio" id="hora_inicio" value="00:00">
                     <input type="hidden" name="hora_fin" id="hora_fin" value="23:59">
                     {{csrf_field()}}
@@ -114,7 +114,7 @@
                 <div class="row mt-2">
                     @if(session('CL')['mca_reserva_horas']=='S')
                     <div class="form-group col-md-7">
-                        <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas</label>
+                        <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>]</label>
                         <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
                     </div>
                     @endif
@@ -322,12 +322,12 @@
 
 
         noUiSlider.create(r_def,{
-            start : [480, 1080],
+            start : [{{ config_cliente('min_hora_reservas') }}, {{ config_cliente('max_hora_reservas') }}],
             connect: true, 
             behaviour: 'tap-drag', 
-            step: 15,
+            step: 10,
             tooltips: true,
-            range : {'min': 0, 'max': 1439},
+            range : {'min': {{ config_cliente('min_hora_reservas') }}, 'max': {{ config_cliente('max_hora_reservas') }} },
             format:  wNumb({
                     decimals: 2,
                 mark: ":",
@@ -340,6 +340,7 @@
             console.log(values);
             $('#hora_inicio').val(values[0]);
             $('#hora_fin').val(values[1]);
+            $('#horas_rango').html(values[0]+' - '+values[1]);
             comprobar_puestos();
             // r_def_value.innerHTML = values[handle];
             // $('.texto_puesto').css('font-size',values[handle]+'vw');
@@ -350,6 +351,7 @@
         values=r_def.noUiSlider.get();
         $('#hora_inicio').val(values[0]);
         $('#hora_fin').val(values[1]);
+        $('#horas_rango').html(values[0]+' - '+values[1]);
     @endif
 
     $('.btn_del').click(function(){
@@ -380,5 +382,6 @@
         $('.flpuesto').removeClass('glow');
         $('#puesto'+$(this).data('puesto')).addClass('glow');
     })
-    
+
+
  </script>

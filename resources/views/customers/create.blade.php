@@ -206,6 +206,24 @@
 									</select>
 								</div>
 							</DIV>
+							<div class="row">
+								<div class="col-md-12 ml-2">
+									Rango de horas de reserva
+								</div>
+								<div class="col-md-2 ml-2">
+									<div class="form-group">
+										<label for="max_horas_reservar">Min</label>
+										<input type="text" autocomplete="off" name="min_hora_reservas" id="min_hora_reservas"   class="form-control hourMask" value="{{isset($config->min_hora_reservas)?decimal_to_time($config->min_hora_reservas/60):'00:00'}}" />						
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label for="max_horas_reservar">Max</label>
+										<input type="text" autocomplete="off" name="max_hora_reservas" id="max_hora_reservas"   class="form-control hourMask" value="{{isset($config->max_hora_reservas)?decimal_to_time($config->max_hora_reservas/60):'23:59'}}" />
+									</div>
+								</div>
+
+							</div>
 						</div>
 					</div>
 					<div id="demo-stk-lft-tab-3" class="tab-pane fade">
@@ -441,7 +459,9 @@
 		</div>
 	</div>
 </form>
-
+	<script src="{{ asset('/plugins/inputmask/dist/inputmask.js') }}"></script>
+	<script src="{{ asset('/plugins/inputmask/dist/jquery.inputmask.js') }}"></script>
+	<script src="{{ asset('/plugins/inputmask/dist/bindings/inputmask.binding.js') }}"></script>
 	<script>
 		$('.form-ajax').submit(form_ajax_submit);
 
@@ -531,6 +551,8 @@
 			}
 			
 		})
+
+		Inputmask({regex:"^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$"}).mask('.hourMask');
 
 	
 	</script>

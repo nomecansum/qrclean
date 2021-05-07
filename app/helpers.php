@@ -251,6 +251,31 @@ function decimal_to_time($dec)
     }
 }
 
+function time_to_dec($time,$out='s'){
+    //Devuelve en segundos una fecha pasada en HH:mm:ss
+    try{
+        $time    = explode(':', $time);
+        $result = ($time[0] * 3600 + $time[1] * 60+ $time[2]);
+        switch ($out) {
+            case 's':
+                return $result;
+                break;
+            case 'm':
+                return $result/60;
+                break; 
+            case 'h':
+                return $result/3600;
+                break;
+            default:
+                return $result;
+                break;
+        }
+    } catch (\Exception $e){
+        return null;
+    }
+
+}
+
 ///Convertir fecha en español a mysql
 function adaptar_fecha($d){
     if(!isset($d)){

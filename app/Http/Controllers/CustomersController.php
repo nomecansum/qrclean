@@ -79,6 +79,8 @@ class CustomersController extends Controller
             $config= new config_clientes;
             $config->id_cliente=$c;
             
+            $r['min_hora_reservas']=time_to_dec($r->min_hora_reservas.':00','m');
+            $r['max_hora_reservas']=time_to_dec($r->max_hora_reservas.':00','m');
             $config->update($r->all());
             $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';
             $config->mca_limpieza=$r->mca_limpieza??'N';
@@ -124,7 +126,9 @@ class CustomersController extends Controller
             $c = $clsvc->actualizar($r);
             //Config de cliente
             $config=config_clientes::findorfail($r->id);
-
+            $r['min_hora_reservas']=time_to_dec($r->min_hora_reservas.':00','m');
+            $r['max_hora_reservas']=time_to_dec($r->max_hora_reservas.':00','m');
+            
             $config->update($r->all());
             $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';
             $config->mca_limpieza=$r->mca_limpieza??'N';

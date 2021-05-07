@@ -216,7 +216,7 @@
                             @if(session('CL')['mca_reserva_horas']=='S')
                                 <div class="form-group col-md-2">
                                     <label for="max_horas_reservar">Max reserva(horas)</label>
-                                    <input type="number" min="1" max="999999" name="max_horas_reservar" id="max_horas_reservar" class="form-control">
+                                    <input type="text" autocomplete="off" name="max_horas_reservar" id="max_horas_reservar"   class="form-control hourMask" />
                                 </div>
                             @endif
                         </div>
@@ -335,6 +335,9 @@
 {{--  <script src="{{ asset('plugins/fullcalendar/fullcalendar.min.js') }}"></script>  --}}
 <script src="{{ asset('plugins/fullcalendar/lib/main.min.js') }}"></script>
 <script src="{{ asset('plugins/fullcalendar/lib/locales/es.js') }}"></script>
+<script src="{{ asset('/plugins/inputmask/dist/inputmask.js') }}"></script>
+<script src="{{ asset('/plugins/inputmask/dist/jquery.inputmask.js') }}"></script>
+<script src="{{ asset('/plugins/inputmask/dist/bindings/inputmask.binding.js') }}"></script>
 
 <script>
 
@@ -603,6 +606,9 @@
     $('#modif_val_icono').click(function() {
         $('.modal').css('z-index', 1000);
     });
+
+
+    Inputmask({regex:"^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$"}).mask('.hourMask');
 
 </script>
 @endsection

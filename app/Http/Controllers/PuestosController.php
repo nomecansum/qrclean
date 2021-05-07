@@ -283,13 +283,16 @@ class PuestosController extends Controller
 
     public function update(Request $r){
         try{
-
+            
+            
             if($r->id_puesto==0){
                 $puesto=puestos::create($r->all());
             } else {
                 validar_acceso_tabla($r->id_puesto,"puestos");
                 $puesto=puestos::find($r->id_puesto);
+                $r['max_horas_reservar']=time_to_dec($r->max_horas_reservar.':00','h');
                 $puesto->update($r->all());
+
             }
             $puesto->mca_acceso_anonimo=$r->mca_acceso_anonimo??'N';
             $puesto->mca_reservar=$r->mca_reservar??'N';
@@ -917,7 +920,7 @@ class PuestosController extends Controller
                 $cosas.=" | Tipo de puesto: ".$r->id_tipo_puesto;
             }
             if($r->max_horas_reservar){
-                $valores["max_horas_reservar"]=$r->max_horas_reservar;
+                $valores["max_horas_reservar"]=time_to_dec($r->max_horas_reservar.':00','h');
                 $cosas.=" | Tiempo maximo de reserva: ".$r->max_horas_reservar;
             }
             if($r->id_perfil){

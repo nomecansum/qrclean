@@ -65,11 +65,6 @@
         "table-name": "tags_puestos"
     },
     {
-        "model-name": "users",
-        "resource-file": "users.json",
-        "table-name": "users"
-    },
-    {
         "model-name": "tareas_programadas",
         "resource-file": "tareas_programadas.json",
         "table-name": "tareas"
@@ -140,11 +135,6 @@
         "table-name": "salas"
     },
     {
-        "model-name": "config_clientes",
-        "resource-file": "config_clientes.json",
-        "table-name": "config_clientes"
-    },
-    {
         "model-name": "niveles_acceso",
         "resource-file": "niveles_accesos.json",
         "table-name": "niveles_acceso"
@@ -153,5 +143,15 @@
         "model-name": "incidencias",
         "resource-file": "incidencias.json",
         "table-name": "incidencias"
+    },
+    {
+        "model-name": "config_clientes",
+        "resource-file": "config_clientes.json",
+        "table-name": "config_clientes"
+    },
+    {
+        "model-name": "users",
+        "resource-file": "users.json",
+        "table-name": "users"
     }
 ]

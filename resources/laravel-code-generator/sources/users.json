@@ -757,9 +757,62 @@
             "api-key": "id_usuario_supervisor",
             "is-api-visible": true,
             "api-description": "The id usuario supervisor of the model."
+        },
+        {
+            "name": "val_vista_puestos",
+            "labels": "Val Vista Puestos",
+            "html-type": "select",
+            "css-class": "",
+            "options": {
+                "L": "L",
+                "M": "M",
+                "P": "P"
+            },
+            "html-value": null,
+            "validation": "nullable",
+            "is-on-index": true,
+            "is-on-show": true,
+            "is-on-form": true,
+            "data-type": "enum",
+            "data-type-params": [
+                1
+            ],
+            "data-value": "M",
+            "is-index": false,
+            "is-unique": false,
+            "is-primary": false,
+            "comment": null,
+            "is-nullable": true,
+            "is-header": false,
+            "is-unsigned": false,
+            "is-auto-increment": false,
+            "is-inline-options": false,
+            "is-date": false,
+            "date-format": "",
+            "cast-as": "",
+            "placeholder": "Enter val vista puestos here...",
+            "delimiter": "; ",
+            "range": [],
+            "foreign-relation": null,
+            "foreign-constraint": null,
+            "on-store": null,
+            "on-update": null,
+            "api-key": "val_vista_puestos",
+            "is-api-visible": true,
+            "api-description": "The val vista puestos of the model."
         }
     ],
     "relations": [
+        {
+            "name": "incidenciasAcciones",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\IncidenciasAccione",
+                "id_usuario",
+                "id"
+            ],
+            "field": "id_incidencia"
+        },
         {
             "name": "incidencias",
             "type": "hasMany",
@@ -768,7 +821,7 @@
                 "id_usuario_cierre",
                 "id"
             ],
-            "field": "comentario_cierre"
+            "field": "des_incidencia"
         },
         {
             "name": "incidencias",
@@ -778,17 +831,7 @@
                 "id_usuario_apertura",
                 "id"
             ],
-            "field": "comentario_cierre"
-        },
-        {
-            "name": "puestos",
-            "type": "hasMany",
-            "params": [
-                "App\\Models\\Puesto",
-                "id_usuario_usando",
-                "id"
-            ],
-            "field": "id_edificio"
+            "field": "des_incidencia"
         },
         {
             "name": "plantasUsuarios",
@@ -801,6 +844,16 @@
             "field": "id_usuario"
         },
         {
+            "name": "puestos",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\Puesto",
+                "id_usuario_usando",
+                "id"
+            ],
+            "field": "cod_puesto"
+        },
+        {
             "name": "puestosAsignados",
             "type": "hasMany",
             "params": [
@@ -808,7 +861,7 @@
                 "id_usuario",
                 "id"
             ],
-            "field": "id"
+            "field": "id_puesto"
         }
     ],
     "indexes": [],

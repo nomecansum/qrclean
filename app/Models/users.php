@@ -47,7 +47,8 @@ class users extends Model
                   'token_acceso',
                   'def_camera',
                   'email_expire_at',
-                  'id_usuario_supervisor'
+                  'id_usuario_supervisor',
+                  'val_vista_puestos'
               ];
 
     /**
@@ -65,6 +66,16 @@ class users extends Model
     protected $casts = [];
     
     /**
+     * Get the incidenciasAcciones for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidenciasAcciones()
+    {
+        return $this->hasMany('App\Models\IncidenciasAccione','id_usuario','id');
+    }
+
+    /**
      * Get the incidencias for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -75,16 +86,6 @@ class users extends Model
     }
 
     /**
-     * Get the puestos for this model.
-     *
-     * @return Illuminate\Database\Eloquent\Collection
-     */
-    public function puestos()
-    {
-        return $this->hasMany('App\Models\Puesto','id_usuario_usando','id');
-    }
-
-    /**
      * Get the plantasUsuarios for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -92,6 +93,16 @@ class users extends Model
     public function plantasUsuarios()
     {
         return $this->hasMany('App\Models\PlantasUsuario','id_usuario','id');
+    }
+
+    /**
+     * Get the puestos for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function puestos()
+    {
+        return $this->hasMany('App\Models\Puesto','id_usuario_usando','id');
     }
 
     /**

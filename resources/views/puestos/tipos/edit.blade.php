@@ -82,6 +82,13 @@
                         <input type="time" autocomplete="off" name="hora_liberar" id="hora_liberar" style="width: 120px"  class="form-control" value="{{$tipo->hora_liberar??config_cliente('hora_liberar_puestos',$tipo->id_cliente)}}" />
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="des_tipo_puesto" class="control-label">Observaciones</label>
+                        <input class="form-control" required name="observaciones" type="text" id="observaciones" value="{{ old('observaciones', optional($tipo)->observaciones) }}" maxlength="200" placeholder="Enter observaciones here...">
+                        
+                    </div>
+                </div>
                 
 
                 <div class="form-group">

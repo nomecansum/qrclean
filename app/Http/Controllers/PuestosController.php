@@ -537,7 +537,7 @@ class PuestosController extends Controller
             $p=puestos::find($puesto->id_puesto);
             $p->id_estado=$r->estado;
             $p->fec_ult_estado=Carbon::now();
-            if($r->estado=1){
+            if($r->estado==1){
                 $p->id_usuario_usando=null;
             }
             $p->save();

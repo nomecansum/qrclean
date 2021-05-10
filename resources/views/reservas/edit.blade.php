@@ -102,7 +102,7 @@
                         <label for="id_usuario">Tipo de puesto</label>
                         <select name="id_tipo_puesto" id="id_tipo_puesto" class="form-control">
                             @foreach($tipos as $t)
-                                <option value="{{ $t->id_tipo_puesto}}" {{ isset($reserva->id_tipo_puesto) && $reserva->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }}>{{ $t->des_tipo_puesto }}</option>
+                                <option value="{{ $t->id_tipo_puesto}}" {{ isset($reserva->id_tipo_puesto) && $reserva->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }} data-observaciones="{{ $t->observaciones }}">{{ $t->des_tipo_puesto }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -114,7 +114,7 @@
                 <div class="row mt-2">
                     @if(session('CL')['mca_reserva_horas']=='S')
                     <div class="form-group col-md-7">
-                        <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>]</label>
+                        <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>] <span id="obs" class="text-info"></span></label>
                         <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
                     </div>
                     @endif
@@ -168,6 +168,13 @@
     changeCheckbox.onclick = function() {
         comprobar_puestos();
     };
+
+    $('#id_tipo_puesto').change(function(){
+        $('#obs').html();
+        var selected = $(this).find('option:selected');
+        $('#obs').html("<i class='fa fa-info-circle'></i> "+selected.data('observaciones'));
+        //console.log(selected.data('observaciones'));
+    })
 
     $('#id_edificio').change(function(){
         $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$(this).val(), function(){

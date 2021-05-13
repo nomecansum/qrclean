@@ -62,7 +62,7 @@
         <div class="col-md-12 text-center">
             @if(isset($puesto))
             <div class="pad-all text-center font-bold" style="color: {{ $puesto->val_color }}; font-size: 22px">
-                <i class="{{ $puesto->val_icono }}"></i>{{ nombrepuesto($puesto) }}
+                <i class="{{ $puesto->val_icono }}"></i> @if(config('app.env')=='local') [{{ $puesto->id_puesto }}] @endif{{ nombrepuesto($puesto) }}
             </div>
             @endif
         </div>
@@ -120,8 +120,8 @@
                 @endif
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        
                         @if($respuesta['operativo']==1)
+                        
                             @switch($puesto->id_estado)
                                 @case(1)
                                         @if(isset($respuesta['tiene_reserva'])&&$respuesta['tiene_reserva']!="")
@@ -134,11 +134,7 @@
                                     @break
                                 @case(2)
                                         @if((Auth::check() && $puesto->id_usuario_usando==Auth::user()->id) || (!Auth::check()&&$puesto->id_usuario_usando==null))
-                                            @if($config_cliente->mca_limpieza=='S')
-                                                <button class="btn btn-lg btn-purple btn_estado" data-estado="3"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
-                                            @else
-                                                <button class="btn btn-lg btn-purple btn_estado" data-estado="1"  data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
-                                            @endif
+                                            <button class="btn btn-lg btn-purple btn_estado" @if($config_cliente->mca_limpieza=='S') data-estado="3" @else  data-estado="1"  @endif data-id="{{$puesto->token}}">Voy a dejar este puesto</button>
                                         @endif
                                     @break
                                 @default

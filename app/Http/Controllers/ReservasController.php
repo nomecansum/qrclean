@@ -197,7 +197,7 @@ class ReservasController extends Controller
             $asignados_usuarios=DB::table('puestos_asignados')
                 ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
                 ->join('users','users.id','puestos_asignados.id_usuario')    
-                ->where('id_usuario','<>',Auth::user()->id)
+                // ->where('id_usuario','<>',Auth::user()->id)
                 ->where(function($q){
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 })
@@ -551,7 +551,15 @@ class ReservasController extends Controller
         $asignados_usuarios=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('users','users.id','puestos_asignados.id_usuario')    
-            ->where('id_usuario',0)
+            ->wherenotnull('id_usuario')
+            ->where(function($q) use($desde,$hasta){
+                $q->whereraw("date(fec_Desde) not between '".Carbon::parse($desde)->format('Y-m-d')."' AND '".Carbon::parse($hasta)->format('Y-m-d')."'");
+                $q->whereraw("date(fec_hasta) not between '".Carbon::parse($desde)->format('Y-m-d')."' AND '".Carbon::parse($hasta)->format('Y-m-d')."'");
+                $q->orwhere(function($q){
+                    $q->wherenull('fec_desde');
+                    $q->wherenull('fec_hasta');
+                });    
+            })
             ->get();
         if(isset($asignados_usuarios)){
             $puestos_usuarios=$asignados_usuarios->pluck('id_puesto')->toArray();
@@ -562,13 +570,29 @@ class ReservasController extends Controller
         $asignados_miperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
-            ->where('id_perfil',0)
+            ->where('id_perfil',$usuario->id_perfil)
+            ->where(function($q) use($desde,$hasta){
+                $q->whereraw("date(fec_Desde) not between '".Carbon::parse($desde)->format('Y-m-d')."' AND '".Carbon::parse($hasta)->format('Y-m-d')."'");
+                $q->whereraw("date(fec_hasta) not between '".Carbon::parse($desde)->format('Y-m-d')."' AND '".Carbon::parse($hasta)->format('Y-m-d')."'");
+                $q->orwhere(function($q){
+                    $q->wherenull('fec_desde');
+                    $q->wherenull('fec_hasta');
+                });    
+            })
             ->get();
         
         $asignados_nomiperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
-            ->where('id_perfil',0)
+            ->where('id_perfil','<>',$usuario->id_perfil)
+            ->where(function($q) use($desde,$hasta){
+                $q->whereraw("date(fec_Desde) not between '".Carbon::parse($desde)->format('Y-m-d')."' AND '".Carbon::parse($hasta)->format('Y-m-d')."'");
+                $q->whereraw("date(fec_hasta) not between '".Carbon::parse($desde)->format('Y-m-d')."' AND '".Carbon::parse($hasta)->format('Y-m-d')."'");
+                $q->orwhere(function($q){
+                    $q->wherenull('fec_desde');
+                    $q->wherenull('fec_hasta');
+                });    
+            })
             ->get();
         if(isset($asignados_nomiperfil)){
             $puestos_nomiperfil=$asignados_nomiperfil->pluck('id_puesto')->toArray();
@@ -591,6 +615,12 @@ class ReservasController extends Controller
             })
             ->when($puestos_reservados, function($q) use($puestos_reservados){
                 $q->wherenotin('id_puesto',$puestos_reservados);
+            })
+            ->when($puestos_usuarios, function($q) use($puestos_usuarios){
+                $q->wherenotin('id_puesto',$puestos_usuarios);
+            })
+            ->when($puestos_nomiperfil, function($q) use($puestos_nomiperfil){
+                $q->wherenotin('id_puesto',$puestos_nomiperfil);
             })
             ->where(function($q) use($plantas_usuario){
                 if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){

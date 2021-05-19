@@ -77,6 +77,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 						@if (isset($days[$i]))
 							@php
 								$dias=$reservas->where('fec_reserva',Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d'))->all();
+								
 							@endphp
 					
 							

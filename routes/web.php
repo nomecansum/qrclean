@@ -272,7 +272,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/estados/delete/{id?}',['middleware'=>'permissions:["Estados de incidencia"],["D"]', 'uses' => 'IncidenciasController@estados_delete']);
 
 
-        Route::get('/create/{puesto}',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@nueva_incidencia'])->name('incidencias.nueva');
+        Route::get('/create/{puesto}','IncidenciasController@nueva_incidencia')->name('incidencias.nueva');
         Route::get('/edit/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@edit']);
         Route::post('/save',['middleware'=>'permissions:["Incidencias"],["C"]','uses' => 'IncidenciasController@save']);
         Route::post('/cerrar',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@cerrar']);

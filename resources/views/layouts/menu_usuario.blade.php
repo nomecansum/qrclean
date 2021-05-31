@@ -41,7 +41,7 @@
                     </a>
                 </div>
                 <div id="profile-nav" class="collapse list-group bg-trans">
-                    <a href="{{ url('/users/'.Auth::user()->id.'/edit') }}" class="list-group-item"><i class="fad fa-user"></i> Mi Perfil</a>
+                    <a href="{{ url('/miperfil/'.Auth::user()->id.'') }}" class="list-group-item"><i class="fad fa-user"></i> Mi Perfil</a>
                     {{-- @if(checkPermissions(['Configuracion'],['R']))<a href="{{ url('/config') }}" class="list-group-item"><i class="fad fa-cogs"></i> Configuración @endif --}}
                     <a href="{{url('/logout')}}" class="list-group-item"><i class="fad fa-sign-out-alt"></i> Logout</a>
                     

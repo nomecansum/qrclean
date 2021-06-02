@@ -140,6 +140,26 @@
                                 @default
                             @endswitch
                         @endif
+                        @switch($puesto->id_estado)
+                            @case(3)
+                                    <button class=" btn btn-lg text-center btn-info pad-all mt-2 rounded">
+                                        <i class="fad fa-broom blink_me fa-2x"></i> El puesto debe ser limpiado antes de volver a ser utilizando
+                                    </button>
+                                @break
+                            
+                            @case(5)
+                                <button class=" btn btn-lg text-center btn-dark pad-all mt-2 rounded">
+                                    <i class="fad fa-forbidden blink_me fa-2x"></i> El puesto esta bloqueado, no puede ser utilizado
+                                </button>
+                            @break
+
+                            @case(6)
+                                <button class=" btn btn-lg text-center btn-warning pad-all mt-2 rounded">
+                                    <i class="fad fa-danger blink_me fa-2x"></i> El puesto tiene una incidencia, no puede ser utilizado
+                                </button>
+                            @break
+                            @default
+                        @endswitch
                         @if(isset($respuesta['hacer_login']) && $puesto->mca_acceso_anonimo=='N')
                             <button class="btn btn-lg btn-primary text-bold btn_login" data-id="{{$puesto->token}}"><i class="fad fa-user"></i> Iniciar sesion</button>
                             @php

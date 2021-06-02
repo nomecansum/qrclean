@@ -237,8 +237,8 @@ class HomeController extends Controller
                     'icono' => '<i class="fad fa-user"></i>',
                     'color'=>'success',
                     'puesto'=>$p,
-                    'disponibles'=>[],
-                    'operativo' => 1,
+                    'disponibles'=> $p->id_estado==1||$p->id_estado==2?[]:$disponibles,
+                    'operativo' => $p->id_estado==1||$p->id_estado==2?1:0,
                     'encuesta'=>$enc_toca,
                 ];
 

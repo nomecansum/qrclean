@@ -366,7 +366,7 @@ function comodines_texto($texto,$campos,$datos){
     return $texto;
 }
 
-function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1){
+function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1,$triangulo="alerta_05"){
     try{
         switch ($metodo) {
             case 0:
@@ -374,7 +374,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1){
             break;
             case 1: //Mail
                 $cliente=clientes::find($user->id_cliente);
-                \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente], function ($m) use ($user,$subject) {
+                \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'triangulo'=>$triangulo], function ($m) use ($user,$subject) {
                     if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
                         $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
                     } else {
@@ -478,7 +478,7 @@ function randomcolor(){
 
 function imagen_usuario($user,$height=50){
     if(isset($user->img_usuario) && $user->img_usuario<>'')
-        return '<img class="direct-chat-img" src="'.url("/img/users/",$user->img_usuario).'" height="'.$height.'px" alt="" onerror="this.remove()" class="b-all">';
+        return '<img class="direct-chat-img b-all" src="'.url("/img/users/",$user->img_usuario).'" height="'.$height.'px" alt="" onerror="this.remove()" style="height:'.$height.'px; width:'.$height.'px; object-fit: cover;">';
     else
         return icono_nombre($user->name);
 }

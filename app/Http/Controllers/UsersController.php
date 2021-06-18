@@ -1102,7 +1102,7 @@ class UsersController extends Controller
                 savebitacora('Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,"Usuarios","asignar_temporal","OK");
                 //Notificar al usuario entrante
                 $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted en el intervalo '.$r->rango;
-                notificar_usuario($usuario,"Se le ha asignado un nuevo puesto",'emails.asignacion_puesto',$str_notificacion,1);
+                notificar_usuario($usuario,"<span class='super_negrita'>Asignacion de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'>Se le ha asignado un nuevo puesto</span>",'emails.asignacion_puesto',$str_notificacion,1,"alerta_05");
                 return [
                     'result' => "OK",
                     'title' => "Usuarios",
@@ -1115,7 +1115,7 @@ class UsersController extends Controller
                 savebitacora('Borrada asignacion del puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango,"Usuarios","asignar_temporal","OK");
                 //Notificar al usuario
                 $str_notificacion=Auth::user()->name.' ha eliminado la asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') que tenía';
-                notificar_usuario($usuario,"Se eliminado la asignacion temporal de su puesto",'emails.asignacion_puesto',$str_notificacion,1);
+                notificar_usuario($usuario,"<span class='super_negrita'>Se ha eliminado su asignacion de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'>Se eliminado la asignacion temporal de su puesto</span>",'emails.asignacion_puesto',$str_notificacion,1,"alerta_03");
 
                 return [
                     'result' => "OK",
@@ -1161,7 +1161,7 @@ class UsersController extends Controller
                     }
                     //Notificar al usuario saliente
                     $user_puesto=users::find($p->id_usuario);
-                    notificar_usuario($user_puesto,"Se han producido cambios en su asignacion de puesto",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,1); 
+                    notificar_usuario($user_puesto,"<span class='super_negrita'>Cambio en su asignacion de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'>Se han producido cambios en su asignacion de puesto</span>",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,1,"alerta_03"); 
                     savebitacora($str_notificacion.$str_respuesta,"Usuarios","asignar_temporal","OK");
                 }
 
@@ -1170,7 +1170,7 @@ class UsersController extends Controller
                     $user_puesto=users::find($res->id_usuario);
                     $str_respuesta=' Se ha cancelado su reserva de puesto que tenía para el día entre '.Carbon::parse($res->fec_reserva)->format('d/m/Y');
                     savebitacora(' Se ha cancelado su reserva de puesto '.$puesto->cod_puesto.' al usuario '.$user_puesto->name.' para el dia  '.Carbon::parse($res->fec_reserva)->format('d/m/Y').' por una asignacion temporal de puesto creada por '.Auth::user()->name,"Usuarios","asignar_temporal","OK");
-                    notificar_usuario($user_puesto,"Se han producido cambios en su reserva de puesto",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,1); 
+                    notificar_usuario($user_puesto,"<span class='super_negrita'>Cambio en su reserva de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'>Se han producido cambios en su reserva de puesto</span>",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,1,"alerta_03"); 
                 }
                 //Si no hay nada mas, creamos la asignacion para el usuario
                 DB::table('puestos_asignados')->insert([
@@ -1183,7 +1183,7 @@ class UsersController extends Controller
                 savebitacora('Asignado puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->rango.' '.$str_respuesta,"Usuarios","asignar_temporal","OK");
                 //Notificar al usuario entrante
                 $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted';
-                notificar_usuario($usuario,"Se le ha asignado un nuevo puesto",'emails.asignacion_puesto',$str_notificacion,1);
+                notificar_usuario($usuario,"<span class='super_negrita'>Nueva asignacion de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'>Se hle ha asignado un nuevo puesto</span>",'emails.asignacion_puesto',$str_notificacion,1,"alerta_05");
                 return [
                     'result' => "OK",
                     'title' => "Usuarios",

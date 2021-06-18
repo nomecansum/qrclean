@@ -145,9 +145,9 @@ class liberarReserva extends Command
             ]);
             $this->escribelog_comando_comando('debug','Anulada reserva # '.$res->id_reserva.' de '.$res->name.' para el puesto '.$res->cod_puesto.' por no utilizarla a tiempo ['.Carbon::parse($res->fec_reserva)->format('d/m/Y H:i').'] -> ['.Carbon::now()->format('d/m/Y H:i').']  ('.Carbon::now()->diffForHumans(Carbon::parse($res->fec_reserva)).')'); 
             savebitacora('Anulada reserva # '.$res->id_reserva.' de '.$res->name.' para el puesto '.$res->cod_puesto.' por no utilizarla a tiempo ['.Carbon::parse($res->fec_reserva)->format('d/m/Y H:i').'] -> ['.Carbon::now()->format('d/m/Y H:i').']',"Tareas programadas","liberarReserva","OK");
-            $body="Le notificamos que su reserva del puesto ".$res->cod_puesto." que tenía para hoy a las ".Carbon::parse($res->fec_reserva)->format('d/m/Y H:i')." ha sido anulada porque a las ".Carbon::now()->format('d/m/Y H:i')." (".Carbon::now()->diffForHumans(Carbon::parse($res->fec_reserva)).") no consta que haya hecho uso del puesto.<br>".chr(13);
-            $body.="Si quiere seguir haciendo uso del puesto puede volver a reservarlo o acceder a el directamente, siempre que no haya sido reservado por otro usuario";
-            notificar_usuario($res,'Anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1);
+            $body="<span class='super_negrita'>Se ha anulado su reserva....<br></span>Le notificamos que <span class='super_negrita'>su reserva del puesto ".$res->cod_puesto." que tenía para hoy a las ".Carbon::parse($res->fec_reserva)->format('d/m/Y H:i')." ha sido anulada</span> porque a las ".Carbon::now()->format('d/m/Y H:i')." (".Carbon::now()->diffForHumans(Carbon::parse($res->fec_reserva)).") no consta que haya hecho uso del puesto.<br>".chr(13);
+            $body.="<span class='super_negrita'>Si quiere seguir haciendo uso del puesto puede volver a reservarlo</span> o acceder a el directamente, siempre que no haya sido reservado por otro usuario";
+            notificar_usuario($res,'Anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1,"alerta_03");
         }
 
         $lista_reservas=$reservas->pluck('id_reserva')->toArray();
@@ -176,9 +176,10 @@ class liberarReserva extends Command
             //Se manda un mail a los usuarios para recordarles que deben hacer chek-in en el puesto o se le anulara la reserva
             $this->escribelog_comando_comando('debug','Mandar preaviso de anulacion de reserva # '.$res->id_reserva.' de '.$res->name.' para el puesto '.$res->cod_puesto.' por no utilizarla a tiempo ['.Carbon::parse($res->fec_reserva)->format('d/m/Y H:i').'] -> ['.Carbon::now()->format('d/m/Y H:i').']  ('.Carbon::now()->diffForHumans(Carbon::parse($res->fec_reserva)).')'); 
             //savebitacora('Anulada reserva # '.$res->id_reserva.' de '.$res->name.' para el puesto '.$res->cod_puesto.' por no utilizarla a tiempo ['.Carbon::parse($res->fec_reserva)->format('d/m/Y H:i').'] -> ['.Carbon::now()->format('d/m/Y H:i').']',"Tareas programadas","liberarReserva","OK");
-            $body="Estimado usuario:<br>No consta que haya hecho ckeck-in del puesto ".$res->cod_puesto." que tenía para hoy a las ".Carbon::parse($res->fec_reserva)->format('d/m/Y H:i')." le recordamos que si no hace uso del mismo ".$val_minutos." despues de la hora en la que lo tenia reservado, se anulará automáticamente su reserva y el puesto podrá ser reservado por otra persona<br>".chr(13);
+            $body="<span class='super_negrita'>No se ha hecho el check-in....<br></span>Estimado usuario:<br><span class='super_negrita'>No consta que haya hecho ckeck-in del puesto ".$res->cod_puesto." </span>que tenía para hoy a las ".Carbon::parse($res->fec_reserva)->format('d/m/Y H:i')." le recordamos que si no hace uso del mismo ".$val_minutos." despues de la hora en la que lo tenia reservado, se anulará automáticamente su reserva y el puesto podrá ser reservado por otra persona<br>".chr(13);
+            $body.="Le recordamos que si no hace uso del mismo 20 minutos después de la hora a la que lo tenía reservado, se anulará automáticamente su reserva y el puesto podrá ser reservado por otra persona.<br>".chr(13);
             $body.="Si quiere seguir haciendo uso del puesto puede volver a reservarlo o acceder a el directamente, siempre que no haya sido reservado por otro usuario";
-            notificar_usuario($res,'Preaviso de anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1);
+            notificar_usuario($res,'Preaviso de anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1,"alerta_03");
         }
 
         //Ahora buscamos los puestos que deben liberarse automaticamente
@@ -206,8 +207,8 @@ class liberarReserva extends Command
            $puesto->id_usuario_usando=null;
            $puesto->fec_liberacion_auto=Carbon::parse(Carbon::now()->addDay(1)->format('Y-m-d').' '.$p->hora_liberar);
            $puesto->save();
-           $body="Estimado ".$p->name.chr(13).'<br> Hoy olvido liberar el puesto '.$p->cod_puesto.' que estaba utilizando. El puesto ha sido marcado como disponible automaticamente por la plataforma. <br>Recuerde liberar su puesto una vez termine de utilizarlo, de esa forma puede permitir que alguno de sus compañeros pueda utilizarlo tambien.<br><br>Gracias  ' ;
-           notificar_usuario($p,'Liberado automaticamente puesto '.$p->cod_puesto.' ocupado por usted','emails.plantilla_generica',$body,config_cliente('val_metodo_notificacion',$p->id_cliente));
+           $body="<span class='super_negrita'>No se ha liberado la reserva....<br></span><br>Estimado ".$p->name.chr(13)."<br> Hoy <span class='super_negrita'>olvido liberar el puesto '.$p->cod_puesto.' que estaba utilizando.</span> Ha sido marcado como disponible automaticamente por la plataforma. <br>Por favor, recuerde liberar su puesto una vez termine de utilizarlo. De esa manera posibilitará que otros compañer@s puedan utilizarlo también.<br><br>  " ;
+        //    notificar_usuario($p,'Liberado automaticamente puesto '.$p->cod_puesto.' ocupado por usted','emails.plantilla_generica',$body,config_cliente('val_metodo_notificacion',$p->id_cliente));
            savebitacora('Liberado automaticamente puesto '.$p->cod_puesto.' ocupado por '.$p->name,"Tareas programadas","liberarReserva","OK");
         }
             

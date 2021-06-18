@@ -136,7 +136,7 @@
                             </td>
                             <td class="center">
                                 @if (isset($users->img_usuario ) && $users->img_usuario!='')
-                                    <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$users->img_usuario) }}" class="img-circle" style="height: 50px">
+                                    <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$users->img_usuario) }}" class="img-circle" style="height:50px; width:50px; object-fit: cover;">
                                 @else
                                     {!! icono_nombre($users->name) !!}
                                 @endif

@@ -230,10 +230,8 @@ class IncidenciasController extends Controller
         $tipos=DB::table('incidencias_tipos')
             ->join('clientes','incidencias_tipos.id_cliente','clientes.id_cliente')
             ->where(function($q) use($puesto){
-                if (!isAdmin()) {
-                    $q->where('incidencias_tipos.id_cliente',$puesto->id_cliente);
-                    $q->orwhere('incidencias_tipos.mca_fijo','S');
-                }
+                $q->where('incidencias_tipos.id_cliente',$puesto->id_cliente);
+                $q->orwhere('incidencias_tipos.mca_fijo','S');
                 })
             ->where(function($q) use($puesto){
                 $q->wherenull('list_tipo_puesto');

@@ -299,7 +299,7 @@
             $('#footer').hide();
             setTimeout(function(){
                 window.location.href = '/';
-            }, 60000);
+            }, 90000);
         })
 
         @if(isset($respuesta['disponibles']) && Auth::user())

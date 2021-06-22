@@ -27,7 +27,7 @@
     </div>
     <div class="panel-body">
         @php
-            dd(Carbon\Carbon::now()->format('H:i:s'));
+           phpinfo();
         @endphp 
     </div>
 </div>

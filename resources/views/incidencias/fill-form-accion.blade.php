@@ -1,4 +1,5 @@
 <input type="hidden" name="id_incidencia" value="{{ $id }}"></input>
+<input type="hidden" name="adjuntos[]" id="adjuntos" value="">
 <div class="row">
     <div class="form-group col-md-12">
         <label for="val_color">Accion</label><br>
@@ -6,34 +7,12 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="row" style="padding-left: 15px">
-        Imagen 1<br>
-    </div>
-    <div class="col-md-12">
-        <div class="form-group  {{ $errors->has('img_usuario') ? 'has-error' : '' }}">
-            <div class="custom-file">
-                <input type="file"  accept=".jpg,.png,.gif,.mp4,.avi,.mpg" class="form-control  custom-file-input" name="img_attach1" id="img_attach1" lang="es">
-                <label class="custom-file-label" for="img_attach1"></label>
-            </div>
-        </div>
-            {!! $errors->first('img_attach1', '<p class="help-block">:message</p>') !!}
+<div id="dZUpload" class="dropzone">
+    <div class="dz-default dz-message">
+        <h2><i class="mdi mdi-cloud-upload"></i> Arrastre archivos <span class="text-blue">para subirlos</span></h2>&nbsp&nbsp<h6 class="display-inline text-muted"> (o Click aqui)</h6>
     </div>
 </div>
-<div class="row">
-    <div class="row" style="padding-left: 15px">
-        Imagen 2<br>
-    </div>
-    <div class="col-md-12">
-        <div class="form-group  {{ $errors->has('img_usuario') ? 'has-error' : '' }}">
-            <div class="custom-file">
-                <input type="file" accept=".jpg,.png,.gif,.mp4,.avi,.mpg" class="form-control  custom-file-input" name="img_attach2" id="img_attach2" lang="es">
-                <label class="custom-file-label" for="img_attach2"></label>
-            </div>
-        </div>
-            {!! $errors->first('img_attach2', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
+
 <div class="row">
     <div class="form-group col-md-12 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
         <label for="id_estado" class="control-label">Poner la incidencia en estado</label>

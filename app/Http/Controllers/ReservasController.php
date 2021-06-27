@@ -466,7 +466,7 @@ class ReservasController extends Controller
 
             $cal=$cal->get();
             \Mail::send('emails.plantilla_generica', ['user' => $user,'body'=>$body], function ($m) use ($user,$subject,$cal) {
-                if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
                     $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
                 } else {
                     $m->to($user->email, $user->name)->subject($subject);

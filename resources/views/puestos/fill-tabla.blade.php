@@ -59,7 +59,7 @@
                                 <td class="td" data-id="">{{$puesto->des_planta}}</td>
                                 <td class="td" data-id="">
                                     <div class="m-0 rounded pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
-                                        @if(config('app.env')=='dev')[{{ $puesto->id_puesto }}] @endif<b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}
+                                        @if(config('app.env')=='local')[{{ $puesto->id_puesto }}] @endif<b>{{$puesto->cod_puesto}}</b> - {{$puesto->des_puesto}}
                                     </div>
                                 </td>
                                 <td class="text-center text-muted" >@if($puesto->mca_acceso_anonimo=='S') <i class="fas fa-circle"></i> @endif</td>
@@ -109,7 +109,7 @@
                         <div class="pad-all rounded bg-white" style="border: 3px solid navy; background-color: #fff; ">
                             <label>Acciones<span class="font-bold ml-2" id="nombrepuesto"></span></label><br>
                             <div class="btn-group btn-group pull-right ml-1" role="group">
-                                @if(isAdmin() || config('app.env')=='dev')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan()"  data-id=""> <span class="fa fa-qrcode" aria-hidden="true"></span></a>@endif
+                                @if(isAdmin() || config('app.env')=='local')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan()"  data-id=""> <span class="fa fa-qrcode" aria-hidden="true"></span></a>@endif
                                 @if(checkPermissions(['Puestos'],['W']))<a href="#"  class="btn btn-info btn_editar add-tooltip toolbutton ml-2" onclick="editar()" title="Editar puesto" data-id=""> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                                 @if(checkPermissions(['Puestos'],['D']))<a href="#" data-target="#eliminar-puesto" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del toolbutton"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                                 @if(checkPermissions(['Reservas'],['D']))<a href="#"  title="Cancelar Reserva" class="btn btn-pink add-tooltip btn_del toolbutton" onclick="cancelar()"><span class="fad fa-calendar-times" aria-hidden="true"></span> Res</a>@endif

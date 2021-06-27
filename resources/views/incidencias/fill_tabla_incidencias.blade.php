@@ -1,3 +1,5 @@
+
+
 <tr>
     <td colspan="9">
         <div id="chartdiv" style="width:100%; height:300px;  ml-0"></div>
@@ -80,6 +82,7 @@
     
         </div>
     </div>
+   
     <script>
         am4core.ready(function() {
         // Themes begin
@@ -107,7 +110,8 @@
         pieSeries.hiddenState.properties.opacity = 1;
         pieSeries.hiddenState.properties.endAngle = -90;
         pieSeries.hiddenState.properties.startAngle = -90;
-        
+   
+
         }); // end am4core.ready()
     </script>
 
@@ -149,26 +153,26 @@
         
             // Themes end
             // Create chart instance
-            var chart_inci = am4core.create("chartdiv_incidencias2", am4charts.PieChart);
+            var chart_inci2 = am4core.create("chartdiv_incidencias2", am4charts.PieChart);
         
-            chart_inci.legend = new am4charts.Legend();
+            chart_inci2.legend = new am4charts.Legend();
             
             // Add data
-            chart_inci.data = {!! json_encode($datos_quesito) !!};
+            chart_inci2.data = {!! json_encode($datos_quesito) !!};
             
             // Add and configure Series
-            var pieSeries = chart_inci.series.push(new am4charts.PieSeries());
-            pieSeries.dataFields.value = "cuenta";
-            pieSeries.dataFields.category = "des_estado";
-            pieSeries.slices.template.stroke = am4core.color("#fff");
-            pieSeries.slices.template.strokeWidth = 2;
-            pieSeries.slices.template.strokeOpacity = 1;
+            var pieSeries2 = chart_inci2.series.push(new am4charts.PieSeries());
+            pieSeries2.dataFields.value = "cuenta";
+            pieSeries2.dataFields.category = "des_estado";
+            pieSeries2.slices.template.stroke = am4core.color("#fff");
+            pieSeries2.slices.template.strokeWidth = 2;
+            pieSeries2.slices.template.strokeOpacity = 1;
             
             // This creates initial animation
-            pieSeries.hiddenState.properties.opacity = 1;
-            pieSeries.hiddenState.properties.endAngle = -90;
-            pieSeries.hiddenState.properties.startAngle = -90;
-            
+            pieSeries2.hiddenState.properties.opacity = 1;
+            pieSeries2.hiddenState.properties.endAngle = -90;
+            pieSeries2.hiddenState.properties.startAngle = -90;
+
             }); // end am4core.ready()
         </script>
     </td>
@@ -208,26 +212,26 @@
         
             // Themes end
             // Create chart instance
-            var chart_inci = am4core.create("chartdiv_incidencias3", am4charts.PieChart);
+            var chart_inci3 = am4core.create("chartdiv_incidencias3", am4charts.PieChart);
         
-            chart_inci.legend = new am4charts.Legend();
+            chart_inci3.legend = new am4charts.Legend();
             
-            // Add data
-            chart_inci.data = {!! json_encode($datos_quesito) !!};
+            // chart_inci3 data
+            chart_inci3.data = {!! json_encode($datos_quesito) !!};
             
             // Add and configure Series
-            var pieSeries = chart_inci.series.push(new am4charts.PieSeries());
-            pieSeries.dataFields.value = "cuenta";
-            pieSeries.dataFields.category = "des_estado";
-            pieSeries.slices.template.stroke = am4core.color("#fff");
-            pieSeries.slices.template.strokeWidth = 2;
-            pieSeries.slices.template.strokeOpacity = 1;
+            var pieSeries3 = chart_inci3.series.push(new am4charts.PieSeries());
+            pieSeries3.dataFields.value = "cuenta";
+            pieSeries3.dataFields.category = "des_estado";
+            pieSeries3.slices.template.stroke = am4core.color("#fff");
+            pieSeries3.slices.template.strokeWidth = 2;
+            pieSeries3.slices.template.strokeOpacity = 1;
             
             // This creates initial animation
-            pieSeries.hiddenState.properties.opacity = 1;
-            pieSeries.hiddenState.properties.endAngle = -90;
-            pieSeries.hiddenState.properties.startAngle = -90;
-            
+            pieSeries3.hiddenState.properties.opacity = 1;
+            pieSeries3.hiddenState.properties.endAngle = -90;
+            pieSeries3.hiddenState.properties.startAngle = -90;
+
             }); // end am4core.ready()
         </script>
     </td>

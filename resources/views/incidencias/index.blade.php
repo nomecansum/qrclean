@@ -4,7 +4,7 @@
 
 
 @section('styles')
-
+<link href="{{url('/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
 @endsection
 
 @section('title')
@@ -24,6 +24,14 @@
 @php
     //dd($incidencias);
 @endphp
+<script type="text/javascript"  src="{{url('/plugins/dropzone/dropzone.js')}}"></script>
+<script src="{{url('plugins')}}/amcharts4/core.js"></script>
+<script src="{{url('plugins')}}/amcharts4/charts.js"></script>
+<script src="{{url('plugins')}}/amcharts4/themes/material.js"></script>
+<script src="{{url('plugins')}}/amcharts4/themes/animated.js"></script>
+<script src="{{url('plugins')}}/amcharts4/themes/kelly.js"></script>
+<script src="{{url('plugins')}}/amcharts4/lang/es_ES.js"></script>
+
 
 <div class="row botones_accion">
 	<div class="col-md-4">
@@ -136,6 +144,7 @@
 <div class="modal fade" id="accion-incidencia">
 	<form method="POST" action="{{ url('/incidencias/accion') }}" accept-charset="UTF-8" class="form-horizontal form-ajax" enctype="multipart/form-data">	
 		@csrf
+		<input type="hidden" name="adjuntos[]" id="adjuntos" value="">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
 				<div class="modal-header"><i class="fad fa-plus fa-2x"></i>
@@ -191,14 +200,11 @@
 @endsection
 
 @section('scripts')
-	{{--  AMCharts  --}}
-	<script src="{{url('plugins')}}/amcharts4/core.js"></script>
-	<script src="{{url('plugins')}}/amcharts4/charts.js"></script>
-	<script src="{{url('plugins')}}/amcharts4/themes/material.js"></script>
-	<script src="{{url('plugins')}}/amcharts4/themes/animated.js"></script>
-	<script src="{{url('plugins')}}/amcharts4/themes/kelly.js"></script>
-	<script src="{{url('plugins')}}/amcharts4/lang/es_ES.js"></script>
+	
+	
 	<script>
+
+	var lista_ficheros=new Array(0);
 
 	$('.mantenimiento').addClass('active active-sub');
 	$('.incidencias').addClass('active-link');
@@ -237,7 +243,7 @@
 
 	 //Date range picker
 	 $('#fechas').daterangepicker({
-            autoUpdateInput: false,
+            autoUpdateInput: true,
             locale: {
                 format: '{{trans("general.date_format")}}',
                 applyLabel: "OK",
@@ -254,6 +260,84 @@
             //window.location.href = '{{ url('/incidencias/') }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
         });
 
+		$('#accion-incidencia').on('shown.bs.modal', function (e) {
+			window.Laravel = {!! json_encode([
+				'csrfToken' => csrf_token(),
+			]) !!};
+
+			lista_ficheros=[];	
+			$('#adjuntos').val('');
+			var myDropzone = new Dropzone("#dZUpload" , {
+				url: '{{ url('/incidencias/upload_imagen/') }}',
+				autoProcessQueue: true,
+				uploadMultiple: true,
+				parallelUploads: 1,
+				maxFiles: {{ $config->num_imagenes_incidencias??2 }},
+				addRemoveLinks: true,
+				maxFilesize: 15,
+				autoProcessQueue: true,
+				acceptedFiles: 'image/*,video/*',
+				dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg"><i class="fa fa-caret-right text-danger"></i> Arrastre archivos <span class="font-xs">para subirlos</span></span><span>&nbsp&nbsp<h4 class="display-inline"> (O haga Click)</h4></span>',
+				dictResponseError: 'Error subiendo fichero!',
+                dictDefaultMessage :
+                    '<span class="bigger-150 bolder"><i class=" fa fa-caret-right red"></i> Drop files</span> to upload \
+                    <span class="smaller-80 grey">(or click)</span> <br /> \
+                    <i class="upload-icon fa fa-cloud-upload blue fa-3x"></i>'
+                ,
+                dictResponseError: 'Error while uploading file!',
+				headers: {
+					'X-CSRF-TOKEN': Laravel.csrfToken
+				},
+				init: function() {
+					dzClosure = this; // Makes sure that 'this' is understood inside the functions below.
+					this.on("sending", function(file, xhr, formData) {
+						formData.append("id_cliente", {{ Auth::user()->id_cliente }});
+						// formData.append("enviar_email", $("#enviar_email").is(':checked'));
+						console.log(formData)
+					});
+					
+					//send all the form data along with the files:
+					this.on("sendingmultiple", function(data, xhr, formData) {
+						console.log("multiple")
+					});
+
+					this.on("drop", function(event) {
+						
+					});
+
+					this.on("removedfile", function(event) {
+						console.log(event);
+						value=event.name;
+						lista_ficheros = lista_ficheros.filter(item => item.orig !== value);
+						console.log(lista_ficheros);     
+						ficheros_final=lista_ficheros.map(function(item,index,array){
+							return item.nuevo;
+						});
+						$('#adjuntos').val(ficheros_final);
+					});
+
+
+					this.on("maxfilesexceeded", function(event) {
+						toast_warning('Incidencias','El numero maximo de adjuntos es {{ $config->num_imagenes_incidencias??2 }}')   
+					});
+
+					this.on("success", function(file, responseText) {
+						//Dropzone.forElement("#dZUpload").removeAllFiles(true);
+						fic=new Object();
+						fic.orig=responseText.filename;
+						fic.nuevo=responseText.newfilename;
+						lista_ficheros.push(fic);
+						ficheros_final=lista_ficheros.map(function(item,index,array){
+							return item.nuevo;
+						});
+						$('#adjuntos').val(ficheros_final);
+						console.log(lista_ficheros);
+					});
+				}
+            });
+
+		});
+
 	function post_form_ajax(data){
 		console.log(data);
 		$('#cell'+data.id).removeClass('bg-pink');
@@ -267,10 +351,15 @@
 		$('#body_cierre').load("{{ url('/incidencias/form_cierre/') }}/"+id);
    }
 
+   
+
    function accion_incidencia(id){
 	    $('#des_incidencia_accion').html($(this).data('desc'));
-		$('#body_accion').load("{{ url('/incidencias/form_accion/') }}/"+id);
-   }
+		
+		$.get("{{ url('/incidencias/form_accion/') }}/"+id,function(data){
+			$('#body_accion').html(data);
+		})
+   	}
 
    function reabrir_incidencia(id){
 		$.post('{{url('/incidencias/reabrir')}}', {_token: '{{csrf_token()}}',id_incidencia:id}, function(data, textStatus, xhr) {
@@ -316,6 +405,7 @@
 	$('#id_puesto').change(function(e){
 		window.open("{{ url('incidencias/create') }}/"+$('#id_puesto').val(),'_self');
 	})
+	
 
 	</script>
 

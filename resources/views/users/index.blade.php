@@ -140,7 +140,7 @@
                                 @else
                                     {!! icono_nombre($users->name) !!}
                                 @endif
-                                @if(config('app.env')=='dev')[#{{ $users->id }}]@endif
+                                @if(config('app.env')=='local')[#{{ $users->id }}]@endif
                             </td>
                             <td class="pt-3">{{ $users->name }}</td>
                             <td>

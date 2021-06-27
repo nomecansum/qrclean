@@ -375,7 +375,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1,$triangulo=
             case 1: //Mail
                 $cliente=clientes::find($user->id_cliente);
                 \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'triangulo'=>$triangulo], function ($m) use ($user,$subject) {
-                    if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                    if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
                         $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
                     } else {
                         $m->to($user->email, $user->name)->subject($subject);

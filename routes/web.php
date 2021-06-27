@@ -270,6 +270,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/estados/save',['middleware'=>'permissions:["Estados de incidencia"],["W"]', 'uses' => 'IncidenciasController@estados_save']);
         Route::get('/estados/edit/{id?}',['middleware'=>'permissions:["Estados de incidencia"],["W"]', 'uses' => 'IncidenciasController@estados_edit']);
         Route::get('/estados/delete/{id?}',['middleware'=>'permissions:["Estados de incidencia"],["D"]', 'uses' => 'IncidenciasController@estados_delete']);
+        Route::post('/upload_imagen',['middleware'=>'permissions:["Incidencias"],["W"]', 'uses' => 'IncidenciasController@subir_adjuntos']);
 
 
         Route::get('/create/{puesto}','IncidenciasController@nueva_incidencia')->name('incidencias.nueva');

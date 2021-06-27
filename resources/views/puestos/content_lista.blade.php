@@ -154,7 +154,7 @@ if(!isset($id_check))
                                 <td   style="color: {{ $cuadradito['font_color'] }};">
                                     @include('resources.adornos_iconos_puesto')
                                 </td>
-                                <td>@if(config('app.env')=='dev')[#{{ $puesto->id_puesto }}]@endif {{ $puesto->cod_puesto }}</td>
+                                <td>@if(config('app.env')=='local')[#{{ $puesto->id_puesto }}]@endif {{ $puesto->cod_puesto }}</td>
                                 <td>{{ $puesto->des_tipo_puesto }}</td>
                                 <td>
                                     @if($puesto->mca_incidencia=='N')
@@ -207,7 +207,7 @@ if(!isset($id_check))
         <div class="pad-all rounded bg-white" style="border: 3px solid navy; background-color: #fff; ">
             <label>Acciones<span class="font-bold ml-2" id="nombrepuesto"></span></label><br>
             <div class="btn-group btn-group pull-right ml-1" role="group">
-                @if(isAdmin() || config('app.env')=='dev')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan()"  data-id=""> <span class="fa fa-qrcode" aria-hidden="true"></span></a>@endif
+                @if(isAdmin() || config('app.env')=='local')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan()"  data-id=""> <span class="fa fa-qrcode" aria-hidden="true"></span></a>@endif
                 @if(checkPermissions(['Puestos'],['W']))<a href="#"  class="btn btn-info btn_editar add-tooltip toolbutton ml-2" onclick="editar()" title="Editar puesto" data-id=""> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                 @if(checkPermissions(['Reservas'],['D']))<a href="#"  title="Cancelar Reserva" class="btn btn-pink add-tooltip btn_del toolbutton" onclick="cancelar()"><span class="fad fa-calendar-times" aria-hidden="true"></span> Res</a>@endif
             </div>

@@ -10,11 +10,12 @@
         </h3>
     </div>
     <div class="panel-body">
-        <form method="POST" action="{{ url('/incidencias/save') }}" id="incidencia_form" name="incidencia_form" accept-charset="UTF-8" class="form-horizontal form-ajax" enctype="multipart/form-data">
+        <form method="POST" action="{{ url('/incidencias/save') }}" id="incidencia_form" name="incidencia_form" accept-charset="UTF-8" class="form-horizontal form-ajax">
         {{ csrf_field() }}
             <div class="row">
                 <input type="hidden" name="id_puesto" value="{{ $puesto->id_puesto }}">
                 <input type="hidden" name="referer" value="{{ $referer }}">
+                <input type="hidden" name="adjuntos[]" id="adjuntos" value="">
                 @if(isset($config->val_layout_incidencias) && ($config->val_layout_incidencias=='T' || $config->val_layout_incidencias=='A'))
                     <div class="form-group col-md-8 {{ $errors->has('des_incidencia') ? 'has-error' : '' }}">
                         <label for="des_incidencia" class="control-label">Titulo</label>
@@ -40,41 +41,15 @@
                 </div>
             </div>
             @endif
-            @if((isset($config->num_imagenes_incidencias) && $config->num_imagenes_incidencias>0) || (!isset($config->num_imagenes_incidencias)))
-            <div class="row">
-                <div class="row" style="padding-left: 15px">
-                    Imagen 1<br>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group  {{ $errors->has('img_usuario') ? 'has-error' : '' }}">
-                        <div class="custom-file">
-                            <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input" name="img_attach1" id="img_attach1" lang="es">
-                            <label class="custom-file-label" for="img_attach1"></label>
-                        </div>
-                    </div>
-                        {!! $errors->first('img_attach1', '<p class="help-block">:message</p>') !!}
+            <div id="dZUpload" class="dropzone">
+                <div class="dz-default dz-message">
+                    <h2><i class="mdi mdi-cloud-upload"></i> Arrastre archivos <span class="text-blue">para subirlos</span></h2>&nbsp&nbsp<h6 class="display-inline text-muted"> (o Click aqui)</h6>
                 </div>
             </div>
-            @endif
-            @if(isset($config->num_imagenes_incidencias) && $config->num_imagenes_incidencias>1)
-            <div class="row">
-                <div class="row" style="padding-left: 15px">
-                    Imagen 2<br>
-                </div>
-                <div class="col-md-12">
-                    <div class="form-group  {{ $errors->has('img_usuario') ? 'has-error' : '' }}">
-                        <div class="custom-file">
-                            <input type="file" accept=".jpg,.png,.gif,.mp4,.avi,.mpg" class="form-control  custom-file-input" name="img_attach2" id="img_attach2" lang="es">
-                            <label class="custom-file-label" for="img_attach2"></label>
-                        </div>
-                    </div>
-                        {!! $errors->first('img_attach2', '<p class="help-block">:message</p>') !!}
-                </div>
-            </div>
-            @endif
-            <div class="form-group">
-                <div class="col-md-12 text-right">
-                    <input class="btn btn-primary" type="submit" value="Guardar">
+
+            <div class="form-group mt-3">
+                <div class="col-md-12 text-center">
+                    <input class="btn btn-lg btn-primary" type="submit" value="Guardar">
                 </div>
             </div>
         </form>

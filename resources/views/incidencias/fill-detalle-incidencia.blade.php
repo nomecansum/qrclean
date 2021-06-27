@@ -3,7 +3,7 @@
 
         <div class="panel-heading">
             <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+                <button class="btn btn-default" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
             </div>
             <h3 class="panel-title" id="titulo">
                Detalle de la incidencia #{{ $incidencia->id_incidencia }}
@@ -135,5 +135,11 @@
         })
         var tooltip = $('.add-tooltip');
         if (tooltip.length)tooltip.tooltip();
+
+        $('*[data-dismiss="panel"]').click(function(){
+            $(this).closest('.panel').hide('slow');   
+        });
+
+
     </script>
     @include('layouts.scripts_panel')

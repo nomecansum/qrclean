@@ -36,7 +36,7 @@ class IncidenciasController extends Controller
             ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa')
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
-            ->join('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
             ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
@@ -113,6 +113,11 @@ class IncidenciasController extends Controller
             ->where(function($q) use($r,$estados){
                 if ($estados) {
                     $q->whereIn('puestos.id_estado',$estados);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->estado_inc) {
+                    $q->whereIn('incidencias.id_estado',$r->estado_inc);
                 }
             })
             ->where(function($q) use($r){
@@ -259,6 +264,7 @@ class IncidenciasController extends Controller
             'id_puesto'=> 'required',
             'img1'=>'nullable',
             'img2'=>'nullable',
+            'adjuntos'=>'nullable',
         ];
         $data = $request->validate($rules);
         return $data;
@@ -269,30 +275,16 @@ class IncidenciasController extends Controller
         $puesto=puestos::find($r->id_puesto);
         $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
         try{    
-            for ($i=0; $i <3 ; $i++) { 
-                $var="img".$i;
-                $$var='';
-                if ($r->hasFile('img_attach'.$i)) {
-                    
-                    $file = $r->file('img_attach'.$i);
-                    $path = config('app.ruta_public').'/uploads/incidencias/'.$puesto->id_cliente;
-                    $path_local = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
 
-                        if(!File::exists($path_local)) {
-                            File::makeDirectory($path_local);
-                        }
-
-                    $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                    // $img = Image::make($file);
-                    // $img->resize(1000, null, function ($constraint) {
-                    //     $constraint->aspectRatio();
-                    // })->save($path.'/'.$$var);
-                    
-                    Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
-                    $file->move($path_local,$$var);
+            if(isset($r->adjuntos) and is_array($r->adjuntos)){
+                $adjuntos=$r->adjuntos[0];
+                $adjuntos=explode(",",$adjuntos);
+                foreach($adjuntos as $key=>$value){
+                    $var="img".$key+1;
+                    $$var=$value;
                 }
-                $data[$var]=$$var;
             }
+
             $inc=new incidencias;
             $inc->des_incidencia=$data['des_incidencia']??null;
             $inc->txt_incidencia=$data['txt_incidencia']??null;
@@ -301,8 +293,8 @@ class IncidenciasController extends Controller
             $inc->fec_apertura=Carbon::now();
             $inc->id_tipo_incidencia=$r->id_tipo_incidencia;
             $inc->id_puesto=$puesto->id_puesto;
-            $inc->img_attach1=$img1;
-            $inc->img_attach2=$img2;
+            $inc->img_attach1=$img1??null;
+            $inc->img_attach2=$img2??null;
             $inc->id_estado_vuelta_puesto=$puesto->id_estado;
             $inc->save();
 
@@ -330,8 +322,6 @@ class IncidenciasController extends Controller
                     'url' => url($url_vuelta)
                 ];
             }
-           
-       
             
         } catch (Exception $exception) {
 
@@ -349,25 +339,16 @@ class IncidenciasController extends Controller
         $incidencia=incidencias::find($r->id_incidencia);
         $tipo=incidencias_tipos::find($incidencia->id_tipo_incidencia);
         try{    
-            for ($i=1; $i <3 ; $i++) { 
-                $var="img".$i;
-                $$var='';
-                if ($r->hasFile('img_attach'.$i)) {
-                    
-                    $file = $r->file('img_attach'.$i);
-                    $path = config('app.ruta_public').'/uploads/incidencias/'.$incidencia->id_cliente;
-                    $path_local = public_path().'/uploads/incidencias/'.$incidencia->id_cliente;
-
-                    if(!File::exists($path_local)) {
-                        File::makeDirectory($path_local);
-                    }
-                    $$var = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                    
-                    Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$$var);
-                    $file->move($path_local,$$var);
+            
+            if(isset($r->adjuntos) and is_array($r->adjuntos)){
+                $adjuntos=$r->adjuntos[0];
+                $adjuntos=explode(",",$adjuntos);
+                foreach($adjuntos as $key=>$value){
+                    $var="img".$key+1;
+                    $$var=$value;
                 }
-                $data[$var]=$$var;
             }
+
             $acciones=incidencias_acciones::where('id_incidencia',$r->id_incidencia);
             if($acciones){
                 $cuenta=$acciones->count()+1;
@@ -382,8 +363,8 @@ class IncidenciasController extends Controller
             $accion->des_accion=$r->des_accion;
             $accion->fec_accion=Carbon::now();
             $accion->id_usuario=Auth::user()->id;
-            $accion->img_attach1=isset($data['img1'])?$data['img1']:null;
-            $accion->img_attach2=isset($data['img2'])?$data['img2']:null;
+            $accion->img_attach1=$img1??null;
+            $accion->img_attach2=$img2??null;
             $accion->save();
             savebitacora("Añadida accion para la incidencia ".$r->id_incidencia,"Incidencias","add_accion","OK");
             return [
@@ -402,6 +383,29 @@ class IncidenciasController extends Controller
             ];
         } 
     }
+
+    public function subir_adjuntos(Request $r){
+		try{
+			if(isset($r->id_cliente)){
+				$path = config('app.ruta_public').'/uploads/incidencias/'.$r->id_cliente;
+				$file = $r->file('file')[0];
+
+                    $original = $file->getClientOriginalName();
+                    $extension = File::extension($file->getClientOriginalName());
+                    $newfile = $r->id_cliente.'_'.Str::random(24).'.'.$extension;
+                    Storage::disk(config('app.upload_disk'))->putFileAs($path,$file,$newfile);
+				return \Response::json(array('success' => true, 'filename'=>$original,'newfilename'=>$newfile));
+			}
+		} catch(\Exception $e){
+		response()->json([
+			"error" => "Error subiendo adjunto ".mensaje_excepcion($e),
+			"TS" => Carbon::now()->format('Y-m-d h:i:s')
+			],400)->throwResponse();
+		return \Response::json(array('error' => false));
+		}
+
+	}
+
 
     //PROCESADO DE INCIDENCIAS->ENVIARLA A TERCEROS SISTEMAS
 
@@ -422,16 +426,21 @@ class IncidenciasController extends Controller
             case 'M':  //Mandar e-mail
                 $to_email = $tipo->txt_destinos;
                 Mail::send('emails.mail_incidencia', ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto) {
-                    if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                    if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
                         $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                     } else {
                         $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                     }
                     $message->from(config('mail.from.address'),config('mail.from.name'));
-                    if($inc->img_attach1)
-                        $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
-                    if($inc->img_attach2)
-                        $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+                    if($inc->img_attach1){
+                        $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+                        $message->attachData($adj1,$inc->img_attach1);
+                    }
+                        
+                    if($inc->img_attach2){
+                        $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+                        $message->attachData($adj2,$inc->img_attach2);
+                    }
                 });
                 break;
             case 'P': //HTTP Post
@@ -450,16 +459,18 @@ class IncidenciasController extends Controller
         }
         //Enviamos mail al uusario abriente
         Mail::send('emails.mail_incidencia', ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
-            if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+            if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
                 $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
             } else {
                 $message->to(explode(';',$usuario_abriente->email), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
             }
             $message->from(config('mail.from.address'),config('mail.from.name'));
             if($inc->img_attach1)
-                $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+                $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+                $message->attachData($adj1,$inc->img_attach1);
             if($inc->img_attach2)
-                $message->attach(public_path().'/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+                $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+                $message->attachData($adj2,$inc->img_attach2);
         });
 
     }
@@ -476,14 +487,14 @@ class IncidenciasController extends Controller
     //FORMULARIO DE AÑADIR NUEVA ACCIOM
     public function form_accion($id){
         validar_acceso_tabla($id,'incidencias');
+        $incidencia=incidencias::find($id);
         $estados = DB::table('estados_incidencias')
             ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
-                    $q->orwhere('estados_incidencias.mca_fijo','S');
-                }
+            ->where(function($q) use($incidencia){
+                $q->where('estados_incidencias.id_cliente',$incidencia->id_cliente);
+                $q->orwhere('estados_incidencias.mca_fijo','S');
             })
+            ->orderby('des_estado')
         ->get();
 
         return view('incidencias.fill-form-accion',compact('id','estados'));
@@ -583,7 +594,7 @@ class IncidenciasController extends Controller
             $usuario_abriente=users::find($inc->id_usuario_apertura);
             $body="Tenemos el placer de comunicarle que la incidencia [".$inc->id_incidencia."] ".$inc->des_incidencia."Que usted abrió el  ".Carbon::parse($inc->fec_apertura)->format('d/m/Y')." ha sido cerrada por ".Auth::user()->name." Con el siguiente comentario:<br>".chr(13)." [".$des_causa."] ".$r->comentario_cierre;
             Mail::send('emails.mail_cerrar_incidencia', ['inc'=>$inc,'body'=>$body], function($message) use ($inc, $puesto,$body,$usuario_abriente) {
-                if(config('app.env')=='dev'){//Para que en desarrollo solo me mande los mail a mi
+                if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
                     $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Confirmacion de cierre de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                 } else {
                     $message->to(explode(';',$usuario_abriente->email), '')->subject('Confirmacion de cierre de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
@@ -854,4 +865,5 @@ class IncidenciasController extends Controller
     }
 
     
+
 }

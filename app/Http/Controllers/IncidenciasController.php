@@ -275,11 +275,11 @@ class IncidenciasController extends Controller
         $puesto=puestos::find($r->id_puesto);
         $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
         try{    
-
+            
             if(isset($r->adjuntos) and is_array($r->adjuntos)){
                 $adjuntos=$r->adjuntos[0];
                 $adjuntos=explode(",",$adjuntos);
-                $indice=0;
+                $indice=1;
                 foreach($adjuntos as $key=>$value){
                     $var="img".$indice;
                     $$var=$value;
@@ -425,8 +425,8 @@ class IncidenciasController extends Controller
             ->first();
         switch ($tipo->tip_metodo) {
             case 'S':  //Mandar SMS
-               
                 break;
+
             case 'M':  //Mandar e-mail
                 $to_email = $tipo->txt_destinos;
                 Mail::send('emails.mail_incidencia', ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto) {
@@ -436,27 +436,25 @@ class IncidenciasController extends Controller
                         $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                     }
                     $message->from(config('mail.from.address'),config('mail.from.name'));
-                    if($inc->img_attach1){
+                    if($inc->img_attach2!==null){
                         $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
                         $message->attachData($adj1,$inc->img_attach1);
-                    }
-                        
-                    if($inc->img_attach2){
+                    }     
+                    if(isset($inc->img_attach2)){
                         $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
                         $message->attachData($adj2,$inc->img_attach2);
                     }
                 });
                 break;
             case 'P': //HTTP Post
-                
                 break;
+
             case 'G': //HTTP Get
-                
                 break;
+
             case 'L': //Spotlinker
-                
-                break;
-                                                    
+                break;  
+
             default:
                 # code...
                 break;
@@ -469,13 +467,16 @@ class IncidenciasController extends Controller
                 $message->to(explode(';',$usuario_abriente->email), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
             }
             $message->from(config('mail.from.address'),config('mail.from.name'));
-            if(isset($inc->img_attach1))
+            if($inc->img_attach1!==null){
                 $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
                 $message->attachData($adj1,$inc->img_attach1);
-            if(isset($inc->img_attach2))
+            }     
+            if($inc->img_attach2!==null){
                 $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
                 $message->attachData($adj2,$inc->img_attach2);
+            }
         });
+        
 
     }
 

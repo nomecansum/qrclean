@@ -274,6 +274,11 @@ class IncidenciasController extends Controller
         $data=$this->getDataincidencia($r);
         $puesto=puestos::find($r->id_puesto);
         $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
+        $path = config('app.ruta_public').'/uploads/incidencias/'.$puesto->id_cliente;
+        $path_local = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
+            if(!File::exists($path_local)) {
+                File::makeDirectory($path_local);
+            }
         try{    
             
             if(isset($r->adjuntos) and is_array($r->adjuntos)){
@@ -436,11 +441,11 @@ class IncidenciasController extends Controller
                         $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                     }
                     $message->from(config('mail.from.address'),config('mail.from.name'));
-                    if($inc->img_attach2!==null){
+                    if($inc->img_attach1!==null){
                         $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
                         $message->attachData($adj1,$inc->img_attach1);
                     }     
-                    if(isset($inc->img_attach2)){
+                    if($inc->img_attach2!==null){
                         $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
                         $message->attachData($adj2,$inc->img_attach2);
                     }

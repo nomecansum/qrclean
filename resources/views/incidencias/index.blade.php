@@ -220,6 +220,8 @@
 		$('#fechas, #ac').change(function(){
 			$('#formbuscador').submit();
 		})
+		
+
 	})     
 
 	$('.minicolors').minicolors({

@@ -248,6 +248,7 @@
 
     //dd($datos_quesito);
 @endphp
+
 <script>
     // Create chart instance
     var chart = am4core.create("chartdiv", am4charts.XYChart);
@@ -295,5 +296,4 @@
 
     chart.legend = new am4charts.Legend();
     chart.cursor = new am4charts.XYCursor();
-
 </script>

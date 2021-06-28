@@ -274,11 +274,6 @@ class IncidenciasController extends Controller
         $data=$this->getDataincidencia($r);
         $puesto=puestos::find($r->id_puesto);
         $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
-        $path = config('app.ruta_public').'/uploads/incidencias/'.$puesto->id_cliente;
-        $path_local = public_path().'/uploads/incidencias/'.$puesto->id_cliente;
-            if(!File::exists($path_local)) {
-                File::makeDirectory($path_local);
-            }
         try{    
             
             if(isset($r->adjuntos) and is_array($r->adjuntos)){

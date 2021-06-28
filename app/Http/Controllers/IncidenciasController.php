@@ -279,7 +279,6 @@ class IncidenciasController extends Controller
             if(isset($r->adjuntos) and is_array($r->adjuntos)){
                 $adjuntos=$r->adjuntos[0];
                 $adjuntos=explode(",",$adjuntos);
-                dd($adjuntos);
                 foreach($adjuntos as $key=>$value){
                     $var="img".$key+1;
                     $$var=$value;

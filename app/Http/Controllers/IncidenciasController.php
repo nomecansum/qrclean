@@ -469,10 +469,10 @@ class IncidenciasController extends Controller
                 $message->to(explode(';',$usuario_abriente->email), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
             }
             $message->from(config('mail.from.address'),config('mail.from.name'));
-            if($inc->img_attach1)
+            if(isset($inc->img_attach1))
                 $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
                 $message->attachData($adj1,$inc->img_attach1);
-            if($inc->img_attach2)
+            if(isset($inc->img_attach2))
                 $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
                 $message->attachData($adj2,$inc->img_attach2);
         });
@@ -568,6 +568,7 @@ class IncidenciasController extends Controller
            
             $incidencia->delete();
             $puesto->mca_incidencia='N';
+            $puesto->id_estado=$incidencia->id_estado_vuelta_puesto;
             $puesto->save();
             savebitacora('Incidencia ['.$incidencia->id_incidencia.'] '.$incidencia->des_incidencia.' borrada',"Incidencias","delete","OK");
             return redirect()->route('incidencias.index')->with('success_message', 'Incidencia ['.$id.'] '.$incidencia->des_incidencia.' borrada.');

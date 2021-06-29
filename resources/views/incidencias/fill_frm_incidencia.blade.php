@@ -61,10 +61,5 @@
         var originalOption = icon.element;
         return $('<span><i class="mdi ' + $(originalOption).data('icon') + '"></i> ' + icon.text + '</span>');
     }
-    $('.icons_select2').select2({
-		width: "100%",
-		templateSelection: iformat,
-		templateResult: iformat,
-		allowHtml: true
-	});
+
 </script>

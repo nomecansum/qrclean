@@ -82,7 +82,7 @@
                 this.on("sending", function(file, xhr, formData) {
                     formData.append("id_cliente", {{ Auth::user()->id_cliente }});
                     // formData.append("enviar_email", $("#enviar_email").is(':checked'));
-                    console.log(formData)
+                    console.log(file)
                 });
                 
                 //send all the form data along with the files:
@@ -103,6 +103,7 @@
                         return item.nuevo;
                     });
                     $('#adjuntos').val(ficheros_final);
+                    console.log("onremoved");
                 });
 
 
@@ -112,6 +113,7 @@
 
                 this.on("success", function(file, responseText) {
                     //Dropzone.forElement("#dZUpload").removeAllFiles(true);
+                    console.log(responseText);
                     fic=new Object();
                     fic.orig=responseText.filename;
                     fic.nuevo=responseText.newfilename;
@@ -120,7 +122,7 @@
                         return item.nuevo;
                     });
                     $('#adjuntos').val(ficheros_final);
-                    console.log(lista_ficheros);
+                    console.log(ficheros_final);
                 });
             }
         }

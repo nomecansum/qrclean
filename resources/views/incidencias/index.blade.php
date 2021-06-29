@@ -220,8 +220,6 @@
 		$('#fechas, #ac').change(function(){
 			$('#formbuscador').submit();
 		})
-		
-
 	})     
 
 	$('.minicolors').minicolors({
@@ -266,7 +264,8 @@
 			window.Laravel = {!! json_encode([
 				'csrfToken' => csrf_token(),
 			]) !!};
-
+			
+			//Dropzone para adjuntos de acciones
 			lista_ficheros=[];	
 			$('#adjuntos').val('');
 			var myDropzone = new Dropzone("#dZUpload" , {

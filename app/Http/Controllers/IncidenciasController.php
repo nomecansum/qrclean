@@ -274,7 +274,7 @@ class IncidenciasController extends Controller
         $data=$this->getDataincidencia($r);
         $puesto=puestos::find($r->id_puesto);
         $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
-        try{    
+          
             
             if(isset($r->adjuntos) and is_array($r->adjuntos)){
                 $adjuntos=$r->adjuntos[0];
@@ -325,7 +325,7 @@ class IncidenciasController extends Controller
                 ];
             }
             
-        } catch (Exception $exception) {
+            try{  } catch (Exception $exception) {
 
             savebitacora('ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","save","ERROR");
             return [

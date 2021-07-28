@@ -55,6 +55,7 @@
     <script>
         $('.SECCION_MENU').addClass('active active-sub');
         $('.reservas').addClass('active-link');
+        $('.reservas_puestos').addClass('active-link');
 
         function filter_hour(value, type) {
         return (value % 60 == 0) ? 1 : 0;

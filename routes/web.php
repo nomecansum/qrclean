@@ -273,7 +273,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/upload_imagen',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@subir_adjuntos']);
 
 
-        Route::get('/create/{puesto}','IncidenciasController@nueva_incidencia')->name('incidencias.nueva');
+        Route::get('/create/{puesto}/{embed?}','IncidenciasController@nueva_incidencia')->name('incidencias.nueva');
         Route::get('/edit/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@edit']);
         Route::post('/save',['middleware'=>'permissions:["Incidencias"],["C"]','uses' => 'IncidenciasController@save']);
         Route::post('/cerrar',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@cerrar']);
@@ -283,10 +283,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/delete/{id}',['middleware'=>'permissions:["Incidencias"],["D"]','uses' => 'IncidenciasController@delete']);
         Route::get('/get_detalle/{id?}',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@get_detalle_scan']);
         Route::get('/form_accion/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@form_accion']);
-        
-        
-
         Route::post('/accion',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@add_accion']);
+        Route::get('/create/{puesto}','IncidenciasController@nueva_incidencia')->name('incidencias.nueva');
+        
+        Route::get('/nueva_incidencia',['middleware'=>'permissions:["Incidencias"],["C"]','uses'=>'IncidenciasController@selector_puestos'])->name('incidencias.nueva_incidencia_blanco');
+        
         
     });
 

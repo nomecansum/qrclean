@@ -19,7 +19,7 @@
 
 @endphp
     nueva
-    <div class="row">
+    {{-- <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4 text-center">
             @if(isset($puesto))
@@ -28,7 +28,7 @@
             @endif
         </div>
         <div class="col-md-4"></div>
-    </div>
+    </div> --}}
     <div class="row" id="div_respuesta">
         <div class="col-md-3"></div>
         <div class="col-md-6 text-3x text-center rounded">

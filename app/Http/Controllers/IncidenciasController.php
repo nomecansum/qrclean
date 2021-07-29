@@ -208,7 +208,7 @@ class IncidenciasController extends Controller
     }
 
     //USUARIOS ABRIR INCIDENCIAS
-    public function nueva_incidencia($puesto){
+    public function nueva_incidencia($puesto,$tipo='normal'){
         $referer = request()->headers->get('referer');
         if(strpos($referer,'/puesto/')){
             $referer='scan';
@@ -245,7 +245,30 @@ class IncidenciasController extends Controller
             ->orderby('mca_fijo')
             ->orderby('nom_cliente')
             ->get();
-        return view('incidencias.nueva_incidencia',compact('puesto','tipos','referer','config'));
+        if($tipo=='embed'){
+            return view('incidencias.fill_frm_incidencia',compact('puesto','tipos','referer','config'));
+        } else {
+            return view('incidencias.nueva_incidencia',compact('puesto','tipos','referer','config'));
+        }
+        
+    }
+
+    //Funcion para abrir incidencia cuando no has seleccionado puesto 
+    public function selector_puestos(){
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            })
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+        return view('incidencias.selector_puestos',compact('puestos'));
     }
 
     /**
@@ -435,11 +458,11 @@ class IncidenciasController extends Controller
                         $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                     }
                     $message->from(config('mail.from.address'),config('mail.from.name'));
-                    if($inc->img_attach1!==null){
+                    if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
                         $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
                         $message->attachData($adj1,$inc->img_attach1);
                     }     
-                    if($inc->img_attach2!==null){
+                    if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
                         $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
                         $message->attachData($adj2,$inc->img_attach2);
                     }
@@ -466,11 +489,11 @@ class IncidenciasController extends Controller
                 $message->to(explode(';',$usuario_abriente->email), '')->subject('Confirmacion de apertura de incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
             }
             $message->from(config('mail.from.address'),config('mail.from.name'));
-            if($inc->img_attach1!==null){
+            if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
                 $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
                 $message->attachData($adj1,$inc->img_attach1);
             }     
-            if($inc->img_attach2!==null){
+            if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
                 $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
                 $message->attachData($adj2,$inc->img_attach2);
             }

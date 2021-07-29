@@ -43,10 +43,13 @@ class LoginController extends Controller
 
     public function login(Request $request)
      {
-       $this->validate($request, [
+        $this->validate($request, [
         'email' => 'required|email',
         'password' => 'required',
+        'intended' => 'string'
         ]);
+
+        
 
         $remember_me = $request->has('remember') ? true : false;
 
@@ -105,9 +108,11 @@ class LoginController extends Controller
                     id_perfil=".auth()->user()->cod_nivel.") sq
             GROUP BY sq.des_seccion"));
             session(['P' => $permisos]);
+            if(isset($request->intended)&&$request->intended!=''){
+                session(['redirectTo' => $request->intended]);
+            }
             //session(['CL'=>$config_cliente]);
             return redirect ('/');
-            
         }else{
             return response()->json(["result"=>"ERROR", "message"=>"Credenciales incorrectas, intente de nuevo"],422);
         }

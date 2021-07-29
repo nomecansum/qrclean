@@ -26,6 +26,7 @@
                     <label for="demo-form-checkbox">Remember me</label>
                 </div>  --}}
                 <input type="hidden" name="remember" value="1"/>
+                <input type="hidden" name="intended" value="{{ session()->has('url.intended')?session('url.intended'):'' }}">
                 <button class="btn btn-primary btn-lg btn-block" type="submit">Entrar</button>
             </form>
         </div>

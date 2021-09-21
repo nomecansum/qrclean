@@ -46,7 +46,7 @@ class LoginController extends Controller
         $this->validate($request, [
         'email' => 'required|email',
         'password' => 'required',
-        'intended' => 'string'
+        'intended' => 'nullable|string'
         ]);
 
         
@@ -57,7 +57,6 @@ class LoginController extends Controller
         {
             $user = auth()->user();
             //Vamos a ver si tiene que cambiar la password
-           
 
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  
             $cliente=DB::table('clientes')->where('id_cliente',$user->id_cliente)->first();  

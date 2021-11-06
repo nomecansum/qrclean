@@ -21,7 +21,7 @@
     @if(isset($cookie) && $cookie==$encuesta->id_encuesta)
         <div class="col-md-4 col-xs-offset-4 text-center ">
             <h3 class="text-danger"><i class="fas fa-stopwatch"></i> Lo sentimos, para volver a participar en esta encuesta tiene que haber transcurrido un minimo de {{ $encuesta->val_periodo_minimo }} minutos</h3>
-            
+
         </div>
     @else
         <div class="row" id="selector">
@@ -51,7 +51,7 @@
 @section('scripts')
 <script>
     $('.valor').click(function(){
-       /$(this).css('background-color','#7fff00')
+       //$(this).css('background-color','#7fff00')
         console.log($(this).data('value'));
         $.post('{{url('/encuestas/save_data')}}', {_token:'{{csrf_token()}}',val: $(this).data('value'), id_encuesta: "{{ $encuesta->token }}", mca_anonima: "{{ $encuesta->mca_anonima }}",comentario: $('#comentario').val()}, function(data, textStatus, xhr) {
            console.log(data);

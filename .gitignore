@@ -1,7 +1,8 @@
 /node_modules
 /public/hot
 /public/storage
-/public/uploads
+/public/uploads/incidencias
+/public/uploads/json
 /storage/*.key
 /vendor
 .env

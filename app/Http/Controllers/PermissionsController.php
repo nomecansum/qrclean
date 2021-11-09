@@ -206,6 +206,10 @@ class PermissionsController extends Controller
 		$nivel_acceso = \DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->val_nivel_acceso;
 		$niveles = DB::table('niveles_acceso')
 				->where('val_nivel_acceso','<=',$nivel_acceso)
+				->where(function($q){
+					$q->where('id_cliente',Auth::user()->id_cliente);
+					$q->orwhere('mca_fijo','S');
+				})
 				->get();
 
 		$grupos = DB::table('secciones')

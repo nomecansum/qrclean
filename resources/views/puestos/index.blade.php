@@ -182,13 +182,21 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2 p-t-30">
-                                <input type="checkbox" class="form-control  magic-checkbox" name="mca_acceso_anonimo"  id="modif_mca_acceso_anonimo" value="S"> 
-                                <label class="custom-control-label"   for="mca_acceso_anonimo">Anonimo</label>
+                            <div class="col-md-2">
+                                <label for="planta">Anonimo</label>
+                                <select name="mca_acceso_anonimo" id="modif_mca_acceso_anonimo" class="form-control">
+                                    <option value=""></option>
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
                             </div>
-                            <div class="col-md-2  p-t-30">
-                                <input type="checkbox" class="form-control  magic-checkbox" name="mca_reservar"  id="modif_mca_reservar" value="S"> 
-                                <label class="custom-control-label"   for="mca_reservar">Reserva</label>
+                            <div class="col-md-2">
+                                <label for="planta">Reservar</label>
+                                <select name="mca_reservar" id="modif_mca_reservar" class="form-control">
+                                    <option value=""></option>
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
                             </div>
                             <div class="form-group col-md-12">
                                 <label for="planta">Tags</label>

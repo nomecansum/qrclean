@@ -76,7 +76,7 @@
 
                 <div class="form-group">
                     <div class="col-md-12 text-right">
-                        <input class="btn btn-primary" type="submit" value="Guardar">
+                        @if(checkPermissions(['Estados de incidencia'],['D']) && ($estado->mca_fijo=='N' || ($estado->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@endif
                     </div>
                 </div>
             </form>

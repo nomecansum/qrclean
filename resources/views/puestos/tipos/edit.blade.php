@@ -85,7 +85,7 @@
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label for="des_tipo_puesto" class="control-label">Observaciones</label>
-                        <input class="form-control" required name="observaciones" type="text" id="observaciones" value="{{ old('observaciones', optional($tipo)->observaciones) }}" maxlength="200" placeholder="Enter observaciones here...">
+                        <input class="form-control" name="observaciones" type="text" id="observaciones" value="{{ old('observaciones', optional($tipo)->observaciones) }}" maxlength="200" placeholder="Enter observaciones here...">
                         
                     </div>
                 </div>
@@ -93,7 +93,7 @@
 
                 <div class="form-group">
                     <div class="col-md-12 text-right">
-                        <input class="btn btn-primary" type="submit" value="Guardar">
+                        @if(checkPermissions(['Tipos de puesto'],['W']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess()))) <input class="btn btn-primary" type="submit" value="Guardar">@endif
                     </div>
                 </div>
             </form>

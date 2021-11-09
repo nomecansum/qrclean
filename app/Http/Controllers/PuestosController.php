@@ -509,6 +509,12 @@ class PuestosController extends Controller
     public function tipos_delete($id=0){
         try {
             $tipo = puestos_tipos::findorfail($id);
+            //Vamos a comprobar si tiene puestos el tipo
+            $hay_puestos=DB::table('puestos')->where('id_tipo_puesto',$id)->count();
+            if($hay_puestos>0){
+                flash('ERROR: Ocurrio un error borrando Tipo de puesto '.$tipo->des_tipo_puesto.' Existen puestos de este tioo. Borrelos primero desde Parametrizacion > Puestos')->error();
+                return back()->withInput();
+            }
 
             $tipo->delete();
             savebitacora('Tipo de puesto borrado '.$tipo->des_tipo_puesto,"Puestos","tipos_delete","OK");
@@ -918,6 +924,14 @@ class PuestosController extends Controller
             if($r->id_tipo_puesto){
                 $valores["id_tipo_puesto"]=$r->id_tipo_puesto;
                 $cosas.=" | Tipo de puesto: ".$r->id_tipo_puesto;
+            }
+            if($r->mca_acceso_anonimo){
+                $valores["mca_acceso_anonimo"]=$r->mca_acceso_anonimo;
+                $cosas.=" | Acceso anonimo: ".$r->mca_acceso_anonimo;
+            }
+            if($r->mca_reservar){
+                $valores["mca_reservar"]=$r->mca_reservar;
+                $cosas.=" | Permitir reserva: ".$r->mca_reservar;
             }
             if($r->max_horas_reservar){
                 $valores["max_horas_reservar"]=time_to_dec($r->max_horas_reservar.':00','h');

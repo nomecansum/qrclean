@@ -28,10 +28,12 @@
     </div>
     <div class="col-md-1 text-right">
         <div class="btn-group btn-group-sm pull-right" role="group">
+            @if(checkPermissions(['Tipos de incidencia'],['C'])) 
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo edificio">
-                <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-                <span>Nuevo</span>
-            </a>
+                    <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
+                    <span>Nuevo</span>
+                </a>
+            @endif
         </div>
     </div>
 </div>
@@ -122,7 +124,7 @@
                                 <div class="pull-right floating-like-gmail mt-2" role="group">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tipo->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
                                     <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_tipo_incidencia }})" title="Editar tipo" data-id="{{ $tipo->id_tipo_incidencia }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
-                                    <a href="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" data-target="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>
+                                    @if(checkPermissions(['Estados de incidencia'],['D']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess())))<a href="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" data-target="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$tipo->id_tipo_incidencia}}" style="display: none;">
                                     <div class="modal-dialog">

@@ -60,6 +60,8 @@ class LoginController extends Controller
 
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  
             $cliente=DB::table('clientes')->where('id_cliente',$user->id_cliente)->first();  
+            $nivel=DB::table('niveles_acceso')->where('cod_nivel',$user->cod_nivel)->first();
+            session(['NIV'=>(array)$nivel]);
             if(isset($cliente->id_distribuidor)){
                 $distribuidor=DB::table('distribuidores')->where('id_distribuidor',$cliente->id_distribuidor)->first();
                 session(['DIS'=>(array)$distribuidor]);

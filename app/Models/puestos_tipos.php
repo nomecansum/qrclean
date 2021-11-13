@@ -40,7 +40,8 @@ class puestos_tipos extends Model
                   'mca_fijo',
                   'observaciones',
                   'val_color',
-                  'val_icono'
+                  'val_icono',
+                  'mca_liberar_auto'
               ];
 
     /**

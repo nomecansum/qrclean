@@ -73,14 +73,22 @@
                         <label class="custom-control-label"   for="mca_fijo">Fijo</label>
                     </div>
                     @endif
+                    
                     <div class="form-group col-md-2" style="margin-top: 7px">
                         <label for="max_usos">Usos simultaneo</label><br>
                         <input type="number" autocomplete="off" min="1" max="20" style="width: 100px"  name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
                     </div>
-                    <div class="form-group col-lg-1" style="margin-top: 7px">
-                        <label for="max_usos">Liberar a las</label><br>
-                        <input type="time" autocomplete="off" name="hora_liberar" id="hora_liberar" style="width: 120px"  class="form-control" value="{{$tipo->hora_liberar??config_cliente('hora_liberar_puestos',$tipo->id_cliente)}}" />
+                    <div class="col-md-4 b-all rounded p-0">
+                        <div class="col-md-7 p-t-20 mt-2">
+                            <input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ isset($tipo->mca_liberar_auto) && $tipo->mca_liberar_auto=='S'?'checked':'' }}> 
+                            <label class="custom-control-label"   for="mca_liberar_auto">Liberar reservas AUTO</label>
+                        </div>
+                        <div class="form-group col-md-5" style="margin-top: 7px">
+                            <label for="max_usos">Cortesia (min)</label><br>
+                            <input type="number" autocomplete="off" name="hora_liberar" id="hora_liberar" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->hora_liberar??config_cliente('hora_liberar_puestos',$tipo->id_cliente)}}" />
+                        </div>
                     </div>
+                    
                 </div>
                 <div class="row">
                     <div class="form-group col-md-12">

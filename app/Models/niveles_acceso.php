@@ -37,7 +37,9 @@ class niveles_acceso extends Model
                   'des_nivel_acceso',
                   'id_cliente',
                   'home_page',
-                  'mca_fijo'
+                  'mca_fijo',
+                  'mca_reserva_multiple',
+                  'mca_liberar_auto'
               ];
 
     /**

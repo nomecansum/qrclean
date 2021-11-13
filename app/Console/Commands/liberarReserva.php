@@ -121,8 +121,11 @@ class liberarReserva extends Command
         //Primero sacar aquellas reservas 
         $this->escribelog_comando_comando('debug','Buscando reservas anulables'); 
         $reservas=DB::table('reservas')
+            ->select('reservas.*','niveles_acceso.mca_liberar_auto as auto_nivel','tipos.mca_liberar_auto as auto_tipo','tipos.hora_liberar','users.name','puestos.cod_puesto')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('puestos_tipos as tipos','puestos.id_tipo_puesto','tipos.id_tipo_puesto')
             ->join('users','users.id','reservas.id_usuario')
+            ->join('niveles_acceso','users.cod_nivel','niveles_acceso.cod_nivel')
             ->where(function($q) use($tarea){
                 if(isset($tarea->clientes) && $tarea->clientes!=''){
                     $lista_clientes=explode(',',$tarea->clientes);
@@ -130,12 +133,32 @@ class liberarReserva extends Command
                 }
             })
             ->wheredate('fec_reserva',Carbon::now()->format('Y-m-d'))
-            ->where('fec_reserva','<=',Carbon::now()->subMinutes($val_minutos))
+            ->where(function($q) use($val_minutos){
+                $q->where(function($q){
+                    $q->wherenotnull('tipos.hora_liberar');
+                    $q->where('tipos.hora_liberar','>',0);
+                    $q->whereraw("fec_reserva <= DATE_SUB(now(), INTERVAL tipos.hora_liberar MINUTE)");
+                });
+                $q->orwhere(function($q) use($val_minutos){
+                    $q->wherenull('tipos.hora_liberar');
+                    $q->where('fec_reserva','<=',Carbon::now()->subMinutes($val_minutos));
+                });
+            })
+            ->where('niveles_acceso.mca_liberar_auto','S')
+            ->where('tipos.mca_liberar_auto','S')
             ->wherenotnull('fec_fin_reserva')
             ->wherenull('fec_utilizada')
             ->get();
+
         $this->escribelog_comando_comando('info','Encontradas '.$reservas->count().' anulables'); 
         foreach($reservas as $res){
+            //Primero borramos si habia una reserva anulada anterior
+            DB::table('reservas')
+                ->where('id_puesto',$res->id_puesto)
+                ->where('fec_reserva',$res->fec_reserva)
+                ->where('fec_fin_reserva',$res->fec_fin_reserva)
+                ->where('mca_anulada','S')
+                ->delete();
             //Marcamos las reservas como anuladas y les enviamos un mail a los afectados
             $upd_res=DB::table('reservas')
             ->where('id_reserva',$res->id_reserva)
@@ -154,8 +177,11 @@ class liberarReserva extends Command
         //Preaviso de anulacion
         $this->escribelog_comando_comando('debug','Buscando preavisos de anulacion de reserva'); 
         $preavisos=DB::table('reservas')
+            ->select('reservas.*','niveles_acceso.mca_liberar_auto as auto_nivel','tipos.mca_liberar_auto as auto_tipo','tipos.hora_liberar','users.name','puestos.cod_puesto')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('puestos_tipos as tipos','puestos.id_tipo_puesto','tipos.id_tipo_puesto')
             ->join('users','users.id','reservas.id_usuario')
+            ->join('niveles_acceso','users.cod_nivel','niveles_acceso.cod_nivel')
             ->where(function($q) use($tarea){
                 if(isset($tarea->clientes) && $tarea->clientes!=''){
                     $lista_clientes=explode(',',$tarea->clientes);
@@ -166,6 +192,8 @@ class liberarReserva extends Command
             ->where('fec_reserva','<=',Carbon::now()->subMinutes($val_preaviso))
             ->wherenotnull('fec_fin_reserva')
             ->wherenull('fec_utilizada')
+            ->where('niveles_acceso.mca_liberar_auto','S')
+            ->where('tipos.mca_liberar_auto','S')
             ->wherenotin('reservas.id_reserva',$lista_reservas)
             ->get();
         

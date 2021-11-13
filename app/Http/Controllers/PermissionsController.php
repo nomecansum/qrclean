@@ -45,6 +45,8 @@ class PermissionsController extends Controller
 					'val_nivel_acceso' => $r->num_nivel_acceso,
 					'id_cliente' => $r->id_cliente,
 					'mca_fijo' => isset($r->mca_fijo)?'S':'N',
+					'mca_reserva_multiple' => isset($r->mca_reserva_multiple)?'S':'N',
+					'mca_liberar_auto' => isset($r->mca_reserva_multiple)?'S':'N',
 					'home_page' => $r->home_page
 				]
 			);
@@ -59,6 +61,8 @@ class PermissionsController extends Controller
 					'des_nivel_acceso' => $r->des_nivel_acceso,
 					'id_cliente' => $r->id_cliente,
 					'mca_fijo' => isset($r->mca_fijo)?'S':'N',
+					'mca_reserva_multiple' => isset($r->mca_reserva_multiple)?'S':'N',
+					'mca_liberar_auto' => isset($r->mca_reserva_multiple)?'S':'N',
 					'home_page' => $r->home_page
 				]
 			);

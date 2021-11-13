@@ -87,6 +87,14 @@
 								<label class="custom-control-label"   for="mca_fijo">Fijo</label>
 							</div>
 							@endif
+							<div class="col-md-2 p-t-20 mt-1">
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_reserva_multiple"  id="mca_reserva_multiple" value="S" {{ isset($n) && $n->mca_reserva_multiple=='S'?'checked':'' }}> 
+								<label class="custom-control-label"   for="mca_reserva_multiple">Reserva multiple</label>
+							</div>
+							<div class="col-md-2 p-t-20 mt-1">
+								<input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ isset($n) && $n->mca_liberar_auto=='S'?'checked':'' }}> 
+								<label class="custom-control-label"   for="mca_liberar_auto">Liberar reservas AUTO</label>
+							</div>
 							<div class="col-md-1">
 								<button type="submit" class="btn btn-primary float-right    " style="margin-top: 25px">Guardar</button>
 							</div>
@@ -130,7 +138,7 @@
 										</td>
 										@endif
 			                			<td style="position: relative;">{{$nivel->des_nivel_acceso}}
-                                            @if($nivel->mca_fijo=='S' and isAdmin())
+                                            @if(($nivel->mca_fijo=='S' && isAdmin()) || $nivel->id_cliente==Auth::user()->id_cliente)
 											<div class="floating-like-gmail pull-right pt-3" role="group">
                                                 <a href="#" class="btn btn-info btn-xs btn_editar pt-2  add-tooltip" title="Editar perfil"  data-perfil="{{$nivel->cod_nivel}}" data-nombre="{{$nivel->des_nivel_acceso}}"  data-num="{{$nivel->val_nivel_acceso}}"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
                                                 <a href="#eliminar-usuario-{{$nivel->cod_nivel}}" data-toggle="modal" data-perfil="{{$nivel->cod_nivel}}" data-nombre="{{$nivel->des_nivel_acceso}}"  data-num="{{$nivel->val_nivel_acceso}}" class="btn btn-danger  btn-xs add-tooltip" title="Borrar perfil" ><span class="fa fa-trash" aria-hidden="true"></span> Del</a>

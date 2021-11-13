@@ -184,12 +184,14 @@ class ReservasController extends Controller
                         $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
                     });
                 })
+                ->where('mca_anulada','N')
                 ->where(function($q){
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 })
                 ->get();
             $puestos_reservados=array_merge($puestos_reservados,$reservas->pluck('id_puesto')->toArray());
         }
+        //dd($puestos_reservados);
         $puestos_usuarios=[];
         //Vamos a mirar que puestos estan disponibles todos los dias que ha solicitado el usuario
         $period = CarbonPeriod::create($f1,$f2);
@@ -209,6 +211,7 @@ class ReservasController extends Controller
             if(isset($asignados_usuarios)){
                 $puestos_usuarios=array_merge($puestos_usuarios,$asignados_usuarios->pluck('id_puesto')->toArray());
         }}
+     
          
         $asignados_miperfil=DB::table('puestos_asignados')
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
@@ -298,6 +301,8 @@ class ReservasController extends Controller
             ->orderby('puestos.des_puesto')
             ->get();
 
+        
+
         $edificios=DB::table('edificios')
             ->select('id_edificio','des_edificio')
             ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
@@ -338,53 +343,59 @@ class ReservasController extends Controller
         foreach($period as $p){
             $fec_desde=Carbon::parse($p->format('Y-m-d').' '.$r->hora_inicio);
             $fec_hasta=Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin);
-            //Primero comprobamos si tiene una reserva para ese dia de ese tipo de puesto
-            $reservas=DB::table('reservas')
-                ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-                ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
-                ->join('users','reservas.id_usuario','users.id')
-                ->where('puestos.id_tipo_puesto',$puesto->id_tipo_puesto)
-                ->where('reservas.id_usuario',Auth::user()->id)
-                ->where(function($q) use($r,$fec_desde,$fec_hasta){
-                    $q->where(function($q) use($fec_desde,$fec_hasta,$r){
-                        $q->wherenull('fec_fin_reserva');
-                        $q->where('fec_reserva',adaptar_fecha($r->fecha));
-                    });
-                    $q->orwhere(function($q) use($fec_desde,$fec_hasta,$r){
-                        $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
-                        $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
-                        $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
-                        $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
-                    });
-                })
-                ->where('puestos.id_cliente',Auth::user()->id_cliente)
-                ->first();
+            //Si en el perfil le hemos puesto que pude reservar varios puestos del tipo no comprobamos si ya estaba pillado
+            
+            if(session('NIV')["mca_reserva_multiple"]=='N')
+            {
+                 //Primero comprobamos si tiene una reserva para ese dia de ese tipo de puesto
+                $reservas=DB::table('reservas')
+                    ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+                    ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+                    ->join('users','reservas.id_usuario','users.id')
+                    ->where('puestos.id_tipo_puesto',$puesto->id_tipo_puesto)
+                    ->where('reservas.id_usuario',Auth::user()->id)
+                    ->where(function($q) use($r,$fec_desde,$fec_hasta){
+                        $q->where(function($q) use($fec_desde,$fec_hasta,$r){
+                            $q->wherenull('fec_fin_reserva');
+                            $q->where('fec_reserva',adaptar_fecha($r->fecha));
+                        });
+                        $q->orwhere(function($q) use($fec_desde,$fec_hasta,$r){
+                            $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                            $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                            $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
+                            $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
+                        });
+                    })
+                    ->where('mca_anulada','N')
+                    ->where('puestos.id_cliente',Auth::user()->id_cliente)
+                    ->first();
 
-            if(isset($reservas) && !isset($r->salas)){
-                $mensajes_error[]='Ya tiene una reserva para un puesto del tipo '.$reservas->des_tipo_puesto.' para el periodo ['.$fec_desde->format('d/m/Y H:i').' - '.$fec_hasta->format('d/m/Y H:i').'] que coincide en todo o en parte con la reserva que intenta hacer, anule primero la reserva que entra en conflicto con ésta';
+                if(isset($reservas) && !isset($r->salas)){
+                    $mensajes_error[]='Ya tiene una reserva para un puesto del tipo '.$reservas->des_tipo_puesto.' para el periodo ['.$fec_desde->format('d/m/Y H:i').' - '.$fec_hasta->format('d/m/Y H:i').'] que coincide en todo o en parte con la reserva que intenta hacer, anule primero la reserva que entra en conflicto con ésta';
+                }
+
+                //Despues comprobamos si tiene una asignacion para ese dia de ese tipo de puesto
+                $asignado=DB::table('puestos_asignados')
+                    ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+                    ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+                    ->join('users','puestos_asignados.id_usuario','users.id')
+                    ->where('puestos.id_tipo_puesto',$puesto->id_tipo_puesto)
+                    ->where('puestos_asignados.id_usuario',Auth::user()->id)
+                    ->where(function($q) use($fec_desde,$fec_hasta){
+                        $q->where(function($q){
+                            $q->wherenull('fec_desde');
+                            $q->orwherenull('fec_hasta');
+                        });
+                        $q->orwhereraw("'".$fec_desde->format('Y-m-d')."' between fec_desde AND fec_hasta");
+                    })
+                    ->where('puestos.id_cliente',Auth::user()->id_cliente)
+                    ->first();
+
+                if(isset($asignado)){
+                    $mensajes_error[]='Ya tiene un un puesto del tipo '.$asignado->des_tipo_puesto.' asignado para el '.$fec_desde->format('d/m/Y');
+                }
             }
-
-            //Despues comprobamos si tiene una asignacion para ese dia de ese tipo de puesto
-            $asignado=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
-                ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
-                ->join('users','puestos_asignados.id_usuario','users.id')
-                ->where('puestos.id_tipo_puesto',$puesto->id_tipo_puesto)
-                ->where('puestos_asignados.id_usuario',Auth::user()->id)
-                ->where(function($q) use($fec_desde,$fec_hasta){
-                    $q->where(function($q){
-                        $q->wherenull('fec_desde');
-                        $q->orwherenull('fec_hasta');
-                    });
-                    $q->orwhereraw("'".$fec_desde->format('Y-m-d')."' between fec_desde AND fec_hasta");
-                })
-                
-                ->where('puestos.id_cliente',Auth::user()->id_cliente)
-                ->first();
-
-            if(isset($asignado)){
-                $mensajes_error[]='Ya tiene un un puesto del tipo '.$asignado->des_tipo_puesto.' asignado para el '.$fec_desde->format('d/m/Y');
-            }
+           
 
             //Ahora hay que comprobar que no han pillado el puesto mientras el usuario se lo pensabe
             $ya_esta=DB::table('reservas')
@@ -404,6 +415,7 @@ class ReservasController extends Controller
                         $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
                     });
                 })
+                ->where('mca_anulada','N')
                 ->where('puestos.id_cliente',Auth::user()->id_cliente)
                 ->first();
 

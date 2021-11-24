@@ -372,7 +372,7 @@
                             </select>
                         </div>
                         @if(session('CL')['mca_reserva_horas']=='S')
-                        <div class="mb-5">
+                        <div class="mb-5 capa_horas">
                             <label><span class="badge badge-primary">3</span> Seleccione horario </label>
                             <div class="form-group col-md-12">
                                 <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>] <span id="obs" class="text-info"></span></label>
@@ -719,6 +719,7 @@
             $('#div_usuario_multiple').hide();
             $('#comprobar_puesto_reserva').html('<b>¿Seguro que quiere cancelar las todas las reservas de estos '+searchIDs.length+' puestos entre las fechas seleccionadas?<br>Esta acción no puede deshacerse</b>');
             $('#comprobar_puesto_reserva').show();
+            $('.capa_horas').hide();
         } else {
             $('#div_usuario_multiple').show();
         }

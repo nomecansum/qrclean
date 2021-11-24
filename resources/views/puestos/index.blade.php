@@ -8,6 +8,8 @@
     <link href="{{ asset('/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css') }}" rel="stylesheet">
     {{--  <link href="{{ asset('/plugins/fullcalendar/fullcalendar.min.css') }}" rel="stylesheet">  --}}
     <link href="{{ asset('/plugins/fullcalendar/lib/main.css') }}" rel="stylesheet">
+    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/noUiSlider/nouislider.min.css') }}" rel="stylesheet">
     
 	{{--  <link href="{{ asset('/plugins/fullcalendar/nifty-skin/fullcalendar-nifty.min.css') }}" rel="stylesheet">  --}}
     <style type="text/css">
@@ -59,6 +61,8 @@
                             @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
                             @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
                             @if(checkPermissions(['Puestos'],['W']))<li><a href="#modificar-puesto" class="btn_modificar_puestos btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-pencil"></i> Modificar puestos</a></li>@endif
+                            @if(checkPermissions(['Reservas'],['C']) && checkPermissions(['Reservas global'],['C']))<li><a href="#modal-reservas" class="btn_crear_reservas btn_toggle_dropdown btn_modal_reserva" data-toggle="modal" data-tipo="C" data-accion="Crear"><i class="fad fa-calendar-alt"></i> Crear reserva</a></li>@endif
+                            @if(checkPermissions(['Reservas'],['D']) && checkPermissions(['Reservas global'],['D']))<li><a href="#modal-reservas" class="btn_cancelar_reservas btn_toggle_dropdown btn_modal_reserva" data-toggle="modal" data-tipo="D" data-accion="Cancelar"><i class="fad fa-calendar-times"></i> Cancelar reservas</a></li>@endif
                             <li class="divider"></li>
                             <li class="dropdown-header">Acciones</li>
                             <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
@@ -334,6 +338,62 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal-reservas" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                    <input type="hidden" name="tip_ronda" value="L" id="tip_ronda">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                    <span class="float-right" id="spin_reserva" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
+                    <h3 class="modal-title"><span class="tipo_accion"></span> multiples reservas.</h3><br>
+                </div>
+                <form  action="{{url('puestos/modificar_puestos')}}" method="POST" name="frm_modif_puestos" id="frm_modif_puestos" class="form-ajax">
+                    {{csrf_field()}}
+                    <div class="modal-body" id="">
+                        <input type="hidden" name="lista_id" id="lista_id_reserva">
+                        <input type="hidden" name="accion_reserva" id="accion_reserva">
+                        <input type="hidden" name="hora_inicio" id="hora_inicio" value="00:00">
+                        <input type="hidden" name="hora_fin" id="hora_fin" value="23:59">
+                        <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control pull-left rangepicker" id="fechas_reserva" name="fechas" style="height: 40px; width: 200px">
+                            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                        
+                        </div>
+                        <div id="div_usuario_multiple">
+                            <label><span class="badge badge-primary">2</span> Seleccione usuario </label>
+                            <select name="id_usuario_res_multiple" id="id_usuario_res_multiple" class="form-control select2_res ">
+                                <option value=""></option>
+                                @foreach($usuarios as $n)
+                                    <option value="{{ $n->id}}">{{ $n->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @if(session('CL')['mca_reserva_horas']=='S')
+                        <div class="mb-5">
+                            <label><span class="badge badge-primary">3</span> Seleccione horario </label>
+                            <div class="form-group col-md-12">
+                                <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>] <span id="obs" class="text-info"></span></label>
+                                <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
+                            </div>
+                        </div>
+                        @endif
+                        
+                        <div id="comprobar_puesto_reserva" class="rounded b-all mt-4 pad-all" style="display: none"></div>
+                        <div id="mensaje_pulse" style="display: none">Pulse Si para confirmar la reserva</div>
+                    </div>
+                </form>
+                
+                <div class="modal-footer">
+                    <a class="btn btn-info" id="btn_res_multiple" href="javascript:void(0)">Si</a>
+                    <button type="button" id="btn_cancel_res_multiple" data-dismiss="modal" class="btn btn-warning">No</button>
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-left"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     
 @endsection
 
@@ -346,8 +406,40 @@
 <script src="{{ asset('/plugins/inputmask/dist/inputmask.js') }}"></script>
 <script src="{{ asset('/plugins/inputmask/dist/jquery.inputmask.js') }}"></script>
 <script src="{{ asset('/plugins/inputmask/dist/bindings/inputmask.binding.js') }}"></script>
+<script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
+<script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
 
 <script>
+
+    function comprobar_reserva_multiple(){
+        if( $('#fechas_reserva').val()!==null && $('#id_usuario_res_multiple').val()!==""){
+            searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+            }).get(); // <----
+            fecres=$('#fechas_reserva').val();
+            fecres=fecres.split(' - ');
+            console.log(fecres);
+            fecdesde=moment(fecres[0]+' '+$('#hora_inicio').val(),"DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DD HH:mm:ss');
+            fechasta=moment(fecres[1]+' '+$('#hora_fin').val(),"DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DD HH:mm:ss');
+            $('#spin_reserva').show();
+            $.post('{{ url('reservas/puestos_usuario') }}/'+$('#id_usuario_res_multiple').val()+'/'+fecdesde+'/'+fechasta, {_token: '{{csrf_token()}}',lista_id:searchIDs}, function(data, textStatus, xhr) {
+                console.log(data);
+                $('#spin_reserva').hide();
+                $('#comprobar_puesto_reserva').show();
+                $('#comprobar_puesto_reserva').html(data.message+'<br>'+data.recomendacion);
+                if(data.lista.length>0){
+                    $('#mensaje_pulse').show();
+                    $('#btn_res_multiple').show();
+                } else {
+                    $('#mensaje_pulse').hide();
+                    $('#btn_res_multiple').hide();
+                }
+            })
+            .fail(function(err){
+                toast_error('Error',err.responseJSON.message);
+            });
+        }
+    }
 
     //Menu
     $('.parametrizacion').addClass('active active-sub');
@@ -462,8 +554,6 @@
         });
     });
 
-    
-
     $('.btn_qr').click(function(){
         //block_espere();
         searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
@@ -473,14 +563,11 @@
             toast_error('Error','Debe seleccionar algún puesto');
             return;
         }
-    //
         $('#frmpuestos').attr('action',"{{url('/puestos/print_qr')}}");
         $('#frmpuestos').submit();
-        //
     });
 
     $('.btn_export_qr').click(function(){
-        //block_espere();
         searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
         return $(this).val();
         }).get(); // <----
@@ -488,14 +575,11 @@
             toast_error('Error','Debe seleccionar algún puesto');
             return;
         }
-    //
         $('#frmpuestos').attr('action',"{{url('/puestos/export_qr')}}");
         $('#frmpuestos').submit();
-        //
     });
 
     $('.btn_asignar').click(function(){
-        //block_espere();
         searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
         return $(this).val();
         }).get(); // <----
@@ -590,8 +674,6 @@
         //$('#frm_modif_puestos').submit();
     })
 
-    //$('#frm_modif_puestos').submit(form_ajax_submit);
-
     $('.btn_modificar_puestos').click(function(){
         //block_espere();
         searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
@@ -615,8 +697,136 @@
         $('.modal').css('z-index', 1000);
     });
 
+    $('.btn_modal_reserva').click(function(){
+        $('#id_usuario_res_multiple').val('');
+        $('#id_usuario_res_multiple').trigger('change');
+        $('#comprobar_puesto_reserva').empty();
+        $('#mensaje_pulse').hide();
+        $('#accion_reserva').val($(this).data('tipo'));
+        $('.tipo_accion').html($(this).data('accion'));
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); 
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            $('#modal-reservas').modal('hide');
+            exit();
+        }
+        $('#lista_id_reserva').val(searchIDs);
+        //A ver si estamos cancelando o creando
+        
+        if($(this).data('accion')=='Cancelar'){
+            $('#div_usuario_multiple').hide();
+            $('#comprobar_puesto_reserva').html('<b>¿Seguro que quiere cancelar las todas las reservas de estos '+searchIDs.length+' puestos entre las fechas seleccionadas?<br>Esta acción no puede deshacerse</b>');
+            $('#comprobar_puesto_reserva').show();
+        } else {
+            $('#div_usuario_multiple').show();
+        }
+    })
+
+
+    $('#btn_res_multiple').click(function(){
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); 
+        $('#spin_reserva').show();
+        $.post('{{ url('reservas/reservas_multiples_admin') }}', {_token: '{{csrf_token()}}',lista_id:searchIDs,id_usuario: $('#id_usuario_res_multiple').val(),rango: $('#fechas_reserva').val(),accion:$('#accion_reserva').val(), hora_inicio:$('#hora_inicio').val() ,hora_fin: $('#hora_fin').val() }, function(data, textStatus, xhr) {
+            $('#spin_reserva').hide();
+            console.log(data);
+            if(data.error){
+                toast_error(data.title,data.error);
+            } else {
+                toast_ok(data.title,data.mensaje);
+            }
+            $('#modal-reservas').modal('hide');
+        })
+        .fail(function(err){
+            toast_error('Error',err.responseJSON.message);
+        });
+    })
 
     Inputmask({regex:"^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$"}).mask('.hourMask');
+
+
+    $('#fechas_reserva').daterangepicker({
+        autoUpdateInput: true,
+        locale: {
+            format: '{{trans("general.date_format")}}',
+            applyLabel: "OK",
+            cancelLabel: "Cancelar",
+            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+            firstDay: {{trans("general.firstDayofWeek")}}
+        },
+        opens: 'right',
+        parentEl: "#modal-reservas .modal-body" 
+    });
+
+    $('#fechas_reserva').change(function(){
+        comprobar_reserva_multiple();
+    })
+    $('#id_usuario_res_multiple').change(function(){
+        comprobar_reserva_multiple();
+    })
+
+    $('.select2_res').select2({
+        width: '100%',
+        dropdownParent: $("#modal-reservas  .modal-body"),
+    }      
+    );
+
+    @if(session('CL')['mca_reserva_horas']=='S')
+
+        var aproximateHour = function (mins)
+        {
+        //http://greweb.me/2013/01/be-careful-with-js-numbers/
+        var minutes = Math.round(mins % 60);
+        if (minutes == 60 || minutes == 0)
+        {
+            return mins / 60;
+        }
+        return Math.trunc (mins / 60) + minutes / 100;
+        }
+
+
+        function filter_hour(value, type) {
+        return (value % 60 == 0) ? 1 : 0;
+        }
+
+
+        var r_def = document.getElementById('hora-range-drg');
+        var r_def_value = document.getElementById('hora-range-val');
+
+
+        noUiSlider.create(r_def,{
+            start : [{{ config_cliente('min_hora_reservas') }}, {{ config_cliente('max_hora_reservas') }}],
+            connect: true, 
+            behaviour: 'tap-drag', 
+            step: 10,
+            tooltips: true,
+            range : {'min': {{ config_cliente('min_hora_reservas') }}, 'max': {{ config_cliente('max_hora_reservas') }} },
+            format:  wNumb({
+                    decimals: 2,
+                mark: ":",
+                    encoder: function(a){
+                return aproximateHour(a);
+                }
+                }),
+        });
+        r_def.noUiSlider.on('change', function( values, handle ) {
+            console.log(values);
+            $('#hora_inicio').val(values[0]);
+            $('#hora_fin').val(values[1]);
+            $('#horas_rango').html(values[0]+' - '+values[1]);
+            comprobar_reserva_multiple();
+        });
+
+        
+        values=r_def.noUiSlider.get();
+        $('#hora_inicio').val(values[0]);
+        $('#hora_fin').val(values[1]);
+        $('#horas_rango').html(values[0]+' - '+values[1]);
+    @endif
 
 </script>
 @endsection

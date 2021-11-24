@@ -251,8 +251,11 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/comprobar_plano',['middleware'=>'permissions:["Reservas"],["W"]','uses' => 'ReservasController@comprobar_plano']);
         Route::get('/puestos_usuario/{id}/{desde}/{hasta}',['middleware'=>'permissions:["Reservas"],["W"]','uses'=>'ReservasController@puestos_usuario'])->name('reservas.puestos_usuario');
         Route::post('/asignar_reserva_multiple',['middleware'=>'permissions:["Reservas"],["W"]','uses' => 'ReservasController@asignar_reserva_multiple']);
+        Route::post('/puestos_usuario/{id}/{desde}/{hasta}',['middleware'=>'permissions:["Reservas"],["W"]','uses'=>'ReservasController@puestos_usuario'])->name('reservas.puestos_usuario_post');
 
         Route::get('/cancelar_puesto/{id}',['middleware'=>'permissions:["Reservas"],["D"]','uses'=>'ReservasController@cancelar_reserva_puesto'])->name('reservas.cancelar_reserva_puesto');
+
+        Route::post('/reservas_multiples_admin',['middleware'=>'permissions:["Reservas"],["W"]','uses'=>'ReservasController@reservas_multiples_admin'])->name('reservas.reservas_multiples_admin');
     });
 
     Route::group(['prefix' => 'incidencias'], function () {

@@ -389,7 +389,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1,$triangulo=
                 break;
         }
     } catch(\Exception $e){
-        dump($e);
+        //dump($e);
         return $e->getMessage();
     }
     return true;

@@ -588,7 +588,7 @@
             console.log(fecres);
             fecdesde=moment(fecres[0],"DD/MM/YYYY").format('YYYY-MM-DD');
             fechasta=moment(fecres[1],"DD/MM/YYYY").format('YYYY-MM-DD');
-            $('#puestos_usuario_reserva').load("{{ url('reservas/puestos_usuario/') }}/"+searchIDs+'/'+fecdesde+'/'+fechasta, function(){
+            $('#puestos_usuario_reserva').load("{{ url('reservas/puestos_usuario') }}/"+searchIDs+'/'+fecdesde+'/'+fechasta, function(){
                 $('#comprobar_puesto_reserva').html('');
                 $('.flpuesto').click(function(){
                     $('#spin_reserva').show();

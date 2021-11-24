@@ -60,7 +60,13 @@ class PuestosController extends Controller
             })
         ->get();
 
-        return view('puestos.index',compact('puestos','tipos'));
+        $usuarios = DB::table('users')
+            ->join('clientes','clientes.id_cliente','users.id_cliente')
+            ->where('users.id_cliente',Auth::user()->id_cliente)
+            ->orderby('name')
+        ->get();
+
+        return view('puestos.index',compact('puestos','tipos','usuarios'));
     }
 
     public function search(Request $r){

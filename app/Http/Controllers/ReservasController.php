@@ -138,8 +138,6 @@ class ReservasController extends Controller
     }
 
     public function comprobar_puestos(Request $r){
-        
-
 
         $plantas_usuario=DB::table('plantas_usuario')
             ->where('id_usuario',Auth::user()->id)
@@ -520,7 +518,7 @@ class ReservasController extends Controller
         }
     }
 
-    public function puestos_usuario($id,$desde,$hasta){
+    public function puestos_usuario(Request $r, $id,$desde,$hasta){
         $usuario=users::find($id);
 
         $plantas_usuario=DB::table('plantas_usuario')
@@ -538,18 +536,17 @@ class ReservasController extends Controller
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
-            ->whereraw("date(fec_reserva) between '".Carbon::parse($desde)->format('Y-m-d')."' AND '".Carbon::parse($hasta)->format('Y-m-d')."'")
+            ->where(function($q) use($desde,$hasta){
+                //$q->whereraw("date(fec_reserva) between '".Carbon::parse($desde)->format('Y-m-d')."' AND '".Carbon::parse($hasta)->format('Y-m-d')."'");
+                $q->orwhere(function($q) use($desde,$hasta){
+                    $q->whereraw("'".$desde."' between fec_reserva AND fec_fin_reserva");
+                    $q->orwhereraw("'".$hasta."' between fec_reserva AND fec_fin_reserva");
+                    $q->orwherebetween('fec_reserva',[$desde,$hasta]);
+                    $q->orwherebetween('fec_fin_reserva',[$desde,$hasta]);
+                });
+            })
             ->where('reservas.id_cliente',$usuario->id_cliente)
             ->get();
-
-            // ->where(function($q) use($desde,$hasta){
-            //     $q->wherebetween('fec_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
-            //     $q->orwherebetween('fec_fin_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
-            //     $q->orwhere(function($q) use($desde,$hasta){
-            //         $q->wherebetween('fec_reserva',[Carbon::parse($desde),Carbon::parse($hasta)]);
-            //         $q->wherenull('fec_fin_reserva');
-            //     });
-            // })
             
         if(isset($reservas)){
             $puestos_reservados=$reservas->pluck('id_puesto')->toArray();
@@ -640,6 +637,11 @@ class ReservasController extends Controller
                 }
             })
             ->wherenotin('puestos.id_estado',[4,5,6])
+            ->where(function($q) use($r){
+                if(isset($r->lista_id) && is_array($r->lista_id)){
+                    $q->wherein('puestos.id_puesto',$r->lista_id);
+                }
+            })
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
@@ -651,8 +653,19 @@ class ReservasController extends Controller
         $checks=0; //Para que la vista muestre los checkbox
         $id_check=$id;
         $url_check="users/add_puesto_usuario/";
+        if(isset($r->lista_id) && is_array($r->lista_id)){ //Si viene por POST es que estamos en reserva multiple desde listado de puestos
+            return [
+                'title' => "Reserva multiple",
+                'message' => $puestos->count().' puestos disponibles de '.count($r->lista_id).' puestos solicitados para para el periodo  '.beauty_fecha($r->desde).' - '.beauty_fecha($r->hasta),
+                'recomendacion'=>$puestos->count()!=count($r->lista_id)?'Libere primero las reservas existentes en los puestos o reserve solo los puestos disponibles':'',
+                'lista'=>$puestos->pluck('id_puesto')->toArray()
+            ]; 
+        } else {  //Si viene por GET es que estamos en usuario ->crear reserva
+            return view('puestos.content_mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','checks','puestos_check','id_check','url_check'));
+        }
+            
+         
         
-        return view('puestos.content_mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','checks','puestos_check','id_check','url_check'));
     }
 
     public function asignar_reserva_multiple(Request $r){
@@ -733,5 +746,121 @@ class ReservasController extends Controller
                 ];
             }
          }
+    }
+
+    public function reservas_multiples_admin(Request $r){
+        ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+        $f = explode(' - ',$r->rango);
+        $f1 = Carbon::parse(adaptar_fecha($f[0]));
+        $f2 = Carbon::parse(adaptar_fecha($f[1]));
+
+        //Primero la accion, a ver si hay que borrar o crear
+        if ($r->accion=="D"){//Borrar
+            //El borrado es mas simple, nos cepillamos todo 
+            $reservas=DB::table('reservas')
+                ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+                ->join('users','reservas.id_usuario','users.id')
+                ->wherein('puestos.id_puesto',$r->lista_id)
+                ->wherebetween('fec_reserva',[$f1,$f2])
+                ->where('puestos.id_cliente',Auth::user()->id_cliente)
+                ->get();
+            foreach($reservas as $res){
+                DB::table('reservas')->where('id_reserva',$res->id_reserva)->delete();
+                $user_puesto=users::find($res->id_usuario);
+                $str_notificacion=Auth::user()->name.' ha realizado una cancelacion masiva de reservas ';
+                $str_respuesta=' Se ha cancelado su reserva de puesto que tenía para el día '.Carbon::parse($res->fec_reserva)->format('d/m/Y');
+                
+                notificar_usuario($user_puesto,"<span class='super_negrita'>Cambio en su reserva de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'>Se han producido cambios en su reserva de puesto</span>",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,1,"alerta_03"); 
+            }
+            savebitacora(" Se han eliminado las reservas para ".count($r->lista_id).'puestos ['.implode(",",$r->lista_id).']en el intervalo'.$r->rango.' por cancelacion masiva creada por '.Auth::user()->name,"Usuarios","reservas_multiples_admin","OK");
+            return [
+                'tipo'=>'OK',
+                'title'=>'Cancelacion masiva de reservas',
+                'mensaje'=>"Se han eliminado las reservas para ".count($r->lista_id).' puestos en el intervalo '.$r->rango
+            ];
+
+        } else {
+            $period = CarbonPeriod::create($f1, $f2);
+            $lista_puestos_pillados=[];
+            $lista_nombres_puestos=[];
+            $hora_inicio=$r->hora_inicio??'00:00:00';
+            $hora_fin=$r->hora_fin??'23:59:59';
+            foreach($period as $fecha){
+                foreach($r->lista_id as $id_puesto){
+                    //Ahora hay que comprobar que no han pillado el puesto mientras el usuario se lo pensabe
+                    $ya_esta=DB::table('reservas')
+                        ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+                        ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+                        ->join('users','reservas.id_usuario','users.id')
+                        ->where('puestos.id_puesto',$id_puesto)
+                        ->where(function($q) use($hora_inicio,$hora_fin,$fecha){
+                            $q->where(function($q) use($fecha){
+                                $q->wherenull('fec_fin_reserva');
+                                $q->wheredate('fec_reserva',$fecha);
+                            });
+                            $q->orwhere(function($q) use($fecha){
+                                $q->whereraw("'".$fecha->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+                            });
+                            $q->orwhere(function($q) use($hora_inicio,$hora_fin,$fecha){
+                                $q->whereraw("'".$fecha->format('Y-m-d')." ".$hora_inicio."' between fec_reserva AND fec_fin_reserva");
+                                $q->orwhereraw("'".$fecha->format('Y-m-d')." ".$hora_fin."' between fec_reserva AND fec_fin_reserva");
+                                $q->orwherebetween('fec_reserva',[$fecha->format('Y-m-d').' '.$hora_inicio,$fecha->format('Y-m-d').' '.$hora_fin]);
+                                $q->orwherebetween('fec_fin_reserva',[$fecha->format('Y-m-d').' '.$hora_inicio,$fecha->format('Y-m-d').' '.$hora_fin]);
+                            });
+                        })
+                        ->where('reservas.id_usuario','<>',$r->id_usuario)
+                        ->where('mca_anulada','N')
+                        ->where('puestos.id_cliente',Auth::user()->id_cliente)
+                        ->first();
+
+                    $asignados_usuarios=DB::table('puestos_asignados')
+                        ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                        ->join('users','users.id','puestos_asignados.id_usuario')    
+                        ->where('puestos.id_puesto',$id_puesto)
+                        ->where(function($q){
+                            $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                        })
+                        ->where(function($q) use($r,$fecha){
+                            $q->wherenull('fec_desde');
+                            $q->orwhereraw("'".$fecha."' between fec_desde AND fec_hasta");
+                        })
+                        ->first();
+
+                    if(!isset($ya_esta) && !isset($asignados_usuarios)){
+                        //Vale, podemos jugar
+                        $puesto=puestos::find($id_puesto);
+                        $lista_nombres_puestos[]=$puesto->cod_puesto;
+                        $res=new reservas;
+                        $res->id_puesto=$id_puesto;
+                        $res->id_usuario=$r->id_usuario;
+                        $res->fec_reserva=Carbon::parse($fecha->format('Y-m-d').' '.$hora_inicio);
+                       
+                        if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar) && session('CL')['mca_reserva_horas']=='S'){
+                            $res->fec_fin_reserva=$res->fec_reserva->addHour($puesto->max_horas_reservar);   
+                        } else {
+                            $res->fec_fin_reserva=carbon::parse($fecha->format('Y-m-d').' '.$hora_fin);   
+                        }
+                        $res->id_cliente=$puesto->id_cliente;
+                        $res->save();
+                    } else {
+                        $lista_puestos_pillados[]=$id_puesto;
+                    }
+                    $usuario=users::find($r->id_usuario);
+                    $str_notificacion=Auth::user()->name.' ha creado una nueva reserva de los puestos '.implode(",",$lista_nombres_puestos).' para usted en el intervalo '.$r->rango;
+                    //notificar_usuario($usuario,"<span class='super_negrita'>Reserva de puesto creada por administrador....<br></span>Estimado usuario:<br><span class='super_negrita'>Se le ha reservado un nuevo puesto</span>",'emails.asignacion_puesto',$str_notificacion,1,"alerta_05");
+                    $mensaje="Se han creado ".count($lista_nombres_puestos)." reservas de ".(count($r->lista_id)-count(array_unique($lista_puestos_pillados))).' puestos para el usuario '.$usuario->name.' y el intervalo '.$r->rango;
+                    if(count($lista_puestos_pillados)>0){
+                        $mensaje.="<br>Se detectaron ".count($lista_puestos_pillados)." conflictos con otras reservas realizadas por otros usuarios o puestos asignados a nominalmente a usuarios durante este proceso en alguna de las fechas, por lo tanto no pueden ser reservados";
+                    }
+                    savebitacora(' Se han creado reservas de puesto para los puestos'.implode(",",$lista_nombres_puestos).' para el usuario '.$usuario->name.' para el periodo  '.$r->rango.' creada por '.Auth::user()->name,"Usuarios","reservas_multiples_admin","OK");
+                }
+            }
+            return [
+                'tipo'=>'OK',
+                'title'=>'Creacion masiva de reservas',
+                'mensaje'=>$mensaje,
+                'pillados'=>array_unique($lista_puestos_pillados)
+            ];
+        }
     }
 }

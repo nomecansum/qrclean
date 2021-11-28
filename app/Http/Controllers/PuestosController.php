@@ -23,6 +23,10 @@ use Illuminate\Support\Str;
 use Redirect;
 use Excel;
 use App\Exports\ExportExcel;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use InvalidArgumentException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use stdClass;
 
 
@@ -568,9 +572,19 @@ class PuestosController extends Controller
         ];
     }
 
-    public function mapa(){
+    /**
+     * @param Request $r 
+     * @return View|Factory 
+     * @throws InvalidArgumentException 
+     * @throws BindingResolutionException 
+     */
+    public function mapa(Request $r){
 
-
+        if(isset($r->fecha)){
+            $fecha_mirar=Carbon::parse(adaptar_fecha($r->fecha));
+        } else {
+            $fecha_mirar=Carbon::now();
+        }
         $puestos=DB::table('puestos')
             ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','puestos_tipos.des_tipo_puesto','users.name as usuario_usando')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -606,9 +620,9 @@ class PuestosController extends Controller
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
-            ->where(function($q){
-                $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
-                $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+            ->where(function($q) use($fecha_mirar){
+                $q->wheredate('fec_reserva',$fecha_mirar);
+                $q->orwhereraw("'".$fecha_mirar->format('Y-m-d')."' between fec_reserva AND fec_fin_reserva");
             })
             ->where(function($q){
                 $q->where('reservas.id_cliente',Auth::user()->id_cliente);
@@ -619,9 +633,9 @@ class PuestosController extends Controller
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('users','users.id','puestos_asignados.id_usuario')    
             ->where('id_usuario','<>',Auth::user()->id)
-            ->where(function($q) {
+            ->where(function($q) use($fecha_mirar){
                 $q->wherenull('fec_desde');
-                $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+                $q->orwhereraw("'".$fecha_mirar->format('Y-m-d')."' between fec_desde AND fec_hasta");
             })
             ->get();
 
@@ -637,11 +651,15 @@ class PuestosController extends Controller
             ->where('id_perfil','<>',Auth::user()->cod_nivel)
             ->get();
         
-        return view('puestos.'.collect(request()->segments())->last(),compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
+        return view('puestos.'.collect(request()->segments())->last(),compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','r'));
     }
 
-    public function plano(){
-
+    public function plano(Request $r){
+        if(isset($r->fecha)){
+            $fecha_mirar=Carbon::parse(adaptar_fecha($r->fecha));
+        } else {
+            $fecha_mirar=Carbon::now();
+        }
         $puestos=DB::table('puestos')
             ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -669,9 +687,9 @@ class PuestosController extends Controller
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('users','reservas.id_usuario','users.id')
-            ->where(function($q){
-                $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
-                $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+            ->where(function($q) use($fecha_mirar){
+                $q->wheredate('fec_reserva',$fecha_mirar);
+                $q->orwhereraw("'".$fecha_mirar->format('Y-m-d')."' between fec_reserva AND fec_fin_reserva");
             })
             ->where(function($q){
                 $q->where('reservas.id_cliente',Auth::user()->id_cliente);
@@ -682,9 +700,9 @@ class PuestosController extends Controller
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
             ->join('users','users.id','puestos_asignados.id_usuario')    
             ->where('id_usuario','<>',Auth::user()->id)
-            ->where(function($q){
+            ->where(function($q) use($fecha_mirar){
                 $q->wherenull('fec_desde');
-                $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+                $q->orwhereraw("'".$fecha_mirar->format('Y-m-d')."' between fec_desde AND fec_hasta");
             })
             ->get();
 
@@ -700,7 +718,7 @@ class PuestosController extends Controller
             ->where('id_perfil','<>',Auth::user()->cod_nivel)
             ->get();
         
-        return view('puestos.plano',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
+        return view('puestos.plano',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','r'));
     }
 
     function ver_en_mapa($id){

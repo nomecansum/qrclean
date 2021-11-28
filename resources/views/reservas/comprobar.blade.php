@@ -75,7 +75,7 @@
                     $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();  
                     $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();  
                     $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
-                    $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"R");
+                    $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"P");
                     $es_reserva="P";
                     if(isMobile()){
                         if($puesto->factor_puesto<3.5){
@@ -158,4 +158,15 @@
     if (tooltip.length)tooltip.tooltip();
 
     $('#tipo_vista').val('comprobar');
+
+    // var intervalo=setInterval(() => {
+    //     var data = $('.form-ajax').serialize();
+    //     data+='&name='+name;
+    //     data+='&ajax=1';
+    //     data+='&_token={{csrf_token()}}';
+    //     $.post('{{url('/reservas/comprobar')}}', data, function(data, textStatus, xhr) {
+	// 		console.log(data);
+    //     });
+
+    // }, 3000);
 </script>

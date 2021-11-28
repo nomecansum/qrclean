@@ -81,7 +81,7 @@ class colorPuesto
                 'font_color'=>"#fff",
                 'clase_disp'=>"",
                 'title'=>"Puesto permanentemente asignado a ".$asignado_usuario->name,
-                'borde'=>"border: 3px solid #ff9f1a; border-radius: 16px",
+                'borde'=>"border: 3px solid #ff9f1a; border-radius: 8px",
                 "transp"=>0.4
             ];
         } else if(isset($asignado_otroperfil)){
@@ -99,7 +99,7 @@ class colorPuesto
                 'font_color'=>"#05688f",
                 'clase_disp'=>"disponible",
                 'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso,
-                'borde'=>"border: 3px solid #05688f; border-radius: 10px",
+                'borde'=>"border: 3px solid #05688f; border-radius: 6px",
                 "transp"=>1
             ];
         } else if($puesto->id_estado==5){  //Bloqueado

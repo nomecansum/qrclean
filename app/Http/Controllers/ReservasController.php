@@ -152,7 +152,7 @@ class ReservasController extends Controller
             ->toArray();
             
         //dd($r->all());
-        $f = explode(' - ',$r->fecha);
+        $f = explode(' - ',$r->fechas);
         $f1 = adaptar_fecha($f[0]);
         $f2 = adaptar_fecha($f[1]);
         //Intervalo en minutos entre las dos hora en cualquier dia
@@ -289,17 +289,20 @@ class ReservasController extends Controller
                     }
                 }
             })
-            ->wherenotin('puestos.id_estado',[4,5,6])
-            ->wherenotin('puestos.id_puesto',$puestos_usuarios)
-            ->wherenotin('puestos.id_puesto',$puestos_nomiperfil)
-            ->wherenotin('puestos.id_puesto',$puestos_reservados)
+            ->where(function($q) use($puestos_usuarios,$puestos_nomiperfil,$puestos_reservados){
+                if(config_cliente('mca_mostrar_puestos_reservas')=='D'){
+                    $q->wherenotin('puestos.id_estado',[4,5,6]);
+                    $q->wherenotin('puestos.id_puesto',$puestos_usuarios);
+                    $q->wherenotin('puestos.id_puesto',$puestos_nomiperfil);
+                    $q->wherenotin('puestos.id_puesto',$puestos_reservados);
+                }
+            })
+           
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
             ->get();
-
-        
 
         $edificios=DB::table('edificios')
             ->select('id_edificio','des_edificio')
@@ -326,6 +329,9 @@ class ReservasController extends Controller
         $u->val_vista_puestos=$r->tipo;
         $u->save();
 
+        if(isset($r->ajax)){
+            $r->tipo='comprobar_ajax';
+        }
         return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','plantas_usuario','tipo_vista','id_planta'));
     }
 

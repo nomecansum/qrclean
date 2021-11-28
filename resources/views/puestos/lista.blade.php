@@ -27,10 +27,13 @@
 @section('content')
         <div class="row botones_accion mb-2">
             <div class="col-md-4">
-                <div class="input-group float-right" id="div_fechas">
-                    <input type="text" class="form-control pull-left" id="fecha_ver" name="fecha_ver" style="width: 100px" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}">
-                    <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
-                </div>
+                <form action="{{ url('puestos/lista') }}" name="form_mapa" id="form_mapa" method="POST">
+                    {{ csrf_field() }}
+                    <div class="input-group float-right" id="div_fechas">
+                        <input type="text" class="form-control pull-left" id="fecha" name="fecha" style="width: 100px" value="{{isset($r->fecha)?$r->fecha:Carbon\Carbon::now()->format('d/m/Y') }}">
+                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                    </div>
+                </form>
             </div>
             <div class="col-md-3">
                 
@@ -59,7 +62,7 @@
         $('.adorno_puesto').css('line-height','20px');
         $('.adorno_puesto').css('vertical-align','absmiddle');
 
-        $('#fecha_ver').daterangepicker({
+        $('#fecha').daterangepicker({
             singleDatePicker: true,
             showDropdowns: true,
             autoUpdateInput : true,
@@ -72,6 +75,9 @@
                 monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
                 firstDay: {{trans("general.firstDayofWeek")}}
             }
+        });
+        $('#fecha').change(function(){
+               $('#form_mapa').submit();
         });
     </script>
 

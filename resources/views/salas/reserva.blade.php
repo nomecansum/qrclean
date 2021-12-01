@@ -20,7 +20,7 @@
 <div class="row botones_accion">
     <div class="col-md-4">
         <div class="input-group float-right" id="div_fechas">
-            <input type="text" class="form-control pull-left" id="fecha_ver" name="fecha_ver" style="width: 100px" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}">
+            <input type="text" class="form-control pull-left ml-1" id="fecha_ver" name="fecha_ver" style="width: 100px" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}">
             <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
         </div>
     </div>

@@ -88,7 +88,9 @@ class ReservasController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-                $q->orwhere('puestos_tipos.mca_fijo','S');
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
             }
         })
         ->where(function($q){

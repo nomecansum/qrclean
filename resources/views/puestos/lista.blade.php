@@ -76,8 +76,8 @@
                 firstDay: {{trans("general.firstDayofWeek")}}
             }
         });
-        $('#fecha').change(function(){
-               $('#form_mapa').submit();
+        $('#fecha').on('apply.daterangepicker', function(ev, picker) {
+            $('#form_mapa').submit();
         });
     </script>
 

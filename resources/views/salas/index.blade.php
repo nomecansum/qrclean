@@ -19,6 +19,13 @@
 
 @section('content')
 <div class="row botones_accion mb-2">
+    <form action="{{ url('/salas') }}" name="form_mapa" id="form_mapa" method="POST">
+        {{ csrf_field() }}
+        <div class="input-group float-right" id="div_fechas">
+            <input type="text" class=" ml-3 form-control pull-left" id="fecha" name="fecha" style="width: 100px" value="{{isset($r->fecha)?$r->fecha:Carbon::now()->format('d/m/Y') }}">
+            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+        </div>
+    </form>
     <br><br>
 </div>
 <div class="panel">
@@ -41,5 +48,26 @@
     <script>
         $('.parametrizacion').addClass('active active-sub');
         $('.salas').addClass('active-link');
+
+        $('#fecha').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            autoUpdateInput : true,
+            //autoApply: true,
+            locale: {
+                format: '{{trans("general.date_format")}}',
+                applyLabel: "OK",
+                cancelLabel: "Cancelar",
+                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+                firstDay: {{trans("general.firstDayofWeek")}}
+            },
+            function() {
+                
+            }  
+        });
+        $('#fecha').on('apply.daterangepicker', function(ev, picker) {
+            $('#form_mapa').submit();
+        });
     </script>
 @endsection

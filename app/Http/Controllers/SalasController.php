@@ -18,7 +18,13 @@ class SalasController extends Controller
 {
     
     //
-    public function index($sala=0){
+    public function index(Request $r, $sala=0){
+        if(isset($r->fecha)){
+            $fecha_mirar=Carbon::parse(adaptar_fecha($r->fecha));
+        } else {
+            $fecha_mirar=Carbon::now();
+        }
+        
         $salas=DB::table('salas')
             ->join('puestos','salas.id_puesto','puestos.id_puesto')
             ->where(function($q){
@@ -36,10 +42,10 @@ class SalasController extends Controller
         $reservas=DB::table('reservas')
             ->join('users','reservas.id_usuario','users.id')
             ->wherein('reservas.id_puesto',$lista_puestos)
-            ->wheredate('reservas.fec_reserva',Carbon::now())
+            ->wheredate('reservas.fec_reserva',$fecha_mirar)
             ->get();
 
-        return view('salas.index',compact('salas','reservas'));
+        return view('salas.index',compact('salas','reservas','r'));
     }
 
     public function reservas(){
@@ -163,7 +169,9 @@ class SalasController extends Controller
             ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
             ->where(function($q){
                 $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-                $q->orwhere('puestos_tipos.mca_fijo','S');
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
             })
             ->wherein('puestos_tipos.id_tipo_puesto',config('app.tipo_puesto_sala'))
             ->orderby('id_tipo_puesto')

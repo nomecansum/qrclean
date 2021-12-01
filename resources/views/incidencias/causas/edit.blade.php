@@ -35,7 +35,7 @@
                             {!! $errors->first('des_causa_cierre', '<p class="help-block">:message</p>') !!}
                         </div>
 
-
+                        @if(checkPermissions(['Causas de cierre'],['W']) && ($causa->mca_fija!='S' || ($causa->mca_fija=='S' && fullAccess())))
                         <div class="form-group col-md-4 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
                             <label for="id_cliente" class="control-label">Cliente</label>
                             <select class="form-control" required id="id_cliente" name="id_cliente">
@@ -48,6 +48,7 @@
                                 
                             {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
                         </div>
+                        @endif
 
                         
                 </div>
@@ -72,7 +73,7 @@
 
                 <div class="form-group">
                     <div class="col-md-12 text-right">
-                        @if(checkPermissions(['Causas de cierre'],['W']) && ($causa->mca_fija!='S' || ($causa->mca_fija=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@endif
+                        @if(checkPermissions(['Causas de cierre'],['W']) && ($causa->mca_fija!='S' || ($causa->mca_fija=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
             </form>

@@ -236,7 +236,10 @@ class IncidenciasController extends Controller
             ->join('clientes','incidencias_tipos.id_cliente','clientes.id_cliente')
             ->where(function($q) use($puesto){
                 $q->where('incidencias_tipos.id_cliente',$puesto->id_cliente);
-                $q->orwhere('incidencias_tipos.mca_fijo','S');
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('incidencias_tipos.mca_fijo','S');
+                }
+                
                 })
             ->where(function($q) use($puesto){
                 $q->wherenull('list_tipo_puesto');
@@ -519,7 +522,9 @@ class IncidenciasController extends Controller
             ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
             ->where(function($q) use($incidencia){
                 $q->where('estados_incidencias.id_cliente',$incidencia->id_cliente);
-                $q->orwhere('estados_incidencias.mca_fijo','S');
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('estados_incidencias.mca_fijo','S');
+                }
             })
             ->orderby('des_estado')
         ->get();
@@ -688,7 +693,9 @@ class IncidenciasController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('incidencias_tipos.id_cliente',Auth::user()->id_cliente);
-                $q->orwhere('incidencias_tipos.mca_fijo','S');
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('incidencias_tipos.mca_fijo','S');
+                }
             }
         })
         ->get();
@@ -708,7 +715,9 @@ class IncidenciasController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
-                    $q->orwhere('estados_incidencias.mca_fijo','S');
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('estados_incidencias.mca_fijo','S');
+                    }
                 }
             })
         ->get();
@@ -834,7 +843,9 @@ class IncidenciasController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
-                $q->orwhere('estados_incidencias.mca_fijo','S');
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('estados_incidencias.mca_fijo','S');
+                }
             }
         })
         ->get();

@@ -59,7 +59,9 @@ class PuestosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
                 }
             })
         ->get();
@@ -220,7 +222,9 @@ class PuestosController extends Controller
         ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
         ->where(function($q){
             $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-            $q->orwhere('puestos_tipos.mca_fijo','S');
+            if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                $q->orwhere('puestos_tipos.mca_fijo','S');
+            }
         })
         ->get();
 
@@ -472,7 +476,9 @@ class PuestosController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-                $q->orwhere('puestos_tipos.mca_fijo','S');
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
             }
         })
         ->get();
@@ -581,7 +587,7 @@ class PuestosController extends Controller
     public function mapa(Request $r){
 
         if(isset($r->fecha)){
-            $fecha_mirar=adaptar_fecha($r->fecha);
+            $fecha_mirar=Carbon::parse(adaptar_fecha($r->fecha));
         } else {
             $fecha_mirar=Carbon::now();
         }

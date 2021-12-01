@@ -35,7 +35,7 @@
                             {!! $errors->first('des_estado', '<p class="help-block">:message</p>') !!}
                         </div>
 
-
+                        @if(checkPermissions(['Estados de incidencia'],['D']) && ($estado->mca_fijo!='S' || ($estado->mca_fijo=='S' && fullAccess())))
                         <div class="form-group col-md-4 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
                             <label for="id_cliente" class="control-label">Cliente</label>
                             <select class="form-control" required id="id_cliente" name="id_cliente">
@@ -48,6 +48,7 @@
                                 
                             {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
                         </div>
+                        @endif
 
                         
                 </div>
@@ -76,7 +77,7 @@
 
                 <div class="form-group">
                     <div class="col-md-12 text-right">
-                        @if(checkPermissions(['Estados de incidencia'],['D']) && ($estado->mca_fijo!='S' || ($estado->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@endif
+                        @if(checkPermissions(['Estados de incidencia'],['D']) && ($estado->mca_fijo!='S' || ($estado->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
             </form>

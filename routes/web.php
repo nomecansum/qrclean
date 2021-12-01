@@ -322,7 +322,6 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('/detalle/{id}',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@detalle_tarea']);
 		Route::get('/log_tarea/{id}/{fecha}/{hora}',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@ver_log_tarea']);
 		Route::get('/cola/{id}/',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@ver_cola']);
-
 		Route::get('/runTask/{id}/',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@ejecutar_tarea_web']);
 		Route::get('/log_tarea/{id}/{fecha}',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@log_tarea_web']);
 		
@@ -349,13 +348,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/crear_reserva/sala/{sala}',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@crear_reserva']);
         Route::post('/comprobar',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@comprobar']);
         Route::get('/{sala?}',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@index'])->where('sala', '[0-9]+');
-
+        Route::post('/',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@index'])->where('sala', '[0-9]+');
         Route::get('/mis_reservas',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'SalasController@mis_reservas']);
-        
-
-       
-        
-        
     });
 
     ////////////////////////////   SECCIONES  PERFILES Y PERMISOS ////////////////////////////////

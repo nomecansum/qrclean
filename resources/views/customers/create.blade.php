@@ -126,6 +126,10 @@
 									<input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_puestos_auto"  id="mca_liberar_puestos_auto" value="S" {{ isset($config->mca_liberar_puestos_auto)&&$config->mca_liberar_puestos_auto=='S'?'checked':'' }}> 
 									<label class="custom-control-label"   for="mca_liberar_puestos_auto">Liberar puestos auto</label>
 								</div>
+								<div class="col-md-3 mt-1">
+									<input type="checkbox" class="form-control  magic-checkbox" name="mca_mostrar_datos_fijos"  id="mca_mostrar_datos_fijos" value="S" {{ isset($config->mca_mostrar_datos_fijos)&&$config->mca_mostrar_datos_fijos=='S'?'checked':'' }}> 
+									<label class="custom-control-label"   for="mca_mostrar_datos_fijos">Mostrar datos fijos</label>
+								</div>
 								
 								
 							</div>
@@ -171,7 +175,7 @@
 							</div>
 							<DIV class="row">
 								<div class="col-md-2 ml-2">
-									<label for="modo_visualizacion_reservas">Vista defecto en reservas</label>
+									<label for="modo_visualizacion_reservas">Vista por defecto en reservas</label>
 									<select name="modo_visualizacion_reservas" id="modo_visualizacion_reservas" class="form-control" style="width: 100%">
 										<option value="M" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='M'?'selected':'' }}>Mosaico (Puestos)</option>
 										<option value="P" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='P'?'selected':'' }}>Plano</option>
@@ -185,7 +189,7 @@
 									</select>
 								</div>
 								<div class="col-md-2">
-									<label for="val_campo_puesto_mostrar">Mostrar nombre de puesto</label>
+									<label for="val_campo_puesto_mostrar">Mostrar en nombre de puesto</label>
 									<select name="val_campo_puesto_mostrar" id="val_campo_puesto_mostrar" class="form-control" style="width: 100%">
 										<option value="D" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='D'?'selected':'' }}>Descripcion</option>
 										<option value="I" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='I'?'selected':'' }}>Identificador</option>
@@ -197,7 +201,7 @@
 									<input type="time" autocomplete="off" name="hora_liberar_puestos" id="hora_liberar_puestos"   class="form-control" value="{{isset($config->hora_liberar_puestos)?$config->hora_liberar_puestos:'23:59'}}" />
 								</div> --}}
 								<div class="form-group col-md-2" style="{{ $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
-									<label for="mca_mostrar_puestos_reservas">Mostrar puestos en reservas</label><br>
+									<label for="mca_mostrar_puestos_reservas">Mostrar puestos reservas</label><br>
 									<select name="mca_mostrar_puestos_reservas" id="mca_mostrar_puestos_reservas" class="form-control" style="width: 100%">
 										<option value="D" {{ isset($config->mca_mostrar_puestos_reservas)&&$config->mca_mostrar_puestos_reservas=='D'?'selected':'' }}>Solo disponibles</option>
 										<option value="T" {{ isset($config->mca_mostrar_puestos_reservas)&&$config->mca_mostrar_puestos_reservas=='T'?'selected':'' }}>Todos</option>
@@ -205,7 +209,7 @@
 								</div>
 								
 								<div class="form-group col-md-2">
-									<label for="max_dias_reserva">Max Dias Reserva</label><br>
+									<label for="max_dias_reserva">Maximo de dias para reserva</label><br>
 									<select name="max_dias_reserva" id="max_dias_reserva"  class="form-control ">
 										@for ($n=1;$n<=31;$n++)
 											<option value={{$n}}  {{  isset($config->max_dias_reserva)&&$config->max_dias_reserva==$n?'selected':''  }}>{{ $n }}</option>

@@ -52,7 +52,8 @@ class config_clientes extends Model
                   'mca_liberar_puestos_auto',
                   'mca_salas',
                   'min_hora_reservas',
-                  'max_hora_reservas'
+                  'max_hora_reservas',
+                  'mca_mostrar_datos_fijos'
               ];
 
     /**

@@ -62,6 +62,9 @@
             @php
                 $puesto->factor_puesto=5;
                 $puesto->factor_letra=1.5/(strlen($puesto->cod_puesto)*0.25);
+                if(strlen($puesto->cod_puesto)<4){
+                    $puesto->factor_letra=1.8;
+                }
                 $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();   
                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
             @endphp

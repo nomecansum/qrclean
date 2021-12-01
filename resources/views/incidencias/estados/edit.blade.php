@@ -1,5 +1,5 @@
 
-    <div class="panel">
+    <div class="panel editor">
 
         <div class="panel-heading">
             <div class="panel-control">
@@ -76,7 +76,7 @@
 
                 <div class="form-group">
                     <div class="col-md-12 text-right">
-                        @if(checkPermissions(['Estados de incidencia'],['D']) && ($estado->mca_fijo=='N' || ($estado->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@endif
+                        @if(checkPermissions(['Estados de incidencia'],['D']) && ($estado->mca_fijo!='S' || ($estado->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@endif
                     </div>
                 </div>
             </form>
@@ -107,5 +107,8 @@
 
         $('#val_icono').iconpicker({
             icon:'{{isset($estado) ? ($estado->val_icono) : ''}}'
+        });
+        $('.demo-psi-cross').click(function(){
+            $('.editor').hide();
         });
     </script>

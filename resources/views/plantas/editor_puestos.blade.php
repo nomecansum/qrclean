@@ -21,7 +21,7 @@
 
 </style>
 
-    <div class="panel">
+    <div class="panel editor">
         <div class="panel-heading">
             <div class="panel-control">
                 <button class="btn btn-default" data-panel="dismiss" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
@@ -205,4 +205,8 @@
         $('.texto_puesto').css('font-size',values[handle]+'vw');
         $('#factor_letra').val(values[handle]);
     });
+
+    $('.demo-psi-cross').click(function(){
+            $('.editor').hide();
+        });
 </script>

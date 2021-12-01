@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="{{ url('/plugins/html5-editor/bootstrap-wysihtml5.css') }}" />
 
-<div class="panel">
+<div class="panel editor">
     <div class="panel-heading">
         <div class="panel-control">
             <button class="btn btn-default" data-panel="dismiss" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
@@ -334,6 +334,9 @@
 		});
     })
 
+    $('.demo-psi-cross').click(function(){
+            $('.editor').hide();
+        });
 </script>
 @include('layouts.scripts_panel')
 

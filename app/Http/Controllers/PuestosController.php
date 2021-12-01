@@ -581,7 +581,7 @@ class PuestosController extends Controller
     public function mapa(Request $r){
 
         if(isset($r->fecha)){
-            $fecha_mirar=Carbon::parse(adaptar_fecha($r->fecha));
+            $fecha_mirar=adaptar_fecha($r->fecha);
         } else {
             $fecha_mirar=Carbon::now();
         }

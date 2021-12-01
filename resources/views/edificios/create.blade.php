@@ -1,5 +1,5 @@
 
-    <div class="panel">
+    <div class="panel editor">
 
         <div class="panel-heading">
             <div class="panel-control">
@@ -37,6 +37,10 @@
 
     <script>
         $('.form-ajax').submit(form_ajax_submit);
+
+        $('.demo-psi-cross').click(function(){
+            $('.editor').hide();
+        });
     </script>
 @include('layouts.scripts_panel')
 

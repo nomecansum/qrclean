@@ -5,7 +5,7 @@
     }
 </style>
 
-    <div class="panel">
+    <div class="panel editor">
         <div class="panel-heading">
             <div class="panel-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
@@ -101,7 +101,7 @@
 
                 <div class="form-group">
                     <div class="col-md-12 text-right">
-                        @if(checkPermissions(['Tipos de puesto'],['W']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess()))) <input class="btn btn-primary" type="submit" value="Guardar">@endif
+                        @if(checkPermissions(['Tipos de puesto'],['W']) && ($tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess()))) <input class="btn btn-primary" type="submit" value="Guardar">@endif
                     </div>
                 </div>
             </form>
@@ -136,4 +136,10 @@
     $('#val_icono').iconpicker({
         icon:'{{isset($tipo) ? ($tipo->val_icono) : ''}}'
     });
+
+    $('.demo-psi-cross').click(function(){
+        $('.editor').hide();
+    });
+
+    
     </script>

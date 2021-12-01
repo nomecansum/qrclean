@@ -776,7 +776,9 @@ class IncidenciasController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('causas_cierre.id_cliente',Auth::user()->id_cliente);
-                $q->orwhere('causas_cierre.mca_fija','S');
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('causas_cierre.mca_fija','S');
+                }
             }
         })
         ->get();

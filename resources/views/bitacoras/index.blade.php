@@ -118,7 +118,7 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                             <div class="input-group mar-btm">
                                 <input type="text" class="form-control pull-right" id="fechas" name="fechas" value="{{ isset($r)?Carbon::parse($fechas[0])->format('d/m/Y').' - '.Carbon::parse($fechas[1])->format('d/m/Y'):'' }}">
                                 <div class="input-group-btn">
-                                    <span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fa fa-calendar mt-1"></i></span>
+                                    <span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                                 </div>
                             </div>
                             <!-- /.input group -->

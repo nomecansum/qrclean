@@ -78,7 +78,7 @@
                 <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                     <div class="form-group">
                         <label>Icono</label><br>
-                        <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
+                        <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
                     </div>
                 </div>
                 <div class="col-md-1 p-t-30 mt-1">
@@ -95,7 +95,7 @@
                     <label>Fechas </label>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{  Carbon\Carbon::parse($encuesta->fec_inicio)->format('d/m/Y').' - '.Carbon\Carbon::parse($encuesta->fec_fin)->format('d/m/Y') }}">
-                        <span class="btn input-group-text btn-mint" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
+                        <span class="btn input-group-text btn-mint" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                     </div>
                 </div>
                 

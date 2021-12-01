@@ -291,7 +291,7 @@
                     <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control pull-left rangepicker" id="fechas_reserva" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
-                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                     
                     </div>
                     <label><span class="badge badge-primary">2</span> Seleccione puesto </label>
@@ -324,7 +324,7 @@
                             <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ Carbon\Carbon::now()->format('d/m/Y').' - '.Carbon\Carbon::now()->format('d/m/Y') }}">
-                                <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                                <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                             </div>
                         </div>
                         <div class="col-md-8 pt-2">

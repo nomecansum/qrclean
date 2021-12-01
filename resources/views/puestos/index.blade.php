@@ -163,7 +163,7 @@
                             <div class="col-sm-1">
                                 <div class="form-group">
                                     <label>Icono</label><br>
-                                    <button type="button"  role="iconpicker" name="val_icono"  id="modif_val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker enfrente" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
+                                    <button type="button"  role="iconpicker" name="val_icono"  id="modif_val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker enfrente" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
                                 </div>
                             </div>
                         </div>
@@ -359,7 +359,7 @@
                         <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control pull-left rangepicker" id="fechas_reserva" name="fechas" style="height: 40px; width: 200px">
-                            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                         
                         </div>
                         <div id="div_usuario_multiple">

@@ -2,7 +2,7 @@
     <label>Fechas</label>
     <div class="input-group">
         <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{ (isset($f1)?$f1->format('d/m/Y'):Carbon\Carbon::now()->startofmonth()->format('d/m/Y')).' - '.(isset($f2)?$f2->format('d/m/Y'):Carbon\Carbon::now()->endofmonth()->format('d/m/Y')) }}">
-        <span class="btn input-group-text btn-mint" disabled  style="height: 44px;"><i class="fas fa-calendar mt-1"></i></span>
+        <span class="btn input-group-text btn-mint" disabled  style="height: 44px;"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
     </div>
 </div>
 @section('scripts5')

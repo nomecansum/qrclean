@@ -141,7 +141,7 @@
 								<div class="col-sm-1">
 									<div class="form-group">
 										<label>{{__('general.icono')}}</label><br>
-										<button type="button" autocomplete="no"  role="iconpicker" required name="val_icono_tarea"  id="val_icono_tarea" data-iconset="fontawesome5" class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
+										<button type="button" autocomplete="no"  role="iconpicker" required name="val_icono_tarea"  id="val_icono_tarea" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
 									</div>
 								</div>
 							</div>

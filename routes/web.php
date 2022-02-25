@@ -51,6 +51,18 @@ Route::get('/logout','Auth\LoginController@logout');
 
 //Route::view('/scan2', 'scan2');
 
+///////////////////////////////////////////////////////////
+//// RUTAS PARA LA LANDING PAGE DE EVENTOS
+////
+route::view('/welcome','landing.welcome');
+Route::group(['prefix' => '/landing'], function() {
+    Route::post('save', 'LandingController@save');
+    Route::get('products','LandingController@products');
+    Route::post('products/save','LandingController@save_product');
+
+});
+
+
 //Tareas programadas
 Route::get('/runTask2/{id}/', 'TareasController@ejecutar_tarea_web');
 

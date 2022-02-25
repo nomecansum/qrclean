@@ -153,5 +153,15 @@
         "model-name": "puestos_tipos",
         "resource-file": "puestos_tipos.json",
         "table-name": "puestos_tipos"
+    },
+    {
+        "model-name": "contactos",
+        "resource-file": "contactos.json",
+        "table-name": "contactos"
+    },
+    {
+        "model-name": "contactos_producto",
+        "resource-file": "contactos_productos.json",
+        "table-name": "contactos_producto"
     }
 ]

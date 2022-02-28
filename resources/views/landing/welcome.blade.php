@@ -60,7 +60,7 @@ input[type="checkbox"] {
             </div>
             <div class="input-group flex-nowrap quitar mt-2 mb-5">
                 <div class="input-group-prepend">
-                    <input type="checkbox" class="big-checkbox mr-2"  name="chk_mandar" id="chk_mandar">
+                    <input type="checkbox" class="big-checkbox mr-2"  name="chk_mandar" id="chk_mandar"  value="S">
                 </div>
                 <label class="custom-control-label text-white" for="chk_mandar">&nbsp;&nbsp; Mandadme de vez en cuando información de los eventos y promociones que tenéis.</label>
             </div>
@@ -131,9 +131,6 @@ input[type="checkbox"] {
             })
             .fail(function(err) {
                 let error = JSON.parse(err.responseText);
-               
-                
-
                 //toast_error("ERROR",error.message);
             })
             .always(function() {

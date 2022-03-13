@@ -61,9 +61,9 @@ class FeriasController extends Controller
      */
     public function store(Request $request)
     {
+        $request['fec_feria']=adaptar_fecha($request->fec_feria);
         $data = $this->getData($request);
         try {
-            
             ferias::create($data);
             savebitacora('Feria '.$request->des_feria. ' creada',"Ferias","store","OK");
             return [
@@ -113,12 +113,13 @@ class FeriasController extends Controller
      */
     public function update($id, Request $request)
     {
-
+        $request['fec_feria']=adaptar_fecha($request->fec_feria);
         $data = $this->getData($request);
         
             validar_acceso_tabla($id,"ferias");
             
             $ferias = ferias::findOrFail($id);
+
             $ferias->update($data);
             savebitacora('Feria '.$request->des_feria. ' actualizada',"Ferias","update","OK");
             return [
@@ -169,9 +170,9 @@ class FeriasController extends Controller
     protected function getData(Request $request)
     {
         $rules = [
-                'des_feria' => 'nullable|string|min:0|max:50',
+            'des_feria' => 'nullable|string|min:0|max:50',
             'id_cliente' => 'nullable',
-            'fec_fecia' => 'date',
+            'fec_feria' => 'date',
         ];
         
         $data = $request->validate($rules);

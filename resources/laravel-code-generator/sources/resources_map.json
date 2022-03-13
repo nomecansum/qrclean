@@ -155,13 +155,18 @@
         "table-name": "puestos_tipos"
     },
     {
-        "model-name": "contactos",
-        "resource-file": "contactos.json",
-        "table-name": "contactos"
-    },
-    {
         "model-name": "contactos_producto",
         "resource-file": "contactos_productos.json",
         "table-name": "contactos_producto"
+    },
+    {
+        "model-name": "ferias",
+        "resource-file": "ferias.json",
+        "table-name": "ferias"
+    },
+    {
+        "model-name": "contactos",
+        "resource-file": "contactos.json",
+        "table-name": "contactos"
     }
 ]

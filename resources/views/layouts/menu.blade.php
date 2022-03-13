@@ -213,6 +213,22 @@
                     </li>
                     @endif
 
+                    @if(checkPermissions(['Ferias'],['R']))
+                    <li class="ferias">
+                        <a href="#">
+                            <i class="fa-solid fa-sensor-on"></i>
+                            @if(checkPermissions(['Ferias'],['R']))<span class="menu-title">Ferias</span> @endif
+                            <i class="arrow"></i>
+                        </a>
+                        <!--Submenu-->
+                        <ul class="collapse">
+                            @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant text-nowrap"><a href="/ferias" class="text-nowrap"><i class="fa-solid fa-sensor-on"></i> Ferias </a></li> @endif
+                            @if(checkPermissions(['Incidencias'],['R']))<li class="incidencias"><a href="/ferias/contactos" class="text-nowrap"><i class="fa-solid fa-handshake"></i> Contactos</a></li> @endif
+                            @if(checkPermissions(['Scan mantenimiento'],['R']))<li class="scan_mant"><a href="/ferias/actividad" class="text-nowrap"><i class="fa-solid fa-file-chart-column"></i> Actividad</a></li> @endif
+                        </ul>
+                    </li>
+                    @endif
+
                     @if(checkPermissions(['Configuracion'],['R']))
                     <li class="configuracion">
                         <a href="#">

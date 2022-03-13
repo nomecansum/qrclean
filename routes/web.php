@@ -319,7 +319,15 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('delete/{id}',['middleware'=>'permissions:["Encuestas"],["D"]', 'uses' => 'EncuestasController@delete']);
         Route::get('gen_key',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@gen_key']);
         Route::post('resultados',['middleware'=>'permissions:["Encuestas"],["R"]', 'uses' => 'EncuestasController@resultados']);
+    });
 
+    Route::group(['prefix' => 'ferias'], function() {
+        Route::get('/',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@index'])->name('ferias.index');
+        Route::get('create',['middleware'=>'permissions:["Ferias"],["C"]', 'uses' => 'FeriasController@create']);
+        Route::post('save',['middleware'=>'permissions:["Ferias"],["W"]', 'uses' => 'FeriasController@store']);
+        Route::get('edit/{id}',['middleware'=>'permissions:["Ferias"],["W"]', 'uses' => 'FeriasController@edit']);
+        Route::post('update/{id}',['middleware'=>'permissions:["Ferias"],["W"]', 'uses' => 'FeriasController@update']);
+        Route::get('delete/{id}',['middleware'=>'permissions:["Ferias"],["D"]', 'uses' => 'FeriasController@delete']);
     });
 
     ////////////////////TAREAS////////////////////

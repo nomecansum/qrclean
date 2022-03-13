@@ -36,10 +36,12 @@ class contactos extends Model
                   'email',
                   'empresa',
                   'fec_audit',
+                  'id_usuario',
                   'mca_acepto',
                   'mca_enviar',
                   'mensaje',
-                  'nombre'
+                  'nombre',
+                  'token'
               ];
 
     /**

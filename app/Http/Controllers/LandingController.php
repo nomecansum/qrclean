@@ -7,6 +7,7 @@ use carbon;
 use App\Models\contactos;
 use App\Models\contactos_producto;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
 
 class LandingController extends Controller
 {
@@ -21,6 +22,7 @@ class LandingController extends Controller
         $contacto->mensaje=$r->message;
         $contacto->mca_acepto=$r->chk_acepto??'N';
         $contacto->mca_enviar=$r->chk_mandar??'N';
+        $contacto->token=Str::random(50);
         $contacto->save();
         Cookie::queue('landing', $contacto->id_contacto, 999999);
         return [

@@ -654,6 +654,11 @@ function validar_acceso_tabla($id,$tabla){
             $campo="id_encuesta";
             $ruta="encuestas.index";
             break;
+        case "ferias":
+            $descriptivo="feria";
+            $campo="id_feria";
+            $ruta="ferias.index";
+            break;
         default:
             $descriptivo=$tabla;
     }

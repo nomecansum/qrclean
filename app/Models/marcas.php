@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class contactos extends Model
+class marcas extends Model
 {
     
     /**
@@ -18,14 +18,14 @@ class contactos extends Model
      *
      * @var string
      */
-    protected $table = 'contactos';
+    protected $table = 'ferias_marcas';
 
     /**
     * The database primary key value.
     *
     * @var string
     */
-    protected $primaryKey = 'id_contacto';
+    protected $primaryKey = 'id_marca';
 
     /**
      * Attributes that should be mass-assignable.
@@ -33,16 +33,10 @@ class contactos extends Model
      * @var array
      */
     protected $fillable = [
-                  'email',
-                  'empresa',
-                  'fec_audit',
+                  'des_marca',
                   'id_cliente',
-                  'id_feria',
-                  'id_usuario',
-                  'mca_acepto',
-                  'mca_enviar',
-                  'mensaje',
-                  'nombre',
+                  'img_logo',
+                  'observaciones',
                   'token'
               ];
 
@@ -70,26 +64,6 @@ class contactos extends Model
         return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
     }
 
-    /**
-     * Set the fec_audit.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setFecAuditAttribute($value)
-    {
-        $this->attributes['fec_audit'] = !empty($value) ? \DateTime::createFromFormat('[% date_format %]', $value) : null;
-    }
 
-    /**
-     * Get fec_audit in array format
-     *
-     * @param  string  $value
-     * @return array
-     */
-    public function getFecAuditAttribute($value)
-    {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
-    }
 
 }

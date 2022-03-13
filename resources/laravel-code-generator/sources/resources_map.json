@@ -165,6 +165,16 @@
         "table-name": "ferias"
     },
     {
+        "model-name": "ferias_marcas",
+        "resource-file": "ferias_marcas.json",
+        "table-name": "marcas"
+    },
+    {
+        "model-name": "marcas",
+        "resource-file": "marcas.json",
+        "table-name": "ferias_marcas"
+    },
+    {
         "model-name": "contactos",
         "resource-file": "contactos.json",
         "table-name": "contactos"

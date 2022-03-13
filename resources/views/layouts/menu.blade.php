@@ -222,9 +222,10 @@
                         </a>
                         <!--Submenu-->
                         <ul class="collapse">
-                            @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant text-nowrap"><a href="/ferias" class="text-nowrap"><i class="fa-solid fa-sensor-on"></i> Ferias </a></li> @endif
-                            @if(checkPermissions(['Incidencias'],['R']))<li class="incidencias"><a href="/ferias/contactos" class="text-nowrap"><i class="fa-solid fa-handshake"></i> Contactos</a></li> @endif
-                            @if(checkPermissions(['Scan mantenimiento'],['R']))<li class="scan_mant"><a href="/ferias/actividad" class="text-nowrap"><i class="fa-solid fa-file-chart-column"></i> Actividad</a></li> @endif
+                            {{-- @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant text-nowrap"><a href="/ferias" class="text-nowrap"><i class="fa-solid fa-sensor-on"></i> Ferias </a></li> @endif --}}
+                            @if(checkPermissions(['Ferias'],['R']))<li class="ferias_asistentes"><a href="/ferias/asistentes" class="text-nowrap"><i class="fa-solid fa-user-tie"></i> Asistentes</a></li> @endif
+                            @if(checkPermissions(['Ferias marcas'],['R']))<li class="ferias_marcas"><a href="/ferias/marcas" class="text-nowrap"><i class="fa-brands fa-bandcamp"></i> Marcas</a></li> @endif
+                            @if(checkPermissions(['Scan ferias'],['R']))<li class="scan_feriat"><a href="/ferias/actividad" class="text-nowrap"><i class="fa-solid fa-file-chart-column"></i> Actividad</a></li> @endif
                         </ul>
                     </li>
                     @endif

@@ -328,6 +328,20 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('edit/{id}',['middleware'=>'permissions:["Ferias"],["W"]', 'uses' => 'FeriasController@edit']);
         Route::post('update/{id}',['middleware'=>'permissions:["Ferias"],["W"]', 'uses' => 'FeriasController@update']);
         Route::get('delete/{id}',['middleware'=>'permissions:["Ferias"],["D"]', 'uses' => 'FeriasController@delete']);
+
+        Route::get('/marcas',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@marcas_index'])->name('marcas.index');
+        Route::get('/marcas/edit/{id}',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@marcas_edit']);
+        Route::get('/marcas/delete/{id}',['middleware'=>'permissions:["Ferias"],["D"]', 'uses' => 'FeriasController@marcas_delete']);
+        Route::post('/marcas/save',['middleware'=>'permissions:["Ferias"],["W"]', 'uses' => 'FeriasController@marcas_save']);
+        Route::post('/marcas/print_qr',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@print_qr_marcas']);
+        Route::post('/marcas/export_qr',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@export_qr_marcas']);
+
+        Route::get('/asistentes',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@asistentes_index'])->name('contactos.index');
+        Route::get('/asistentes/edit/{id}',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@asistentes_edit']);
+        Route::post('/asistentes/save',['middleware'=>'permissions:["Ferias"],["W"]', 'uses' => 'FeriasController@asistentes_save']);
+        Route::get('/asistentes/delete/{id}',['middleware'=>'permissions:["Ferias"],["D"]', 'uses' => 'FeriasController@asistentes_delete']);
+        Route::post('/asistentes/print_qr',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@print_qr_asistentes']);
+        Route::post('/asistentes/export_qr',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@export_qr_asistentes']);
     });
 
     ////////////////////TAREAS////////////////////

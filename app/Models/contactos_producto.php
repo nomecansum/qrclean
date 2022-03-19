@@ -33,9 +33,10 @@ class contactos_producto extends Model
      * @var array
      */
     protected $fillable = [
-                  'fec_audit',
                   'id_contacto',
-                  'id_producto'
+                  'id_producto',
+                  'fec_audit',
+                  'id_usuario_com'
               ];
 
     /**

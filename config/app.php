@@ -125,7 +125,7 @@ return [
 
 
     'url_base_scan'=>env('URL_BASE_SCAN','https://qrclean.ddns.net/puesto/'),
-    'url_base_feria'=>env('URL_BASE_FERIA','https://qrclean.ddns.net/ferias/'),
+    'url_base_feria'=>env('URL_BASE_FERIA','https://qrclean.ddns.net/'),
     'id_perfil_personal_limpieza'=>10,
     'id_perfil_personal_mantenimiento'=>11,
     //Rutas de los WKLHTML2PDF

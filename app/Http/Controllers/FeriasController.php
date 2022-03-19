@@ -523,4 +523,5 @@ class FeriasController extends Controller
             return Redirect::back();
         }
     }
+
 }

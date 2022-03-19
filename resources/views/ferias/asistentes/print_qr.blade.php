@@ -15,7 +15,7 @@
     }
 @endphp
 @if($layout!='layout_simple')
-<form method="POST" action="{{url('/ferias/marcas/print_qr')}}"  name="frm_qr" id="frm_qr">
+<form method="POST" action="{{url('/ferias/asistentes/print_qr')}}"  name="frm_qr" id="frm_qr">
     <div class="row b-all rounded mb-3  ml-3">
         
             {{csrf_field()}}
@@ -49,15 +49,13 @@
     <div style="background-color: #fff" id="printarea">
         <div class="row pb-4 pr-4 mr-0 ml-1 mb-4 cont_qr" style=" display: inline-block; border: 1px solid #ccc;padding: 5px 5px 5px 5px">
             <div class="col-md-6" >
-                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size($r->tam_qr)->generate(config('app.url_base_scan').$dato->token)) !!} ">
+                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size($r->tam_qr)->generate($dato->token)) !!} ">
             </div>
-            <div class="col-md-6" style="">
-                @isset($dato->img_logo)
-                    <img src="{{Storage::disk(config('app.img_disk'))->url('img/ferias/marcas/'.$dato->img_logo)}}" style="width: {{ $r->tam_qr }}px" alt="">
-                @endif	
+            <div class="col-md-6" >
+                
             </div>
-            <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr" style="background-color: #fff; font-size: {{ $tam_fuente }}px">
-                {{$dato->des_marca}} 
+            <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr col-md-12" style="background-color: #fff; font-size: {{ $tam_fuente }}px">
+                {{$dato->nombre}} - {{ $dato->empresa }} - {{ $dato->email }}
             </div>
         </div>
     </div>

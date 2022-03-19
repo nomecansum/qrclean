@@ -486,4 +486,101 @@ class ReportsController extends Controller
             break;
         }
     }
+
+     ///////////////INFORME DE FERIAS /////////////////
+     public function ferias_index(){
+        return view('reports.ferias.index');
+    }
+
+    public function ferias(Request $r){
+        
+        //PARAMETROS DE ENTRADA COMUNES, USUARIO Y FECHAS
+        if(isset($r->cod_usuario))
+            Auth::loginUsingId($r->cod_usuario);
+        $f = explode(' - ',$r->fechas);
+        $f1 = adaptar_fecha($f[0]);
+        $f2 = adaptar_fecha($f[1]);
+
+        ///////////////////////////
+        ///CONTENIDO DEL INFORME///
+        ///////////////////////////
+        $informe=DB::table('contactos_producto')
+        ->select('contactos_producto.*','contactos.*','ferias_marcas.*','clientes.nom_cliente','clientes.img_logo','contactos_producto.fec_audit as fecha_contacto','users.name')
+        ->join('contactos','contactos.id_contacto','contactos_producto.id_contacto')
+        ->join('clientes','clientes.id_cliente','contactos.id_cliente')
+        ->join('ferias_marcas','ferias_marcas.id_marca','contactos_producto.id_producto')
+        ->leftjoin('users','users.id','contactos_producto.id_usuario_com')
+        ->where(function($q) use($r){
+            if ($r->mark) {
+                $q->whereIn('contactos_producto.id_producto',$r->mark);
+            }
+        })
+        ->wherebetween('contactos_producto.fec_audit',[$f1,$f2])
+        ->get();
+
+
+        $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+        ///////////////////////////////////////////////////
+        ///////////SALIDA DEL INFORME/////////////////////
+        //Para añadir a los nomres de fichero y hacerlos un poco mas unicos
+        //dd($r->all());
+        $nombre_informe="Informe de asistencia a eventos";
+        $cliente=clientes::find($r->id_cliente);
+        $rango_safe=str_replace(" - ","_",$r->fechas);
+        $rango_safe=str_replace("/","",$rango_safe);
+        $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
+        $usuario = users::find($r->cod_usuario);
+        $view='reports.ferias.filter';
+
+
+        switch($r->output){
+            case "pantalla":
+                if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe, "r" => $r,'executionTime' => $executionTime));
+                } else {  //Navegacion
+                    return view($view,compact('informe','r','executionTime'))->render();
+                }
+
+            break;
+
+            case "pdf":
+                $orientation = $r->orientation == 'h' ? 'landscape' : 'portrait';
+                $pdf = PDF::loadView($view,compact('informe','r','executionTime'));
+                $pdf->setPaper('legal', $orientation);
+                $filename = str_replace(' ', '_', $prepend . '_' . $nombre_informe . '.pdf');
+                $fichero = storage_path() . "/exports/" . $filename;
+
+                if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                    try{
+                        $pdf->save($fichero);
+                        $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                    } catch(\Exception $e){
+                        Log::error('Error generando PDF '.$e->getMessage());
+                    }
+
+                } else {  //Navegacion
+                    try{
+                        return $pdf->download($filename);
+                    } catch(\Exception $e){
+                        Log::error('Error generando PDF '.$e->getMessage());
+                        flash("Error al solicitar el informe: afine los filtros para evitar grandes cargas de datos al navegador (".mensaje_excepcion($e) . ")")->error();  
+                        return redirect()->back()->withInput();
+                    }
+                }
+
+            break;
+
+            case "excel":
+                $filename = str_replace(' ', '_', $prepend.'_'.$nombre_informe.'.xlsx');
+                $fichero = storage_path()."/exports/".$filename;
+                libxml_use_internal_errors(true); //para quitar los errores de libreria
+                if(isset($r->email_schedule) && $r->email_schedule == 1) { //Programado
+                    Excel::store(new ExportExcel($view, compact('informe','r','executionTime')),$filename,'exports');
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                } else {  //Navegacion
+                    return Excel::download(new ExportExcel($view,compact('informe','r','executionTime')),$filename);
+                }
+            break;
+        }
+    }
 }

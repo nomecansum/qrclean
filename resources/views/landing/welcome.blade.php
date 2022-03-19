@@ -13,7 +13,7 @@ input[type="checkbox"] {
     <div class="container">
         <div class="text-center quitar">
             <h2 class="section-heading text-uppercase">Registro</h2>
-            <h3 class="section-subheading text-muted">Bienvenido a nuestro evento, déjenos sus datos para poder informarle sobre los productos de su interes.</h3>
+            <h3 class="section-subheading text-muted">Bienvenido a este evento, déjenos sus datos para poder informarle sobre los productos de su interes.</h3>
         </div>
         <!-- * * * * * * * * * * * * * * *-->
         <!-- * * SB Forms Contact Form * *-->

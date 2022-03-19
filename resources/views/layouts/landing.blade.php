@@ -15,6 +15,12 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="/landing/css/styles.css" rel="stylesheet" />
+        <link href="{{ asset('/plugins/fontawesome5/css/all.min.css') }}" rel="stylesheet">
+
+         <!-- Select2 -->
+        <link rel="stylesheet" href="{{ URL('/plugins/select2/css/select2.min.css') }}">
+        {{--  Colorpicker  --}}
+        <link href="{{url('/plugins/jquery-minicolors-master/jquery.minicolors.css')}}" rel="stylesheet" media="all">
         @yield('estilos')
     </head>
     <body id="page-top">
@@ -64,15 +70,22 @@
         </footer>
         <!-- Portfolio Modals-->
         
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+       <!--jQuery [ REQUIRED ]-->
+        <script src="{{ url('/js/jquery.min.js') }}"></script>
+        <!--jQueryUI [ REQUIRED ]-->
+        <script src="{{ url('/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+        <!--BootstrapJS [ RECOMMENDED ]-->
+        <script src="{{ url('/js/bootstrap.min.js') }}"></script>
         <!-- Core theme JS-->
         <script src="/landing/js/scripts.js"></script>
          <!--JQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
           <!--Moment -->
         <script src="{{ asset('/plugins/momentjs/moment.js') }}"></script>
-
+        <!-- Select2 -->
+        <script src="{{ url('/plugins/select2/js/select2.full.min.js') }}"></script>
+        {{--  Colorpicker  --}}
+        <script src="{{url('/plugins/jquery-minicolors-master/jquery.minicolors.min.js')}}"></script>
          {{--  SweetAlert  --}}
         <script src="{{url('/plugins/sweetalert/dist/sweetalert2.all.min.js')}}"></script>
 
@@ -81,7 +94,7 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         {{-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> --}}
-        @include('layouts.main_scripts')        
+        {{-- @include('layouts.main_scripts')         --}}
         @yield('scripts1')
         @yield('scripts2')
 

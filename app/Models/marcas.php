@@ -34,9 +34,9 @@ class marcas extends Model
      */
     protected $fillable = [
                   'des_marca',
-                  'id_cliente',
                   'img_logo',
                   'observaciones',
+                  'id_cliente',
                   'token'
               ];
 

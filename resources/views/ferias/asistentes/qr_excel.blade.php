@@ -8,6 +8,7 @@
     </tr>
     @foreach($datos as $dato)
         <tr>
+            <td>{{ $dato->id_contacto }}</td>
             <td>{{ $dato->nombre }}</td>
             <td>{{ $dato->empresa }}</td>
             <td>{{ $dato->email }}</td>

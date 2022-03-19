@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Informe uso de puestos</h1>
+    <h1 class="page-header text-overflow pad-no">Informe de contactos en evento</h1>
 @endsection
 
 @section('styles')
@@ -12,7 +12,7 @@
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
 		<li class="breadcrumb-item">Informes</li>
-        <li class="breadcrumb-item">Informe uso de puestos</li>
+        <li class="breadcrumb-item">Informe de contactos en evento</li>
     </ol>
 @endsection
 @section('content')
@@ -28,15 +28,15 @@
 @endphp
 <div class="panel">
 	<div class="panel-heading">
-		<h3 class="panel-title">Informe de uso de puestos</h3>
+		<h3 class="panel-title">Informe de contactos en evento</h3>
 		<span class="float-right" id="spin" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
 	</div>
 	<div class="panel-body">
 		@if (checkPermissions(['Informes'],["R"]))
-			<form action="{{url('/reports/puestos/filter')}}" method="POST" class="ajax-filter">
+			<form action="{{url('/reports/ferias/filter')}}" method="POST" class="ajax-filter">
 				{{csrf_field()}}
 				<input type="hidden" value="{{Auth::user()->id_cliente}}" name="id_cliente">
-				@include('resources.combos_filtro',[$hide=['cli'=>1,'est'=>1,'head'=>1,'btn'=>1,'usu'=>1,'est_inc'=>1,'est_mark'=>1]])
+				@include('resources.combos_filtro',[$hide=['cli'=>1,'edi'=>1,'pla'=>1,'tag'=>1,'pue'=>1,'tip'=>1,'est'=>1,'head'=>1,'btn'=>1,'usu'=>1,'est_inc'=>1,'tip_inc'=>1]])
 				<div class="col-md-3" style="padding-left: 15px">
 					@include('resources.combo_fechas')
 				</div>
@@ -80,7 +80,7 @@
 	</table>
 </div>
 @php
-    $nombre_empresa = "Informe de uso de puestos" . " ";
+    $nombre_empresa = "Informe de contactos en evento" . " ";
     $___cl = \DB::table('clientes')->where('id_cliente',Auth::user()->id_cliente)->first();
     if(isset($___cl) && ($___cl->nom_cliente))
         $nombre_empresa .= $___cl->nom_cliente;

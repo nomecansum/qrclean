@@ -47,17 +47,22 @@
 <br><br>
 @foreach($datos as $dato)
     <div style="background-color: #fff" id="printarea">
-        <div class="row pb-4 pr-4 mr-0 ml-1 mb-4 cont_qr" style=" display: inline-block; border: 1px solid #ccc;padding: 5px 5px 5px 5px">
+        <div class="row pb-4 pr-4 mr-0 ml-1 mb-4 cont_qr" style="border: 1px solid #ccc;padding: 5px 5px 5px 5px">
             <div class="col-md-6" >
-                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size($r->tam_qr)->generate(config('app.url_base_scan').$dato->token)) !!} ">
+                {{$dato->des_marca}} <br>
+                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size($r->tam_qr)->generate(config('app.url_base_feria')."landing/marca/".$dato->token)) !!} ">
             </div>
-            <div class="col-md-6" style="">
-                @isset($dato->img_logo)
+            <div class="col-md-6" >
+                @if(isset($dato->img_logo) && Storage::disk(config('app.img_disk'))->exists('img/ferias/marcas/'.$dato->img_logo))
                     <img src="{{Storage::disk(config('app.img_disk'))->url('img/ferias/marcas/'.$dato->img_logo)}}" style="width: {{ $r->tam_qr }}px" alt="">
-                @endif	
+                @else
+                [LOGO]
+                @endif
+                
             </div>
             <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr" style="background-color: #fff; font-size: {{ $tam_fuente }}px">
-                {{$dato->des_marca}} 
+                
+                <a href="{{ config('app.url_base_feria')."landing/marca/".$dato->token }}">{{ config('app.url_base_feria')."landing/marca/".$dato->token }}</a>
             </div>
         </div>
     </div>

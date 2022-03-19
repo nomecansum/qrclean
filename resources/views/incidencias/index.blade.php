@@ -64,7 +64,7 @@
 				@csrf
 				<input type="hidden" name="document" value="pantalla">
 				<input type="hidden" name="output" value="pantalla">
-				@include('resources.combos_filtro',[])
+				@include('resources.combos_filtro',[$hide=['est_mark'=>1]])
 				<div class="col-md-3" style="padding-left: 15px">
 					@include('resources.combo_fechas')
 				</div>

@@ -209,6 +209,7 @@
                             @if(checkPermissions(['Informes > Uso de puestos'],['R']))<li class="inf_puestos text-nowrap"><a href="/reports/puestos" class="text-nowrap"><i class="fad fa-file-alt"></i> Uso de puestos</a></li> @endif
                             @if(checkPermissions(['Informes > Puestos por usuario'],['R']))<li class="inf_usuarios"><a href="/reports/users" class="text-nowrap"><i class="fad fa-file-alt"></i> Puestos por usuario</a></li> @endif
                             @if(checkPermissions(['Informes > Reservas canceladas'],['R']))<li class="inf_reservas"><a href="/reports/canceladas" class="text-nowrap"><i class="fad fa-file-alt"></i> Reservas canceladas</a></li> @endif
+                            @if(checkPermissions(['Informes > Ferias'],['R']))<li class="inf_reservas"><a href="/reports/ferias" class="text-nowrap"><i class="fad fa-file-alt"></i> Ferias</a></li> @endif
                         </ul>
                     </li>
                     @endif

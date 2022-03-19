@@ -88,7 +88,7 @@
     <form method="post" name="form_puestos" id="formbuscador" action="{{ url('puestos/') }}">
         @csrf
         <input type="hidden" name="document" value="pantalla">
-        @include('resources.combos_filtro',[$hide=['usu'=>1,'est_inc'=>1]])
+        @include('resources.combos_filtro',[$hide=['usu'=>1,'est_inc'=>1,'est_mark'=>1]])
     </form>
     <div id="editorCAM" class="mt-2">
 

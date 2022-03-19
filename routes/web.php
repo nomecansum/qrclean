@@ -59,8 +59,12 @@ Route::group(['prefix' => '/landing'], function() {
     Route::post('save', 'LandingController@save');
     Route::get('products','LandingController@products');
     Route::post('products/save','LandingController@save_product');
-
+    Route::get('/marca/{marca}','LandingController@get_marca');
+    Route::get('/scan/{id?}', 'LandingController@scan')->name('landing_scan');
+    Route::get('/asoc/{marca}/{persona}','LandingController@save_product2');
 });
+
+
 
 
 //Tareas programadas
@@ -371,6 +375,9 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::get('/canceladas',['middleware' => 'permissions:["Informes > Reservas canceladas"],["R"]', 'uses' => 'ReportsController@canceladas_index']);
 	    Route::post('/canceladas/filter',['middleware' => 'permissions:["Informes > Reservas canceladas"],["R"]', 'uses' => 'ReportsController@canceladas']);
+
+        Route::get('/ferias',['middleware' => 'permissions:["Informes > Ferias"],["R"]', 'uses' => 'ReportsController@ferias_index']);
+	    Route::post('/ferias/filter',['middleware' => 'permissions:["Informes > Ferias"],["R"]', 'uses' => 'ReportsController@ferias']);
 		
 	});
 

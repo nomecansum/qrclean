@@ -318,9 +318,9 @@ class FeriasController extends Controller
         $datos=DB::table('ferias_marcas')
             ->select('ferias_marcas.*','clientes.nom_cliente')
             ->join('clientes','clientes.id_cliente','ferias_marcas.id_cliente')
-            ->where(function($q){
-                $q->where('ferias_marcas.id_cliente',Auth::user()->id_cliente);
-            })
+            // ->where(function($q){
+            //     $q->where('ferias_marcas.id_cliente',Auth::user()->id_cliente);
+            // })
             ->orderby('ferias_marcas.des_marca')
             ->get();
 
@@ -343,9 +343,9 @@ class FeriasController extends Controller
             $datos=DB::table('ferias_marcas')
                 ->select('ferias_marcas.*','clientes.nom_cliente')
                 ->join('clientes','clientes.id_cliente','ferias_marcas.id_cliente')
-                ->where(function($q){
-                    $q->where('ferias_marcas.id_cliente',Auth::user()->id_cliente);
-                })
+                // ->where(function($q){
+                //     $q->where('ferias_marcas.id_cliente',Auth::user()->id_cliente);
+                // })
                 ->orderby('ferias_marcas.des_marca')
                 ->get();
         
@@ -483,9 +483,9 @@ class FeriasController extends Controller
             ->select('contactos.*','clientes.nom_cliente','users.name')
             ->join('clientes','clientes.id_cliente','contactos.id_cliente')
             ->leftjoin('users','contactos.id_usuario','users.id')
-            ->where(function($q){
-                $q->where('contactos.id_cliente',Auth::user()->id_cliente);
-            })
+            // ->where(function($q){
+            //     $q->where('contactos.id_cliente',Auth::user()->id_cliente);
+            // })
             ->orderby('contactos.nombre')
             ->get();
 
@@ -509,9 +509,9 @@ class FeriasController extends Controller
                 ->select('contactos.*','clientes.nom_cliente','users.name')
                 ->join('clientes','clientes.id_cliente','contactos.id_cliente')
                 ->leftjoin('users','contactos.id_usuario','users.id')
-                ->where(function($q){
-                    $q->where('contactos.id_cliente',Auth::user()->id_cliente);
-                })
+                // ->where(function($q){
+                //     $q->where('contactos.id_cliente',Auth::user()->id_cliente);
+                // })
                 ->orderby('contactos.nombre')
                 ->get();
         

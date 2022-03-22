@@ -201,7 +201,7 @@ class FeriasController extends Controller
     {
         $datos=DB::table('ferias_marcas')
             ->select('ferias_marcas.*','clientes.nom_cliente')
-            ->join('clientes','clientes.id_cliente','ferias_marcas.id_cliente')
+            ->leftjoin('clientes','clientes.id_cliente','ferias_marcas.id_cliente')
             // ->where(function($q){
             //     $q->where('ferias_marcas.id_cliente',Auth::user()->id_cliente);
             // })
@@ -317,7 +317,7 @@ class FeriasController extends Controller
         
         $datos=DB::table('ferias_marcas')
             ->select('ferias_marcas.*','clientes.nom_cliente')
-            ->join('clientes','clientes.id_cliente','ferias_marcas.id_cliente')
+            ->leftjoin('clientes','clientes.id_cliente','ferias_marcas.id_cliente')
             // ->where(function($q){
             //     $q->where('ferias_marcas.id_cliente',Auth::user()->id_cliente);
             // })
@@ -342,7 +342,7 @@ class FeriasController extends Controller
         try{
             $datos=DB::table('ferias_marcas')
                 ->select('ferias_marcas.*','clientes.nom_cliente')
-                ->join('clientes','clientes.id_cliente','ferias_marcas.id_cliente')
+                ->leftjoin('clientes','clientes.id_cliente','ferias_marcas.id_cliente')
                 // ->where(function($q){
                 //     $q->where('ferias_marcas.id_cliente',Auth::user()->id_cliente);
                 // })
@@ -481,7 +481,7 @@ class FeriasController extends Controller
         
         $datos=DB::table('contactos')
             ->select('contactos.*','clientes.nom_cliente','users.name')
-            ->join('clientes','clientes.id_cliente','contactos.id_cliente')
+            ->leftjoin('clientes','clientes.id_cliente','contactos.id_cliente')
             ->leftjoin('users','contactos.id_usuario','users.id')
             // ->where(function($q){
             //     $q->where('contactos.id_cliente',Auth::user()->id_cliente);
@@ -507,7 +507,7 @@ class FeriasController extends Controller
         try{
             $datos=DB::table('contactos')
                 ->select('contactos.*','clientes.nom_cliente','users.name')
-                ->join('clientes','clientes.id_cliente','contactos.id_cliente')
+                ->leftjoin('clientes','clientes.id_cliente','contactos.id_cliente')
                 ->leftjoin('users','contactos.id_usuario','users.id')
                 // ->where(function($q){
                 //     $q->where('contactos.id_cliente',Auth::user()->id_cliente);

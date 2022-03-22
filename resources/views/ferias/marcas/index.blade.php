@@ -48,7 +48,7 @@
 </div>
 <form id="frm" name="frm" action="{{ url('/ferias/marcas/print_qr') }}" method="post">
 	@csrf
-</form>
+
 <div class="row mt-2">
 	<div class="col-12">
 		<div class="panel">
@@ -58,6 +58,7 @@
 			
 			<div class="panel-body">
 				<div id="all_toolbar">
+					<input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos">Todos</label>
 					<div class="btn-group btn-group-xs pull-bottom" role="group">
 						<div class="btn-group mr-3">
 							<div class="dropdown">
@@ -86,6 +87,7 @@
 					>
 					<thead>
 						<tr>
+							<th></th>
 							<th data-sortable="true">Id</th>
 							<th data-sortable="true">Marca</th>
 							<th data-sortable="true">Logo</th>
@@ -96,7 +98,11 @@
                     <tbody>
                         @foreach ($datos as $marca)
                             <tr class="hover-this" @if (checkPermissions(['Clientes'],["W"])) @endif>
-                                <td>{{$marca->id_marca}}</td>
+                                <td class="text-center">
+                                    <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $marca->id_marca }}" id="chkp{{ $marca->id_marca }}" value="{{ $marca->id_marca }}">
+									<label class="custom-control-label"   for="chkp{{ $marca->id_marca  }}"></label>
+                                </td>
+								<td>{{$marca->id_marca}}</td>
                                 <td>
                                     {{$marca->des_marca}}
                                 </td>
@@ -138,6 +144,7 @@
 		</div>
 	</div>
 </div>
+</form>
 @endsection
 
 @section('scripts')
@@ -171,16 +178,32 @@
 	})
 
 	$('.btn_qr').click(function(){
-        //block_espere();
+        var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); 
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún elemento');
+            exit();
+        }
         $('#frm').attr('action',"{{url('/ferias/marcas/print_qr')}}");
         $('#frm').submit();
     });
 
     $('.btn_export_qr').click(function(){
+		var searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); 
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún elemento');
+            exit();
+        }
         $('#frm').attr('action',"{{url('/ferias/marcas/export_qr')}}");
         $('#frm').submit();
     });
 	
+	$("#chktodos").click(function(){
+		$('.chkpuesto').not(this).prop('checked', this.checked);
+	});
 
 	</script>
 

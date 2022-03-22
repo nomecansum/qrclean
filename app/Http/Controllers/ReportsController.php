@@ -507,7 +507,7 @@ class ReportsController extends Controller
         $informe=DB::table('contactos_producto')
         ->select('contactos_producto.*','contactos.*','ferias_marcas.*','clientes.nom_cliente','clientes.img_logo','contactos_producto.fec_audit as fecha_contacto','users.name')
         ->join('contactos','contactos.id_contacto','contactos_producto.id_contacto')
-        ->join('clientes','clientes.id_cliente','contactos.id_cliente')
+        ->leftjoin('clientes','clientes.id_cliente','contactos.id_cliente')
         ->join('ferias_marcas','ferias_marcas.id_marca','contactos_producto.id_producto')
         ->leftjoin('users','users.id','contactos_producto.id_usuario_com')
         ->where(function($q) use($r){

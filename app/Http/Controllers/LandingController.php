@@ -83,6 +83,9 @@ class LandingController extends Controller
             $cp->id_producto=$detalles->id_marca;
             $cp->id_usuario_com=Auth::user()->id??null;
             $cp->save();
+            if(!isset(Auth::user()->id)){
+                Cookie::queue('landing', $esta->id_contacto, 999999);
+            }
             return view('landing.gracias',compact('detalles'));
         } else {
             return redirect('welcome');

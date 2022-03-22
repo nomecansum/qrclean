@@ -45,8 +45,9 @@
     <link href="{{ asset('/plugins/fontawesome6/css/all.min.css') }}" rel="stylesheet">
 @endif
 <br><br>
+<div style="background-color: #fff" id="printarea">
 @foreach($datos as $dato)
-    <div style="background-color: #fff" id="printarea">
+    
         <div class="row pb-4 pr-4 mr-0 ml-1 mb-4 cont_qr" style="border: 1px solid #ccc;padding: 5px 5px 5px 5px">
             <div class="col-md-6" >
                 {{$dato->des_marca}} <br>
@@ -61,12 +62,12 @@
                 
             </div>
             <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr" style="background-color: #fff; font-size: {{ $tam_fuente }}px">
-                
-                <a href="{{ config('app.url_base_feria')."landing/marca/".$dato->token }}">{{ config('app.url_base_feria')."landing/marca/".$dato->token }}</a>
+                @if(config('app.env')=="local")<a href="{{ config('app.url_base_feria')."landing/marca/".$dato->token }}">{{ config('app.url_base_feria')."landing/marca/".$dato->token }}</a>@endif
             </div>
         </div>
-    </div>
+    
 @endforeach
+</div>
 </form>
 @endsection
 

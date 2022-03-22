@@ -1,5 +1,15 @@
 @extends($layout)
 
+@section('styles')
+    <style type="text/css">
+        .tarjeta {
+            /* height: calc(1.7118 * 100vw); */
+            background-image: url("{{ url("/img/bg_identificacion3.png") }}");
+            background-repeat: no-repeat;
+        }
+    </style>
+@endsection
+
 @section('content')
 @php
     
@@ -44,22 +54,28 @@
     <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/plugins/fontawesome6/css/all.min.css') }}" rel="stylesheet">
 @endif
-<br><br>
-@foreach($datos as $dato)
+@php
+    $vuelta=0;
+@endphp
+
     <div style="background-color: #fff" id="printarea">
-        <div class="row pb-4 pr-4 mr-0 ml-1 mb-4 cont_qr" style=" display: inline-block; border: 1px solid #ccc;padding: 5px 5px 5px 5px">
-            <div class="col-md-6" >
-                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size($r->tam_qr)->generate($dato->token)) !!} ">
+
+        @foreach($datos as $dato)        
+            <div class="tarjeta mb-1" style="width: 372px; height: 594px; display: inline-block; border: 1px solid #ccc;">
+                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(343)->generate($dato->token)) !!} " style="position: relative; top: 102px; left: 11px;">
+                <div class="nombre" style="position: relative; top: 110px; left: 15px; font-size: 25px; width: 320px;">{{$dato->nombre}}W</div>
+                <div class="empresa" style="position: relative; top: 110px; left: 15px; font-size: 20px; width: 320px; overflow: hide">{{ $dato->empresa }}</div>
             </div>
-            <div class="col-md-6" >
-                
-            </div>
-            <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr col-md-12" style="background-color: #fff; font-size: {{ $tam_fuente }}px">
+
+            {{-- <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr col-md-12" style="background-color: #fff; font-size: {{ $tam_fuente }}px">
                 {{$dato->nombre}} - {{ $dato->empresa }} - {{ $dato->email }}
-            </div>
-        </div>
+            </div> --}}
+            @php
+                $vuelta++
+            @endphp
+        @endforeach
     </div>
-@endforeach
+
 </form>
 @endsection
 

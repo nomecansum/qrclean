@@ -321,6 +321,9 @@ class FeriasController extends Controller
             // ->where(function($q){
             //     $q->where('ferias_marcas.id_cliente',Auth::user()->id_cliente);
             // })
+            ->where(function($q) use($r){
+                $q->wherein('id_marca',$r->lista_id);
+            })
             ->orderby('ferias_marcas.des_marca')
             ->get();
 
@@ -346,6 +349,9 @@ class FeriasController extends Controller
                 // ->where(function($q){
                 //     $q->where('ferias_marcas.id_cliente',Auth::user()->id_cliente);
                 // })
+                ->where(function($q) use($r){
+                    $q->wherein('id_marca',$r->lista_id);
+                })
                 ->orderby('ferias_marcas.des_marca')
                 ->get();
         
@@ -486,6 +492,9 @@ class FeriasController extends Controller
             // ->where(function($q){
             //     $q->where('contactos.id_cliente',Auth::user()->id_cliente);
             // })
+            ->where(function($q) use($r){
+                $q->wherein('id_contacto',$r->lista_id);
+            })
             ->orderby('contactos.nombre')
             ->get();
 
@@ -512,6 +521,9 @@ class FeriasController extends Controller
                 // ->where(function($q){
                 //     $q->where('contactos.id_cliente',Auth::user()->id_cliente);
                 // })
+                ->where(function($q) use($r){
+                    $q->wherein('id_contacto',$r->lista_id);
+                })
                 ->orderby('contactos.nombre')
                 ->get();
         

@@ -1,6 +1,9 @@
 @php
     use App\Models\clientes;
     use Carbon\Carbon;
+    if(!isset($cliente)){
+        $cliente=Auth::user()->id_cliente;
+    }
     $cl = clientes::find($cliente);
 @endphp
 @if($r->output=="excel")

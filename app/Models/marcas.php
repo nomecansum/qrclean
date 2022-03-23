@@ -37,7 +37,8 @@ class marcas extends Model
                   'img_logo',
                   'observaciones',
                   'id_cliente',
-                  'token'
+                  'token',
+                  'url'
               ];
 
     /**

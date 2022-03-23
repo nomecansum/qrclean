@@ -304,6 +304,7 @@ class FeriasController extends Controller
             'id_cliente' => 'nullable',
             'img_logo' => 'nullable',
             'observaciones' => 'nullable|string|min:0|max:500',
+            'url' => 'nullable',
         ];
         $data = $request->validate($rules);
         return $data;

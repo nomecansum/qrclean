@@ -14,6 +14,15 @@
             $tam_fuente=14;
     }
 @endphp
+@section('styles')
+    <style type="text/css">
+        .tarjeta {
+            /* height: calc(1.7118 * 100vw); */
+            background-image: url("{{ url("/img/crambo_coe_marca.jpg") }}");
+            background-repeat: no-repeat;
+        }
+    </style>
+@endsection
 @if($layout!='layout_simple')
 <form method="POST" action="{{url('/ferias/marcas/print_qr')}}"  name="frm_qr" id="frm_qr">
     <div class="row b-all rounded mb-3  ml-3">
@@ -51,7 +60,7 @@
 @endif
 <br><br>
 <div style="background-color: #fff" id="printarea">
-@foreach($datos as $dato)
+{{-- @foreach($datos as $dato)
     
         <div class="row pb-4 pr-4 mr-0 ml-1 mb-4 cont_qr" style="border: 1px solid #ccc;padding: 5px 5px 5px 5px">
             <div class="col-md-6" >
@@ -71,7 +80,23 @@
             </div>
         </div>
     
-@endforeach
+@endforeach --}}
+<div style="background-color: #fff" id="printarea">
+
+    @foreach($datos as $dato)        
+        <div class="tarjeta mb-1" style="width: 500px; height: 698px; display: inline-block; border: 1px solid #ccc;">
+            <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(250)->margin(0)->generate(config('app.url_base_feria')."landing/marca/".$dato->token)) !!} " style="position: relative; top: 204px; left: 121px;">
+            <div class="nombre text-center" style="position: relative; top: 200px; left: 5px; font-size: 22px; width: 500px; overflow: hide">{{$dato->des_marca}}</div>
+            @if(isset($dato->img_logo) && Storage::disk(config('app.img_disk'))->exists('img/ferias/marcas/'.$dato->img_logo))
+                <div class="imagen text-center" style="position: relative; top: 194px; height: 112px; overflow: hidden; backgroud-color: #ff0"><img src="{{Storage::disk(config('app.img_disk'))->url('img/ferias/marcas/'.$dato->img_logo)}}" style="width: {{ $r->tam_qr }}px;" alt=""></div>
+            @endif
+        </div>
+
+        {{-- <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr col-md-12" style="background-color: #fff; font-size: {{ $tam_fuente }}px">
+            {{$dato->nombre}} - {{ $dato->empresa }} - {{ $dato->email }}
+        </div> --}}
+    @endforeach
+</div>
 </div>
 </form>
 @endsection

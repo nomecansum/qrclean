@@ -62,6 +62,7 @@ Route::group(['prefix' => '/landing'], function() {
     Route::get('/marca/{marca}','LandingController@get_marca');
     Route::get('/scan/{id?}', 'LandingController@scan')->name('landing_scan');
     Route::get('/asoc/{marca}/{persona}','LandingController@save_product2');
+    Route::post('/comentario','LandingController@comentario');
 });
 
 

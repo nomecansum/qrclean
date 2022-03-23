@@ -86,7 +86,7 @@ class LandingController extends Controller
             if(!isset(Auth::user()->id)){
                 Cookie::queue('landing', $esta->id_contacto, 999999);
             }
-            return view('landing.gracias',compact('detalles'));
+            return view('landing.gracias',compact('detalles','cp'));
         } else {
             return redirect('welcome');
         }
@@ -104,7 +104,7 @@ class LandingController extends Controller
             $cp->id_contacto=$esta->id_contacto;
             $cp->id_producto=$detalles->id_marca;
             $cp->save();
-            return view('landing.gracias',compact('detalles'));
+            return view('landing.gracias',compact('detalles','cp'));
         } else {
             return redirect(url('/landing/scan',$marca));
         }
@@ -116,5 +116,17 @@ class LandingController extends Controller
         $titulo='';
         $tipo_scan="main";
         return view('landing.scan',compact('estado_destino','modo','titulo','tipo_scan','id'));
+    }
+
+    public function comentario(Request $r){
+        //Vamos a ver si estab registrado
+        $esta=contactos_producto::find($r->id_accion);
+        $esta->comentario=$r->txt;
+        $esta->save();
+        if(isset($esta)){
+            return "El mensaje se ha guardado correctamente";
+        } else {
+            return "No existe la solicitud de contacto";
+        }
     }
 }

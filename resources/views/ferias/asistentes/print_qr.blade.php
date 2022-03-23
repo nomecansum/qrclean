@@ -67,10 +67,10 @@
     <div style="background-color: #fff" id="printarea">
 
         @foreach($datos as $dato)        
-            <div class="tarjeta mb-1" style="width: 420px; height: 590px; display: inline-block; border: 1px solid #ccc;">
-                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(250)->generate($dato->token)) !!} " style="position: relative; top: 154px; left: 81px;">
-                <div class="nombre" style="position: relative; top: 130px; left: 15px; font-size: 25px; width: 400px; overflow: hide">{{$dato->nombre}}W</div>
-                <div class="empresa" style="position: relative; top: 140px; left: 15px; font-size: 20px; width: 400px; overflow: hide">{{ $dato->empresa }}</div>
+            <div class="tarjeta mb-1" style="width: 342px; height: 498px; display: inline-block; border: 1px solid #ccc;">
+                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(180)->margin(0)->generate($dato->token)) !!} " style="position: relative; top: 134px; left: 81px;">
+                <div class="nombre text-center" style="position: relative; top: 150px; left: 5px; font-size: 22px; width: 340px; overflow: hide">{{$dato->nombre}}</div>
+                <div class="empresa text-center" style="position: relative; top: 150px; left: 5px; font-size: 18px; width: 340px; overflow: hide">{{ $dato->empresa }}</div>
             </div>
 
             {{-- <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr col-md-12" style="background-color: #fff; font-size: {{ $tam_fuente }}px">

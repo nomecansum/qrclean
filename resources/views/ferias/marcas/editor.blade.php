@@ -27,6 +27,11 @@
                     </select>
                     {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
                 </div>
+                <div class="form-group col-md-12 {{ $errors->has('url') ? 'has-error' : '' }}">
+                    <label for="url" class="control-label">URL</label>
+                    <input class="form-control"  name="url" type="text" id="url"  maxlength="500" value="{{ $datos->url }}">
+                    {!! $errors->first('url', '<p class="help-block">:message</p>') !!}
+                </div>
             </div>
             
 
@@ -43,14 +48,16 @@
                     Imagen<br>
                 </div>
                 <div class="col-12">
+                    
                     <div class="form-group  {{ $errors->has('img_logo') ? 'has-error' : '' }}">
                         <label for="img_usuario" class="preview preview1">
-                            <img src="{{ isset($datos) ? Storage::disk(config('app.img_disk'))->url('img/ferias/marcas/'.$datos->img_logo) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid">
+                            <img src="{{ isset($datos) ? Storage::disk(config('app.img_disk'))->url('img/ferias/marcas/'.$datos->img_logo) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid" placeholder="Click aqui">
                         </label>
                         <input type="hidden" name="old_logo" id="old_logo" value="{{ isset($datos) ? $datos->img_logo : ''}}">
                         <div class="custom-file">
                             <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input editor_imagen" name="img_logo" id="img_logo" lang="es" value="{{ isset($datos) ? $datos->img_logo : ''}}">
                             <label class="custom-file-label" for="img_usuario"></label>
+                            <label class="mt-2 label_logo" >Logo</label>
                         </div>
                     </div>
                         {!! $errors->first('img_logo', '<p class="help-block">:message</p>') !!}
@@ -108,6 +115,9 @@
             
         }  
     });
+    $('#img_preview,.label_logo').click(function(){
+        $('#img_logo').click();
+    })
 
     $('.demo-psi-cross').click(function(){
         $('.editor').hide();

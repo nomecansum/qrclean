@@ -4,7 +4,7 @@
     <style type="text/css">
         .tarjeta {
             /* height: calc(1.7118 * 100vw); */
-            background-image: url("{{ url("/img/bg_identificacion3.png") }}");
+            background-image: url("{{ url("/img/crambo_coe.jpg") }}");
             background-repeat: no-repeat;
         }
     </style>
@@ -67,10 +67,10 @@
     <div style="background-color: #fff" id="printarea">
 
         @foreach($datos as $dato)        
-            <div class="tarjeta mb-1" style="width: 372px; height: 594px; display: inline-block; border: 1px solid #ccc;">
-                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(343)->generate($dato->token)) !!} " style="position: relative; top: 102px; left: 11px;">
-                <div class="nombre" style="position: relative; top: 110px; left: 15px; font-size: 25px; width: 320px;">{{$dato->nombre}}W</div>
-                <div class="empresa" style="position: relative; top: 110px; left: 15px; font-size: 20px; width: 320px; overflow: hide">{{ $dato->empresa }}</div>
+            <div class="tarjeta mb-1" style="width: 420px; height: 590px; display: inline-block; border: 1px solid #ccc;">
+                <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(250)->generate($dato->token)) !!} " style="position: relative; top: 154px; left: 81px;">
+                <div class="nombre" style="position: relative; top: 130px; left: 15px; font-size: 25px; width: 400px; overflow: hide">{{$dato->nombre}}W</div>
+                <div class="empresa" style="position: relative; top: 140px; left: 15px; font-size: 20px; width: 400px; overflow: hide">{{ $dato->empresa }}</div>
             </div>
 
             {{-- <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr col-md-12" style="background-color: #fff; font-size: {{ $tam_fuente }}px">

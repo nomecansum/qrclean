@@ -30,6 +30,12 @@
         
             {{csrf_field()}}
             <input type="hidden" name="formato" value="" id="formato">
+            @if(isset($r->lista_id))
+                @foreach($r->lista_id as $id)
+                <input type="hidden" name="lista_id[]" value="{{ $id }}" >
+                @endforeach
+            @endif
+            
             <div class="col-md-2">
                 <div class="form-group">
                     <label for="">Tamaño QR</label>

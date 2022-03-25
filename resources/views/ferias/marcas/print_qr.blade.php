@@ -18,7 +18,7 @@
     <style type="text/css">
         .tarjeta {
             /* height: calc(1.7118 * 100vw); */
-            background-image: url("{{ url("/img/crambo_coe_marca.jpg") }}");
+            background-image: url("{{ url("/img/crambo_coe.jpg") }}");
             background-repeat: no-repeat;
         }
     </style>
@@ -84,13 +84,13 @@
 <div style="background-color: #fff" id="printarea">
 
     @foreach($datos as $dato)        
-        <div class="tarjeta mb-1" style="width: 500px; height: 698px; display: inline-block; border: 1px solid #ccc;">
-            <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(250)->margin(0)->generate(config('app.url_base_feria')."landing/marca/".$dato->token)) !!} " style="position: relative; top: 204px; left: 121px;">
-            <div class="nombre text-center" style="position: relative; top: 200px; left: 5px; font-size: 22px; width: 500px; overflow: hide">{{$dato->des_marca}}</div>
+        <div class="tarjeta mb-1" style="width: 342px; height: 498px; display: inline-block; border: 1px solid #ccc;">
+            <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(150)->margin(0)->generate(config('app.url_base_feria')."landing/marca/".$dato->token)) !!} " style="position: relative; top: 144px; left: 101px;">
+            <div class="nombre text-center" style="position: relative; top: 150px; left: 5px; font-size: 18px; width: 320px; overflow: hide">{{$dato->observaciones}}</div>
             @if(isset($dato->img_logo) && Storage::disk(config('app.img_disk'))->exists('img/ferias/marcas/'.$dato->img_logo))
                 <div class="imagen text-center" style="position: relative; top: 194px; height: 112px; overflow: hidden; backgroud-color: #ff0"><img src="{{Storage::disk(config('app.img_disk'))->url('img/ferias/marcas/'.$dato->img_logo)}}" style="width: {{ $r->tam_qr }}px;" alt=""></div>
             @endif
-            @if(config('app.env')=="local")<a href="{{ config('app.url_base_feria')."landing/marca/".$dato->token }}" style="font-size: 10px" target="_blank">{{ config('app.url_base_feria')."landing/marca/".$dato->token }}</a>@endif
+            {{-- @if(config('app.env')=="local")<a href="{{ config('app.url_base_feria')."landing/marca/".$dato->token }}" style="font-size: 10px" target="_blank">{{ config('app.url_base_feria')."landing/marca/".$dato->token }}</a>@endif --}}
         </div>
 
         {{-- <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr col-md-12" style="background-color: #fff; font-size: {{ $tam_fuente }}px">

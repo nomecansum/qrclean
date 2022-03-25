@@ -90,6 +90,7 @@
             @if(isset($dato->img_logo) && Storage::disk(config('app.img_disk'))->exists('img/ferias/marcas/'.$dato->img_logo))
                 <div class="imagen text-center" style="position: relative; top: 194px; height: 112px; overflow: hidden; backgroud-color: #ff0"><img src="{{Storage::disk(config('app.img_disk'))->url('img/ferias/marcas/'.$dato->img_logo)}}" style="width: {{ $r->tam_qr }}px;" alt=""></div>
             @endif
+            @if(config('app.env')=="local")<a href="{{ config('app.url_base_feria')."landing/marca/".$dato->token }}" style="font-size: 10px" target="_blank">{{ config('app.url_base_feria')."landing/marca/".$dato->token }}</a>@endif
         </div>
 
         {{-- <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr col-md-12" style="background-color: #fff; font-size: {{ $tam_fuente }}px">

@@ -77,13 +77,15 @@ class LandingController extends Controller
         //https://192.168.1.103/landing/asoc/25/3d92ea00171d73c38b076baa96a1a40d
         $esta=contactos::where('token',$persona)->first();
         $detalles=marcas::where('token',$marca)->first();
+        $cookie=Cookie::get('qrcleanid');
         if(isset($esta)){
             $cp=new contactos_producto;
             $cp->id_contacto=$esta->id_contacto;
             $cp->id_producto=$detalles->id_marca;
-            $cp->id_usuario_com=Auth::user()->id??null;
+            $cp->$cookie??null;
             $cp->save();
-            if(!isset(Auth::user()->id)){
+            $tiene_sesion=isset(Auth::user()->id);
+            if(!$tiene_sesion && $cookie==null){
                 Cookie::queue('landing', $esta->id_contacto, 999999);
             }
             return view('landing.gracias',compact('detalles','cp'));

@@ -78,7 +78,7 @@
 					data-search="true"
 					data-show-columns="true"
 					data-show-columns-toggle-all="true"
-					data-page-list="[5, 10, 20, 30, 40, 50]"
+					data-page-list="[5, 10, 20, 30, 40, 50,100,200]"
 					data-page-size="50"
 					data-pagination="true" 
 					data-show-pagination-switch="true"

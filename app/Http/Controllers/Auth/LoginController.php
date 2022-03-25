@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Symfony\Component\HttpFoundation\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cookie;
 
 class LoginController extends Controller
 {
@@ -69,6 +70,7 @@ class LoginController extends Controller
             session(['CL'=>(array)$config_cliente]);
             session(['logo_cliente'=>$cliente->img_logo]);
             session(['logo_cliente_menu'=>$cliente->img_logo_menu]);
+            Cookie::queue('qrcleanid', $user->id, 999999);
 
             auth()->user()->last_login = Carbon::now();
             auth()->user()->save();

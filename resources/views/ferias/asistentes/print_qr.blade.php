@@ -12,7 +12,8 @@
 
 @section('content')
 @php
-    
+    use App\Models\users;
+
     try{
         if (isset($r->tam_qr)){
             $tf=$r->tam_qr;
@@ -71,6 +72,16 @@
                 <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(180)->margin(0)->generate($dato->token)) !!} " style="position: relative; top: 134px; left: 81px;">
                 <div class="nombre text-center" style="position: relative; top: 150px; left: 5px; font-size: 22px; width: 340px; overflow: hide">{{$dato->nombre}}</div>
                 <div class="empresa text-center" style="position: relative; top: 150px; left: 5px; font-size: 18px; width: 340px; overflow: hide">{{ $dato->empresa }}</div>
+                
+                    @if(users::where('email',$dato->email)->first()!=null)
+                        <div class="tipo text-center" style="position: relative; top: 152px; left: 5px; font-size: 18px; width: 340px; overflow: hide">
+                            <img src="{{url('/img/crambo_500.png')}}" style="height:28px">
+                        </div>
+                    @else
+                        <div class="tipo text-center" style="position: relative; top: 142px; left: 5px; font-size: 18px; width: 340px; overflow: hide">
+                            <h3>Partner</h3>
+                        </div>
+                    @endif
             </div>
 
             {{-- <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr col-md-12" style="background-color: #fff; font-size: {{ $tam_fuente }}px">

@@ -70,26 +70,26 @@ class contactos extends Model
         return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
     }
 
-    /**
-     * Set the fec_audit.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setFecAuditAttribute($value)
-    {
-        $this->attributes['fec_audit'] = !empty($value) ? \DateTime::createFromFormat('[% date_format %]', $value) : null;
-    }
+    // /**
+    //  * Set the fec_audit.
+    //  *
+    //  * @param  string  $value
+    //  * @return void
+    //  */
+    // public function setFecAuditAttribute($value)
+    // {
+    //     $this->attributes['fec_audit'] = !empty($value) ? \DateTime::createFromFormat('[% date_format %]', $value) : null;
+    // }
 
-    /**
-     * Get fec_audit in array format
-     *
-     * @param  string  $value
-     * @return array
-     */
-    public function getFecAuditAttribute($value)
-    {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
-    }
+    // /**
+    //  * Get fec_audit in array format
+    //  *
+    //  * @param  string  $value
+    //  * @return array
+    //  */
+    // public function getFecAuditAttribute($value)
+    // {
+    //     return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
+    // }
 
 }

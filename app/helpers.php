@@ -251,6 +251,20 @@ function decimal_to_time($dec)
     }
 }
 
+
+function get_local_time(){
+    try{
+        $ip = request()->ip();
+        $url = 'http://ip-api.com/json/'.$ip;
+        $tz = file_get_contents($url);
+        $tz = json_decode($tz,true);
+    } catch(\Exception $e){
+        $tz="Europe/Madrid";
+    }
+    return $tz;
+}
+
+
 function time_to_dec($time,$out='s'){
     //Devuelve en segundos una fecha pasada en HH:mm:ss
     try{

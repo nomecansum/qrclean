@@ -27,7 +27,7 @@
     </div>
     <div class="panel-body">
         @php
-           phpinfo();
+           dd(get_local_time());
         @endphp 
     </div>
 </div>

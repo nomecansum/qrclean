@@ -8,6 +8,7 @@ use App\User;
 use Auth;
 use App\Helpers;
 use App\services\ClienteService;
+use App\services\APPApiService;
 use Illuminate\Support\Str;
 use App\Models\clientes;
 use \Carbon\Carbon;
@@ -51,7 +52,7 @@ class CustomersController extends Controller
             ->first();
         }
         $config=DB::table('config_clientes')->where('id_cliente',$id)->first();
-        if(!isset($config)){
+        if(!isset($config) && $id!=0){
             $config= new config_clientes;
             $config->id_cliente=$id;
             $config->save();
@@ -75,14 +76,19 @@ class CustomersController extends Controller
         try {
             //Insertar el cliente
             $c = $clsvc->insertar($r);
-            
             $config= new config_clientes;
-            $config->id_cliente=$c->id_cliente;
+            $config->id_cliente=$c;
             
+            $r['min_hora_reservas']=time_to_dec($r->min_hora_reservas.':00','m');
+            $r['max_hora_reservas']=time_to_dec($r->max_hora_reservas.':00','m');
             $config->update($r->all());
             $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';
             $config->mca_limpieza=$r->mca_limpieza??'N';
             $config->mca_permitir_anonimo=$r->mca_permitir_anonimo??'N';
+            $config->mca_mostrar_nombre_usando=$r->mca_mostrar_nombre_usando??'N';
+            $config->mca_mostrar_puestos_reservas=$r->mca_mostrar_puestos_reservas??'D';
+            $config->mca_mostrar_datos_fijos=$r->mca_mostrar_datos_fijos??'N';
+            
             $config->save();
 
             Session::put('CL',$config->toArray());
@@ -123,16 +129,26 @@ class CustomersController extends Controller
             $c = $clsvc->actualizar($r);
             //Config de cliente
             $config=config_clientes::findorfail($r->id);
-
+            $r['min_hora_reservas']=time_to_dec($r->min_hora_reservas.':00','m');
+            $r['max_hora_reservas']=time_to_dec($r->max_hora_reservas.':00','m');
+            
             $config->update($r->all());
             $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';
             $config->mca_limpieza=$r->mca_limpieza??'N';
             $config->mca_permitir_anonimo=$r->mca_permitir_anonimo??'N';
+            $config->mca_reserva_horas=$r->mca_reserva_horas??'N';
+            $config->mca_mostrar_nombre_usando=$r->mca_mostrar_nombre_usando??'N';
+            $config->mca_salas=$r->mca_salas??'N';
+            $config->hora_liberar_puestos=$r->hora_liberar_puestos;
+            $config->mca_mostrar_puestos_reservas=$r->mca_mostrar_puestos_reservas??'D';
+            $config->mca_mostrar_datos_fijos=$r->mca_mostrar_datos_fijos??'N';
             $config->save();
             
             Session::put('CL',$config->toArray());
 
             savebitacora("Actualizados datos de cliente ".$r->nom_cliente,$r->id_cliente);
+
+            
 
             return [
                 'title' => 'Clientes',

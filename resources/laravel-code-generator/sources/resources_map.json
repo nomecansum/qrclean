@@ -1,18 +1,8 @@
 [
     {
-        "model-name": "niveles_acceso",
-        "resource-file": "niveles_accesos.json",
-        "table-name": "niveles_acceso"
-    },
-    {
         "model-name": "camaras",
         "resource-file": "camaras.json",
         "table-name": "camaras"
-    },
-    {
-        "model-name": "clientes",
-        "resource-file": "clientes.json",
-        "table-name": "clientes"
     },
     {
         "model-name": "edificios",
@@ -65,9 +55,64 @@
         "table-name": "plantas"
     },
     {
-        "model-name": "users",
-        "resource-file": "users.json",
-        "table-name": "users"
+        "model-name": "causas_cierre",
+        "resource-file": "causas_cierres.json",
+        "table-name": "causas_cierre"
+    },
+    {
+        "model-name": "tags_puestos",
+        "resource-file": "tags_puestos.json",
+        "table-name": "tags_puestos"
+    },
+    {
+        "model-name": "tareas_programadas",
+        "resource-file": "tareas_programadas.json",
+        "table-name": "tareas"
+    },
+    {
+        "model-name": "tareas",
+        "resource-file": "tareas.json",
+        "table-name": "tareas_programadas"
+    },
+    {
+        "model-name": "logtarea",
+        "resource-file": "logtareas.json",
+        "table-name": "tareas_programadas_log"
+    },
+    {
+        "model-name": "incidencias_acciones",
+        "resource-file": "incidencias_acciones.json",
+        "table-name": "incidencias_acciones"
+    },
+    {
+        "model-name": "puestos_asignados",
+        "resource-file": "puestos_asignados.json",
+        "table-name": "puestos_asignados"
+    },
+    {
+        "model-name": "estados_incidencias",
+        "resource-file": "estados_incidencias.json",
+        "table-name": "estados_incidencias"
+    },
+    {
+        "model-name": "encuestas_resultados",
+        "resource-file": "encuestas_resultados.json",
+        "table-name": "encuestas_resultados"
+    },
+    {
+        "model-name": "encuestas",
+        "resource-file": "encuestas.json",
+        "table-name": "encuestas"
+    },
+    {
+        "model-name": "tags",
+        "resource-file": "tags.json",
+        "table-name": "tags"
+    },
+    {
+        "model-name": "clientes",
+        "resource-file": "clientes.json",
+        "table-name": "clientes"
     },
     {
         "model-name": "incidencias_tipos",
@@ -75,23 +120,68 @@
         "table-name": "incidencias_tipos"
     },
     {
-        "model-name": "config_clientes",
-        "resource-file": "config_clientes.json",
-        "table-name": "config_clientes"
-    },
-    {
         "model-name": "puestos",
         "resource-file": "puestos.json",
         "table-name": "puestos"
     },
     {
+        "model-name": "salas",
+        "resource-file": "salas.json",
+        "table-name": "salas"
+    },
+    {
+        "model-name": "niveles_acceso",
+        "resource-file": "niveles_accesos.json",
+        "table-name": "niveles_acceso"
+    },
+    {
+        "model-name": "config_clientes",
+        "resource-file": "config_clientes.json",
+        "table-name": "config_clientes"
+    },
+    {
+        "model-name": "puestos_tipos",
+        "resource-file": "puestos_tipos.json",
+        "table-name": "puestos_tipos"
+    },
+    {
+        "model-name": "ferias",
+        "resource-file": "ferias.json",
+        "table-name": "ferias"
+    },
+    {
+        "model-name": "ferias_marcas",
+        "resource-file": "ferias_marcas.json",
+        "table-name": "marcas"
+    },
+    {
+        "model-name": "contactos",
+        "resource-file": "contactos.json",
+        "table-name": "contactos"
+    },
+    {
+        "model-name": "marcas",
+        "resource-file": "marcas.json",
+        "table-name": "ferias_marcas"
+    },
+    {
+        "model-name": "contactos_producto",
+        "resource-file": "contactos_productos.json",
+        "table-name": "contactos_producto"
+    },
+    {
+        "model-name": "turnos",
+        "resource-file": "turnos.json",
+        "table-name": "turnos"
+    },
+    {
+        "model-name": "users",
+        "resource-file": "users.json",
+        "table-name": "users"
+    },
+    {
         "model-name": "incidencias",
         "resource-file": "incidencias.json",
         "table-name": "incidencias"
-    },
-    {
-        "model-name": "causas_cierre",
-        "resource-file": "causas_cierres.json",
-        "table-name": "causas_cierre"
     }
 ]

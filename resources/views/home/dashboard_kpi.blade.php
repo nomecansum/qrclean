@@ -54,8 +54,8 @@
                 </div>
             </div>
             <div class="media-body">
-                <p class="text-2x mar-no text-semibold">{{ $edificios->count() }}</p>
-                <p class="mar-no">Edificios</p>
+                <p class="text-3x mar-no text-semibold">{{ $edificios->count() }}</p>
+                <p class="mar-no  text-2x">Edificios</p>
             </div>
         </div>
     </div>
@@ -67,8 +67,8 @@
                 </div>
             </div>
             <div class="media-body">
-                <p class="text-2x mar-no text-semibold">{{ $plantas->count() }}</p>
-                <p class="mar-no">Plantas</p>
+                <p class="text-3x mar-no text-semibold">{{ $plantas->count() }}</p>
+                <p class="mar-no  text-2x">Plantas</p>
             </div>
         </div>
     </div>
@@ -80,8 +80,8 @@
                 </div>
             </div>
             <div class="media-body">
-                <p class="text-2x mar-no text-semibold">{{ $puestos->count() }}</p>
-                <p class="mar-no">Puestos</p>
+                <p class="text-3x mar-no text-semibold">{{ $puestos->count() }}</p>
+                <p class="mar-no  text-2x">Puestos</p>
             </div>
         </div>
     </div>
@@ -89,29 +89,34 @@
         <div class="panel panel-{{ color_porcentaje($pct_completado) }} panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
-                    <i class="fad fa-check"></i>
+                    <i class="fad fa-check fa-2x"></i>
                 </div>
             </div>
             <div class="media-body">
-                <p class="text-2x mar-no text-semibold">{{ round($pct_completado) }}%   </p>
-                <p class="mar-no">Operativos</p>
+                <p class="text-3x mar-no text-semibold">{{ round($pct_completado) }}%   </p>
+                <p class="mar-no text-2x">Operativos</p>
             </div>
         </div>
     </div>
 </div>
 
-
+@include('home.puesto_asignado')
 
 <div class="row">
     <div class="col-md-6">
         @include('home.kpi_grafico_puestos')
-        @include('home.incidencias_abiertas')
+        @if(checkPermissions(['Incidencias'],['R']))
+            @include('home.incidencias_abiertas')
+        @endif
     </div>
     <div class="col-md-6">
-        @include('home.calendario')
+        @if(checkPermissions(['Reservas'],['R']))
+            @include('home.calendario')
+        @endif
     </div>
 </div>
-
-@include('home.tabla_incidencias')
+@if(checkPermissions(['Incidencias'],['R']))
+    @include('home.tabla_incidencias')
+@endif
 
 @include('home.rondas_pendientes')

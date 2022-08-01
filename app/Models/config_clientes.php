@@ -38,7 +38,22 @@ class config_clientes extends Model
                   'mca_limpieza',
                   'mca_permitir_anonimo',
                   'theme_type',
-                  'theme_name'
+                  'theme_name',
+                  'mca_reserva_horas',
+                  'val_metodo_notificacion',
+                  'tam_qr',
+                  'modo_visualizacion_reservas',
+                  'modo_visualizacion_puestos',
+                  'val_layout_incidencias',
+                  'num_imagenes_incidencias',
+                  'val_campo_puesto_mostrar',
+                  'mca_mostrar_nombre_usando',
+                  'hora_liberar_puestos',
+                  'mca_liberar_puestos_auto',
+                  'mca_salas',
+                  'min_hora_reservas',
+                  'max_hora_reservas',
+                  'mca_mostrar_datos_fijos'
               ];
 
     /**
@@ -65,6 +80,26 @@ class config_clientes extends Model
         return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
     }
 
+    /**
+     * Set the hora_liberar_puestos.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setHoraLiberarPuestosAttribute($value)
+    {
+        $this->attributes['hora_liberar_puestos'] = !empty($value) ?$value : null;
+    }
 
+    /**
+     * Get hora_liberar_puestos in array format
+     *
+     * @param  string  $value
+     * @return array
+     */
+    public function getHoraLiberarPuestosAttribute($value)
+    {
+        return $value;
+    }
 
 }

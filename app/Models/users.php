@@ -45,7 +45,12 @@ class users extends Model
                   'id_cliente',
                   'val_timezone',
                   'token_acceso',
-                  'def_camera'
+                  'def_camera',
+                  'email_expire_at',
+                  'id_usuario_supervisor',
+                  'val_vista_puestos',
+                  'token_expires',
+                  'id_externo'
               ];
 
     /**
@@ -63,6 +68,26 @@ class users extends Model
     protected $casts = [];
     
     /**
+     * Get the incidenciasAcciones for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidenciasAcciones()
+    {
+        return $this->hasMany('App\Models\IncidenciasAccione','id_usuario','id');
+    }
+
+    /**
+     * Get the incidencias for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidencias()
+    {
+        return $this->hasMany('App\Models\Incidencia','id_usuario_apertura','id');
+    }
+
+    /**
      * Get the plantasUsuarios for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -73,26 +98,25 @@ class users extends Model
     }
 
     /**
-     * Set the email_verified_at.
+     * Get the puestos for this model.
      *
-     * @param  string  $value
-     * @return void
+     * @return Illuminate\Database\Eloquent\Collection
      */
-    public function setEmailVerifiedAtAttribute($value)
+    public function puestos()
     {
-        $this->attributes['email_verified_at'] = !empty($value) ? \DateTime::createFromFormat('[% date_format %]', $value) : null;
+        return $this->hasMany('App\Models\Puesto','id_usuario_usando','id');
     }
 
     /**
-     * Get email_verified_at in array format
+     * Get the puestosAsignados for this model.
      *
-     * @param  string  $value
-     * @return array
+     * @return Illuminate\Database\Eloquent\Collection
      */
-    public function getEmailVerifiedAtAttribute($value)
+    public function puestosAsignados()
     {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
+        return $this->hasMany('App\Models\PuestosAsignado','id_usuario','id');
     }
+
 
     /**
      * Get created_at in array format

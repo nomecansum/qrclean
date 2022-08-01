@@ -1,6 +1,8 @@
 
-    <div class="panel">
-
+    @php
+        use App\Models\puestos_tipos;   
+    @endphp
+    <div class="panel editor">
         <div class="panel-heading">
             <div class="panel-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
@@ -35,7 +37,7 @@
                             {!! $errors->first('des_tipo_incidencia', '<p class="help-block">:message</p>') !!}
                         </div>
 
-
+                        @if(checkPermissions(['Tipos de incidencia'],['D']) && ( $tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess())))
                         <div class="form-group col-md-4 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
                             <label for="id_cliente" class="control-label">Cliente</label>
                             <select class="form-control" required id="id_cliente" name="id_cliente">
@@ -48,6 +50,7 @@
                                 
                             {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
                         </div>
+                        @endif
 
                         
                 </div>
@@ -66,12 +69,45 @@
                     </div>
                     <div class="form-group col-md-2" style="margin-top: 7px">
                         <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($puesto->val_color)?$puesto->val_Color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
                     <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5" class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="30" data-search-text="Buscar..."></button>
+                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-iconset-version="5.3.1_pro" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
+                        <label for="id_estado_inicial" class="control-label">Estado inicial</label>
+                        <select class="form-control" required id="id_estado_inicial" name="id_estado_inicial">
+                            @foreach ($estados as $estado)
+                                <option value="{{ $estado->id_estado }}" {{ old('id_estado_inicial', optional($tipo)->id_estado_inicial) == $estado->id_estado ? 'selected' : '' }}>
+                                    {{ $estado->des_estado }}
+                                </option>
+                            @endforeach
+                        </select>
+                            
+                        {!! $errors->first('id_estado_inicial', '<p class="help-block">:message</p>') !!}
+                    </div>
+                    <div class="form-group  col-md-12" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
+                        <label>Tipo de puesto</label>
+                        <div class="input-group select2-bootstrap-append">
+                            <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipos_puesto[]" id="multi-tipo" >
+                                @php
+                                    $tipos_puesto=explode(",",$tipo->list_tipo_puesto);
+                                @endphp
+                                @foreach(puestos_tipos::where(function($q) {
+                                    $q->where('id_cliente',Auth::user()->id_cliente);
+                                    $q->orwhere('mca_fijo','S');
+                                    })
+                                    ->where('id_tipo_puesto','>',0)
+                                    ->get() as $tp)
+                                    <option value="{{ $tp->id_tipo_puesto }}" {{ in_array($tp->id_tipo_puesto,$tipos_puesto)?'selected':'' }}>{{ $tp->des_tipo_puesto }}</option>
+                                @endforeach
+                            </select>
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,12 +119,12 @@
                     </div>
                     <div class="form-group col-md-12 {{ $errors->has('param_url') ? 'has-error' : '' }}">
                         <label for="des_edificio" class="control-label">Parametros URL</label>
-                        <input class="form-control" name="param_url" type="text" id="param_url" value="{{ old('param_url', optional($tipo)->vaparam_urll_url) }}" maxlength="200" placeholder="Enter Param URL here...">
+                        <input class="form-control" name="param_url" type="text" id="param_url" value="{{ old('param_url', optional($tipo)->vaparam_urll_url) }}" maxlength="1000" placeholder="Enter Param URL here...">
                         {!! $errors->first('param_url', '<p class="help-block">:message</p>') !!}
                     </div>
                     <div class="form-group col-md-8 {{ $errors->has('val_apikey') ? 'has-error' : '' }}">
                         <label for="val_apikey" class="control-label">API Key</label>
-                        <input class="form-control" name="val_apikey" type="text" id="val_apikey" value="{{ old('val_apikey', optional($tipo)->val_url) }}" maxlength="200" placeholder="Enter API Key here...">
+                        <input class="form-control" name="val_apikey" type="text" id="val_apikey" value="{{ old('val_apikey', optional($tipo)->val_url) }}" maxlength="500" placeholder="Enter API Key here...">
                         {!! $errors->first('val_apikey', '<p class="help-block">:message</p>') !!}
                     </div>
 
@@ -101,14 +137,14 @@
                 <div class="row opciones P">
                     <div class="form-group col-md-12 {{ $errors->has('val_body') ? 'has-error' : '' }}">
                         <label for="val_body" class="control-label">Body</label>
-                        <textarea class="form-control" name="val_body" type="text" id="val_body" value="" maxlength="200" placeholder="Enter URL here..." rows="8">{{ old('val_body', optional($tipo)->val_body) }}</textarea>
+                        <textarea class="form-control" name="val_body" type="text" id="val_body" value="" maxlength="65535" placeholder="Enter URL here..." rows="8">{{ old('val_body', optional($tipo)->val_body) }}</textarea>
                         {!! $errors->first('val_body', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
                 <div class="row opciones S M">
                     <div class="form-group col-md-12 {{ $errors->has('txt_destinos') ? 'has-error' : '' }}">
                         <label for="txt_destinos" class="control-label">Destinos <span style="font-size: 9px">(separados por ; )</span></label>
-                        <textarea class="form-control" name="txt_destinos" type="text" id="txt_destinos" value="" maxlength="200" placeholder="Enter Destinos here..." rows="4">{{ old('txt_destinos', optional($tipo)->txt_destinos) }}</textarea>
+                        <textarea class="form-control" name="txt_destinos" type="text" id="txt_destinos" value="" maxlength="65535" placeholder="Enter Destinos here..." rows="4">{{ old('txt_destinos', optional($tipo)->txt_destinos) }}</textarea>
                         {!! $errors->first('val_txt_destinosurl', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
@@ -138,7 +174,7 @@
 
                 <div class="form-group">
                     <div class="col-md-12 text-right">
-                        <input class="btn btn-primary" type="submit" value="Guardar">
+                        @if(checkPermissions(['Tipos de incidencia'],['D']) && ( $tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
             </form>
@@ -176,7 +212,27 @@
     $('#frm_contador').submit(form_ajax_submit);
 
     $('#val_icono').iconpicker({
-        icon:'{{isset($t) ? ($t->val_icono) : ''}}'
+        icon:'{{isset($tipo->val_icono) ? ($tipo->val_icono) : ''}}'
     });
+
+    $('.select-all').click(function(event) {
+        $(this).parent().parent().find('select option').prop('selected', true)
+        $(this).parent().parent().find('select').select2({
+            placeholder: "Todos",
+            allowClear: true,
+            width: "99.2%",
+        });
+        $(this).parent().parent().find('select').change();
+    });
+
+    $(".select2-filtro").select2({
+        placeholder: "Todos",
+        allowClear: true,
+        width: "99.2%",
+    });
+
+    $('.demo-psi-cross').click(function(){
+            $('.editor').hide();
+        });
     </script>
     @include('layouts.scripts_panel')

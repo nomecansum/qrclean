@@ -30,12 +30,14 @@
 		<br>
 	</div>
 	<div class="col-md-1 text-right">
+		@if(checkPermissions(['Clientes'],['C']))
 		<div class="btn-group btn-group-sm pull-right" role="group">
 				<a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva cliente">
 				<i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
 				<span>Nuevo</span>
 			</a>
 		</div>
+		@endif
 	</div>
 </div>
 <div id="editorCAM" class="mt-2">
@@ -77,7 +79,7 @@
 								<td>{{$cus->id_cliente}}</td>
 								<td class="text-center no-sort">
 									@isset($cus->img_logo)
-										<img src="{{url('/img/clientes/images/',$cus->img_logo)}}" width="40px" alt="">
+										<img src="{{Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$cus->img_logo)}}" width="40px" alt="">
 									@endif
 								</td>
 								<td>{{$cus->nom_cliente}}</td>

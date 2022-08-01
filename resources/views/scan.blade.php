@@ -130,7 +130,7 @@
     <script>
 
         function loguear(s){
-            $('#log').html($('#log').html()+'<br>'+s)
+            //$('#log').html($('#log').html()+'<br>'+s)
             //console.log(s);
         }
 
@@ -153,7 +153,6 @@
         }
 
         function geturl(url){
-            
             @if(!isset($modo) || (isset($modo) && $modo=='location'))
                 loguear('Get URL: '+url);
                 document.location.href=url;
@@ -177,13 +176,18 @@
                             $('#div_txt_mensaje').addClass('bg-danger');
                             $('#div_txt_mensaje').html('<i class="fad fa-exclamation-square"></i> '+data.mensaje);
                         }
+                        try{post_procesado(data.id)} catch(err){};
                         loguear(JSON.stringify(data));
                         fin=setTimeout(ocultar_mensaje,5000);
                 })
             @elseif($modo=='usuario' && isset($estado_destino))
                 puesto=url.split('/').pop();
+                if (url.indexOf('sala')!=-1){
+                    window.location.replace("{{ url('/sala') }}/"+puesto);
+                } else {
+                    window.location.replace("{{ url('/puesto') }}/"+puesto);
+                }
                 loguear('Dinamica de usuario para '+puesto);
-                window.location.replace("{{ url('/puesto') }}/"+puesto);
             @elseif($modo=='incidencia')
                 puesto=url.split('/').pop();
                 loguear('Dinamica de mantenimiento para '+puesto);

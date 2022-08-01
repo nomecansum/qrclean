@@ -7,6 +7,7 @@
 @section('styles')
     <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/noUiSlider/nouislider.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('breadcrumb')
@@ -45,16 +46,22 @@
         <div id="calendario"></div>
     </div>
 </div>
-
 @endsection
 
 
 @section('scripts')
+    <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
+    <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
     <script>
         $('.SECCION_MENU').addClass('active active-sub');
         $('.reservas').addClass('active-link');
+        $('.reservas_puestos').addClass('active-link');
 
+        function filter_hour(value, type) {
+        return (value % 60 == 0) ? 1 : 0;
+        }
 
+        
         function loadMonth(month = null,type = null)
         {
             $('#spinner').show();
@@ -93,10 +100,10 @@
 
         function boton_modo_click(){
             $('#loadfilter').show();
-                    $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $(this).data('href')}, function(data, textStatus, xhr) {
-                        $('#detalles_reserva').html(data);
-                        recolocar_puestos();
-                    });
+                $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fechas: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $(this).data('href'), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(),id_planta:$('#id_planta').val()}, function(data, textStatus, xhr) {
+                    $('#detalles_reserva').html(data);
+                    recolocar_puestos();
+                });
         }
 
 
@@ -123,7 +130,7 @@
         $('.mainnav-toggle').click(function(){
             recolocar_puestos();
         })
-        
+
 
     </script>
 @endsection

@@ -4,6 +4,13 @@ use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Models\users;
+use App\Models\config_clientes;
+use App\Models\clientes;
+use Jenssegers\Agent\Agent;
+
+function stripAccents($str) {
+    return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+}
 
 function getProfilePic()
 {
@@ -18,12 +25,12 @@ function getProfilePic()
 
 function savebitacora($des_bitacora,$modulo=null,$seccion=null,$tipo='OK')
 {
-   if(isset(Auth::user()->name)){
-       $user=Auth::user()->name;
-   }
+    if(isset(Auth::user()->name)){
+        $user=Auth::user()->name;
+    }
 
     \DB::table('bitacora')->insert([
-        'accion' => $des_bitacora,
+        'accion' => substr($des_bitacora,0,5000),
         'id_usuario' =>Auth::user()->id??0,
         'id_modulo' => $modulo,
         'id_seccion' => $seccion,
@@ -88,8 +95,79 @@ function lista_clientes(){
     return $clientes;
 }
 
+function isJson($string) {
+    try{
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    } catch(\Exception $e){
+        return false;
+    }
+    
+}
 
+function isxml($xmlstr){
+    try{
+        libxml_use_internal_errors(true);
 
+        $doc = simplexml_load_string($xmlstr);
+        $xml = explode("\n", $xmlstr);
+
+        if (!$doc) {
+            $errors = libxml_get_errors();
+
+            // foreach ($errors as $error) {
+            //     echo display_xml_error($error, $xml);
+            // }
+
+            libxml_clear_errors();
+            return false;
+        } else {
+            return true;
+        }
+    } catch(\Exception $e){
+        return false;
+    }
+}
+
+//Añadir ceros por la izquierda\
+function lz($num)
+{
+    return (strlen($num) < 2) ? "0{$num}" : $num;
+}
+
+//Devuelve el valor de cualquiera de los elementos del array de parametros de un comando para tareas/Eventos
+function valor($parametros,$nombre){
+    $salida=null;
+    try{
+        foreach($parametros as $param){
+            if($param->name==$nombre){
+                return $param->value;
+            }
+        }
+    } catch(\Exception $e){
+
+    }
+    return $salida;
+}
+
+//Decodificar JSON mejorado
+function decodeComplexJson($string) { # list from www.json.org: (\b backspace, \f formfeed)
+    $string = preg_replace("/[\r\n]+/", "", $string); //Retornos de carro
+    $string = preg_replace('/[ ]{2,}|[\t]/', '', trim($string));  //tabs
+    $json = utf8_encode($string);
+    $json = json_decode($json);
+    return $json;
+}
+
+//Funcion para que las tareas programadas escriban su log
+function log_tarea($mensaje,$id,$tipo='info'){
+    DB::table('tareas_programadas_log')->insert([
+        'txt_log'=>$mensaje,
+        'cod_tarea'=>$id,
+        'tip_mensaje'=>$tipo,
+        'fec_log'=>Carbon::now()
+    ]);
+}
 
 function fullAccess(){
     return isAdmin();
@@ -98,6 +176,18 @@ function fullAccess(){
 function isAdmin(){
     try{
         return Auth::User()->nivel_acceso == 200 ? true : false;
+    } catch(\Exception $e){
+        return false;
+    }
+}
+
+function isSupervisor($id){
+    try{
+        $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
+        $usuario=users::findorfail($id);
+
+        $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->where('id_perfil',$usuario->cod_nivel)->first();
+        return isset($supervisores_perfil)&&$supervisores_perfil->mca_read=="1"?true:false;
     } catch(\Exception $e){
         return false;
     }
@@ -113,7 +203,7 @@ function mensaje_excepcion($e){
 
 function isCustomerAdmin(){
     try{
-        return Auth::User()->val_nivel_acceso == 200 ? true : false;
+        return Auth::User()->val_nivel_acceso >= 100 ? true : false;
     } catch(\Exception $e){
         return false;
     }
@@ -129,6 +219,16 @@ function formatmysqldate2($date){
 
 function formatspdate($date){
     return \Carbon\Carbon::createFromFormat('Y-m-d H:i', $date)->format('d/m/Y H:i');
+}
+
+function isDesktop(){
+    $agent = new \Jenssegers\Agent\Agent;
+    return $agent->isDesktop();
+}
+
+function isMobile(){
+    $agent = new \Jenssegers\Agent\Agent;
+    return $agent->isMobile();
 }
 
 function decimal_to_time($dec)
@@ -149,23 +249,78 @@ function decimal_to_time($dec)
     } else {
         return lz($hours).":".lz($minutes);
     }
+}
+
+
+function get_local_tz(){
+    try{
+        $ip = request()->ip();
+        $url = 'http://ip-api.com/json/'.$ip;
+        $tz = file_get_contents($url);
+        $tz = json_decode($tz,true)['timezone'];
+    } catch(\Exception $e){
+        $tz="Europe/Madrid";
+    }
+    return $tz;
+}
+
+
+function time_to_dec($time,$out='s'){
+    //Devuelve en segundos una fecha pasada en HH:mm:ss
+    try{
+        $time    = explode(':', $time);
+        $result = ($time[0] * 3600 + $time[1] * 60+ $time[2]);
+        switch ($out) {
+            case 's':
+                return $result;
+                break;
+            case 'm':
+                return $result/60;
+                break; 
+            case 'h':
+                return $result/3600;
+                break;
+            default:
+                return $result;
+                break;
+        }
+    } catch (\Exception $e){
+        return null;
+    }
 
 }
 
+///Convertir fecha en español a mysql
 function adaptar_fecha($d){
+    if(!isset($d)){
+        return null;
+    }
+    try{
+        if (Carbon::createFromFormat('d/m/Y H:i:s', $d)!== false) {
+            return Carbon::createFromFormat('d/m/Y H:i:s', $d)->format('Y-m-d H:i:s');
+        }
+    } catch (\Exception $e){}
+    try{
+        if (Carbon::createFromFormat('d/m/Y H:i', $d)!== false) {
+            return Carbon::createFromFormat('d/m/Y H:i', $d)->format('Y-m-d H:i');
+        }
+    } catch (\Exception $e){}
     try{
         if (Carbon::createFromFormat('d/m/Y', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y', $d);
+            return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
         }
+    } catch (\Exception $e){}
+    try{
         if (Carbon::createFromFormat('Y-m-d', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y', $d);
+            return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
         }
+    } catch (\Exception $e){}
+    try{
         if (Carbon::parse($d)!== false) {
-            return Carbon::parse($d);
+            return Carbon::parse($d)->format('Y-m-d');
         }
-    } catch (\Exception $e){
-        return  $d." ".$e->getMessage();
-    }
+    } catch (\Exception $e){}
+    return  $d;
 }
 
 function random_readable_pwd($length=10){
@@ -200,21 +355,79 @@ function random_readable_pwd($length=10){
     }
 
     return $pwd;
-
 }
 
+//Rellena en el texto pasado los comodines indicados por los corchetes con su correspondiente valor de la lista de datos. Esto es para las notificaciones de evebntos
+function comodines_texto($texto,$campos,$datos){
+    preg_match_all("/\[([^\]]*)\]/", $texto, $matches);
+    foreach($matches[0] as $match){
+        foreach($campos as $campo){
+            if($match==$campo->label){
+                $nom_campo=str_replace("[","",$campo->label);
+                $nom_campo=str_replace("]","",$nom_campo);
+                if($match=="[fecha]")
+                {
+                    $texto=str_replace("[fecha]",Carbon::now()->format('d/m/Y'),$texto);
+                } else if($match=="[hora]")
+                {
+                    $texto=str_replace("[hora]",Carbon::now()->format('H:i'),$texto);
+                } else {
+                    $texto=str_replace($match,$datos->$nom_campo,$texto);
+                }
+            }
+        }
+    }
+    return $texto;
+}
 
-function enviar_email($user,$from,$to,$to_name,$subject,$plantilla){
+function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1,$triangulo="alerta_05"){
     try{
-        \Mail::send($plantilla, ['user' => $user], function ($m) use ($from,$to,$to_name,$subject) {
-            $m->from($from, 'Cuco360');
-            $m->to($to, $to_name)->subject($subject);
-        });
+        switch ($metodo) {
+            case 0:
+                //No hacer nada
+            break;
+            case 1: //Mail
+                $cliente=clientes::find($user->id_cliente);
+                \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'triangulo'=>$triangulo], function ($m) use ($user,$subject) {
+                    if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
+                        $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
+                    } else {
+                        $m->to($user->email, $user->name)->subject($subject);
+                    }
+                    $m->from(config('mail.from.address'),config('mail.from.name'));
+                });
+                break;
+            case 2:
+            case 3:  //Notificacion push
+                # code...
+                break;
+        }
     } catch(\Exception $e){
+        //dump($e);
         return $e->getMessage();
     }
     return true;
+}
 
+function tags($string, $encoding = 'UTF-8'){
+    $string = trim(strip_tags(html_entity_decode(urldecode($string))));
+    if(empty($string)){ return false; }
+
+    $stopWords = array('a','ante', 'bajo', 'con', 'contra','de', 'desde', 'durante','en', 'entre','hacia', 'hasta', 'mediante', 'para', 'por', 'pro', 'segun','sin', 'sobre', 'tras', 'via','los', 'las', 'una', 'unos', 'unas', 'este', 'estos', 'ese',
+    'esos', 'aquel', 'aquellos', 'esta', 'estas', 'esa', 'esas','aquella', 'aquellas', 'usted', 'nosotros', 'vosotros','ustedes', 'nos', 'les', 'nuestro', 'nuestra', 'vuestro','vuestra', 'mis', 'tus', 'sus', 'nuestros', 'nuestras',
+   'vuestros', 'vuestras','esto', 'que','Planta', '/','-');
+ 
+    $string = preg_replace('/\s\s+/i', '', $string); // replace whitespace
+   
+    $string = trim($string); // trim the string
+
+    $string = preg_replace('/[^a-zA-Z0-9À-ÿ -]/', '', $string); // only take alphanumerical characters, but keep the spaces and dashes too…
+    
+    $string = mb_strtolower($string,$encoding); // make it lowercase
+
+    $matchWords=preg_replace('/\b(' . implode('|', $stopWords) . ')\b/u', '', $string);
+    
+    return $matchWords;
 }
 
 function acronimo($nombre,$height=10){
@@ -246,24 +459,31 @@ function acronimo($nombre,$height=10){
     return $acronym;
 }
 
-
-function icono_nombre($nombre,$height=50,$font=18){
-
+function iniciales ($nombre,$cantidad){
     try{
-        $padding=intdiv($height,11);
-        $rand=Str::random(9);
+        $nombre=stripAccents($nombre);
         $words = explode(" ", $nombre);
         $acronym = "";
         $i = 0;
         foreach ($words as $w) {
             $acronym .= $w[0];
-            if (++$i == 2) break;
+            if (++$i == $cantidad) break;
         }
     } catch(\Exception $e){
-        $acronym=substr($nombre,1,2);
+        $acronym=substr($nombre,1,$cantidad);
     }
+    return $acronym;
+}
+
+function icono_nombre($nombre,$height=50,$font=18){
+
+    $padding=intdiv($height,11);
+    $rand=Str::random(9);
+    $acronym = iniciales($nombre,2);
+    $top_letras=0;
+    $left_letras=2;
     //return '<span class="round" id="'.$rand.'" style="text-transform: uppercase; background-color: '.App\Classes\RandomColor::one().'">'.$acronym.'</span>';
-    return '<span class="round" id="'.$rand.'" style="font-weight: bold; font-size: '.$font.'px; width: '.$height.'px;height: '.$height.'px; padding-top:'.$padding.'px; text-transform: uppercase; background-color: '.genColorCodeFromText($nombre).'" data-toggle="tooltip" data-placement="bottom" title="'.$nombre.'">'.$acronym.'</span>';
+    return '<div class="round add-tooltip" id="'.$rand.'" style="line-height: 50px; padding: 0px; font-weight: bold; font-size: '.$font.'px; width: '.$height.'px;height: '.$height.'px; text-transform: uppercase; background-color: '.genColorCodeFromText($nombre).'" data-toggle="tooltip" data-placement="bottom" title="'.$nombre.'"><span style="position: relative; top: '.$top_letras.'%; left:'.$left_letras.'%;">'.$acronym.'</span></div>';
 }
 
 function randomcolor(){
@@ -271,39 +491,37 @@ function randomcolor(){
 }
 
 function imagen_usuario($user,$height=50){
-
     if(isset($user->img_usuario) && $user->img_usuario<>'')
-        return '<img class="direct-chat-img" src="'.url("/img/users/",$user->img_usuario).'" height="'.$height.'px" alt="" onerror="this.remove()" class="b-all">';
+        return '<img class="direct-chat-img b-all" src="'.url("/img/users/",$user->img_usuario).'" height="'.$height.'px" alt="" onerror="this.remove()" style="height:'.$height.'px; width:'.$height.'px; object-fit: cover;">';
     else
         return icono_nombre($user->name);
-
 }
 
 function genColorCodeFromText($text,$min_brightness=100,$spec=10)
 {
-	// Check inputs
-	if(!is_int($min_brightness)) throw new Exception("$min_brightness is not an integer");
-	if(!is_int($spec)) throw new Exception("$spec is not an integer");
-	if($spec < 2 or $spec > 10) throw new Exception("$spec is out of range");
-	if($min_brightness < 0 or $min_brightness > 255) throw new Exception("$min_brightness is out of range");
+    // Check inputs
+    if(!is_int($min_brightness)) throw new Exception("$min_brightness is not an integer");
+    if(!is_int($spec)) throw new Exception("$spec is not an integer");
+    if($spec < 2 or $spec > 10) throw new Exception("$spec is out of range");
+    if($min_brightness < 0 or $min_brightness > 255) throw new Exception("$min_brightness is out of range");
 
 
-	$hash = md5($text);  //Gen hash of text
-	$colors = array();
-	for($i=0;$i<3;$i++)
-		$colors[$i] = max(array(round(((hexdec(substr($hash,$spec*$i,$spec)))/hexdec(str_pad('',$spec,'F')))*255),$min_brightness)); //convert hash into 3 decimal values between 0 and 255
+    $hash = md5($text);  //Gen hash of text
+    $colors = array();
+    for($i=0;$i<3;$i++)
+        $colors[$i] = max(array(round(((hexdec(substr($hash,$spec*$i,$spec)))/hexdec(str_pad('',$spec,'F')))*255),$min_brightness)); //convert hash into 3 decimal values between 0 and 255
 
-	if($min_brightness > 0)  //only check brightness requirements if min_brightness is about 100
-		while( array_sum($colors)/3 < $min_brightness )  //loop until brightness is above or equal to min_brightness
-			for($i=0;$i<3;$i++)
-				$colors[$i] += 10;	//increase each color by 10
+    if($min_brightness > 0)  //only check brightness requirements if min_brightness is about 100
+        while( array_sum($colors)/3 < $min_brightness )  //loop until brightness is above or equal to min_brightness
+            for($i=0;$i<3;$i++)
+                $colors[$i] += 10;	//increase each color by 10
 
-	$output = '';
+    $output = '';
 
-	for($i=0;$i<3;$i++)
-		$output .= str_pad(dechex($colors[$i]),2,0,STR_PAD_LEFT);  //convert each color to hex and append to output
+    for($i=0;$i<3;$i++)
+        $output .= str_pad(dechex($colors[$i]),2,0,STR_PAD_LEFT);  //convert each color to hex and append to output
 
-	return '#'.$output;
+    return '#'.$output;
 }
 
 function checkPermissions($secciones = [],$permisos = [])
@@ -343,11 +561,10 @@ function checkPermissions($secciones = [],$permisos = [])
         }
     }
     if ($encontrado && $b >= (count($permisos)*count($secciones))) {
-         return true;
-     }
+        return true;
+    }
     return false;
 }
-
 
 function beauty_fecha($date,$mostrar_hora=-1){
     setlocale(LC_TIME, App::getLocale());
@@ -362,7 +579,6 @@ function beauty_fecha($date,$mostrar_hora=-1){
     }
     return "<b>".$fecha."</b> ".$hora;
 }
-
 
 function validar_request($r,$metodo_notif,$tipo,$reglas,$mensajes=[]){
     $validator = Validator::make($r->all(), $reglas,$mensajes);
@@ -447,6 +663,26 @@ function validar_acceso_tabla($id,$tabla){
             $campo="id_incidencia";
             $ruta="incidencias.index";
             break;
+        case "encuestas":
+            $descriptivo="encuesta";
+            $campo="id_encuesta";
+            $ruta="encuestas.index";
+            break;
+        case "ferias":
+            $descriptivo="feria";
+            $campo="id_feria";
+            $ruta="ferias.index";
+            break;
+        case "contactos":
+            $descriptivo="contacto";
+            $campo="id_contacto";
+            $ruta="contactos.index";
+            break;
+        case "ferias_marcas":
+            $descriptivo="marca";
+            $campo="id_marca";
+            $ruta="marcas.index";
+            break;
         default:
             $descriptivo=$tabla;
     }
@@ -469,6 +705,27 @@ function validar_acceso_tabla($id,$tabla){
         flash("ERROR: El ".$descriptivo." ".$id." no existe o no tienes acceso")->error();
         return redirect()->route($ruta);
     }
+}
+
+//Devuelve texto blanco o negro en funcion del color sobre el que esta
+function txt_blanco($hex) {
+    // returns brightness value from 0 to 255
+    // strip off any leading #
+    try{
+        $hex = str_replace('#', '', $hex);
+
+        $c_r = hexdec(substr($hex, 0, 2));
+        $c_g = hexdec(substr($hex, 2, 2));
+        $c_b = hexdec(substr($hex, 4, 2));
+
+        $result=(($c_r * 299) + ($c_g * 587) + ($c_b * 114)) / 1000;
+        if($result<130){
+            return "text-white";
+        }
+    } catch(\Exception $e){
+
+    }
+    
 }
 
 function color_porcentaje($pct,$modo="bootstrap"){
@@ -514,8 +771,7 @@ function color_porcentaje($pct,$modo="bootstrap"){
         if($pct>100){
             return "#008000";
         }
-    }
-    
+    }   
 }
 
 function color_porcentaje_inv($pct){
@@ -531,6 +787,16 @@ function color_porcentaje_inv($pct){
     if($pct>=75 && $pct<=100){
         return "danger";
     }
+}
+
+function js_array($array)
+{
+    function js_str($s)
+    {
+        return '"' . addcslashes($s, "\0..\37\"\\") . '"';
+    }
+    $temp = array_map('js_str', $array);
+    return '[' . implode(',', $temp) . ']';
 }
 
 function authbyToken($token){
@@ -579,4 +845,45 @@ function authbyToken($token){
     } else {
         return false;
     }
+}
+
+function nombrepuesto($puesto){
+    try{
+        if(isset(session('CL')['val_campo_puesto_mostrar'])){
+            switch (session('CL')['val_campo_puesto_mostrar']) {
+                case 'D':
+                    return $puesto->des_puesto;
+                    break;
+                case 'I':
+                    return $puesto->cod_puesto;
+                    break;
+                case 'A':
+                    return '['.$puesto->cod_puesto.'] '.$puesto->des_puesto ;
+                    break;
+                
+                default:
+                    return '['.$puesto->cod_puesto.'] '.$puesto->des_puesto ;
+                    break;
+            }
+        } else {
+            return $puesto->des_puesto;
+        }
+    } catch(\Exception $e){
+        return $puesto->des_puesto;
+    }  
+
+}
+
+function config_cliente($clave,$cliente=null){
+    try{
+        if (!isset($cliente)){
+            $cliente=Auth::user()->id_cliente;
+        }
+        $config=config_clientes::find($cliente)->$clave;
+        return $config;
+    } catch (\Exception $e){
+        return null;
+    }
+    
+
 }

@@ -22,6 +22,7 @@ class BitacorasController extends Controller
         $bitacoras = DB::table('bitacora')
         ->join('users','bitacora.id_usuario','users.id')
         ->join('clientes','clientes.id_cliente','users.id_cliente')
+        ->orderby('fecha','desc')
         ->get();
 
         $todas_bitacoras = DB::table('bitacora')

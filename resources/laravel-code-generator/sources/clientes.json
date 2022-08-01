@@ -151,6 +151,60 @@
             "api-description": "The id cliente of the model."
         },
         {
+            "name": "id_distribuidor",
+            "labels": "Id Distribuidor",
+            "html-type": "select",
+            "css-class": "",
+            "options": {},
+            "html-value": null,
+            "validation": "nullable",
+            "is-on-index": true,
+            "is-on-show": true,
+            "is-on-form": true,
+            "data-type": "int",
+            "data-type-params": [],
+            "data-value": null,
+            "is-index": true,
+            "is-unique": false,
+            "is-primary": false,
+            "comment": null,
+            "is-nullable": true,
+            "is-header": false,
+            "is-unsigned": false,
+            "is-auto-increment": false,
+            "is-inline-options": false,
+            "is-date": false,
+            "date-format": "",
+            "cast-as": "",
+            "placeholder": "Enter id distribuidor here...",
+            "delimiter": "; ",
+            "range": [],
+            "foreign-relation": {
+                "name": "Distribuidore",
+                "type": "belongsTo",
+                "params": [
+                    "App\\Models\\Distribuidore",
+                    "id_distribuidor",
+                    "id_distribuidor"
+                ],
+                "field": "id"
+            },
+            "foreign-constraint": {
+                "field": "id_distribuidor",
+                "references": "distribuidores",
+                "on": "id_distribuidor",
+                "on-delete": "set null",
+                "on-update": "cascade",
+                "references-model": "App\\Models\\Distribuidore",
+                "is-self-reference": false
+            },
+            "on-store": null,
+            "on-update": null,
+            "api-key": "id_distribuidor",
+            "is-api-visible": true,
+            "api-description": "The id distribuidor of the model."
+        },
+        {
             "name": "img_logo",
             "labels": "Img Logo",
             "html-type": "text",
@@ -188,6 +242,45 @@
             "api-key": "img_logo",
             "is-api-visible": true,
             "api-description": "The img logo of the model."
+        },
+        {
+            "name": "img_logo_menu",
+            "labels": "Img Logo Menu",
+            "html-type": "text",
+            "css-class": "",
+            "options": {},
+            "html-value": null,
+            "validation": "nullable|string|min:0|max:250",
+            "is-on-index": true,
+            "is-on-show": true,
+            "is-on-form": true,
+            "data-type": "string",
+            "data-type-params": [
+                250
+            ],
+            "data-value": null,
+            "is-index": false,
+            "is-unique": false,
+            "is-primary": false,
+            "comment": null,
+            "is-nullable": true,
+            "is-header": false,
+            "is-unsigned": false,
+            "is-auto-increment": false,
+            "is-inline-options": false,
+            "is-date": false,
+            "date-format": "",
+            "cast-as": "",
+            "placeholder": "Enter img logo menu here...",
+            "delimiter": "; ",
+            "range": [],
+            "foreign-relation": null,
+            "foreign-constraint": null,
+            "on-store": null,
+            "on-update": null,
+            "api-key": "img_logo_menu",
+            "is-api-visible": true,
+            "api-description": "The img logo menu of the model."
         },
         {
             "name": "locked",
@@ -508,6 +601,16 @@
     ],
     "relations": [
         {
+            "name": "causasCierres",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\CausasCierre",
+                "id_cliente",
+                "id_cliente"
+            ],
+            "field": "des_causa"
+        },
+        {
             "name": "edificios",
             "type": "hasMany",
             "params": [
@@ -515,17 +618,57 @@
                 "id_cliente",
                 "id_cliente"
             ],
-            "field": "id"
+            "field": "des_edificio"
+        },
+        {
+            "name": "configCliente",
+            "type": "hasOne",
+            "params": [
+                "App\\Models\\ConfigCliente",
+                "id_cliente",
+                "id_cliente"
+            ],
+            "field": "max_dias_reserva"
+        },
+        {
+            "name": "encuestas",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\Encuesta",
+                "id_cliente",
+                "id_cliente"
+            ],
+            "field": "fec_fin"
+        },
+        {
+            "name": "estadosIncidencias",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\EstadosIncidencia",
+                "id_cliente",
+                "id_cliente"
+            ],
+            "field": "des_estado"
+        },
+        {
+            "name": "incidencias",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\Incidencia",
+                "id_cliente",
+                "id_cliente"
+            ],
+            "field": "comentario_cierre"
         },
         {
             "name": "plantas",
             "type": "hasMany",
             "params": [
-                "App\\Models\\Plantum",
+                "App\\Models\\Planta",
                 "id_cliente",
                 "id_cliente"
             ],
-            "field": "id"
+            "field": "id_edificio"
         },
         {
             "name": "puestos",
@@ -535,7 +678,47 @@
                 "id_cliente",
                 "id_cliente"
             ],
-            "field": "cod_puesto"
+            "field": "id_edificio"
+        },
+        {
+            "name": "rondasLimpiezas",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\Ronda",
+                "id_cliente",
+                "id_cliente"
+            ],
+            "field": "des_ronda"
+        },
+        {
+            "name": "tags",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\Tag",
+                "id_cliente",
+                "id_cliente"
+            ],
+            "field": "id_cliente"
+        },
+        {
+            "name": "incidenciasTipos",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\IncidenciasTipo",
+                "id_cliente",
+                "id_cliente"
+            ],
+            "field": "des_tipo_incidencia"
+        },
+        {
+            "name": "puestosTipos",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\PuestosTipo",
+                "id_cliente",
+                "id_cliente"
+            ],
+            "field": "des_tipo_puesto"
         }
     ],
     "indexes": [],

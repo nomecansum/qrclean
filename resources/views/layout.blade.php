@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>QRClean</title>
+    <title>{{ config('app.name') }}</title>
     <!--STYLESHEET-->
     <!--=================================================-->
     <!--Open Sans Font [ OPTIONAL ]-->
@@ -31,7 +31,7 @@
     {{-- MAterial design fonts --}}
     <link rel="stylesheet" href="{{ URL('/css/materialdesignicons.min.css') }}">
     {{--  FontAwesome  --}}
-    <link href="{{ asset('/plugins/fontawesome5/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/fontawesome6/css/all.min.css') }}" rel="stylesheet">
 
 
     <!--Mosaic custom CSS [ REQUIRED ]-->
@@ -61,7 +61,8 @@
     <link href="{{ asset('/plugins/daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     {{-- Boostrap Select --}}
     <link href="{{ asset('/plugins/bootstrap-select-master/css/bootstrap-select.min.css') }}" rel="stylesheet">
-
+    {{-- switchery switchs deslizable --}}
+    <link href="{{ asset('plugins/switchery/switchery.min.css') }}" rel="stylesheet">
 
     <!--=================================================
 
@@ -225,13 +226,13 @@
     <!--JAVASCRIPT-->
     <!--=================================================-->
     <!--jQuery [ REQUIRED ]-->
-    <script src="{{ url('js/jquery.min.js') }}"></script>
+    <script src="{{ url('/js/jquery.min.js') }}"></script>
     <!--jQueryUI [ REQUIRED ]-->
     <script src="{{ url('/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
     <!--BootstrapJS [ RECOMMENDED ]-->
-    <script src="{{ url('js/bootstrap.min.js') }}"></script>
+    <script src="{{ url('/js/bootstrap.min.js') }}"></script>
     <!--NiftyJS [ RECOMMENDED ]-->
-    <script src="{{ url('js/nifty.js') }}"></script>
+    <script src="{{ url('/js/nifty.js') }}"></script>
     <!--=================================================-->
     <!--Demo script [ DEMONSTRATION ]-->
     {{--  <script src="{{ url('js/demo/nifty-demo.js') }}"></script>  --}}
@@ -265,6 +266,9 @@
 
     {{-- Bootstrap select --}}
     <script src="{{ asset('/plugins/bootstrap-select-master/js/bootstrap-select.min.js') }}"></script>
+
+    {{-- switchery switchs deslizable --}}
+    <script src="{{ asset('/plugins/switchery/switchery.min.js') }}"></script>
 
     @include('layouts.main_scripts')
     @yield('scripts')

@@ -45,6 +45,26 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
+            'url' => 'mysql://b85b12d8d76325:7bb31a74@eu-cdbr-west-03.cleardb.net/heroku_e3678739afb7ac4?reconnect=true',
+            'host' => 'eu-cdbr-west-03.cleardb.net',
+            'port' => 3306,
+            'database' => 'heroku_e3678739afb7ac4',
+            'username' => 'b85b12d8d76325',
+            'password' => '7bb31a74',
+            'unix_socket' => '',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
+        'mysql_local' => [
+            'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),

@@ -12,6 +12,7 @@ use Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PlantasController extends Controller
 {
@@ -27,10 +28,12 @@ class PlantasController extends Controller
             ->join('clientes','clientes.id_cliente','plantas.id_cliente')
             ->join('edificios','edificios.id_edificio','plantas.id_edificio')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
             })
+            ->orderby('plantas.id_cliente')
+            ->orderby('plantas.id_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.id_planta')
             ->get();
 
         return view('plantas.index', compact('plantasObjects'));
@@ -51,9 +54,7 @@ class PlantasController extends Controller
             ->pluck('nom_cliente','id_cliente')
             ->all();
         $Edificios = edificios::where(function($q){
-                if (!isAdmin()) {
-                    $q->where('id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('id_cliente',Auth::user()->id_cliente);
             })
             ->pluck('des_edificio','id_edificio')
             ->all();
@@ -75,13 +76,14 @@ class PlantasController extends Controller
         try {
             if ($request->hasFile('img_plano')) {
                 $file = $request->file('img_plano');
-                $path = public_path().'/img/plantas/';
+                $path = config('app.ruta_public').'/img/plantas/';
                 $img_planta = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                $file->move($path,$img_planta);
+                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_planta);
+                //$file->move($path,$img_planta);
                 $data['img_plano']=$img_planta;
             }
             plantas::create($data);
-
+            savebitacora('Planta '.$request->des_planta. ' creada',"Plantas","store","OK");
             return [
                 'title' => "Plantas",
                 'message' => 'Planta '.$request->des_planta. ' creada',
@@ -107,8 +109,18 @@ class PlantasController extends Controller
     public function edit($id)
     {
         $plantas = plantas::findOrFail($id);
-        $Clientes = clientes::pluck('nom_cliente','id_cliente')->all();
-        $Edificios = edificios::pluck('des_edificio','id_edificio')->all();
+        $Clientes = clientes::where(function($q){
+            if (!isAdmin()) {
+                $q->where('id_cliente',Auth::user()->id_cliente);
+            }
+        })
+        ->pluck('nom_cliente','id_cliente')
+        ->all();
+        $Edificios = edificios::where(function($q){
+            $q->where('id_cliente',Auth::user()->id_cliente);
+        })
+        ->pluck('des_edificio','id_edificio')
+        ->all();
 
         return view('plantas.edit', compact('plantas','Clientes','Edificios'));
     }
@@ -129,14 +141,14 @@ class PlantasController extends Controller
             validar_acceso_tabla($id,"plantas");
             if ($request->hasFile('img_plano')) {
                 $file = $request->file('img_plano');
-                $path = public_path().'/img/plantas/';
+                $path = config('app.ruta_public').'/img/plantas/';
                 $img_planta = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                $file->move($path,$img_planta);
+                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_planta);
                 $data['img_plano']=$img_planta;
             } 
             $plantas = plantas::findOrFail($id);
             $plantas->update($data);
-
+            savebitacora('Planta '.$request->des_planta. ' actualizada',"Plantas","update","OK");
             return [
                 'title' => "Plantas",
                 'message' => 'Planta '.$request->des_planta. ' actualizada',
@@ -165,7 +177,7 @@ class PlantasController extends Controller
             validar_acceso_tabla($id,"plantas");
             $plantas = plantas::findOrFail($id);
             $plantas->delete();
-
+            savebitacora('Planta '.$plantas->des_planta. ' borrada',"Plantas","destroy","OK");
             return redirect()->route('plantas.plantas.index')
                 ->with('success_message', 'Planta borrada.');
         } catch (Exception $exception) {
@@ -188,6 +200,7 @@ class PlantasController extends Controller
                 'des_planta' => 'nullable|string|min:0|max:50',
             'id_cliente' => 'nullable',
             'id_edificio' => 'nullable', 
+            'num_orden' => 'required', 
         ];
         
         $data = $request->validate($rules);
@@ -201,12 +214,17 @@ class PlantasController extends Controller
         validar_acceso_tabla($id,'plantas');
         $plantas = plantas::findOrFail($id);
         $puestos= DB::Table('puestos')
+            ->select('puestos.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','plantas.factor_puesto','plantas.factor_letra','puestos.val_color as hex_color')
+            ->join('plantas','plantas.id_planta','puestos.id_planta')
             ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
-            ->where('id_planta',$id)
+            ->where('puestos.id_planta',$id)
             ->get();
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-            ->where('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where(function($q){
+                $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+            })
             ->get();
 
         return view('plantas.editor_puestos', compact('plantas','puestos','reservas'));
@@ -216,7 +234,10 @@ class PlantasController extends Controller
         validar_acceso_tabla($r->id_planta,'plantas');
         $planta = plantas::findOrFail($r->id_planta);
         $planta->posiciones=$r->json;
+        $planta->factor_puesto=$r->factor_puesto;
+        $planta->factor_letra=$r->factor_letra;
         $planta->save();
+        savebitacora('Distribucion de puestos en  '.$planta->des_planta. ' actualizada',"Plantas","puestos_save","OK");
         return [
             'title' => "Plantas",
             'message' => 'Distribucion de puestos en  '.$planta->des_planta. ' actualizada',

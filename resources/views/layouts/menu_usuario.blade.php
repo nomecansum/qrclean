@@ -41,8 +41,8 @@
                     </a>
                 </div>
                 <div id="profile-nav" class="collapse list-group bg-trans">
-                    <a href="{{ url('/users/'.Auth::user()->id.'/edit') }}" class="list-group-item"><i class="fad fa-user"></i> Mi Perfil</a>
-                    @if(checkPermissions(['Configuracion'],['R']))<a href="{{ url('/config') }}" class="list-group-item"><i class="fad fa-cogs"></i> Configuración @endif
+                    <a href="{{ url('/miperfil/'.Auth::user()->id.'') }}" class="list-group-item"><i class="fad fa-user"></i> Mi Perfil</a>
+                    {{-- @if(checkPermissions(['Configuracion'],['R']))<a href="{{ url('/config') }}" class="list-group-item"><i class="fad fa-cogs"></i> Configuración @endif --}}
                     <a href="{{url('/logout')}}" class="list-group-item"><i class="fad fa-sign-out-alt"></i> Logout</a>
                     
                     {{-- <a href="#" class="list-group-item">
@@ -84,7 +84,19 @@
                         <i class="arrow"></i>
                     </a>
                     @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan_usuario" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
-                    @if(checkPermissions(['Reservas'],['R']))<li class="reservas"><a href="/reservas" class="text-nowrap"><i class="fad fa-calendar-alt"></i></i> <span class="menu-title">Reservar</span></a></li> @endif
+                    <li class="reservas">
+                        <a href="#">
+                            <i class="fad fa-calendar-alt"></i>
+                            @if(checkPermissions(['Reservas'],['R']))<span class="menu-title">Reservas</span> @endif
+                            <i class="arrow"></i>
+                        </a>
+                        
+                        <!--Submenu-->
+                        <ul class="collapse">
+                            @if(checkPermissions(['Reservas puestos'],['R']))<li class="reservas_puestos" class="reservas_puestos"><a href="/reservas" class="text-nowrap"><i class="fad fa-chair-office"></i> Puestos</a></li> @endif
+                            @if(checkPermissions(['Reservas salas'],['R']) && session('CL')['mca_salas']=='S')<li class="reservas_salas"><a href="/salas/reservas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas</a></li> @endif
+                        </ul>
+                    </li>
                     {{-- <a href="{{ url('/puestos') }}">
                         <i class="fad fa-browser"></i>
                         <span class="menu-title">Puestos</span>

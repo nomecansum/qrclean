@@ -46,6 +46,7 @@
     }
 </style>
 @endsection
+
 <div class="row">
         <div class="col-md-10">
             <div class="row">
@@ -68,13 +69,20 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label class="control-label">Token registro</label>
+                <div class="col-md-11">
+                    <label class="control-label">Token acceso</label>
                     <div class="input-group mb-3">
                         <input type="text" name="token_acceso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($users) ? $users->token_acceso : ''}}">
                         <div class="input-group-btn">
                             <button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>
                         </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label for="name" class="control-label">Expira (d)</label>
+                        <input class="form-control" name="token_expires" type="number" id="token_expires" value="{{ old('token_expires', optional($users)->token_expires) }}" min="1" max="6000" >
+                        {!! $errors->first('token_expires', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
             </div>
@@ -85,8 +93,8 @@
             </div>
             <div class="col-12">
                 <div class="form-group  {{ $errors->has('img_usuario') ? 'has-error' : '' }}">
-                    <label for="img_usuario" class="preview preview1" style="background-image: url();">
-                        <img src="{{ isset($users) ? url('img/users/',$users->img_usuario) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid">
+                    <label for="img_usuario" class="preview preview1">
+                        <img src="{{ isset($users) ? Storage::disk(config('app.img_disk'))->url('img/users/'.$users->img_usuario) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid">
                     </label>
                     <div class="custom-file">
                         <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input" name="img_usuario" id="img_usuario" lang="es" value="{{ isset($users) ? $users->img_usuario : ''}}">
@@ -172,6 +180,32 @@
             </div>
         </div>
 </div>
+<div class="row rounded b-all">
+    <div class="col-md-3 mr-3">
+        <div class="form-group">
+            <label>Supervisor</label><br>
+            <select name="id_usuario_supervisor" id="id_usuario_supervisor" class="select2">
+                <option value=""></option>
+                @foreach ($supervisores as $c)
+                    <option {{isset($users) && $users->id_usuario_supervisor == $c->id ? 'selected' : ''}} value="{{$c->id}}">{{$c->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    @if(isset($users) && isSupervisor($users->id))
+        <div class="col-md-8">
+            <div class="form-group">
+                <label>Usuarios a los que supervisa</label><br>
+                <select name="lista_id[]" id="lista_id" class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple">
+                    <option value=""></option>
+                    @foreach ($usuarios_supervisables as $c)
+                        <option {{ in_array($c->id,$usuarios_supervisados) ? 'selected' : ''}} value="{{$c->id}}">{{$c->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    @endif
+</div>
 
 @section('scripts2')
 <script>
@@ -192,9 +226,9 @@
 
     $('#btn_generar_token').click(function(event){
         //console.log('token');
-        $.get( "/clientes/gen_key")
+        $.get( "/users/gen_token/{{ $users->id??'' }}")
         .done(function( data, textStatus, jqXHR ) {
-            $('#token_1uso').val(data);
+            $('#token_1uso').val(data.access_token);
         })
         .fail(function( jqXHR, textStatus, errorThrown ) {
                 console.log(errorThrown);

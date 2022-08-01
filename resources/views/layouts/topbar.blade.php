@@ -4,7 +4,7 @@
 <div class="navbar-header">
     <a href="{{url('/')}}" class="navbar-brand">
         @if(session('logo_cliente_menu'))
-        <img src="{{ url('/img/clientes/images/'.session('logo_cliente_menu')) }}" style="width: 55px; height: 55px" alt="" class="brand-icon">
+        <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente_menu')) }}" style="width: 55px; height: 55px" alt="" class="brand-icon">
         @else   
         <img src="/img/logo.png" alt="Spotlinker" class="brand-icon">
         @endif
@@ -151,8 +151,9 @@
             <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
                 <div class="font-bold text-center w100 mt-2">{{ Auth::user()->name }}</div>
                 <ul class="head-list">
+                    
                     <li>
-                        <a href="{{ url('/users/'.Auth::user()->id.'/edit') }}"><i class="fad fa-user"></i> Mi Perfil</a>
+                        <a href="{{ url('/miperfil/'.Auth::user()->id) }}"><i class="fad fa-user"></i> Mi Perfil</a>
                     </li>
                     {{-- <li>
                         <a href="#"><span class="badge badge-danger pull-right">9</span><i class="demo-pli-mail icon-lg icon-fw"></i> Messages</a>
@@ -163,9 +164,14 @@
                     <li>
                         <a href="{{ url('/lockscreen') }}"><i class="fad fa-user-lock"></i> Bloquear pantalla</a>
                     </li>
+                   
                     <li>
                         <a href="{{url('/logout')}}"><i class="fad fa-sign-out-alt"></i> Logout</a>
                     </li>
+                    @if(session('back_id') && session('back_id')!=Auth::user()->id)
+                        <li role="separator" class="divider"></li>
+                        <button class="btn btn-warning ml-5 mb-2" onclick="document.location='{{url('reback')}}'"> <i class="mdi mdi-format-rotate-90"></i> Volver a mi sesion</button>
+                    @endif
                 </ul>
             </div>
         </li>

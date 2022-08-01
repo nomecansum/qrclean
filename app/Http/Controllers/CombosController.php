@@ -52,6 +52,18 @@ class CombosController extends Controller
                 ->join('edificios','edificios.id_edificio','puestos.id_edificio')
                 ->join('plantas','plantas.id_planta','puestos.id_planta')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->where(function($q){
+                    if (isSupervisor(Auth::user()->id)) {
+                        $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                        $q->wherein('puestos.id_puesto',$puestos_usuario);
+                    }
+                })
+                ->get(),
+
+            "tags" => DB::table('tags')
+                ->select('clientes.id_cliente','clientes.nom_cliente','tags.id_tag','tags.nom_tag')
+                ->join('clientes','clientes.id_cliente','tags.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
                 ->get()
         ];
     }
@@ -82,6 +94,12 @@ class CombosController extends Controller
                 ->join('plantas','plantas.id_planta','puestos.id_planta')
                 ->whereIn('clientes.id_cliente',$r->cliente)
                 ->wherein('edificios.id_edificio',$r->edificio)
+                ->where(function($q){
+                    if (isSupervisor(Auth::user()->id)) {
+                        $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                        $q->wherein('puestos.id_puesto',$puestos_usuario);
+                    }
+                })
                 ->get()
         ];
     }
@@ -111,6 +129,12 @@ class CombosController extends Controller
                 ->whereIn('clientes.id_cliente',$r->cliente)
                 ->wherein('edificios.id_edificio',$r->edificio)
                 ->wherein('plantas.id_planta',$r->planta)
+                ->where(function($q){
+                    if (isSupervisor(Auth::user()->id)) {
+                        $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                        $q->wherein('puestos.id_puesto',$puestos_usuario);
+                    }
+                })
                 ->get()
         ];
     }
@@ -121,9 +145,7 @@ class CombosController extends Controller
             ->join('clientes','clientes.id_cliente','puestos.id_cliente')
             ->wherein('puestos.id_puesto',$r->lista_id)
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-                }
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
             })
             ->pluck('nom_cliente','clientes.id_cliente')
             ->unique();
@@ -161,6 +183,37 @@ class CombosController extends Controller
             })
             ->get();
         return view('resources.combo_plantas',compact('plantas'));
+    }
+
+    public function combo_plantas_salas($id_edificio){
+
+        $plantas=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.des_planta')
+            ->join('puestos','plantas.id_planta','puestos.id_planta')
+            ->where('plantas.id_edificio',$id_edificio)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_sala'))
+            ->distinct()
+            ->get();
+        return view('resources.combo_plantas',compact('plantas'));
+    }
+
+
+    public function combo_edificios($id_cliente){
+
+        $edificios=DB::table('edificios')
+            ->where('id_cliente',$id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->get();
+        return view('resources.combo_edificios',compact('edificios'));
     }
 
 }

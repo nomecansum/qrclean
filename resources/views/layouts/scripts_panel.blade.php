@@ -1,4 +1,4 @@
-<script>
+{{--  <script>
     var panelControl = {
             closeBtn : $('[data-dismiss="panel"], [data-panel="dismiss"]'),
             minMaxBtn : $('[data-panel="minmax"]'),
@@ -17,4 +17,4 @@
             });
         });
     }
-</script>
+</script>  --}}

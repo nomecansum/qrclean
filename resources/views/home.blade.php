@@ -53,7 +53,7 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 @if(session('logo_cliente'))
-                <img src="{{ url('/img/clientes/images/'.session('logo_cliente')) }}" height="200px" alt="">
+                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" style="max-width:500px;" alt="">
                 @else   
                 <img src="{{ url('/img/Mosaic_brand_white.png') }}" style="height: 100px">
                 @endif

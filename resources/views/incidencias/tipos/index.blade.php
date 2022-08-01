@@ -28,10 +28,12 @@
     </div>
     <div class="col-md-1 text-right">
         <div class="btn-group btn-group-sm pull-right" role="group">
+            @if(checkPermissions(['Tipos de incidencia'],['C'])) 
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo edificio">
-                <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-                <span>Nuevo</span>
-            </a>
+                    <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
+                    <span>Nuevo</span>
+                </a>
+            @endif
         </div>
     </div>
 </div>
@@ -90,7 +92,7 @@
                     @foreach($tipos as $tipo)
                         <tr class="hover-this">
                             <td>{{ $tipo->id_tipo_incidencia }}</td>
-                            <td><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
+                            <td class="text-center"><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
                             <td>{{ $tipo->des_tipo_incidencia }}</td>
                             <td>
                                 @switch($tipo->tip_metodo)
@@ -119,10 +121,10 @@
                             <td>{{ $tipo->nom_cliente }}</td>
 
                             <td>
-                                <div class="btn-group btn-group-xs pull-right floating-like-gmail mt-2" role="group">
+                                <div class="pull-right floating-like-gmail mt-2" role="group">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tipo->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    <a href="#"  class="btn btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_tipo_incidencia }})" title="Editar tipo" data-id="{{ $tipo->id_tipo_incidencia }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>
-                                    <a href="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" data-target="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" title="Borrar tipo" data-toggle="modal" class="btn btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                                    <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_tipo_incidencia }})" title="Editar tipo" data-id="{{ $tipo->id_tipo_incidencia }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
+                                    @if(checkPermissions(['Estados de incidencia'],['D']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess())))<a href="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" data-target="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$tipo->id_tipo_incidencia}}" style="display: none;">
                                     <div class="modal-dialog">
@@ -132,7 +134,7 @@
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">×</span></button>
                                                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                                                <h4 class="modal-title">¿Borrar edificio {{$tipo->des_tipo_incidencia}}?</h4>
+                                                <h4 class="modal-title">¿Borrar tipo de incidencia {{$tipo->des_tipo_incidencia}}?</h4>
                                             </div>
                                             <div class="modal-footer">
                                                 <a class="btn btn-info" href="{{url('/incidencias/tipos/delete',$tipo->id_tipo_incidencia)}}">Si</a>
@@ -159,7 +161,8 @@
 @section('scripts')
     <script>
         $('.configuracion').addClass('active active-sub');
-        $('.tipos_incidencia').addClass('active-link');
+        $('.tipos_incidencia').addClass('active active-sub');
+        $('.incidencias_tipos').addClass('active-link');
         
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/incidencias/tipos/edit/0') }}", function(){

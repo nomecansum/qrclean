@@ -25,17 +25,56 @@
         overflow: hidden;
     }
     
+    .glow {
+        background-color: #1c87c9;
+        border: none;
+        color: #eeeeee;
+        cursor: pointer;
+        display: inline-block;
+        font-family: sans-serif;
+        font-size: 20px;
+        padding: 10px 10px;
+        text-align: center;
+        text-decoration: none;
+      }
+      @keyframes glowing {
+        0% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+        50% {
+          background-color: #49e819;
+          box-shadow: 0 0 20px #49e819;
+        }
+        100% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+      }
+      .glow {
+        animation: glowing 1300ms infinite;
+      }
 </style>
 
 <div class="row botones_accion">
     <div class="col-md-8">
         <span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
     </div>
-    <div class="col-md-4 text-right">
+    <div class="col-md-2 text-right">
+        <a href="#modal-leyenda" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
+    </div>
+    <div class="col-md-2 text-right">
         <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar" ><i class="fad fa-th"></i> Mosaico</a>
         <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar_plano" style="color: #1e90ff"><i class="fad fa-map-marked-alt"></i> Plano</a>
     </div>
 </div>
+@if($edificios->isempty())
+    <div class="row">
+        <div class="col-md-12  alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> El usuario no tiene asignada ninguna planta en la que pueda reservar, debe asignarle plantas en los detalles de usuario o utilizando la acción de "Asignar planta"
+        </div>
+    </div>
+@endif
 @foreach ($edificios as $e)
 <div class="panel">
     <div class="panel-heading bg-gray-dark">
@@ -54,21 +93,34 @@
     </div>
     <div class="panel-body">
         @php
-            $plantas=plantas::where('id_edificio',$e->id_edificio)->get();
+            $plantas=plantas::where('id_edificio',$e->id_edificio)
+            ->where(function($q) use($plantas_usuario){
+                if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
+                    $q->wherein('id_planta',$plantas_usuario??[]);
+                }
+            })
+            ->where(function($q) use($id_planta){
+                if($id_planta && $id_planta!=0){
+                    $q->where('plantas.id_planta',$id_planta);
+                }
+            })
+            ->get();
         @endphp
         @foreach($plantas as $pl)
-            <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $pl->des_planta }}</h3>
-            @include('reservas.fill-plano')
+            <a id="planta{{ $pl->id_planta }}">
+                <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $pl->des_planta }}</h3>
+                @include('reservas.fill-plano')
+            </a>
         @endforeach
     </div>
 </div>
 @endforeach
+@include('resources.leyenda_reservas')
 <script>
 
     $('.sitio').click(function(){
         $('#des_puesto').html('');
         $('#des_puesto_form').html('');
-        
         $('#id_puesto').val(null);
         $('.disponible').removeClass('bg-info');
         $('.disponible').each(function(){
@@ -87,12 +139,14 @@
         });
         $(this).css('background-color','');
         $(this).addClass('bg-info');
-        animateCSS('#des_puesto','zoomIn');
+        //animateCSS('#des_puesto','zoomIn');
         $('#frm_contador').submit();
     })
 
     $('.boton_modo').click(boton_modo_click);
 
    setTimeout(recolocar_puestos, 800);
+
+   $('#tipo_vista').val('comprobar_plano');
     
 </script>

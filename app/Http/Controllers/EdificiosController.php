@@ -23,9 +23,7 @@ class EdificiosController extends Controller
         $edificiosObjects = DB::table('edificios')
         ->join('clientes','clientes.id_cliente','edificios.id_cliente')
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
-            }
+            $q->where('edificios.id_cliente',Auth::user()->id_cliente);
         })
         ->get();
 
@@ -58,7 +56,7 @@ class EdificiosController extends Controller
             
             $data = $this->getData($request);
             edificios::create($data);
-            savebitacora('Edificio '.$request->des_edificio. ' creado',"Edificios","Update","OK");
+            savebitacora('Edificio '.$request->des_edificio. ' creado',"Edificios","store","OK");
             return [
                 'title' => "Edificios",
                 'message' => 'Edificio '.$request->des_edificio. ' creado',
@@ -134,7 +132,7 @@ class EdificiosController extends Controller
             validar_acceso_tabla($id,"edificios");
             $edificios = edificios::findOrFail($id);
             $edificios->delete();
-            savebitacora('Edificio '.$edificios->des_edificio. ' borrado',"Edificios","Delete","OK");
+            savebitacora('Edificio '.$edificios->des_edificio. ' borrado',"Edificios","destroy","OK");
 
             return redirect()->route('edificios.edificios.index')
                 ->with('success_message', 'Edificio borrado');

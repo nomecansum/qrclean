@@ -4,5 +4,8 @@
         z-index: 11000 !important;
     }
 
+    .text-white{
+        color: #FFF !important;
+    }
     
 </style>

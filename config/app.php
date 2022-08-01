@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Madrid',
 
     /*
     |--------------------------------------------------------------------------
@@ -125,11 +125,23 @@ return [
 
 
     'url_base_scan'=>env('URL_BASE_SCAN','https://qrclean.ddns.net/puesto/'),
+    'url_base_feria'=>env('URL_BASE_FERIA','https://qrclean.ddns.net/'),
     'id_perfil_personal_limpieza'=>10,
     'id_perfil_personal_mantenimiento'=>11,
     //Rutas de los WKLHTML2PDF
     'BIN_SNAPPY_PDF'=>env('BIN_SNAPPY_PDF',"C:/Progra~1/wkhtmltopdf/bin/wkhtmltopdf.exe"),
     'BIN_SNAPPY_IMG'=>env('BIN_SNAPPY_IMG',"C:/Progra~1/wkhtmltopdf/bin/wkhtmltoimage.exe"),
+
+    'img_disk'=>env('img_disk',"local"),
+    'upload_disk'=>env('upload_disk',"local"),
+    'ruta_public'=>env('ruta_public',public_path()),
+
+    'remitente_mail'=>env('MAIL_FROM_ADDRESS','spotdesking@gmail.com'),
+
+    'AWS_URL'=>env('AWS_URL','/'),
+    'url_asset_mail'=>'https://spotdesking.spotlinker.com/',
+    'tipo_puesto_parking'=>[2],
+    'tipo_puesto_sala'=>[4],
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -168,11 +180,13 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
         Intervention\Image\ImageServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -182,6 +196,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        Laravel\Passport\PassportServiceProvider::class,
 
     ],
 
@@ -241,6 +257,8 @@ return [
 
         'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
+        'QRCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 
     ],
 

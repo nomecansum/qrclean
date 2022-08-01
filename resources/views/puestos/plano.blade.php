@@ -19,11 +19,40 @@
             position: absolute;
             z-index: 1000;
             color: #FFFFFF;
-            font-weight: bold;
             font-size: 9px;
             width: 40px;
             height: 40px;
             overflow: hidden;
+        }
+        .glow {
+            background-color: #1c87c9;
+            border: none;
+            color: #eeeeee;
+            cursor: pointer;
+            display: inline-block;
+            font-family: sans-serif;
+            font-size: 20px;
+            padding: 13px 10px;
+            text-align: center;
+            text-decoration: none;
+            opacity: 1;
+        }
+        @keyframes glowing {
+            0% {
+            background-color: #2ba805;
+            box-shadow: 0 0 5px #2ba805;
+            }
+            50% {
+            background-color: #49e819;
+            box-shadow: 0 0 20px #49e819;
+            }
+            100% {
+            background-color: #2ba805;
+            box-shadow: 0 0 5px #2ba805;
+            }
+        }
+        .glow {
+            animation: glowing 1300ms infinite;
         }
         
     </style>
@@ -44,13 +73,26 @@
 @endphp
 
 @section('content')
-        <div class="row botones_accion">
-            <div class="col-md-8">
-
+        <div class="row botones_accion mb-2">
+            <div class="col-md-4">
+                <form action="{{ url('puestos/plano') }}" name="form_mapa" id="form_mapa" method="POST">
+                    {{ csrf_field() }}
+                    <div class="input-group float-right" id="div_fechas">
+                        <input type="text" class="form-control pull-left" id="fecha" name="fecha" style="width: 100px" value="{{isset($r->fecha)?$r->fecha:Carbon\Carbon::now()->format('d/m/Y') }}">
+                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                    </div>
+                </form>
             </div>
-            <div class="col-md-4 text-right">
-                <a href="{{ url('puestos/mapa') }}" class="mr-2" ><i class="fad fa-th"></i> Mosaico</a>
-                <a href="{{ url('puestos/plano') }}" class="mr-2" style="color:#fff"><i class="fad fa-map-marked-alt"></i> Plano</a>
+            <div class="col-md-3">
+                
+            </div>
+            <div class="col-md-2 text-right">
+                <a href="#modal-leyenda" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
+            </div>
+            <div class="col-md-3 text-right">
+                <a href="{{ url('puestos/lista') }}" class="mr-2  text-white" ><i class="fad fa-list"></i> Lista</a>
+                <a href="{{ url('puestos/mapa') }}" class="mr-2  text-white" ><i class="fad fa-th"></i> Mosaico</a>
+                <a href="{{ url('puestos/plano') }}" class="mr-2" style="color: #1e1ed3; font-weight: bold"><i class="fad fa-map-marked-alt"></i> Plano</a>
             </div>
         </div>
    
@@ -58,10 +100,10 @@
         <div class="panel">
             <div class="panel-heading bg-gray-dark">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-5">
                         <span class="text-2x ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}</span>
                     </div>
-                    <div class="col-md-7"></div>
+                    <div class="col-md-5"></div>
                     <div class="col-md-2 text-right">
                         <h4>
                             <span class="mr-2"><i class="fad fa-layer-group"></i> {{ $e->plantas }}</span>
@@ -73,6 +115,9 @@
             <div class="panel-body">
                 @php
                     $plantas=plantas::where('id_edificio',$e->id_edificio)->get();
+                    if(isset($cualpuesto)){ //Esto es para el caso de que queramos filtrar para mostrar la ubicacion de un puesto
+                        $plantas=$plantas->where('id_planta',$cualpuesto->id_planta);
+                    }
                 @endphp
                 @foreach($plantas as $pl)
                     <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $pl->des_planta }}</h3>
@@ -81,7 +126,7 @@
             </div>
         </div>
         @endforeach
-
+        @include('resources.leyenda_puestos')
 
 @endsection
 
@@ -114,6 +159,23 @@
             recolocar_puestos();
         })
 
+        $('#fecha').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            autoUpdateInput : true,
+            //autoApply: true,
+            locale: {
+                format: '{{trans("general.date_format")}}',
+                applyLabel: "OK",
+                cancelLabel: "Cancelar",
+                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+                firstDay: {{trans("general.firstDayofWeek")}}
+            }
+        });
 
+        $('#fecha').change(function(){
+               $('#form_mapa').submit();
+        });
     </script>
 @endsection

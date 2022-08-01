@@ -5,7 +5,8 @@
 @endsection
 
 @section('styles')
-
+    {{-- Boostrap Select --}}
+    <link href="{{ asset('/plugins/noUiSlider/nouislider.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('breadcrumb')
@@ -27,12 +28,14 @@
             <br>
         </div>
         <div class="col-md-1 text-right">
+            @if(checkPermissions(['Plantas'],['C']))
             <div class="btn-group btn-group-sm pull-right" role="group">
                     <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva planta">
                     <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
                     <span>Nuevo</span>
                 </a>
             </div>
+            @endif
         </div>
     </div>
     <div id="editorCAM" class="mt-2">
@@ -65,15 +68,29 @@
         <div class="panel-body panel-body-with-table">
             <div class="table-responsive w-100">
 
-                <table class="table table-bordered table-condensed table-hover dataTable"  style="width: 98%"> 
+                <table id="tablaplantas"  data-toggle="table"
+                data-locale="es-ES"
+                data-search="true"
+                data-show-columns="true"
+                data-show-toggle="true"
+                data-show-columns-toggle-all="true"
+                data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+                data-page-size="50"
+                data-pagination="true" 
+                data-show-pagination-switch="true"
+                data-show-button-icons="true"
+                data-toolbar="#all_toolbar"
+                data-buttons-class="secondary"
+                data-show-button-text="true"
+                >
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Planta</th>
-                            <th>Edificio</th>
-                            <th>Cliente</th>
+                            <th data-sortable="true" >ID</th>
+                            <th data-sortable="true" >Planta</th>
+                            <th data-sortable="true" >Edificio</th>
+                            <th data-sortable="true" >Cliente</th>
+                            <th>Puestos</th>
                             <th>Plano</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,13 +100,14 @@
                             <td>{{ $plantas->des_planta }}</td>
                             <td>{{ $plantas->des_edificio }}</td>
                             <td>{{ $plantas->nom_cliente }}</td>
-                            <td class="text-center">@if(isset($plantas->img_plano))<img src="{{ url('img/plantas/'.$plantas->img_plano) }}" style="height: 50px">@endif</td>
-                            <td>
-                                <div class="btn-group btn-group-xs pull-right floating-like-gmail mt-3" role="group">
+                            <td></td>
+                            <td class="text-center" style="position: relative">@if(isset($plantas->img_plano))<img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="height: 50px; position: absoluite">@endif
+                            
+                                <div class="pull-right floating-like-gmail mt-3" style="width: 140px;">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    <a href="#"  class="btn btn-info btn_editar add-tooltip" onclick="editar({{ $plantas->id_planta }})" title="Editar planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>
-                                    <a href="#"  class="btn btn-mint btn_puestos add-tooltip" onclick="puestos({{ $plantas->id_planta }})" title="Distribucion de puestos en la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-desktop-alt pt-1" aria-hidden="true"></span></a>
-                                    <a href="#eliminar-planta-{{$plantas->id_planta}}" data-target="#eliminar-planta-{{$plantas->id_planta}}" title="Borrar planta" data-toggle="modal" class="btn btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                                    @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $plantas->id_planta }})" title="Editar planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                    @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-mint btn_puestos add-tooltip" onclick="puestos({{ $plantas->id_planta }})" title="Distribucion de puestos en la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-desktop-alt pt-1" aria-hidden="true"></span> Pos</a>@endif
+                                    @if(checkPermissions(['Plantas'],['D']))<a href="#eliminar-planta-{{$plantas->id_planta}}" data-target="#eliminar-planta-{{$plantas->id_planta}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$plantas->id_planta}}" style="display: none;">
                                     <div class="modal-dialog">
@@ -125,6 +143,8 @@
 @endsection
 
 @section('scripts')
+    <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
+    <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
     <script>
         $('.parametrizacion').addClass('active active-sub');
         $('.plantas').addClass('active-link');

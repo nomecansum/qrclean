@@ -23,61 +23,56 @@
 @endphp
 
 @section('content')
-        <div class="row botones_accion">
-            <div class="col-md-8">
-
+        <div class="row botones_accion mb-2">
+            <div class="col-md-4">
+                <form action="{{ url('puestos/mapa') }}" name="form_mapa" id="form_mapa" method="POST">
+                    {{ csrf_field() }}
+                    <div class="input-group float-right" id="div_fechas">
+                        <input type="text" class="form-control pull-left" id="fecha" name="fecha" style="width: 100px" value="{{isset($r->fecha)?$r->fecha:Carbon\Carbon::now()->format('d/m/Y') }}">
+                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                    </div>
+                </form>
             </div>
-            <div class="col-md-4 text-right">
-                <a href="{{ url('puestos/mapa') }}" class="mr-2" style="color:#fff"><i class="fad fa-th"></i> Mosaico</a>
-                <a href="{{ url('puestos/plano') }}" class="mr-2"><i class="fad fa-map-marked-alt"></i> Plano</a>
+            <div class="col-md-3">
+                
+            </div>
+            <div class="col-md-2 text-right">
+                <a href="#modal-leyenda" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
+            </div>
+            <div class="col-md-3 text-right">
+                <a href="{{ url('puestos/lista') }}" class="mr-2 text-white" ><i class="fad fa-list"></i> Lista</a>
+                <a href="{{ url('puestos/mapa') }}" class="mr-2" style="color: #1e1ed3; font-weight: bold"><i class="fad fa-th"></i> Mosaico</a>
+                <a href="{{ url('puestos/plano') }}" class="mr-2 text-white"><i class="fad fa-map-marked-alt"></i> Plano</a>
             </div>
         </div>
-   
-        @foreach ($edificios as $e)
-        <div class="panel">
-            <div class="panel-heading bg-gray-dark">
-                <div class="row">
-                    <div class="col-md-3">
-                        <span class="text-2x ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}</span>
-                    </div>
-                    <div class="col-md-7"></div>
-                    <div class="col-md-2 text-right">
-                        <h4>
-                            <span class="mr-2"><i class="fad fa-layer-group"></i> {{ $e->plantas }}</span>
-                            <span class="mr-2"><i class="fad fa-desktop-alt"></i> {{ $e->puestos }}</span>
-                        </h4>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-body">
-                @php
-                    $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
-                @endphp
-                @foreach($plantas as $key=>$value)
-                    <h3 class="pad-all w-100 bg-gray rounded" style="font-size: 2vh">PLANTA {{ $value }}</h3>
-                    @php
-                        $puestos_planta=$puestos->where('id_planta',$key);
-                    @endphp
-                    <div class="d-flex flex-wrap">
-                        @foreach($puestos_planta as $p)
-                            <div class="text-center font-bold rounded bg-{{ $p->val_color }} mr-2 mb-2 align-middle" style="width:8vw; height: 8vw; overflow: hidden; font-size: 1.6vw;">
-                                <span class="h-100 align-middle">{{ $p->cod_puesto }}</span>
-                            </div>
-                            
-                        @endforeach
-                    </div>
-                @endforeach
-            </div>
-        </div>
-        @endforeach
-
-
+        @include('puestos.content_mapa')
 @endsection
 
 
 @section('scripts')
     <script>
+        var tooltip = $('.add-tooltip');
+        if (tooltip.length)tooltip.tooltip();
+
         $('.parametrizacion').addClass('active active-sub');
         $('.mapa').addClass('active-link');
+
+        $('#fecha').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: true,
+            autoUpdateInput : true,
+            //autoApply: true,
+            locale: {
+                format: '{{trans("general.date_format")}}',
+                applyLabel: "OK",
+                cancelLabel: "Cancelar",
+                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+                firstDay: {{trans("general.firstDayofWeek")}}
+            }
+        });
+        $('#fecha').on('apply.daterangepicker', function(ev, picker) {
+            $('#form_mapa').submit();
+        });
     </script>
 @endsection

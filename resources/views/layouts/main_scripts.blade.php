@@ -3,14 +3,14 @@
     let modal_open = false;   //Indica si hay ventanas modales abiertas
 
     //Locale de Moment
-    moment.locale('es');
+    moment.locale('es'); 
     
     //Para cambiar el tema de la plantilla
     var themeBtn = $('.demo-theme'),
     changeTheme = function (themeName, type) {
         var themeCSS = $('#theme'),
             fileext = '.min.css',
-            filename = 'css/themes/type-' + type + '/' + themeName + fileext;
+            filename = '/css/themes/type-' + type + '/' + themeName + fileext;
 
         if (themeCSS.length) {
             themeCSS.prop('href', filename);
@@ -98,7 +98,7 @@
     }
 
     function mensaje_warning_controlado(data){
-        toast_warning(data.title,data.error);
+        toast_warning(data.title,data.alert);
     }
 
     //Mostrara un sweet alert indicando que hay algo leyendo en la pagina. Para quitarlo se llama a fin_espere()
@@ -200,7 +200,7 @@
     $('.singledate').daterangepicker({
         singleDatePicker: true,
         showDropdowns: true,
-        //autoUpdateInput : false,
+        autoUpdateInput : true,
         //autoApply: true,
         locale: {
             format: '{{trans("general.date_format")}}',
@@ -222,8 +222,10 @@
     });
 
     $('.select-all').click(function(event) {
-        element=$('#'+$(this).data('select'));
-        element.find('option').prop('selected', 'selected').end().select2();
+        //element=$('#'+$(this).data('select'));
+        //element.find('option').prop('selected', 'selected').end().select2();
+        //element.find('option').prop('selected', '').end().select2();
+        //element.val(null).trigger('change');
     });
 
     // when any modal is opening
@@ -274,8 +276,10 @@
                 toast_ok(data.title,data.message);
             }
             $('.modal').modal('hide');
+           
 
             try{//Si tenemos defiinda la funcion de despues
+                animateCSS('.editor','fadeOut',$('.editor').hide());
                 post_form_ajax(data);
             } catch(e){}
 
@@ -384,6 +388,8 @@
             block_espere("Renderizando datos...");
 
             if (tipo == 'pantalla') {
+                //$('body').scrollTo('#myFilter');
+                $('#divfiltro').toggle();
                 $('#myFilter').html(data);
             }
             fin_espere();
@@ -410,7 +416,7 @@
         event.preventDefault();
         $('#spin_login').show();
         $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
-            if (data.recover) {
+            if (data.expired) {
                 console.log("Enviado login")
                 toast_ok("Login", data.msg)
 
@@ -505,6 +511,60 @@
             return 'pink';
     }
 
+    //formularios de informes
 
+    $('.ajax-filter').submit(function(event) {
+        block_espere("Obteniendo datos...");
+        let form = $(this);
+        let tipo = form.find('[name="output"]').val();
+
+        if (tipo == 'pantalla') {
+            event.preventDefault();
+        }
+        $('#action_orig').val($(this).attr('action'));
+
+        $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
+            block_espere("Renderizando datos...");
+            @if (checkPermissions(['Informes programados'],["W"]))
+                if($('#div_programar_informe').length)
+                {
+                    $('#request_orig').val(request_orig);
+                    $('#div_programar_informe').show();
+                    animateCSS('#div_programar_informe','bounceInRight');
+                }
+            @endif
+            if($('.btn_print').length)
+            {
+                $('.btn_print').show();
+                animateCSS('.btn_print','zoomIn');
+            }
+
+            if (tipo == 'pantalla') {
+                $('#myFilter').html(data);
+                $('#divfiltro').toggle();
+            }
+            fin_espere();
+
+        })
+        .fail(function(err) {
+            let error = JSON.parse(err.responseText);
+            console.log(error);
+
+            toast_error("{{trans('strings.error')}}",error.message);
+        })
+        .always(function() {
+            fin_espere();
+            //console.log("complete");
+            form.find('[type="submit"]').attr('disabled',false);
+        });
+    });
+
+    $('.btn_print').click(function(){
+        $('#myFilter').printThis({
+            importCSS: true,
+            importStyle: true,
+            footer: "<img src='{{ url('/img/Mosaic_brand_20.png') }}' class='float-right'>"
+        });
+    })
 
 </script>

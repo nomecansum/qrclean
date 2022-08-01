@@ -40,7 +40,7 @@
 
 	}
 	$primero=true;
-
+    
 @endphp
 <div class="container-fluid">
 
@@ -85,22 +85,22 @@
                                             @foreach ($niveles as $n)
                                                 <td style="vertical-align: middle" class="celda_{{ $n->cod_nivel }}" nowrap>
                                                     <div title="{{trans('strings._permissions.R')}}" class="custom-control custom-checkbox" style="display: inline-block; @if($sec->val_tipo=='Permiso') margin-left: 62px; @endif margin-right: 6px">
-                                                        <input @if(checkPermissions(['Permisos'],["W"])) readonly @endif {{checkChecked($n->cod_nivel,$sec->cod_seccion,'R',$permisos) ? 'checked' : ''}} type="checkbox" data-type="R" data-section="{{$sec->cod_seccion}}" data-level="{{$n->cod_nivel}}" class="check-permission custom-control-input magic-checkbox @if($sec->val_tipo=='Permiso') chk_verde @else  @endif" id="read{{$sec->cod_seccion}}-{{$n->cod_nivel}}">
+                                                        <input @if(!checkPermissions(['Permisos'],["W"]) || (!checkPermissions([$sec->des_seccion],["R"]) && !fullAccess()) || ($n->mca_fijo=='S' && !fullAccess())) readonly disabled @endif {{checkChecked($n->cod_nivel,$sec->cod_seccion,'R',$permisos) ? 'checked' : ''}} type="checkbox" data-type="R" data-section="{{$sec->cod_seccion}}" data-level="{{$n->cod_nivel}}" class="check-permission custom-control-input magic-checkbox @if($sec->val_tipo=='Permiso') chk_verde @else  @endif" id="read{{$sec->cod_seccion}}-{{$n->cod_nivel}}">
                                                         <label class="custom-control-label" for="read{{$sec->cod_seccion}}-{{$n->cod_nivel}}" style="padding-top: 4px">@if($sec->val_tipo=='Seccion')R @endif</label>
                                                     </div>
                                                     @if($sec->val_tipo=='Seccion')
                                                     <div title="{{trans('strings._permissions.W')}}" class="custom-control custom-checkbox" style="display: inline-block; margin-right: 6px">
-                                                        <input @if(checkPermissions(['Permisos'],["W"])) readonly @endif {{checkChecked($n->cod_nivel,$sec->cod_seccion,'W',$permisos) ? 'checked' : ''}} type="checkbox" data-type="W" data-section="{{$sec->cod_seccion}}" data-level="{{$n->cod_nivel}}" class="check-permission custom-control-input magic-checkbox  @if($sec->val_tipo=='Permiso') chk_verde @else  @endif" id="write{{$sec->cod_seccion}}-{{$n->cod_nivel}}">
+                                                        <input @if(!checkPermissions(['Permisos'],["W"]) || (!checkPermissions([$sec->des_seccion],["W"]) && !fullAccess()) || ($n->mca_fijo=='S' && !fullAccess()))  readonly disabled  @endif {{checkChecked($n->cod_nivel,$sec->cod_seccion,'W',$permisos) ? 'checked' : ''}} type="checkbox" data-type="W" data-section="{{$sec->cod_seccion}}" data-level="{{$n->cod_nivel}}" class="check-permission custom-control-input magic-checkbox  @if($sec->val_tipo=='Permiso') chk_verde @else  @endif" id="write{{$sec->cod_seccion}}-{{$n->cod_nivel}}">
                                                         <label class="custom-control-label" for="write{{$sec->cod_seccion}}-{{$n->cod_nivel}}" style="padding-top: 4px">W</label>
                                                     </div>
 
                                                     <div title="{{trans('strings._permissions.C')}}" class="custom-control custom-checkbox " style="display: inline-block; margin-right: 6px">
-                                                        <input @if(checkPermissions(['Permisos'],["W"])) readonly @endif {{checkChecked($n->cod_nivel,$sec->cod_seccion,'C',$permisos) ? 'checked' : ''}} type="checkbox" data-type="C" data-section="{{$sec->cod_seccion}}" data-level="{{$n->cod_nivel}}" class="check-permission custom-control-input magic-checkbox @if($sec->val_tipo=='Permiso') chk_verde @else  @endif" id="create{{$sec->cod_seccion}}-{{$n->cod_nivel}}">
+                                                        <input @if(!checkPermissions(['Permisos'],["W"]) || (!checkPermissions([$sec->des_seccion],["C"]) && !fullAccess()) || ($n->mca_fijo=='S' && !fullAccess()))  readonly disabled  @endif {{checkChecked($n->cod_nivel,$sec->cod_seccion,'C',$permisos) ? 'checked' : ''}} type="checkbox" data-type="C" data-section="{{$sec->cod_seccion}}" data-level="{{$n->cod_nivel}}" class="check-permission custom-control-input magic-checkbox @if($sec->val_tipo=='Permiso') chk_verde @else  @endif" id="create{{$sec->cod_seccion}}-{{$n->cod_nivel}}">
                                                         <label class="custom-control-label" for="create{{$sec->cod_seccion}}-{{$n->cod_nivel}}" style="padding-top: 4px">C</label>
                                                     </div>
 
                                                     <div title="{{trans('strings._permissions.D')}}" class="custom-control custom-checkbox" style="display: inline-block; margin-right: 6px">
-                                                        <input @if(checkPermissions(['Permisos'],["W"])) readonly @endif {{checkChecked($n->cod_nivel,$sec->cod_seccion,'D',$permisos) ? 'checked' : ''}} type="checkbox" data-type="D" data-section="{{$sec->cod_seccion}}" data-level="{{$n->cod_nivel}}" class="check-permission custom-control-input magic-checkbox @if($sec->val_tipo=='Permiso') chk_verde @else  @endif" id="delete{{$sec->cod_seccion}}-{{$n->cod_nivel}}">
+                                                        <input @if(!checkPermissions(['Permisos'],["W"]) || (!checkPermissions([$sec->des_seccion],["D"]) && !fullAccess()) || ($n->mca_fijo=='S' && !fullAccess()))  readonly disabled  @endif {{checkChecked($n->cod_nivel,$sec->cod_seccion,'D',$permisos) ? 'checked' : ''}} type="checkbox" data-type="D" data-section="{{$sec->cod_seccion}}" data-level="{{$n->cod_nivel}}" class="check-permission custom-control-input magic-checkbox @if($sec->val_tipo=='Permiso') chk_verde @else  @endif" id="delete{{$sec->cod_seccion}}-{{$n->cod_nivel}}">
                                                         <label class="custom-control-label" for="delete{{$sec->cod_seccion}}-{{$n->cod_nivel}}" style="padding-top: 4px">D</label>
                                                     </div>
                                                     @endif
@@ -136,6 +136,7 @@
 
 <script>
 	$('.configuracion').addClass('active active-sub');
+    $('.menu_permisos').addClass('active active-sub');
 	$('.permisos').addClass('active-link');
 		
 	$('.check-permission').on('change', function(event){

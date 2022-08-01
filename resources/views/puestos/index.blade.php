@@ -5,13 +5,29 @@
 @endsection
 
 @section('styles')
+    <link href="{{ asset('/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css') }}" rel="stylesheet">
+    {{--  <link href="{{ asset('/plugins/fullcalendar/fullcalendar.min.css') }}" rel="stylesheet">  --}}
+    <link href="{{ asset('/plugins/fullcalendar/lib/main.css') }}" rel="stylesheet">
+    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/noUiSlider/nouislider.min.css') }}" rel="stylesheet">
+    
+	{{--  <link href="{{ asset('/plugins/fullcalendar/nifty-skin/fullcalendar-nifty.min.css') }}" rel="stylesheet">  --}}
+    <style type="text/css">
+        td .tooltip {
+            position:absolute
+        }
+        .enfrente {
+            z-index: 1100;
+        }
 
+    </style>
 @endsection
 
 @section('breadcrumb')
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
-        <li class="breadcrumb-item">puestos</li>
+        <li class="breadcrumb-item">parametrización</li>
+        <li class="breadcrumb-item active">puestos</li>
         {{--  <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
         <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
     </ol>
@@ -35,16 +51,25 @@
                                 <li class="dropdown-header">Cambiar estado</li>
                                 <li><a href="#" data-estado="1" class="btn_estado_check"><i class="fas fa-square text-success"></i> Disponible</a></li>
                                 <li><a href="#" data-estado="2" class="btn_estado_check"><i class="fas fa-square text-danger"></i> Usado</a></li>
-                                <li><a href="#" data-estado="3" class="btn_estado_check"><i class="fas fa-square text-info"></i> Limpieza</a></li>
+                                @if(session('CL')['mca_limpieza']=='S')<li><a href="#" data-estado="3" class="btn_estado_check"><i class="fas fa-square text-info"></i> Limpieza</a></li>@endif
                                 <li><a href="#" data-estado="6" class="btn_estado_check"><i class="fas fa-square text-warning"></i> Incidencia</a></li>
+                                <li><a href="#" data-estado="5" class="btn_estado_check"><i class="fas fa-square text-secondary"></i> Bloqueado</a></li>
+                                <li><a href="#" data-estado="7" class="btn_estado_check"><i class="fas fa-square text-secondary"></i> No usable (encuesta)</a></li>
                             @endif
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Atributos</li>
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
+                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#modificar-puesto" class="btn_modificar_puestos btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-pencil"></i> Modificar puestos</a></li>@endif
+                            @if(checkPermissions(['Reservas'],['C']) && checkPermissions(['Reservas global'],['C']))<li><a href="#modal-reservas" class="btn_crear_reservas btn_toggle_dropdown btn_modal_reserva" data-toggle="modal" data-tipo="C" data-accion="Crear"><i class="fad fa-calendar-alt"></i> Crear reserva</a></li>@endif
+                            @if(checkPermissions(['Reservas'],['D']) && checkPermissions(['Reservas global'],['D']))<li><a href="#modal-reservas" class="btn_cancelar_reservas btn_toggle_dropdown btn_modal_reserva" data-toggle="modal" data-tipo="D" data-accion="Cancelar"><i class="fad fa-calendar-times"></i> Cancelar reservas</a></li>@endif
                             <li class="divider"></li>
                             <li class="dropdown-header">Acciones</li>
                             <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
-                            @if(checkPermissions(['Rondas de limpieza'],['C']))<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
+                            <li><a href="#" class="btn_export_qr"><i class="fad fa-file-export"></i></i> Exportar QR</a></li>
+                            @if(checkPermissions(['Rondas de limpieza'],['C']) && session('CL')['mca_limpieza']=='S')<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
                             @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
-                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
-                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
+                            @if(checkPermissions(['Puestos'],['D']))<li><a href="#" class="btn_borrar_puestos btn_toggle_dropdown"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar puestos</a> </li>@endif
                         </ul>
                     </div>
                 </div>
@@ -63,72 +88,163 @@
     <form method="post" name="form_puestos" id="formbuscador" action="{{ url('puestos/') }}">
         @csrf
         <input type="hidden" name="document" value="pantalla">
-        @include('resources.combos_filtro')
+        @include('resources.combos_filtro',[$hide=['usu'=>1,'est_inc'=>1,'est_mark'=>1]])
     </form>
     <div id="editorCAM" class="mt-2">
 
     </div>
     <script>
-        let id_fila=0;
-        let token_fila=0;
-
-        function hoverdiv(obj,e,divid,id,txt,token){
-            if(id==id_fila){
-                $('#'+divid).hide();
-                id_fila=0;
-                return;
-            }
-            id_fila=id;
-            token_fila=token;
-            console.log(obj.position());
-            
-            console.log(e);
-            var left  =obj.position().left-280;
-            var top  = obj.position().top+16;
-
-
-            $('#nombrepuesto').html(txt);
-            $('#txt_borrar').html(txt);
-            $('#toolbutton').data('id',id);
-            $('#toolbutton').data('token',token);
-            $('#link_borrar').attr('href','{{url('/puestos/delete')}}/'+id)
-            $('#'+divid).css('left',left);
-            $('#'+divid).css('top',top);
-            console.log(left+','+top);
-            $('#'+divid).show();
-            animateCSS('#'+divid,'fadeIn');
-            return false;
-            $
-        }
-        function editar(){
-            $('#editorCAM').load("{{ url('/puestos/edit/') }}"+"/"+id_fila, function(){
-                animateCSS('#editorCAM','bounceInRight');
-            });
-        }
-
-        function estado(est){
-            $.get("{{ url('/puesto/estado/') }}/"+token_fila+"/"+est, function(data){
-                toast_ok('Cambio de estado',data.mensaje);
-                //console.log('#estado_'+$(this).data('id'));
-                $('#estado_'+data.id).removeClass();
-                $('#estado_'+data.id).addClass('bg-'+data.color);
-                $('#estado_'+data.id).html(data.label);
-                $('#toolbutton').hide();
-                animateCSS('#estado_'+data.id,'rubberBand');
-            }) 
-            .fail(function(err){
-                console.log(err);
-                toast_error('Error',err);
-            });
-        }
-       
+        left_toolbar=300;
+        top_toolbar=16;
     </script>
+    @include('puestos.scripts_lista_puestos')
+
     <div id="myFilter">
         @if(!isset($r))
             @include('puestos.fill-tabla')
         @endif
     </div>
     
+    <div class="modal fade" id="borrar-puestos" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                    <h4 class="modal-title">¿Borrar <span id="cuenta_puestos_borrar"></span> puestos?</h4><br>
+                   
+                </div>
+                <div class="modal-body">
+                    Esta accion no puede deshacerse
+                </div>
+
+                <div class="modal-footer">
+                    <a class="btn btn-info" href="javascript:void(0)" id="borrar_muchos">Si</a>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modificar-puestos" style="display: none;">
+        <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+                <form  action="{{url('puestos/modificar_puestos')}}" method="POST" name="frm_modif_puestos" id="frm_modif_puestos" class="form-ajax">
+                    {{csrf_field()}}
+                    <input type="hidden" name="lista_id" id=lista_id_modif>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                        <h4 class="modal-title">Modificar datos de <span id="cuenta_puestos_borrar"></span> puestos</h4><br>
+                    
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="des_puesto">Nombre descriptivo</label>
+                                <input type="text" name="des_puesto" id="des_puesto" class="form-control" >
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="id_estado">Estado</label>
+                                <select name="id_estado" id="modif_id_estado"  class="form-control">
+                                    <option value=""></option>
+                                    @foreach(DB::table('estados_puestos')->get() as $estado)
+                                    <option value="{{ $estado->id_estado}}">{{ $estado->des_estado }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="val_color">Color</label><br>
+                                <input type="text" autocomplete="off" name="val_color" id="modif_val_color"  class="minicolors form-control" value="" />
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <label>Icono</label><br>
+                                    <button type="button"  role="iconpicker" name="val_icono"  id="modif_val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker enfrente" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label for="id_edificio">Edificio</label>
+                                <select name="id_edificio" id="modif_id_edificio" class="form-control enfrente">
+                                    <option value=""></option>
+                                    @foreach(DB::table('edificios')->where('id_cliente',Auth::user()->id_cliente)->get() as $edificio)
+                                        <option value="{{ $edificio->id_edificio}}">{{ $edificio->des_edificio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="planta">Planta</label>
+                                <select name="id_planta" id="modif_id_planta" class="form-control">
+                                    <option value=""></option>
+                                    @foreach(DB::table('plantas')->where('id_cliente',Auth::user()->id_cliente)->get() as $planta)
+                                        <option value="{{ $planta->id_planta}}">{{ $planta->des_planta }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="planta">Anonimo</label>
+                                <select name="mca_acceso_anonimo" id="modif_mca_acceso_anonimo" class="form-control">
+                                    <option value=""></option>
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="planta">Reservar</label>
+                                <select name="mca_reservar" id="modif_mca_reservar" class="form-control">
+                                    <option value=""></option>
+                                    <option value="S">Si</option>
+                                    <option value="N">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="planta">Tags</label>
+                                <input type="text" class="edit_tag" data-role="tagsinput" placeholder="Type to add a tag" size="17" name="tags">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="id_perfil">Asignar a perfil</label>
+                                <select name="id_perfil" id="modif_id_perfil" class="form-control enfrente">
+                                    <option value=""></option>
+                                    @foreach(DB::table('niveles_acceso')->wherein('id_cliente',[1,Auth::user()->id_cliente])->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->orderby('val_nivel_acceso')->orderby('des_nivel_acceso')->get() as $n)
+                                        <option value="{{ $n->cod_nivel}}">{{ $n->des_nivel_acceso }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="id_usuario">Tipo de puesto</label>
+                                <select name="id_tipo_puesto" id="id_tipo_puesto" class="form-control">
+                                    <option value=""></option>
+                                    @foreach($tipos as $t)
+                                        <option value="{{ $t->id_tipo_puesto}}" {{ isset($puesto->id_tipo_puesto) && $puesto->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }}>{{ $t->des_tipo_puesto }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @if(session('CL')['mca_reserva_horas']=='S')
+                                <div class="form-group col-md-2">
+                                    <label for="max_horas_reservar">Max reserva(horas)</label>
+                                    <input type="text" autocomplete="off" name="max_horas_reservar" id="max_horas_reservar"   class="form-control hourMask" />
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info" id="modificar_muchos">Si</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="eliminar-puesto" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -175,7 +291,8 @@
                 <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div><h4 class="modal-title">Habilitar reserva para los puestos</h4>
+                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                        <h4 class="modal-title">Habilitar reserva para los puestos</h4>
                 </div>
                 <div class="modal-body">
                     <input type="checkbox" class="form-control  magic-checkbox chk_accion" name="mca_reserva" data-label="lbl_reserva" id="mca_reserva" checked value="S"> 
@@ -221,11 +338,108 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modal-reservas" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                    <input type="hidden" name="tip_ronda" value="L" id="tip_ronda">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                    <span class="float-right" id="spin_reserva" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
+                    <h3 class="modal-title"><span class="tipo_accion"></span> multiples reservas.</h3><br>
+                </div>
+                <form  action="{{url('puestos/modificar_puestos')}}" method="POST" name="frm_modif_puestos" id="frm_modif_puestos" class="form-ajax">
+                    {{csrf_field()}}
+                    <div class="modal-body" id="">
+                        <input type="hidden" name="lista_id" id="lista_id_reserva">
+                        <input type="hidden" name="accion_reserva" id="accion_reserva">
+                        <input type="hidden" name="hora_inicio" id="hora_inicio" value="00:00">
+                        <input type="hidden" name="hora_fin" id="hora_fin" value="23:59">
+                        <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control pull-left rangepicker" id="fechas_reserva" name="fechas" style="height: 40px; width: 200px">
+                            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+                        
+                        </div>
+                        <div id="div_usuario_multiple">
+                            <label><span class="badge badge-primary">2</span> Seleccione usuario </label>
+                            <select name="id_usuario_res_multiple" id="id_usuario_res_multiple" class="form-control select2_res ">
+                                <option value=""></option>
+                                @foreach($usuarios as $n)
+                                    <option value="{{ $n->id}}">{{ $n->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @if(session('CL')['mca_reserva_horas']=='S')
+                        <div class="mb-5 capa_horas">
+                            <label><span class="badge badge-primary">3</span> Seleccione horario </label>
+                            <div class="form-group col-md-12">
+                                <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>] <span id="obs" class="text-info"></span></label>
+                                <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
+                            </div>
+                        </div>
+                        @endif
+                        
+                        <div id="comprobar_puesto_reserva" class="rounded b-all mt-4 pad-all" style="display: none"></div>
+                        <div id="mensaje_pulse" style="display: none">Pulse Si para confirmar la reserva</div>
+                    </div>
+                </form>
+                
+                <div class="modal-footer">
+                    <a class="btn btn-info" id="btn_res_multiple" href="javascript:void(0)">Si</a>
+                    <button type="button" id="btn_cancel_res_multiple" data-dismiss="modal" class="btn btn-warning">No</button>
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-left"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     
 @endsection
 
 @section('scripts')
+<script src="{{ asset('/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js') }}"></script>
+{{--  <script src="{{ asset('plugins/fullcalendar/lib/jquery-ui.custom.min.js') }}"></script>  --}}
+{{--  <script src="{{ asset('plugins/fullcalendar/fullcalendar.min.js') }}"></script>  --}}
+<script src="{{ asset('plugins/fullcalendar/lib/main.min.js') }}"></script>
+<script src="{{ asset('plugins/fullcalendar/lib/locales/es.js') }}"></script>
+<script src="{{ asset('/plugins/inputmask/dist/inputmask.js') }}"></script>
+<script src="{{ asset('/plugins/inputmask/dist/jquery.inputmask.js') }}"></script>
+<script src="{{ asset('/plugins/inputmask/dist/bindings/inputmask.binding.js') }}"></script>
+<script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
+<script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
+
 <script>
+
+    function comprobar_reserva_multiple(){
+        if( $('#fechas_reserva').val()!==null && $('#id_usuario_res_multiple').val()!==""){
+            searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+            }).get(); // <----
+            fecres=$('#fechas_reserva').val();
+            fecres=fecres.split(' - ');
+            console.log(fecres);
+            fecdesde=moment(fecres[0]+' '+$('#hora_inicio').val(),"DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DD HH:mm:ss');
+            fechasta=moment(fecres[1]+' '+$('#hora_fin').val(),"DD/MM/YYYY HH:mm:ss").format('YYYY-MM-DD HH:mm:ss');
+            $('#spin_reserva').show();
+            $.post('{{ url('reservas/puestos_usuario') }}/'+$('#id_usuario_res_multiple').val()+'/'+fecdesde+'/'+fechasta, {_token: '{{csrf_token()}}',lista_id:searchIDs}, function(data, textStatus, xhr) {
+                console.log(data);
+                $('#spin_reserva').hide();
+                $('#comprobar_puesto_reserva').show();
+                $('#comprobar_puesto_reserva').html(data.message+'<br>'+data.recomendacion);
+                if(data.lista.length>0){
+                    $('#mensaje_pulse').show();
+                    $('#btn_res_multiple').show();
+                } else {
+                    $('#mensaje_pulse').hide();
+                    $('#btn_res_multiple').hide();
+                }
+            })
+            .fail(function(err){
+                toast_error('Error',err.responseJSON.message);
+            });
+        }
+    }
 
     //Menu
     $('.parametrizacion').addClass('active active-sub');
@@ -349,14 +563,23 @@
             toast_error('Error','Debe seleccionar algún puesto');
             return;
         }
-    //
         $('#frmpuestos').attr('action',"{{url('/puestos/print_qr')}}");
         $('#frmpuestos').submit();
-        //
+    });
+
+    $('.btn_export_qr').click(function(){
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+        return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            return;
+        }
+        $('#frmpuestos').attr('action',"{{url('/puestos/export_qr')}}");
+        $('#frmpuestos').submit();
     });
 
     $('.btn_asignar').click(function(){
-        //block_espere();
         searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
         return $(this).val();
         }).get(); // <----
@@ -402,6 +625,209 @@
         $('#ronda-limpieza').modal('hide');
     });
 
+    $('.btn_borrar_puestos').click(function(){
+        //block_espere();
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            return;
+        }
+        $('#cuenta_puestos_borrar').html(searchIDs.length);
+        $('#borrar-puestos').modal('show');
+        //fin_espere();
+    });
+
+    $('#borrar_muchos').click(function(){
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); // 
+
+        $.post('{{url('/puestos/borrar_puestos')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs}, function(data, textStatus, xhr) {
+            console.log(data);
+            if(data.error){
+                toast_error(data.title,data.error);
+            } else if(data.alert){
+                toast_warning(data.title,data.alert);
+            } else{
+                toast_ok(data.title,data.message);
+            }
+        }) 
+        .fail(function(err){
+            toast_error('Error',err.responseJSON.message);
+        })
+        .always(function(data){
+            $('#borrar-puestos').modal('hide');  
+            if(data.url){
+                setTimeout(()=>{window.open(data.url,'_self')},3000);
+            } 
+            
+        });
+    })
+
+    $('#modificar_muchos').click(function(){
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); 
+        $('#lista_id_modif').val(searchIDs);
+        //$('#frm_modif_puestos').submit();
+    })
+
+    $('.btn_modificar_puestos').click(function(){
+        //block_espere();
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); // <----
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            return;
+        }
+        $('#cuenta_puestos_modificar').html(searchIDs.length);
+        $('#modificar-puestos').modal('show');
+        //fin_espere();
+    });
+
+    $('#modif_val_icono').on('change', function(e) {
+        console.log(e.icon);
+        $('.modal').css('z-index', 10000);
+    });
+
+    $('#modif_val_icono').click(function() {
+        $('.modal').css('z-index', 1000);
+    });
+
+    $('.btn_modal_reserva').click(function(){
+        $('#id_usuario_res_multiple').val('');
+        $('#id_usuario_res_multiple').trigger('change');
+        $('#comprobar_puesto_reserva').empty();
+        $('#mensaje_pulse').hide();
+        $('#accion_reserva').val($(this).data('tipo'));
+        $('.tipo_accion').html($(this).data('accion'));
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); 
+        if(searchIDs.length==0){
+            toast_error('Error','Debe seleccionar algún puesto');
+            $('#modal-reservas').modal('hide');
+            exit();
+        }
+        $('#lista_id_reserva').val(searchIDs);
+        //A ver si estamos cancelando o creando
+        
+        if($(this).data('accion')=='Cancelar'){
+            $('#div_usuario_multiple').hide();
+            $('#comprobar_puesto_reserva').html('<b>¿Seguro que quiere cancelar las todas las reservas de estos '+searchIDs.length+' puestos entre las fechas seleccionadas?<br>Esta acción no puede deshacerse</b>');
+            $('#comprobar_puesto_reserva').show();
+            $('.capa_horas').hide();
+        } else {
+            $('#div_usuario_multiple').show();
+        }
+    })
+
+
+    $('#btn_res_multiple').click(function(){
+        searchIDs = $('.chkpuesto:checkbox:checked').map(function(){
+            return $(this).val();
+        }).get(); 
+        $('#spin_reserva').show();
+        $.post('{{ url('reservas/reservas_multiples_admin') }}', {_token: '{{csrf_token()}}',lista_id:searchIDs,id_usuario: $('#id_usuario_res_multiple').val(),rango: $('#fechas_reserva').val(),accion:$('#accion_reserva').val(), hora_inicio:$('#hora_inicio').val() ,hora_fin: $('#hora_fin').val() }, function(data, textStatus, xhr) {
+            $('#spin_reserva').hide();
+            console.log(data);
+            if(data.error){
+                toast_error(data.title,data.error);
+            } else {
+                toast_ok(data.title,data.mensaje);
+            }
+            $('#modal-reservas').modal('hide');
+        })
+        .fail(function(err){
+            toast_error('Error',err.responseJSON.message);
+        });
+    })
+
+    Inputmask({regex:"^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$"}).mask('.hourMask');
+
+
+    $('#fechas_reserva').daterangepicker({
+        autoUpdateInput: true,
+        locale: {
+            format: '{{trans("general.date_format")}}',
+            applyLabel: "OK",
+            cancelLabel: "Cancelar",
+            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
+            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
+            firstDay: {{trans("general.firstDayofWeek")}}
+        },
+        opens: 'right',
+        parentEl: "#modal-reservas .modal-body" 
+    });
+
+    $('#fechas_reserva').change(function(){
+        comprobar_reserva_multiple();
+    })
+    $('#id_usuario_res_multiple').change(function(){
+        comprobar_reserva_multiple();
+    })
+
+    $('.select2_res').select2({
+        width: '100%',
+        dropdownParent: $("#modal-reservas  .modal-body"),
+    }      
+    );
+
+    @if(session('CL')['mca_reserva_horas']=='S')
+
+        var aproximateHour = function (mins)
+        {
+        //http://greweb.me/2013/01/be-careful-with-js-numbers/
+        var minutes = Math.round(mins % 60);
+        if (minutes == 60 || minutes == 0)
+        {
+            return mins / 60;
+        }
+        return Math.trunc (mins / 60) + minutes / 100;
+        }
+
+
+        function filter_hour(value, type) {
+        return (value % 60 == 0) ? 1 : 0;
+        }
+
+
+        var r_def = document.getElementById('hora-range-drg');
+        var r_def_value = document.getElementById('hora-range-val');
+
+
+        noUiSlider.create(r_def,{
+            start : [{{ config_cliente('min_hora_reservas') }}, {{ config_cliente('max_hora_reservas') }}],
+            connect: true, 
+            behaviour: 'tap-drag', 
+            step: 10,
+            tooltips: true,
+            range : {'min': {{ config_cliente('min_hora_reservas') }}, 'max': {{ config_cliente('max_hora_reservas') }} },
+            format:  wNumb({
+                    decimals: 2,
+                mark: ":",
+                    encoder: function(a){
+                return aproximateHour(a);
+                }
+                }),
+        });
+        r_def.noUiSlider.on('change', function( values, handle ) {
+            console.log(values);
+            $('#hora_inicio').val(values[0]);
+            $('#hora_fin').val(values[1]);
+            $('#horas_rango').html(values[0]+' - '+values[1]);
+            comprobar_reserva_multiple();
+        });
+
+        
+        values=r_def.noUiSlider.get();
+        $('#hora_inicio').val(values[0]);
+        $('#hora_fin').val(values[1]);
+        $('#horas_rango').html(values[0]+' - '+values[1]);
+    @endif
 
 </script>
 @endsection

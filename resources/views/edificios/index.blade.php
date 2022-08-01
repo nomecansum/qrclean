@@ -27,12 +27,14 @@
         <br>
     </div>
     <div class="col-md-1 text-right">
+        @if(checkPermissions(['Edificios'],['C']))
         <div class="btn-group btn-group-sm pull-right" role="group">
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo edificio">
                 <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
                 <span>Nuevo</span>
             </a>
         </div>
+        @endif
     </div>
 </div>
 <div id="editorCAM" class="mt-2">
@@ -64,12 +66,26 @@
         <div class="panel-body panel-body-with-table">
             <div class="table-responsive w-100" >
 
-                <table class="table table-bordered table-condensed table-hover dataTable" style="width: 98%">
+                <table id="tablaedificios"  data-toggle="table"
+                data-locale="es-ES"
+                data-search="true"
+                data-show-columns="true"
+                data-show-toggle="true"
+                data-show-columns-toggle-all="true"
+                data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+                data-page-size="50"
+                data-pagination="true" 
+                data-show-pagination-switch="true"
+                data-show-button-icons="true"
+                data-toolbar="#all_toolbar"
+                data-buttons-class="secondary"
+                data-show-button-text="true"
+                >
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Cliente</th>
+                            <th  data-sortable="true" >ID</th>
+                            <th  data-sortable="true" >Nombre</th>
+                            <th  data-sortable="true" >Cliente</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -81,10 +97,10 @@
                             <td>{{ $edificios->nom_cliente }}</td>
 
                             <td>
-                                <div class="btn-group btn-group-xs pull-right floating-like-gmail" role="group">
+                                <div class="pull-right floating-like-gmail" role="group">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $edificios->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    <a href="#"  class="btn btn-info btn_editar add-tooltip" onclick="editar({{ $edificios->id_edificio }})" title="Editar edificio" data-id="{{ $edificios->id_edificio }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span></a>
-                                    <a href="#eliminar-planta-{{$edificios->id_edificio}}" data-target="#eliminar-planta-{{$edificios->id_edificio}}" title="Borrar edificio" data-toggle="modal" class="btn btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span></a>
+                                    @if(checkPermissions(['Edificios'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $edificios->id_edificio }})" title="Editar edificio" data-id="{{ $edificios->id_edificio }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                    @if(checkPermissions(['Edificios'],['D']))<a href="#eliminar-planta-{{$edificios->id_edificio}}" data-target="#eliminar-planta-{{$edificios->id_edificio}}" title="Borrar edificio" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$edificios->id_edificio}}" style="display: none;">
                                     <div class="modal-dialog">

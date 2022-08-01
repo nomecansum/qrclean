@@ -6,6 +6,7 @@ use App\User;
 use App\Models\clientes;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class ClienteService
 {
@@ -64,9 +65,10 @@ class ClienteService
         $img_logo='';
         if ($r->hasFile($campo)) {
             $file = $r->file($campo);
-            $path = public_path().'/img/clientes/images/';
+            $path = config('app.ruta_public').'/img/clientes/images/';
             $img_logo = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-            $file->move($path,$img_logo);
+            Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_logo);
+            //$file->move($path,$img_logo);
         }
         return $img_logo;
     }

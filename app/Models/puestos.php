@@ -33,19 +33,23 @@ class puestos extends Model
      * @var array
      */
     protected $fillable = [
-                  'id_edificio',
-                  'id_planta',
-                  'id_cliente',
                   'cod_puesto',
                   'des_puesto',
-                  'id_estado',
-                  'val_color',
-                  'token',
                   'fec_ult_estado',
-                  'val_icono',
+                  'id_cliente',
+                  'id_edificio',
+                  'id_estado',
+                  'id_planta',
+                  'id_tipo_puesto',
                   'id_usuario_usando',
+                  'img_puesto',
+                  'max_horas_reservar',
                   'mca_acceso_anonimo',
-                  'mca_reservar'
+                  'mca_incidencia',
+                  'mca_reservar',
+                  'token',
+                  'val_color',
+                  'val_icono'
               ];
 
     /**
@@ -62,6 +66,16 @@ class puestos extends Model
      */
     protected $casts = [];
     
+    /**
+     * Get the Cliente for this model.
+     *
+     * @return App\Models\Cliente
+     */
+    public function Cliente()
+    {
+        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+    }
+
     /**
      * Get the Edificio for this model.
      *
@@ -83,13 +97,13 @@ class puestos extends Model
     }
 
     /**
-     * Get the Cliente for this model.
+     * Get the PuestosTipo for this model.
      *
-     * @return App\Models\Cliente
+     * @return App\Models\PuestosTipo
      */
-    public function Cliente()
+    public function PuestosTipo()
     {
-        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+        return $this->belongsTo('App\Models\PuestosTipo','id_tipo_puesto','id_tipo_puesto');
     }
 
     /**
@@ -120,6 +134,26 @@ class puestos extends Model
     public function logCambiosEstados()
     {
         return $this->hasMany('App\Models\Logpuesto','id_puesto','id_puesto');
+    }
+
+    /**
+     * Get the puestosAsignados for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function puestosAsignados()
+    {
+        return $this->hasMany('App\Models\PuestosAsignado','id_puesto','id_puesto');
+    }
+
+    /**
+     * Get the tagsPuestos for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function tagsPuestos()
+    {
+        return $this->hasMany('App\Models\TagsPuesto','id_puesto','id_puesto');
     }
 
 

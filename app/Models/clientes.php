@@ -36,6 +36,7 @@ class clientes extends Model
                   'CIF',
                   'cod_tipo_cliente',
                   'fec_borrado',
+                  'id_distribuidor',
                   'img_logo',
                   'img_logo_menu',
                   'locked',
@@ -63,6 +64,26 @@ class clientes extends Model
     protected $casts = [];
     
     /**
+     * Get the Distribuidore for this model.
+     *
+     * @return App\Models\Distribuidore
+     */
+    public function Distribuidore()
+    {
+        return $this->belongsTo('App\Models\Distribuidore','id_distribuidor','id_distribuidor');
+    }
+
+    /**
+     * Get the causasCierres for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function causasCierres()
+    {
+        return $this->hasMany('App\Models\CausasCierre','id_cliente','id_cliente');
+    }
+
+    /**
      * Get the edificios for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -73,13 +94,53 @@ class clientes extends Model
     }
 
     /**
+     * Get the configCliente for this model.
+     *
+     * @return App\Models\ConfigCliente
+     */
+    public function configCliente()
+    {
+        return $this->hasOne('App\Models\ConfigCliente','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the encuestas for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function encuestas()
+    {
+        return $this->hasMany('App\Models\Encuesta','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the estadosIncidencias for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function estadosIncidencias()
+    {
+        return $this->hasMany('App\Models\EstadosIncidencia','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the incidencias for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidencias()
+    {
+        return $this->hasMany('App\Models\Incidencia','id_cliente','id_cliente');
+    }
+
+    /**
      * Get the plantas for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
      */
     public function plantas()
     {
-        return $this->hasMany('App\Models\Plantum','id_cliente','id_cliente');
+        return $this->hasMany('App\Models\Planta','id_cliente','id_cliente');
     }
 
     /**
@@ -90,6 +151,46 @@ class clientes extends Model
     public function puestos()
     {
         return $this->hasMany('App\Models\Puesto','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the rondasLimpiezas for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function rondasLimpiezas()
+    {
+        return $this->hasMany('App\Models\Ronda','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the tags for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function tags()
+    {
+        return $this->hasMany('App\Models\Tag','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the incidenciasTipos for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidenciasTipos()
+    {
+        return $this->hasMany('App\Models\IncidenciasTipo','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the puestosTipos for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function puestosTipos()
+    {
+        return $this->hasMany('App\Models\PuestosTipo','id_cliente','id_cliente');
     }
 
 

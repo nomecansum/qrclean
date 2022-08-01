@@ -34,17 +34,19 @@ class incidencias_tipos extends Model
      */
     protected $fillable = [
                   'des_tipo_incidencia',
-                  'id_cliente',
-                  'mca_fijo',
-                  'param_url',
                   'tip_metodo',
-                  'txt_destinos',
-                  'val_apikey',
+                  'val_url',
+                  'param_url',
                   'val_body',
-                  'val_color',
+                  'val_apikey',
                   'val_content_type',
+                  'txt_destinos',
+                  'mca_fijo',
+                  'id_cliente',
                   'val_icono',
-                  'val_url'
+                  'val_color',
+                  'id_estado_inicial',
+                  'list_tipo_puesto'
               ];
 
     /**
@@ -72,13 +74,23 @@ class incidencias_tipos extends Model
     }
 
     /**
-     * Get the incidencia for this model.
+     * Get the EstadosIncidencia for this model.
      *
-     * @return App\Models\Incidencia
+     * @return App\Models\EstadosIncidencia
      */
-    public function incidencia()
+    public function EstadosIncidencia()
     {
-        return $this->hasOne('App\Models\Incidencia','id_tipo_incidencia','id_tipo_incidencia');
+        return $this->belongsTo('App\Models\EstadosIncidencia','id_estado_inicial','id_estado');
+    }
+
+    /**
+     * Get the incidencias for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidencias()
+    {
+        return $this->hasMany('App\Models\Incidencia','id_tipo_incidencia','id_tipo_incidencia');
     }
 
 

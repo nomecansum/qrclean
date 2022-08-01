@@ -42,7 +42,7 @@ return [
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'from_name' => env('MAIL_FROM_NAME'),
-            'timeout' => null,
+            'timeout' => 15,
         ],
 
         'ses' => [

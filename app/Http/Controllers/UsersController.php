@@ -264,7 +264,13 @@ class UsersController extends Controller
         }
         $eventos=json_encode($eventos);
 
-        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos'));
+        $tokens=DB::table('oauth_access_tokens')
+            ->where('user_id',$id)
+            ->where('expires_at','>',Carbon::now())
+            ->orderby('expires_at','desc')
+            ->first();
+
+        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens'));
     }
     /**
      * Update the specified users in the storage.

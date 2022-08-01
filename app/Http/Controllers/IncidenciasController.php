@@ -116,11 +116,6 @@ class IncidenciasController extends Controller
                 }
             })
             ->where(function($q) use($r){
-                if ($r->estado_inc) {
-                    $q->whereIn('incidencias.id_estado',$r->estado_inc);
-                }
-            })
-            ->where(function($q) use($r){
                 if ($r->tipo) {
                     $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
                 }
@@ -195,6 +190,11 @@ class IncidenciasController extends Controller
                 }
             })
             ->where(function($q) use($r){
+                if ($r->estado_inc) {
+                    $q->whereIn('incidencias.id_estado',$r->estado_inc);
+                }
+            })
+            ->where(function($q) use($r){
                 if ($r->tipoinc) {
                     $q->whereIn('incidencias.id_tipo_incidencia',$r->tipoinc);
                 }
@@ -204,7 +204,12 @@ class IncidenciasController extends Controller
         $f1=Carbon::parse($f1);
         $f2=Carbon::parse($f2);
 
-        return view('incidencias.fill_tabla_incidencias',compact('incidencias','f1','f2','puestos','r'));
+        if ($r->wantsJson()) {
+            return $incidencias;
+        } else {
+            return view('incidencias.fill_tabla_incidencias',compact('incidencias','f1','f2','puestos','r'));
+        }
+        
     }
 
     //USUARIOS ABRIR INCIDENCIAS
@@ -322,6 +327,7 @@ class IncidenciasController extends Controller
             $inc->id_puesto=$puesto->id_puesto;
             $inc->img_attach1=$img1??null;
             $inc->img_attach2=$img2??null;
+            $inc->id_estado=$data['id_estado']??null;
             $inc->id_estado_vuelta_puesto=$puesto->id_estado;
             $inc->save();
 
@@ -339,14 +345,16 @@ class IncidenciasController extends Controller
                 return [
                     'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
                     'message' => "Incidencia de tipo ".$tipo->des_tipo_incidencia.' creada. Muchas gracias',
-                    'url' => url($url_vuelta)
+                    'url' => url($url_vuelta),
+                    'id' => $inc->id_incidencia,
                 ];
             } catch(\Exception $exception){
                 savebitacora('ERROR: Ocurrio un error en el postprocesado de incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(). ' La incidencia se ha registrado correctamente pero no se ha podido procesar la accion de notificacion programada' ,"Incidencias","save","ERROR");
                 return [
                     'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
                     'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
-                    'url' => url($url_vuelta)
+                    'url' => url($url_vuelta),
+                    'id' => $inc->id_incidencia,
                 ];
             }
             

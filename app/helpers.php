@@ -252,12 +252,12 @@ function decimal_to_time($dec)
 }
 
 
-function get_local_time(){
+function get_local_tz(){
     try{
         $ip = request()->ip();
         $url = 'http://ip-api.com/json/'.$ip;
         $tz = file_get_contents($url);
-        $tz = json_decode($tz,true);
+        $tz = json_decode($tz,true)['timezone'];
     } catch(\Exception $e){
         $tz="Europe/Madrid";
     }

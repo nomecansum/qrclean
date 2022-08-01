@@ -1,4 +1,4 @@
-<div class="nano">
+{{-- <div class="nano">
     <div class="nano-content">
         <!--Nav tabs-->
         <!--================================-->
@@ -266,4 +266,4 @@
 
         </div>
     </div>
-</div>
+</div> --}}

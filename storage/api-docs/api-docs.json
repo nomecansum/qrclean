@@ -1,0 +1,267 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Spotdesking API",
+        "description": "Spotdesking [Aka QRCLEAN] API Description",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/test": {
+            "get": {
+                "tags": [
+                    "test"
+                ],
+                "summary": "Consulta de test de la API",
+                "operationId": "cfca7857582a4baa84356eace0776a7e",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/entidades": {
+            "get": {
+                "tags": [
+                    "entidades"
+                ],
+                "summary": "Consulta de entidades del cliente",
+                "operationId": "56043a66ce243c1fda8494fa5250ad69",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/incidencias/list": {
+            "post": {
+                "tags": [
+                    "get_incidents"
+                ],
+                "summary": "Devuelve las incidencias de un cliente segun los filtros",
+                "operationId": "e0eca1b9fc4e71b6b26e78da74451f0e",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "fec_desde": {
+                                        "description": "Fecha de inicio de la consulta",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "fec_hasta": {
+                                        "description": "Fecha de fin de la consulta",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "tipoinc": {
+                                        "description": "IDs de tipo de incidencia",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "id_estado": {
+                                        "description": "IDS de estado de la incidencia",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "puesto": {
+                                        "description": "Puestos afectado por la incidencia",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/incidencias": {
+            "put": {
+                "tags": [
+                    "crear_incidencia"
+                ],
+                "summary": "Crea una nueva incidencia",
+                "operationId": "1ae2931b4bddb72749a53c3755cf0bf6",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "des_incidencia": {
+                                        "description": "Tiutulo de la incidencia",
+                                        "type": "string"
+                                    },
+                                    "txt_incidencia": {
+                                        "description": "Texto descriptivo  de la incidencia",
+                                        "type": "string"
+                                    },
+                                    "id_tipo_incidencia": {
+                                        "description": "Tipo de la incidencia",
+                                        "type": "number"
+                                    },
+                                    "tipoinc": {
+                                        "description": "ID de tipo de incidencia",
+                                        "type": "number"
+                                    },
+                                    "id_estado": {
+                                        "description": "ID Estado de la incidencia",
+                                        "type": "number"
+                                    },
+                                    "id_puesto": {
+                                        "description": "ID Puesto afectado por la incidencia",
+                                        "type": "number"
+                                    },
+                                    "id_usuario_apertura": {
+                                        "description": "ID Puesto afectado por la incidencia",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/incidencias/add_accion": {
+            "post": {
+                "tags": [
+                    "add_accion"
+                ],
+                "summary": "Añade una nueva accion a la  incidencia",
+                "operationId": "4ee9bf285c204609c18b31a37c61dbfe",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id_incidencia": {
+                                        "description": "ID de incidencia",
+                                        "type": "number"
+                                    },
+                                    "des_accion": {
+                                        "description": "Texto  de la accion",
+                                        "type": "string"
+                                    },
+                                    "id_usuario": {
+                                        "description": "ID de usuario que realiza la accion",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "passport": {
+                "type": "oauth2",
+                "description": "Laravel passport oauth2 security.",
+                "in": "header",
+                "scheme": "https",
+                "flows": {
+                    "password": {
+                        "authorizationUrl": "http://qrclean/api/auth/login",
+                        "tokenUrl": "http://qrclean/api/auth/login",
+                        "refreshUrl": "http://qrclean/auth/token/refresh",
+                        "scopes": []
+                    }
+                }
+            }
+        }
+    }
+}

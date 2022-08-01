@@ -47,7 +47,9 @@ class incidencias extends Model
                   'id_causa_cierre',
                   'comentario_cierre',
                   'id_estado',
-                  'id_estado_vuelta_puesto'
+                  'id_estado_vuelta_puesto',
+                  'id_externo',
+                  'id_incidencia_salas'
               ];
 
     /**

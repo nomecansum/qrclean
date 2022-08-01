@@ -119,6 +119,8 @@ class Kernel extends ConsoleKernel
 				->timezone('Europe/Madrid');
 				
             //log_tarea("Config de tarea [".$task->cod_tarea."] " . $task->des_tarea . " Config: " . json_encode($sch), $task->cod_tarea);
+
+            
         }
 
         
@@ -132,6 +134,8 @@ class Kernel extends ConsoleKernel
 	    // 	$schedule->command('queue:work --sleep=3 --timeout=1800 --tries=3 --daemon --queue='.$cola)->runInBackground()->withoutOverlapping()->everyMinute();
 	    // }
       
+        //Para purgar los token de acceso caducados
+        $schedule->command('passport:purge')->hourly();
     }
 
     /**

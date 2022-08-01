@@ -27,7 +27,7 @@
     </div>
     <div class="panel-body">
         @php
-           dd(get_local_time());
+           dd(get_local_tz());
         @endphp 
     </div>
 </div>

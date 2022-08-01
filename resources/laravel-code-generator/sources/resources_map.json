@@ -135,19 +135,9 @@
         "table-name": "niveles_acceso"
     },
     {
-        "model-name": "incidencias",
-        "resource-file": "incidencias.json",
-        "table-name": "incidencias"
-    },
-    {
         "model-name": "config_clientes",
         "resource-file": "config_clientes.json",
         "table-name": "config_clientes"
-    },
-    {
-        "model-name": "users",
-        "resource-file": "users.json",
-        "table-name": "users"
     },
     {
         "model-name": "puestos_tipos",
@@ -178,5 +168,20 @@
         "model-name": "contactos_producto",
         "resource-file": "contactos_productos.json",
         "table-name": "contactos_producto"
+    },
+    {
+        "model-name": "turnos",
+        "resource-file": "turnos.json",
+        "table-name": "turnos"
+    },
+    {
+        "model-name": "users",
+        "resource-file": "users.json",
+        "table-name": "users"
+    },
+    {
+        "model-name": "incidencias",
+        "resource-file": "incidencias.json",
+        "table-name": "incidencias"
     }
 ]

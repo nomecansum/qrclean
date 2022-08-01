@@ -69,13 +69,20 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <label class="control-label">Token registro</label>
+                <div class="col-md-11">
+                    <label class="control-label">Token acceso</label>
                     <div class="input-group mb-3">
                         <input type="text" name="token_acceso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($users) ? $users->token_acceso : ''}}">
                         <div class="input-group-btn">
                             <button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>
                         </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label for="name" class="control-label">Expira (d)</label>
+                        <input class="form-control" name="token_expires" type="number" id="token_expires" value="{{ old('token_expires', optional($users)->token_expires) }}" min="1" max="6000" >
+                        {!! $errors->first('token_expires', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
             </div>
@@ -219,9 +226,9 @@
 
     $('#btn_generar_token').click(function(event){
         //console.log('token');
-        $.get( "/clientes/gen_key")
+        $.get( "/users/gen_token/{{ $users->id??'' }}")
         .done(function( data, textStatus, jqXHR ) {
-            $('#token_1uso').val(data);
+            $('#token_1uso').val(data.access_token);
         })
         .fail(function( jqXHR, textStatus, errorThrown ) {
                 console.log(errorThrown);

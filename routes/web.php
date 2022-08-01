@@ -127,11 +127,9 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/supervisor_planta/{id}/{planta}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@supervisor_planta'])->name('users.supervisor_planta');
         Route::get('/supervisor_edificio/{id}/{edificio}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@supervisor_edificio'])->name('users.supervisor_edificio');
 
-        
-        
-
         Route::get('/addtodaplanta/{estado}/{planta}',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@addtodaplanta'])->name('users.addtodaplanta');
         Route::get('/addtodouser/{estado}/{usuario}',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@addtodouser'])->name('users.addtodouser');
+        Route::get('/gen_token/{id}',['middleware'=>'permissions:["API_TOKEN"],["R"]','uses'=>'APIAuthController@gen_token'])->name('users.api.gen_token');
         
     });
 
@@ -406,6 +404,12 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'MKD'], function () {
         Route::get('/','MKDController@index');
         Route::post('/gen_config','MKDController@gen_config');
+    });  
+
+    ////////////////////////////   CONFIGURACION DE SEÑALETICA  ////////////////////////////////
+    Route::group(['prefix' => 'turnos'], function () {
+        Route::get('/','TurnosController@index');
+        Route::get('/edit/{id}','TurnosController@edit');
     });  
 
 });

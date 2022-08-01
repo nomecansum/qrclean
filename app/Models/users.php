@@ -48,7 +48,9 @@ class users extends Model
                   'def_camera',
                   'email_expire_at',
                   'id_usuario_supervisor',
-                  'val_vista_puestos'
+                  'val_vista_puestos',
+                  'token_expires',
+                  'id_externo'
               ];
 
     /**

@@ -1,5 +1,6 @@
 <input type="hidden" name="id_incidencia" value="{{ $id }}"></input>
 <input type="hidden" name="adjuntos[]" id="adjuntos" value="">
+<input type="hidden" name="procedencia" value="web"></input>
 <div class="row">
     <div class="form-group col-md-12">
         <label for="val_color">Accion</label><br>

@@ -90,11 +90,6 @@
         "table-name": "puestos_asignados"
     },
     {
-        "model-name": "estados_incidencias",
-        "resource-file": "estados_incidencias.json",
-        "table-name": "estados_incidencias"
-    },
-    {
         "model-name": "encuestas_resultados",
         "resource-file": "encuestas_resultados.json",
         "table-name": "encuestas_resultados"
@@ -113,11 +108,6 @@
         "model-name": "clientes",
         "resource-file": "clientes.json",
         "table-name": "clientes"
-    },
-    {
-        "model-name": "incidencias_tipos",
-        "resource-file": "incidencias_tipos.json",
-        "table-name": "incidencias_tipos"
     },
     {
         "model-name": "puestos",
@@ -180,8 +170,23 @@
         "table-name": "users"
     },
     {
+        "model-name": "incidencias_postprocesado",
+        "resource-file": "incidencias_postprocesados.json",
+        "table-name": "incidencias_postprocesado"
+    },
+    {
         "model-name": "incidencias",
         "resource-file": "incidencias.json",
         "table-name": "incidencias"
+    },
+    {
+        "model-name": "estados_incidencias",
+        "resource-file": "estados_incidencias.json",
+        "table-name": "estados_incidencias"
+    },
+    {
+        "model-name": "incidencias_tipos",
+        "resource-file": "incidencias_tipos.json",
+        "table-name": "incidencias_tipos"
     }
 ]

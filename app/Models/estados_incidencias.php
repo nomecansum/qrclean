@@ -35,10 +35,12 @@ class estados_incidencias extends Model
     protected $fillable = [
                   'des_estado',
                   'id_cliente',
-                  'mca_cierre',
-                  'mca_fijo',
+                  'val_icono',
                   'val_color',
-                  'val_icono'
+                  'mca_fijo',
+                  'mca_cierre',
+                  'id_estado_salas',
+                  'id_estado_externo'
               ];
 
     /**
@@ -56,6 +58,16 @@ class estados_incidencias extends Model
     protected $casts = [];
     
     /**
+     * Get the Cliente for this model.
+     *
+     * @return App\Models\Cliente
+     */
+    public function Cliente()
+    {
+        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+    }
+
+    /**
      * Get the incidencias for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -63,6 +75,16 @@ class estados_incidencias extends Model
     public function incidencias()
     {
         return $this->hasMany('App\Models\Incidencia','id_estado','id_estado');
+    }
+
+    /**
+     * Get the incidenciasTipos for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidenciasTipos()
+    {
+        return $this->hasMany('App\Models\IncidenciasTipo','id_estado_inicial','id_estado');
     }
 
 

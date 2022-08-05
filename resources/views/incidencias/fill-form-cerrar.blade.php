@@ -1,4 +1,5 @@
 <input type="hidden" name="id_incidencia" value="{{ $id }}"></input>
+<input type="hidden" name="procedencia" value="web"></input>
 <h5>Causa de cierre</h5>
 <ul>
     @foreach($causas_cierre as $causa)

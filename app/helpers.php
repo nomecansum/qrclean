@@ -380,6 +380,26 @@ function comodines_texto($texto,$campos,$datos){
     return $texto;
 }
 
+//Mandar mail
+function enviar_email($user,$from,$to,$to_name,$subject,$plantilla,$error=null,$texto=null,$adjunto=null){
+    try{
+        \Mail::send($plantilla, ['user' => $user, 'error' => $error, 'texto'=>$texto, 'adjunto'=>$adjunto], function ($m) use ($from,$to,$to_name,$subject,$adjunto) {
+            $m->from($from, 'spotdyna');
+            $m->to($to, $to_name)->subject($subject);
+            if(!empty($adjunto))
+            {
+                $m->attach($adjunto, array(
+                    'mime' => 'application/pdf')
+                );
+            }
+        });
+        } catch(\Exception $e){
+        return $e->getMessage();
+    }
+    return true;
+}
+
+
 function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1,$triangulo="alerta_05"){
     try{
         switch ($metodo) {
@@ -428,6 +448,107 @@ function tags($string, $encoding = 'UTF-8'){
     $matchWords=preg_replace('/\b(' . implode('|', $stopWords) . ')\b/u', '', $string);
     
     return $matchWords;
+}
+
+function get_mime_type($filename) {
+    try{
+        $filename=strtolower($filename);
+        $idx = explode( '.', $filename );
+        $count_explode = count($idx);
+        $idx = strtolower($idx[$count_explode-1]);
+
+        $mimet = array( 
+            'txt' => 'text/plain',
+            'htm' => 'text/html',
+            'html' => 'text/html',
+            'php' => 'text/html',
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'json' => 'application/json',
+            'xml' => 'application/xml',
+            'swf' => 'application/x-shockwave-flash',
+            'flv' => 'video/x-flv',
+
+            // images
+            'png' => 'image/png',
+            'jpe' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'jpg' => 'image/jpeg',
+            'gif' => 'image/gif',
+            'bmp' => 'image/bmp',
+            'ico' => 'image/vnd.microsoft.icon',
+            'tiff' => 'image/tiff',
+            'tif' => 'image/tiff',
+            'svg' => 'image/svg+xml',
+            'svgz' => 'image/svg+xml',
+            'webp' => 'image/webp',
+
+            // archives
+            'zip' => 'application/zip',
+            'rar' => 'application/x-rar-compressed',
+            'exe' => 'application/x-msdownload',
+            'msi' => 'application/x-msdownload',
+            'cab' => 'application/vnd.ms-cab-compressed',
+
+            // audio/video
+            'mp3' => 'audio/mpeg',
+            'qt' => 'video/quicktime',
+            'mov' => 'video/quicktime',
+            'mp4' => 'video/mpeg4',
+            'mpeg4' => 'video/mpeg4',
+
+            // adobe
+            'pdf' => 'application/pdf',
+            'psd' => 'image/vnd.adobe.photoshop',
+            'ai' => 'application/postscript',
+            'eps' => 'application/postscript',
+            'ps' => 'application/postscript',
+
+            // ms office
+            'doc' => 'application/msword',
+            'rtf' => 'application/rtf',
+            'xls' => 'application/vnd.ms-excel',
+            'ppt' => 'application/vnd.ms-powerpoint',
+            'docx' => 'application/msword',
+            'xlsx' => 'application/vnd.ms-excel',
+            'pptx' => 'application/vnd.ms-powerpoint',
+
+
+            // open office
+            'odt' => 'application/vnd.oasis.opendocument.text',
+            'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+        );
+
+        if (isset( $mimet[$idx] )) {
+        return $mimet[$idx];
+        } else {
+        return 'application/octet-stream';
+        }
+    } catch(\Exception $e){
+        return 'application/octet-stream';
+    }
+}
+
+function js_array($array,$tipo='str')
+{
+    if(!function_exists('js_str')){
+        function js_str($s)
+        {
+            return '"' . addcslashes($s, "\0..\37\"\\") . '"';
+        }
+    }
+
+    if($tipo=='str'){
+        $temp = array_map('js_str', $array);
+    } else {
+        $temp=$array;
+    }
+    return '[' . implode(',', $temp) . ']';
+}
+
+function replace_extension($filename, $new_extension) {
+    $info = pathinfo($filename);
+    return $info['filename'] . '.' . $new_extension;
 }
 
 function acronimo($nombre,$height=10){
@@ -536,6 +657,51 @@ function checkPermissions($secciones = [],$permisos = [])
     }
     $encontrado=false;
     $mispermisos=Session::get('P');
+    if(!isset($mispermisos)){
+        return false;
+    }
+    foreach ($secciones as $key => $s) {
+        foreach($mispermisos as $per){
+            if($per->des_seccion===$s){
+                $encontrado=true;
+            }
+        }
+        if (!$encontrado){
+            return false;
+        }
+        foreach ($permisos as $key => $p) {
+            if ($p == "R") {$type = "mca_read";}
+            if ($p == "W") {$type = "mca_write";}
+            if ($p == "C") {$type = "mca_create";}
+            if ($p == "D") {$type = "mca_delete";}
+            foreach($mispermisos as $per){
+                if($per->des_seccion==$s && $per->$type==1){
+                    $b++;
+                }
+            }
+        }
+    }
+    if ($encontrado && $b >= (count($permisos)*count($secciones))) {
+        return true;
+    }
+    return false;
+}
+
+function checkPermissionsAPI($secciones = [],$permisos = [])
+{
+    $a = 0;
+    $b = 0;
+    if (!$secciones) {
+        return false;
+    }
+    if (!$permisos) {
+        return false;
+    }
+    $encontrado=false;
+    $mispermisos=DB::table('secciones_perfiles')
+        ->select('des_seccion','mca_read','mca_write','mca_create','mca_delete')
+        ->join('secciones','secciones_perfiles.id_seccion','secciones.cod_seccion')
+        ->where('id_perfil',Auth::user()->cod_nivel)->get();
     if(!isset($mispermisos)){
         return false;
     }
@@ -789,15 +955,6 @@ function color_porcentaje_inv($pct){
     }
 }
 
-function js_array($array)
-{
-    function js_str($s)
-    {
-        return '"' . addcslashes($s, "\0..\37\"\\") . '"';
-    }
-    $temp = array_map('js_str', $array);
-    return '[' . implode(',', $temp) . ']';
-}
 
 function authbyToken($token){
     $usuario=users::where('token_acceso',$token)->first();
@@ -885,5 +1042,50 @@ function config_cliente($clave,$cliente=null){
         return null;
     }
     
+//Decodificar JSON mejorado
+function decodeComplexJson($string) { # list from www.json.org: (\b backspace, \f formfeed)
+    $string = preg_replace("/[\r\n]+/", "", $string); //Retornos de carro
+    $string = preg_replace('/[ ]{2,}|[\t]/', '', trim($string));  //tabs
+    $json = utf8_encode($string);
+    $json = json_decode($json);
+    return $json;
+}
+
+
+
+//Funcion para que las tareas programadas escriban su log
+function log_tarea($mensaje,$id,$tipo='info'){
+    DB::table('tareas_programadas_log')->insert([
+        'txt_log'=>$mensaje,
+        'cod_tarea'=>$id,
+        'tip_mensaje'=>$tipo,
+        'fec_log'=>Carbon::now()
+    ]);
+}
+
+//Funcion para que los eventos escriban su log
+function log_evento($texto,$cod_regla,$tipo="info"){
+    DB::table('eventos_log')->insert([
+        'fec_log'=>Carbon::now(),
+        'txt_log'=>$texto,
+        'cod_regla'=>$cod_regla,
+        'tip_mensaje'=>$tipo
+    ]);
+ }
+
+
+
+function dayOfWeek($num){
+    $days = array(
+        1 => 'Monday',
+        2 => 'Tuesday',
+        3 => 'Wednesday',
+        4 => 'Thursday',
+        5 => 'Friday',
+        6 => 'Saturday',
+        7 => 'Sunday'
+    );
+    return $days[$num];
+}
 
 }

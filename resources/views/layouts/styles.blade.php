@@ -7,5 +7,13 @@
     .text-white{
         color: #FFF !important;
     }
+
+    .btn_todos{
+        max-height: 45px !important;
+    }
+
+    .bg-yellow{
+        background-color: #fefef0 !important;
+    }
     
 </style>

@@ -95,7 +95,7 @@
                             <td class="text-center"><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
                             <td>{{ $tipo->des_tipo_incidencia }}</td>
                             <td>
-                                @switch($tipo->tip_metodo)
+                                {{-- @switch($tipo->tip_metodo)
                                     @case("S")
                                         <i class="fad fa-sms"></i> SMS
                                         @break
@@ -116,7 +116,7 @@
                                         @break
                                     @default
                                         
-                                @endswitch
+                                @endswitch --}}
                             </td>
                             <td>{{ $tipo->nom_cliente }}</td>
 

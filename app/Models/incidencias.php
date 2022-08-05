@@ -49,7 +49,9 @@ class incidencias extends Model
                   'id_estado',
                   'id_estado_vuelta_puesto',
                   'id_externo',
-                  'id_incidencia_salas'
+                  'id_incidencia_salas',
+                  'url_detalle_incidencia',
+                  'val_procedencia'
               ];
 
     /**

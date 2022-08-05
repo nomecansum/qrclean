@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layout_email')
 
 @section('title')
     <h1 class="page-header text-overflow pad-no">Gestión de cámaras</h1>
@@ -26,9 +26,7 @@
         <h3 class="panel-title">Titulo</h3>
     </div>
     <div class="panel-body">
-        @php
-           dd(get_local_tz());
-        @endphp 
+       
     </div>
 </div>
 

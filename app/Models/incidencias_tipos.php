@@ -34,19 +34,15 @@ class incidencias_tipos extends Model
      */
     protected $fillable = [
                   'des_tipo_incidencia',
-                  'tip_metodo',
-                  'val_url',
-                  'param_url',
-                  'val_body',
-                  'val_apikey',
-                  'val_content_type',
-                  'txt_destinos',
                   'mca_fijo',
                   'id_cliente',
                   'val_icono',
                   'val_color',
                   'id_estado_inicial',
-                  'list_tipo_puesto'
+                  'list_tipo_puesto',
+                  'id_tipo_externo',
+                  'id_tipo_salas',
+                  'val_responsable'
               ];
 
     /**
@@ -91,6 +87,16 @@ class incidencias_tipos extends Model
     public function incidencias()
     {
         return $this->hasMany('App\Models\Incidencia','id_tipo_incidencia','id_tipo_incidencia');
+    }
+
+    /**
+     * Get the incidenciasPostprocesados for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function incidenciasPostprocesados()
+    {
+        return $this->hasMany('App\Models\IncidenciasPostprocesado','id_tipo_incidencia','id_tipo_incidencia');
     }
 
 

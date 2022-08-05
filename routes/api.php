@@ -19,8 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/unauthenticated', function () {
-    return response()->json(['message' => 'Unauthenticated.'], 403);
+    return response()->json(['result'=>'error','timestamp'=>Carbon\Carbon::now(),'message' => 'Unauthenticated.'], 403);
 });
+
+Route::post('/test_request', 'APIController@echo_test');
+Route::get('/test_request', 'APIController@echo_test');
 
 //Funciones para login y registro
 Route::group(['prefix' => 'auth'], function () {
@@ -30,10 +33,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'APIAuthController@logout');
         Route::get('user', 'APIAuthController@user');
-
-        //Listado de entidades
-        Route::get('entities', 'APIController@entidades');
-
     });
 });
 
@@ -41,16 +40,22 @@ Route::group(['prefix' => 'auth'], function () {
 //FUNCIONES DEL API
 Route::group(['middleware' => 'auth:api'], function() {
     //LLamada de test
-    Route::get('test', 'APIController@test');
+    Route::get('test', ['middleware'=>'permissions:["API General"],["R"]','uses'=>'APIController@test']);
     //Listado de entidades
-    Route::get('entidades', 'APIController@entidades');
+    Route::get('entidades', ['middleware'=>'permissions:["API General"],["R"]','uses'=>'APIController@entidades']);
 });
 
 ////INCIDENCIAS/////
 Route::group(['prefix' => 'incidencias','middleware' => 'auth:api'], function() {
     //Listado de incidencias
-    Route::post('list', 'APIController@get_incidents');
+    Route::post('list', ['middleware'=>'permissions:["API Incidencias"],["R"]','uses'=>'APIController@get_incidents']);
     //Crear incidencia
-    Route::put('/', 'APIController@crear_incidencia');
+    Route::put('/', ['middleware'=>'permissions:["API Incidencias"],["R"]','uses'=>'APIController@crear_incidencia']);
+    //Añadir accion
+    Route::post('/add_accion', ['middleware'=>'permissions:["API Incidencias"],["R"]','uses'=>'APIController@add_accion']);
+    //Cerrar incidencia
+    Route::post('/cerrar', ['middleware'=>'permissions:["API Incidencias"],["R"]','uses'=>'APIController@cerrar_ticket']);
+     //Cerrar incidencia
+    Route::post('/reabrir', ['middleware'=>'permissions:["API Incidencias"],["R"]','uses'=>'APIController@reabrir_ticket']);
 
 });

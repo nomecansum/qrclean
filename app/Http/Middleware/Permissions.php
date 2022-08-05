@@ -15,8 +15,14 @@ class Permissions
      */
     public function handle($request, Closure $next, $secciones=NULL, $permisos=NULL)
     {
-        if (checkPermissions(json_decode($secciones),json_decode($permisos))) {
-            return $next($request);
+        if($request->wantsJson()){  //API
+            if (checkPermissionsAPI(json_decode($secciones),json_decode($permisos))) {
+                return $next($request);
+            }
+        } else {  //WEB
+            if (checkPermissions(json_decode($secciones),json_decode($permisos))) {
+                return $next($request);
+            }
         }
         return back();
     }

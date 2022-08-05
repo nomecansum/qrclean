@@ -4,8 +4,83 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "181926b8edcc040593d53e08f2645e93",
+    "content-hash": "53bb828685fc649478db25bc0ec4ba4d",
     "packages": [
+        {
+            "name": "24slides/laravel-saml2",
+            "version": "2.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/24Slides/laravel-saml2.git",
+                "reference": "a3c311439462daffb60eef5a21a2991653e6bec7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/24Slides/laravel-saml2/zipball/a3c311439462daffb60eef5a21a2991653e6bec7",
+                "reference": "a3c311439462daffb60eef5a21a2991653e6bec7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "illuminate/console": "~5.5|^6.0|^7.0|^8.0|^9.0",
+                "illuminate/database": "~5.5|^6.0|^7.0|^8.0|^9.0",
+                "illuminate/support": "~5.4|^6.0|^7.0|^8.0|^9.0",
+                "onelogin/php-saml": "^3.0",
+                "php": ">=7.1",
+                "ramsey/uuid": "^3.8|^4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.9",
+                "phpunit/phpunit": "^7.5|^9.0",
+                "squizlabs/php_codesniffer": "^2.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Saml2": "Slides\\Saml2\\Facades\\Auth"
+                    },
+                    "providers": [
+                        "Slides\\Saml2\\ServiceProvider"
+                    ]
+                },
+                "branch-aliases": {
+                    "dev-master": "2.0.8-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Slides\\Saml2\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artem Brezhnev",
+                    "email": "brezzhnev@gmail.com"
+                }
+            ],
+            "description": "SAML2 Service Provider integration to your Laravel 5.4+ application, based on OneLogin toolkit",
+            "homepage": "https://github.com/24slides/laravel-saml2",
+            "keywords": [
+                "SAML2",
+                "SSO",
+                "laravel",
+                "onelogin",
+                "saml"
+            ],
+            "support": {
+                "issues": "https://github.com/24Slides/laravel-saml2/issues",
+                "source": "https://github.com/24Slides/laravel-saml2/tree/2.0.10"
+            },
+            "time": "2022-04-14T12:51:18+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.1.1",
@@ -2388,6 +2463,75 @@
             "time": "2022-05-16T17:09:47+00:00"
         },
         {
+            "name": "laravel/socialite",
+            "version": "v5.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/socialite.git",
+                "reference": "9dfc76b31ee041c45a7cae86f23339784abde46d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/9dfc76b31ee041c45a7cae86f23339784abde46d",
+                "reference": "9dfc76b31ee041c45a7cae86f23339784abde46d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "illuminate/contracts": "^6.0|^7.0|^8.0|^9.0",
+                "illuminate/http": "^6.0|^7.0|^8.0|^9.0",
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0",
+                "league/oauth1-client": "^1.10.1",
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0",
+                "phpunit/phpunit": "^8.0|^9.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Socialite\\SocialiteServiceProvider"
+                    ],
+                    "aliases": {
+                        "Socialite": "Laravel\\Socialite\\Facades\\Socialite"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Socialite\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel wrapper around OAuth 1 & OAuth 2 libraries.",
+            "homepage": "https://laravel.com",
+            "keywords": [
+                "laravel",
+                "oauth"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel/socialite/issues",
+                "source": "https://github.com/laravel/socialite"
+            },
+            "time": "2022-07-18T13:51:19+00:00"
+        },
+        {
             "name": "laravel/tinker",
             "version": "v2.7.2",
             "source": {
@@ -3109,6 +3253,82 @@
                 }
             ],
             "time": "2022-04-17T13:12:02+00:00"
+        },
+        {
+            "name": "league/oauth1-client",
+            "version": "v1.10.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth1-client.git",
+                "reference": "d6365b901b5c287dd41f143033315e2f777e1167"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth1-client/zipball/d6365b901b5c287dd41f143033315e2f777e1167",
+                "reference": "d6365b901b5c287dd41f143033315e2f777e1167",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "guzzlehttp/psr7": "^1.7|^2.0",
+                "php": ">=7.1||>=8.0"
+            },
+            "require-dev": {
+                "ext-simplexml": "*",
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "mockery/mockery": "^1.3.3",
+                "phpstan/phpstan": "^0.12.42",
+                "phpunit/phpunit": "^7.5||9.5"
+            },
+            "suggest": {
+                "ext-simplexml": "For decoding XML-based responses."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev",
+                    "dev-develop": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\OAuth1\\Client\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ben Corlett",
+                    "email": "bencorlett@me.com",
+                    "homepage": "http://www.webcomm.com.au",
+                    "role": "Developer"
+                }
+            ],
+            "description": "OAuth 1.0 Client Library",
+            "keywords": [
+                "Authentication",
+                "SSO",
+                "authorization",
+                "bitbucket",
+                "identity",
+                "idp",
+                "oauth",
+                "oauth1",
+                "single sign on",
+                "trello",
+                "tumblr",
+                "twitter"
+            ],
+            "support": {
+                "issues": "https://github.com/thephpleague/oauth1-client/issues",
+                "source": "https://github.com/thephpleague/oauth1-client/tree/v1.10.1"
+            },
+            "time": "2022-04-15T14:02:14+00:00"
         },
         {
             "name": "league/oauth2-server",
@@ -4286,6 +4506,61 @@
                 }
             ],
             "time": "2022-06-22T07:13:36+00:00"
+        },
+        {
+            "name": "onelogin/php-saml",
+            "version": "3.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/onelogin/php-saml.git",
+                "reference": "a7328b11887660ad248ea10952dd67a5aa73ba3b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/onelogin/php-saml/zipball/a7328b11887660ad248ea10952dd67a5aa73ba3b",
+                "reference": "a7328b11887660ad248ea10952dd67a5aa73ba3b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4",
+                "robrichards/xmlseclibs": ">=3.1.1"
+            },
+            "require-dev": {
+                "pdepend/pdepend": "^2.5.0",
+                "php-coveralls/php-coveralls": "^1.0.2 || ^2.0",
+                "phploc/phploc": "^2.1 || ^3.0 || ^4.0",
+                "phpunit/phpunit": "<7.5.18",
+                "sebastian/phpcpd": "^2.0 || ^3.0 || ^4.0",
+                "squizlabs/php_codesniffer": "^3.1.1"
+            },
+            "suggest": {
+                "ext-curl": "Install curl lib to be able to use the IdPMetadataParser for parsing remote XMLs",
+                "ext-gettext": "Install gettext and php5-gettext libs to handle translations",
+                "ext-openssl": "Install openssl lib in order to handle with x509 certs (require to support sign and encryption)"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OneLogin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "OneLogin PHP SAML Toolkit",
+            "homepage": "https://developers.onelogin.com/saml/php",
+            "keywords": [
+                "SAML2",
+                "onelogin",
+                "saml"
+            ],
+            "support": {
+                "email": "sixto.garcia@onelogin.com",
+                "issues": "https://github.com/onelogin/php-saml/issues",
+                "source": "https://github.com/onelogin/php-saml/"
+            },
+            "time": "2021-03-02T10:13:07+00:00"
         },
         {
             "name": "opis/closure",
@@ -5507,6 +5782,48 @@
                 }
             ],
             "time": "2022-03-27T21:42:02+00:00"
+        },
+        {
+            "name": "robrichards/xmlseclibs",
+            "version": "3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/robrichards/xmlseclibs.git",
+                "reference": "f8f19e58f26cdb42c54b214ff8a820760292f8df"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/robrichards/xmlseclibs/zipball/f8f19e58f26cdb42c54b214ff8a820760292f8df",
+                "reference": "f8f19e58f26cdb42c54b214ff8a820760292f8df",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "php": ">= 5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "RobRichards\\XMLSecLibs\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "A PHP library for XML Security",
+            "homepage": "https://github.com/robrichards/xmlseclibs",
+            "keywords": [
+                "security",
+                "signature",
+                "xml",
+                "xmldsig"
+            ],
+            "support": {
+                "issues": "https://github.com/robrichards/xmlseclibs/issues",
+                "source": "https://github.com/robrichards/xmlseclibs/tree/3.1.1"
+            },
+            "time": "2020-09-05T13:00:25+00:00"
         },
         {
             "name": "simplesoftwareio/simple-qrcode",

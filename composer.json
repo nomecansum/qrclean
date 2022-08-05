@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "24slides/laravel-saml2": "^2.0",
         "aws/aws-sdk-php": "^3.155",
         "barryvdh/laravel-async-queue": "^0.7.5",
         "barryvdh/laravel-snappy": "^0.4.7",
@@ -22,6 +23,7 @@
         "laravel/framework": "^8.65",
         "laravel/passport": "^10.4",
         "laravel/sanctum": "^2.11",
+        "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.0",
         "league/flysystem-aws-s3-v3": "^1.0",

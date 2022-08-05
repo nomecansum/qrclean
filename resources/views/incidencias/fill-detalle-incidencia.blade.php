@@ -98,7 +98,7 @@
                             {!! icono_nombre($accion->name,32,14) !!}
                             @endif
                             
-                            <span class="btn-link">{{ $accion->name }}</span> Like <i>{{ $accion->des_accion }}</i>
+                            <span class="btn-link">{{ $accion->name }}</span> <i>{{ $accion->des_accion }}</i>
                             <br>
                             <div class="float-right">
                                 @if(isset($accion->img_attach1)  && $accion->img_attach1!='')<a class="link_imagen" href="#modal_img_accion" data-toggle="modal" data-src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" style="height: 100px"></a>@endif

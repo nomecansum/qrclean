@@ -57,7 +57,7 @@
                         <label for="val_color">Color</label><br>
                         <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($estado->val_color)?$estado->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
-                    <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
+                    <div class="form-group col-md-2 mt-2" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
                             <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
@@ -72,6 +72,16 @@
                     <div class="col-md-2 p-t-30 mt-1">
                         <input type="checkbox" class="form-control  magic-checkbox" name="mca_cierre"  id="mca_cierre" value="S" {{ $estado->mca_cierre=='S'?'checked':'' }}> 
                         <label class="custom-control-label"   for="mca_cierre">Implica cierre</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="des_estado" class="control-label">ID en salas</label>
+                        <input class="form-control" required name="id_estado_salas" type="text" id="id_estado_salas" value="{{ old('id_estado_salas', optional($estado)->id_estado_salas) }}" maxlength="200" placeholder="Enter id_estado_salas here...">
+                        {!! $errors->first('id_estado_salas', '<p class="help-block">:message</p>') !!}
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="des_estado" class="control-label">ID externo</label>
+                        <input class="form-control" required name="id_estado_externo" type="text" id="id_estado_externo" value="{{ old('id_estado_externo', optional($estado)->id_estado_externo) }}" maxlength="200" placeholder="Enter id_estado_externo here...">
+                        {!! $errors->first('id_estado_externo', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
 

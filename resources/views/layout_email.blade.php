@@ -1,473 +1,354 @@
-<!DOCTYPE html
-    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-    <meta name="x-apple-disable-message-reformatting">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="telephone=no" name="format-detection">
-    <title>Nueva plantilla</title>
+<!--[if gte mso 9]>
+<xml>
+  <o:OfficeDocumentSettings>
+    <o:AllowPNG/>
+    <o:PixelsPerInch>96</o:PixelsPerInch>
+  </o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="x-apple-disable-message-reformatting">
+  <!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]-->
+  <title></title>
+  
     <style type="text/css">
-        #outlook a {
-            padding: 0;
-        }
+      @media only screen and (min-width: 620px) {
+  .u-row {
+    width: 600px !important;
+  }
+  .u-row .u-col {
+    vertical-align: top;
+  }
 
-        .es-button {
-            mso-style-priority: 100 !important;
-            text-decoration: none !important;
-        }
+  .u-row .u-col-100 {
+    width: 600px !important;
+  }
 
-        .super_negrita{
-            Margin:0;
-            margin-bottom:10px;
-            -webkit-text-size-adjust:none;
-            -ms-text-size-adjust:none;
-            mso-line-height-rule:exactly;
-            font-family:arial, 'helvetica neue', helvetica, sans-serif;
-            line-height:24px;
-            color:#6488C0;
-            font-size:16px;
-            font-weight: bold;
-        }
+}
 
-        a[x-apple-data-detectors] {
-            color: inherit !important;
-            text-decoration: none !important;
-            font-size: inherit !important;
-            font-family: inherit !important;
-            font-weight: inherit !important;
-            line-height: inherit !important;
-        }
+@media (max-width: 620px) {
+  .u-row-container {
+    max-width: 100% !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  .u-row .u-col {
+    min-width: 320px !important;
+    max-width: 100% !important;
+    display: block !important;
+  }
+  .u-row {
+    width: calc(100% - 40px) !important;
+  }
+  .u-col {
+    width: 100% !important;
+  }
+  .u-col > div {
+    margin: 0 auto;
+  }
+}
+body {
+  margin: 0;
+  padding: 0;
+}
 
-        .es-desk-hidden {
-            display: none;
-            float: left;
-            overflow: hidden;
-            width: 0;
-            max-height: 0;
-            line-height: 0;
-            mso-hide: all;
-        }
+table,
+tr,
+td {
+  vertical-align: top;
+  border-collapse: collapse;
+}
 
-        [data-ogsb] .es-button {
-            border-width: 0 !important;
-            padding: 10px 20px 10px 20px !important;
-        }
+p {
+  margin: 0;
+}
 
-        @media only screen and (max-width:600px) {
+.ie-container table,
+.mso-container table {
+  table-layout: fixed;
+}
 
-            p,
-            ul li,
-            ol li,
-            a {
-                line-height: 150% !important
-            }
+* {
+  line-height: inherit;
+}
 
-            h1 {
-                font-size: 30px !important;
-                text-align: center;
-                line-height: 120% !important
-            }
+a[x-apple-data-detectors='true'] {
+  color: inherit !important;
+  text-decoration: none !important;
+}
 
-            h2 {
-                font-size: 26px !important;
-                text-align: center;
-                line-height: 120% !important
-            }
-
-            h3 {
-                font-size: 20px !important;
-                text-align: center;
-                line-height: 120% !important
-            }
-
-            .es-header-body h1 a,
-            .es-content-body h1 a,
-            .es-footer-body h1 a {
-                font-size: 30px !important
-            }
-
-            .es-header-body h2 a,
-            .es-content-body h2 a,
-            .es-footer-body h2 a {
-                font-size: 26px !important
-            }
-
-            .es-header-body h3 a,
-            .es-content-body h3 a,
-            .es-footer-body h3 a {
-                font-size: 20px !important
-            }
-
-            .es-menu td a {
-                font-size: 16px !important
-            }
-
-            .es-header-body p,
-            .es-header-body ul li,
-            .es-header-body ol li,
-            .es-header-body a {
-                font-size: 16px !important
-            }
-
-            .es-content-body p,
-            .es-content-body ul li,
-            .es-content-body ol li,
-            .es-content-body a {
-                font-size: 16px !important
-            }
-
-            .es-footer-body p,
-            .es-footer-body ul li,
-            .es-footer-body ol li,
-            .es-footer-body a {
-                font-size: 16px !important
-            }
-
-            .es-infoblock p,
-            .es-infoblock ul li,
-            .es-infoblock ol li,
-            .es-infoblock a {
-                font-size: 12px !important
-            }
-
-            *[class="gmail-fix"] {
-                display: none !important
-            }
-
-            .es-m-txt-c,
-            .es-m-txt-c h1,
-            .es-m-txt-c h2,
-            .es-m-txt-c h3 {
-                text-align: center !important
-            }
-
-            .es-m-txt-r,
-            .es-m-txt-r h1,
-            .es-m-txt-r h2,
-            .es-m-txt-r h3 {
-                text-align: right !important
-            }
-
-            .es-m-txt-l,
-            .es-m-txt-l h1,
-            .es-m-txt-l h2,
-            .es-m-txt-l h3 {
-                text-align: left !important
-            }
-
-            .es-m-txt-r img,
-            .es-m-txt-c img,
-            .es-m-txt-l img {
-                display: inline !important
-            }
-
-            .es-button-border {
-                display: block !important
-            }
-
-            a.es-button,
-            button.es-button {
-                font-size: 20px !important;
-                display: block !important;
-                border-width: 10px 0px 10px 0px !important
-            }
-
-            .es-adaptive table,
-            .es-left,
-            .es-right {
-                width: 100% !important
-            }
-
-            .es-content table,
-            .es-header table,
-            .es-footer table,
-            .es-content,
-            .es-footer,
-            .es-header {
-                width: 100% !important;
-                max-width: 600px !important
-            }
-
-            .es-adapt-td {
-                display: block !important;
-                width: 100% !important
-            }
-
-            .adapt-img {
-                width: 100% !important;
-                height: auto !important
-            }
-
-            .es-m-p0 {
-                padding: 0px !important
-            }
-
-            .es-m-p0r {
-                padding-right: 0px !important
-            }
-
-            .es-m-p0l {
-                padding-left: 0px !important
-            }
-
-            .es-m-p0t {
-                padding-top: 0px !important
-            }
-
-            .es-m-p0b {
-                padding-bottom: 0 !important
-            }
-
-            .es-m-p20b {
-                padding-bottom: 20px !important
-            }
-
-            .es-mobile-hidden,
-            .es-hidden {
-                display: none !important
-            }
-
-            tr.es-desk-hidden,
-            td.es-desk-hidden,
-            table.es-desk-hidden {
-                width: auto !important;
-                overflow: visible !important;
-                float: none !important;
-                max-height: inherit !important;
-                line-height: inherit !important
-            }
-
-            tr.es-desk-hidden {
-                display: table-row !important
-            }
-
-            table.es-desk-hidden {
-                display: table !important
-            }
-
-            td.es-desk-menu-hidden {
-                display: table-cell !important
-            }
-
-            .es-menu td {
-                width: 1% !important
-            }
-
-            table.es-table-not-adapt,
-            .esd-block-html table {
-                width: auto !important
-            }
-
-            table.es-social {
-                display: inline-block !important
-            }
-
-            table.es-social td {
-                display: inline-block !important
-            }
-        }
+table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } @media (max-width: 480px) { #u_content_image_1 .v-container-padding-padding { padding: 15px 10px 30px !important; } #u_content_image_1 .v-src-width { width: auto !important; } #u_content_image_1 .v-src-max-width { max-width: 100% !important; } #u_content_text_1 .v-container-padding-padding { padding: 25px 30px 10px !important; } #u_content_text_1 .v-text-align { text-align: center !important; } #u_content_button_1 .v-container-padding-padding { padding: 10px 10px 35px !important; } #u_content_button_1 .v-size-width { width: 60% !important; } #u_content_button_1 .v-text-align { text-align: center !important; } }
     </style>
+  
+  
+
+<!--[if !mso]><!--><link href="https://fonts.googleapis.com/css?family=Rubik:400,700&display=swap" rel="stylesheet" type="text/css"><!--<![endif]-->
+
 </head>
 
-<body
-    style="width:100%;font-family:arial, 'helvetica neue', helvetica, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
-    <div class="es-wrapper-color" style="background-color:#F6F6F6">
-        <!--[if gte mso 9]>
-<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
-<v:fill type="tile" color="#f6f6f6"></v:fill>
-</v:background>
-<![endif]-->
-        <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0"
-            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top">
-            <tr>
-                <td valign="top" style="padding:0;Margin:0">
-                    <table class="es-content" cellspacing="0" cellpadding="0" align="center"
-                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%">
-                        <tr>
-                            <td align="center" style="padding:0;Margin:0">
-                                <table class="es-content-body" cellspacing="0" cellpadding="0" bgcolor="#ffffff"
-                                    align="center"
-                                    style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#FFFFFF;width:600px">
-                                    <tr>
-                                        <td align="left" style="padding:0;Margin:0">
-                                            <table width="100%" cellspacing="0" cellpadding="0"
-                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                <tr>
-                                                    <td class="es-m-p0r" valign="top" align="center"
-                                                        style="padding:0;Margin:0;width:600px">
-                                                        <table
-                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#809ACB"
-                                                            width="100%" cellspacing="0" cellpadding="0"
-                                                            bgcolor="#809ACB" role="presentation">
-                                                            <tr>
-                                                                <td style="padding:0;Margin:0;padding-top:15px;padding-bottom:15px;font-size:0"
-                                                                    align="center">
-                                                                    <table width="100%" height="100%" cellspacing="0"
-                                                                        cellpadding="0" border="0" role="presentation"
-                                                                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                                        <tr>
-                                                                            <td></td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    @yield('content')
+<body class="clean-body u_body" style="margin: 0;padding: 0;-webkit-text-size-adjust: 100%;background-color: #ffffff;color: #000000">
+  <!--[if IE]><div class="ie-container"><![endif]-->
+  <!--[if mso]><div class="mso-container"><![endif]-->
+  <table style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;min-width: 320px;Margin: 0 auto;background-color: #ffffff;width:100%" cellpadding="0" cellspacing="0">
+  <tbody>
+  <tr style="vertical-align: top">
+    <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
+    <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="background-color: #ffffff;"><![endif]-->
+    
 
-                                    <tr>
-                                        <td align="left" style="padding:20px;Margin:0">
-                                            <!--[if mso]><table style="width:560px" cellpadding="0" cellspacing="0"><tr><td style="width:410px" valign="top"><![endif]-->
-                                            <table class="es-left" cellspacing="0" cellpadding="0" align="left"
-                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left">
-                                                <tr>
-                                                    <td class="es-m-p20b" align="left"
-                                                        style="padding:0;Margin:0;width:410px">
-                                                        <table width="100%" cellspacing="0" cellpadding="0"
-                                                            role="presentation"
-                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                            <tr>
-                                                                <td style="padding:20px;Margin:0;font-size:0"
-                                                                    align="center">
-                                                                    <table width="100%" height="100%" cellspacing="0"
-                                                                        cellpadding="0" border="0" role="presentation"
-                                                                        style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                                        <tr>
-                                                                            <td></td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td align="right" style="padding:0;Margin:0">
-                                                                    <p
-                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:27px;color:#333333;font-size:18px">
-                                                                        <strong>Muchas gracias por su
-                                                                            colaboración</strong><br></p>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <!--[if mso]></td><td style="width:20px"></td><td style="width:130px" valign="top"><![endif]-->
-                                            <table class="es-right" cellspacing="0" cellpadding="0" align="right"
-                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:right">
-                                                <tr>
-                                                    <td align="left" style="padding:0;Margin:0;width:130px">
-                                                        <table width="100%" cellspacing="0" cellpadding="0"
-                                                            role="presentation"
-                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                            <tr>
-                                                                <td style="padding:0;Margin:0;font-size:0px"
-                                                                    align="left"><img class="adapt-img"
-                                                                        src="https://crambo.eu/newsletters/plantillas_reservas/risi_crambo.png"
-                                                                        alt
-                                                                        style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
-                                                                        width="84"></td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <!--[if mso]></td></tr></table><![endif]-->
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" style="padding:0;Margin:0;padding-top:20px">
-                                            <table width="100%" cellspacing="0" cellpadding="0"
-                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                <tr>
-                                                    <td valign="top" align="center"
-                                                        style="padding:0;Margin:0;width:600px">
-                                                        <table width="100%" cellspacing="0" cellpadding="0"
-                                                            role="presentation"
-                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                            <tr>
-                                                                <td style="padding:0;Margin:0;font-size:0px"
-                                                                    align="center"><img class="adapt-img"
-                                                                        src="https://crambo.eu/newsletters/plantillas_reservas/sombra_02.png"
-                                                                        alt
-                                                                        style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
-                                                                        width="600"></td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="Margin:0;padding-top:5px;padding-bottom:5px;padding-left:40px;padding-right:40px;background-color:#809ACB"
-                                            bgcolor="#809ACB" align="left">
-                                            <table width="100%" cellspacing="0" cellpadding="0"
-                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                <tr>
-                                                    <td valign="top" align="center"
-                                                        style="padding:0;Margin:0;width:520px">
-                                                        <table width="100%" cellspacing="0" cellpadding="0"
-                                                            role="presentation"
-                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                            <tr>
-                                                                <td align="center" style="padding:0;Margin:0">
-                                                                    <p
-                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#FFFFFF;font-size:12px">
-                                                                        <strong>Recuerde que este e-mail no acepta
-                                                                            mensajes entrantes. Para cualquier duda, por
-                                                                            favor, acceda a la solución y a través de un
-                                                                            nuevo escaneo háganoslo saber.</strong><br>
-                                                                    </p>
-                                                                    <p
-                                                                        style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;color:#FFFFFF;font-size:12px">
-                                                                        <strong>¡Estaremos encantados de
-                                                                            ayudarle!</strong></p>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" style="padding:0;Margin:0;padding-top:20px">
-                                            <table width="100%" cellspacing="0" cellpadding="0"
-                                                style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                <tr>
-                                                    <td valign="top" align="center"
-                                                        style="padding:0;Margin:0;width:600px">
-                                                        <table width="100%" cellspacing="0" cellpadding="0"
-                                                            role="presentation"
-                                                            style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                                            <tr>
-                                                                <td style="padding:0;Margin:0;font-size:0px"
-                                                                    align="center"><img class="adapt-img"
-                                                                        src="https://crambo.eu/newsletters/plantillas_reservas/barra_inferior.png"
-                                                                        alt
-                                                                        style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"
-                                                                        width="600"></td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+<div class="u-row-container" style="padding: 0px;background-color: #ebdbc6">
+  <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
+    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
+      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: #ebdbc6;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: transparent;"><![endif]-->
+      
+<!--[if (mso)|(IE)]><td align="center" width="600" style="background-color: #ebdbc6;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
+<div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
+  <div style="background-color: #ebdbc6;height: 100%;width: 100% !important;">
+  <!--[if (!mso)&(!IE)]><!--><div style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;"><!--<![endif]-->
+  
+<table id="u_content_image_1" style="font-family:'Rubik',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:16px 0px;font-family:'Rubik',sans-serif;" align="left">
+        
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="left">
+      
+      <img align="left" border="0" src="{{ url('img/Mosaic_brand_300.png') }}" alt="Illustration" title="Illustration" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 25%;max-width: 160px;" width="160" class="v-src-width v-src-max-width"/>
+      
+    </td>
+    <td>
+
+    </td>
+    <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="left">
+      @yield('logo_cliente')
+        
+    </td>
+  </tr>
+</table>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
+  </div>
+</div>
+<!--[if (mso)|(IE)]></td><![endif]-->
+      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
     </div>
+  </div>
+</div>
+
+
+
+<div class="u-row-container" style="padding: 0px;background-color: transparent">
+  <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
+    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
+      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: transparent;"><![endif]-->
+      
+<!--[if (mso)|(IE)]><td align="center" width="600" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
+  <div style="height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+  <!--[if (!mso)&(!IE)]><!--><div style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
+  
+<table style="font-family:'Rubik',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+    <td class="v-text-align" style="padding-right: 0px;padding-left: 0px; widht: 50px" align="left">
+        
+      </td>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Rubik',sans-serif;" align="right">
+        <div class="v-text-align" style="line-height: 140%; text-align: left; word-wrap: break-word;">
+            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 20px; line-height: 28px;"><img align="left" border="0" src="{{ url('img/image-6.jpeg') }}" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 50px;max-width: 150px;" width="150" class="v-src-width v-src-max-width"/>
+                <span style="margin-top: 30px; font-weight: bold">Se ha notificado una incidencia</span></span></p>
+        </div>
+      </td>
+      
+    </tr>
+  </tbody>
+</table>
+
+  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
+  </div>
+</div>
+<!--[if (mso)|(IE)]></td><![endif]-->
+      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
+    </div>
+  </div>
+</div>
+
+
+
+<div class="u-row-container" style="padding: 0px;background-color: transparent">
+  <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
+    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
+      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: transparent;"><![endif]-->
+      
+<!--[if (mso)|(IE)]><td align="center" width="600" style="background-color: #ffffff;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
+  <div style="background-color: #ffffff;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+  <!--[if (!mso)&(!IE)]><!--><div style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
+  
+<table id="u_content_text_1" style="font-family:'Rubik',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:60px 30px 20px;font-family:'Rubik',sans-serif;" align="left">
+        
+  <div class="v-text-align" style="line-height: 160%; text-align: justify; word-wrap: break-word;">
+    <p style="font-size: 14px; line-height: 160%;"><span style="font-size: 16px; line-height: 25.6px;"><strong>@yield('saludo')</strong></span></p>
+    @yield('cuerpo')
+  </div>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table id="u_content_button_1" style="font-family:'Rubik',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 25px 30px;font-family:'Rubik',sans-serif;" align="left">
+        
+        @yield('enlace')
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
+  </div>
+</div>
+<!--[if (mso)|(IE)]></td><![endif]-->
+      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
+    </div>
+  </div>
+</div>
+
+
+
+<div class="u-row-container" style="padding: 0px;background-color: #ebdbc6">
+  <div class="u-row" style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
+    <div style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
+      <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding: 0px;background-color: #ebdbc6;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr style="background-color: transparent;"><![endif]-->
+      
+<!--[if (mso)|(IE)]><td align="center" width="600" style="background-color: #ebdbc6;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+<div class="u-col u-col-100" style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
+  <div style="background-color: #ebdbc6;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+  <!--[if (!mso)&(!IE)]><!--><div style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;"><!--<![endif]-->
+  
+<table style="font-family:'Rubik',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:35px 10px 10px;font-family:'Rubik',sans-serif;" align="left">
+        
+<div align="center">
+  <div style="display: table; max-width:234px;">
+  <!--[if (mso)|(IE)]><table width="234" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-collapse:collapse;" align="center"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; mso-table-lspace: 0pt;mso-table-rspace: 0pt; width:234px;"><tr><![endif]-->
+  
+    
+    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
+    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
+      <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
+        <a href="https://www.facebook.com/cramboeu/?modal=admin_todo_tour" title="Facebook" target="_blank">
+          <img src="{{ url('img/image-5.png') }}" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+        </a>
+      </td></tr>
+    </tbody></table>
+    <!--[if (mso)|(IE)]></td><![endif]-->
+    
+    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
+    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
+      <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
+        <a href="https://twitter.com/cramboEU?lang=es" title="Twitter" target="_blank">
+          <img src="{{ url('img/image-1.png') }}" alt="Twitter" title="Twitter" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+        </a>
+      </td></tr>
+    </tbody></table>
+    <!--[if (mso)|(IE)]></td><![endif]-->
+    
+    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
+    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
+      <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
+        <a href="https://www.linkedin.com/company/cramboeu/" title="LinkedIn" target="_blank">
+          <img src="{{ url('img/image-3.png') }}" alt="LinkedIn" title="LinkedIn" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+        </a>
+      </td></tr>
+    </tbody></table>
+    <!--[if (mso)|(IE)]></td><![endif]-->
+    
+    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
+    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
+      <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
+        <a href="https://www.instagram.com/crambo_eu/" title="Instagram" target="_blank">
+          <img src="{{ url('img/image-4.png') }}" alt="Instagram" title="Instagram" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+        </a>
+      </td></tr>
+    </tbody></table>
+    <!--[if (mso)|(IE)]></td><![endif]-->
+    
+    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 0px;" valign="top"><![endif]-->
+    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 0px">
+      <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
+        <a href="https://www.youtube.com/channel/UC1AlXs5dP8qAy4yDENCkUyA?view_as=subscriber" title="YouTube" target="_blank">
+          <img src="{{ url('img/image-2.png') }}" alt="YouTube" title="YouTube" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+        </a>
+      </td></tr>
+    </tbody></table>
+    <!--[if (mso)|(IE)]></td><![endif]-->
+    
+    
+    <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
+  </div>
+</div>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<table style="font-family:'Rubik',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+  <tbody>
+    <tr>
+      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 40px;font-family:'Rubik',sans-serif;" align="left">
+        
+  <div class="v-text-align" style="color: #000000; line-height: 140%; text-align: center; word-wrap: break-word;">
+    <p style="font-size: 14px; line-height: 140%;">Crambo, S.A. c/ de los Torneros, 7 </p>
+<p style="font-size: 14px; line-height: 140%;">28830 San Fernando de Henares, Madrid (España) | CIF A78198017</p>
+<p style="font-size: 14px; line-height: 140%;"> </p>
+<p style="font-size: 10px; line-height: 140%;">Recuerde que este e-mail no acepta mensajes entrantes. Para cualquier duda, por favor, acceda spotlinker y a través de un nuevo escaneo háganoslo saber.
+    ¡Estaremos encantados de ayudarle!</p>
+  </div>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  <!--[if (!mso)&(!IE)]><!--></div><!--<![endif]-->
+  </div>
+</div>
+<!--[if (mso)|(IE)]></td><![endif]-->
+      <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
+    </div>
+  </div>
+</div>
+
+
+    <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+    </td>
+  </tr>
+  </tbody>
+  </table>
+  <!--[if mso]></div><![endif]-->
+  <!--[if IE]></div><![endif]-->
 </body>
 
 </html>

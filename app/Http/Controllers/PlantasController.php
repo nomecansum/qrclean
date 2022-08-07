@@ -198,9 +198,10 @@ class PlantasController extends Controller
     {
         $rules = [
                 'des_planta' => 'nullable|string|min:0|max:50',
-            'id_cliente' => 'nullable',
-            'id_edificio' => 'nullable', 
-            'num_orden' => 'required', 
+                'abreviatura' => 'nullable|string|min:0|max:20',
+                'id_cliente' => 'nullable',
+                'id_edificio' => 'nullable', 
+                'num_orden' => 'required', 
         ];
         
         $data = $request->validate($rules);

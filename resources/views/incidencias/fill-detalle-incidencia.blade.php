@@ -35,7 +35,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-md-12">
-                    {{ $incidencia->txt_incidencia }}
+                    {!! $incidencia->txt_incidencia !!}
                 </div>
             </div>
             @if(isset($incidencia->fec_cierre))

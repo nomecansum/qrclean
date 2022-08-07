@@ -51,7 +51,8 @@ class incidencias extends Model
                   'id_externo',
                   'id_incidencia_salas',
                   'url_detalle_incidencia',
-                  'val_procedencia'
+                  'val_procedencia',
+                  'val_prioridad'
               ];
 
     /**

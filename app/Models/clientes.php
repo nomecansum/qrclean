@@ -33,20 +33,22 @@ class clientes extends Model
      * @var array
      */
     protected $fillable = [
-                  'CIF',
-                  'cod_tipo_cliente',
-                  'fec_borrado',
-                  'id_distribuidor',
-                  'img_logo',
-                  'img_logo_menu',
-                  'locked',
-                  'mca_appmovil',
-                  'mca_vip',
                   'nom_cliente',
                   'nom_contacto',
-                  'tel_cliente',
+                  'img_logo',
+                  'locked',
+                  'val_apikey',
                   'token_1uso',
-                  'val_apikey'
+                  'mca_appmovil',
+                  'tel_cliente',
+                  'CIF',
+                  'fec_borrado',
+                  'mca_vip',
+                  'cod_tipo_cliente',
+                  'id_distribuidor',
+                  'img_logo_menu',
+                  'id_cliente_salas',
+                  'id_externo'
               ];
 
     /**
@@ -104,6 +106,16 @@ class clientes extends Model
     }
 
     /**
+     * Get the contactos for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function contactos()
+    {
+        return $this->hasMany('App\Models\Contacto','id_cliente','id_cliente');
+    }
+
+    /**
      * Get the encuestas for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -131,6 +143,16 @@ class clientes extends Model
     public function incidencias()
     {
         return $this->hasMany('App\Models\Incidencia','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the feriasMarcas for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function feriasMarcas()
+    {
+        return $this->hasMany('App\Models\Marca','id_cliente','id_cliente');
     }
 
     /**
@@ -164,6 +186,16 @@ class clientes extends Model
     }
 
     /**
+     * Get the salas for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function salas()
+    {
+        return $this->hasMany('App\Models\Sala','id_cliente','id_cliente');
+    }
+
+    /**
      * Get the tags for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -191,6 +223,16 @@ class clientes extends Model
     public function puestosTipos()
     {
         return $this->hasMany('App\Models\PuestosTipo','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the ferias for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function ferias()
+    {
+        return $this->hasMany('App\Models\Feria','id_cliente','id_cliente');
     }
 
 

@@ -29,14 +29,14 @@
             {{ csrf_field() }}
                 <div class="row">
                         <input type="hidden" name="id" value="{{ $id }}">
-                        <div class="form-group col-md-8 {{ $errors->has('des_tipo_incidencia') ? 'has-error' : '' }}">
+                        <div class="form-group col-md-7 {{ $errors->has('des_tipo_incidencia') ? 'has-error' : '' }}">
                             <label for="des_estado" class="control-label">Nombre</label>
                             <input class="form-control" required name="des_estado" type="text" id="des_estado" value="{{ old('des_estado', optional($estado)->des_estado) }}" maxlength="200" placeholder="Enter nombre here...">
                             {!! $errors->first('des_estado', '<p class="help-block">:message</p>') !!}
                         </div>
 
                         @if(checkPermissions(['Estados de incidencia'],['D']) && ($estado->mca_fijo!='S' || ($estado->mca_fijo=='S' && fullAccess())))
-                        <div class="form-group col-md-4 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
+                        <div class="form-group col-md-3 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
                             <label for="id_cliente" class="control-label">Cliente</label>
                             <select class="form-control" required id="id_cliente" name="id_cliente">
                                 @foreach ($Clientes as $key => $Cliente)
@@ -49,14 +49,15 @@
                             {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
                         </div>
                         @endif
+                        <div class="form-group col-md-2" style="margin-top: 7px">
+                            <label for="val_color">Color</label><br>
+                            <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($estado->val_color)?$estado->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        </div>
 
                         
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-2" style="margin-top: 7px">
-                        <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($estado->val_color)?$estado->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
-                    </div>
+                    
                     <div class="form-group col-md-2 mt-2" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
@@ -72,6 +73,10 @@
                     <div class="col-md-2 p-t-30 mt-1">
                         <input type="checkbox" class="form-control  magic-checkbox" name="mca_cierre"  id="mca_cierre" value="S" {{ $estado->mca_cierre=='S'?'checked':'' }}> 
                         <label class="custom-control-label"   for="mca_cierre">Implica cierre</label>
+                    </div>
+                    <div class="col-md-2 p-t-30 mt-1">
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_defecto"  id="mca_defecto" value="S" {{ $estado->mca_defecto=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_defecto">Estado defecto</label>
                     </div>
                     <div class="form-group col-md-2">
                         <label for="des_estado" class="control-label">ID en salas</label>

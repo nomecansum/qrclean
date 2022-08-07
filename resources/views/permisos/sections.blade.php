@@ -105,7 +105,7 @@
 													<div class="modal-header">
 
 															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-															  <span aria-hidden="true">×</span></button>
+															  <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
 															  <div><img src="/img/logo_enaire_20.png" class="float-right"></div>
 															<h4 class="modal-title">¿Borrar seccion {{$secc->des_seccion}}?</h4>
 														  </div>
@@ -136,7 +136,7 @@
 		  <div class="modal-content">
 			<div class="modal-header">
 			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">×</span></button>
+				<span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
 			  <h4 class="modal-title">Default Modal</h4>
 			</div>
 			<div class="modal-body">

@@ -34,14 +34,15 @@ class puestos_tipos extends Model
      */
     protected $fillable = [
                   'des_tipo_puesto',
-                  'hora_liberar',
-                  'id_cliente',
-                  'max_usos',
                   'mca_fijo',
-                  'observaciones',
-                  'val_color',
+                  'id_cliente',
                   'val_icono',
-                  'mca_liberar_auto'
+                  'val_color',
+                  'max_usos',
+                  'hora_liberar',
+                  'observaciones',
+                  'mca_liberar_auto',
+                  'abreviatura'
               ];
 
     /**
@@ -78,5 +79,26 @@ class puestos_tipos extends Model
         return $this->hasMany('App\Models\Puesto','id_tipo_puesto','id_tipo_puesto');
     }
 
+    /**
+     * Set the hora_liberar.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setHoraLiberarAttribute($value)
+    {
+        $this->attributes['hora_liberar'] = $value;
+    }
+
+    /**
+     * Get hora_liberar in array format
+     *
+     * @param  string  $value
+     * @return array
+     */
+    public function getHoraLiberarAttribute($value)
+    {
+        return $value;
+    }
 
 }

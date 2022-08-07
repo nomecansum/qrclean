@@ -129,6 +129,45 @@
             "api-key": "id_edificio",
             "is-api-visible": true,
             "api-description": "The id edificio of the model."
+        },
+        {
+            "name": "abreviatura",
+            "labels": "Abreviatura",
+            "html-type": "text",
+            "css-class": "",
+            "options": {},
+            "html-value": null,
+            "validation": "nullable|string|min:0|max:20",
+            "is-on-index": true,
+            "is-on-show": true,
+            "is-on-form": true,
+            "data-type": "string",
+            "data-type-params": [
+                20
+            ],
+            "data-value": null,
+            "is-index": false,
+            "is-unique": false,
+            "is-primary": false,
+            "comment": null,
+            "is-nullable": true,
+            "is-header": false,
+            "is-unsigned": false,
+            "is-auto-increment": false,
+            "is-inline-options": false,
+            "is-date": false,
+            "date-format": "",
+            "cast-as": "",
+            "placeholder": "Enter abreviatura here...",
+            "delimiter": "; ",
+            "range": [],
+            "foreign-relation": null,
+            "foreign-constraint": null,
+            "on-store": null,
+            "on-update": null,
+            "api-key": "abreviatura",
+            "is-api-visible": true,
+            "api-description": "The abreviatura of the model."
         }
     ],
     "relations": [
@@ -140,7 +179,7 @@
                 "id_edificio",
                 "id_edificio"
             ],
-            "field": "des_planta"
+            "field": "id_edificio"
         },
         {
             "name": "puestos",

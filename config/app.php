@@ -140,8 +140,10 @@ return [
 
     'AWS_URL'=>env('AWS_URL','/'),
     'url_asset_mail'=>'https://spotdesking.spotlinker.com/',
-    'tipo_puesto_parking'=>[2],
-    'tipo_puesto_sala'=>[4],
+    'tipo_puesto_parking'=>[2,221,271,131],
+    'tipo_puesto_sala'=>[4,281,191],
+    'url_base_api_salas'=>env('URL_BASE_API_SALAS','https://salas-test.spotlinker.com/puestos_api/'),
+    'token_api_salas'=>env('TOKEN_API_SALAS','SP.JlYzRknsAClwUuYZZkMxRwPHJYbHhEdRakcDAPdjkJFwjcIEoD.6e09d8332dffd653f994'),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

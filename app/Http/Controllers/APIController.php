@@ -15,36 +15,10 @@ use App\Models\users;
 use App\Models\causas_cierre;
 use App\Models\incidencias;
 use App\Models\puestos;
-/**
- * @OA\OpenApi(
- *   @OA\Server(
- *      url="/api"
- *   ),
- *   @OA\Info(
- *      version="1.0.0",
- *      title="Spotdesking API",
- *      description="Spotdesking [Aka QRCLEAN] API Description",
- * ),
- *  * @OA\Tag(
- *    name="Autorizacion",
- *    description="Consultas relacionadas con la autorización de usuarios para el API",
- *),
- * @OA\Tag(
- *    name="Generales",
- *    description="Consulta de datos existentes en la plataforma",
- *),
- * @OA\Tag(
- *    name="Gestion de incidencias",
- *    description="Consulta de para la gestion de incidencias generica",
- *),
-  * @OA\Tag(
- *    name="Salas",
- *    description="Consulta de para la integracion con gestion de salas",
- *),
- * )
- */
-
-
+use App\Models\salas;
+use App\Models\clientes;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class APIController extends Controller
 {
@@ -92,29 +66,50 @@ class APIController extends Controller
         }
     }
 
+    public static function get_causa_cierre($r){
+        try{
+            $result=causas_cierre::where('id_cliente',Auth::user()->id_cliente)
+                ->where(function($q) use($r){
+                    $q->where('id_causa_cierre',$r->id_causa_cierre)
+                    ->orWhere('id_externo',$r->id_causa_cierre);
+                })
+                ->first()->id_causa_cierre;
+            return $result;
+        } catch (\Exception $e) {
+            throw new \ErrorException('La causa de cierre '.$r->id_causa_cierre.' no existe');
+        }
+    }
+
+    public static function respuesta_error($texto,$codigo){
+        return response()->json([
+            'result'=>'error',
+            'error' => $texto,
+            'timestamp'=>Carbon::now(),
+        ])->setStatusCode($codigo);
+    }
+
+    public static function enviar_request_salas($metodo,$accion,$param,$body){
+        $response=Http::withOptions(['verify' => false])
+            ->withHeaders(['Accept' => 'application/json', 'Content-Type' => 'application/json','Authorization'=>config('app.token_api_salas')])
+            ->withbody($body,'application/json')
+            ->$metodo(config('app.url_base_api_salas').$accion);
+        
+        if($response->status()!=200){
+            Log::error('Error en la respuesta de la API de salas: '.$response->body());
+            return APIController::respuesta_error('Error en la respuesta de la API de salas: '.$response->body(),$response->status());
+        } 
+        return [
+            "body"=>$response->body(),
+            "status"=>$response->status()
+           ];
+    }
+
     ////////////////////////////////////////////////////////////////////
 
 
 ////////////////////FUNCIONES GENERALES//////////////////////////
-       /**
-        * @OA\Get(
-        *     path="/test",
-        *     tags={"Generales"},
-        *     summary="Consulta de test de la API",
-        *     security={{"passport":{}}},   
-        *     @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent()
-        *       ),
-        *     @OA\Response(
-        *         response="default",
-        *         description="Ha ocurrido un error."
-        *     )
-        * )
-        */
-    public function test()
-    {
+
+    public function test(){
          
         return response()->json([
         'result'=>'ok',
@@ -122,34 +117,15 @@ class APIController extends Controller
         'message' => 'Hello World!']);
     }
     
-    /**
-     * @OA\Get(
-     *     path="/entidades",
-     *     tags={"Generales"},
-     *     summary="Consulta de entidades del cliente",
-     *     security={{"passport":{}}},
-     *     
-     *     @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent()
-     *       ),
-     *     @OA\Response(
-     *         response="default",
-     *         description="Ha ocurrido un error."
-     *     )
-     * )
-     */
-    public function entidades()
-    {
+    public function entidades(){
         
         $edificios=DB::table('edificios')
-            ->select('id_edificio','des_edificio')
+            ->select('id_edificio','des_edificio','abreviatura')
             ->where('edificios.id_cliente',Auth::user()->id_cliente)
             ->get();
 
         $plantas=DB::table('plantas')
-            ->select('id_planta','des_planta','id_edificio','num_orden')
+            ->select('id_planta','des_planta','id_edificio','num_orden','abreviatura')
             ->where('plantas.id_cliente',Auth::user()->id_cliente)
             ->get();
         
@@ -169,7 +145,7 @@ class APIController extends Controller
         }
 
         $tipos_puesto = DB::table('puestos_tipos')
-            ->select('id_tipo_puesto','des_tipo_puesto','val_icono','val_color')
+            ->select('id_tipo_puesto','des_tipo_puesto','val_icono','val_color','abreviatura')
             ->where(function($q){
                 $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
                 if(config_cliente('mca_mostrar_datos_fijos')=='S'){
@@ -179,7 +155,7 @@ class APIController extends Controller
         ->get();
 
         $tipos_incidencia=DB::table('incidencias_tipos')
-            ->select('id_tipo_incidencia','des_tipo_incidencia','val_icono','val_color','list_tipo_puesto')
+            ->select('id_tipo_incidencia','des_tipo_incidencia','val_icono','val_color','list_tipo_puesto','id_tipo_externo','id_tipo_salas','val_responsable')
             ->where('incidencias_tipos.id_cliente',Auth::user()->id_cliente)
             ->get();
 
@@ -190,7 +166,7 @@ class APIController extends Controller
         }
 
         $causas_cierre=DB::table('causas_cierre')
-            ->select('id_causa_cierre','des_causa','val_icono','val_color')
+            ->select('id_causa_cierre','des_causa','val_icono','val_color','mca_default','id_externo')
             ->where('causas_cierre.id_cliente',Auth::user()->id_cliente)
             ->get();
 
@@ -213,70 +189,26 @@ class APIController extends Controller
         return response()->json($respuesta);
     }
 
-    public function echo_test(Request $r)
-    {
-        echo("QUERY STRING:\r\n");
-        echo($r->getQueryString());
-        echo("\r\n\r\n");
-        echo("HEADERS:\r\n");
-        echo($r->headers);
-        echo("\r\n\r\n");
-        echo("BODY:\r\n");
-        echo($r->getContent());
-        echo("\r\n\r\n");
+    public function echo_test(Request $r){
+        $data=[
+            "QUERY_STRING"=>$r->getQueryString(),
+            "HEADERS"=>$r->headers->all(),
+            "BODY"=>$r->getContent(),
+        ];
+        return response()->json($data);
+
+    }
+
+    public function process_test(Request $r){
+        $data=[
+            "id_incidencia"=>"FF2202",
+            "url_detalle"=>"http://localhost:8080/incidencias/FF2202"
+        ];
+        return response()->json($data);
     }
 
 ///////////////////////FUNCIONES PARA INCIDENCIAS/////////////////
-       /**
-        * @OA\Post(
-        *     path="/incidencias/list",
-        *     tags={"Gestion de incidencias"},
-        *     summary="Devuelve las incidencias de un cliente segun los filtros",
-        *     security={{"passport":{}}},
-        *     
-        * @OA\RequestBody(
-        *         @OA\JsonContent(
-        *                 @OA\Property(
-        *                     description="Fecha de inicio de la consulta",
-        *                     property="fec_desde",
-        *                     type="date"
-        *                 ),
-        *                 @OA\Property(
-        *                     description="Fecha de fin de la consulta",
-        *                     property="fec_hasta",
-        *                     type="date"
-        *                 ),   
-        *                 @OA\Property(
-        *                     description="IDs de tipo de incidencia",
-        *                     property="tipoinc",
-        *                     type="array",
-        *                     @OA\Items(type="integer")
-        *                 ),
-        *                 @OA\Property(
-        *                     description="IDS de estado de la incidencia",
-        *                     property="id_estado",
-        *                     type="array",
-        *                     @OA\Items(type="integer")
-        *                 ),
-        *                 @OA\Property(
-        *                     description="Puestos afectado por la incidencia",
-        *                     property="puesto",
-        *                     type="array",
-        *                     @OA\Items(type="integer")
-        *                 ),
-        *             )
-        *     ),
-        *     @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent()
-        *       ),
-        *     @OA\Response(
-        *         response="default",
-        *         description="Ha ocurrido un error."
-        *     )
-        * )
-        */
+
     public function get_incidents(Request $r){
 
         try{
@@ -285,7 +217,6 @@ class APIController extends Controller
             $f2=(isset($r->fec_hasta))?Carbon::parse($r->fec_hasta):Carbon::now()->endOfMonth();
             $fechas=$f1->format('d/m/Y').' - '.$f2->format('d/m/Y');
             $r->request->add(['fechas' => $fechas]);
-
             $r->request->add(['ac' => 'B']);
 
 
@@ -322,75 +253,10 @@ class APIController extends Controller
                 'incidencias' => $incidencias]);
         }catch (\Throwable $e) {
             savebitacora('ERROR Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","ERROR"); 
-            return [
-                'result'=>'error',
-                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
-                'timestamp'=>Carbon::now(),
-            ];
+            return $this->respuesta_error('ERROR Solicitud de listado de incidencias '.$e->getMessage(),400);
         } 
     }
 
-       /**
-        * @OA\Put(
-        *     path="/incidencias",
-        *     tags={"Gestion de incidencias"},
-        *     summary="Crea una nueva incidencia",
-        *     security={{"passport":{}}},
-        *     
-        * @OA\RequestBody(
-        *         @OA\JsonContent(
-        *                 required={"des_incidencia","id_tipo_incidencia","id_puesto","id_usuario_apertura"},
-        *                 @OA\Property(
-        *                     description="Tiutulo de la incidencia",
-        *                     property="des_incidencia",
-        *                     type="string",
-        *                     maxLength=500
-        *                 ),
-        *                 @OA\Property(
-        *                     description="Texto descriptivo  de la incidencia",
-        *                     property="txt_incidencia",
-        *                     type="string",
-        *                     maxLength=65535
-        *                 ),
-        *                 @OA\Property(
-        *                     description="ID externo",
-        *                     property="id_incidencia_externo",
-        *                     type="number",
-        *                     maxLength=100
-        *                 ),
-        *                 @OA\Property(
-        *                     description="Tipo de la incidencia",
-        *                     property="id_tipo_incidencia",
-        *                     type="number"
-        *                 ),   
-        *                 @OA\Property(
-        *                     description="ID Estado de la incidencia",
-        *                     property="id_estado",
-        *                     type="number"
-        *                 ),
-        *                 @OA\Property(
-        *                     description="ID Puesto afectado por la incidencia",
-        *                     property="id_puesto",
-        *                     type="string"
-        *                 ),
-        *                 @OA\Property(
-        *                     description="ID de usuario que abre la incidencia",
-        *                     property="id_usuario_apertura",
-        *                     type="string"
-        *                 ),
-        *             )
-        *     ),
-        *     @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent()
-        *       ),
-        *     @OA\Response(
-        *         response="default",
-        *         description="Ha ocurrido un error."
-        *     )
-        * )
-        */
     public function crear_incidencia(Request $r){
 
         try{
@@ -399,58 +265,16 @@ class APIController extends Controller
             $r->request->add(['id_cliente' => Auth::user()->id_cliente]);
             $r->request->add(['id_puesto' => $this->get_puesto($r)]);
             $r->request->add(['procedencia' => "api"]);
+
             $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
             savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
-            return [
-                'result'=>'error',
-                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
-                'timestamp'=>Carbon::now(),
-            ];
+            return $this->respuesta_error('ERROR creando incidencia '.$e->getMessage(),400);
         } 
     }
 
-      /**
-        * @OA\post(
-        *     path="/incidencias/add_accion",
-        *     tags={"Gestion de incidencias"},
-        *     summary="Añade una nueva accion a la  incidencia",
-        *     security={{"passport":{}}},
-        *     
-        * @OA\RequestBody(
-        *         @OA\JsonContent(
-        *                 required={"id_incidencia","id_usuario","des_accion"},
-        *                 @OA\Property(
-        *                     description="ID de incidencia",
-        *                     property="id_incidencia",
-        *                     type="number"
-        *                 ),
-        *                 @OA\Property(
-        *                     description="Texto  de la accion",
-        *                     property="des_accion",
-        *                     maxLength=2000,
-        *                     type="string"
-        *                 ),
-        *                 @OA\Property(
-        *                     description="ID de usuario que realiza la accion",
-        *                     property="id_usuario",
-        *                     type="string"
-        *                 )
-        *             )
-        *     ),
-        *     @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent()
-        *       ),
-        *     @OA\Response(
-        *         response="default",
-        *         description="Ha ocurrido un error."
-        *     )
-        * )
-        */
     public function add_accion(Request $r){
         try{
             $r->request->add(['id_usuario' => $this->get_usuario($r)]);
@@ -462,118 +286,27 @@ class APIController extends Controller
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR añadiendo accion a incidencia '.json_encode($r->all()),"API","add_accion","ERROR");
-            return [
-                'result'=>'error',
-                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
-                'timestamp'=>Carbon::now(),
-            ];
+            return $this->respuesta_error('ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),400);
         } 
         
     }
 
-        /**
-            * @OA\post(
-            *     path="/incidencias/cerrar",
-            *     tags={"Gestion de incidencias"},
-            *     summary="Cierra una incidencia",
-            *     security={{"passport":{}}},
-            *     
-            * @OA\RequestBody(
-            *         @OA\JsonContent(
-            *                 required={"id_incidencia","id_usuario"},
-            *                 @OA\Property(
-            *                     description="ID de incidencia",
-            *                     property="id_incidencia",
-            *                     type="number"
-            *                 ),
-            *                 @OA\Property(
-            *                     description="Comentario de cierre de la incidencia",
-            *                     property="comentario_cierre",
-            *                     type="string",
-            *                     maxLength=65535
-            *                 ),
-            *                 @OA\Property(
-            *                     description="ID de usuario que realiza la accion",
-            *                     property="id_usuario",
-            *                     type="string"
-            *                 ),
-            *                 @OA\Property(
-            *                     description="Identificador de causa de cierre",
-            *                     property="id_causa_cierre",
-            *                     type="number"
-            *                 )
-            *             )
-            *     ),
-            *     @OA\Response(
-            *          response=200,
-            *          description="Successful operation",
-            *          @OA\JsonContent()
-            *       ),
-            *     @OA\Response(
-            *         response="default",
-            *         description="Ha ocurrido un error."
-            *     )
-            * )
-            */
     public function cerrar_ticket(Request $r){
         try{
             $r->request->add(['id_usuario' => $this->get_usuario($r)]);
             $r->request->add(['id_incidencia' => $this->get_incidencia($r)]);
+            $r->request->add(['id_causa_cierre' => $this->get_causa_cierre($r)]);
             $r->request->add(['procedencia' => "api"]);
 
-            if(!isset($r->id_causa_cierre)){
-                $causa=causas_cierre::where('id_cliente',Auth::user()->id_cliente)
-                    ->orderby('mca_default','desc')
-                    ->orderby('id_causa_cierre','asc')
-                    ->first()->id_causa_cierre;  
-                $r->request->add(['id_causa_cierre' => $causa]);
-            }
             $respuesta=app('App\Http\Controllers\IncidenciasController')->cerrar($r);
             savebitacora('Cerrar incidencia incidencia '.json_encode($r->all()),"API","cerrar_ticket","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR cerrando incidencia '.json_encode($r->all()),"API","cerrar_ticket","ERROR");
-            return [
-                'result'=>'error',
-                'error' => 'ERROR: Ocurrio un error cerrando incidencia '.$e->getMessage(),
-                'timestamp'=>Carbon::now(),
-            ];
+            return $this->respuesta_error('ERROR: Ocurrio un error cerrando incidencia '.$e->getMessage(),400);
         } 
     }
 
-       /**
-        * @OA\post(
-        *     path="/incidencias/reabrir",
-        *     tags={"Gestion de incidencias"},
-        *     summary="Reabre una incidencia cerrada",
-        *     security={{"passport":{}}},
-        *     
-        * @OA\RequestBody(
-        *         @OA\JsonContent(
-        *                 required={"id_incidencia","id_usuario"},
-        *                 @OA\Property(
-        *                     description="ID de incidencia",
-        *                     property="id_incidencia",
-        *                     type="number"
-        *                 ),
-        *                 @OA\Property(
-        *                     description="ID de usuario que realiza la accion",
-        *                     property="id_usuario",
-        *                     type="string"
-        *                 )
-        *             )
-        *     ),
-        *     @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent()
-        *       ),
-        *     @OA\Response(
-        *         response="default",
-        *         description="Ha ocurrido un error."
-        *     )
-        * )
-        */
     public function reabrir_ticket(Request $r){
         try{
             $r->request->add(['id_usuario' => $this->get_usuario($r)]);
@@ -585,14 +318,127 @@ class APIController extends Controller
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR reabriendo incidencia '.json_encode($r->all()),"API","reabrir_ticket","ERROR");
-            return [
-                'result'=>'error',
-                'error' => 'ERROR: Ocurrio un error reabriendo incidencia '.$e->getMessage(),
-                'timestamp'=>Carbon::now(),
-            ];
+            return $this->respuesta_error('ERROR: Ocurrio un error reabriendo incidencia '.$e->getMessage(),400);
+        } 
+    }
+    
+///////////////////////FUNCIONES PARA SALAS///////////////////////
+
+    public function solicitud_sincro_datos(Request $r,$fecha,$cliente){
+        try{
+            //Buscamos el cliente
+            $cliente=clientes::where('id_externo',$cliente)->first();
+            if(!isset($cliente)){
+                return $this->respuesta_error('ERROR: El cliente no existe',400);
+            }
+            $r->request->add(['procedencia' => "salas"]);
+            //Codigo para la resincronizacion de incidencias
+            $url="get_estructura_incidencias_empresa_desde_fecha/".$fecha;
+            $respuesta=$this->enviar_request_salas("GET",$url,"","");
+            $respuesta=json_decode($respuesta['body']);
+
+            //Sincronizamos las salas
+            $salas_spotlinker=json_decode($respuesta->a_salas);
+            foreach($salas_spotlinker->salas as $sala){
+                $esta=puestos::where('id_cliente',$cliente)
+                        ->join('salas','salas.id_puesto','puestos.id_puesto')
+                        ->where('des_puesto',$sala->nombre)
+                        ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_sala'))
+                        ->first();
+                if(!isset($esta)){
+                    $sala_qrclean=salas::where('id_puesto',$esta->id_puesto)->first();
+                    $sala_qrclean->id_externo=$sala->id;
+                    $sala_qrclean->save();
+                }
+            }
+            //fin
+            
+            savebitacora('Solicitud de resincronizacion de estructuras salas'.json_encode($r->all()),"API","solicitud_sincro","OK"); 
+            return response()->json($respuesta);
+        }catch (\Throwable $e) {
+            savebitacora('Error en sincronizacion  de estructuras salas '.json_encode($r->all()),"API","reabrir_ticket","ERROR");
+            return $this->respuesta_error('ERROR: Ocurrio un error en el proceso '.$e->getMessage(),400);
+            
         } 
     }
 
+    public function crear_incidencia_salas(Request $r){
+        try{
+            $r->request->add(['fec_apertura' => Carbon::parse($r->fecha)]);
+            $r->request->add(['id_usuario_apertura'=>DB::table('users')->where('name','Spotlinker Salas')->first()->id_usuario??0]);
 
-///////////////////////FUNCIONES PARA SALAS///////////////////////
+            $r->request->add(['id_puesto' => salas::where('id_externo',$r->sala_id)->first()->id_puesto??0]);
+            $r->request->add(['procedencia' => "salas"]);
+            $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
+            savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
+            return response()->json($respuesta);
+        }catch (\Throwable $e) {
+            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
+            return response()->json([
+                'result'=>'error',
+                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
+                'timestamp'=>Carbon::now(),
+            ])->setStatusCode(400);
+        } 
+    }
+
+    public function add_accion_salas(Request $r){
+        try{
+            $r->request->add(['fec_apertura' => Carbon::parse($r->fecha)]);
+            $r->request->add(['id_usuario_apertura'=>DB::table('users')->where('name','Spotlinker Salas')->first()->id_usuario??0]);
+
+            $r->request->add(['id_puesto' => salas::where('id_externo',$r->sala_id)->first()->id_puesto??0]);
+            $r->request->add(['procedencia' => "salas"]);
+            $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
+            savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
+            return response()->json($respuesta);
+        }catch (\Throwable $e) {
+            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
+            return response()->json([
+                'result'=>'error',
+                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
+                'timestamp'=>Carbon::now(),
+            ])->setStatusCode(400);
+        } 
+    }
+
+    public function request_sincro($fecha,$cliente){
+        try{
+            $r->request->add(['fec_apertura' => Carbon::parse($r->fecha)]);
+            $r->request->add(['id_usuario_apertura'=>DB::table('users')->where('name','Spotlinker Salas')->first()->id_usuario??0]);
+
+            $r->request->add(['id_puesto' => salas::where('id_externo',$r->sala_id)->first()->id_puesto??0]);
+            $r->request->add(['procedencia' => "salas"]);
+            $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
+            savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
+            return response()->json($respuesta);
+        }catch (\Throwable $e) {
+            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
+            return response()->json([
+                'result'=>'error',
+                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
+                'timestamp'=>Carbon::now(),
+            ])->setStatusCode(400);
+        } 
+    }
+
+    public function sincro_incidencias_salas($fecha,$cliente){
+        try{
+            $r->request->add(['fec_apertura' => Carbon::parse($r->fecha)]);
+            $r->request->add(['id_usuario_apertura'=>DB::table('users')->where('name','Spotlinker Salas')->first()->id_usuario??0]);
+
+            $r->request->add(['id_puesto' => salas::where('id_externo',$r->sala_id)->first()->id_puesto??0]);
+            $r->request->add(['procedencia' => "salas"]);
+            $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
+            savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
+            return response()->json($respuesta);
+        }catch (\Throwable $e) {
+            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
+            return response()->json([
+                'result'=>'error',
+                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
+                'timestamp'=>Carbon::now(),
+            ])->setStatusCode(400);
+        } 
+    }
 }

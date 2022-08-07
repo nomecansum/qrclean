@@ -249,7 +249,8 @@
     {{--  SweetAlert  --}}
     <script src="{{url('/plugins/sweetalert/dist/sweetalert2.all.min.js')}}"></script>
     {{-- Iconpicker --}}
-    <script src="{{ asset('/plugins/bootstrap-iconpicker/js/bootstrap-iconpicker.bundle.min.js') }}"></script>
+    <script src="{{ asset('/plugins/bootstrap-iconpicker/js/bootstrap-iconpicker-iconset-all.min.js') }}"></script>
+    <script src="{{ asset('/plugins/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js') }}"></script>
     {{-- Plugin print --}}
     <script src="{{asset('/plugins/printThis-master/printThis.js')}}"></script>
 

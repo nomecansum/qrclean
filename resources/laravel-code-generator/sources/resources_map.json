@@ -5,11 +5,6 @@
         "table-name": "camaras"
     },
     {
-        "model-name": "edificios",
-        "resource-file": "edificios.json",
-        "table-name": "edificios"
-    },
-    {
         "model-name": "logpuestos",
         "resource-file": "logpuestos.json",
         "table-name": "log_cambios_estado"
@@ -48,16 +43,6 @@
         "model-name": "plantas_usuario",
         "resource-file": "plantas_usuarios.json",
         "table-name": "plantas_usuario"
-    },
-    {
-        "model-name": "plantas",
-        "resource-file": "plantas.json",
-        "table-name": "plantas"
-    },
-    {
-        "model-name": "causas_cierre",
-        "resource-file": "causas_cierres.json",
-        "table-name": "causas_cierre"
     },
     {
         "model-name": "tags_puestos",
@@ -105,11 +90,6 @@
         "table-name": "tags"
     },
     {
-        "model-name": "clientes",
-        "resource-file": "clientes.json",
-        "table-name": "clientes"
-    },
-    {
         "model-name": "puestos",
         "resource-file": "puestos.json",
         "table-name": "puestos"
@@ -128,11 +108,6 @@
         "model-name": "config_clientes",
         "resource-file": "config_clientes.json",
         "table-name": "config_clientes"
-    },
-    {
-        "model-name": "puestos_tipos",
-        "resource-file": "puestos_tipos.json",
-        "table-name": "puestos_tipos"
     },
     {
         "model-name": "ferias",
@@ -170,9 +145,9 @@
         "table-name": "users"
     },
     {
-        "model-name": "incidencias_postprocesado",
-        "resource-file": "incidencias_postprocesados.json",
-        "table-name": "incidencias_postprocesado"
+        "model-name": "incidencias_tipos",
+        "resource-file": "incidencias_tipos.json",
+        "table-name": "incidencias_tipos"
     },
     {
         "model-name": "incidencias",
@@ -180,13 +155,38 @@
         "table-name": "incidencias"
     },
     {
+        "model-name": "edificios",
+        "resource-file": "edificios.json",
+        "table-name": "edificios"
+    },
+    {
+        "model-name": "plantas",
+        "resource-file": "plantas.json",
+        "table-name": "plantas"
+    },
+    {
+        "model-name": "puestos_tipos",
+        "resource-file": "puestos_tipos.json",
+        "table-name": "puestos_tipos"
+    },
+    {
+        "model-name": "causas_cierre",
+        "resource-file": "causas_cierres.json",
+        "table-name": "causas_cierre"
+    },
+    {
+        "model-name": "incidencias_postprocesado",
+        "resource-file": "incidencias_postprocesados.json",
+        "table-name": "incidencias_postprocesado"
+    },
+    {
         "model-name": "estados_incidencias",
         "resource-file": "estados_incidencias.json",
         "table-name": "estados_incidencias"
     },
     {
-        "model-name": "incidencias_tipos",
-        "resource-file": "incidencias_tipos.json",
-        "table-name": "incidencias_tipos"
+        "model-name": "clientes",
+        "resource-file": "clientes.json",
+        "table-name": "clientes"
     }
 ]

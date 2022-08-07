@@ -1,4 +1,4 @@
-@extends('layout_email')
+@extends('layout')
 
 @section('title')
     <h1 class="page-header text-overflow pad-no">Gestión de cámaras</h1>
@@ -26,7 +26,20 @@
         <h3 class="panel-title">Titulo</h3>
     </div>
     <div class="panel-body">
-       
+       @php
+           $icons=[];
+           $json=file_get_contents(public_path('/plugins/fontawesome6/metadata/categories.json'));
+           $json=json_decode($json);
+           foreach($json as $cat){
+                foreach($cat->icons as $icon){
+                    $icons[]='fa-solid fa-'.$icon;
+                    $icons[]='fa-regular fa-'.$icon;
+                    $icons[]='fa-dutone fa-'.$icon;
+                }
+           }
+           $icons=array_unique($icons);
+           dd(json_encode(array_values($icons)));
+       @endphp
     </div>
 </div>
 

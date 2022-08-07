@@ -34,7 +34,8 @@ class edificios extends Model
      */
     protected $fillable = [
                   'des_edificio',
-                  'id_cliente'
+                  'id_cliente',
+                  'abreviatura'
               ];
 
     /**

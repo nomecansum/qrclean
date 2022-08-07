@@ -1,9 +1,14 @@
 
 <div class="row">
-    <div class="form-group col-md-12 {{ $errors->has('des_edificio') ? 'has-error' : '' }}">
+    <div class="form-group col-md-11 {{ $errors->has('des_edificio') ? 'has-error' : '' }}">
         <label for="des_edificio" class="control-label">Nombre</label>
         <input class="form-control" name="des_edificio" type="text" id="des_edificio" value="{{ old('des_edificio', optional($edificios)->des_edificio) }}" maxlength="200" placeholder="Enter des edificio here...">
         {!! $errors->first('des_edificio', '<p class="help-block">:message</p>') !!}
+    </div>
+    <div class="form-group col-md-1 {{ $errors->has('abreviatura') ? 'has-error' : '' }}">
+        <label for="abreviatura" class="control-label">Alias</label>
+        <input class="form-control" name="abreviatura" type="text" id="abreviatura" value="{{ old('abreviatura', optional($edificios)->abreviatura) }}" maxlength="200" placeholder="Enter abreviatura here...">
+        {!! $errors->first('abreviatura', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
 <div class="row">

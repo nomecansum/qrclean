@@ -39,6 +39,7 @@ class incidencias_postprocesado extends Model
                   'param_url',
                   'val_body',
                   'val_header',
+                  'val_respuesta',
                   'txt_destinos',
                   'mca_api',
                   'mca_web',

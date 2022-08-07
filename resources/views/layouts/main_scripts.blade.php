@@ -254,7 +254,7 @@
         event.preventDefault();
 
         //$(this).block({ message: "<br><img src='{{url('ajax-loader.gif')}}' style='width:50px'><br><br>" });
-        block_espere();
+        @if(config('app.env')!='local') block_espere(); @endif
 
         let form = $(this);
 

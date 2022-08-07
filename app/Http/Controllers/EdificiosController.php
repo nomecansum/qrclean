@@ -154,6 +154,7 @@ class EdificiosController extends Controller
     {
         $rules = [
                 'des_edificio' => 'nullable|string|min:0|max:200',
+                'abreviatura' => 'nullable|string|min:0|max:20',
             'id_cliente' => 'nullable', 
         ];
         $data = $request->validate($rules);

@@ -39,8 +39,9 @@ class plantas extends Model
                   'img_plano',
                   'posiciones',
                   'num_orden',
+                  'factor_puesto',
                   'factor_letra',
-                  'factor_puesto'
+                  'abreviatura'
               ];
 
     /**
@@ -88,35 +89,15 @@ class plantas extends Model
     }
 
     /**
-     * Get the plantasUsuario for this model.
+     * Get the plantasUsuarios for this model.
      *
-     * @return App\Models\PlantasUsuario
+     * @return Illuminate\Database\Eloquent\Collection
      */
-    public function plantasUsuario()
+    public function plantasUsuarios()
     {
-        return $this->hasOne('App\Models\PlantasUsuario','id_planta','id_planta');
+        return $this->hasMany('App\Models\PlantasUsuario','id_planta','id_planta');
     }
 
-    /**
-     * Set the posiciones.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setPosicionesAttribute($value)
-    {
-        $this->attributes['posiciones'] = json_encode($value);
-    }
 
-    /**
-     * Get posiciones in array format
-     *
-     * @param  string  $value
-     * @return array
-     */
-    public function getPosicionesAttribute($value)
-    {
-        return json_decode($value) ?: [];
-    }
 
 }

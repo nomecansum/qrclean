@@ -88,7 +88,9 @@ class APIAuthController extends Controller
 
         if (!Auth::attempt($credentials))
             return response()->json([
-                'message' => 'Unauthorized'
+                'result'=>'error',
+                'error' => 'Unauthorized',
+                'timestamp'=>Carbon::now(),
             ], 401);
 
         $user = $request->user();
@@ -102,7 +104,9 @@ class APIAuthController extends Controller
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
+            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
+            'result'=>'ok',
+            'timestamp'=>Carbon::now(),
         ]);
     }
 
@@ -130,6 +134,8 @@ class APIAuthController extends Controller
         $request->user()->token()->revoke();
 
         return response()->json([
+            'result'=>'ok',
+            'timestamp'=>Carbon::now(),
             'message' => 'Successfully logged out'
         ]);
     }
@@ -169,7 +175,9 @@ class APIAuthController extends Controller
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
+            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString(),
+            'result'=>'ok',
+            'timestamp'=>Carbon::now()
         ]);
     }
 

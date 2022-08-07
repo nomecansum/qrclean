@@ -110,7 +110,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
+                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
                 <span class="float-right" id="loading" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span><h1 class="modal-title">Ronda de {{ $entidades['tipo'] }} <span class="idronda">#</span></h1>
             </div>

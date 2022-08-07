@@ -115,7 +115,7 @@
                                         <div class="modal-header">
 
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">×</span></button>
+                                                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
                                                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
                                                 <h4 class="modal-title">¿Borrar planta {{$plantas->des_planta}}?</h4>
                                             </div>

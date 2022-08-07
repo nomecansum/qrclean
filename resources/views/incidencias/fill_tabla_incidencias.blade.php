@@ -237,7 +237,7 @@
     </td>
 </tr>
 @php
-    $datos=$incidencias->groupBy('fec_apertura')->map->count();
+    $datos=$incidencias->groupBy('fecha_corta')->map->count();
     $resultado_fecha = [];
     foreach ($datos as $key => $value) {
         $obj=new stdClass();
@@ -268,6 +268,7 @@
             },
         @endforeach
         ];
+
 
     // Create axes
     var dateAxis = chart.xAxes.push(new am4charts.DateAxis());

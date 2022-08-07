@@ -36,9 +36,62 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties:
+                    result:
+                      description: 'Resultado de la operacion'
+                      type: string
+                      enum:
+                      - ok
+                    timestamp:
+                      description: 'Fecha de ejecucion de la accion'
+                      type: string
+                      format: date-time
+                    access_token: 
+                      type: string
+                    token_type: 
+                      type: string
+                    expires_at: 
+                      type: string
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+        401:
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -53,9 +106,40 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                  message:
+                    description: 'Mensaje de resultado de la operacion'
+                    type: string
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -70,9 +154,88 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                  id: 
+                    type: integer
+                    format: int32
+                  name: 
+                    type: string
+                  email: 
+                    type: string
+                  email_verified_at: 
+                    type: string
+                  created_at: 
+                    type: string
+                  updated_at: 
+                    type: string
+                  img_usuario: 
+                    type: string
+                  cod_nivel: 
+                    type: integer
+                    format: int32
+                  theme: 
+                    type: string
+                    format: nullable
+                  collapse: 
+                    type: integer
+                    format: int32
+                  last_login: 
+                    type: string
+                  nivel_acceso: 
+                    type: integer
+                    format: int32
+                  id_cliente: 
+                    type: integer
+                    format: int32
+                  val_timezone: 
+                    type: string
+                  token_acceso: 
+                    type: string
+                  def_camera: 
+                    type: string
+                  email_expire_at: 
+                    type: string
+                    format: nullable
+                  id_usuario_supervisor: 
+                    type: string
+                    format: nullable
+                  val_vista_puestos: 
+                    type: string
+                  token_expires: 
+                    type: integer
+                    format: int32
+                  id_externo: 
+                    type: string
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -87,9 +250,40 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                  message:
+                    description: 'Mensaje de resultado de la operacion'
+                    type: string
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -104,9 +298,170 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties: 
+                  result: 
+                    type: string
+                  timestamp: 
+                    type: string
+                    format: date-time
+                  edificios: 
+                    type: array
+                    items: 
+                      type: object
+                      properties: 
+                        id_edificio: 
+                          type: integer
+                          format: int32
+                        des_edificio: 
+                          type: string
+                        abreviatura: 
+                          type: string
+                        plantas: 
+                          type: array
+                          items: 
+                            type: object
+                            properties: 
+                              id_planta: 
+                                type: integer
+                                format: int32
+                              des_planta: 
+                                type: string
+                              id_edificio: 
+                                type: integer
+                                format: int32
+                              num_orden: 
+                                type: integer
+                                format: int32
+                              abreviatura: 
+                                type: string
+                              puestos: 
+                                type: array
+                                items: 
+                                  type: object
+                                  properties: 
+                                    id_planta: 
+                                      type: integer
+                                      format: int32
+                                    id_puesto: 
+                                      type: integer
+                                      format: int32
+                                    cod_puesto: 
+                                      type: string
+                                    des_puesto: 
+                                      type: string
+                                    id_estado: 
+                                      type: integer
+                                      format: int32
+                                    id_tipo_puesto: 
+                                      type: integer
+                                      format: int32
+                                    mca_incidencia: 
+                                      type: string
+                                    des_estado: 
+                                      type: string
+                                    hex_color: 
+                                      type: string
+                                    icono_tipo: 
+                                      type: string
+                                    color_tipo: 
+                                      type: string
+                        tipos_puesto: 
+                          type: array
+                          items: 
+                            type: object
+                            properties: 
+                              id_tipo_puesto: 
+                                type: integer
+                                format: int32
+                              des_tipo_puesto: 
+                                type: string
+                              val_icono: 
+                                type: string
+                              val_color: 
+                                type: string
+                              abreviatura: 
+                                type: string
+                        tipos_incidencia: 
+                          type: array
+                          items: 
+                            type: object
+                            properties: 
+                              id_tipo_incidencia: 
+                                type: integer
+                                format: int32
+                              des_tipo_incidencia: 
+                                type: string
+                              val_icono: 
+                                type: string
+                              val_color: 
+                                type: string
+                              list_tipo_puesto: 
+                                type: string
+                                format: nullable
+                              id_tipo_externo: 
+                                type: string
+                                format: nullable
+                              id_tipo_salas: 
+                                type: string
+                                format: nullable
+                              val_responsable: 
+                                type: string
+                                format: nullable
+                        causas_cierre: 
+                          type: array
+                          items: 
+                            type: object
+                            properties: 
+                              id_causa_cierre: 
+                                type: integer
+                                format: int32
+                              des_causa: 
+                                type: string
+                              val_icono: 
+                                type: string
+                              val_color: 
+                                type: string
+                              mca_default: 
+                                type: string
+                              id_externo: 
+                                type: string
+                        estados_incidencia: 
+                          type: array
+                          items: 
+                            type: object
+                            properties: 
+                              id_estado: 
+                                type: integer
+                                format: int32
+                              des_estado: 
+                                type: string
+                              val_icono: 
+                                type: string
+                              val_color: 
+                                type: string
+                              mca_cierre: 
+                                type: string
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -150,9 +505,93 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties:
+                    result: 
+                      type: string
+                    timestamp: 
+                      type: string
+                      format: date-time
+                    incidencias: 
+                      type: array
+                      items: 
+                        type: object
+                        properties: 
+                          id_incidencia: 
+                            type: integer
+                            format: int32
+                          id_externo: 
+                            type: string
+                            format: nullable
+                          id_incidencia_salas: 
+                            type: string
+                            format: nullable
+                          des_incidencia: 
+                            type: string
+                          txt_incidencia: 
+                            type: string
+                          fec_apertura: 
+                            type: string
+                          fec_cierre: 
+                            type: string
+                          id_tipo_incidencia: 
+                            type: integer
+                            format: int32
+                          id_puesto: 
+                            type: integer
+                            format: int32
+                          id_causa_cierre: 
+                            type: integer
+                            format: int32
+                          comentario_cierre: 
+                            type: string
+                          id_estado: 
+                            type: string
+                            format: nullable
+                          id_usuario_apertura: 
+                            type: integer
+                            format: int32
+                          id_usuario_ext: 
+                            type: string
+                          acciones: 
+                            type: array
+                            items: 
+                              type: object
+                              properties: 
+                                id_accion: 
+                                  type: integer
+                                  format: int32
+                                des_accion: 
+                                  type: string
+                                fec_accion: 
+                                  type: string
+                                id_usuario: 
+                                  type: integer
+                                  format: int32
+                                mca_resuelve: 
+                                  type: string
+                                id_usuario_ext: 
+                                  type: string
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -202,9 +641,43 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                  message:
+                    description: 'Mensaje de resultado de la operacion'
+                    type: string
+                  id:
+                    description: 'Identificador de la incidencia creada'
+                    type: number
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -239,9 +712,40 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                  message:
+                    description: 'Mensaje de resultado de la operacion'
+                    type: string
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -278,9 +782,40 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                  id:
+                    description: 'Identificador de la incidencia'
+                    type: number
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -310,9 +845,398 @@ paths:
           description: 'Successful operation'
           content:
             application/json:
-              schema: []
-        default:
-          description: 'Ha ocurrido un error.'
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                  id:
+                    description: 'Identificador de la incidencia'
+                    type: number
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+      security:
+        -
+          passport: []
+  /salas/sincronizar_estructura_incidencias_empresa_desde_fecha:
+    get:
+      tags:
+        - 'Integracion con salas'
+      summary: 'Solicitud de sincronización de información estructural de incidencias (Por cambios en salas, departamentos o tipos de incidencias)'
+      operationId: 50178506ff2858dd658eb11de4c7ed46
+      parameters:
+        -
+          name: fecha
+          in: path
+          description: 'Fecha de incicio de la consulta'
+          required: true
+        -
+          name: id_cliente
+          in: path
+          description: 'Identificador de cliente'
+          required: true
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+      security:
+        -
+          passport: []
+  /salas/add_incidencia_empresa:
+    post:
+      tags:
+        - 'Integracion con salas'
+      summary: 'Crea una nueva incidencia desde gestion de salas'
+      operationId: 2547ba5e9f70585c13dffd3dd7f88b75
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - id_cliente
+                - sala_id
+                - fecha
+                - descripcion_adicional
+                - estado
+                - incidencia_sala_id
+              properties:
+                id_cliente:
+                  description: 'ID de cliente'
+                  type: integer
+                sala_id:
+                  description: 'ID de sala'
+                  type: integer
+                fecha:
+                  description: 'Fecha de incio de la incidencia'
+                  type: string
+                  format: date-time
+                descripcion_adicional:
+                  description: 'Titulo de la incidencia'
+                  type: string
+                  maxLength: 500
+                tipo_incidencia_id:
+                  description: 'ID de tipo de incidencia'
+                  type: integer
+                estado:
+                  description: 'ID de estado de la incidencia'
+                  type: integer
+                reunion_anterior:
+                  description: 'Datos de la reunion anterior'
+                  type: string
+                reunion_actual:
+                  description: 'Datos de la reunion actual'
+                  type: string
+                reunion_posterior:
+                  description: 'Datos de la reunion posteriore'
+                  type: string
+                notas_admin:
+                  description: 'Detalle de la incidencia'
+                  type: integer
+                  maxLength: 65535
+                incidencia_sala_id:
+                  description: 'ID de la incidencia en salas'
+                  type: integer
+                  maxLength: 65535
+              type: object
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+      security:
+        -
+          passport: []
+  /salas/set_incidencia_empresa:
+      post:
+        tags:
+          - 'Integracion con salas'
+        summary: 'Modifica una incidencia existente desde salas'
+        operationId: 5d065c7fd30d2547ba5e9f70585c13dffd3dd7f88b75
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                required:
+                  - id_cliente
+                  - fecha
+                  - estado
+                  - incidencia_sala_id
+                  - incidencia_id_puestos
+                properties:
+                  id_cliente:
+                    description: 'ID de cliente'
+                    type: integer
+                  fecha:
+                    description: 'Fecha de incio de la incidencia'
+                    type: string
+                    format: date-time
+                  estado:
+                    description: 'ID de estado de la incidencia'
+                    type: integer
+                  notas_admin:
+                    description: 'Detalle de la incidencia'
+                    type: integer
+                    maxLength: 65535
+                  incidencia_sala_id:
+                    description: 'ID de la incidencia en salas'
+                    type: integer
+                  incidencia_id_puestos:
+                    description: 'ID de incidencia en puestos'
+                    type: integer
+                type: object
+        responses:
+          200:
+            description: 'Successful operation'
+            content:
+              application/json:
+                schema:
+                  properties:
+                    result:
+                      description: 'Resultado de la operacion'
+                      type: string
+                      enum:
+                      - ok
+                    timestamp:
+                      description: 'Fecha de ejecucion de la accion'
+                      type: string
+                      format: date-time
+                  type: object
+          400:
+            description: 'Error en la peticion'
+            content:
+              application/json:
+                schema:
+                  properties:
+                    result:
+                      description: 'Resultado de la operacion'
+                      type: string
+                      enum:
+                      - error
+                    error:
+                      description: 'Descripcion del error'
+                      type: string
+                    timestamp:
+                      description: 'Fecha de ejecucion de la accion'
+                      type: string
+                      format: date-time
+                  type: object
+        security:
+          -
+            passport: []
+  /salas/sincronizar_incidencias_desde_fecha:
+    get:
+      tags:
+        - 'Integracion con salas'
+      summary: 'Lanza el proceso de sincronizacion de incidencias'
+      operationId: dfbe31a6a86e5d065c7fd30d2547ba5e9f70585c13dffd3dd7f88b75
+      parameters:
+      -
+        name: fecha
+        in: path
+        description: 'Fecha de incicio de la consulta'
+        required: true
+      -
+        name: id_cliente
+        in: path
+        description: 'Identificador de cliente'
+        required: true
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+      security:
+        -
+          passport: []
+  /salas/get_incidencias_desde_fecha:
+    get:
+      tags:
+        - 'Integracion con salas'
+      summary: 'Devuelve el listado de incidencias pendientes de sincronizar'
+      operationId: dfbe31a6a86e5d065c7fd30d2547ba5e9f70585c13dffd3dd7f88b75
+      parameters:
+      -
+        name: fecha
+        in: path
+        description: 'Fecha de incicio de la consulta'
+        required: true
+      -
+        name: id_cliente
+        in: path
+        description: 'Identificador de cliente'
+        required: true
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                properties:
+                    result: 
+                      type: string
+                    timestamp: 
+                      type: string
+                      format: date-time
+                    a_incidencias_pendientes: 
+                      type: array
+                      items: 
+                        type: object
+                        properties: 
+                          incidencia_id_puestos: 
+                            type: integer
+                            format: int32
+                          sala_id: 
+                            type: integer
+                            format: nullable
+                          descripcion_adicional: 
+                            type: string
+                          notas_admin: 
+                            type: string
+                          fecha: 
+                            type: string
+                          estado: 
+                            type: integer
+                            format: int32
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
       security:
         -
           passport: []
@@ -327,7 +1251,7 @@ tags:
     name: 'Gestion de incidencias'
     description: 'Consulta de para la gestion de incidencias generica'
   -
-    name: Salas
+    name: 'Integracion con salas'
     description: 'Consulta de para la integracion con gestion de salas'
 components:
   securitySchemes:
@@ -338,7 +1262,7 @@ components:
       scheme: https
       flows:
         password:
-          authorizationUrl: 'http://qrclean/api/auth/login'
-          tokenUrl: 'http://qrclean/api/auth/login'
-          refreshUrl: 'http://qrclean/auth/token/refresh'
+          authorizationUrl: '/api/auth/login'
+          tokenUrl: '/api/auth/login'
+          refreshUrl: '/api/auth/token/refresh'
           scopes: []

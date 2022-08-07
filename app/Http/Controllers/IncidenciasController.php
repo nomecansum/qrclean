@@ -29,6 +29,39 @@ use Illuminate\Support\Facades\Http;
 
 class IncidenciasController extends Controller
 {
+  //////////////FUNCIONES AUXILIARES////////////////////
+  //Ejemplo de JSON de respuesta
+//   {
+//     "incidencias.id_externo": "@R:id_incidencia",
+//     "incidencias.url_detalle_incidencia": "@R:url_detalle",
+//     "incidencias.mca_sincronizada": "S"
+//   }
+    private function procesar_respuesta($reglas,$respuesta,$id_incidencia,$id_puesto){
+        try{
+            $reglas=json_decode($reglas,true);
+            $respuesta=json_decode($respuesta,true);
+            //Cada una de las reglas de la respuesta se trata por separado
+            foreach($reglas as $key=>$value){
+                $tabla=explode(".",$key)[0];
+                $campo=explode(".",$key)[1];
+                $pk=DB::select(DB::raw("SHOW KEYS FROM ".$tabla." WHERE Key_name = 'PRIMARY'"))[0]->Column_name;
+                //Ahora a ver si es un valor o parte de la respuesta
+                if(strpos($value,'@R:')!==false){
+                    $campo_respuesta=str_replace("@R:","",$value);
+                    $dato=$respuesta[$campo_respuesta];
+                } else {
+                    $dato=$value;
+                }
+                //Y ahora actualizamos BDD
+                DB::table($tabla)->where($pk,${$pk})->update([$campo=>$dato]);
+            }
+        } catch(\Throwable $e){
+            Log::error("Postprocesado de RESPUESTA HTTP POST de incidencia  ".$id_incidencia." ERROR: ".$e->getMessage());
+        }
+    }
+  
+  //////////////////////////////////////////////////////
+  
     //LISTADO DE INCIDENCIAS
     public function index($f1=0,$f2=0){
         $f1=$f1==0?Carbon::now()->startOfMonth()->subMonth():Carbon::parse($f1);
@@ -37,6 +70,7 @@ class IncidenciasController extends Controller
         $fhasta=$fhasta->addDay();
         $incidencias=DB::table('incidencias')
             ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa')
+            ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
@@ -171,6 +205,7 @@ class IncidenciasController extends Controller
 
         $incidencias=DB::table('incidencias')
             ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa')
+            ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
             ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
             ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
@@ -332,7 +367,7 @@ class IncidenciasController extends Controller
             $inc->id_puesto=$puesto->id_puesto;
             $inc->img_attach1=$img1??null;
             $inc->img_attach2=$img2??null;
-            $inc->id_estado=$data['id_estado']??null;
+            $inc->id_estado=$data['id_estado']??$tipo->id_estado_inicial;
             $inc->id_estado_vuelta_puesto=$puesto->id_estado;
             $inc->val_procedencia=$procedencia;
             $inc->save();
@@ -358,6 +393,7 @@ class IncidenciasController extends Controller
                 ];
             } catch(\Exception $exception){
                 savebitacora('ERROR: Ocurrio un error en el postprocesado de incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(). ' La incidencia se ha registrado correctamente pero no se ha podido procesar la accion de notificacion programada' ,"Incidencias","save","ERROR");
+                //dump($exception);
                 return [
                     'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
                     'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
@@ -478,6 +514,8 @@ class IncidenciasController extends Controller
             ->where('id_tipo_incidencia',$tipo->id_tipo_incidencia)
             ->where('val_momento',$momento)
             ->get();
+        
+        
         foreach($postprocesado as $p){
             if (($procedencia=='api' && $p->mca_api=='S') || ($procedencia=='salas' && $p->mca_salas=='S')){
                 //Esto es para no mandarla al mismo sitio del que viene;
@@ -509,8 +547,14 @@ class IncidenciasController extends Controller
                     break;
                 case 'P': //HTTP Post
                     try{
+                        $inc->mca_sincronizada='N';
                         Log::info("Iniciando postprocesado HTTP POST de incidencia ".$inc->id_incidencia);
                         log::debug($p->val_url.'?'.$p->param_url);
+                        //Ahora sustituimos las variables por sus valores
+                        preg_match_all("/(?<=#).*?(?=#)/", $p->val_body, $match);
+                        foreach($match[0] as $value){
+                            $p->val_body=str_replace('#'.$value.'#',$inc->$value,$p->val_body);
+                        }
                         $response=Http::withOptions(['verify' => false])
                             ->withHeaders(json_decode($p->val_header,true))
                             ->withbody($p->val_body,'application/json')
@@ -521,10 +565,16 @@ class IncidenciasController extends Controller
                             Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ERROR: ".$response->status());
                         }
                         Log::debug($response->body());
+                        
+                        if($p->val_respuesta!=null){
+                            $this->procesar_respuesta($p->val_respuesta,$response->body(),$inc->id_incidencia,$puesto->id_puesto);
+                        }
                        
                     } catch(\Throwable $e){
-                        Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ".$response->status()." ERROR: ".$e->getMessage());
+                        Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." "." ERROR: ".$e->getMessage());
+                        //dd($e);
                     }
+                    $inc->mca_sincronizada='S';
                     break;
 
                 case 'G': //HTTP Get
@@ -540,13 +590,20 @@ class IncidenciasController extends Controller
                             Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ERROR: ".$response->status());
                         }
                         Log::debug($response->body());
+                        if($p->val_respuesta!=null){
+                            $this->procesar_respuesta($p->val_respuesta,$response->body(),$inc->id_incidencia,$puesto->id_puesto);
+                        }
 
                     } catch(\Throwable $e){
                         Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ".$response->status()." ERROR: ".$e->getMessage());
+                        //dd($e);
                     }
+                    $inc->mca_sincronizada='S';
                     break;
 
                 case 'L': //Spotlinker
+
+                    $inc->mca_sincronizada='S';
                     break;  
 
                 default:
@@ -554,7 +611,9 @@ class IncidenciasController extends Controller
                     break;
             }
         }
+        $inc->save();
         //Enviamos mail al uusario abriente
+        $to_email = $usuario_abriente->email;
         Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
             if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
                 $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
@@ -872,6 +931,7 @@ class IncidenciasController extends Controller
         $tipo->param_url=$r->param_url??null;
         $tipo->val_body=$r->val_body??null;
         $tipo->val_header=$r->val_header??null;
+        $tipo->val_respuesta=$r->val_respuesta??null;
         $tipo->mca_api=isset($r->mca_api)?'S':'N';
         $tipo->mca_web=isset($r->mca_web)?'S':'N';
         $tipo->mca_salas=isset($r->mca_salas)?'S':'N';

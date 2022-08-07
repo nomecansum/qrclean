@@ -54,6 +54,8 @@
         weathericon: $.iconset_weathericon || Iconpicker.ICONSET_EMPTY
     };
 
+    
+
     // ICONPICKER DEFAULTS
     // ==============================
     Iconpicker.DEFAULTS = {
@@ -483,6 +485,7 @@
                         .append('<input type="hidden" ' + name + '></input>')
                         .append('<span class="caret"></span>')
                         .addClass('iconpicker ' + (($.fn.bsVersion() === '3.x') ? '' : 'dropdown-toggle'));
+
                     data.setIconset(op.iconset);
                     $this.on('click', function(e) {
                         e.preventDefault();
@@ -522,6 +525,7 @@
     };
 
     $.fn.iconpicker.Constructor = Iconpicker;
+
 
     // ICONPICKER NO CONFLICT
     // ==================

@@ -63,7 +63,7 @@
                     <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro" data-placement="right"  class="btn btn-light iconpicker" data-iconset-version="5.3.1_pro" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
+                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-placement="right"  class="btn btn-light iconpicker" data-iconset-version="5.3.1_pro" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
                         </div>
                     </div>
                     <div class="form-group col-md-3 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
@@ -154,6 +154,20 @@
     </div>
 
     <script>
+        function prettyPrint(el){ 
+            
+           try{
+            var ugly = el.val();
+            var obj = JSON.parse(ugly);
+            var pretty = JSON.stringify(obj, undefined, 4);
+            //console.log(pretty);
+            el.val(pretty);
+           } catch(e){
+            
+           }
+        }
+
+
         $('.form-ajax').submit(form_ajax_submit);
         $('.opciones').hide();
         $('#tip_metodo').change(function(){
@@ -212,6 +226,8 @@
 
     $('.demo-psi-cross').click(function(){
             $('.editor').hide();
-        });
+    });
+
+    
     </script>
     @include('layouts.scripts_panel')

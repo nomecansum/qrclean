@@ -37,7 +37,9 @@ class causas_cierre extends Model
                   'id_cliente',
                   'mca_fija',
                   'val_color',
-                  'val_icono'
+                  'val_icono',
+                  'mca_default',
+                  'id_externo'
               ];
 
     /**

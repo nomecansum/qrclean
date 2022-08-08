@@ -63,9 +63,14 @@
                     {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
                 </div>
                 <div class="form-group col-md-6 {{ $errors->has('password') ? 'has-error' : '' }}">
-                    <label for="password" class="control-label">Password</label>
-                    <input class="form-control" name="password" type="password" id="password"  minlength="4" maxlength="255" placeholder="Enter password here...">
-                    {!! $errors->first('password', '<p class="help-block">:message</p>') !!}
+                    <div class="input-group mb-3">
+                        <label for="password" class="control-label">Password</label>
+                        <input class="form-control" name="password" type="password" id="password"  minlength="4" maxlength="255" placeholder="Enter password here...">
+                        {!! $errors->first('password', '<p class="help-block">:message</p>') !!}
+                        <div class="input-group-btn">
+                            <button class="btn btn-mint mt-4" type="button"  id="btn_generar_password">Generar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -234,6 +239,20 @@
                 console.log(errorThrown);
         });	
     })
+    
+    $('#btn_generar_password').click(function(event){
+        //console.log('token');
+        $.get( "/users/gen_password/{{ $users->id??'' }}")
+        .done(function( data, textStatus, jqXHR ) {
+            $('#password').val(data.pwd);
+            $('#password').attr('type', 'text')
+        })
+        .fail(function( jqXHR, textStatus, errorThrown ) {
+                console.log(errorThrown);
+        });	
+    })
+
+    
 
 </script>
 @endsection

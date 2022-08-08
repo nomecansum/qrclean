@@ -1219,4 +1219,16 @@ class UsersController extends Controller
         return view('users.miperfil', compact('users',));
     }
 
+    //Obtener el objeto User como jso
+    public function gen_password($usuario)
+    {
+        $pwd = randomPassword(16,true,true);
+
+        return response()->json([
+            'pwd' => $pwd,
+            'result'=>'ok',
+            'timestamp'=>Carbon::now()
+        ]);
+    }
+
 }

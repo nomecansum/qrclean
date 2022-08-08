@@ -323,38 +323,28 @@ function adaptar_fecha($d){
     return  $d;
 }
 
-function random_readable_pwd($length=10){
-
-    // the wordlist from which the password gets generated
-    // (change them as you like)
-    $words = 'dog,cat,sheep,sun,sky,red,ball,happy,ice,';
-    $words .= 'green,blue,music,movies,radio,green,turbo,';
-    $words .= 'mouse,computer,paper,water,fire,storm,chicken,';
-    $words .= 'boot,freedom,white,nice,player,small,eyes,';
-    $words .= 'path,kid,box,black,flower,ping,pong,smile,';
-    $words .= 'coffee,colors,rainbow,plus,king,tv,ring';
-
-    // Split by ",":
-    $words = explode(',', $words);
-    if (count($words) == 0){ die('Wordlist is empty!'); }
-
-    // Add words while password is smaller than the given length
-    $pwd = '';
-    while (strlen($pwd) < $length){
-        $r = mt_rand(0, count($words)-1);
-        $pwd .= $words[$r];
-    }
-
-    // append a number at the end if length > 2 and
-    // reduce the password size to $length
-    $num = mt_rand(1, 99);
-    if ($length > 2){
-        $pwd = substr($pwd,0,$length-strlen($num)).$num;
-    } else {
-        $pwd = substr($pwd, 0, $length);
-    }
-
-    return $pwd;
+function randomPassword( $len = 16, $ucfirst = true, $spchar = true ){
+	if ( $len >= 6 && ( $len % 2 ) !== 0 ) { // Length parameter must be greater than or equal to 6, and a multiple of 2
+		$len = 8;
+	}
+	$length = $len - 2; // Makes room for a two-digit number on the end
+	$conso = array('b','c','d','f','g','h','j','k','l','m','n','p','r','s','t','v','w','x','y','z');
+	$vocal = array('a','e','i','o','u');
+	$spchars = array('!','@','#','$','%','^','*','&','*','-','+','?');
+	$password = '';
+	$max = $length / 2;
+	for ( $i = 1; $i <= $max; $i ++ ) {
+		$password .= $conso[ random_int( 0, 19 ) ];
+		$password .= $vocal[ random_int( 0, 4 ) ];
+	}
+	if ( $spchar == true ) {
+		$password = substr($password, 0, -1) . $spchars[ random_int( 0, 11 ) ];
+	}
+	$password .= random_int( 10, 99 );
+	if($ucfirst==true){
+		$password = ucfirst( $password );
+	}
+	return $password;
 }
 
 //Rellena en el texto pasado los comodines indicados por los corchetes con su correspondiente valor de la lista de datos. Esto es para las notificaciones de evebntos

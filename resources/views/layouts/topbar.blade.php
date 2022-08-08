@@ -9,7 +9,7 @@
         <img src="/img/logo.png" alt="Spotlinker" class="brand-icon">
         @endif
         <div class="brand-title">
-            <span class="brand-text"> <img src="/img/brand_text.png" alt="Spotlinker" class="brand-text"></span>
+            <span class="brand-text"> <img src="/img/logo_menu_arriba.png" alt="Spotlinker" class="brand-text"></span>
         </div>
     </a>
 </div>

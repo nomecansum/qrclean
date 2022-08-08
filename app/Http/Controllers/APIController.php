@@ -17,6 +17,8 @@ use App\Models\incidencias;
 use App\Models\puestos;
 use App\Models\salas;
 use App\Models\clientes;
+use App\Models\estados_incidencias;
+use App\Models\incidencias_tipos;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
@@ -77,6 +79,66 @@ class APIController extends Controller
             return $result;
         } catch (\Exception $e) {
             throw new \ErrorException('La causa de cierre '.$r->id_causa_cierre.' no existe');
+        }
+    }
+
+    public static function get_sala($r){
+        try{
+            $result=salas::where('id_cliente',$r->id_cliente)
+                ->where('id_externo_salas',$r->sala_id)
+                ->first()->id_puesto;
+            return $result;
+        } catch (\Exception $e) {
+            throw new \ErrorException('La sala con ID '.$r->sala_id.' no existe',406);
+        }
+    }
+
+    public static function get_cliente_ext($r){
+        try{
+            $result=clientes::where('id_externo',$r->id_cliente)
+                ->first()->id_cliente;
+            return $result;
+        } catch (\Exception $e) {
+            throw new \ErrorException('El cliente '.$r->id_cliente.' no existe',406);
+        }
+    }
+
+    public static function get_estado_salas($r){
+        try{
+
+            $result=estados_incidencias::where('id_cliente',$r->id_cliente)
+                ->where('id_estado_salas',$r->estado)
+                ->first()->id_estado;
+            return $result;
+        } catch (\Exception $e) {
+            throw new \ErrorException('El estado '.$r->estado.' no existe',406);
+        }
+    }
+
+    public static function get_tipo_salas($r){
+        try{
+
+            $result=incidencias_tipos::where('id_cliente',$r->id_cliente)
+                ->where('id_tipo_salas',$r->tipo_incidencia_id)
+                ->first()->id_tipo_incidencia;
+            return $result;
+        } catch (\Exception $e) {
+            throw new \ErrorException('El tipo '.$r->tipo_incidencia_id.' no existe',406);
+        }
+    }
+
+    public static function check_existe_incidencia($r,$campo,$id){
+        try{
+
+            $result=incidencias::where('id_cliente',$r->id_cliente)
+                ->where($campo,$id)
+                ->first()->id_incidencia;
+            if($result!=null){;
+                return true;
+            }
+            return false;
+        } catch (\Exception $e) {
+            
         }
     }
 
@@ -253,25 +315,29 @@ class APIController extends Controller
                 'incidencias' => $incidencias]);
         }catch (\Throwable $e) {
             savebitacora('ERROR Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","ERROR"); 
-            return $this->respuesta_error('ERROR Solicitud de listado de incidencias '.$e->getMessage(),400);
-        } 
+            return $this->respuesta_error('ERROR Solicitud de listado de incidencias '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
+        }
     }
 
     public function crear_incidencia(Request $r){
 
         try{
+            $r->request->add(['id_cliente' => Auth::user()->id_cliente]);
+            if($this->check_existe_incidencia($r,"id_externo",$r->id_incidencia_externo)===true){
+                throw new \ErrorException('La incidencia ID '.$r->id_incidencia_externo.' ya existe',403);
+            };
             $r->request->add(['fec_apertura' => Carbon::now()]);
             $r->request->add(['id_usuario_apertura' => $this->get_usuario($r)]);
             $r->request->add(['id_cliente' => Auth::user()->id_cliente]);
             $r->request->add(['id_puesto' => $this->get_puesto($r)]);
             $r->request->add(['procedencia' => "api"]);
-
+            $r->request->add(['id_externo' => $r->id_incidencia_externo]);
             $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
             savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
-            return $this->respuesta_error('ERROR creando incidencia '.$e->getMessage(),400);
+            return $this->respuesta_error('ERROR creando incidencia '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
     }
 
@@ -286,7 +352,7 @@ class APIController extends Controller
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR añadiendo accion a incidencia '.json_encode($r->all()),"API","add_accion","ERROR");
-            return $this->respuesta_error('ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),400);
+            return $this->respuesta_error('ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
         
     }
@@ -303,7 +369,7 @@ class APIController extends Controller
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR cerrando incidencia '.json_encode($r->all()),"API","cerrar_ticket","ERROR");
-            return $this->respuesta_error('ERROR: Ocurrio un error cerrando incidencia '.$e->getMessage(),400);
+            return $this->respuesta_error('ERROR: Ocurrio un error cerrando incidencia '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
     }
 
@@ -318,7 +384,7 @@ class APIController extends Controller
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR reabriendo incidencia '.json_encode($r->all()),"API","reabrir_ticket","ERROR");
-            return $this->respuesta_error('ERROR: Ocurrio un error reabriendo incidencia '.$e->getMessage(),400);
+            return $this->respuesta_error('ERROR: Ocurrio un error reabriendo incidencia '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
     }
     
@@ -357,39 +423,53 @@ class APIController extends Controller
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('Error en sincronizacion  de estructuras salas '.json_encode($r->all()),"API","reabrir_ticket","ERROR");
-            return $this->respuesta_error('ERROR: Ocurrio un error en el proceso '.$e->getMessage(),400);
+            return $this->respuesta_error('ERROR: Ocurrio un error en el proceso '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
             
         } 
     }
 
     public function crear_incidencia_salas(Request $r){
         try{
+            $r->request->add(['id_cliente' => $this->get_cliente_ext($r)]);
+            //Comprobamos si existe la incidencia
+            if($this->check_existe_incidencia($r,"id_incidencia_salas",$r->incidencia_sala_id)===true){
+                throw new \ErrorException('La incidencia ID '.$r->incidencia_sala_id.' ya existe',403);
+            };
+            $r->request->add(['id_puesto' => $this->get_sala($r)]);
+            
             $r->request->add(['fec_apertura' => Carbon::parse($r->fecha)]);
-            $r->request->add(['id_usuario_apertura'=>DB::table('users')->where('name','Spotlinker Salas')->first()->id_usuario??0]);
-
-            $r->request->add(['id_puesto' => salas::where('id_externo',$r->sala_id)->first()->id_puesto??0]);
+            $r->request->add(['id_usuario_apertura'=>config('app.id_usuario_spotlinker_salas')]);
+            $r->request->add(['id_estado' => $this->get_estado_salas($r)]);
+            $r->request->add(['id_tipo_incidencia' => $this->get_tipo_salas($r)]);
             $r->request->add(['procedencia' => "salas"]);
+            $r->request->add(['id_incidencia_salas' => $r->incidencia_sala_id]);
+            $r->request->add(['txt_incidencia' => $r->notas_admin]);
+            $r->request->add(['des_incidencia' => $r->descripcion_adicional]);
+
             $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
-            savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
+            savebitacora('Crear de incidencia desde salas '.json_encode($r->all()),"API","crear_incidencia_salas","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
-            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
-            return response()->json([
-                'result'=>'error',
-                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
-                'timestamp'=>Carbon::now(),
-            ])->setStatusCode(400);
+            savebitacora('ERROR Creacion de incidencia desde salas '.json_encode($r->all()),"API","crear_incidencia_salas","ERROR");
+            dd($e);
+            return $this->respuesta_error('ERROR: Ocurrio un error creando la incidencia '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
     }
 
     public function add_accion_salas(Request $r){
         try{
-            $r->request->add(['fec_apertura' => Carbon::parse($r->fecha)]);
-            $r->request->add(['id_usuario_apertura'=>DB::table('users')->where('name','Spotlinker Salas')->first()->id_usuario??0]);
-
-            $r->request->add(['id_puesto' => salas::where('id_externo',$r->sala_id)->first()->id_puesto??0]);
+            $r->request->add(['id_cliente' => $this->get_cliente_ext($r)]);
+            //Comprobamos si existe la incidencia
+            if($this->check_existe_incidencia($r,"id_incidencia_salas",$r->incidencia_sala_id)===false){
+                throw new \ErrorException('La incidencia ID '.$r->incidencia_sala_id.' no existe',404);
+            };
+            $r->request->add(['id_estado' => $this->get_estado_salas($r)]);
             $r->request->add(['procedencia' => "salas"]);
-            $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
+            $r->request->add(['id_incidencia_salas' => $r->incidencia_sala_id]);
+            $r->request->add(['txt_incidencia' => $r->notas_admin]);
+            $r->request->add(['id_incidencia' => $r->ncidencia_id_puestos]);
+
+            $respuesta=app('App\Http\Controllers\IncidenciasController')->add_accion($r);
             savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {

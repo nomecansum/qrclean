@@ -370,6 +370,8 @@ class IncidenciasController extends Controller
             $inc->id_estado=$data['id_estado']??$tipo->id_estado_inicial;
             $inc->id_estado_vuelta_puesto=$puesto->id_estado;
             $inc->val_procedencia=$procedencia;
+            $inc->id_incidencia_salas=$r->id_incidencia_salas??null;
+            $inc->id_externo=$r->id_externo??null;
             $inc->save();
 
             //Marcamos el puesto como chungo
@@ -452,6 +454,10 @@ class IncidenciasController extends Controller
             $accion->img_attach1=$img1??null;
             $accion->img_attach2=$img2??null;
             $accion->save();
+            if(isset($r->id_estado)){
+                $incidencia->id_estado=$r->id_estado;
+                $incidencia->save();
+            }
             $this->post_procesado_incidencia($incidencia,'A',$procedencia);
             savebitacora("Añadida accion para la incidencia ".$r->id_incidencia,"Incidencias","add_accion","OK");
             return [
@@ -528,6 +534,7 @@ class IncidenciasController extends Controller
 
                 case 'M':  //Mandar e-mail
                     $to_email = $p->txt_destinos;
+                    Log::info("Iniciando postprocesado MAIL de incidencia ".$inc->id_incidencia);
                     Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto) {
                         if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
                             $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
@@ -602,7 +609,7 @@ class IncidenciasController extends Controller
                     break;
 
                 case 'L': //Spotlinker
-
+                    Log::info("Iniciando postprocesado SALAS de incidencia ".$inc->id_incidencia);
                     $inc->mca_sincronizada='S';
                     break;  
 

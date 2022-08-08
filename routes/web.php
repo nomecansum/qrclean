@@ -130,6 +130,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/addtodaplanta/{estado}/{planta}',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@addtodaplanta'])->name('users.addtodaplanta');
         Route::get('/addtodouser/{estado}/{usuario}',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@addtodouser'])->name('users.addtodouser');
         Route::get('/gen_token/{id}',['middleware'=>'permissions:["API_TOKEN"],["R"]','uses'=>'APIAuthController@gen_token'])->name('users.api.gen_token');
+        Route::get('/gen_password/{id}',['middleware'=>'permissions:["API_TOKEN"],["R"]','uses'=>'UsersController@gen_password'])->name('users.api.gen_password');
         
     });
 

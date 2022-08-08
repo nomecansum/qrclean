@@ -68,9 +68,9 @@ Route::group(['prefix' => 'salas','middleware' => 'auth:api'], function() {
     //Listado de incidencias
     Route::get('sincronizar_estructura_incidencias_empresa_desde_fecha/{fecha}/{cliente}', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@solicitud_sincro_datos']);
     //Crear incidencia
-    Route::put('/', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@crear_incidencia']);
+    Route::post('/add_incidencia_empresa', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@crear_incidencia_salas']);
     //Añadir accion
-    Route::post('/add_accion', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@add_accion']);
+    Route::post('/set_incidencia_empresa', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@add_accion_salas']);
     //Cerrar incidencia
     Route::post('/cerrar', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@cerrar_ticket']);
      //Cerrar incidencia

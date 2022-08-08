@@ -699,6 +699,9 @@ paths:
                 id_incidencia:
                   description: 'ID de incidencia'
                   type: number
+                id_estado:
+                  description: 'ID Estado al que cambia la  incidencia'
+                  type: number
                 des_accion:
                   description: 'Texto  de la accion'
                   type: string

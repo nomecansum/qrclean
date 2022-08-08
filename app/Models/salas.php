@@ -42,7 +42,8 @@ class salas extends Model
                   'obs_sala',
                   'mca_manos_libres',
                   'mca_pizarra',
-                  'mca_pizarra_digital'
+                  'mca_pizarra_digital',
+                  'id_externo'
               ];
 
     /**

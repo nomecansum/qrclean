@@ -33,43 +33,7 @@ class APIAuthController extends Controller
         ], 201);
     }
 
-    /**
-        * @OA\Post(
-        *     path="/auth/login",
-        *     tags={"Autorizacion"},
-        *     summary="Inicia sesion para el usuario y devuelve el token de acceso",
-        *     security={{"passport":{}}},    
-        *     @OA\RequestBody(
-        *         @OA\JsonContent(
-        *             required={"username","password"},
-        *             @OA\Property(
-        *                 description="username",
-        *                 property="username",
-        *                  type="string",
-        *              ),
-        *              @OA\Property(
-        *                 description="password",
-        *                 property="password",
-        *                 type="string",
-        *              ),   
-        *              @OA\Property(
-        *                 description="remember_me",
-        *                 property="remember_me",
-        *                 type="boolean",
-        *              ), 
-        *             )
-        *     ),
-        *     @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent()
-        *       ),
-        *     @OA\Response(
-        *         response="default",
-        *         description="Ha ocurrido un error."
-        *     )
-        * )
-        */
+    
      // Inicio de sesión y creación de token
     public function login(Request $request)
     {
@@ -110,25 +74,6 @@ class APIAuthController extends Controller
         ]);
     }
 
-
-    //Cierre de sesión (anular el token)
-        /**
-        * @OA\Get(
-        *     path="/auth/logout",
-        *     tags={"Autorizacion"},
-        *     summary="Cerrar sesion para el usuario actual",
-        *     security={{"passport":{}}},    
-        *     @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent()
-        *       ),
-        *     @OA\Response(
-        *         response="default",
-        *         description="Ha ocurrido un error."
-        *     )
-        * )
-        */
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
@@ -141,24 +86,6 @@ class APIAuthController extends Controller
     }
 
 
-     //Obtener el objeto User como json
-      /**
-        * @OA\Get(
-        *     path="/auth/user",
-        *     tags={"Autorizacion"},
-        *     summary="Obtiene los datos del usuario actual",
-        *     security={{"passport":{}}},    
-        *     @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent()
-        *       ),
-        *     @OA\Response(
-        *         response="default",
-        *         description="Ha ocurrido un error."
-        *     )
-        * )
-        */
     public function user(Request $request)
     {
         return response()->json($request->user());

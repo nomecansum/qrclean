@@ -392,11 +392,7 @@ class APIController extends Controller
 
     public function solicitud_sincro_datos(Request $r,$fecha,$cliente){
         try{
-            //Buscamos el cliente
-            $cliente=clientes::where('id_externo',$cliente)->first();
-            if(!isset($cliente)){
-                return $this->respuesta_error('ERROR: El cliente no existe',400);
-            }
+            $r->request->add(['id_cliente' => $this->get_cliente_ext($r)]);
             $r->request->add(['procedencia' => "salas"]);
             //Codigo para la resincronizacion de incidencias
             $url="get_estructura_incidencias_empresa_desde_fecha/".$fecha;
@@ -417,7 +413,6 @@ class APIController extends Controller
                     $sala_qrclean->save();
                 }
             }
-            //fin
             
             savebitacora('Solicitud de resincronizacion de estructuras salas'.json_encode($r->all()),"API","solicitud_sincro","OK"); 
             return response()->json($respuesta);
@@ -451,7 +446,7 @@ class APIController extends Controller
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR Creacion de incidencia desde salas '.json_encode($r->all()),"API","crear_incidencia_salas","ERROR");
-            dd($e);
+            //dd($e);
             return $this->respuesta_error('ERROR: Ocurrio un error creando la incidencia '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
     }
@@ -467,13 +462,19 @@ class APIController extends Controller
             $r->request->add(['procedencia' => "salas"]);
             $r->request->add(['id_incidencia_salas' => $r->incidencia_sala_id]);
             $r->request->add(['txt_incidencia' => $r->notas_admin]);
-            $r->request->add(['id_incidencia' => $r->ncidencia_id_puestos]);
+            //Vamos a sacar la diferencia en el campo de comentarios
+            $incidencia=incidencias::find($r->incidencia_id_puestos);
+            $txt_nuevo=str_replace($incidencia->txt_incidencia,"",$r->notas_admin);
+            $incidencia->txt_incidencia=$r->notas_admin;
+            $incidencia->save();
 
+            $r->request->add(['des_accion' => $txt_nuevo]);
+            $r->request->add(['id_incidencia' => $r->incidencia_id_puestos]);
             $respuesta=app('App\Http\Controllers\IncidenciasController')->add_accion($r);
-            savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
+            savebitacora('Modificar incidencia '.json_encode($r->all()),"API","add_accion_salas","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
-            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
+            savebitacora('ERROR Modificacion de incidencia '.json_encode($r->all()),"API","add_accion_salas","ERROR");
             return response()->json([
                 'result'=>'error',
                 'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
@@ -482,43 +483,92 @@ class APIController extends Controller
         } 
     }
 
-    public function request_sincro($fecha,$cliente){
+    public function request_sincro(Request $r,$fecha,$cliente){
         try{
-            $r->request->add(['fec_apertura' => Carbon::parse($r->fecha)]);
-            $r->request->add(['id_usuario_apertura'=>DB::table('users')->where('name','Spotlinker Salas')->first()->id_usuario??0]);
-
-            $r->request->add(['id_puesto' => salas::where('id_externo',$r->sala_id)->first()->id_puesto??0]);
+            $r->request->add(['id_cliente' => $this->get_cliente_ext($r)]);
             $r->request->add(['procedencia' => "salas"]);
-            $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
-            savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
+            //Codigo para la resincronizacion de incidencias
+            $url="get_incidencias_desde_fecha/".$fecha;
+            $respuesta=$this->enviar_request_salas("GET",$url,"","");
+            $respuesta=json_decode($respuesta['body']);
+
+            //Sincronizamos las salas
+            $pendientes=json_decode($respuesta->a_incidencias_pendientes);
+            $reenviar=[];
+            foreach($pendientes->salas as $p){
+                $esta=incidencias::where('id_incidencia_salas',$p->incidencia_sala_id)->first();
+                if(!isset($esta)){
+                    $esta=salas::where('id_puesto',$esta->id_puesto)->first();
+                    $esta->id_estado=estados_incidencias::where('id_cliente',$r->id_cliente)->where('id_estado_salas',$p->estado)->first()->id_estado;
+                    $esta->id_tipo_incidencia=incidencias_tipos::where('id_cliente',$r->id_cliente)->where('id_tipo_salas',$p->tipo_incidencia_id)->first()->id_tipo_incidencia;
+                    $esta->txt_incidencia=$r->notas_admin;
+                    $esta->save();
+                    $reenviar[]=[$p->incidencia_sala_id,$esta->id_incidencia];
+                }
+            }
+
+            //Ahora reenviamos los datos de las incidencias que no se han sincronizado
+            
+            savebitacora('Solicitud de resincronizacion de estructuras salas'.json_encode($r->all()),"API","solicitud_sincro","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
-            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
-            return response()->json([
-                'result'=>'error',
-                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
-                'timestamp'=>Carbon::now(),
-            ])->setStatusCode(400);
+            savebitacora('Error en sincronizacion  de estructuras salas '.json_encode($r->all()),"API","reabrir_ticket","ERROR");
+            return $this->respuesta_error('ERROR: Ocurrio un error en el proceso '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
+            
         } 
     }
 
-    public function sincro_incidencias_salas($fecha,$cliente){
+    public function get_incidencias_desde_fecha(Request $r,$fecha,$cliente){
+
         try{
-            $r->request->add(['fec_apertura' => Carbon::parse($r->fecha)]);
-            $r->request->add(['id_usuario_apertura'=>DB::table('users')->where('name','Spotlinker Salas')->first()->id_usuario??0]);
-
-            $r->request->add(['id_puesto' => salas::where('id_externo',$r->sala_id)->first()->id_puesto??0]);
-            $r->request->add(['procedencia' => "salas"]);
-            $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
-            savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
-            return response()->json($respuesta);
-        }catch (\Throwable $e) {
-            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
+            //Fechas
+            $f1=(isset($fecha))?Carbon::parse($fecha):Carbon::now()->startOfMonth();
+            $f2=Carbon::now()->endOfMonth();
+            $fechas=$f1->format('d/m/Y').' - '.$f2->format('d/m/Y');
+            $r->request->add(['fechas' => $fechas]);
+            $r->request->add(['ac' => 'B']);
+            
+            $r->request->add(['id_cliente'=>$cliente]);
+            $r->request->add(['cliente' => [$this->get_cliente_ext($r)]]);
+            Auth::user()->id_cliente=$r->cliente[0];
+            $respuesta=app('App\Http\Controllers\IncidenciasController')->search($r);
+            //dd($respuesta);
+            $incidencias = $respuesta->map(function ($item, $key) {
+                $acciones=DB::table('incidencias_acciones')
+                    ->select('id_accion','des_accion','fec_accion','id_usuario','mca_resuelve','users.id_externo as id_usuario_ext')
+                    ->join('users','users.id','incidencias_acciones.id_usuario')
+                    ->where('id_incidencia',$item->id_incidencia)
+                    ->get();
+                return [
+                    'id_incidencia' => $item->id_incidencia,
+                    'id_externo' => $item->id_externo,
+                    'id_incidencia_salas' => $item->id_incidencia_salas,
+                    'des_incidencia' => $item->des_incidencia,
+                    'txt_incidencia' => $item->txt_incidencia,
+                    'fec_apertura' => $item->fec_apertura,
+                    'fec_cierre' => $item->fec_cierre,
+                    'id_tipo_incidencia' => $item->id_tipo_incidencia,
+                    'id_tipo_salas' => $item->id_tipo_salas,
+                    'id_puesto' => $item->id_puesto,
+                    'id_causa_cierre' => $item->id_causa_cierre,
+                    'comentario_cierre' => $item->comentario_cierre,
+                    'id_estado' => $item->id_estado,
+                    'id_estado_salas' => $item->id_estado_salas,
+                    'id_usuario_apertura' => $item->id_usuario_apertura,
+                    'id_usuario_ext' => users::find($item->id_usuario_apertura)->id_externo,
+                    'acciones' => $acciones,
+                ];
+            });
+            savebitacora('Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","OK"); 
             return response()->json([
-                'result'=>'error',
-                'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
+                'result'=>'ok',
                 'timestamp'=>Carbon::now(),
-            ])->setStatusCode(400);
-        } 
+                'incidencias' => $incidencias]);
+        }catch (\Throwable $e) {
+            savebitacora('ERROR Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","ERROR"); 
+            dd($e);
+            return $this->respuesta_error('ERROR Solicitud de listado de incidencias '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
+        }
     }
+
 }

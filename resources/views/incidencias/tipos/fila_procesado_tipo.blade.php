@@ -26,9 +26,12 @@
                         </div>
                     @break
                 @case("P")
-                        <div class="row">
+                        <div>
                             <div class="form-group col-md-12 {{ $errors->has('val_url') ? 'has-error' : '' }}">
-                                <label for="des_edificio" class="control-label">URL</label>
+                                <div class="row">
+                                    <div class="col-md-3"><label for="des_edificio" class="control-label">URL</label></div>
+                                    <div class="col-md-9 text-right mt-2"><a href="#modal-url" data-toggle="modal" data-target="#modal-url"><i class="fa-solid fa-square-question fa-2x text-info" title="Ayuda  URL"></i></a></div>
+                                </div>
                                 <input class="form-control tocado" name="val_url" type="text" id="val_url" value="{{ old('val_url', optional($tipo)->val_url) }}" maxlength="200" placeholder="Enter URL here...">
                                 {!! $errors->first('val_url', '<p class="help-block">:message</p>') !!}
                             </div>

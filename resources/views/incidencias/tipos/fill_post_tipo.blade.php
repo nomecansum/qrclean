@@ -7,7 +7,51 @@
         
     </div>
 @endforeach
+<div class="modal fade" id="modal-url" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
 
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                <h4 class="modal-title">URL del servicio</h4>
+            </div>
+            <div class="modal-body">
+                El formato de la URL deberá ser el estandar, sin parámetros ni interrogacion <b>?</b> que se añadiran en el siguiente campo<br><br>
+                Ejemplo:<br>
+                <pre><b>https://direccion_del_servidor/ruta1/ruta2  </b></pre><br><br>
+                En la URL se pueden utilizar los siguientes comodines que serán sustituidos por el valor correspondiente en el momento de la petición:<br>
+                <div class="col-md-12 rounded mb-3 bg-yellow" style="font-size: 12px" >
+                    <h3>Campos variables</h3>
+                    <div class="col-md-6">
+                        <b>#id_cliente#:</b> Identificador unico del cliente<br>
+                        <b>#id_incidencia#:</b> Identificador unico de la incidencia<br>
+                        <b>#id_usuario_apertura#:</b> ID Usuario que ha abierto la incidencia<br>
+                        <b>#id_usuario_externo#:</b> ID externo del usuario que ha abierto la incidencia<br>
+                        <b>#id_usuario_cierre#:</b> ID  del usuario que ha cerrado la incidencia<br>
+                        <b>#fec_apertura#:</b> Fecha de apertura de la incidencia<br>
+                        <b>#fec_cierre#:</b> Fecha de cierre de la incidencia<br>
+                    </div>
+                    <div class="col-md-6">
+                        <b>#id_tipo_incidencia#:</b> Identificador de tipo de la incidencia<br>
+                        <b>#id_puesto#:</b> Identificador del puesto<br>
+                        <b>#id_estado#:</b> Identificador del estado de la incidencia<br>
+                        <b>#edificio#:</b> Edificio en le que esta el puesto<br>
+                        <b>#planta#:</b> Planta en la que esta el puesto<br>
+                        <b>#id_cliente#:</b> Identificador de cliente<br>
+                        <b>#id_externo#:</b> Identificador de la incidencia en el sistema externo<br>
+                        <b>#id_incidencia_salas#:</b> Identificador de la incidencia en spotlinker salas<br>
+                        <b>#id_causa_cierre#:</b> Identificador de la causa de cierre<br>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-warning">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="modal-param_url" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -21,7 +65,31 @@
             <div class="modal-body">
                 El formato de los parámetros por URL será de pares nombre=valor separados por el caracter <b>&</b><br><br>
                 Ejemplo:<br>
-                <pre><b>param1=1&amp;param2=2&amp;param3=3  </b></pre>
+                <pre><b>param1=1&amp;param2=2&amp;param3=3  </b></pre><br><br>
+                En los parámetros se pueden utilizar los siguientes comodines que serán sustituidos por el valor correspondiente en el momento de la petición:<br>
+                <div class="col-md-12 rounded mb-3 bg-yellow" style="font-size: 12px" >
+                    <h3>Campos variables</h3>
+                    <div class="col-md-6">
+                        <b>#id_cliente#:</b> Identificador unico del cliente<br>
+                        <b>#id_incidencia#:</b> Identificador unico de la incidencia<br>
+                        <b>#id_usuario_apertura#:</b> ID Usuario que ha abierto la incidencia<br>
+                        <b>#id_usuario_externo#:</b> ID externo del usuario que ha abierto la incidencia<br>
+                        <b>#id_usuario_cierre#:</b> ID  del usuario que ha cerrado la incidencia<br>
+                        <b>#fec_apertura#:</b> Fecha de apertura de la incidencia<br>
+                        <b>#fec_cierre#:</b> Fecha de cierre de la incidencia<br>
+                    </div>
+                    <div class="col-md-6">
+                        <b>#id_tipo_incidencia#:</b> Identificador de tipo de la incidencia<br>
+                        <b>#id_puesto#:</b> Identificador del puesto<br>
+                        <b>#id_estado#:</b> Identificador del estado de la incidencia<br>
+                        <b>#edificio#:</b> Edificio en le que esta el puesto<br>
+                        <b>#planta#:</b> Planta en la que esta el puesto<br>
+                        <b>#id_cliente#:</b> Identificador de cliente<br>
+                        <b>#id_externo#:</b> Identificador de la incidencia en el sistema externo<br>
+                        <b>#id_incidencia_salas#:</b> Identificador de la incidencia en spotlinker salas<br>
+                        <b>#id_causa_cierre#:</b> Identificador de la causa de cierre<br>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-warning">OK</button>

@@ -991,7 +991,7 @@ paths:
                   type: string
                 notas_admin:
                   description: 'Detalle de la incidencia'
-                  type: integer
+                  type: string
                   maxLength: 65535
                 incidencia_sala_id:
                   description: 'ID de la incidencia en salas'
@@ -1064,14 +1064,14 @@ paths:
                     format: date-time
                   estado:
                     description: 'ID de estado de la incidencia'
-                    type: integer
+                    type: string
                   notas_admin:
                     description: 'Detalle de la incidencia'
                     type: integer
                     maxLength: 65535
                   incidencia_sala_id:
                     description: 'ID de la incidencia en salas'
-                    type: integer
+                    type: string
                   incidencia_id_puestos:
                     description: 'ID de incidencia en puestos'
                     type: integer
@@ -1126,6 +1126,9 @@ paths:
         name: fecha
         in: path
         description: 'Fecha de incicio de la consulta'
+        type: string
+        format: date-time
+        example: '1900-01-01T15:00:01.123+0200'
         required: true
       -
         name: id_cliente
@@ -1175,13 +1178,15 @@ paths:
     get:
       tags:
         - 'Integracion con salas'
-      summary: 'Devuelve el listado de incidencias pendientes de sincronizar'
+      summary: 'Devuelve el listado de incidencias desde la fecha solicitada'
       operationId: dfbe31a6a86e5d065c7fd30d2547ba5e9f70585c13dffd3dd7f88b75
       parameters:
       -
         name: fecha
         in: path
         description: 'Fecha de incicio de la consulta'
+        format: date-time
+        example: '1900-01-01T15:00:01.123+0200'
         required: true
       -
         name: id_cliente
@@ -1200,26 +1205,72 @@ paths:
                     timestamp: 
                       type: string
                       format: date-time
-                    a_incidencias_pendientes: 
+                    incidencias: 
                       type: array
                       items: 
                         type: object
                         properties: 
-                          incidencia_id_puestos: 
+                          id_incidencia: 
                             type: integer
                             format: int32
-                          sala_id: 
-                            type: integer
+                          id_externo: 
+                            type: string
                             format: nullable
-                          descripcion_adicional: 
+                          id_incidencia_salas: 
                             type: string
-                          notas_admin: 
+                            format: nullable
+                          des_incidencia: 
                             type: string
-                          fecha: 
+                          txt_incidencia: 
                             type: string
-                          estado: 
+                          fec_apertura: 
+                            type: string
+                          fec_cierre: 
+                            type: string
+                          id_tipo_incidencia: 
                             type: integer
                             format: int32
+                          id_tipo_salas: 
+                            type: integer
+                            format: int32
+                          id_puesto: 
+                            type: integer
+                            format: int32
+                          id_causa_cierre: 
+                            type: integer
+                            format: int32
+                          comentario_cierre: 
+                            type: string
+                          id_estado: 
+                            type: string
+                            format: nullable
+                          id_estado_salas: 
+                            type: string
+                            format: nullable
+                          id_usuario_apertura: 
+                            type: integer
+                            format: int32
+                          id_usuario_ext: 
+                            type: string
+                          acciones: 
+                            type: array
+                            items: 
+                              type: object
+                              properties: 
+                                id_accion: 
+                                  type: integer
+                                  format: int32
+                                des_accion: 
+                                  type: string
+                                fec_accion: 
+                                  type: string
+                                id_usuario: 
+                                  type: integer
+                                  format: int32
+                                mca_resuelve: 
+                                  type: string
+                                id_usuario_ext: 
+                                  type: string
                 type: object
         400:
           description: 'Error en la peticion'

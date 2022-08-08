@@ -19,7 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/unauthenticated', function () {
-    return response()->json(['result'=>'error','timestamp'=>Carbon\Carbon::now(),'message' => 'Unauthenticated.'], 403);
+    return response()->json(['result'=>'error','timestamp'=>Carbon\Carbon::now(),'message' => 'Unauthenticated.'], 401);
 });
 
 Route::post('/test_request', 'APIController@echo_test');
@@ -72,8 +72,9 @@ Route::group(['prefix' => 'salas','middleware' => 'auth:api'], function() {
     //Añadir accion
     Route::post('/set_incidencia_empresa', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@add_accion_salas']);
     //Cerrar incidencia
-    Route::post('/cerrar', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@cerrar_ticket']);
-     //Cerrar incidencia
-    Route::post('/reabrir', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@reabrir_ticket']);
+    Route::post('/sincronizar_incidencias_desde_fecha/{fecha}/{cliente}', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@request_sincro']);
+    //Listado de incidencias
+    Route::get('/get_incidencias_desde_fecha/{fecha}/{cliente}', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@get_incidencias_desde_fecha']);
+
 
 });

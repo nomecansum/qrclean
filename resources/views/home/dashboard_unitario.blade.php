@@ -1,5 +1,7 @@
 @include('home.accesos_directos')
 @include('home.puesto_asignado')
-@include('home.calendario')
+@if(checkPermissions(['Reservas puestos'],['R']) || checkPermissions(['Reservas salas'],['R']))
+    @include('home.calendario')
+@endif
 
 

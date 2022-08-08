@@ -59,6 +59,14 @@ class IncidenciasController extends Controller
             Log::error("Postprocesado de RESPUESTA HTTP POST de incidencia  ".$id_incidencia." ERROR: ".$e->getMessage());
         }
     }
+
+    private function reemplazar_parametros($subject,$inc){
+        preg_match_all("/(?<=#).*?(?=#)/", $subject, $match);
+        foreach($match[0] as $value){
+            $subject=str_replace('#'.$value.'#',$inc->$value,$subject);
+        }
+        return $subject;
+    }
   
   //////////////////////////////////////////////////////
   
@@ -204,7 +212,7 @@ class IncidenciasController extends Controller
         $lista_puestos=$puestos->pluck('id_puesto')->toArray();
 
         $incidencias=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','estados_incidencias.id_estado_salas as id_estado_salas','causas_cierre.des_causa')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
             ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
@@ -558,10 +566,10 @@ class IncidenciasController extends Controller
                         Log::info("Iniciando postprocesado HTTP POST de incidencia ".$inc->id_incidencia);
                         log::debug($p->val_url.'?'.$p->param_url);
                         //Ahora sustituimos las variables por sus valores
-                        preg_match_all("/(?<=#).*?(?=#)/", $p->val_body, $match);
-                        foreach($match[0] as $value){
-                            $p->val_body=str_replace('#'.$value.'#',$inc->$value,$p->val_body);
-                        }
+                        $p->val_url=$this->reemplazar_parametros($p->val_url,$inc);
+                        $p->param_url=$this->reemplazar_parametros($p->param_url,$inc);
+                        $p->val_body=$this->reemplazar_parametros($p->val_body,$inc);
+                        
                         $response=Http::withOptions(['verify' => false])
                             ->withHeaders(json_decode($p->val_header,true))
                             ->withbody($p->val_body,'application/json')

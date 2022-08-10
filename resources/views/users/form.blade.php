@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-11">
+                <div class="col-md-10">
                     <label class="control-label">Token acceso</label>
                     <div class="input-group mb-3">
                         <input type="text" name="token_acceso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($users) ? $users->token_acceso : ''}}">
@@ -85,8 +85,8 @@
                 </div>
                 <div class="col-md-1">
                     <div class="form-group">
-                        <label for="name" class="control-label">Expira (d)</label>
-                        <input class="form-control" name="token_expires" type="number" id="token_expires" value="{{ old('token_expires', optional($users)->token_expires) }}" min="1" max="6000" >
+                        <label for="name" class="control-label">Expira (dias)</label>
+                        <input class="form-control" name="token_expires" type="number" id="token_expires" value="{{ old('token_expires', optional($users)->token_expires) }}" min="1" max="1000000" >
                         {!! $errors->first('token_expires', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
@@ -129,8 +129,8 @@
         </div>
         <div class="col-md-3 mr-3">
             <div class="form-group {{ $errors->has('id_perfil') ? 'has-error' : '' }}">
-                <label for="id_perfil" class="control-label">Perfil</label>
-                <select class="form-control"  id="cod_nivel" name="cod_nivel">
+                <label for="id_perfil">Perfil</label>
+                <select class="select2 notsearch"  id="cod_nivel" name="cod_nivel">
                     @foreach ($Perfiles as $Perfile)
                         <option value="{{ $Perfile->cod_nivel }}" {{ old('cod_nivel', optional($users)->cod_nivel) == $Perfile->cod_nivel ? 'selected' : '' }}>
                             {{ $Perfile->des_nivel_acceso }}
@@ -140,6 +140,7 @@
                 {!! $errors->first('cod_nivel', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
+
         {{-- //Vamos a añadir un combo con las zonas horarias --}}
         @php
             $regions = array(
@@ -184,18 +185,42 @@
                 </select>
             </div>
         </div>
+        <div class="col-md-3 mr-3">
+            <div class="form-group">
+                <label>Edificio de referencia</label><br>
+                <select name="id_edificio" id="id_edificio" class="select2 notsearch">
+                    <option value=""></option>
+                    @foreach ($edificios as $t)
+                        <option {{isset($users) && $users->id_edificio == $t->id_edificio ? 'selected' : ''}} value="{{$t->id_edificio}}">{{$t->des_edificio}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
 </div>
+@if(isset($users))
+    <div class="row rounded b-all mb-2">
+        <div class="col-md-12">
+            <label><b>Turno de asistencia</b></label><br>
+            @foreach($turnos as $t)
+            <div class="form-group col-md-3">
+                <input type="checkbox" class="form-control  magic-checkbox chkdia" name="turno[]" id="turno{{$t->id_turno}}" value="{{$t->id_turno}}" {{ in_array($t->id_turno,$turnos_usuario)?'checked':'' }}> 
+                <label class="custom-control-label"   for="turno{{$t->id_turno}}"><b>{{$t->des_turno}} <i class="fa-solid fa-square" style="color: {{ $t->val_color }}"></i></b></label><br>
+            </div>
+            @endforeach
+        </div>
+    </div>
+@endif
 <div class="row rounded b-all">
-    <div class="col-md-3 mr-3">
-        <div class="form-group">
-            <label>Supervisor</label><br>
+
+        <div class="form-group col-md-3 ">
+            <label><b>Supervisor</b></label><br>
             <select name="id_usuario_supervisor" id="id_usuario_supervisor" class="select2">
                 <option value=""></option>
                 @foreach ($supervisores as $c)
                     <option {{isset($users) && $users->id_usuario_supervisor == $c->id ? 'selected' : ''}} value="{{$c->id}}">{{$c->name}}</option>
                 @endforeach
             </select>
-        </div>
+
     </div>
     @if(isset($users) && isSupervisor($users->id))
         <div class="col-md-8">
@@ -250,6 +275,16 @@
         .fail(function( jqXHR, textStatus, errorThrown ) {
                 console.log(errorThrown);
         });	
+    })
+
+    $('.notsearch').select2({
+        minimumResultsForSearch: -1,
+        width: "100%"
+    });
+
+
+    $('.chkdia').click(function(){
+        $.get("{{ url('users/turno') }}/{{ $users->id??0 }}/"+$(this).val()+"/"+$(this).is(':checked'));
     })
 
     

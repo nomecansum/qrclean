@@ -5,7 +5,7 @@
 @endsection
 
 @section('styles')
-
+    <link href="{{url('/plugins/flag-icon-css/css/flag-icon.min.css')}}" rel="stylesheet" media="all">  
 @endsection
 
 @section('breadcrumb')
@@ -85,6 +85,7 @@
                         <tr>
                             <th  data-sortable="true" >ID</th>
                             <th  data-sortable="true" >Nombre</th>
+                            <th  data-sortable="true" >Ubicación</th>
                             <th  data-sortable="true" >Cliente</th>
                             <th></th>
                         </tr>
@@ -94,6 +95,7 @@
                         <tr class="hover-this">
                             <td>{{ $edificios->id_edificio }}</td>
                             <td>{{ $edificios->des_edificio }}</td>
+                            <td>{{ $edificios->nombre }}</td>
                             <td>{{ $edificios->nom_cliente }}</td>
 
                             <td>

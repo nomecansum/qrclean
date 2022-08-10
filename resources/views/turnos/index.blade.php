@@ -4,7 +4,7 @@
 
 
 @section('styles')
-
+	<link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('title')
@@ -67,11 +67,10 @@
 							<th>Id</th>
 							<th>Cliente</th>
 							<th>Nombre</th>
-							<th>Dias</th>
 							<th>F.inicio</th>
 							<th>F.fin</th>
-                            <th>Semana</th>
-							<th></th>
+                            <th>Color</th>
+							<th>Dias</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -80,12 +79,17 @@
 								<td>{{$dato->id_turno}}</td>
 								<td>{{$dato->nom_cliente}}</td>
 								<td>{{ $dato->des_turno}}</td>
-								<td>{{ $dato->dias_semana}}</td>
-								<td>{{ $dato->fec_inicio}}</td>
-                                <td>{{ $dato->fec_fin}}</td>
-                                <td>{{ $dato->mod_semana}}</td>
+								<td>{!! beauty_fecha($dato->fec_inicio,"2")!!}</td>
+                                <td>{!! beauty_fecha($dato->fec_fin,"2")!!}</td>
+                                <td style="background-color: {{ $dato->val_color }}"></td>
 								<td style="position: relative;" class="pt-2">
-									<div class="floating-like-gmail mt-2">
+									@php
+										$dias=['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO','DOMINGO'];
+										foreach(json_decode($dato->dias_semana)->dia as $dia){
+											echo "<li>".$dias[$dia-1].'</li>';
+										}
+									@endphp
+									<div class="floating-like-gmail">
 										@if (checkPermissions(['Turnos'],["W"]))<a href="#" title="Editar turno" data-id="{{ $dato->id_turno }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $dato->id_turno }})"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
 										@if (checkPermissions(['Turnos'],["D"]))<a href="#eliminar-{{$dato->id_turno}}" title="Borrar turno" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
 										{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$cus->id_cliente}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
@@ -123,8 +127,11 @@
 @section('scripts')
 	<script>
 
-	$('.configuracion').addClass('active active-sub');
-	$('.clientes').addClass('active-link');
+	$('.parametrizacion').addClass('active active-sub');
+	$('.turnos').addClass('active-link');
+
+
+
 
 	$('#btn_nueva_puesto').click(function(){
        $('#editorCAM').load("{{ url('/turnos/edit/0') }}", function(){

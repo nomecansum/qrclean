@@ -22,6 +22,7 @@ class EdificiosController extends Controller
     {
         $edificiosObjects = DB::table('edificios')
         ->join('clientes','clientes.id_cliente','edificios.id_cliente')
+        ->leftjoin('provincias','provincias.id_prov','edificios.id_provincia')
         ->where(function($q){
             $q->where('edificios.id_cliente',Auth::user()->id_cliente);
         })
@@ -40,7 +41,17 @@ class EdificiosController extends Controller
         //$Clientes = clientes::pluck('nom_cliente','id_cliente')->all();
         //$Clientes=lista_clientes();
         $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
-        return view('edificios.create', compact('Clientes'));
+        $provincias = DB::table('provincias')
+            ->select('id_prov', 'nombre', 'nom_pais', 'id_pais', 'regiones.cod_region', 'regiones.nom_region')
+            ->leftjoin("regiones", "provincias.cod_region", "regiones.cod_region")
+            ->leftjoin("paises", "paises.id_pais", "provincias.cod_pais")
+            ->where('id_prov', '>', 0)
+            ->orderby('nom_pais','desc')
+            ->orderby('nom_region')
+            ->orderby('nombre')
+            ->get();
+        
+        return view('edificios.create', compact('Clientes','provincias'));
     }
 
     /**
@@ -83,8 +94,17 @@ class EdificiosController extends Controller
         validar_acceso_tabla($id,"edificios");
         $edificios = edificios::findOrFail($id);
         $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
+        $provincias = DB::table('provincias')
+            ->select('id_prov', 'nombre', 'nom_pais', 'id_pais', 'regiones.cod_region', 'regiones.nom_region')
+            ->leftjoin("regiones", "provincias.cod_region", "regiones.cod_region")
+            ->leftjoin("paises", "paises.id_pais", "provincias.cod_pais")
+            ->where('id_prov', '>', 0)
+            ->orderby('nom_pais')
+            ->orderby('nom_region')
+            ->orderby('nombre')
+            ->get();
         //$Clientes=lista_clientes();
-        return view('edificios.edit', compact('edificios','Clientes'));
+        return view('edificios.edit', compact('edificios','Clientes','provincias'));
     }
 
     /**
@@ -156,6 +176,7 @@ class EdificiosController extends Controller
                 'des_edificio' => 'nullable|string|min:0|max:200',
                 'abreviatura' => 'nullable|string|min:0|max:20',
             'id_cliente' => 'nullable', 
+            'id_provincia' => 'integer|min:1', 
         ];
         $data = $request->validate($rules);
         return $data;

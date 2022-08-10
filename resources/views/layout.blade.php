@@ -63,6 +63,7 @@
     <link href="{{ asset('/plugins/bootstrap-select-master/css/bootstrap-select.min.css') }}" rel="stylesheet">
     {{-- switchery switchs deslizable --}}
     <link href="{{ asset('plugins/switchery/switchery.min.css') }}" rel="stylesheet">
+    
 
     <!--=================================================
 
@@ -89,9 +90,10 @@
     Detailed information and more samples can be found in the document.
 
     =================================================-->
-
-    @include('layouts.styles')
     @yield('styles')
+    @yield('styles2')
+    @include('layouts.styles')
+    
 </head>
 <!--TIPS-->
 <!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->

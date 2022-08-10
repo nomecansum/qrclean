@@ -30,11 +30,11 @@
                                         'users' => null,
                                       ])
 
-                <div class="form-group">
-                    <div class="col-md-10">
-                        <input class="btn btn-primary btn-lg" type="submit" value="Guardar">
-                    </div>
-                </div>
+<div class="form-group mt-2">
+    <div class="col-md-12 text-right">
+        <input class="btn btn-primary btn-lg" type="submit" value="Actualizar">
+    </div>
+</div>
 
             </form>
 

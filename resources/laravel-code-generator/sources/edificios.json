@@ -76,7 +76,7 @@
                     "id_cliente",
                     "id_cliente"
                 ],
-                "field": "CIF"
+                "field": "nom_cliente"
             },
             "foreign-constraint": {
                 "field": "id_cliente",
@@ -168,6 +168,43 @@
             "api-key": "abreviatura",
             "is-api-visible": true,
             "api-description": "The abreviatura of the model."
+        },
+        {
+            "name": "id_provincia",
+            "labels": "Id Provincia",
+            "html-type": "number",
+            "css-class": "",
+            "options": {},
+            "html-value": null,
+            "validation": "nullable",
+            "is-on-index": true,
+            "is-on-show": true,
+            "is-on-form": true,
+            "data-type": "int",
+            "data-type-params": [],
+            "data-value": null,
+            "is-index": false,
+            "is-unique": false,
+            "is-primary": false,
+            "comment": null,
+            "is-nullable": true,
+            "is-header": false,
+            "is-unsigned": false,
+            "is-auto-increment": false,
+            "is-inline-options": false,
+            "is-date": false,
+            "date-format": "",
+            "cast-as": "",
+            "placeholder": "Enter id provincia here...",
+            "delimiter": "; ",
+            "range": [],
+            "foreign-relation": null,
+            "foreign-constraint": null,
+            "on-store": null,
+            "on-update": null,
+            "api-key": "id_provincia",
+            "is-api-visible": true,
+            "api-description": "The id provincia of the model."
         }
     ],
     "relations": [

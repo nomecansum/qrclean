@@ -959,6 +959,7 @@ paths:
                 - descripcion_adicional
                 - estado
                 - incidencia_sala_id
+                - tipo_incidencia_id
               properties:
                 id_cliente:
                   description: 'ID de cliente'
@@ -1205,72 +1206,30 @@ paths:
                     timestamp: 
                       type: string
                       format: date-time
-                    incidencias: 
+                    a_incidencias_pendientes: 
                       type: array
                       items: 
                         type: object
                         properties: 
-                          id_incidencia: 
+                          sala_id: 
                             type: integer
                             format: int32
-                          id_externo: 
+                          fecha: 
                             type: string
-                            format: nullable
-                          id_incidencia_salas: 
+                            format: date-time
+                          descripcion_adicional: 
                             type: string
-                            format: nullable
-                          des_incidencia: 
-                            type: string
-                          txt_incidencia: 
-                            type: string
-                          fec_apertura: 
-                            type: string
-                          fec_cierre: 
-                            type: string
-                          id_tipo_incidencia: 
+                          tipo_incidencia_id: 
                             type: integer
                             format: int32
-                          id_tipo_salas: 
+                          estado: 
                             type: integer
                             format: int32
-                          id_puesto: 
+                          notas_admin: 
+                            type: string
+                          incidencia_id_puestos: 
                             type: integer
                             format: int32
-                          id_causa_cierre: 
-                            type: integer
-                            format: int32
-                          comentario_cierre: 
-                            type: string
-                          id_estado: 
-                            type: string
-                            format: nullable
-                          id_estado_salas: 
-                            type: string
-                            format: nullable
-                          id_usuario_apertura: 
-                            type: integer
-                            format: int32
-                          id_usuario_ext: 
-                            type: string
-                          acciones: 
-                            type: array
-                            items: 
-                              type: object
-                              properties: 
-                                id_accion: 
-                                  type: integer
-                                  format: int32
-                                des_accion: 
-                                  type: string
-                                fec_accion: 
-                                  type: string
-                                id_usuario: 
-                                  type: integer
-                                  format: int32
-                                mca_resuelve: 
-                                  type: string
-                                id_usuario_ext: 
-                                  type: string
                 type: object
         400:
           description: 'Error en la peticion'

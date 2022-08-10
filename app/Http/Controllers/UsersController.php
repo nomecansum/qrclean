@@ -9,6 +9,7 @@ use App\Models\users;
 use App\Models\puestos;
 use App\Models\plantas_usuario;
 use App\Models\puestos_asignados;
+use App\Models\turnos_usuarios;
 use Illuminate\Http\Request;
 use Exception;
 use DB;
@@ -99,6 +100,14 @@ class UsersController extends Controller
 
         $supervisores_usuario=DB::table('permisos_usuarios')->where('id_seccion',$permiso)->get()->pluck('id_usuario')->unique();
 
+        $turnos=DB::table('turnos')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+
+        $edificios=DB::table('edificios')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+
         $supervisores=DB::table('users')
             ->where(function ($q) use($supervisores_perfil,$supervisores_usuario){
                 $q->wherein('cod_nivel',$supervisores_perfil);
@@ -124,7 +133,7 @@ class UsersController extends Controller
 
         $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',0)->pluck('id')->toarray();
 
-        return view('users.create', compact('Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables'));
+        return view('users.create', compact('Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','edificios','turnos'));
 
     }
     /**
@@ -236,6 +245,18 @@ class UsersController extends Controller
             ->leftjoin('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')
             ->where('puestos_asignados.id_usuario',$id)
             ->get();
+        
+        $turnos=DB::table('turnos')
+            ->where('id_cliente',$users->id_cliente)
+            ->get();
+
+        $turnos_usuario=DB::table('turnos_usuarios')
+            ->where('id_usuario',$id)
+            ->pluck('id_turno')->toarray();
+
+        $edificios=DB::table('edificios')
+            ->where('id_cliente',$users->id_cliente)
+            ->get();
         $eventos=[];
         foreach($reservas as $res){
             $e=new stdClass();
@@ -270,7 +291,7 @@ class UsersController extends Controller
             ->orderby('expires_at','desc')
             ->first();
 
-        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens'));
+        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios'));
     }
     /**
      * Update the specified users in the storage.
@@ -457,7 +478,10 @@ class UsersController extends Controller
             'theme' => 'nullable|string|min:0|max:150',
             'val_timezone' => 'nullable|string|min:0|max:100',
             'nivel_acceso'=>'nullable',
-            'token_acceso'=>'nullable'
+            'token_acceso'=>'nullable',
+            'id_edificio'=>'numeric',
+            'id_turno'=>'nullable',
+            'token_expires'=>'nullable|numeric',
         ];
 
 
@@ -1231,4 +1255,25 @@ class UsersController extends Controller
         ]);
     }
 
+    public function turno_usuario($usuario,$turno,$estado){
+        
+        if($estado==="true"){
+            $turno=db::table('turnos_usuarios')->insert([
+                'id_usuario'=>$usuario,
+                'id_turno'=>$turno,
+                'fec_audit'=>Carbon::now()
+            ]);
+            return [
+                'result' => "OK",
+                "action" => "insert turno",
+            ];
+        }else{
+            $turno=turnos_usuarios::where('id_usuario',$usuario)->where('id_turno',$turno)->delete();
+            return [
+                'result' => "OK",
+                "action" => "del turno",
+            ];
+        }
+    }
+hello@fontawesome.com
 }

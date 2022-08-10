@@ -25,9 +25,7 @@
 
     <div class="panel">
         <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
-            </div>
+            
             <h3 class="panel-title">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</h3>
         </div>
         <div class="panel-body">
@@ -47,8 +45,8 @@
                                         'users' => $users,
                                       ])
 
-                <div class="form-group">
-                    <div class="col-md-10">
+                <div class="form-group mt-2">
+                    <div class="col-md-12 text-right">
                         <input class="btn btn-primary btn-lg" type="submit" value="Actualizar">
                     </div>
                 </div>

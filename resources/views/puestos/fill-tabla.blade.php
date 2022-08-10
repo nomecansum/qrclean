@@ -1,5 +1,5 @@
 <div class="row mt-2">
-    <div class="panel">
+    <div class="panel" style="width: 100%">
         <div class="panel-heading">
             <h3 class="panel-title">Puestos</h3>
         </div>

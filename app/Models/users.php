@@ -50,7 +50,8 @@ class users extends Model
                   'id_usuario_supervisor',
                   'val_vista_puestos',
                   'token_expires',
-                  'id_externo'
+                  'id_externo',
+                  'id_edificio'
               ];
 
     /**

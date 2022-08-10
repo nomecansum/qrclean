@@ -161,7 +161,7 @@
                                 <form method="POST" action="{!! route('users.users.destroy', $users->id) !!}" accept-charset="UTF-8">
                                 <input name="_method" value="DELETE" type="hidden">
                                 {{ csrf_field() }}
-                                    <div class="pull-right floating-like-gmail" role="group" style="width: 170px">
+                                    <div class="pull-right floating-like-gmail" role="group" style="width: 170px; position: relative">
                                         @if (checkPermissions(['ReLogin'],["R"]))<a href="{{url('relogin',$users->id)}}" class="btn btn-xs btn-warning"><i class="fa fa-user" ></i> Suplantar</a>@endif
                                         <a href="{{ route('users.users.edit', $users->id ) }}" class="btn btn-xs btn-info  add-tooltip" title="Editar Usuario"  style="float: left"><span class="fa fa-pencil pt-1" ></span> Edit</a>
                                         <a class="btn btn-xs btn-danger add-tooltip ml-1 btn_eliminar"  data-target="#eliminar-usuario" data-toggle="modal" style="float: left" title="Borrar usuario" onclick="$('#txt_borrar').html('{{ $users->name }}'); $('#id_usuario_borrar').val({{ $users->id }})" data-name="{{ $users->name }}"   style="float: right">

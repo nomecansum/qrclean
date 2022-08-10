@@ -44,9 +44,10 @@ class eventos extends Command
                     "name": "cod_grupo_ejecucion",
                     "tipo": "list",
                     "multiple": false,
-                    "list": "Minuto,Hora,Diario,Semanal,Quincenal,Mensual,Todos",
-                    "values": "I,H,D,S,Q,M,*",
-                    "def": "*"
+                    "list": "Todos|Minuto|Hora|Dia|Semana|Quincena|grupo A|grupo B|grupo C|grupo D|grupo E|grupo F",
+                    "values": "*|I|H|D|S|Q|A|B|C|D|E|F",
+                    "def": "*",
+                    "required": false
                 }
             ]
         }';
@@ -68,13 +69,18 @@ class eventos extends Command
         return "A";
      }
 
-     static function log_evento($texto,$cod_regla){
+     static function log_evento($texto,$cod_regla,$tipo="info"){
         DB::table('eventos_log')->insert([
             'fec_log'=>Carbon::now(),
-            'txt_log'=>$texto,
-            'cod_regla'=>$cod_regla
+            'txt_log'=>substr($texto,0,5000),
+            'cod_regla'=>$cod_regla,
+            'tip_mensaje'=>$tipo
         ]);
      }
+
+     public function scope(){
+        return "events";
+    }
 
     /**
      * Execute the console command.
@@ -140,24 +146,41 @@ class eventos extends Command
             $this->log_evento('Iniciando proceso de la regla dentro del horario de programacion',$evento->cod_regla);
             //Ahora leemos el fichero de la regla
             Log::debug('Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando);
-            include_once(resource_path('views/events/comandos').'/'.$evento->nom_comando);
-            $resultado_json=ejecutar($evento);
-            $resultado=json_decode($resultado_json);
+            $output=$this->output;
             try{
-                $campos=json_decode($campos);
-                $campos=$campos->campos;
-            } catch(\Exception $e){
-                $campos=[];
+                include_once(resource_path('views/events/comandos').'/'.$evento->nom_comando);
+                $resultado_json=ejecutar($evento,$output);
+                $resultado=json_decode($resultado_json);
+                try{
+                    $campos=json_decode($campos);
+                    $campos=$campos->campos;
+                } catch(\Throwable $e){
+                    $campos=[];
+                }
+                if(sizeof($resultado->lista_id)>0){
+                    $this->log_evento('Comando ejecutado, '.count($resultado->lista_id).' ID a procesar: '.implode(",",$resultado->lista_id),$evento->cod_regla);
+                    Log::debug("ID a procesar: ".implode(",",$resultado->lista_id));
+                } else{
+                    $this->log_evento('Comando ejecutado, no hay ID para procesar',$evento->cod_regla);
+                    Log::debug("No hay ID para procesar");
+                }
+    
+                Log::notice("Resultado del comando: ".$resultado->respuesta);
+            } catch(\Throwable $e){
+                Log::error('Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando.', no encontrado');
+                $this->log_evento('Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando.', no encontrado',$evento->cod_regla,'error');
+                $resultado=json_decode(json_encode([
+                    "respuesta" => "ERROR",
+                    "comando" => $evento->nom_comando,
+                    "tipo_id" => "void",
+                    "table" => "void",
+                    "campo" => "void",
+                    "lista_id" =>  [],
+                    "data" =>[],
+                    "TS" => Carbon::now()->format('Y-m-d h:i:s')
+                ]));
             }
-            if(sizeof($resultado->lista_id)>0){
-                $this->log_evento('Comando ejecutado, ID a procesar: '.implode(",",$resultado->lista_id),$evento->cod_regla);
-                Log::debug("ID a procesar: ".implode(",",$resultado->lista_id));
-            } else{
-                $this->log_evento('Comando ejecutado, no hay ID para procesar',$evento->cod_regla);
-                Log::debug("No hay ID para procesar");
-            }
-
-            Log::notice("Resultado del comando: ".$resultado->respuesta);
+            
 
 
             //Sacamos la cuenta total de iteraciones para saber cuando acaba
@@ -177,13 +200,18 @@ class eventos extends Command
                 }
                 $acciones_toca=$acciones->where('val_iteracion',$num_iteracion)->sortby("nom_orden");
                 foreach($acciones_toca as $accion){
-                    Log::debug("ID: ".$id." | Iteracion: " .$num_iteracion." | Accion[".$accion->num_orden."]: ".$accion->nom_accion);
-                    $this->log_evento("ID: ".$id." | Iteracion: " .$num_iteracion." | Accion[".$accion->num_orden."]: ".$accion->nom_accion,$evento->cod_regla);
-                    include(resource_path('views/events/acciones').'/'.$accion->nom_accion);
-                    //Ejecutamos la funcion principal de cada accion
-                    $func_accion($accion,$resultado,$campos,$id);
-                    //Se elimina la funcion por si hay mas acciones en la misma regla
-                    unset($func_accion);
+                    try{
+                        Log::debug("ID: ".$id." | Iteracion: " .$num_iteracion." | Accion[".$accion->num_orden."]: ".$accion->nom_accion);
+                        $this->log_evento("ID: ".$id." | Iteracion: " .$num_iteracion." | Accion[".$accion->num_orden."]: ".$accion->nom_accion,$evento->cod_regla);
+                        include(resource_path('views/events/acciones').'/'.$accion->nom_accion);
+                        //Ejecutamos la funcion principal de cada accion
+                        $func_accion($accion,$resultado,$campos,$id);
+                        //Se elimina la funcion por si hay mas acciones en la misma regla
+                        unset($func_accion);
+                    } catch(\Throwable $e){
+                        Log::error('Error al ejecutar la accion :'.$accion->nom_accion.', '.mensaje_excepcion($e));
+                        $this->log_evento('Error al ejecutar la accion :'.$accion->nom_accion.', '.mensaje_excepcion($e),$evento->cod_regla,'error');
+                    }
                 }
                 if($num_iteracion==1){ //Estamos en la primera ya hay que insertar en la tabla de evolucion para ir progresandola
                     DB::table('eventos_evolucion_id')->insert([
@@ -202,10 +230,20 @@ class eventos extends Command
                         Log::debug('Añadido no molestar para '.$id.' hasta dentro de '.$evento->nomolestar.' horas');
                         $this->log_evento('Añadido no molestar para '.$id.' hasta dentro de '.$evento->nomolestar.' horas',$evento->cod_regla);
                         DB::table('eventos_noactuar')->where('cod_regla',$evento->cod_regla)->where('id',$id)->delete();
+                        //Dependiendo de la unidad de tiempo de nomolestar
+                        if($evento->tip_nomolestar=='H'){
+                            $fecha_noactuar=Carbon::now()->addHours($evento->nomolestar);
+                        } else if($evento->tip_nomolestar=='D'){
+                            $fecha_noactuar=Carbon::now()->addDays($evento->nomolestar);
+                        } else if($evento->tip_nomolestar=='M'){
+                            $fecha_noactuar=Carbon::now()->addMonths($evento->nomolestar);
+                        } else if($evento->tip_nomolestar=='Y'){
+                            $fecha_noactuar=Carbon::now()->addYears($evento->nomolestar);
+                        }
                         DB::table('eventos_noactuar')->insert([
                             "cod_regla"=>$evento->cod_regla,
                             "id"=>$id,
-                            "fecha"=>Carbon::now()->addHour($evento->nomolestar),
+                            "fecha"=>$fecha_noactuar,
                         ]);
                     }
                 } else { //Estamos a mitad del fregao, aumentamos el numero de iteracion y listo
@@ -221,7 +259,7 @@ class eventos extends Command
             'fec_ult_ejecucion'=>Carbon::now(),
             'fec_prox_ejecucion'=>Carbon::now()->addMinutes($evento->intervalo)
             ]);
-        $this->log_evento('Proxima ejecucion establecida para  ',Carbon::now()->addMinutes($evento->intervalo)->toString());
+        $this->log_evento('Proxima ejecucion establecida para  '.Carbon::now()->addMinutes($evento->intervalo)->toString(),$evento->cod_regla);
         } else {
             Log::info('No hay eventos para evaluar');
         }

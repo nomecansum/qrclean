@@ -733,8 +733,12 @@ function beauty_fecha($date,$mostrar_hora=-1){
     } else {
         $fecha=Carbon::parse($date)->format('d/m/Y');
     }
+    if($mostrar_hora=="2"){
+        $fecha=Carbon::parse($date)->formatLocalized('%d %b');
+    }
     return "<b>".$fecha."</b> ".$hora;
 }
+
 
 function validar_request($r,$metodo_notif,$tipo,$reglas,$mensajes=[]){
     $validator = Validator::make($r->all(), $reglas,$mensajes);
@@ -839,6 +843,16 @@ function validar_acceso_tabla($id,$tabla){
             $campo="id_marca";
             $ruta="marcas.index";
             break;
+        case "festivos":
+            $descriptivo="festivo";
+            $campo="cod_festivo";
+            $ruta="festivos.index";
+            break;
+        case "turnos":
+                $descriptivo="turno";
+                $campo="id_turno";
+                $ruta="turnos.index";
+                break;
         default:
             $descriptivo=$tabla;
     }

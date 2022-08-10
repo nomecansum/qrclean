@@ -204,7 +204,6 @@ class CombosController extends Controller
 
 
     public function combo_edificios($id_cliente){
-
         $edificios=DB::table('edificios')
             ->where('id_cliente',$id_cliente)
             ->where(function($q){
@@ -214,6 +213,86 @@ class CombosController extends Controller
             })
             ->get();
         return view('resources.combo_edificios',compact('edificios'));
+    }
+
+    public function combo_paises($id_cliente){
+        $datos = DB::table('provincias')
+            ->select('nom_pais as nombre', 'id_pais as id')
+			->leftjoin("edificios", "provincias.id_prov", "edificios.id_provincia")
+            ->leftjoin("regiones", "provincias.cod_region", "regiones.cod_region")
+			->leftjoin("paises", "paises.id_pais", "provincias.cod_pais")
+            ->where('id_cliente', $id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->orderby('nom_pais')
+            ->distinct()
+            ->get();
+        return view('resources.combo_generico',compact('datos'));
+    }
+    public function combo_regiones($id_cliente){
+        $datos = DB::table('provincias')
+            ->select('regiones.cod_region as id', 'nom_region as nombre')
+            ->leftjoin("edificios", "provincias.id_prov", "edificios.id_provincia")
+            ->leftjoin("regiones", "provincias.cod_region", "regiones.cod_region")
+            ->leftjoin("paises", "paises.id_pais", "provincias.cod_pais")
+            ->where('id_cliente', $id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->orderby('nom_region')
+            ->distinct()
+            ->get();
+        return view('resources.combo_generico',compact('datos'));
+    }
+    public function combo_provincias($id_cliente){
+        $datos = DB::table('provincias')
+            ->select('id_prov as id', 'nombre')
+            ->leftjoin("edificios", "provincias.id_prov", "edificios.id_provincia")
+            ->leftjoin("regiones", "provincias.cod_region", "regiones.cod_region")
+            ->leftjoin("paises", "paises.id_pais", "provincias.cod_pais")
+            ->where('id_cliente', $id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->orderby('nombre')
+            ->distinct()
+            ->get();
+        return view('resources.combo_generico',compact('datos'));
+    }
+
+    
+    public function search_clientes_json(Request $r){
+        $r->searchTerm=strtoupper($r->searchTerm);
+        if(strlen($r->searchTerm)<3 || !isset($r->searchTerm)){
+            return json_encode(["1"]);
+        }
+        $clientes=DB::table('clientes')
+        ->select('clientes.id_cliente as id','clientes.nombre_cliente as text')
+		->where(function($q){
+            if (!fullAccess()) {
+                $q->WhereIn('id_cliente',clientes());
+            }
+            if (session('id_cliente')) {
+                $q->where('id_cliente',session('id_cliente'));
+            }
+        })
+        ->where('clientes.nombre_cliente', 'LIKE', "%{$r->searchTerm}%")
+        ->orderby('nombre_cliente')
+        ->get();
+        if((fullAccess() || $clientes->count()>100) && (strlen($r->searchTerm)<3 || !isset($r->searchTerm))){
+            return json_encode(["2"]);
+        } else {
+            return json_encode($clientes);
+        }
+        
+        //return view('combos.fill_combo_clientes',compact('clientes'));
     }
 
 }

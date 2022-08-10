@@ -533,37 +533,25 @@ class APIController extends Controller
             Auth::user()->id_cliente=$r->cliente[0];
             $respuesta=app('App\Http\Controllers\IncidenciasController')->search($r);
             //dd($respuesta);
+            //{:a_incidencias_pendientes =>[{sala_id, fecha, descripcion_adicional, tipo_incidencia_id, estado, notas_admin, incidencia_id_puestos}]}
             $incidencias = $respuesta->map(function ($item, $key) {
-                $acciones=DB::table('incidencias_acciones')
-                    ->select('id_accion','des_accion','fec_accion','id_usuario','mca_resuelve','users.id_externo as id_usuario_ext')
-                    ->join('users','users.id','incidencias_acciones.id_usuario')
-                    ->where('id_incidencia',$item->id_incidencia)
-                    ->get();
                 return [
-                    'id_incidencia' => $item->id_incidencia,
-                    'id_externo' => $item->id_externo,
-                    'id_incidencia_salas' => $item->id_incidencia_salas,
-                    'des_incidencia' => $item->des_incidencia,
-                    'txt_incidencia' => $item->txt_incidencia,
-                    'fec_apertura' => $item->fec_apertura,
-                    'fec_cierre' => $item->fec_cierre,
-                    'id_tipo_incidencia' => $item->id_tipo_incidencia,
-                    'id_tipo_salas' => $item->id_tipo_salas,
-                    'id_puesto' => $item->id_puesto,
-                    'id_causa_cierre' => $item->id_causa_cierre,
-                    'comentario_cierre' => $item->comentario_cierre,
-                    'id_estado' => $item->id_estado,
-                    'id_estado_salas' => $item->id_estado_salas,
-                    'id_usuario_apertura' => $item->id_usuario_apertura,
-                    'id_usuario_ext' => users::find($item->id_usuario_apertura)->id_externo,
-                    'acciones' => $acciones,
+                    [
+                        "sala_id"=>salas::where('id_puesto',$item->id_puesto)->first()->id_externo_salas??0,
+                        "fecha"=>$item->fec_apertura,
+                        "descripcion_adicional"=>$item->des_incidencia,
+                        "tipo_incidencia_id"=>$item->id_tipo_salas,
+                        "estado"=>$item->id_estado_salas,
+                        "notas_admin"=>$item->txt_incidencia,
+                        "incidencia_id_puestos"=>$item->id_incidencia
+                    ]
                 ];
             });
             savebitacora('Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","OK"); 
             return response()->json([
                 'result'=>'ok',
                 'timestamp'=>Carbon::now(),
-                'incidencias' => $incidencias]);
+                'a_incidencias_pendientes' => $incidencias]);
         }catch (\Throwable $e) {
             savebitacora('ERROR Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","ERROR"); 
             dd($e);

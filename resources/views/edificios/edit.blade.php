@@ -1,7 +1,7 @@
 
     <div class="panel editor">
 
-        <<div class="panel-heading">
+        <div class="panel-heading">
             <div class="panel-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
             </div>
@@ -26,7 +26,7 @@
                                       ])
 
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+                    <div class="col-md-offset-2 col-md-10 text-right">
                         <input class="btn btn-primary" type="submit" value="Guardar">
                     </div>
                 </div>

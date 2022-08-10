@@ -130,16 +130,6 @@
         "table-name": "contactos_producto"
     },
     {
-        "model-name": "turnos",
-        "resource-file": "turnos.json",
-        "table-name": "turnos"
-    },
-    {
-        "model-name": "users",
-        "resource-file": "users.json",
-        "table-name": "users"
-    },
-    {
         "model-name": "incidencias_tipos",
         "resource-file": "incidencias_tipos.json",
         "table-name": "incidencias_tipos"
@@ -148,11 +138,6 @@
         "model-name": "incidencias",
         "resource-file": "incidencias.json",
         "table-name": "incidencias"
-    },
-    {
-        "model-name": "edificios",
-        "resource-file": "edificios.json",
-        "table-name": "edificios"
     },
     {
         "model-name": "plantas",
@@ -188,5 +173,45 @@
         "model-name": "salas",
         "resource-file": "salas.json",
         "table-name": "salas"
+    },
+    {
+        "model-name": "festivos",
+        "resource-file": "festivos.json",
+        "table-name": "festivos"
+    },
+    {
+        "model-name": "paises",
+        "resource-file": "paises.json",
+        "table-name": "paises"
+    },
+    {
+        "model-name": "provincias",
+        "resource-file": "provincias.json",
+        "table-name": "provincias"
+    },
+    {
+        "model-name": "regiones",
+        "resource-file": "regiones.json",
+        "table-name": "regiones"
+    },
+    {
+        "model-name": "edificios",
+        "resource-file": "edificios.json",
+        "table-name": "edificios"
+    },
+    {
+        "model-name": "turnos",
+        "resource-file": "turnos.json",
+        "table-name": "turnos"
+    },
+    {
+        "model-name": "users",
+        "resource-file": "users.json",
+        "table-name": "users"
+    },
+    {
+        "model-name": "turnos_usuarios",
+        "resource-file": "turnos_usuarios.json",
+        "table-name": "turnos_usuarios"
     }
 ]

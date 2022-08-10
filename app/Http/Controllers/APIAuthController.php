@@ -9,6 +9,7 @@ use DB;
 use Auth;
 use Carbon\Carbon;
 use App\User;
+use Laravel\Passport\Passport;
 
 class APIAuthController extends Controller
 {
@@ -95,10 +96,11 @@ class APIAuthController extends Controller
     public function gen_token($usuario)
     {
         $user=User::find($usuario);
+        Passport::personalAccessTokensExpireIn(Carbon::now()->addDays($user->token_expires));
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
-        $token->expires_at = Carbon::now()->addDays($user->token_expires);
-
+        //$token->expires_at = Carbon::now()->addDays($user->token_expires);
+        $token->save();
         return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',

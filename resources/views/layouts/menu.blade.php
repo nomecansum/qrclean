@@ -156,7 +156,8 @@
                             @if(checkPermissions(['Puestos'],['R']))<li class="puestos"><a href="/puestos"> <i class="fad fa-desktop-alt"></i> Puestos</a></li> @endif
                             @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas"><a href="/salas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas reunion</a></li> @endif
                             @if(checkPermissions(['Puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
-                            @if(checkPermissions(['Turnos'],['R']))<li class="mapa"><a href="/turnos"><i class="fa-solid fa-repeat-1"></i> Turnos</a></li> @endif
+                            @if(checkPermissions(['Turnos'],['R']))<li class="turnos"><a href="/turnos"><i class="fa-solid fa-repeat-1"></i> Turnos</a></li> @endif
+                            @if(checkPermissions(['Festivos'],['R']))<li class="festivos"><a href="/festives"><i class="fa-solid fa-calendar-range"></i> Festivos</a></li> @endif
                             
                             @if(checkPermissions(['Encuestas'],['R']))<li class="encuestas"><a href="/encuestas"><i class="fad fa-poll-h"></i> Encuestas</a></li> @endif
                             @if(checkPermissions(['Señaletica'],['R']))<li class="mkd"><a href="/MKD"><i class="fad fa-sign"></i> Señaletica</a></li> @endif
@@ -303,6 +304,7 @@
                             @endif
                             
                             @if(checkPermissions(['Tareas programadas'],['R']))<li class="tareas_programadas"><a href="/tasks" class="text-nowrap"> <i class="mdi mdi-camera-timer"></i>Tareas programadas</a></li> @endif
+                            @if (checkPermissions(['Eventos'],["R"]))<li><a href="{{url('/events')}}"><i class="mdi mdi-engine"></i> Eventos</a></li>@endif
                         </ul>
                     </li>
                     @endif

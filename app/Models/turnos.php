@@ -38,8 +38,7 @@ class turnos extends Model
                   'dias_semana',
                   'fec_inicio',
                   'fec_fin',
-                  'val_color',
-                  'mod_semana'
+                  'val_color'
               ];
 
     /**
@@ -58,25 +57,27 @@ class turnos extends Model
     
 
     /**
-     * Set the fec_inicio.
+     * Set the dias_semana.
      *
      * @param  string  $value
      * @return void
      */
-    public function setFecInicioAttribute($value)
+    public function setDiasSemanaAttribute($value)
     {
-        $this->attributes['fec_inicio'] = !empty($value) ? \DateTime::createFromFormat('[% date_format %]', $value) : null;
+        $this->attributes['dias_semana'] = json_encode($value);
     }
 
+
+
     /**
-     * Set the fec_fin.
+     * Get dias_semana in array format
      *
      * @param  string  $value
-     * @return void
+     * @return array
      */
-    public function setFecFinAttribute($value)
+    public function getDiasSemanaAttribute($value)
     {
-        $this->attributes['fec_fin'] = !empty($value) ? \DateTime::createFromFormat('[% date_format %]', $value) : null;
+        return json_decode($value) ?: [];
     }
 
     /**
@@ -87,7 +88,7 @@ class turnos extends Model
      */
     public function getFecInicioAttribute($value)
     {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
+      return $value;
     }
 
     /**
@@ -98,7 +99,7 @@ class turnos extends Model
      */
     public function getFecFinAttribute($value)
     {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
+       return $value;
     }
 
 }

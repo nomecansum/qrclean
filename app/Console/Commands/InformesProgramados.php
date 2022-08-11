@@ -58,7 +58,8 @@ class InformesProgramados extends Command
                     "tipo": "list",
                     "multiple": false,
                     "list": "Todos,Grandes,Medianos,Pequeños",
-                    "values": "0,L,M,S"
+                    "values": "0,L,M,S",
+                    "required": false
                 }
             ]
         }';

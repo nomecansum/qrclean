@@ -1,8 +1,12 @@
-@extends('layouts.app')
+@extends('layout')
+
+@section('title')
+    <h1 class="page-header text-overflow pad-no">Eventos</h1>
+@endsection
+
 @section('styles')
 
- {{--  Colorpicker  --}}
- <link href="{{url('/plugins/jquery-minicolors-master/jquery.minicolors.css')}}" rel="stylesheet" media="all">
+ <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
  <style type="text-css">
 	.select2-container .select2-search__field {
 		width: 100% !important;
@@ -10,7 +14,16 @@
 
  </style>
 @endsection
-@section('content')
+
+@section('breadcrumb')
+    <ol class="breadcrumb">
+        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item">Configuracion</li>
+        <li class="breadcrumb-item"><a href="{{url('/events')}}">eventos</a></li>
+        <li class="breadcrumb-item active">regla de evento</li>
+    </ol>
+@endsection
+
 @php
 	Carbon\Carbon::setLocale(session('lang'));
     setlocale(LC_TIME, 'Spanish');
@@ -18,204 +31,181 @@
         $cod_regla=0;
     }
 
-    if(count(session('clientes'))<100 && Auth::user()->mca_acceso_todos_clientes!=1){
-        $clientes=DB::table('usuarios_clientes')
-            ->join('clientes','clientes.id_cliente','usuarios_clientes.id_cliente')
-            ->where('id_usuario',Auth::user()->id_usuario)
-            ->get();
-    }
-    else if(isset($reglas)&&strlen($reglas->clientes)>0){
-        $clientes=DB::table('usuarios_clientes')
-            ->join('clientes','clientes.id_cliente','usuarios_clientes.id_cliente')
-            ->where('id_usuario',Auth::user()->id_usuario)
-            ->wherein('clientes.id_cliente',explode(",",$reglas->clientes))
-            ->get();
-        $clientes=collect($clientes);
-    }
-    else {
-        $clientes=[];
-        $clientes=collect($clientes);
-    }
+    $clientes=DB::table('clientes')
+        ->where(function($q) {
+            if(!isAdmin()){
+                $q->wherein('clientes.id_cliente',clientes());
+            }
+        })
+        ->get();
+
 @endphp
 
-<div class="container-fluid">
-	<div class="row page-titles">
-        <div class="col-md-6 col-8 align-self-center">
-        	<h3 class="text-themecolor mb-0 mt-0">{{ __('eventos.nueva_regla_evento') }}</h3>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url('/') }}">{{trans('general.home')}}</a></li>
-                    <li class="breadcrumb-item"><a href="{{  url('/events')}}">{{ __('general.eventos') }}</a></li>
-                <li class="breadcrumb-item active">{{ __('eventos.nueva_regla_evento') }}</li>
-            </ol>
-        </div>
-        <div class="col-md-6 col-4 align-self-center">
-            {{-- <a href="{{url('eventos')}}" class="btn float-right hidden-sm-down btn-warning"><i class="mdi mdi-chevron-double-left"></i> {{trans('strings.back')}}</a> --}}
-        </div>
-	</div>
-    <form action="{{url(config('app.carpeta_asset').'/save')}}" method="POST" class="form-ajax" id="formcomando">
-        {{csrf_field()}}
-        <input type="hidden" name="cod_regla" value="{{ $cod_regla }}">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        {{-- <h4 class="card-title">Nueva regla</h4> --}}
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <label  for="nom_regla">{{ __('general.nombre') }}</label><br>
-                                    <input required type="text" name="nom_regla" id="nom_regla" class="form-control" style="height: 47px" value="{{ isset($reglas->nom_regla)?$reglas->nom_regla:'' }}">
+@section('content')
+<div class="row botones_accion mb-2">
+    <br><br>
+</div>
+<div class="panel">
+    <div class="panel-heading">
+        <h3 class="panel-title">Titulo</h3>
+    </div>
+    <div class="panel-body">
+        <form action="{{url(config('app.carpeta_asset').'/save')}}" method="POST" class="form-ajax" id="formcomando">
+            {{csrf_field()}}
+            <input type="hidden" name="cod_regla" value="{{ $cod_regla }}">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel">
+                        <div class="panel-body">
+                            {{-- <h4 class="card-title">Nueva regla</h4> --}}
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label  for="nom_regla">{{ __('general.nombre') }}</label><br>
+                                        <input required type="text" name="nom_regla" id="nom_regla" class="form-control" style="height: 47px" value="{{ isset($reglas->nom_regla)?$reglas->nom_regla:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div class="form-group"  >
+                                            <label>{{ __('general.propietario') }}
+                                                @include('resources.spin_puntitos',['id_spin'=>'spin_cli'])
+                                            </label>
+                                            <select name="cod_propietario"  required  class="form-control" id="cod_propietario" lang="{{ config('app.lang', 'es') }}">
+                                                @foreach ($clientes as $c)
+                                                    <option value="{{$c->id_cliente}}" @if(isset($reglas) && $c->id_cliente=$reglas->cod_cliente) selected @endif>{{$c->nom_cliente}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <div class="form-group"  >
-                                        <label>{{ __('general.propietario') }}
-                                            @include('resources.spin_puntitos',['id_spin'=>'spin_cli'])
-                                        </label>
-                                        <select name="cod_propietario"  required  @if(Auth::user()->mca_acceso_todos_clientes==1 || count(session('clientes'))>100)class="form-control" multiple @else class="form-control" @endif  id="cod_propietario" lang="{{ config('app.lang', 'es') }}">
-                                            @foreach ($clientes as $c)
-                                                <option value="{{$c->id_cliente}}" @if(isset($reglas) && $c->id_cliente=$reglas->cod_cliente) selected @endif>{{$c->nombre_cliente}}</option>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="">{{ __('general.comando') }}</label>
+                                        <select name="comando" id="comando"class="form-control select2" style="width: 100%" placeholder="{{ __('eventos.seleccione_un_comando') }}">
+                                            @php
+                                                $files = File::allFiles(resource_path('views/events/comandos'));
+    
+                                            @endphp
+                                            <option value=""></option>
+                                            @foreach ($files as $file)
+                                            {{-- {{ $elementos->url_elemento==basename($file) ? 'selected' : '' }} --}}
+                                            <option style="text-transform: uppercase" {{ isset($reglas->nom_comando)&&$reglas->nom_comando==basename($file)?'selected':'' }}  value="{{ basename($file) }}">{{ str_replace(".php","",str_replace("_"," ",basename($file))) }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="">{{ __('general.comando') }}</label>
-                                    <select name="comando" id="comando"class="form-control select2" style="width: 100%" placeholder="{{ __('eventos.seleccione_un_comando') }}">
-                                        @php
-                                            $files = File::allFiles(resource_path('views/events/comandos'));
-
-                                        @endphp
-                                        <option value=""></option>
-                                        @foreach ($files as $file)
-                                        {{-- {{ $elementos->url_elemento==basename($file) ? 'selected' : '' }} --}}
-                                        <option style="text-transform: uppercase" {{ isset($reglas->nom_comando)&&$reglas->nom_comando==basename($file)?'selected':'' }}  value="{{ basename($file) }}">{{ str_replace(".php","",str_replace("_"," ",basename($file))) }}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="col-md-8 mt-4 text-muted" id="txt-desc" style="font-weight: 400;">
+                                    {!! isset($descripcion)?$descripcion:'' !!}
                                 </div>
                             </div>
-                            <div class="col-md-8 mt-4 text-muted" id="txt-desc" style="font-weight: 400;">
-                                {!! isset($descripcion)?$descripcion:'' !!}
-                            </div>
-                        </div>
-                        <div class="row" id="row_intervalo" style="display: none">
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label for="">{{ __('general.intervalo') }} (min)</label><br>
-                                    <input required type="number" name="intervalo" id="intervalo" class="form-control" value="{{ isset($reglas->intervalo)?$reglas->intervalo:'' }}" min="2" max="99999">
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label  for="cod_grupo">{{ __('general.grupo') }}</label><br>
-                                    <select class="form-control"  name="cod_grupo" id="cod_grupo">
-                                        <option value=""> </option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="I"?'selected':''}} value="I">{{ __('general.minuto') }}</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="H"?'selected':''}} value="H">{{ __('general.hora') }}</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="D"?'selected':''}} value="D">{{ __('general.dia') }}</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="S"?'selected':''}} value="S">{{ __('general.semana') }}</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="Q"?'selected':''}} value="Q">{{ __('general.quincena') }}</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="A"?'selected':''}} value="A">{{ __('general.grupo') }} A</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="B"?'selected':''}} value="B">{{ __('general.grupo') }} B</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="C"?'selected':''}} value="C">{{ __('general.grupo') }} C</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="D"?'selected':''}} value="D">{{ __('general.grupo') }} D</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="E"?'selected':''}} value="E">{{ __('general.grupo') }} E</option>
-                                        <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="F"?'selected':''}} value="F">{{ __('general.grupo') }} F</option>
-                                    </select>
-
-                                </div>
-                            </div>
-                            <div class="col-md-1 pt-2">
-                                <div class="form-group">
-                                    <div class="form-group d-flex align-items-center justify-content-between pt-4 ml-2">
-                                        <label class="mb-0" for="mca_activa">{{ __('general.activa') }}</label>
-                                        <input class="input-switch" id="mca_activa" type="checkbox" name="mca_activa" value="S" {{(isset($t) && $t->mca_activa=="S")||(!isset($t))?'checked':'' }}>
-                                        <i class="btn-switch switchOff  {{(isset($t) && $t->mca_activa=="S")||(!isset($t))?'switchOn':'' }}"></i>
+                            <div class="row" id="row_intervalo" style="display: none">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="">{{ __('general.intervalo') }} (min)</label><br>
+                                        <input required type="number" name="intervalo" id="intervalo" class="form-control" value="{{ isset($reglas->intervalo)?$reglas->intervalo:'' }}" min="2" max="99999">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-4 d-flex flex-row p-3">
-
-                                    <label class="mt-3 mr-1" for="" title="{{ __('eventos.hint_tiempo_espera') }}">{{ __('eventos.intervalo_de_espera') }}</label>
-                                    @php
-                                       
-                                    @endphp
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label  for="cod_grupo">{{ __('general.grupo') }}</label><br>
+                                        <select class="form-control"  name="cod_grupo" id="cod_grupo">
+                                            <option value=""> </option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="I"?'selected':''}} value="I">{{ __('general.minuto') }}</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="H"?'selected':''}} value="H">{{ __('general.hora') }}</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="D"?'selected':''}} value="D">{{ __('general.dia') }}</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="S"?'selected':''}} value="S">{{ __('general.semana') }}</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="Q"?'selected':''}} value="Q">{{ __('general.quincena') }}</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="A"?'selected':''}} value="A">{{ __('general.grupo') }} A</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="B"?'selected':''}} value="B">{{ __('general.grupo') }} B</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="C"?'selected':''}} value="C">{{ __('general.grupo') }} C</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="D"?'selected':''}} value="D">{{ __('general.grupo') }} D</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="E"?'selected':''}} value="E">{{ __('general.grupo') }} E</option>
+                                            <option {{ isset($reglas->cod_grupo) && $reglas->cod_grupo=="F"?'selected':''}} value="F">{{ __('general.grupo') }} F</option>
+                                        </select>
+    
+                                    </div>
+                                </div>
+                                <div class="col-md-1" style="padding-top: 30px">
+                                    <input type="checkbox" class="form-control  magic-checkbox mt-3" name="mca_activa"  id="mca_activa" value="S" {{ isset($reglas->mca_activa)&&$reglas->mca_activa=='S'?'checked':'' }}> 
+                                    <label class="custom-control-label"   for="mca_activa">Activa</label>
+                                </div>
+                                <div class="col-md-4 d-flex flex-row p-t-20">
+                                    <label class="mt-2 mr-1" for="" title="{{ __('eventos.hint_tiempo_espera') }}">{{ __('eventos.intervalo_de_espera') }}</label>
                                     <input required type="number" name="int_espera" id="int_espera" class="form-control col-4" value="{{ $reglas->nomolestar??'' }}" min="0" max="365">
                                     <select class="form-control col-4"  name="tip_espera" id="tip_espera">
                                         <option value="M" {{ isset($reglas->tip_nomolestar) && $reglas->tip_nomolestar=='M'? 'selected':'' }}>{{ __('general.minutos') }}</option>
                                         <option value="H" {{ isset($reglas->tip_nomolestar) && $reglas->tip_nomolestar=='H'? 'selected':'' }}>{{ __('general.horas') }}</option>
                                         <option value="D" {{ isset($reglas->tip_nomolestar) && $reglas->tip_nomolestar=='D'? 'selected':'' }}>{{ __('general.dias') }}</option>
                                     </select>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row" id="div_regla" style="display:none">
-            <div class="col-md-12">
-                <div class="card totales_resultados b-all" >
-                    <h4 class="mt-2 ml-2" >{{ __('eventos.parametrizacion_del_comando') }}</h4>
-                    <div class="card-body" id="param_regla">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row" id="div_prog" style="display:none">
-            <div class="col-md-12">
-                <div class="card" >
-                    <h4 class="mt-2 ml-2" >{{ __('eventos.programacion_de_la_regla') }}</h4>
-                    <div class="card-body" id="prog_regla">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-    <form action="{{url(config('app.carpeta_asset').'/acciones/param_acciones/save')}}" method="POST" class="form-ajax" id="formaccion">
-        {{csrf_field()}}
-        <div class="row" id="div_acc" style="display:none">
-            <div class="col-md-12">
-                <div class="card" >
-                    <div class="card-header bg-white">
-                        <b>Acciones</b>
-                            <div class="dropdown" >
-
-                                <a href="javascript:void(0)" data-toggle="dropdown" class="btn float-right hidden-sm-down btn-success dropdown-toggle mr-3 pr-3"><i class="fas fa-plus-circle"></i> {{ ucfirst(__('general.addadir')) }}</a>
-
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item nueva_accion p-1"  id="nueva_iteracion" data-tipo="iteracion" href="javascript:void(0)"><i class="fad fa-recycle" style="width:20px"></i> {{ __('eventos.iteracion') }}</a>
-                                    <a class="dropdown-item nueva_accion p-1" id="nueva_accion" data-tipo="accion" href="javascript:void(0)"><i class="fad fa-shoe-prints" style="width:20px"></i> {{ __('general.accion') }}</a>
                                 </div>
-
                             </div>
-                    </div>
-                    <div class="card-body" id="acciones_regla">
-
+    
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-
+            <div class="row" id="div_regla" style="display:none">
+                <div class="col-md-12">
+                    <div class="panel totales_resultados b-all" >
+                        <h4 class="mt-2 ml-2" >{{ __('eventos.parametrizacion_del_comando') }}</h4>
+                        <div class="panel-body" id="param_regla">
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row" id="div_prog" style="display:none">
+                <div class="col-md-12">
+                    <div class="panel" >
+                        <h4 class="mt-2 ml-2" >{{ __('eventos.programacion_de_la_regla') }}</h4>
+                        <div class="panel-body" id="prog_regla">
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form action="{{url(config('app.carpeta_asset').'/acciones/param_acciones/save')}}" method="POST" class="form-ajax" id="formaccion">
+            {{csrf_field()}}
+            <div class="row" id="div_acc" style="display:none">
+                <div class="col-md-12">
+                    <div class="panel" >
+                        <div class="panel-header bg-white">
+                            <h4 class="mt-2 ml-2" >Acciones</h4>                          
+                                <div class="dropdown text-right">
+                                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
+                                        <i class="fas fa-plus-circle"></i> Añadir <i class="dropdown-caret"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" style="">
+                                        <li><a class="dropdown-item nueva_accion p-1"  id="nueva_iteracion" data-tipo="iteracion" href="javascript:void(0)"><i class="fad fa-recycle" style="width:20px"></i> {{ __('eventos.iteracion') }}</a></li>
+                                        <li><a class="dropdown-item nueva_accion p-1" id="nueva_accion" data-tipo="accion" href="javascript:void(0)"><i class="fad fa-shoe-prints" style="width:20px"></i> {{ __('general.accion') }}</a></li>
+                                    </ul>
+                                </div>
+                        </div>
+                        
+                        <div class="panel-body" id="acciones_regla">
+    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
-
-
-
 @endsection
+
+
 @section('scripts')
-{{--  Colorpicker  --}}
-<script src="{{url('/plugins/jquery-minicolors-master/jquery.minicolors.min.js')}}"></script>
+    <script>
+        $('.configuracion').addClass('active active-sub');
+        $('.eventos').addClass('active-link');
+    </script>
+
 <script>
      $('.colorpicker').minicolors({
         control: $(this).attr('data-control') || 'hue',
@@ -312,43 +302,17 @@
         })
     });
 
-    @if(Auth::user()->mca_acceso_todos_clientes==1 || count(session('clientes'))>100)
-        $("#cod_propietario").select2(
-            {
-                placeholder: "{{ __('general.seleccione_un_cliente') }}",
-                dropdownAutoWidth: false,
-                width: '100%',
-                minimumResultsForSearch: 1,
-                maximumSelectionLength: 1,
-                minimumInputLength: 3,
-                language: "es",
-                ajax: { url: "{{ url(config('app.asset_url').'/combos/clientes_search') }}", type: "post", dataType: 'json', delay: 500,data: function (params) {
-                $('#spin_cli').show();
-                return {
-                    searchTerm: params.term,// search term
-                    _token:'{{csrf_token()}}'
-                    };
-
-                },
-                processResults: function (response) {
-                    $('#spin_cli').hide();
-                    return {
-                        results: response 
-                    };
-                },
-                cache: true
-                }
-            });
-    @else
-        $("#cod_propietario").select2({
+    $("#cod_propietario").select2({
             placeholder: "{{ __('general.seleccione_un_cliente') }}",
             dropdownAutoWidth: false,
             width: '100%',
             minimumResultsForSearch: 1,
             language: "es",
         });
-    @endif
 
 
 </script>
 @endsection
+
+
+

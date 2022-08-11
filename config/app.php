@@ -145,6 +145,7 @@ return [
     'id_usuario_spotlinker_salas'=>1832,
     'url_base_api_salas'=>env('URL_BASE_API_SALAS','https://salas-test.spotlinker.com/puestos_api/'),
     'token_api_salas'=>env('TOKEN_API_SALAS','SP.JlYzRknsAClwUuYZZkMxRwPHJYbHhEdRakcDAPdjkJFwjcIEoD.6e09d8332dffd653f994'),
+    'carpeta_asset'=>env('CARPETA_ASSET','/events'),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

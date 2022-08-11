@@ -1,16 +1,9 @@
 
 
 @php
-if(count(session('clientes'))<100 && !fullAccess()){
-    $clientes=DB::table('usuarios_clientes')
-        ->join('clientes','clientes.id_cliente','usuarios_clientes.id_cliente')
-        ->where('id_usuario',Auth::user()->id_usuario)
-        ->get();
-}
-else if(isset($reglas)&&strlen($reglas->clientes)>0){
-    $clientes=DB::table('usuarios_clientes')
-        ->join('clientes','clientes.id_cliente','usuarios_clientes.id_cliente')
-        ->where('id_usuario',Auth::user()->id_usuario)
+if(isset($reglas)&&strlen($reglas->clientes)>0){
+    $clientes=DB::table('clientes')
+        ->where('id_cliente',clientes())
         ->wherein('clientes.id_cliente',explode(",",$reglas->clientes))
         ->get();
     $clientes=collect($clientes);
@@ -22,7 +15,7 @@ else {
 @endphp
 
 <div class="row">
-    <div class="form-group  pr-5 col-md-12" style="{{ ((!fullAccess() && count(clientes())==1) || (isset($hide['cli']) && $hide['cli']===1)) ? 'display: none' : ''}}">
+    <div class="form-group  pr-5 col-md-12" style="{{ (isset($hide['cli']) && $hide['cli']===1) ? 'display: none' : ''}}">
         <label>{{trans('general.clientes')}}
             @include('resources.spin_puntitos',['id_spin'=>'spin_cli','clase'=>'spin_cli'])
         </label>
@@ -31,9 +24,7 @@ else {
                 <option value="{{$c->id_cliente}}" @if(isset($reglas)&&in_array($c->id_cliente,explode(",",$reglas->clientes))) selected @endif>{{$c->nombre_cliente}}</option>
             @endforeach
         </select>
-        @if(count(session('clientes'))<100 && Auth::user()->mca_acceso_todos_clientes!=1)
-            <button class="btn btn-info float-right mt-0 position-absolute select-all"data-select="multi-clientes" style="height: 47px"  @if(Auth::user()->mca_acceso_todos_clientes==1 || count(session('clientes'))>100) disabled @endif type="button"><i class="fad fa-check-double"></i></button>
-        @endif
+        <button class="btn btn-info float-right mt-0 position-absolute select-all"data-select="multi-clientes" style="height: 47px"  type="button"><i class="fad fa-check-double"></i></button>
         @if(count(clientes())==1)
                 <input type="hidden" value="{{$clientes->first()->id_cliente}}" name="clientes[]" >
         @endif

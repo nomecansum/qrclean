@@ -131,10 +131,10 @@
 									</div>
 								</div>
 								<div class="col-sm-3">
-									<div class="form-group">
+									<div class="form-group nowrap no-wrap">
 										<label>{{__('general.franja_horaria')}}</label><br>
 										<input type="time" placeholder="HH:mm" name="hora_inicio" id="hor_desde"  class="form-control col-sm-5" style="width: 120px" value="{{isset($t) ? Carbon\Carbon::parse($t->hora_inicio)->format('H:i') : '00:00'}}">
-										<i class="fa fas fa-arrow-right ml-3 mt-2 col-sm-1"></i>
+										
 										<input type="time" placeholder="HH:mm" name="hora_fin" id="hor_hasta"  class="form-control col-sm-5" style="width: 120px" value="{{isset($t) ?  Carbon\Carbon::parse($t->hora_fin)->format('H:i') : '23:59'}}">
 									</div>
 								</div>

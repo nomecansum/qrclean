@@ -139,7 +139,7 @@
 									<div class="col-md-2">
 										<div class="form-group">
 											<label for="">Notificar a usuarios</label>
-											<select name="val_metodo_notificacion" id="val_metodo_notificacion" class="form-control ">
+											<select name="val_metodo_notificacion" id="val_metodo_notificacion" class="form-control">
 												<option value="0"  {{isset($config->val_metodo_notificacion) && $config->val_metodo_notificacion == 0 ? 'selected' : ''}}>No</option>
 												<option value="1"  {{isset($config->val_metodo_notificacion) && $config->val_metodo_notificacion == 1 ? 'selected' : ''}}>e-mail</option>
 												{{--  <option value="2"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Notificacion APP</option>

@@ -12,7 +12,7 @@ $icono='<i class="fa-solid fa-calendar-clock"></i>';
 $detalle_regla=reglas::find($regla??0);
 $clientes_regla=explode(",",$detalle_regla->clientes??"");
 $tareas=tareas::all();
-$lista_tareas=[];
+$lista_tareas=[0];
 foreach($tareas as $t){
     $t->clientes=explode(",",$t->clientes);
     if(count($t->clientes=array_intersect($clientes_regla,$t->clientes))>0){

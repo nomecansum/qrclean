@@ -28,9 +28,9 @@
     
 <div class="row" id="div_detalle_accion" style="display:none">
     <div class="col-md-12">
-        <div class="card totales_resultados b-all" >
+        <div class="panel totales_resultados b-all" >
             <h4 class="mt-2 ml-2" >{{ __('eventos.parametrizacion_de_accion') }}</h4>
-            <div class="card-body" id="param_accion">
+            <div class="panel-body" id="param_accion">
             
             </div>
         </div>
@@ -39,10 +39,10 @@
 
 <div class="row" id=divacciones>
     @for($n=1; $n<=$numacciones; $n++)
-        <div id="it{{ $n }}" data-iteracion="{{ $n }}" data-regla="{{ $id }}" class="col-md-2 b-all rounded m-2 iteracion sortable connectedSortable" style="background-color: {{ $colores[$n-1]  }}">
+        <div id="it{{ $n }}" data-iteracion="{{ $n }}" data-regla="{{ $id }}" class="col-md-2 b-all rounded m-2 iteracion sortable connectedSortable mr-3" style="background-color: {{ $colores[$n-1]  }}">
             <h6 class="text-center mt-2 text-white">{{ __('eventos.iteracion') }} {{ $n }}</h6>
             @foreach($acciones->where('val_iteracion',$n)->sortby('num_orden') as $acc)
-                <div class="b-all rounded m-1 p-1 border-dark accion " data-regla="{{ $id }}" data-accion="{{ $acc->cod_accion }}" style="background-color: {{ genColorCodeFromText($acc->nom_accion.$id."AA") }}; height: 80px; color: #fff; position: relative; width:100%;">
+                <div class="b-all rounded m-1 p-1 border-dark accion mb-2" data-regla="{{ $id }}" data-accion="{{ $acc->cod_accion }}" style="background-color: {{ genColorCodeFromText($acc->nom_accion.$id."AA") }}; height: 80px; color: #fff; position: relative; width:100%;">
                     @if(isset($acc->val_icono)) {!! $acc->val_icono !!} @endif
                     {{-- @if(config('app.env')=='local')[{{ $acc->cod_accion }}]@endif --}}
                     {{ str_replace(".php","",str_replace("_"," ",basename($acc->nom_accion))) }}<br>

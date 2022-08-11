@@ -50,9 +50,11 @@
         @isset($descripcion){{ $descripcion }}@endisset
     </div>
 </div>
+
 @if($accion->nom_accion!=null)
     @include('resources.form_parametros')
 @endif
+
 <div class="row">
     <div class="col-md-12">
         <button type="submit" class="btn btn-primary btn_accion float-right">{{trans('general.submit')}}</button>
@@ -62,9 +64,9 @@
 <br><br>
 <div class="row campos_notificaciones">
     <div class="col-md-12">
-        <div class="card" style="background-color: #fff3cd">
+        <div class="panel" style="background-color: #fff3cd">
             <h4 class="mt-2 ml-2"><i class="fas fa-information"></i> {{ __('eventos.campos_para_notificaciones') }}:</h4>
-            <div class="card-body">
+            <div class="panel-body">
                 <ul class="text-muted" style="columns: 2;-webkit-columns: 2;-moz-columns: 2;">
                     @if($campos!="")
                         @foreach($campos as $campo)

@@ -1275,5 +1275,4 @@ class UsersController extends Controller
             ];
         }
     }
-hello@fontawesome.com
 }

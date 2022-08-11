@@ -40,21 +40,18 @@ class FiltrosController extends Controller
         $r=$this->filtro_clientes($r);
         return
         [
-            "tags" => DB::table('tags')
-                ->select('tags.id_tag','tags.nombre_tag','clientes.nombre_cliente')
-                ->join('permisos_clientes_tags','permisos_clientes_tags.id_tag','tags.id_tag')
-                ->join('clientes','clientes.id_cliente','permisos_clientes_tags.id_cliente')
-                ->wherein('permisos_clientes_tags.id_cliente',$r->clientes)
+            "tags" => DB::table('clientes')
+                ->select('tags.id_tag','tags.nombre_tag','clientes.nom_cliente')
+                ->wherein('clientes.id_cliente',$r->clientes)
                 ->where(function($q) {
                     if (!fullAccess()) {
-                        $q->WhereIn('permisos_clientes_tags.id_cliente',clientes());
+                        $q->WhereIn('clientes.id_cliente',clientes());
                     }
                     if (session('id_cliente')) {
-                        $q->where('permisos_clientes_tags.id_cliente',session('id_cliente'));
+                        $q->where('clientes.id_cliente',session('id_cliente'));
                     }
                 })
-                ->orderby('clientes.nombre_cliente')
-                ->orderby('tags.nombre_tag')
+                ->orderby('clientes.nom_cliente')
                 ->get(),
 
             "dispositivos" => DB::table('dispositivos')

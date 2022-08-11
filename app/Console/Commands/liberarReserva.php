@@ -51,27 +51,31 @@ class liberarReserva extends Command
                     "label": "Minutos de cortesia",
                     "name": "val_minutos",
                     "tipo": "num",
-                    "def": "30"
+                    "def": "30",
+                    "required": true
                 },
                 {
                     "label": "Minutos de preaviso",
                     "name": "val_preaviso",
                     "tipo": "num",
-                    "def": "10"
+                    "def": "10",
+                    "required": true
                 },
                 {
                     "label": "Aplicar a puestos del tipo",
                     "name": "tipos_aplicar",
                     "tipo": "list_db",
                     "multiple": true,
-                    "sql": "select id_tipo_puesto as id, des_tipo_puesto as nombre from puestos_tipos"
+                    "sql": "select id_tipo_puesto as id, des_tipo_puesto as nombre from puestos_tipos",
+                    "required": false
                 },
                 {
                     "label": "No aplicar a puestos del tipo",
                     "name": "tipos_noaplicar",
                     "tipo": "list_db",
                     "multiple": true,
-                    "sql": "select id_tipo_puesto as id, des_tipo_puesto as nombre from puestos_tipos"
+                    "sql": "select id_tipo_puesto as id, des_tipo_puesto as nombre from puestos_tipos",
+                    "required": false
                 }
             ]
         }';

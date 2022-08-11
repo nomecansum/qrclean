@@ -287,7 +287,7 @@
                 if(data.url=="reload()"){
                     top.location.reload();
                 }else if(data.url=="reload_acciones()"){
-                    $('#acciones_regla').load("{{ url('/eventos/acciones/') }}/"+data.id);
+                    $('#acciones_regla').load("{{ url('/events/acciones/') }}/"+data.id);
                 } else {
                     window.open(data.url,'_self');
                 }

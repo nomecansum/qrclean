@@ -53,7 +53,7 @@ $params='{
             "name": "id_tipo_producto",
             "tipo": "list_db",
             "multiple": true,
-            "sql": "select id_tipo_producto as id, cod_tipo_producto as nombre from tipos_productos",
+            "sql": "select id_tipo_incidencia as id, des_tipo_incidencia as nombre from incidencias_tipos",
             "required": false
         },
         {
@@ -61,7 +61,7 @@ $params='{
             "name": "id_rol",
             "tipo": "list_db",
             "multiple": false,
-            "sql": "select id_rol as id, cod_rol as nombre from roles",
+            "sql": "select id_pais as id, nom_pais as nombre from paises",
             "required": false
         },
         {
@@ -69,7 +69,7 @@ $params='{
             "name": "id_rol",
             "tipo": "list_db",
             "multiple": false,
-            "sql": "select id_rol as id, cod_rol as nombre from roles",
+            "sql": "select id_pais as id, nom_pais as nombre from paises",
             "required": false,
             "buscar": true
         },

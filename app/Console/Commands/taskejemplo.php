@@ -49,38 +49,44 @@ class taskejemplo extends Command
                     "label": "Parametro tipo boolean",
                     "name": "mca_respetar_festivos",
                     "tipo": "bool",
-                    "def": true
+                    "def": true,
+                    "required": false
                 },
                 {
                     "label": "Parametro numerico",
                     "name": "val_margen",
                     "tipo": "num",
-                    "def": "15"
+                    "def": "15",
+                    "required": false
                 },
                 {
                     "label": "Parametro de texto",
                     "name": "val_texto",
                     "tipo": "txt",
-                    "def": "dato"
+                    "def": "dato",
+                    "required": false
                 },
                 {
                     "label": "Parametro lista multiple proveniente de BDD",
                     "name": "id_planta",
                     "tipo": "list_db",
                     "multiple": true,
-                    "sql": "select id_planta as id, des_planta as nombre from plantas where id_planta>0"
+                    "sql": "select id_planta as id, des_planta as nombre from plantas where id_planta>0",
+                    "required": false
                 },
                 {
                     "label": "Parametro lista simple proveniente de BDD",
                     "name": "id_estado",
                     "tipo": "list_db",
                     "multiple": false,
-                    "sql": "select id_estado as id, des_estado as nombre from estados_puestos"
+                    "sql": "select id_estado as id, des_estado as nombre from estados_puestos",
+                    "required": false
                 },
                 {
                     "label": "Parametro color",
                     "name": "val_color",
-                    "tipo": "color"
+                    "tipo": "color",
+                    "required": false
                 },
                 {
                     "label": "Parametro con lista simple estatica",
@@ -88,7 +94,8 @@ class taskejemplo extends Command
                     "tipo": "list",
                     "multiple": false,
                     "list": "Motivo1,Motivo2,Motivo3,Motivo4,Motivo5,Motivo6",
-                    "values": "1,2,3,4,5,6"
+                    "values": "1,2,3,4,5,6",
+                    "required": false
                 },
                 {
                     "label": "Parametro con lista multiple estatica",
@@ -96,7 +103,8 @@ class taskejemplo extends Command
                     "tipo": "list",
                     "multiple": true,
                     "list": "Motivo1,Motivo2,Motivo3,Motivo4,Motivo5,Motivo6",
-                    "values": "1,2,3,4,5,6"
+                    "values": "1,2,3,4,5,6",
+                    "required": false
                 }
             ]
         }';

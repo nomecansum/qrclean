@@ -274,7 +274,7 @@ class CombosController extends Controller
             return json_encode(["1"]);
         }
         $clientes=DB::table('clientes')
-        ->select('clientes.id_cliente as id','clientes.nombre_cliente as text')
+        ->select('clientes.id_cliente as id','clientes.nom_cliente as text')
 		->where(function($q){
             if (!fullAccess()) {
                 $q->WhereIn('id_cliente',clientes());
@@ -283,8 +283,8 @@ class CombosController extends Controller
                 $q->where('id_cliente',session('id_cliente'));
             }
         })
-        ->where('clientes.nombre_cliente', 'LIKE', "%{$r->searchTerm}%")
-        ->orderby('nombre_cliente')
+        ->where('clientes.nom_cliente', 'LIKE', "%{$r->searchTerm}%")
+        ->orderby('nom_cliente')
         ->get();
         if((fullAccess() || $clientes->count()>100) && (strlen($r->searchTerm)<3 || !isset($r->searchTerm))){
             return json_encode(["2"]);

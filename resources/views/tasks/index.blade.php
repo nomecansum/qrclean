@@ -254,6 +254,7 @@
 
 
 @section('scripts')
+<script src="{{url('/plugins/jQuery-slimScroll-1.3.8/jquery.slimscroll.min.js')}}"></script>
     <script>
         $('.configuracion').addClass('active active-sub');
         $('.tareas_programadas').addClass('active-link');

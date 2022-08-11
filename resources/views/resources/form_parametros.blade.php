@@ -13,7 +13,9 @@
             } else {
                 $margin="";
             }
-           // dd($p);
+           if(!isset($p->required)){
+            $p->required=false;
+           }
         @endphp
 
         {{-- Etiqueta --}}

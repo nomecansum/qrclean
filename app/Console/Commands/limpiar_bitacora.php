@@ -57,19 +57,22 @@ class limpiar_bitacora extends Command
                     "label": "Numero de dias bitacora",
                     "name": "num_dias_bitacora",
                     "tipo": "num",
-                    "def": "60"
+                    "def": "60",
+                    "required": true
                 },
                 {
                     "label": "Numero de dias reservas",
                     "name": "num_dias_reservas",
                     "tipo": "num",
-                    "def": "120"
+                    "def": "120",
+                    "required": true
                 },
                 {
                     "label": "Numero de dias LOG",
                     "name": "num_dias_log",
                     "tipo": "num",
-                    "def": "20"
+                    "def": "20",
+                    "required": true
                 }
             ]
         }';

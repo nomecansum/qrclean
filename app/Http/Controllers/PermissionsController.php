@@ -21,20 +21,32 @@ class PermissionsController extends Controller
 				$q->orwhere('mca_fijo','S');
 			})
 			->get();
+		$cuenta =
+			DB::table('users')
+			->select(DB::raw('count(id) as cuenta,cod_nivel'))
+			->where('id_cliente',Auth::user()->id_cliente)
+			  ->where('nivel_acceso','<=',$nivel_acceso)
+			  ->where(function($q){
+				  $q->where('id_cliente',Auth::user()->id_cliente);
+			  })
+			  ->groupby('cod_nivel')
+			  ->get();
 		$homepages=DB::table('niveles_acceso')->pluck('home_page')->unique()->toArray();
-		return view('permisos.profiles',compact('niveles','nivel_acceso','homepages'));
+		return view('permisos.profiles',compact('niveles','nivel_acceso','cuenta','homepages'));
 	}
+
 	public function profilesEdit($id)
 	{
-	    $nivel_acceso = \DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->num_nivel_acceso)->first()->val_nivel_acceso;
+	    $nivel_acceso = \DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->val_nivel_acceso;
         $niveles =
           DB::table('niveles_acceso')
             ->where('val_nivel_acceso','<=',$nivel_acceso)
 			->get();
 		$homepages=DB::table('niveles_acceso')->pluck('home_page')->unique()->toArray();
 		$n = DB::table('niveles_acceso')->where('cod_nivel',$id)->first();
-		return view('permisos.profiles',compact('n', 'niveles', 'nivel_acceso','homepages'));
+		return view('permisos.editor_perfiles',compact('n', 'niveles', 'nivel_acceso','homepages'));
 	}
+
 	public function profilesSave(Request $r)
 	{
 		//dd($r);
@@ -47,6 +59,9 @@ class PermissionsController extends Controller
 					'mca_fijo' => isset($r->mca_fijo)?'S':'N',
 					'mca_reserva_multiple' => isset($r->mca_reserva_multiple)?'S':'N',
 					'mca_liberar_auto' => isset($r->mca_reserva_multiple)?'S':'N',
+					'mca_reservar_sabados' => isset($r->mca_reservar_sabados)?'S':'N',
+					'mca_reservar_domingos' => isset($r->mca_reservar_domingos)?'S':'N',
+					'mca_reservar_festivos' => isset($r->mca_reservar_festivos)?'S':'N',
 					'home_page' => $r->home_page
 				]
 			);
@@ -63,6 +78,9 @@ class PermissionsController extends Controller
 					'mca_fijo' => isset($r->mca_fijo)?'S':'N',
 					'mca_reserva_multiple' => isset($r->mca_reserva_multiple)?'S':'N',
 					'mca_liberar_auto' => isset($r->mca_reserva_multiple)?'S':'N',
+					'mca_reservar_sabados' => isset($r->mca_reservar_sabados)?'S':'N',
+					'mca_reservar_domingos' => isset($r->mca_reservar_domingos)?'S':'N',
+					'mca_reservar_festivos' => isset($r->mca_reservar_festivos)?'S':'N',
 					'home_page' => $r->home_page
 				]
 			);
@@ -112,6 +130,7 @@ class PermissionsController extends Controller
             'url' => url('profiles')
         ];
 	}
+
 	public function profilesDelete($id)
 	{
 		savebitacora("Eliminado perfil ".$id." ".DB::table('niveles_acceso')->where('cod_nivel',$id)->value('des_nivel_acceso'),Auth::user()->id,"Perfiles","OK");
@@ -119,6 +138,7 @@ class PermissionsController extends Controller
 		flash('Perfil '.$id.' Borrado')->success();
 		return redirect('profiles');
 	}
+
 	public function sections()
 	{
 		$secciones = DB::table('secciones')
@@ -135,6 +155,7 @@ class PermissionsController extends Controller
 
 		return view('permisos.sections',compact('secciones','grupos','tipos'));
 	}
+
 	public function sectionsEdit($id)
 	{
 	    $secciones = DB::table('secciones')
@@ -149,6 +170,7 @@ class PermissionsController extends Controller
 		$s = DB::table('secciones')->where('cod_seccion',$id)->first();
 		return view('permisos.sections',compact('s','grupos','tipos','secciones'));
 	}
+
 	public function sectionsSave(Request $r)
 	{
 		//dd($r);
@@ -178,6 +200,7 @@ class PermissionsController extends Controller
             'url' => url('sections')
         ];
 	}
+
 	public function sectionsDelete($id)
 	{
 		savebitacora("Eliminado seccion ".$id." ".DB::table('secciones')->where('cod_seccion',$id)->value('des_seccion'),Auth::user()->id,"Secciones","OK");
@@ -189,6 +212,7 @@ class PermissionsController extends Controller
             'url' => url('sections')
         ];
 	}
+
 	public function profilePermissions()
 	{
 		$permisos = DB::table('secciones')
@@ -235,7 +259,6 @@ class PermissionsController extends Controller
         return $niveles;
     }
 
-
 	public function addPermissions(Request $r)
 	{
 		if ($r->type == "R") {$type = "mca_read";}
@@ -255,6 +278,7 @@ class PermissionsController extends Controller
 		}
 		savebitacora("Añadidos permisos para seccion ".$r->section." y perfil ".$r->level,Auth::user()->id,"Permisos","OK");
 	}
+
 	public function removePermissions(Request $r)
 	{
 		if ($r->type == "R") {$type = "mca_read";}
@@ -286,6 +310,7 @@ class PermissionsController extends Controller
 		}
 		savebitacora("Añadidos permisos para seccion ".$r->section." y usuario ".$r->level,Auth::user()->id,"Permisos","OK");
 	}
+
 	public function removePermissions_user(Request $r)
 	{
 		if ($r->type == "R") {$type = "mca_read";}

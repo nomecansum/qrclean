@@ -95,11 +95,6 @@
         "table-name": "puestos"
     },
     {
-        "model-name": "niveles_acceso",
-        "resource-file": "niveles_accesos.json",
-        "table-name": "niveles_acceso"
-    },
-    {
         "model-name": "config_clientes",
         "resource-file": "config_clientes.json",
         "table-name": "config_clientes"
@@ -213,5 +208,10 @@
         "model-name": "turnos_usuarios",
         "resource-file": "turnos_usuarios.json",
         "table-name": "turnos_usuarios"
+    },
+    {
+        "model-name": "niveles_acceso",
+        "resource-file": "niveles_accesos.json",
+        "table-name": "niveles_acceso"
     }
 ]

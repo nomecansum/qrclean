@@ -77,31 +77,47 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 						@if (isset($days[$i]))
 							@php
 								$dias=$reservas->where('fec_reserva',Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d'))->all();
-								
+								$festivo=$festivos_mes->where('date',Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d'))->first()->festivo;
 							@endphp
 					
 							
 							@php
-								if(count($dias)>0){
+								$dia_pasado=Carbon\Carbon::parse($month.'-'.$days[$i]) < Carbon\Carbon::now()->format('Y-m-d');	
+
+								if($festivo==1){
+									$color = '#ffa69e';
+									$borde="border: 2px solid #999";
+									$title="";
+									$estado="festivo";
+									$noclickable=1;
+								} else if($dia_pasado){
+									$color="#dedede";
+									$borde="";
+									$title="";
+									$estado="";
+									$noclickable=1;
+								} else if(count($dias)>0){
 									$color="#edf5e0";
 									$borde="";
 									$title="";
 									$estado="ocupado";
+									$noclickable=0;
 								} else {
 									$color = '#fff';
 									$borde="border: 2px solid #999";
 									$title="";
 									$estado="vacio"; 
+									$noclickable=0;
 								}
 								if(Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d')==Carbon\Carbon::now()->format('Y-m-d')){
 									$borde="border: 3px solid #1e90ff";
 								}
 
-								$dia_pasado=Carbon\Carbon::parse($month.'-'.$days[$i]) < Carbon\Carbon::now()->format('Y-m-d');	
+								
 							@endphp
 							{{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
 							
-							<td style="background-color: {{$dia_pasado?'#dedede':$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip dia  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" @if($dia_pasado) data-past="1" @else data-past="0" @endif data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
+							<td style="background-color: {{$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip dia  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" data-past="{{ $noclickable }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
                                 <span class="font-bold" style="font-size: 2.5vw; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
 								<div style="color: #fff; cursor: pointer">
@@ -157,7 +173,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 				$('body, html').animate({scrollTop : 0}, 500);
 			});
 		} else {
-			toast_warning('Reservas','No se puede reservar en una fecha pasada');
+			toast_warning('Reservas','No se puede reservar en un festivo o fin de semana si no lo habilita en su perfil');
 			sphide('spin');
 		}
 		

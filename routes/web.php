@@ -141,7 +141,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/search', 'BitacorasController@search')->name('bitacoras.bitacora.search');
     });
 
-    ////////////////////TAREAS////////////////////
+    ////////////////////PERFILES////////////////////
     Route::group(['prefix' => 'profiles'], function () {
         Route::get('/',['middleware'=>'permissions:["Perfiles"],["R"]','uses'=>'PermissionsController@profiles']);
         Route::get('/edit/{id}',['middleware'=>'permissions:["Perfiles"],["C"]','uses'=>'PermissionsController@profilesEdit']);

@@ -39,7 +39,10 @@ class niveles_acceso extends Model
                   'home_page',
                   'mca_fijo',
                   'mca_reserva_multiple',
-                  'mca_liberar_auto'
+                  'mca_liberar_auto',
+                  'mca_reservar_sabados',
+                  'mca_reservar_domingos',
+                  'mca_reservar_festivos'
               ];
 
     /**

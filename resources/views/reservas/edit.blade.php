@@ -257,27 +257,6 @@
       comprobar_puestos();
     })
 
-
-    // $('.singledate').daterangepicker({
-    //     singleDatePicker: true,
-    //     showDropdowns: true,
-    //     //autoUpdateInput : false,
-    //     autoApply: true,
-    //     locale: {
-    //         format: '{{trans("general.date_format")}}',
-    //         applyLabel: "OK",
-    //         cancelLabel: "Cancelar",
-    //         daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-    //         monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-    //         firstDay: {{trans("general.firstDayofWeek")}}
-    //     }
-       
-    // },
-    // function(date) {
-    //     $('#fechas').val(moment(date).format('D/M/Y'));
-    //     $('#fechas').data('fecha',moment(date).format('Y-MM-DD'));
-    //     comprobar_puestos();
-    // });
     $('#fechas').daterangepicker({
             autoUpdateInput: false,
             locale: {
@@ -290,6 +269,10 @@
             },
             "maxSpan": {"days": {{ config_cliente('max_dias_reserva',Auth::user()->id_cliente) }}},
             opens: 'right',
+            isInvalidDate: function(ele) {
+                var currDate = moment(ele._d).format('YYYY-MM-DD');
+                return ({!! $festivos_usuario !!}.indexOf(currDate) != -1 && {{ $perfil_usuario->mca_reservar_festivos=='N'?'true':'false' }})||(moment(ele._d).isoWeekday() == 6 && {{ $perfil_usuario->mca_reservar_sabados=='N'?'true':'false' }})||(moment(ele._d).isoWeekday() == 7 && {{ $perfil_usuario->mca_reservar_domingos=='N'?'true':'false' }});
+            },
         }, function(start_date, end_date) {
             $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
             $('#fechas').data('fecha_inicio',moment(start_date).format('Y-MM-DD'));

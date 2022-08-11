@@ -959,7 +959,6 @@ function color_porcentaje_inv($pct){
     }
 }
 
-
 function authbyToken($token){
     $usuario=users::where('token_acceso',$token)->first();
     if($usuario){
@@ -1047,6 +1046,7 @@ function config_cliente($clave,$cliente=null){
     }
     
 //Decodificar JSON mejorado
+
 function decodeComplexJson($string) { # list from www.json.org: (\b backspace, \f formfeed)
     $string = preg_replace("/[\r\n]+/", "", $string); //Retornos de carro
     $string = preg_replace('/[ ]{2,}|[\t]/', '', trim($string));  //tabs
@@ -1054,8 +1054,6 @@ function decodeComplexJson($string) { # list from www.json.org: (\b backspace, \
     $json = json_decode($json);
     return $json;
 }
-
-
 
 //Funcion para que las tareas programadas escriban su log
 function log_tarea($mensaje,$id,$tipo='info'){
@@ -1079,7 +1077,8 @@ function log_evento($texto,$cod_regla,$tipo="info"){
 
 
 
-function dayOfWeek($num){
+
+ function dayOfWeek($num){
     $days = array(
         1 => 'Monday',
         2 => 'Tuesday',

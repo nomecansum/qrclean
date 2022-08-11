@@ -10,12 +10,43 @@ use Auth;
 use App\Models\reservas;
 use App\Models\puestos;
 use App\Models\users;
+use App\Models\niveles_acceso;
 use stdClass;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
 
 class ReservasController extends Controller
 {
+    ///////////////FUNCIONES AUXILIARES/////////////////////////////
+    private function festivos_usuario($id){
+        //Lista total de festivos del cliente para desactivarlos en el selector de fecha
+        $ubicacion_usuario=DB::table('edificios')
+            ->join('users','users.id_edificio','edificios.id_edificio')
+            ->join('provincias','provincias.id_prov','edificios.id_provincia')
+            ->where('users.id',$id)
+            ->first();
+        $festivos_usuario = DB::select( DB::raw("
+            SELECT
+            date_format(val_fecha,'%Y-%m-%d') as fecha
+        FROM festivos
+        WHERE (FIND_IN_SET(CONVERT(IFNULL(". $ubicacion_usuario->id_prov.",-1),char), cod_provincia ) <> 0
+            OR FIND_IN_SET(CONVERT(IFNULL(". $ubicacion_usuario->cod_pais.",-1),char), cod_pais) <> 0
+            OR FIND_IN_SET(CONVERT(IFNULL(". $ubicacion_usuario->cod_region.",-1),char), cod_region) <> 0
+            OR (FIND_IN_SET(CONVERT(IFNULL(". $ubicacion_usuario->id_edificio.",-1),char),cod_centro) <> 0  OR (IFNULL(cod_centro,0) = 0))
+            OR mca_nacional='S') 
+            AND val_fecha>subdate(curdate(), (day(curdate())-1))
+            AND id_cliente=".Auth::user()->id_cliente.";"));
+        $festivos_usuario=array_map(function($item){
+            return $item->fecha;
+        },$festivos_usuario);
+
+        return js_array($festivos_usuario);
+    }
+
+
+    ////////////////////////////////////////////////////////////////
+    
+    
     public function index(){
         return view('reservas.index');
     }
@@ -32,6 +63,18 @@ class ReservasController extends Controller
             $backMonth = $month->subMonth()->format('Y-n');
         else $backMonth = $month->format('Y-n');
         $end=$month->copy()->endOfMonth();
+
+        //Los dias del mes correspondiente y si cada uno de ellos es festivo o no
+        $festivos_mes = DB::select( DB::raw("
+            WITH RECURSIVE t as (
+                select date('".$month."') as date,
+                estadefiesta(".Auth::user()->id.",'".$month."') as festivo
+            UNION
+                SELECT DATE_ADD(t.date, INTERVAL 1 DAY), estadefiesta(".Auth::user()->id.",DATE_ADD(t.date, INTERVAL 1 DAY)) as festivo FROM t WHERE DATE_ADD(t.date, INTERVAL 1 DAY) <= '".$end."'
+            )select * FROM t;"));
+        $festivos_mes=collect($festivos_mes);
+
+        
         $reservas=DB::table('reservas')
             ->selectraw('date(reservas.fec_reserva) as fec_reserva,reservas.fec_fin_reserva,puestos.cod_puesto,puestos.des_puesto,edificios.des_edificio,plantas.des_planta,puestos_tipos.val_icono,puestos_tipos.val_color')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
@@ -76,7 +119,7 @@ class ReservasController extends Controller
                 }
                 
             }
-        return view('reservas.calendario',compact('backMonth','reservas'))->render();
+        return view('reservas.calendario',compact('backMonth','reservas','festivos_mes'))->render();
     }
 
     public function create($fecha){
@@ -115,8 +158,10 @@ class ReservasController extends Controller
             ->get();
 
         $reserva->id_planta=0;
+        $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
+        $perfil_usuario=niveles_acceso::find(Auth::user()->cod_nivel);
 
-        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario'));
+        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario'));
     }
 
     public function edit($fecha){
@@ -136,7 +181,10 @@ class ReservasController extends Controller
             ->where('id_usuario',Auth::user()->id)
             ->get();
         
-        return view('reservas.edit_del',compact('reserva','f1','plantas_usuario'));
+        $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
+        $perfil_usuario=niveles_acceso::find(Auth::user()->cod_nivel);
+
+        return view('reservas.edit_del',compact('reserva','f1','plantas_usuario','festivos_usuario','perfil_usuario'));
     }
 
     public function comprobar_puestos(Request $r){
@@ -681,27 +729,40 @@ class ReservasController extends Controller
         $usuario=users::find($r->id_usuario[0]);
         $puesto=puestos::find($r->puesto);
         $period = CarbonPeriod::create(Carbon::parse($r->desde), Carbon::parse($r->hasta));
+        $festivos_periodo = DB::select( DB::raw("
+            WITH RECURSIVE t as (
+                select date('".Carbon::parse($r->desde)->format('Y-m-d')."') as date,
+                estadefiesta(".$usuario->id.",'".Carbon::parse($r->desde)->format('Y-m-d')."') as festivo
+            UNION
+                SELECT DATE_ADD(t.date, INTERVAL 1 DAY), estadefiesta(".$usuario->id.",DATE_ADD(t.date, INTERVAL 1 DAY)) as festivo FROM t WHERE DATE_ADD(t.date, INTERVAL 1 DAY) <= '".Carbon::parse($r->hasta)->format('Y-m-d')."'
+            )select * FROM t;"));
+
+        $festivos_periodo=collect($festivos_periodo);
+        $cuenta=0;
         foreach($period as $fecha){
-            $res=new reservas;
-            $res->id_puesto=$r->puesto;
-            $res->id_usuario=$usuario->id;
-            $res->fec_reserva=$fecha;
-            //Si no vienen horas las ponemos a 0
-            $res->fec_reserva->hour=0;
-            $res->fec_reserva->minute=0;
-            $res->fec_reserva->second=0;
-            if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar) && session('CL')['mca_reserva_horas']=='S'){
-                $res->fec_fin_reserva=$res->fec_reserva->addHour($puesto->max_horas_reservar);   
+            if($festivos_periodo->where('date',$fecha->format('Y-m-d'))->first()->festivo==0){
+                $res=new reservas;
+                $res->id_puesto=$r->puesto;
+                $res->id_usuario=$usuario->id;
+                $res->fec_reserva=$fecha;
+                //Si no vienen horas las ponemos a 0
+                $res->fec_reserva->hour=0;
+                $res->fec_reserva->minute=0;
+                $res->fec_reserva->second=0;
+                if($puesto->max_horas_reservar && $puesto->max_horas_reservar>0 && is_int($puesto->max_horas_reservar) && session('CL')['mca_reserva_horas']=='S'){
+                    $res->fec_fin_reserva=$res->fec_reserva->addHour($puesto->max_horas_reservar);   
+                }
+                $res->id_cliente=$usuario->id_cliente;
+                $res->save();
+                $cuenta++;
             }
-            $res->id_cliente=$usuario->id_cliente;
-            $res->save();
         }
-        savebitacora('Reserva  de puesto '.$r->des_puesto.' creada para el usuario '.$usuario->name.' para el periodo  '.$r->desde.' - '.$r->hasta,"Reservas","asignar_reserva_multiple","OK");
-        $str_notificacion=Auth::user()->name.' ha creado una Reserva  del puesto '.$r->des_puesto.' para usted en el periodo  '.$r->desde.' - '.$r->hasta;
+        savebitacora('Reserva  de puesto '.$r->des_puesto.' creada para el usuario '.$usuario->name.' para el periodo  '.$r->desde.' - '.$r->hasta.". ".$cuenta." dias reservados","Reservas","asignar_reserva_multiple","OK");
+        $str_notificacion=Auth::user()->name.' ha creado una Reserva  del puesto '.$r->des_puesto.' para usted en el periodo  '.$r->desde.' - '.$r->hasta.". ".$cuenta." dias reservados";
         notificar_usuario($usuario,"<span class='super_negrita'>Asignacion de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'Se le ha asignado un nuevo puesto</span>",'emails.asignacion_puesto',$str_notificacion,1,"alerta_05");
         return [
             'title' => "Reservas",
-            'message' => 'Reserva  de puesto '.$r->des_puesto.' creada para el usuario '.$usuario->name.' para el periodo  '.$r->desde.' - '.$r->hasta,
+            'message' => 'Reserva  de puesto '.$r->des_puesto.' creada para el usuario '.$usuario->name.' para el periodo  '.$r->desde.' - '.$r->hasta.". ".$cuenta." dias reservados",
             //'fecha' => Carbon::parse(adaptar_fecha($r->fechas))->format('Ymd'),
             //'url' => url('puestos')
         ];

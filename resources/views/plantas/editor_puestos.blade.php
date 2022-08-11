@@ -122,6 +122,7 @@
     }
     //console.log(posiciones);
     function recolocar_puestos(){
+        console.log("recolocar");
         $.each(posiciones, function(i, item) {//console.log(item);
             puesto=$('#puesto'+item.id);
             puesto.css('top',$('#plano').height()*item.offsettop/100);
@@ -136,7 +137,7 @@
             //console.log($(this).data('id')+' '+$(this).data('puesto')+' '+$(this).position().top+ ' '+$(this).position().left);
             }
         });
-        recolocar_puestos();
+        setTimeout(recolocar_puestos, 800);
     } );
 
     $('#btn_guardar').click(function(){

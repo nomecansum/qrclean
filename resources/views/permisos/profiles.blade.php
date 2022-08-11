@@ -30,83 +30,14 @@
 
 <div class="container-fluid">
 
-    <div class="row">
-    	<div class="col-md-12">
+	<div class="row">
+		<div class="col-md-12">
 			<div class="panel box-solid" id="editor" style="display:none">
-				<div class="box-header with-border">
-					<h3 class="box-title">@isset ($s)Editar perfil @else Crear perfil @endisset</h3>
-				</div>
-				<div class="panel-body">
-					<form action="{{url('profiles/update')}}" method="POST" class="form-ajax" id="formperfil">
-						<input type="hidden" name="id" id="id" value="{{ isset($n) ? $n->cod_nivel : 0}}">
-						{{csrf_field()}}
-						<div class="row">
-							<div class="form-group col-md-10">
-								<label for="">Descripcion</label>
-								<input type="text" name="des_nivel_acceso" id="des_nivel_acceso" class="form-control" required value="{{isset($n) ? $n->des_nivel_acceso : ''}}">
-							</div>
-	
-							<div class="form-group col-md-2">
-								<label for="">Nivel</label>
-								<input type="number" name="num_nivel_acceso" id="num_nivel_acceso" min="0" max="{{ Auth::user()->nivel_acceso }}" class="form-control" required value="{{isset($n) ? $n->val_nivel_acceso : ''}}">
-							</div>
-						</div>
-						<div class="row">
-							<div class="form-group col-md-3">
-								<label>Hereda de</label>
-								<select  name="hereda_de" class="form-control" id="nn">
-									<option value="" selected=""></option>
-									@foreach ($niveles as $n)
-										<option value="{{$n->cod_nivel}}">{{$n->des_nivel_acceso}}</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="form-group col-md-3">
-								<label>Homepage</label>
-								<select  name="home_page" class="form-control" id="hh">
-									<option value="" selected=""></option>
-									@foreach ($homepages as $h)
-										<option value="{{$h}}" {{ isset($n) && old('id_cliente', optional($n)->home_page) == $h? 'selected' : '' }}>{{$h}}</option>
-									@endforeach
-								</select>
-							</div>
-							<div class="form-group col-md-3 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
-								<label for="id_cliente" class="control-label">Cliente</label>
-								<select class="form-control" required id="id_cliente" name="id_cliente">
-									@foreach (lista_clientes() as $cl)
-										<option value="{{ $cl->id_cliente }}" {{ isset($n) && old('id_cliente', optional($n)->id_cliente) == $cl->id_cliente ? 'selected' : '' }}>
-											{{ $cl->nom_cliente }}
-										</option>
-									@endforeach
-								</select>
-								{!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
-							</div>
-							@if(isAdmin())
-							<div class="col-md-2 p-t-20 mt-1">
-								<input type="checkbox" class="form-control  magic-checkbox" name="mca_fijo"  id="mca_fijo" value="S" {{ isset($n) && $n->mca_fijo=='S'?'checked':'' }}> 
-								<label class="custom-control-label"   for="mca_fijo">Fijo</label>
-							</div>
-							@endif
-							<div class="col-md-2 p-t-20 mt-1">
-								<input type="checkbox" class="form-control  magic-checkbox" name="mca_reserva_multiple"  id="mca_reserva_multiple" value="S" {{ isset($n) && $n->mca_reserva_multiple=='S'?'checked':'' }}> 
-								<label class="custom-control-label"   for="mca_reserva_multiple">Reserva multiple</label>
-							</div>
-							<div class="col-md-2 p-t-20 mt-1">
-								<input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ isset($n) && $n->mca_liberar_auto=='S'?'checked':'' }}> 
-								<label class="custom-control-label"   for="mca_liberar_auto">Liberar reservas AUTO</label>
-							</div>
-							<div class="col-md-1">
-								<button type="submit" class="btn btn-primary float-right    " style="margin-top: 25px">Guardar</button>
-							</div>
-						</div>
-                    </form>
-                </div>
-                <div class="row alert alert-warning not-dismissable" id="warning_level" style="display: none">
-                    <h3 class="text-warning col-md-12"><i class="fa fa-exclamation-triangle"></i> Atencion!!</h3> Si selecciona la opcion de heredar de, se borrarán todos los permisos que tuviera este perfil.
-                </div>
+				
 			</div>
 		</div>
 	</div>
+    
 	<div class="row">
 			<div class="panel">
 				<div class="panel-heading">
@@ -116,28 +47,55 @@
 			        {{-- <h2 class="panel-title float-left">{{trans('strings.profiles')}}</h2> --}}
 			        {{-- @include('resources.combo_clientes') --}}
 			        <div class="table-responsive mt-40">
-			            <table id="myTable" class="table table-bordered table-condensed table-hover  table-striped table-bordered">
+			            <table id="myTable" class="table table-bordered  table-hover  table-striped">
 			                <thead>
 			                    <tr>
 									<th>ID  </th>
 									<th style="width: 2%">Nivel</th>
-									@if(isAdmin())<th style="width: 2%">Fijo</th>@endif
-			                        <th>Pefil</th>
-									
+			                        <th style="width: 30%" class="text-center">Pefil</th>
+									@if(isAdmin())<th style="width: 80px" class="text-center">Fijo</th>@endif
+									<th style="width: 80px" class="text-center">Multiple</th>
+									<th style="width: 80px" class="text-center">Sabados</th>
+									<th style="width: 80px" class="text-center">Domingos</th>
+									<th style="width: 80px" class="text-center">Festivos</th>
+									<th style="width: 80px" class="text-center"><i class="fa-solid fa-user-group"></i> Usuarios</th>
+									<th></th>
 			                    </tr>
 			                </thead>
 			                <tbody>
 			                	@foreach ($niveles as $nivel)
-			                		<tr class="hover-this" data-perfil="{{$nivel->cod_nivel}}" data-nombre="{{$nivel->des_nivel_acceso}}"  data-num="{{$nivel->val_nivel_acceso}}">
+			                		<tr class="hover-this pad-all" data-perfil="{{$nivel->cod_nivel}}" data-nombre="{{$nivel->des_nivel_acceso}}"  data-num="{{$nivel->val_nivel_acceso}}">
 										<td style="width:4%">{{$nivel->cod_nivel}}</td>
+										
 										<td>{{$nivel->val_nivel_acceso}}</td>
+										<td>{{$nivel->des_nivel_acceso}}</td>
 										@if(isAdmin())
-										<td>
+										<td class="text-center">
 											<input type="checkbox" class="form-control  magic-checkbox" readonly  value="S" {{ $nivel->mca_fijo=='S'?'checked':'' }}> 
 											<label class="custom-control-label" readonly  for="mca_fijo{{ $nivel->cod_nivel }}"></label>
 										</td>
 										@endif
-			                			<td style="position: relative;">{{$nivel->des_nivel_acceso}}
+										<td class="text-center">
+											<input type="checkbox" class="form-control  magic-checkbox" readonly  value="S" {{ $nivel->mca_reserva_multiple=='S'?'checked':'' }}> 
+											<label class="custom-control-label" readonly  for="mca_reserva_multiple{{ $nivel->cod_nivel }}"></label>
+										</td>
+										<td class="text-center">
+											<input type="checkbox" class="form-control  magic-checkbox" readonly  value="S" {{ $nivel->mca_reservar_sabados=='S'?'checked':'' }}> 
+											<label class="custom-control-label" readonly  for="mca_reservar_sabados{{ $nivel->cod_nivel }}"></label>
+										</td>
+										<td class="text-center">
+											<input type="checkbox" class="form-control  magic-checkbox" readonly  value="S" {{ $nivel->mca_reservar_domingos=='S'?'checked':'' }}> 
+											<label class="custom-control-label" readonly  for="mca_reservar_domingos{{ $nivel->cod_nivel }}"></label>
+										</td>
+										<td class="text-center">
+											<input type="checkbox" class="form-control  magic-checkbox" readonly  value="S" {{ $nivel->mca_reservar_festivos=='S'?'checked':'' }}> 
+											<label class="custom-control-label" readonly  for="mca_reservar_festivos{{ $nivel->cod_nivel }}"></label>
+										</td>
+										<td  class="text-center">
+											{{ $cuenta->where('cod_nivel',$nivel->cod_nivel)->count() }}
+										</td>
+			                			<td style="position: relative;">
+											
                                             @if(($nivel->mca_fijo=='S' && isAdmin()) || $nivel->id_cliente==Auth::user()->id_cliente)
 											<div class="floating-like-gmail pull-right pt-3" role="group">
                                                 <a href="#" class="btn btn-info btn-xs btn_editar pt-2  add-tooltip" title="Editar perfil"  data-perfil="{{$nivel->cod_nivel}}" data-nombre="{{$nivel->des_nivel_acceso}}"  data-num="{{$nivel->val_nivel_acceso}}"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
@@ -199,12 +157,10 @@
 	$('.btn_editar').click(function(){
 		$('#editor').show();
 		animateCSS('#editor','bounceInRight');
-		$('.box-title').html("Editar perfil");
-		$('#id').val($(this).data('perfil'));
-		console.log($(this).data('nombre'));
-		$('#des_nivel_acceso').val($(this).data('nombre'));
-		$('#num_nivel_acceso').val($(this).data('num'));
-		$('#formperfil').attr("action","{{url('profiles/update')}}")
+		$('#editor').load("{{ url('profiles/edit') }}/"+$(this).data('perfil'), function(data){
+			$('.box-title').html("Editar perfil");
+			$('#formperfil').attr("action","{{url('profiles/update')}}")
+		});
 	});
 	</script>
 @endsection

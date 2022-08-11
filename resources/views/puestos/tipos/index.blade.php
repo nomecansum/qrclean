@@ -96,7 +96,7 @@
                             
                             <td>{{ $tipo->nom_cliente }}</td>
 
-                            <td>
+                            <td style="position: relative;">
                                 <div class="pull-right floating-like-gmail mt-2" role="group">
                                     @if(checkPermissions(['Tipos de puesto'],['W'])) <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_tipo_puesto }})" title="Editar tipo" data-id="{{ $tipo->id_tipo_puesto }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                                     @if(checkPermissions(['Tipos de puesto'],['D']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess()))) <a href="#eliminar-planta-{{$tipo->id_tipo_puesto}}" data-target="#eliminar-planta-{{$tipo->id_tipo_puesto}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif

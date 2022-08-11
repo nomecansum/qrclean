@@ -42,7 +42,8 @@ class puestos_tipos extends Model
                   'hora_liberar',
                   'observaciones',
                   'mca_liberar_auto',
-                  'abreviatura'
+                  'abreviatura',
+                  'val_tiempo_limpieza'
               ];
 
     /**
@@ -91,6 +92,17 @@ class puestos_tipos extends Model
     }
 
     /**
+     * Set the val_tiempo_limpieza.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setValTiempoLimpiezaAttribute($value)
+    {
+        $this->attributes['val_tiempo_limpieza'] = $value;
+    }
+
+    /**
      * Get hora_liberar in array format
      *
      * @param  string  $value
@@ -99,6 +111,17 @@ class puestos_tipos extends Model
     public function getHoraLiberarAttribute($value)
     {
         return $value;
+    }
+
+    /**
+     * Get val_tiempo_limpieza in array format
+     *
+     * @param  string  $value
+     * @return array
+     */
+    public function getValTiempoLimpiezaAttribute($value)
+    {
+        return$value;
     }
 
 }

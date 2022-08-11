@@ -140,11 +140,6 @@
         "table-name": "plantas"
     },
     {
-        "model-name": "puestos_tipos",
-        "resource-file": "puestos_tipos.json",
-        "table-name": "puestos_tipos"
-    },
-    {
         "model-name": "causas_cierre",
         "resource-file": "causas_cierres.json",
         "table-name": "causas_cierre"
@@ -213,5 +208,10 @@
         "model-name": "niveles_acceso",
         "resource-file": "niveles_accesos.json",
         "table-name": "niveles_acceso"
+    },
+    {
+        "model-name": "puestos_tipos",
+        "resource-file": "puestos_tipos.json",
+        "table-name": "puestos_tipos"
     }
 ]

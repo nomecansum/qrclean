@@ -26,7 +26,7 @@
             </div>
     </div>
     @php
-        $posiciones=json_decode(json_decode($puesto->posiciones));
+        $posiciones=json_decode($puesto->posiciones);
         $top=0;
         $left=0;
         if(isset($posiciones)){

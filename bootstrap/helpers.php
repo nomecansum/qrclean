@@ -247,7 +247,7 @@ function decimal_to_time($dec)
     if ($hours==0 && $minutes==0){
         return 0;
     } else {
-        return lz($hours).":".lz($minutes);
+        return lz($hours).":".lz($minutes).":".lz($seconds);
     }
 }
 
@@ -634,6 +634,7 @@ function genColorCodeFromText($text,$min_brightness=100,$spec=10)
 
     return '#'.$output;
 }
+
 
 function checkPermissions($secciones = [],$permisos = [])
 {

@@ -56,32 +56,38 @@
                                 
                             {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
                         </div>
-
+                        <div class="form-group col-md-2" style="margin-top: 7px">
+                            <label for="val_color">Color</label><br>
+                            <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        </div>
+                        <div class="form-group col-md-2" style="margin-top: 7px">
+                            <label for="max_usos">Usos simultaneo</label><br>
+                            <input type="number" autocomplete="off" min="1" max="20" style="width: 100px"  name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
+                        </div>
+                        <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
+                            <div class="form-group">
+                                <label>Icono</label><br>
+                                <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-align="right" data-placement="inline" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
+                            </div>
+                        </div>
+                        @if(isAdmin())
+                        <div class="col-md-1 p-t-30 mt-1">
+                            <input type="checkbox" class="form-control  magic-checkbox" name="mca_fijo"  id="mca_fijo" value="S" {{ $tipo->mca_fijo=='S'?'checked':'' }}> 
+                            <label class="custom-control-label"   for="mca_fijo">Fijo</label>
+                        </div>
+                        @endif
+                        <div class="form-group col-md-2" style="margin-top: 7px">
+                            <label for="max_usos">Tiempo limpieza (min)</label><br>
+                            <input type="number" autocomplete="off" name="val_tiempo_limpieza" id="val_tiempo_limpieza" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->val_tiempo_limpieza}}" />
+                        </div>
                         
                 </div>
                 <div class="row">
                     
-                    <div class="form-group col-md-2" style="margin-top: 7px">
-                        <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
-                    </div>
-                    <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
-                        <div class="form-group">
-                            <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-align="right" data-placement="inline" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
-                        </div>
-                    </div>
-                    @if(isAdmin())
-                    <div class="col-md-2 p-t-30 mt-1">
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_fijo"  id="mca_fijo" value="S" {{ $tipo->mca_fijo=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_fijo">Fijo</label>
-                    </div>
-                    @endif
                     
-                    <div class="form-group col-md-2" style="margin-top: 7px">
-                        <label for="max_usos">Usos simultaneo</label><br>
-                        <input type="number" autocomplete="off" min="1" max="20" style="width: 100px"  name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
-                    </div>
+                    
+                    
+                    
                     <div class="col-md-4 b-all rounded p-0">
                         <div class="col-md-7 p-t-20 mt-2">
                             <input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ $tipo->mca_liberar_auto=='S'?'checked':'' }}> 

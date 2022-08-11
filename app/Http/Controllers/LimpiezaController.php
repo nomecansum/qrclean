@@ -52,10 +52,12 @@ class LimpiezaController extends Controller
             ->get();
 
         $detalles=DB::table('rondas_limpieza')
-            ->select('puestos_ronda.*','puestos.cod_puesto','puestos.id_edificio','puestos.id_planta','puestos.id_estado')
+            ->select('puestos_ronda.*','puestos.cod_puesto','puestos.id_edificio','puestos.id_planta','puestos.id_estado','puestos_tipos.val_tiempo_limpieza','puestos_tipos.val_icono','puestos_tipos.val_color as color_puesto')
             ->join('puestos_ronda','puestos_ronda.id_ronda','rondas_limpieza.id_ronda')
             ->join('puestos','puestos_ronda.id_puesto','puestos.id_puesto')
+            ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
             ->where(function($q){
+                
                 if (!isAdmin()) {
                     $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
                 }
@@ -89,11 +91,12 @@ class LimpiezaController extends Controller
             ->get();
 
         $detalles=DB::table('puestos_ronda')
-            ->select('puestos_ronda.*','puestos.cod_puesto','puestos.id_edificio','puestos.id_planta','puestos.id_estado','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado','estados_puestos.val_color','users.name')
+            ->select('puestos_ronda.*','puestos.cod_puesto','puestos.id_edificio','puestos.id_planta','puestos.id_estado','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado','estados_puestos.val_color','users.name','puestos_tipos.val_tiempo_limpieza','puestos_tipos.val_icono','puestos_tipos.val_color as color_puesto')
             ->join('puestos','puestos_ronda.id_puesto','puestos.id_puesto')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
             ->leftjoin('users','puestos_ronda.user_audit','users.id')
             ->where('id_ronda',$ronda->id_ronda)
             ->get();

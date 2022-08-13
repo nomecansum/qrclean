@@ -442,7 +442,8 @@
     }
 
     //Menu
-    $('.parametrizacion').addClass('active active-sub');
+    $('.configuracion').addClass('active active-sub');
+    $('.menu_parametrizacion').addClass('active active-sub');
     $('.puestos').addClass('active-link');
 
     $('.chk_accion').click(function(){

@@ -212,7 +212,8 @@
 <script src="{{url('/plugins/js-year-calendar')}}/js-year-calendar.min.js"></script>
 <script src="{{url('/plugins/js-year-calendar')}}/js-year-calendar.es.js"></script>
 <script>
-	$('.parametrizacion').addClass('active active-sub');
+	$('.configuracion').addClass('active active-sub');
+    $('.menu_parametrizacion').addClass('active active-sub');
 	$('.festivos').addClass('active-link');
 
 var anio = {{ Carbon\Carbon::now()->year }};

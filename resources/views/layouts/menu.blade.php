@@ -145,24 +145,13 @@
                     <li class="parametrizacion">
                         <a href="#">
                             <i class="fad fa-browser"></i>
-                            @if(checkPermissions(['Parametrizacion'],['R']))<span class="menu-title">Parametrizacion</span> @endif
+                            @if(checkPermissions(['Parametrizacion'],['R']))<span class="menu-title">Mi oficina</span> @endif
                             <i class="arrow"></i>
                         </a>
                         
                         <!--Submenu-->
                         <ul class="collapse">
-                            @if(checkPermissions(['Edificios'],['R']))<li class="edificios"><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li> @endif
-                            @if(checkPermissions(['Plantas'],['R']))<li class="plantas"><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li> @endif
-                            @if(checkPermissions(['Puestos'],['R']))<li class="puestos"><a href="/puestos"> <i class="fad fa-desktop-alt"></i> Puestos</a></li> @endif
-                            @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas"><a href="/salas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas reunion</a></li> @endif
                             @if(checkPermissions(['Puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
-                            @if(checkPermissions(['Turnos'],['R']))<li class="turnos"><a href="/turnos"><i class="fa-solid fa-repeat-1"></i> Turnos</a></li> @endif
-                            @if(checkPermissions(['Festivos'],['R']))<li class="festivos"><a href="/festives"><i class="fa-solid fa-calendar-range"></i> Festivos</a></li> @endif
-                            
-                            @if(checkPermissions(['Encuestas'],['R']))<li class="encuestas"><a href="/encuestas"><i class="fad fa-poll-h"></i> Encuestas</a></li> @endif
-                            @if(checkPermissions(['Señaletica'],['R']))<li class="mkd"><a href="/MKD"><i class="fad fa-sign"></i> Señaletica</a></li> @endif
-                            
-                            @if(checkPermissions(['Importar datos'],['W']))<li class="importar"> <a href="/import"><i class="fad fa-upload"></i> Importar datos</a></li> @endif
                         </ul>
                     </li>
                     @endif
@@ -298,8 +287,21 @@
                                         <i class="arrow"></i>
                                     </a>
                                     <ul class="collapse">
+                                        @if(checkPermissions(['Edificios'],['R']))<li class="edificios"><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li> @endif
+                                        @if(checkPermissions(['Plantas'],['R']))<li class="plantas"><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li> @endif
+                                        @if(checkPermissions(['Puestos'],['R']))<li class="puestos"><a href="/puestos"> <i class="fad fa-desktop-alt"></i> Puestos</a></li> @endif
+                                        @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas"><a href="/salas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas reunion</a></li> @endif
+                                        {{-- @if(checkPermissions(['Puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif --}}
+                                        @if(checkPermissions(['Turnos'],['R']))<li class="turnos"><a href="/turnos"><i class="fa-solid fa-repeat-1"></i> Turnos</a></li> @endif
+                                        @if(checkPermissions(['Festivos'],['R']))<li class="festivos"><a href="/festives"><i class="fa-solid fa-calendar-range"></i> Festivos</a></li> @endif
+
                                         @if(checkPermissions(['Tipos de puesto'],['R']))<li class="puestostipos text-nowrap"><a href="/puestos/tipos"> <i class="fal fa-desktop-alt"></i> Tipos de puesto</a></li> @endif
                                         @if(checkPermissions(['Tags'],['R']))<li class="tags text-nowrap"><a href="/tags"> <i class="fad fa-tags"></i> Tags</a></li> @endif
+                                        
+                                        @if(checkPermissions(['Encuestas'],['R']))<li class="encuestas"><a href="/encuestas"><i class="fad fa-poll-h"></i> Encuestas</a></li> @endif
+                                        @if(checkPermissions(['Señaletica'],['R']))<li class="mkd"><a href="/MKD"><i class="fad fa-sign"></i> Señaletica</a></li> @endif
+                                        
+                                        @if(checkPermissions(['Importar datos'],['W']))<li class="importar"> <a href="/import"><i class="fad fa-upload"></i> Importar datos</a></li> @endif
                                     </ul>
                                 </li>
                             @endif

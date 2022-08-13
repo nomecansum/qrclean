@@ -79,10 +79,10 @@
 <div class="panel">
     <div class="panel-heading bg-gray-dark">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-5">
                 <span class="text-2x ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}</span>
             </div>
-            <div class="col-md-7"></div>
+            <div class="col-md-5"></div>
             <div class="col-md-2 text-right">
                 <h4>
                     <span class="mr-2"><i class="fad fa-layer-group"></i> {{ $e->plantas }}</span>

@@ -127,22 +127,21 @@ class ReservasController extends Controller
         $reserva=new reservas;
         $f1=Carbon::parse($fecha);
         $tipos = DB::table('puestos_tipos')
-        ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
-        ->where(function($q){
-            if (!isAdmin()) {
+            ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+            ->wherein('puestos_tipos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos))
+            ->where(function($q){
                 $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
                 if(config_cliente('mca_mostrar_datos_fijos')=='S'){
                     $q->orwhere('puestos_tipos.mca_fijo','S');
                 }
-            }
-        })
-        ->where(function($q){
-            if(config_cliente('mca_salas',Auth::user()->id_cliente)=='S'){
-                $q->wherenotin('puestos_tipos.id_tipo_puesto',config('app.tipo_puesto_sala'));
-            }
-        })
-        ->orderby('id_tipo_puesto')
-        ->get();
+            })
+            ->where(function($q){
+                if(config_cliente('mca_salas',Auth::user()->id_cliente)=='S'){
+                    $q->wherenotin('puestos_tipos.id_tipo_puesto',config('app.tipo_puesto_sala'));
+                }
+            })
+            ->orderby('id_tipo_puesto')
+            ->get();
         //Primero comprobamos si tiene una reserva para ese dia
         $misreservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
@@ -309,6 +308,7 @@ class ReservasController extends Controller
                     $q->where('puestos.id_tipo_puesto',$r->tipo_puesto);
                 }
             })
+            ->wherein('puestos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos))
             ->where(function($q) use($intervalo){
                 if(session('CL')['mca_reserva_horas']=='S'){
                     $q->where('puestos.max_horas_reservar','>=',$intervalo);

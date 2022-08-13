@@ -29,12 +29,12 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="panel">
                     <div class="alert" style="display: none"  id="msg_result">
                         <button type="button" class="close" onclick="$('#msg_result').hide();" aria-label="Close"> <span aria-hidden="true">×</span> </button>
                         <h3 id="h_titulo" class=""><i id="icono_msg" class=""></i> <span id="tit_msg"></span></h3> <span id="msg"></span>
                     </div>
-                    <div class="card-body wizard-content">
+                    <div class="panel-body wizard-content">
                         <form name="form_fichero" id="form_fichero"  enctype="multipart/form-data"  action="{{ url('import/process_import') }}" class="tab-wizard wizard-circle form-horizontal" method="POST">
                             <input type="hidden" name="fichero" id="fic">
                             <input type="hidden" name="cod_cliente" id="cod_cliente" value="{{ Auth::user()->id_cliente }}">
@@ -234,9 +234,9 @@ Dropzone.options.dZUpload= {
         });
     }
 }
+
+    $('.configuracion').addClass('active active-sub');
+    $('.menu_parametrizacion').addClass('active active-sub');
+    $('.importar').addClass('active-link');
 </script>
-    <script>
-        $('.parametrizacion').addClass('active active-sub');
-        $('.importar').addClass('active-link');
-    </script>
 @endsection

@@ -108,7 +108,8 @@
 
 @section('scripts')
     <script>
-        $('.parametrizacion').addClass('active active-sub');
+        $('.configuracion').addClass('active active-sub');
+        $('.menu_parametrizacion').addClass('active active-sub');
         $('.mkd').addClass('active-link');
         var lista=[];
         var num=1;

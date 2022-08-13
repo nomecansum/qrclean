@@ -153,7 +153,8 @@
     <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
     <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
     <script>
-        $('.parametrizacion').addClass('active active-sub');
+        $('.configuracion').addClass('active active-sub');
+        $('.menu_parametrizacion').addClass('active active-sub');
         $('.plantas').addClass('active-link');
 
         $('#btn_nueva_puesto').click(function(){

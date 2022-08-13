@@ -149,7 +149,7 @@
                 
                     <!--Tabs Content-->
                     <div class="tab-content">
-                        <div id="demo-stk-lft-tab-1" class="tab-pane fade">
+                        <div id="demo-stk-lft-tab-1" class="tab-pane fade active in">
                             <div class="panel">
                                 <div class="panel-heading">
                                     <p class="text-main text-semibold">Datos generales</p>
@@ -346,7 +346,7 @@
                                 <div class="panel-heading">
                                     <p class="text-main text-semibold">Reserva automatica</p>
                                 </div>
-                                <input type="hidden" name="list_puestos_preferidos" id="list_puestos_preferidos">
+                                <input type="hidden" name="list_puestos_preferidos" id="list_puestos_preferidos" value="{{ $users->list_puestos_preferidos }}">
                                 <div class="panel-body">
                                     @if(isset($users))
                                         <div class="row rounded b-all mb-2 bg-gray-light">
@@ -369,7 +369,7 @@
                                                 <label>Criterios seleccionados</label>
                                                 <div id="sortable" style="border: 1px dashed #ccc; padding: 5px 5px 30px 5px; border-radius: 9px">
                                                     <div class="ui-state-default ui-state-disabled static"><i class="fa-solid fa-clock-rotate-left" id="u" type="ul"></i> <div class="detalle" data-tipo="ul" data-id="20">Ultimas 20 reservas</div></div>
-                                                    @foreach ($pref_turnos as $pf )
+                                                    @foreach ($pref_turnos??[] as $pf )
                                                         @if($pf->tipo !='ul')
                                                             <div id="puesto_pref" class="draggable" style="background-color:{{ $pf->color }} ">
                                                                 <h4 class="text-white">{!! $pf->icono !!} </h4>
@@ -480,7 +480,7 @@
                             
                             
                         </div>
-                        <div id="demo-stk-lft-tab-4" class="tab-pane fade active in">
+                        <div id="demo-stk-lft-tab-4" class="tab-pane fade">
                             <div class="panel">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Tipos de puesto que puede reservar</h3>
@@ -488,11 +488,11 @@
                                 <div class="panel-body">
                                     <div class="row rounded b-all mb-2 bg-gray-light">
                                         <div class="col-md-12">
-                                            <label><b>Turno de asistencia</b></label><br>
+                                            <label><b>Tipos de puesto que puede reservar</b></label><br>
                                             @foreach($tipos_puestos as $t)
                                                 <div class="form-group col-md-4">
                                                     <input type="checkbox" class="form-control  magic-checkbox chkdia" name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" {{ in_array($t->id_tipo_puesto,$tipos_puesto_usuario)?'checked':'' }}> 
-                                                    <label class="custom-control-label"   for="tipo_puesto{{$t->id_tipo_puesto}}"><i class="{{ $t->val_icono }}" style="color: {{ $t->val_color }}"></i> {{$t->des_tipo_puesto}} </label><br>
+                                                    <label class="custom-control-label" for="tipo_puesto{{$t->id_tipo_puesto}}"> {{$t->des_tipo_puesto}} </label><br>
                                                 </div>
                                             @endforeach
                                         </div>

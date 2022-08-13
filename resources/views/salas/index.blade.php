@@ -46,7 +46,8 @@
 
 @section('scripts')
     <script>
-        $('.parametrizacion').addClass('active active-sub');
+        $('.configuracion').addClass('active active-sub');
+        $('.menu_parametrizacion').addClass('active active-sub');
         $('.salas').addClass('active-link');
 
         $('#fecha').daterangepicker({

@@ -37,9 +37,9 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 		z-index: -1;
 		overflow: hidden;
 		}
-	table {
-		border-spacing: 10px;
-		border-collapse: separate;
+	.table_calendar {
+		border-spacing: 10px !important;
+		border-collapse: separate !important;
 	}
 </style>
 {{-- <div class="panel-heading">
@@ -50,7 +50,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 </div> --}}
 
 <div class="panel-body">
-	<table class="table table-calendar mb0 rounded w-100" style="border: 1px solid #f2f7f8" >
+	<table class="table table-calendar mb0 rounded w-100 table_calendar" style="border: 1px solid #f2f7f8" >
 		<thead>
 			<tr class="">
 				<th>

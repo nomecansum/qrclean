@@ -127,7 +127,8 @@
 @section('scripts')
 	<script>
 
-	$('.parametrizacion').addClass('active active-sub');
+	$('.configuracion').addClass('active active-sub');
+    $('.menu_parametrizacion').addClass('active active-sub');
 	$('.turnos').addClass('active-link');
 
 

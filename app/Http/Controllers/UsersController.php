@@ -198,11 +198,10 @@ class UsersController extends Controller
 
         $tipos_puestos=DB::table('puestos_tipos')
             ->where('id_cliente',$users->id_cliente)
-            ->wherein('id_tipo_puesto',explode(",",$users->tipos_puesto_admitidos))
             ->get();
         try{
-            $tipos_puesto_usuario=explode(",",$users->tipos_puesto_usuario);
-        } catch (\Throwable $e) {
+            $tipos_puesto_usuario=explode(",",$users->tipos_puesto_admitidos);
+            } catch (\Throwable $e) {
             $tipos_puesto_usuario=[];
         }
             

@@ -138,7 +138,8 @@
 
 @section('scripts')
     <script>
-        $('.parametrizacion').addClass('active active-sub');
+        $('.configuracion').addClass('active active-sub');
+        $('.menu_parametrizacion').addClass('active active-sub');
         $('.edificios').addClass('active-link');
         
         $('#btn_nueva_puesto').click(function(){

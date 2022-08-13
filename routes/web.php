@@ -106,7 +106,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/{users}/edit',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@edit'])->name('users.users.edit');
         Route::get('/plantas/{id}/{check}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@plantas_usuario'])->name('users.plantas');
         Route::post('/',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@store'] )->name('users.users.store');
-        Route::post('users/{users}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@update'])->name('users.users.update');
+        Route::post('update/{users}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@update'])->name('users.users.update');
         Route::get('/delete/{id}',['middleware'=>'permissions:["Usuarios"],["D"]','uses'=>'UsersController@destroy'])->name('users.users.destroy');
 
         Route::get('/addplanta/{usuario}/{planta}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@addplanta'])->name('users.addplanta');

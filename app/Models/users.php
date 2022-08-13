@@ -22,7 +22,7 @@ class users extends Model
     */
     protected $primaryKey = 'id';
     protected $keyType = 'string';
-    public $incrementing = false;
+    public $incrementing = true;
 
 
     /**
@@ -31,28 +31,29 @@ class users extends Model
      * @var array
      */
     protected $fillable = [
-                  'name',
+                  'cod_nivel',
+                  'collapse',
+                  'def_camera',
                   'email',
+                  'email_expire_at',
                   'email_verified_at',
+                  'id_cliente',
+                  'id_edificio',
+                  'id_externo',
+                  'id_usuario_supervisor',
+                  'img_usuario',
+                  'last_login',
+                  'list_puestos_preferidos',
+                  'name',
+                  'nivel_acceso',
                   'password',
                   'remember_token',
-                  'img_usuario',
-                  'cod_nivel',
                   'theme',
-                  'collapse',
-                  'last_login',
-                  'nivel_acceso',
-                  'id_cliente',
-                  'val_timezone',
+                  'tipos_puesto_admitidos',
                   'token_acceso',
-                  'def_camera',
-                  'email_expire_at',
-                  'id_usuario_supervisor',
-                  'val_vista_puestos',
                   'token_expires',
-                  'id_externo',
-                  'id_edificio',
-                  'list_puestos_preferidos'
+                  'val_timezone',
+                  'val_vista_puestos'
               ];
 
     /**

@@ -13,6 +13,7 @@ use App\Models\turnos_usuarios;
 use Illuminate\Http\Request;
 use Exception;
 use DB;
+use Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -29,11 +30,7 @@ use stdClass;
 class UsersController extends Controller
 {
 
-    /**
-     * Display a listing of the users.
-     *
-     * @return Illuminate\View\View
-     */
+
     public function index()
     {
         
@@ -83,120 +80,20 @@ class UsersController extends Controller
 
         return view('users.index', compact('usersObjects','supervisores'));
     }
-    /**
-     * Show the form for creating a new users.
-     *
-     * @return Illuminate\View\View
-     */
-    public function create()
-    {
 
-        $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();
-        // dd($Perfiles);
-
-        $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
-
-        $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->get()->pluck('id_perfil')->unique();
-
-        $supervisores_usuario=DB::table('permisos_usuarios')->where('id_seccion',$permiso)->get()->pluck('id_usuario')->unique();
-
-        $turnos=DB::table('turnos')
-            ->where('id_cliente',Auth::user()->id_cliente)
-            ->get();
-
-        $edificios=DB::table('edificios')
-            ->where('id_cliente',Auth::user()->id_cliente)
-            ->get();
-
-        $supervisores=DB::table('users')
-            ->where(function ($q) use($supervisores_perfil,$supervisores_usuario){
-                $q->wherein('cod_nivel',$supervisores_perfil);
-                $q->orwherein('id',$supervisores_usuario);
-            })
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->wherein('users.id_cliente',clientes());
-                }
-            })
-            ->orderby('name')
-            ->get();
-
-        $usuarios_supervisables = DB::table('users')
-            ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->wherein('users.id_cliente',clientes());
-                }
-            })
-            ->where('users.id','<>',Auth::user()->id)
-            ->get();
-
-        $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',0)->pluck('id')->toarray();
-
-        return view('users.create', compact('Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','edificios','turnos'));
-
-    }
-    /**
-     * Store a new users in the storage.
-     *
-     * @param Illuminate\Http\Request $request
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
-     */
-    public function store(Request $request)
-    {
-        //Vamos a comprbar el email, porque no puedo pasarlo por el validado
-        if(DB::table('users')->where('email',$request->email)->exists()){
-            return [
-                'title' => "Usuarios",
-                'error' => 'ERROR: El e-mail ya existe '.$request->email,
-                //'url' => url('users/'.$usuario.'/edit')
-            ];
-        }
-        $data = $this->getData($request);
-
-        $img_usuario = "";
-        try {
-             if ($request->hasFile('img_usuario')) {
-                $file = $request->file('img_usuario');
-                $path = '/img/users/';
-                $img_usuario = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
-                //$file->move($path,$img_usuario);
-                Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_usuario);
-            }
-
-            $data['img_usuario']=$img_usuario;
-            $data["password"]=Hash::make($request->password);
-            $data["cod_nivel"]=$request->cod_nivel;
-            $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
-
-            $usuario=users::insertGetId($data);
-            savebitacora('Usuario '.$request->email. ' creado',"Usuarios","Store","OK");
-            return [
-                'title' => "Usuarios",
-                'message' => 'Usuario '.$request->name. ' creado con exito',
-                'url' => url('users/'.$usuario.'/edit')
-            ];
-        } catch (Exception $exception) {
-            savebitacora('ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage() ,"Usuarios","Store","ERROR");
-            return [
-                'title' => "Usuarios",
-                'error' => 'ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage(),
-                //'url' => url('users/'.$usuario.'/edit')
-            ];
-            // flash('ERROR: Ocurrio un error creando el usuario '.$request->name.' '.$exception->getMessage())->error();
-            // return back()->withInput();
-        }
-    }
-    /**
-     * Show the form for editing the specified users.
-     *
-     * @param int $id
-     *
-     * @return Illuminate\View\View
-     */
     public function edit($id)
     {
+        if($id==0){
+            $users=new users();
+            $users->name="";
+            $users->email=Str::random(40);
+            $users->password="";
+            $users->id_cliente=Auth::user()->id_cliente;
+            $users->save();
+            $id=$users->id;
+            $users->email="";
+        }
+        
         validar_acceso_tabla($id,"users");
         $users = users::findOrFail($id);
         $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();
@@ -253,10 +150,18 @@ class UsersController extends Controller
         $turnos_usuario=DB::table('turnos_usuarios')
             ->where('id_usuario',$id)
             ->pluck('id_turno')->toarray();
+            try{
+                $pref_turnos=json_decode($users->list_puestos_preferidos);
+            } catch (\Throwable $e) {
+                $pref_turnos=[];
+            }
+        
 
         $edificios=DB::table('edificios')
             ->where('id_cliente',$users->id_cliente)
             ->get();
+        
+        //Esta parte es para el calendario de actividad
         $eventos=[];
         foreach($reservas as $res){
             $e=new stdClass();
@@ -291,6 +196,17 @@ class UsersController extends Controller
             ->orderby('expires_at','desc')
             ->first();
 
+        $tipos_puestos=DB::table('puestos_tipos')
+            ->where('id_cliente',$users->id_cliente)
+            ->wherein('id_tipo_puesto',explode(",",$users->tipos_puesto_admitidos))
+            ->get();
+        try{
+            $tipos_puesto_usuario=explode(",",$users->tipos_puesto_usuario);
+        } catch (\Throwable $e) {
+            $tipos_puesto_usuario=[];
+        }
+            
+
         $bitacoras=DB::table('bitacora')
             ->where('id_usuario',$id)
             ->where('fecha','>',Carbon::now()->subdays(60))
@@ -303,14 +219,23 @@ class UsersController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where('puestos.id_cliente',$users->id_cliente)
+            ->wherein('id_tipo_puesto',explode(",",$users->tipos_puesto_admitidos))
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
             ->get();
 
-        $plantas_usuario=DB::table('plantas_usuario')->join('plantas','plantas.id_planta','plantas_usuario.id_planta')->where('id_usuario',$id)->where('id_cliente',$users->id_cliente)->get();
+        $plantas_usuario=DB::table('plantas_usuario')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
+            ->join('edificios','plantas.id_edificio','edificios.id_edificio')
+            ->join('plantas_zonas','plantas.id_planta','plantas_zonas.id_planta')
+            ->where('id_usuario',$id)
+            ->where('plantas.id_cliente',$users->id_cliente)
+            ->orderby('edificios.id_edificio')
+            ->get();
+        
 
-        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras'));
+        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras','tipos_puestos','pref_turnos','tipos_puesto_usuario'));
     }
     /**
      * Update the specified users in the storage.
@@ -323,6 +248,15 @@ class UsersController extends Controller
     public function update($id, Request $request)
     {
         validar_acceso_tabla($id,"users");
+         //Vamos a comprbar el email, porque no puedo pasarlo por el validado
+         if(DB::table('users')->where('email',$request->email)->where('id','<>',$id)->exists()){
+            return [
+                'title' => "Usuarios",
+                'error' => 'ERROR: El e-mail ya existe '.$request->email,
+                //'url' => url('users/'.$usuario.'/edit')
+            ];
+        }
+        
         $data = $this->getData($request);
         try {
             if ($request->hasFile('img_usuario')) {
@@ -333,9 +267,6 @@ class UsersController extends Controller
                 Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_usuario);
                 $data['img_usuario']=$img_usuario;
             }
-
-            
-
             
             if (isset($request->password)){
                 $data["password"]=Hash::make($request->password);
@@ -344,7 +275,6 @@ class UsersController extends Controller
             $data["email_verified_at"]=Carbon::now();
             $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
             $data["id_usuario_supervisor"]=$request->id_usuario_supervisor??null;
-            $data["list_puestos_preferidos"]=implode(",",$request->list_puestos_preferidos);
 
             $users->update($data);
 

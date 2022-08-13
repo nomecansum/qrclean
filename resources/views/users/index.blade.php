@@ -70,7 +70,7 @@
                 </div>
                 <div class="col-md-1 text-right">
                     @if(checkPermissions(['Usuarios'],['C']))
-                    <a href="{{ route('users.users.create') }}" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo usuario">
+                    <a href="{{ url('users/0/edit') }}" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo usuario">
                         <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
                         <span>Nuevo</span>
                     </a>

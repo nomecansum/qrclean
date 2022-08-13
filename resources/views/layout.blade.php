@@ -10,7 +10,7 @@
     <!--Open Sans Font [ OPTIONAL ]-->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
      <!--JQueryUI [OPTIONAL]-->
-     <link href="{{ url('/plugins/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
+     <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
     <!--Nifty Stylesheet [ REQUIRED ]-->
@@ -228,9 +228,9 @@
     <!--JAVASCRIPT-->
     <!--=================================================-->
     <!--jQuery [ REQUIRED ]-->
-    <script src="{{ url('/js/jquery.min.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!--jQueryUI [ REQUIRED ]-->
-    <script src="{{ url('/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <!--BootstrapJS [ RECOMMENDED ]-->
     <script src="{{ url('/js/bootstrap.min.js') }}"></script>
     <!--NiftyJS [ RECOMMENDED ]-->

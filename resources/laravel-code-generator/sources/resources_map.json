@@ -205,11 +205,6 @@
         "table-name": "informes_programados"
     },
     {
-        "model-name": "users",
-        "resource-file": "users.json",
-        "table-name": "users"
-    },
-    {
         "model-name": "puestos",
         "resource-file": "puestos.json",
         "table-name": "puestos"
@@ -223,5 +218,10 @@
         "model-name": "plantas_zonas",
         "resource-file": "plantas_zonas.json",
         "table-name": "plantas_zonas"
+    },
+    {
+        "model-name": "users",
+        "resource-file": "users.json",
+        "table-name": "users"
     }
 ]

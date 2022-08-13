@@ -54,6 +54,7 @@
                     <th data-sortable="true" class="text-center" style="width: 50px"><i class="fad fa-layer-group"></i> Plantas</th>
                     <th data-sortable="true" class="text-center" style="width: 50px"><i class="fad fa-desktop-alt"></i> Puestos</th>
                     <th data-sortable="true"  data-card-visible="false">{{ $entidades['plural'] }}</th>
+                    @if($entidades['tipo']=='limpieza')<th data-sortable="true" class="text-center" style="width: 50px"><i class="fa-solid fa-clock"></i> Tiempo</th>@endif
                     <th data-sortable="true"class="text-center" style="width: 100px">Completado</th>
                     {{--  <th></th>  --}}
                 </tr>
@@ -66,6 +67,7 @@
                     $cnt_puestos=$detalles->where('id_ronda',$r->id_ronda)->pluck('id_puesto')->unique()->count();
                     $puestos_si=$detalles->where('id_ronda',$r->id_ronda)->wherenotnull('fec_fin')->count();
                     $puestos_no=$detalles->where('id_ronda',$r->id_ronda)->wherenull('fec_fin')->count();
+                    $tiempo=$detalles->where('id_ronda',$r->id_ronda)->sum('val_tiempo_limpieza')/60;
                     try{
                         $pct_completado=(100*$puestos_si/$cnt_puestos);
                     } catch(\Exception $e){
@@ -89,6 +91,7 @@
                             <li>{{ $u }}</li>
                         @endforeach
                     </td>
+                    @if($entidades['tipo']=='limpieza')<td class="td text-center text-2x" data-id="">{{ decimal_to_time($tiempo) }}</td>@endif
                     <td class="text-center " >
                         <span class="text-{{ color_porcentaje($pct_completado) }} font-bold " style="font-size: 3.5vw ">{{ round($pct_completado) }} %</span>
                     </td>

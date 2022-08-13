@@ -123,7 +123,7 @@ class PermissionsController extends Controller
                 ]);
             }
         }
-		savebitacora("Creaado perfil ".$r->des_nivel_acceso,Auth::user()->id,"Secciones","OK");
+		savebitacora("Creaado perfil ".$r->des_nivel_acceso,'Permisos',"profilesSave","OK");
 		return [
             'title' => "Perfiles",
             'message' => "Perfil ".$r->des_nivel_acceso.': Guardado',
@@ -133,7 +133,7 @@ class PermissionsController extends Controller
 
 	public function profilesDelete($id)
 	{
-		savebitacora("Eliminado perfil ".$id." ".DB::table('niveles_acceso')->where('cod_nivel',$id)->value('des_nivel_acceso'),Auth::user()->id,"Perfiles","OK");
+		savebitacora("Eliminado perfil ".$id." ".DB::table('niveles_acceso')->where('cod_nivel',$id)->value('des_nivel_acceso'),'Permisos',"profilesDelete","OK");
 		DB::table('niveles_acceso')->where('cod_nivel',$id)->delete();
 		flash('Perfil '.$id.' Borrado')->success();
 		return redirect('profiles');
@@ -193,7 +193,7 @@ class PermissionsController extends Controller
 					'icono' => $grupos[$r->des_grupo]
 				]);
 		}
-		savebitacora("Actualizado seccion ".$r->des_seccion,Auth::user()->id,"Secciones","OK");
+		savebitacora("Actualizado seccion ".$r->des_seccion,'Permisos',"sectionsSave","OK");
 		return [
             'title' => "Secciones",
             'message' => "Seccion ".$r->des_seccion." guardada",
@@ -203,7 +203,7 @@ class PermissionsController extends Controller
 
 	public function sectionsDelete($id)
 	{
-		savebitacora("Eliminado seccion ".$id." ".DB::table('secciones')->where('cod_seccion',$id)->value('des_seccion'),Auth::user()->id,"Secciones","OK");
+		savebitacora("Eliminado seccion ".$id." ".DB::table('secciones')->where('cod_seccion',$id)->value('des_seccion'),'Permisos',"sectionsDelete","OK");
 		$s = DB::table('secciones')->where('cod_seccion',$id);
 		$s->delete();
 		return [
@@ -276,7 +276,7 @@ class PermissionsController extends Controller
 				$type => 1
 			]);
 		}
-		savebitacora("Añadidos permisos para seccion ".$r->section." y perfil ".$r->level,Auth::user()->id,"Permisos","OK");
+		savebitacora("Añadidos permisos para seccion ".$r->section." y perfil ".$r->level,'Permisos',"addPermissions","OK");
 	}
 
 	public function removePermissions(Request $r)
@@ -285,7 +285,7 @@ class PermissionsController extends Controller
 		if ($r->type == "W") {$type = "mca_write";}
 		if ($r->type == "C") {$type = "mca_create";}
 		if ($r->type == "D") {$type = "mca_delete";}
-		savebitacora("Eliminados permisos para seccion ".$r->section." y perfil ".$r->level,Auth::user()->id,"Permisos","OK");
+		savebitacora("Eliminados permisos para seccion ".$r->section." y perfil ".$r->level,'Permisos',"removePermissions","OK");
 		DB::table('secciones_perfiles')->where(['id_seccion' => $r->section,'id_perfil' => $r->level])->update([
 			$type => NULL
 		]);
@@ -308,7 +308,7 @@ class PermissionsController extends Controller
 				$type => 1
 			]);
 		}
-		savebitacora("Añadidos permisos para seccion ".$r->section." y usuario ".$r->level,Auth::user()->id,"Permisos","OK");
+		savebitacora("Añadidos permisos para seccion ".$r->section." y usuario ".$r->level,'Permisos',"addPermissions_user","OK");
 	}
 
 	public function removePermissions_user(Request $r)
@@ -317,7 +317,7 @@ class PermissionsController extends Controller
 		if ($r->type == "W") {$type = "mca_write";}
 		if ($r->type == "C") {$type = "mca_create";}
 		if ($r->type == "D") {$type = "mca_delete";}
-		savebitacora("permisos_usuarios permisos para seccion ".$r->section." y perfil ".$r->level,Auth::user()->id,"Permisos","OK");
+		savebitacora("permisos_usuarios permisos para seccion ".$r->section." y perfil ".$r->level,'Permisos',"removePermissions_user","OK");
 		DB::table('permisos_usuarios')->where(['id_seccion' => $r->section,'cod_usuario' => $r->level])->update([
 			$type => NULL
 		]);

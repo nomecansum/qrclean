@@ -37,6 +37,10 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 		z-index: -1;
 		overflow: hidden;
 		}
+	table {
+		border-spacing: 10px;
+		border-collapse: separate;
+	}
 </style>
 {{-- <div class="panel-heading">
 	<table class="table table-calendar mb0">
@@ -46,13 +50,13 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 </div> --}}
 
 <div class="panel-body">
-	<table class="table table-calendar mb0 rounded w-100" style="border: 1px solid #f2f7f8;">
+	<table class="table table-calendar mb0 rounded w-100" style="border: 1px solid #f2f7f8" >
 		<thead>
-			<tr>
+			<tr class="">
 				<th>
 					<a data-month="{{ $month }}" data-action="sub" class="changeMonth" style="float:left; font-size: 18px; cursor: pointer;"> <i class="fas fa-arrow-left"></i> </a>
 				</th>
-				<th class="text-center" colspan="5" width="80%" style="font-size: 24px">
+				<th class="text-center" colspan="5" width="80%" style="font-size: 32px; font-weight: 1000">
 					{{trans('strings.'.$meses[$carbon->parse($month)->format('n')-1]).' '. ucwords($carbon->parse($month)->format('Y')) }}
 				</th>
 				<th>
@@ -117,10 +121,10 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 							@endphp
 							{{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
 							
-							<td style="background-color: {{$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 8px; {{ $borde }}"  class="add-tooltip dia  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" data-past="{{ $noclickable }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
+							<td style="background-color: {{$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 12px; {{ $borde }}; "  class="add-tooltip dia text-center  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" data-past="{{ $noclickable }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
-                                <span class="font-bold" style="font-size: 2.5vw; font-weigth: bolder" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
-								<div style="color: #fff; cursor: pointer">
+                                <span class="font-bold" style="font-size: 4.5vw; font-weigth: 400;position relative; color: #fff; -webkit-text-stroke: 1px #999;" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
+								<div style="color: #fff; cursor: pointer;" class="text-left">
 									@foreach($dias as $dia)
 										@php
 											$icono=$dia->val_icono;
@@ -129,7 +133,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 											//$title=Carbon\Carbon::parse($dia->fec_reserva)->format('d/m/Y').chr(13)." Puesto: ".$descrip." - Edificio: ".$dia->des_edificio." - Planta: ".$dia->des_planta;	
 										@endphp
 									@if($dia)
-									<b class="des_evento" style="font-size: 1vw; color:#555">@if($icono!="") <i class="{{ $icono }}" style="color: {{ $ic_color }}"></i> @endif{!! $descrip !!}</b><br>
+									<b class="des_evento" style="font-size: 1.5rem; color:#555">@if($icono!="") <i class="{{ $icono }}" style="color: {{ $ic_color }}"></i> @endif{!! $descrip !!}</b><br>
 									@endif
 									@endforeach
 								</div>

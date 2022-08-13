@@ -13,11 +13,48 @@ use App\Exports\ExportExcel;
 use Illuminate\Support\Facades\Storage;
 use Log;
 use Carbon\CarbonPeriod;
+use Carbon\Carbon;
 use App\Models\clientes;
 use App\Models\users;
+use App\Models\informes_programados;
 
 class ReportsController extends Controller
 {
+    /////////////FUNCIONES AUXILIARES/////////////////////
+    protected function enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero = null, $plantilla = null, $datos_informe = array()) {
+
+        if(!is_array($r->destinatarios))
+            $destinatarios = array($r->destinatarios);
+        else $destinatarios = $r->destinatarios;
+
+        //hacemos merge de todos los datos
+        $datos_informe = array_merge($datos_informe, ['usuario' => $usuario->nom_usuario, 'str_informe' => $prepend.' '.$nombre_informe, 'r' => $r]);
+
+        foreach ($destinatarios as $recipient)
+        {
+            //Log::info("Email para " . $recipient);
+            $resp = \Mail::send(empty($plantilla) ? 'email.mail_informe_programado' : $plantilla, $datos_informe, function ($m) use ($prepend, $r, $fichero, $nombre_informe, $recipient) {
+                $m->from(config('mail.from.address'), config('app.name'));
+                if (config('app.manolo')){
+                    $m->to("nomecansum@gmail.com");
+                } else {
+                    $m->to(config('app.debug') ? "desarrollo@cuco360.com" : $recipient);
+                }
+                $m->subject($prepend.' '.$nombre_informe);
+                if(!empty($fichero)) //adjuntamos si existe
+                    $m->attach($fichero);
+            });
+            //Log::info($resp);
+        }
+        if(!empty($fichero)) //borramos si existe
+            file::delete($fichero);
+    }
+    function rand_float($st_num=0,$end_num=1,$mul=1000000)
+    {
+        if ($st_num>$end_num) return false;
+        return mt_rand($st_num*$mul,$end_num*$mul)/$mul;
+    }
+    
     ///////////////INFORME DE PUESTOS POR USUARIO /////////////////
     public function users_index(){
         return view('reports.users.index');
@@ -582,5 +619,89 @@ class ReportsController extends Controller
                 }
             break;
         }
+    }
+
+
+    //////////////////////INFORMES PROGRAMADOS ////////////////////////////////
+    //Crear nuevo informe programado
+    public function programar_informe(Request $r){
+        $programado= new informes_programados();
+        $programado->cod_usuario=Auth::user()->id_usuario;
+        $programado->des_informe_programado=$r->des_informe_programado;
+        $programado->dia_desde=$r->dias_desde;
+        $programado->dia_hasta=$r->dias_hasta;
+        $programado->fec_creacion=Carbon::now();
+        $programado->fec_inicio=adaptar_fecha($r->val_fecha);
+        $programado->fec_prox_ejecucion=adaptar_fecha($r->val_fecha);
+        $programado->list_usuarios=$r->list_usuarios;
+        $programado->url_informe=$r->url_orig;
+        $programado->val_parametros=$r->request_orig;
+        $programado->val_periodo=$r->fechas_prog;
+        $programado->val_intervalo=$r->val_intervalo;
+        $programado->cod_cliente=Auth::user()->id_cliente;
+        $programado->controller=$r->controller;
+        $programado->save();
+
+        return [
+            'title' => 'Programar informe',
+            'message' => "Informe programado correctamente",
+        ];
+    }
+    //Gestor
+    public function informes_programados_index (){
+        $informes=DB::table('informes_programados')
+        ->join('clientes','clientes.id_cliente','informes_programados.cod_cliente')
+        ->where(function($q){
+            if (!isAdmin()){
+                $q->WhereIn('informes_programados.cod_cliente',clientes());
+            }
+        })
+        ->where(function($q){
+            if (Auth::user()->val_nivel_acceso == 1){
+                $q->where('informes_programados.cod_usuario',Auth::user()->id);
+            }
+        })
+        ->get();
+        return view('reports.index_informes_programados',compact('informes'));
+    }
+    public function prog_report(Request $r){
+        return view('reports.informes_programados');
+    }
+    public function delete_informe_programado($id){
+
+        $inf = informes_programados::findOrFail($id);
+        $inf->delete();
+        savebitacora("Borrado de Informe programado [".$id."] ".$inf->des_informe_programado." completado con éxito", null);
+		flash("Borrado de Informe programado [".$id."] ".$inf->des_informe_programado." completado con éxito")->success();
+        return redirect()->back();
+
+    }
+    public function edit_informe_programado($id){
+        $inf = informes_programados::where('cod_informe_programado', $id)->first();
+        $edit=true;
+        return view('resources.programacion_informe', compact('inf','edit'));
+    }
+    public function save_informe_programado(Request $r){
+        try {
+            $inf = informes_programados::where('cod_informe_programado', $r->cod_informe_programado)->first();
+            $inf->des_informe_programado = $r->des_informe_programado;
+            $inf->val_periodo = $r->fechas_prog;
+            $inf->val_intervalo = $r->val_intervalo;
+            $inf->fec_inicio = adaptar_fecha($r->val_fecha);
+            $inf->list_usuarios = $r->list_usuarios;
+            $inf->save();
+            return [
+                'title' => "Informes programados",
+                'message' => "Programacion de informe " . "(" . $r->cod_informe_programado . ") " . $inf->des_informe_programado. " actualizada",
+                'url' => url('/prog_report')
+            ];
+        } catch (\Exception $e) {
+            return [
+                'title' => "Informes programados",
+                'error' => "ERROR: Ocurrio un error al actualizar el informe programado  ".$inf->des_informe_programado.": ".mensaje_excepcion($e),
+                //'url' => url('employees')
+            ];
+        }
+
     }
 }

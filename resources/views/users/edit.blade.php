@@ -54,41 +54,6 @@
 
         </div>
     </div>
-    <div class="panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Actividad de {{ $users->name }}</h3>
-        </div>
-        <div class="panel-body">
-            <div class="row mt-2 ">
-                <div class="col-md-1"></div>
-                <div class="fluid col-md-10">
-                    <div id='demo-calendar'></div>
-                    <div id="events-popover-head" class="hide">Events</div>
-                    <div id="events-popover-content" class="hide">Test</div>
-                </div>
-                <div class="col-md-2"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Plantas en las que puede reservar</h3>
-        </div>
-        <div class="panel-body" id="plantas_usuario">
-
-        </div>
-    </div>
-    @if(isSupervisor($users->id))
-    <div class="panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Puestos que puede gestionar como supervisor</h3>
-        </div>
-        <div class="panel-body" id="puestos_usuario">
-
-        </div>
-    </div>
-    @endif
 @endsection
 
 @section('scripts')
@@ -173,9 +138,6 @@
             });
             calendar.render();
 
-        // $('.fc-dayGridMonth-button').html('Mes');
-        // $('.fc-timeGridWeek-button').html('Semana');
-        // $('.fc-listGridWeek-button').html('Lista');
         $('.fc-event-title').css('font-size','10px');
         $('.fc-event-title').css('font-weight','normal');
         

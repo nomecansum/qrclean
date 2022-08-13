@@ -798,6 +798,15 @@ class PuestosController extends Controller
         return view('puestos.plano',compact('puestos','cualpuesto','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
     }
 
+    function save_pos($id,$top,$left,$offtop,$offleft){
+        $puesto=puestos::find($id);
+        $puesto->top=round($top);
+        $puesto->left=round($left);
+        $puesto->offset_top=round($offtop);
+        $puesto->offset_left=round($offleft);
+        $puesto->save();
+    }
+
     public function ronda_limpieza(Request $r){
         //Primero asegurarnos de que tiene acceso para los puestos
         if($r->tip_ronda=='L')

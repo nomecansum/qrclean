@@ -41,7 +41,10 @@ class plantas extends Model
                   'num_orden',
                   'factor_puesto',
                   'factor_letra',
-                  'abreviatura'
+                  'abreviatura',
+                  'zonas',
+                  'width',
+                  'height'
               ];
 
     /**
@@ -98,6 +101,36 @@ class plantas extends Model
         return $this->hasMany('App\Models\PlantasUsuario','id_planta','id_planta');
     }
 
+    /**
+     * Get the plantasZona for this model.
+     *
+     * @return App\Models\PlantasZona
+     */
+    public function plantasZona()
+    {
+        return $this->hasOne('App\Models\PlantasZona','id_planta','id_planta');
+    }
 
+    /**
+     * Set the zonas.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setZonasAttribute($value)
+    {
+        $this->attributes['zonas'] = json_encode($value);
+    }
+
+    /**
+     * Get zonas in array format
+     *
+     * @param  string  $value
+     * @return array
+     */
+    public function getZonasAttribute($value)
+    {
+        return json_decode($value) ?: [];
+    }
 
 }

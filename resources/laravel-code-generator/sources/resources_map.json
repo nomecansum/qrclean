@@ -90,11 +90,6 @@
         "table-name": "tags"
     },
     {
-        "model-name": "puestos",
-        "resource-file": "puestos.json",
-        "table-name": "puestos"
-    },
-    {
         "model-name": "config_clientes",
         "resource-file": "config_clientes.json",
         "table-name": "config_clientes"
@@ -133,11 +128,6 @@
         "model-name": "incidencias",
         "resource-file": "incidencias.json",
         "table-name": "incidencias"
-    },
-    {
-        "model-name": "plantas",
-        "resource-file": "plantas.json",
-        "table-name": "plantas"
     },
     {
         "model-name": "causas_cierre",
@@ -195,11 +185,6 @@
         "table-name": "turnos"
     },
     {
-        "model-name": "users",
-        "resource-file": "users.json",
-        "table-name": "users"
-    },
-    {
         "model-name": "turnos_usuarios",
         "resource-file": "turnos_usuarios.json",
         "table-name": "turnos_usuarios"
@@ -213,5 +198,30 @@
         "model-name": "puestos_tipos",
         "resource-file": "puestos_tipos.json",
         "table-name": "puestos_tipos"
+    },
+    {
+        "model-name": "informes_programados",
+        "resource-file": "informes_programados.json",
+        "table-name": "informes_programados"
+    },
+    {
+        "model-name": "users",
+        "resource-file": "users.json",
+        "table-name": "users"
+    },
+    {
+        "model-name": "puestos",
+        "resource-file": "puestos.json",
+        "table-name": "puestos"
+    },
+    {
+        "model-name": "plantas",
+        "resource-file": "plantas.json",
+        "table-name": "plantas"
+    },
+    {
+        "model-name": "plantas_zonas",
+        "resource-file": "plantas_zonas.json",
+        "table-name": "plantas_zonas"
     }
 ]

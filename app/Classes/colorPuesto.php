@@ -46,7 +46,7 @@ class colorPuesto
                     'color'=>"#ffb300",
                     'font_color'=>"#fff",
                     'clase_disp'=>"",
-                    'title'=>"Puesto con incidencia",
+                    'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
                     'borde'=>"border: 3px solid #f00; border-radius: 6px",
                     "transp"=>0.4
                 ];
@@ -139,7 +139,7 @@ class colorPuesto
                     'color'=>"#ffb300",
                     'font_color'=>"#fff",
                     'clase_disp'=>"",
-                    'title'=>"Puesto con incidencia",
+                    'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
                     'borde'=>"",
                     "transp"=>0.4
                 ];

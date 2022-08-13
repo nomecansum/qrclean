@@ -7,12 +7,16 @@ use App\Models\clientes;
 use App\Models\edificios;
 use App\Models\plantas;
 use App\Models\puestos;
+use App\Models\plantas_zonas;
+
 use Illuminate\Http\Request;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\File;
 
 class PlantasController extends Controller
 {
@@ -25,6 +29,7 @@ class PlantasController extends Controller
     public function index()
     {
         $plantasObjects=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.img_plano','edificios.des_edificio','clientes.nom_cliente','clientes.id_cliente')
             ->join('clientes','clientes.id_cliente','plantas.id_cliente')
             ->join('edificios','edificios.id_edificio','plantas.id_edificio')
             ->where(function($q){
@@ -35,8 +40,22 @@ class PlantasController extends Controller
             ->orderby('plantas.num_orden')
             ->orderby('plantas.id_planta')
             ->get();
-
-        return view('plantas.index', compact('plantasObjects'));
+       
+        $puestos=DB::table('puestos')
+            ->select('id_planta')
+            ->selectraw("ifnull(count(puestos.id_puesto),0) as cnt_puestos")
+            ->wherein('id_planta',$plantasObjects->pluck('id_planta')->toArray())
+            ->groupby(['id_planta'])
+            ->get();
+        
+        $zonas=DB::table('plantas_zonas')
+            ->select('id_planta')
+            ->selectraw("ifnull(count(plantas_zonas.key_id),0) as cnt_zonas")
+            ->wherein('id_planta',$plantasObjects->pluck('id_planta')->toArray())
+            ->groupby(['id_planta'])
+            ->get();
+            
+        return view('plantas.index', compact('plantasObjects','puestos','zonas'));
     }
 
     /**
@@ -187,7 +206,6 @@ class PlantasController extends Controller
         }
     }
 
-    
     /**
      * Get the request's data from the request.
      *
@@ -210,6 +228,7 @@ class PlantasController extends Controller
         return $data;
     }
 
+    ///////////////POSICIONES DE PUESTOS EN LAS PLANTAS
     public function puestos($id)
     {
         validar_acceso_tabla($id,'plantas');
@@ -246,4 +265,52 @@ class PlantasController extends Controller
         ];
     }
 
+    /////////////////////////ZONAS DE LAS PLANTAS /////////////////////////////////
+    public function zonas($id)
+    {
+        validar_acceso_tabla($id,'plantas');
+        $plantas = plantas::findOrFail($id);
+        //Nos traemos la imagen de fondo para ver las dimensiones
+        try{
+            $tempName = tempnam(sys_get_temp_dir(), 'response');
+            Storage::disk('local')->put(
+                '/temp/'.$plantas->img_plano, 
+                Storage::disk(config('app.img_disk'))->get('img/plantas/'.$plantas->img_plano));
+        } catch(\Throwable $e){
+            $error="Debe añadir una imagen de fondo para poder agregar zonas";
+            return view('plantas.zonas', compact('plantas','error'));
+        }
+        return view('plantas.zonas', compact('plantas'));
+    }
+
+    public function save_zonas(Request $r){
+        validar_acceso_tabla($r->id_planta,'plantas');
+        $planta = plantas::findOrFail($r->id_planta);
+
+        $planta->zonas=$r->json_zonas;
+        $planta->width=$r->width;
+        $planta->height=$r->height;
+        $planta->save();
+
+        $zonas=json_decode($planta->zonas,true);
+        plantas_zonas::where('id_planta',$planta->id_planta)->delete();
+        foreach($zonas as $z){
+            $zona=new plantas_zonas;
+            $zona->id_planta=$planta->id_planta;
+            $zona->num_zona=$z['id'];
+            $zona->des_zona=$z['text'];
+            $zona->val_ancho=round($r->width*$z['w']/100);
+            $zona->val_alto=round($r->height*$z['h']/100);
+            $zona->val_x=round($r->width*$z['x']/100);
+            $zona->val_y=round($r->height*$z['y']/100);
+            $zona->save();
+        }
+
+        savebitacora('Acualizadas zonas en  '.$planta->des_planta. ' actualizada',"Plantas","save_zonas","OK");
+        return [
+            'title' => "Plantas",
+            'message' => 'Distribucion de zonas en  '.$planta->des_planta. ' actualizada',
+            'url' => url('plantas')
+        ];
+    }
 }

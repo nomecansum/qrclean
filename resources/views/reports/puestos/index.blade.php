@@ -89,6 +89,7 @@
 @endsection
 
 @section('scripts4')
+
 <script>
 	document.title = '{{$nombre_empresa}}';
 	$('.informes').addClass('active active-sub');

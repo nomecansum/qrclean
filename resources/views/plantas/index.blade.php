@@ -89,24 +89,31 @@
                             <th data-sortable="true" >Planta</th>
                             <th data-sortable="true" >Edificio</th>
                             <th data-sortable="true" >Cliente</th>
-                            <th>Puestos</th>
-                            <th>Plano</th>
+                            <th class="text-center">Puestos</th>
+                            <th class="text-center">Zonas</th>
+                            <th class="text-center">Plano</th>
                         </tr>
                     </thead>
                     <tbody>
                     @foreach($plantasObjects as $plantas)
                         <tr class="hover-this">
+                            @php
+                                $cnt_puestos=$puestos->where('id_planta',$plantas->id_planta)->first();
+                                $cnt_zonas=$zonas->where('id_planta',$plantas->id_planta)->first();
+                            @endphp
                             <td>{{ $plantas->id_planta }}</td>
                             <td>{{ $plantas->des_planta }}</td>
                             <td>{{ $plantas->des_edificio }}</td>
                             <td>{{ $plantas->nom_cliente }}</td>
-                            <td></td>
+                            <td class="text-center">{{ $cnt_puestos->cnt_puestos??0 }}</td>
+                            <td class="text-center">{{ $cnt_zonas->cnt_zonas??0 }}</td>
                             <td class="text-center" style="position: relative">@if(isset($plantas->img_plano))<img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="height: 50px; position: absoluite">@endif
                             
-                                <div class="pull-right floating-like-gmail mt-3" style="width: 140px;">
+                                <div class="pull-right floating-like-gmail mt-3" style="width: 200px;">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
                                     @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $plantas->id_planta }})" title="Editar planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                                     @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-mint btn_puestos add-tooltip" onclick="puestos({{ $plantas->id_planta }})" title="Distribucion de puestos en la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-desktop-alt pt-1" aria-hidden="true"></span> Pos</a>@endif
+                                    @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-mint btn_zonas add-tooltip" onclick="edit_zonas({{ $plantas->id_planta }})" title="Zonas de la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa-solid fa-draw-square pt-1" aria-hidden="true"></span> Zonas</a>@endif
                                     @if(checkPermissions(['Plantas'],['D']))<a href="#eliminar-planta-{{$plantas->id_planta}}" data-target="#eliminar-planta-{{$plantas->id_planta}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$plantas->id_planta}}" style="display: none;">
@@ -168,6 +175,14 @@
                 animateCSS('#editorPUESTOS','bounceInRight');
             });
         }
+
+        function edit_zonas(id){
+            $('#editorPUESTOS').load("{{ url('/plantas/zonas/') }}"+"/"+id, function(){
+                animateCSS('#editorPUESTOS','bounceInRight');
+                
+            });
+        }
+        
 
         $('.td').click(function(event){
             editar( $(this).data('id'));

@@ -291,7 +291,26 @@ class UsersController extends Controller
             ->orderby('expires_at','desc')
             ->first();
 
-        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios'));
+        $bitacoras=DB::table('bitacora')
+            ->where('id_usuario',$id)
+            ->where('fecha','>',Carbon::now()->subdays(60))
+            ->get();
+
+        //Para los puestos preferidos del usuario
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('puestos.id_cliente',$users->id_cliente)
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $plantas_usuario=DB::table('plantas_usuario')->join('plantas','plantas.id_planta','plantas_usuario.id_planta')->where('id_usuario',$id)->where('id_cliente',$users->id_cliente)->get();
+
+        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras'));
     }
     /**
      * Update the specified users in the storage.
@@ -325,6 +344,7 @@ class UsersController extends Controller
             $data["email_verified_at"]=Carbon::now();
             $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
             $data["id_usuario_supervisor"]=$request->id_usuario_supervisor??null;
+            $data["list_puestos_preferidos"]=implode(",",$request->list_puestos_preferidos);
 
             $users->update($data);
 
@@ -482,6 +502,7 @@ class UsersController extends Controller
             'id_edificio'=>'numeric',
             'id_turno'=>'nullable',
             'token_expires'=>'nullable|numeric',
+            'list_puestos_preferidos'=>'nullable',
         ];
 
 

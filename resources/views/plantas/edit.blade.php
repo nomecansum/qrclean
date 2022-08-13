@@ -28,7 +28,7 @@
                                       ])
 
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+                    <div class="col-md-12 text-right mt-3">
                         <input class="btn btn-primary" type="submit" value="Guardar">
                     </div>
                 </div>

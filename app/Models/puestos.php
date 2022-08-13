@@ -33,23 +33,28 @@ class puestos extends Model
      * @var array
      */
     protected $fillable = [
+                  'id_edificio',
+                  'id_planta',
+                  'id_cliente',
                   'cod_puesto',
                   'des_puesto',
-                  'fec_ult_estado',
-                  'id_cliente',
-                  'id_edificio',
                   'id_estado',
-                  'id_planta',
-                  'id_tipo_puesto',
-                  'id_usuario_usando',
-                  'img_puesto',
-                  'max_horas_reservar',
-                  'mca_acceso_anonimo',
-                  'mca_incidencia',
-                  'mca_reservar',
-                  'token',
                   'val_color',
-                  'val_icono'
+                  'token',
+                  'fec_ult_estado',
+                  'val_icono',
+                  'id_usuario_usando',
+                  'mca_acceso_anonimo',
+                  'mca_reservar',
+                  'max_horas_reservar',
+                  'img_puesto',
+                  'id_tipo_puesto',
+                  'mca_incidencia',
+                  'fec_liberacion_auto',
+                  'top',
+                  'left',
+                  'offset_top',
+                  'offset_left'
               ];
 
     /**
@@ -66,16 +71,6 @@ class puestos extends Model
      */
     protected $casts = [];
     
-    /**
-     * Get the Cliente for this model.
-     *
-     * @return App\Models\Cliente
-     */
-    public function Cliente()
-    {
-        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
-    }
-
     /**
      * Get the Edificio for this model.
      *
@@ -97,13 +92,13 @@ class puestos extends Model
     }
 
     /**
-     * Get the PuestosTipo for this model.
+     * Get the Cliente for this model.
      *
-     * @return App\Models\PuestosTipo
+     * @return App\Models\Cliente
      */
-    public function PuestosTipo()
+    public function Cliente()
     {
-        return $this->belongsTo('App\Models\PuestosTipo','id_tipo_puesto','id_tipo_puesto');
+        return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
     }
 
     /**
@@ -117,6 +112,16 @@ class puestos extends Model
     }
 
     /**
+     * Get the PuestosTipo for this model.
+     *
+     * @return App\Models\PuestosTipo
+     */
+    public function PuestosTipo()
+    {
+        return $this->belongsTo('App\Models\PuestosTipo','id_tipo_puesto','id_tipo_puesto');
+    }
+
+    /**
      * Get the puestosRondas for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
@@ -127,23 +132,33 @@ class puestos extends Model
     }
 
     /**
-     * Get the logCambiosEstados for this model.
+     * Get the salas for this model.
      *
      * @return Illuminate\Database\Eloquent\Collection
      */
-    public function logCambiosEstados()
+    public function salas()
     {
-        return $this->hasMany('App\Models\Logpuesto','id_puesto','id_puesto');
+        return $this->hasMany('App\Models\Sala','id_puesto','id_puesto');
     }
 
     /**
-     * Get the puestosAsignados for this model.
+     * Get the logCambiosEstado for this model.
      *
-     * @return Illuminate\Database\Eloquent\Collection
+     * @return App\Models\Logpuesto
      */
-    public function puestosAsignados()
+    public function logCambiosEstado()
     {
-        return $this->hasMany('App\Models\PuestosAsignado','id_puesto','id_puesto');
+        return $this->hasOne('App\Models\Logpuesto','id_puesto','id_puesto');
+    }
+
+    /**
+     * Get the puestosAsignado for this model.
+     *
+     * @return App\Models\PuestosAsignado
+     */
+    public function puestosAsignado()
+    {
+        return $this->hasOne('App\Models\PuestosAsignado','id_puesto','id_puesto');
     }
 
     /**

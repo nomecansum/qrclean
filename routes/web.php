@@ -48,6 +48,7 @@ Route::post('/encuestas/save_data','EncuestasController@save_data');
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Route::get('/logout','Auth\LoginController@logout');
+//route::view('test_zonas','plantas.zonas');
 
 //Route::view('/scan2', 'scan2');
 
@@ -195,6 +196,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/borrar_puestos',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@borrar_puestos']);
         Route::post('/modificar_puestos',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@modificar_puestos']);
         Route::get('/vmapa/{id}',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@ver_en_mapa']);
+        Route::get('/save_pos/{id}/{top}/{left}/{ot}/{ol}',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@save_pos']);
 
         Route::get('/tipos',['middleware'=>'permissions:["Tipos de puesto"],["R"]', 'uses' => 'PuestosController@index_tipos'])->name('puestos_tipos.index');
         Route::post('/tipos/save',['middleware'=>'permissions:["Tipos de puesto"],["W"]', 'uses' => 'PuestosController@tipos_save']);
@@ -231,6 +233,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/delete/{plantas}','PlantasController@destroy')->name('plantas.plantas.destroy')->where('id', '[0-9]+');
         Route::get('/puestos/{id}','PlantasController@puestos')->name('plantas.puestos.index')->where('id', '[0-9]+');
         Route::post('/puestos','PlantasController@puestos_save')->name('plantas.puestos.save')->where('id', '[0-9]+');
+        Route::get('/zonas/{id}','PlantasController@zonas')->name('plantas.zonas.index')->where('id', '[0-9]+');
+        Route::post('/save_zonas','PlantasController@save_zonas')->name('plantas.puestos.save_zonas')->where('id', '[0-9]+');
     });
 
     ////////////////////RONDAS DE LIMPIEZA Y MANTENIMIENTO////////////////////
@@ -378,8 +382,18 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::get('/ferias',['middleware' => 'permissions:["Informes > Ferias"],["R"]', 'uses' => 'ReportsController@ferias_index']);
 	    Route::post('/ferias/filter',['middleware' => 'permissions:["Informes > Ferias"],["R"]', 'uses' => 'ReportsController@ferias']);
+
+        Route::get('program/{id}', ['middleware' => 'permissions:["Informes programados"],["R"]', 'uses' => 'ReportsController@reportFromEmail']);
 		
 	});
+
+    ////////////////////////////   INFORMES PROGRAMADOS   ////////////////////////////////
+	Route::post('/programar_informe',['middleware' => 'permissions:["Informes programados"],["W"]', 'uses' => 'ReportsController@programar_informe']);
+	Route::get('/prog_report',['middleware' => 'permissions:["Informes programados"],["R"]', 'uses' => 'ReportsController@informes_programados_index']);
+	Route::get('/prog_report/edit/{id}',['middleware' => 'permissions:["Informes programados"],["W"]', 'uses' => 'ReportsController@edit_informe_programado']);
+	Route::post('/prog_report/save',['middleware' => 'permissions:["Informes programados"],["W"]', 'uses' => 'ReportsController@save_informe_programado']);
+	Route::get('/prog_report/delete/{id}',['middleware' => 'permissions:["Informes programados"],["D"]', 'uses' => 'ReportsController@delete_informe_programado']);
+
 
      ////////////////////GESTION DE SALAS DE REUNIONES////////////////////
     Route::group(['prefix' => 'salas'], function () {

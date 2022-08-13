@@ -51,7 +51,8 @@ class users extends Model
                   'val_vista_puestos',
                   'token_expires',
                   'id_externo',
-                  'id_edificio'
+                  'id_edificio',
+                  'list_puestos_preferidos'
               ];
 
     /**
@@ -76,6 +77,16 @@ class users extends Model
     public function incidenciasAcciones()
     {
         return $this->hasMany('App\Models\IncidenciasAccione','id_usuario','id');
+    }
+
+    /**
+     * Get the informesProgramados for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function informesProgramados()
+    {
+        return $this->hasMany('App\Models\InformesProgramado','cod_usuario','id');
     }
 
     /**
@@ -116,6 +127,16 @@ class users extends Model
     public function puestosAsignados()
     {
         return $this->hasMany('App\Models\PuestosAsignado','id_usuario','id');
+    }
+
+    /**
+     * Get the turnosUsuarios for this model.
+     *
+     * @return Illuminate\Database\Eloquent\Collection
+     */
+    public function turnosUsuarios()
+    {
+        return $this->hasMany('App\Models\TurnosUsuario','id_usuario','id');
     }
 
 

@@ -101,7 +101,7 @@ try{
             @endphp
             @foreach($puestos as $p)
                 <div class="col-md-2 rounded add-tooltip divpuesto_ronda mb-2 mr-1" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->cod_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto prendiente de completar @else Completado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer;  @else border: 1px solid #ccc; background-color:#98fb98 @endif">
-                    <i class="{{ $p->val_icono }}" style="color: {{ $p->color_puesto }}"> &nbsp;</i>{{ $p->cod_puesto }}<br>
+                    <i class="{{ $p->val_icono }}" style="color: {{ $p->color_puesto }}"> &nbsp;</i>{{ $p->cod_puesto }} ({{ $p->val_tiempo_limpieza }}')<br>
                     @if(isset($p->user_audit))<i class="fas fa-male" style="color: {{ genColorCodeFromText("EMPLEADO".$p->user_audit,2) }}"></i> <span style="font-size: 12px">{!! beauty_fecha($p->fec_fin) !!}</span> @else --- @endif
                 </div>
             @endforeach

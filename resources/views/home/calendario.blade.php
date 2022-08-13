@@ -1,3 +1,9 @@
+<style>
+    .des_evento{
+        font-size: 16px !important;
+    }
+</style>
+
 <div class="panel">
     <div class="panel-heading">
         <h3 class="panel-title">Mis reservas</h3>
@@ -7,6 +13,7 @@
         <div id="calendario"></div>
     </div>
 </div>
+
 
 @section('scripts5')
     <script>

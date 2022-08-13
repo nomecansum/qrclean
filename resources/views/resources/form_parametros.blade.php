@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="{{ url('/plugins/html5-editor/bootstrap-wysihtml5.css') }}" />
+<link rel="stylesheet" href="{{ asset('/plugins/html5-editor/bootstrap-wysihtml5.css') }}" />
 @php $padre=""; @endphp
-<div class="row form_param">
+<div class="row">
     @foreach($parametros as $p)
         @if(isset($p->id_campo_padre) && $p->id_campo_padre!=$padre)
             @php $padre=$p->id_campo_padre; @endphp
@@ -13,9 +13,7 @@
             } else {
                 $margin="";
             }
-           if(!isset($p->required)){
-            $p->required=false;
-           }
+           // dd($p);
         @endphp
 
         {{-- Etiqueta --}}
@@ -34,7 +32,7 @@
         @if($p->tipo=="bool" || $p->tipo=="bol")
             <div class="col-md-3 pt-3 mb-4 mt-2">
                 <div class="custom-control custom-switch" {{ $margin }}>
-                    <input type="checkbox" name="{{ $p->name }}" class="custom-control-input" id="{{ $p->name }}" value="{{ isset($p->value)&&!is_array($p->value)? 'checked':'' }}">
+                    <input type="checkbox" name="{{ $p->name }}" class="custom-control-input" id="{{ $p->name }}" {{ isset($p->value)&&!is_array($p->value)? 'checked':'' }} value="true">
                     <label class="custom-control-label pt-1" for="{{ $p->name }}">{{ $p->label }}</label>
                 </div>
             </div>
@@ -68,7 +66,7 @@
             <div class="col-md-12"  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
-                    <textarea  class="textarea_editor form-control" name="{{ $p->name }}" id="{{ $p->name }}" rows="6" style="height: 200px" placeholder="Enter text ..." {{ $p->required==true?'required':'' }}>{!! isset($p->value)&&!is_array($p->value)? $p->value : $p->def !!}</textarea>
+                    <textarea  class="textarea_editor form-control" name="{{ $p->name }}" id="{{ $p->name }}" rows="6" placeholder="Enter text ..." {{ $p->required==true?'required':'' }}>{!! isset($p->value)&&!is_array($p->value)? $p->value : $p->def !!}</textarea>
                 </div>
             </div>
         @endif
@@ -79,7 +77,7 @@
             <div class="col-md-3"  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
-                    <input type="number" name="{{ $p->name }}" id="{{ $p->name }}" class="form-control col-10" min="{{ $p->min??'' }}" max="{{ $p->max??'' }}" value="{{ isset($p->value)&&!is_array($p->value)? $p->value : $p->def }}" {{ $p->required==true?'required':'' }}>
+                    <input type="number" name="{{ $p->name }}" id="{{ $p->name }}" class="form-control col-10" value="{{ isset($p->value)&&!is_array($p->value)? $p->value : $p->def }}" {{ $p->required==true?'required':'' }}>
                 </div>
             </div>
         @endif
@@ -92,7 +90,7 @@
                     <input type="date" name="{{ $p->name }}" id="{{ $p->name }}" class="form-control col-10 " value="{{ isset($p->value)&&!is_array($p->value)? $p->value : $p->def }}" {{ $p->required==true?'required':'' }}>
                 </div>
             </div>
-        @endif 
+        @endif
 
         {{-- Combo proveniente de consulta de BDD --}}
         @if($p->tipo=="list_db")
@@ -126,46 +124,6 @@
 
         @endif
 
-        @if($p->tipo=="tags")
-            @php
-                $qr=[];
-            @endphp
-
-            <div class="col-md-12" {{ $margin }}>
-                <div class="form-group">
-                    <label  for="{{ $p->name }}">{{ $p->label }}
-                        @include('resources.spin_puntitos',['id_spin'=>'spin_tag{{ $p->name }}','clase'=>'spin_tag'])
-                    </label><br>
-                    <select class="select2 mb-2 col-md-11 select2-multiple form-control multi2 multitags" style="width: 100%" multiple="multiple" name="{{ $p->name }}[]" id="tags-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
-                        @foreach($qr as $item)
-                        <option value="{{$item->id_tag}}" {{ isset($p->value) && is_array ($p->value) && in_array($item->id_tag,$p->value)===true?'selected':'' }}>{{$item->nombre_tag}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-        @endif
-
-        @if($p->tipo=="disp")
-            @php
-                $qr=[];
-            @endphp
-
-            <div class="col-md-12" {{ $margin }}>
-                <div class="form-group">
-                    <label  for="{{ $p->name }}">{{ $p->label }}
-                        @include('resources.spin_puntitos',['id_spin'=>'spin_disp{{ $p->name }}','clase'=>'spin_disp'])
-                    </label><br>
-                    <select class="select2 mb-2 col-md-11 select2-multiple form-control multi2 multidispositivos" style="width: 100%" multiple="multiple" name="{{ $p->name }}[]" id="disp-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
-                        @foreach($qr as $item)
-                        <option value="{{$item->id_dispositivo}}" {{ isset($p->value) && is_array ($p->value) && in_array($item->id_dispositivo,$p->value)===true?'selected':'' }}>{{$item->nombre}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-        @endif
-
         {{-- Color picker --}}
         @if($p->tipo=="color" || $p->tipo=="col")
             <div class="col-md-2 mr-4"  {{ $margin }}>
@@ -181,7 +139,7 @@
             <div @if($p->multiple) class="col-md-12" @else class="col-md-4" @endif  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
-                    <select @if($p->multiple) class="mb-2 col-md-11 select2-multiple form-control" multiple="multiple" style="width: 100%" name="{{ $p->name }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2':'' }}"  name="{{ $p->name }}"  @endif id="multi-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
+                    <select @if($p->multiple) class="select2 mb-2 col-md-11 select2-multiple form-control" multiple="multiple" style="width: 100%" name="{{ $p->name }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2':'' }}"  name="{{ $p->name }}"  @endif id="multi-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
                         @php
                             $lista=explode("|",$p->list);
                             $valores=explode("|",$p->values);
@@ -212,16 +170,12 @@
 
 </div>
 
-<script src="{{ url('/plugins/html5-editor/wysihtml5-0.3.0.js') }}"></script>
-<script src="{{ url('/plugins/html5-editor/bootstrap-wysihtml5.js') }}"></script>
+<script src="{{ asset('/plugins/html5-editor/wysihtml5-0.3.0.js') }}"></script>
+<script src="{{ asset('/plugins/html5-editor/bootstrap-wysihtml5.js') }}"></script>
 <script>
-    $(".select2-multiple").select2({
+    $(".select2-multiple,.select2").select2({
             allowClear: true
         });
-
-    $("#comando").select2({
-        allowClear: false
-    });
 
     $('.colorpicker').minicolors({
         control: $(this).attr('data-control') || 'hue',
@@ -255,7 +209,7 @@
         },
     });
 
-    $('.textarea_editor').wysihtml5();
+    $('.textarea_editor').each(function(){$(this).wysihtml5();});
 
     $('.custom-file-input').on('change',function(){
         //get the file name
@@ -264,5 +218,5 @@
         $(this).next('.custom-file-label').html(fileName);
     })
 
-    
+
 </script>

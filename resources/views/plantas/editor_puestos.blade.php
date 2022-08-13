@@ -95,8 +95,9 @@
                         <label>Tamaño de letra: </label> <span id="letra-range-def-val"></span>
                         <div id="letra-range-def"></div>	
                     </div>
-                    <div class="col-md-3">
-
+                    <div class="form-group col-md-3">
+                        <label>Tamaño de grid: </label> <span id="grid-range-def-val"></span>
+                        <div id="grid-range-def"></div>	
                     </div>
                     <div class="col-md-1">
                         <input class="btn btn-primary" id="btn_guardar" type="submit" value="Guardar">
@@ -133,8 +134,14 @@
     $( function() {
         $( ".draggable" ).draggable({
             containment: "parent",
+            grid: [ 5, 5 ],
             stop: function() {
-            //console.log($(this).data('id')+' '+$(this).data('puesto')+' '+$(this).position().top+ ' '+$(this).position().left);
+                //console.log($(this).data('id')+' '+$(this).data('puesto')+' '+$(this).position().top+ ' '+$(this).position().left);
+                offsettop=100*$(this).position().top/$('#plano').height();
+                offsetleft=100*$(this).position().left/$('#plano').width();
+                $.get("{{ url('/puestos/save_pos') }}/"+$(this).data('id')+"/"+$(this).position().top+"/"+$(this).position().left+"/"+offsettop+"/"+offsetleft, function(data){
+                    console.log(data);
+                });
             }
         });
         setTimeout(recolocar_puestos, 800);
@@ -171,12 +178,27 @@
     var l_def = document.getElementById('letra-range-def');
     var l_def_value = document.getElementById('letra-range-def-val');
 
+    var g_def = document.getElementById('grid-range-def');
+    var g_def_value = document.getElementById('grid-range-def-val');
+
     noUiSlider.create(p_def,{
         start   : [ {{ $plantas->factor_puesto }} ],
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
             'max': [ 6 ]
+        },
+        format: wNumb({
+            decimals: 2
+        }),
+    });
+
+    noUiSlider.create(g_def,{
+        start   : [ 5 ],
+        connect : 'lower',
+        range   : {
+            'min': [  0.1 ],
+            'max': [ 50 ]
         },
         format: wNumb({
             decimals: 2
@@ -205,6 +227,13 @@
         l_def_value.innerHTML = values[handle];
         $('.texto_puesto').css('font-size',values[handle]+'vw');
         $('#factor_letra').val(values[handle]);
+    });
+    g_def.noUiSlider.on('update', function( values, handle ) {
+        g_def_value.innerHTML = values[handle];
+        console.log(values[handle]);
+        $('.draggable').draggable("option", "grid", [values[handle],values[handle]]);
+        // $('.texto_puesto').css('font-size',values[handle]+'vw');
+        // $('#factor_letra').val(values[handle]);
     });
 
     $('.demo-psi-cross').click(function(){

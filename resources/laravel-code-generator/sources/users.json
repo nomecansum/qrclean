@@ -909,6 +909,43 @@
             "api-key": "id_edificio",
             "is-api-visible": true,
             "api-description": "The id edificio of the model."
+        },
+        {
+            "name": "list_puestos_preferidos",
+            "labels": "List Puestos Preferidos",
+            "html-type": "textarea",
+            "css-class": "",
+            "options": {},
+            "html-value": null,
+            "validation": "nullable",
+            "is-on-index": false,
+            "is-on-show": true,
+            "is-on-form": true,
+            "data-type": "text",
+            "data-type-params": [],
+            "data-value": null,
+            "is-index": false,
+            "is-unique": false,
+            "is-primary": false,
+            "comment": null,
+            "is-nullable": true,
+            "is-header": false,
+            "is-unsigned": false,
+            "is-auto-increment": false,
+            "is-inline-options": false,
+            "is-date": false,
+            "date-format": "",
+            "cast-as": "",
+            "placeholder": "Enter list puestos preferidos here...",
+            "delimiter": "; ",
+            "range": [],
+            "foreign-relation": null,
+            "foreign-constraint": null,
+            "on-store": null,
+            "on-update": null,
+            "api-key": "list_puestos_preferidos",
+            "is-api-visible": true,
+            "api-description": "The list puestos preferidos of the model."
         }
     ],
     "relations": [
@@ -921,6 +958,16 @@
                 "id"
             ],
             "field": "id_incidencia"
+        },
+        {
+            "name": "informesProgramados",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\InformesProgramado",
+                "cod_usuario",
+                "id"
+            ],
+            "field": "des_informe_programado"
         },
         {
             "name": "incidencias",
@@ -971,6 +1018,16 @@
                 "id"
             ],
             "field": "id_puesto"
+        },
+        {
+            "name": "turnosUsuarios",
+            "type": "hasMany",
+            "params": [
+                "App\\Models\\TurnosUsuario",
+                "id_usuario",
+                "id"
+            ],
+            "field": "id_turno"
         }
     ],
     "indexes": [],

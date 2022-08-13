@@ -185,11 +185,9 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                         @endforeach
                         </tbody>
                     </table>
-
                 </div>
             </div>
         @endif
-        
     </div>
 @endsection
 @php

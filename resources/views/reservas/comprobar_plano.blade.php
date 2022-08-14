@@ -2,6 +2,7 @@
     $edificio_ahora=0;
     $planta_ahora=0;
     use App\Models\plantas;
+    $id_puesto_edit=App\Models\reservas::find($r->id_reserva??0)->id_puesto??null;
 @endphp
 
 <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
@@ -27,7 +28,7 @@
     
     .glow {
         background-color: #1c87c9;
-        border: none;
+        border: 6px dashed yellow;
         color: #eeeeee;
         cursor: pointer;
         display: inline-block;
@@ -36,6 +37,7 @@
         padding: 10px 10px;
         text-align: center;
         text-decoration: none;
+        opacity: 1 !important;
       }
       @keyframes glowing {
         0% {
@@ -43,11 +45,11 @@
           box-shadow: 0 0 5px #2ba805;
         }
         50% {
-          background-color: #49e819;
+          background-color: #f0be1a;
           box-shadow: 0 0 20px #49e819;
         }
         100% {
-          background-color: #2ba805;
+          background-color: #ffee02;
           box-shadow: 0 0 5px #2ba805;
         }
       }
@@ -148,5 +150,12 @@
    setTimeout(recolocar_puestos, 800);
 
    $('#tipo_vista').val('comprobar_plano');
+
+   
+   @if(isset($r->id_reserva)&&$r->id_reserva!=0)
+    $(function(){
+            $('#puesto{{ $id_puesto_edit }}').addClass('glow');
+    })
+   @endif
     
 </script>

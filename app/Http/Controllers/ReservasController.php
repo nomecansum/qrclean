@@ -11,6 +11,7 @@ use App\Models\reservas;
 use App\Models\puestos;
 use App\Models\users;
 use App\Models\niveles_acceso;
+use App\Models\puestos_tipos;
 use stdClass;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
@@ -163,27 +164,49 @@ class ReservasController extends Controller
         return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario'));
     }
 
-    public function edit($fecha){
+    public function edit($id){
         
-        $f1=Carbon::parse($fecha);
         $reserva=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-            ->wheredate('fec_reserva',$f1)
-            ->where('id_usuario',Auth::user()->id)
-            ->orderby('fec_reserva')
-            ->orderby('fec_fin_reserva')
+            ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+            ->where('id_reserva',$id)
             ->first();
+        $f1=Carbon::parse($reserva->fec_reserva);
+        $tipos = DB::table('puestos_tipos')
+            ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+            ->wherein('puestos_tipos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos))
+            ->where(function($q){
+                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
+            })
+            ->where(function($q){
+                if(config_cliente('mca_salas',Auth::user()->id_cliente)=='S'){
+                    $q->wherenotin('puestos_tipos.id_tipo_puesto',config('app.tipo_puesto_sala'));
+                }
+            })
+            ->orderby('id_tipo_puesto')
+            ->get();
+        //Primero comprobamos si tiene una reserva para ese dia
+        $misreservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+            ->whereraw("date(fec_reserva)='".$f1->format('Y-m-d')."'")
+            ->where('id_usuario',Auth::user()->id)
+            ->get();
 
         $plantas_usuario=DB::table('plantas_usuario')
             ->select('plantas.*')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
             ->get();
-        
+
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
         $perfil_usuario=niveles_acceso::find(Auth::user()->cod_nivel);
+        $edit=$reserva->id_reserva;
 
-        return view('reservas.edit_del',compact('reserva','f1','plantas_usuario','festivos_usuario','perfil_usuario'));
+        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario','edit'));
     }
 
     public function comprobar_puestos(Request $r){
@@ -382,7 +405,7 @@ class ReservasController extends Controller
         if(isset($r->ajax)){
             $r->tipo='comprobar_ajax';
         }
-        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','plantas_usuario','tipo_vista','id_planta'));
+        return view('reservas.'.$r->tipo,compact('reservas','puestos','edificios','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','plantas_usuario','tipo_vista','id_planta','r'));
     }
 
     public function save(Request $r){
@@ -420,6 +443,7 @@ class ReservasController extends Controller
                             $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
                         });
                     })
+                    ->where('id_reserva','<>',$r->id_reserva)
                     ->where('mca_anulada','N')
                     ->where('puestos.id_cliente',Auth::user()->id_cliente)
                     ->first();
@@ -470,6 +494,7 @@ class ReservasController extends Controller
                     });
                 })
                 ->where('mca_anulada','N')
+                ->where('id_reserva','<>',$r->id_reserva)
                 ->where('puestos.id_cliente',Auth::user()->id_cliente)
                 ->first();
 
@@ -486,6 +511,11 @@ class ReservasController extends Controller
             ];
         }
 
+        //Anulamos la reserva anterior si exsiste
+        if($r->id_reserva!=null){
+           reservas::find($r->id_reserva)->delete();
+           savebitacora('Eliminada reserva  '.$r->id_reserva.' por modificacion',"Reservas","save","OK");
+        }
         //Si todo ha ido bien y no hemos devuelto ningun mensaje de error entonces podemos insertar
         $id_reserva=[];
         foreach($period as $p){
@@ -515,6 +545,9 @@ class ReservasController extends Controller
                 $tipo="el puesto";
             }
             $body="Tiene reservado ".$tipo. " [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto." con los siguientes identificadores de reserva: ".implode(",",$id_reserva);
+            if($r->id_reserva!=null){
+                $body.=".\n\n Su reserva anterior ha sido anulada";
+            }
             $subject="Detalles de su reserva con Spotdesking";
             $user=users::find(Auth::user()->id);
             $cal=Calendar::create('Reserva de puestos Spotdesking');
@@ -930,5 +963,13 @@ class ReservasController extends Controller
                 'pillados'=>array_unique($lista_puestos_pillados)
             ];
         }
+    }
+
+    public function slots($id,$id_reserva){
+        $tipo=puestos_tipos::find($id);
+        $reserva=reservas::find($id_reserva);
+        $slots=collect(json_decode($tipo->slots_reserva))->sortby('hora_inicio');
+
+        return view ('reservas.fill_slots_reserva',compact('slots','tipo','reserva'));
     }
 }

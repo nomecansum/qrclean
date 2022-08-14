@@ -234,8 +234,8 @@ try{
             grid.load(serializedData, true); // update things
         }
 
-        @if(isset($plantas->zonas))
-            serializedData ={!! $plantas->zonas !!}
+        @if(isset($plantas->zonas) )
+            serializedData ={!! json_decode(json_encode($plantas->zonas)) !!};
             loadGrid();
         @endif
 

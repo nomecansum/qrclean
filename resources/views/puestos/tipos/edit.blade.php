@@ -60,10 +60,7 @@
                             <label for="val_color">Color</label><br>
                             <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                         </div>
-                        <div class="form-group col-md-2" style="margin-top: 7px">
-                            <label for="max_usos">Usos simultaneo</label><br>
-                            <input type="number" autocomplete="off" min="1" max="20" style="width: 100px"  name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
-                        </div>
+                        
                         <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                             <div class="form-group">
                                 <label>Icono</label><br>
@@ -76,30 +73,81 @@
                             <label class="custom-control-label"   for="mca_fijo">Fijo</label>
                         </div>
                         @endif
-                        <div class="form-group col-md-2" style="margin-top: 7px">
-                            <label for="max_usos">Tiempo limpieza (min)</label><br>
-                            <input type="number" autocomplete="off" name="val_tiempo_limpieza" id="val_tiempo_limpieza" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->val_tiempo_limpieza}}" />
-                        </div>
+                        
                         
                 </div>
                 <div class="row">
-                    
-                    
-                    
-                    
-                    
-                    <div class="col-md-4 b-all rounded p-0">
-                        <div class="col-md-7 p-t-20 mt-2">
-                            <input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ $tipo->mca_liberar_auto=='S'?'checked':'' }}> 
-                            <label class="custom-control-label"   for="mca_liberar_auto">Liberar reservas AUTO</label>
-                        </div>
-                        <div class="form-group col-md-5" style="margin-top: 7px">
-                            <label for="max_usos">Cortesia (min)</label><br>
-                            <input type="number" autocomplete="off" name="hora_liberar" id="hora_liberar" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->hora_liberar??config_cliente('hora_liberar_puestos',$tipo->id_cliente)}}" />
+                    <div class="col-md-3 p-t-20 mt-2">
+                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ $tipo->mca_liberar_auto=='S'?'checked':'' }}> 
+                        <label class="custom-control-label"   for="mca_liberar_auto">Liberar reservas AUTO</label>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="max_usos">Cortesia (min)</label><br>
+                        <input type="number" autocomplete="off" name="hora_liberar" id="hora_liberar" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->hora_liberar??config_cliente('hora_liberar_puestos',$tipo->id_cliente)}}" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="max_usos">Tiempo limpieza (min)</label><br>
+                        <input type="number" autocomplete="off" name="val_tiempo_limpieza" id="val_tiempo_limpieza" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->val_tiempo_limpieza}}" />
+                    </div>
+                    <div class="form-group col-md-2" style="margin-top: 7px">
+                        <label for="max_usos">Usos simultaneo</label><br>
+                        <input type="number" autocomplete="off" min="1" max="20" style="width: 100px"  name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
+                    </div>
+                </div>
+                
+                
+
+                
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <div class="form-group">
+                            <input type="checkbox" class="form-control  magic-checkbox" name="mca_slots"   id="mca_slots" value="S" {{ isset($tipo->slots_reserva)?'checked':'' }}> 
+                            <label class="custom-control-label" style="margin-left: 5px"  for="mca_slots">Slots de reserva </label>
                         </div>
                     </div>
-                    
+                    <div class="panel-body bg-gray-light" id="body_slots" style="{{ !isset($tipo->slots_reserva)?'display:none':'' }}">
+                        <div class="row d-flex flex-wrap" id="slots">
+                            @if(isset($tipo->slots_reserva))
+                                @php
+                                    $tipo->slots_reserva=json_decode($tipo->slots_reserva);
+                                @endphp
+                                @foreach($tipo->slots_reserva as $slot)
+                                <div class="form-group text-center p-10 col-md-2 b-all rounded" style="margin-left: 5px; margin-right: 5px">
+                                    <div>
+                                        <label for="">Inicio</label><br>
+                                        <input type="time" autocomplete="off"   name="hora_inicio[]"  class="form-control hora_inicio" value="{{ $slot->hora_inicio }}" />
+                                    </div>
+                                    <div>
+                                        <label for="">Fin</label><br>
+                                        <input type="time" autocomplete="off"  name="hora_fin[]"  class="form-control fin" value="{{ $slot->hora_fin }}" />
+                                    </div>
+                                </div>
+                                @endforeach
+                            @endif
+                            <div class="form-group text-center p-10 col-md-1 rounded" style="margin-left: 10px; border: 1px dashed #ddd" id="div_nuevo" >
+                                <div class="text-muted p-t-30">
+                                    <label for="">Nuevo</label><br>
+                                    <a href="#" class="add_nuevo"><i class="fa-solid fa-circle-plus fa-3x"></i></a>
+                                </div>
+                            </div> 
+                            <div style="display: none" id="editor_nuevo">
+                                <div class="form-group text-center p-10 col-md-2 b-all rounded" style="margin-left: 5px; margin-right: 5px">
+                                    <div>
+                                        <label for="">Inicio</label><br>
+                                        <input type="time" autocomplete="off"   name="hora_inicio[]"  class="form-control hora_inicio" value="" />
+                                    </div>
+                                    <div>
+                                        <label for="">Fin</label><br>
+                                        <input type="time" autocomplete="off"  name="hora_fin[]"  class="form-control fin" value="" />
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
+                
+
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label for="des_tipo_puesto" class="control-label">Observaciones</label>
@@ -120,25 +168,25 @@
     </div>
 
     <script>
-        $('.form-ajax').submit(form_ajax_submit);
+    $('.form-ajax').submit(form_ajax_submit);
 
 
-        $('.minicolors').minicolors({
-          control: $(this).attr('data-control') || 'hue',
-          defaultValue: $(this).attr('data-defaultValue') || '',
-          format: $(this).attr('data-format') || 'hex',
-          keywords: $(this).attr('data-keywords') || '',
-          inline: $(this).attr('data-inline') === 'true',
-          letterCase: $(this).attr('data-letterCase') || 'lowercase',
-          opacity: $(this).attr('data-opacity'),
-          position: $(this).attr('data-position') || 'bottom',
-          swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
-          change: function(value, opacity) {
-            if( !value ) return;
-            if( opacity ) value += ', ' + opacity;
-          },
-          theme: 'bootstrap'
-        });
+    $('.minicolors').minicolors({
+        control: $(this).attr('data-control') || 'hue',
+        defaultValue: $(this).attr('data-defaultValue') || '',
+        format: $(this).attr('data-format') || 'hex',
+        keywords: $(this).attr('data-keywords') || '',
+        inline: $(this).attr('data-inline') === 'true',
+        letterCase: $(this).attr('data-letterCase') || 'lowercase',
+        opacity: $(this).attr('data-opacity'),
+        position: $(this).attr('data-position') || 'bottom',
+        swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
+        change: function(value, opacity) {
+        if( !value ) return;
+        if( opacity ) value += ', ' + opacity;
+        },
+        theme: 'bootstrap'
+    });
 
     //$('#frm_contador').on('submit',form_ajax_submit);
     $('#frm_contador').submit(form_ajax_submit);
@@ -149,6 +197,29 @@
 
     $('.demo-psi-cross').click(function(){
         $('.editor').hide();
+    });
+
+    $('.add_nuevo').click(function(){
+        $($('#editor_nuevo').html()).insertBefore("#div_nuevo");
+        //$('#editor_nuevo').show();
+    });
+
+    $('#mca_slots').change(function(){
+        if($(this).is(':checked')){
+            $('#body_slots').show();
+        }else{
+            $('#body_slots').hide();
+        }
+    });
+    
+    $('.fin').change(function(){
+        var hora_inicio=moment($(this).parents(':eq(1)').find('.hora_inicio').val(), ['h:m a', 'H:m']);
+        var hora_fin=moment($(this).val(), ['h:m a', 'H:m']);
+        console.log(hora_inicio+' '+hora_fin);
+        if(hora_inicio>hora_fin){
+            toast_warning('Hora incorrecta','La hora de inicio no puede ser mayor a la hora de fin');
+            $(this).val(hora_inicio.add(1,'hours').format('H:m'));
+        }
     });
 
     

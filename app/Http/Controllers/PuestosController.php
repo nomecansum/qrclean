@@ -470,16 +470,14 @@ class PuestosController extends Controller
         }
     }
      // GESTION DE TIPOS DE PUESTO
-     public function index_tipos(){
+    public function index_tipos(){
         $tipos = DB::table('puestos_tipos')
         ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+            $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
                 if(config_cliente('mca_mostrar_datos_fijos')=='S'){
                     $q->orwhere('puestos_tipos.mca_fijo','S');
                 }
-            }
         })
         ->get();
         
@@ -505,6 +503,21 @@ class PuestosController extends Controller
                 $tipo=puestos_tipos::find($r->id);
                 $tipo->update($r->all());
             }
+            //Slots de reserva
+            if(isset($r->hora_inicio)){
+                $slots=[];
+                foreach($r->hora_inicio as $key=>$value){
+                    if($value!=null){
+                        $slot=new stdClass;
+                        $slot->hora_inicio=$value;
+                        $slot->hora_fin=$r->hora_fin[$key];
+                        $slots[]=$slot;
+                    }
+                }
+                $tipo->slots_reserva=$slots;
+                $tipo->save();
+            }
+
             savebitacora('Tipo de puesto creado '.$r->des_tipo_puesto,"Puestos","tipos_save","OK");
             return [
                 'title' => "Tipos de puesto",

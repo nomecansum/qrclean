@@ -223,5 +223,10 @@
         "model-name": "users",
         "resource-file": "users.json",
         "table-name": "users"
+    },
+    {
+        "model-name": "departamentos",
+        "resource-file": "departamentos.json",
+        "table-name": "departamentos"
     }
 ]

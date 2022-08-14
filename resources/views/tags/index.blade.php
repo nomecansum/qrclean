@@ -89,7 +89,7 @@
                             <td>{{ $tag->nom_tag }}</td>
                             <td>{{ $tag->nom_cliente }}</td>
 
-                            <td>
+                            <td style="position: relative;">
                                 <div class="pull-right floating-like-gmail mt-2" role="group">
                                     {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tag->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
                                     <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tag->id_tag }})" title="Editar tag" data-id="{{ $tag->id_tag }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>

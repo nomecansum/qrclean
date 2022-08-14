@@ -5,7 +5,7 @@
 @endsection
 
 @section('styles')
-
+    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('breadcrumb')

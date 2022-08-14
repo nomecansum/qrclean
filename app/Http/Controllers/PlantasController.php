@@ -280,6 +280,7 @@ class PlantasController extends Controller
             $error="Debe añadir una imagen de fondo para poder agregar zonas";
             return view('plantas.zonas', compact('plantas','error'));
         }
+
         return view('plantas.zonas', compact('plantas'));
     }
 

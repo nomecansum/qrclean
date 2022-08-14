@@ -115,7 +115,7 @@
                 $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
                     
                     puesto=$('#puesto'+item.id);
-                    console.log(item);
+                    //console.log(item);
                     puesto.css('top',plano.height()*item.offsettop/100);
                     puesto.css('left',plano.width()*item.offsetleft/100);
                 });

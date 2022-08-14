@@ -1,12 +1,12 @@
 @php
     $edificio_ahora=0;
     $planta_ahora=0;
-    //dd($puestos);
+    $id_puesto_edit=App\Models\reservas::find($r->id_reserva??0)->id_puesto??null;
 @endphp
 <style>
-    .glow {
+   .glow {
         background-color: #1c87c9;
-        border: none;
+        border: 6px dashed yellow;
         color: #eeeeee;
         cursor: pointer;
         display: inline-block;
@@ -15,6 +15,7 @@
         padding: 10px 10px;
         text-align: center;
         text-decoration: none;
+        opacity: 1 !important;
       }
       @keyframes glowing {
         0% {
@@ -22,11 +23,11 @@
           box-shadow: 0 0 5px #2ba805;
         }
         50% {
-          background-color: #49e819;
+          background-color: #f0be1a;
           box-shadow: 0 0 20px #49e819;
         }
         100% {
-          background-color: #2ba805;
+          background-color: #ffee02;
           box-shadow: 0 0 5px #2ba805;
         }
       }
@@ -95,12 +96,12 @@
                    
 
                     @if(session('CL')['modo_visualizacion_puestos']=='C')
-                    <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{  $cuadradito['clase_disp'] }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-opacity="{{ $cuadradito['transp']  }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; background-color: {{  $cuadradito['color'] }}; color: {{  $cuadradito['font_color'] }}; {{  $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
+                    <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable {{  $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-opacity="{{ $cuadradito['transp']  }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; background-color: {{  $cuadradito['color'] }}; color: {{  $cuadradito['font_color'] }}; {{  $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
                         <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; color:#666">{{ $puesto->cod_puesto }}</span>
                         @include('resources.adornos_iconos_puesto')
                     </div>
                     @else
-                    <div class="text-center rounded add-tooltip align-middle flpuesto draggable {{  $cuadradito['clase_disp'] }}" id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
+                    <div class="text-center rounded add-tooltip align-middle flpuesto draggable {{  $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }} " id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
                         <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">
                             <i class="{{ $puesto->icono_tipo??'' }} fa-2x" style="color: {{ $puesto->color_tipo??'' }}"></i><br>
                             {{ $puesto->cod_puesto }}</span>
@@ -159,14 +160,9 @@
 
     $('#tipo_vista').val('comprobar');
 
-    // var intervalo=setInterval(() => {
-    //     var data = $('.form-ajax').serialize();
-    //     data+='&name='+name;
-    //     data+='&ajax=1';
-    //     data+='&_token={{csrf_token()}}';
-    //     $.post('{{url('/reservas/comprobar')}}', data, function(data, textStatus, xhr) {
-	// 		console.log(data);
-    //     });
-
-    // }, 3000);
+    @if(isset($r->id_reserva)&&$r->id_reserva!=0)
+    $(function(){
+        $('#puesto{{ $id_puesto_edit }}').addClass('glow');
+    })
+   @endif
 </script>

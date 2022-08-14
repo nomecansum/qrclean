@@ -14,9 +14,7 @@ class TagsController extends Controller
         $tags = DB::table('tags')
         ->join('clientes','clientes.id_cliente','tags.id_cliente')
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('tags.id_cliente',Auth::user()->id_cliente);
-            }
+            $q->where('tags.id_cliente',Auth::user()->id_cliente);
         })
         ->get();
         

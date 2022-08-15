@@ -62,7 +62,8 @@ class users extends Model
      *
      * @var array
      */
-    protected $dates = [];
+    protected $dates = ['email_expire_at',
+    'email_verified_at','last_login'];
     
     /**
      * The attributes that should be cast to native types.
@@ -150,7 +151,7 @@ class users extends Model
      */
     public function getCreatedAtAttribute($value)
     {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
+        return $value;
     }
 
     /**
@@ -161,7 +162,7 @@ class users extends Model
      */
     public function getUpdatedAtAttribute($value)
     {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
+        return $value;
     }
 
 }

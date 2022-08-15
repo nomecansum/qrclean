@@ -86,11 +86,7 @@
         </div>
     </div>
     @php $etiqueta_boton="Ver puestos" @endphp
-    <form method="post" name="form_puestos" id="formbuscador" action="{{ url('puestos/') }}">
-        @csrf
-        <input type="hidden" name="document" value="pantalla">
-        @include('resources.combos_filtro',[$hide=['usu'=>1,'est_inc'=>1,'est_mark'=>1]])
-    </form>
+    
     <div id="editorCAM" class="mt-2">
 
     </div>
@@ -98,8 +94,8 @@
         left_toolbar=300;
         top_toolbar=16;
     </script>
-    @include('puestos.scripts_lista_puestos')
-
+    
+    
     <div id="myFilter">
         @if(!isset($r))
             @include('puestos.fill-tabla')

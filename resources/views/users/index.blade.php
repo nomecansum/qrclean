@@ -7,6 +7,8 @@
         .show-calendar{
             z-indez: 15000;
         }
+
+       
        
     </style>
 @endsection
@@ -53,8 +55,9 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="" id="dropdown-acciones">
                             <li class="dropdown-header">Atributos</li>
+                            @if(checkPermissions(['Usuarios'],['W']))<li><a href="#modificar-usuario" class="btn_plantas btn_toggle_dropdown btn_search btn_modif" data-toggle="modal" data-tipo="M"><i class="fa-solid fa-user-pen"></i> Modificar datos de usuario</a> </li>@endif
                             @if(checkPermissions(['Usuarios'],['W']))<li><a href="#asignar-planta" class="btn_plantas btn_toggle_dropdown btn_search" data-toggle="modal" data-tipo="M"><i class="fad fa-layer-plus"></i> Asignar planta</a> </li>@endif
-                            @if(checkPermissions(['Usuarios'],['W']))<li><a href="#asignar-supervisor" class="btn_supervisor btn_toggle_dropdown btn_search" data-toggle="modal" data-tipo="M"><i class="fad fa-user-friends"></i> Asignar supervisor</a></li>@endif
+                            {{-- @if(checkPermissions(['Usuarios'],['W']))<li><a href="#asignar-supervisor" class="btn_supervisor btn_toggle_dropdown btn_search" data-toggle="modal" data-tipo="M"><i class="fad fa-user-friends"></i> Asignar supervisor</a></li>@endif --}}
                             
                             {{--  @if(checkPermissions(['Puestos'],['W']))<li><a href="#modificar-puesto" class="btn_modificar_puestos btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-pencil"></i> Modificar puestos</a></li>@endif  --}}
                             <li class="divider"></li>
@@ -80,105 +83,65 @@
             </div>
         </div>
     </div>
-
-    <div class="panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Usuarios</h3>
+    <div class="row mt-2">
+        <div id="div_filtro">
+            <form method="post" name="form_puestos" id="formbuscador" action="{{ url('users/search') }}" class>
+                @csrf
+                <input type="hidden" name="document" value="pantalla">
+                @include('resources.combos_filtro',[$hide=['tag'=>1,'est_inc'=>1,'pue'=>1,'est'=>1,'tip_mark'=>1,'tip_inc'=>1],$show=['dep'=>1,'perfil'=>1,'tur'=>1]])
+                @include('puestos.scripts_lista_puestos')
+            </form>
         </div>
-
-
-        @if(count($usersObjects) == 0)
-            <div class="panel-body text-center">
-                <h4>No Users Available.</h4>
-            </div>
-        @else
-        <div class="panel-body panel-body-with-table">
-            <div class="table-responsive">
-                <div id="all_toolbar" class="ml-3">
-                    <input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos">Todos</label>
-                </div>
-                @php
-                    $hay_supervisores=$usersObjects->wherenotnull('id_usuario_supervisor');  
-                @endphp
-                <table id="tablarondas"  data-toggle="table"
-                    data-locale="es-ES"
-                    data-search="true"
-                    data-show-columns="true"
-                    data-show-columns-toggle-all="true"
-                    data-page-list="[5, 10, 20, 30, 40, 50]"
-                    data-page-size="50"
-                    data-pagination="true" 
-                    data-show-pagination-switch="true"
-                    data-show-button-icons="true"
-                    data-toolbar="#all_toolbar"
-                    >
-                    <thead>
-                        <tr>
-                            <th style="width: 10px" class="no-sort"  data-switchable="false"></th>
-                            <th style="width: 30px" class="no-sort"  data-switchable="false"></th>
-                            <th  data-sortable="true">Nombre</th>
-                            <th  data-sortable="true">Perfil</th>
-                            @if(!$hay_supervisores->isEmpty())
-                                <th data-sortable="true">Supervisor</th>
-                            @endif
-                            <th  data-sortable="true">Ult acceso</th>
-                            <th  data-sortable="true">Email</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @php
-                        $hay_supervisores=$usersObjects->wherenotnull('id_usuario_supervisor');  
-                    @endphp
-                    @foreach($usersObjects as $users)
-                        <tr class="hover-this" data-id="{{ $users->id }}" data-href="{{ route('users.users.edit', $users->id ) }}">
-                            <td class="text-center">
-                                <input type="checkbox" class="form-control chkuser magic-checkbox" name="lista_id[]" data-id="{{ $users->id }}" id="chku{{ $users->id }}" value="{{ $users->id }}">
-                                <label class="custom-control-label"   for="chku{{ $users->id }}"></label>
-                            </td>
-                            <td class="center">
-                                @if (isset($users->img_usuario ) && $users->img_usuario!='')
-                                    <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$users->img_usuario) }}" class="img-circle" style="height:50px; width:50px; object-fit: cover;">
-                                @else
-                                    {!! icono_nombre($users->name) !!}
-                                @endif
-                                @if(config('app.env')=='local')[#{{ $users->id }}]@endif
-                            </td>
-                            <td class="pt-3">{{ $users->name }}</td>
-                            <td>
-                                @if(isset($users->cod_nivel))
-                                    {{$users->des_nivel_acceso}}
-                                @else
-                                    <div>
-                                        <i class="fa fa-warning" style="color:orange">Pendiente</i>
-                                    </div>
-                                @endif
-                            </td>
-                            @if(!$hay_supervisores->isEmpty())
-                                <td>{{ $users->nom_supervisor }}</td>
-                            @endif
-                            <td>{!! beauty_fecha($users->last_login) !!}</td>
-                            <td style="vertical-align: middle">
-                                {{ $users->email }}
-                                <form method="POST" action="{!! route('users.users.destroy', $users->id) !!}" accept-charset="UTF-8">
-                                <input name="_method" value="DELETE" type="hidden">
-                                {{ csrf_field() }}
-                                    <div class="pull-right floating-like-gmail" role="group" style="width: 170px; position: relative">
-                                        @if (checkPermissions(['ReLogin'],["R"]))<a href="{{url('relogin',$users->id)}}" class="btn btn-xs btn-warning"><i class="fa fa-user" ></i> Suplantar</a>@endif
-                                        <a href="{{ route('users.users.edit', $users->id ) }}" class="btn btn-xs btn-info  add-tooltip" title="Editar Usuario"  style="float: left"><span class="fa fa-pencil pt-1" ></span> Edit</a>
-                                        <a class="btn btn-xs btn-danger add-tooltip ml-1 btn_eliminar"  data-target="#eliminar-usuario" data-toggle="modal" style="float: left" title="Borrar usuario" onclick="$('#txt_borrar').html('{{ $users->name }}'); $('#id_usuario_borrar').val({{ $users->id }})" data-name="{{ $users->name }}"   style="float: right">
-                                            <span class="fa fa-trash"></span> Del
-                                        </a>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        @endif
+        
     </div>
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Usuarios</h3>
+            </div>
+    
+    
+            @if(count($usersObjects) == 0)
+                <div class="panel-body text-center">
+                    <h4>No Users Available.</h4>
+                </div>
+            @else
+            <div class="panel-body panel-body-with-table">
+                <div class="table-responsive">
+                    <div id="all_toolbar" class="ml-3">
+                        <input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos">Todos</label>
+                    </div>
+                    <table id="tablausuarios"  data-toggle="table"
+                        data-locale="es-ES"
+                        data-search="true"
+                        data-show-columns="true"
+                        data-show-columns-toggle-all="true"
+                        data-page-list="[5, 10, 20, 30, 40, 50]"
+                        data-page-size="50"
+                        data-pagination="true" 
+                        data-show-pagination-switch="true"
+                        data-show-button-icons="true"
+                        data-toolbar="#all_toolbar"
+                        >
+                        <thead>
+                            <tr>
+                                <th style="width: 10px" class="no-sort"  data-switchable="false"></th>
+                                <th style="width: 30px" class="no-sort"  data-switchable="false"></th>
+                                <th  data-sortable="true">Nombre</th>
+                                <th  data-sortable="true">Perfil</th>
+                                <th  data-sortable="true">Ult acceso</th>
+                                <th  data-sortable="true">Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myFilter">
+                        @include('users.fill_tabla_usuarios')
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
+        </div>
+    </div>
+    
 
     <div class="modal fade" id="eliminar-usuario" style="display: none;">
         <div class="modal-dialog">
@@ -248,7 +211,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="asignar-supervisor" style="display: none;">
+    {{-- <div class="modal fade" id="asignar-supervisor" style="display: none;">
         <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
@@ -274,7 +237,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div class="modal fade" id="crear-reserva" style="display: none;">
         <div class="modal-dialog modal-lg">
@@ -346,6 +309,29 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modificar-usuario" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
+                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                        <span class="float-right" id="spin_asignar" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
+                        <h4 class="modal-title">Modificar datos de <span id="cuenta_usuarios_modificar"></span> usuarios</h4>
+                </div>
+                
+                <div class="modal-body" id="">
+
+                    
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-info" id="btn_si_modificar">Modificar</button> 
+                    <button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
@@ -357,6 +343,7 @@
         
         var tooltip = $('.add-tooltip');
         if (tooltip.length)tooltip.tooltip();
+        $('#formbuscador').submit(ajax_filter);
 
         
         $('#fechas').daterangepicker({
@@ -419,6 +406,21 @@
             $('#borrar-usuarios').modal('show');
             //fin_espere();
         });
+
+        $('.btn_modif').click(function(){
+            //block_espere();
+            searchIDs = $('.chkuser:checkbox:checked').map(function(){
+                return $(this).val();
+            }).get(); // <----
+
+            $('#cuenta_usuarios_modificar').html(searchIDs.length);
+            $('#modificar-usuario').modal('show');
+            $.post('{{url('/users/edit_modificar_usuarios')}}', {_token: '{{csrf_token()}}',id_usuario: searchIDs}, function(data, textStatus, xhr) {
+                $('#modificar-usuario .modal-body').html(data);
+                    //fin_espere();
+                });       
+        });
+
 
         $('#borrar_muchos').click(function(){
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
@@ -493,29 +495,14 @@
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
                 return $(this).val();
             }).get(); // 
-
-
-            $.post('{{url('/users/asignar_supervisor')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs,supervisor: $('#supervisor').val()}, function(data, textStatus, xhr) {
-                console.log(data);
-                if(data.error){
-                    toast_error(data.title,data.error);
-                } else if(data.alert){
-                    toast_warning(data.title,data.alert);
-                } else{
-                    toast_ok(data.title,data.message);
-                }
-            }) 
-            .fail(function(err){
-                toast_error('Error',err.responseJSON.message);
-            })
-            .always(function(data){
-                $('#asignar-supervisor').modal('hide');  
-                if(data.url){
-                    setTimeout(()=>{window.open(data.url,'_self')},3000);
-                } 
-                
-            });  
         })
+
+        $('#btn_si_modificar').click(function(){
+
+            $('#modif_users_form').submit();
+        })
+
+        
 
         $('.btn_asignar_puesto').click(function(){
             $('#spin_asignar').hide();

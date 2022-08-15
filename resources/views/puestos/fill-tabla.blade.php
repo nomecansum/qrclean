@@ -1,3 +1,13 @@
+<div class="row">
+    <div id="div_filtro">
+        <form method="post" name="form_puestos" id="formbuscador" action="{{ url('puestos/') }}">
+            @csrf
+            <input type="hidden" name="document" value="pantalla">
+            @include('resources.combos_filtro',[$hide=['usu'=>1,'est_inc'=>1,'est_mark'=>1]])
+            @include('puestos.scripts_lista_puestos')
+        </form>
+    </div>
+</div>
 <div class="row mt-2">
     <div class="panel" style="width: 100%">
         <div class="panel-heading">

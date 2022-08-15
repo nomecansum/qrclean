@@ -37,6 +37,7 @@ class UsersController extends Controller
         $usersObjects = DB::table('users')
         ->select('users.*','niveles_acceso.*','sup.name as nom_supervisor','sup.id as id_supervisor')
         ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
+        ->leftjoin('users AS sup','users.id_usuario_supervisor', 'sup.id')
         ->where(function($q){
             if (!isAdmin()) {
                 $q->wherein('users.id_cliente',clientes());
@@ -48,39 +49,70 @@ class UsersController extends Controller
                 $q->wherein('users.id',$usuarios_supervisados);
             }
         })
-        ->leftjoin('users AS sup','users.id_usuario_supervisor', 'sup.id')
-        ->get();
-
-
-        $supervisores_perfil=[0];
-        $supervisores_usuario=[0];
-
-    
-        $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
-
-        $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->get()->pluck('id_perfil')->unique();
-
-        $supervisores_usuario=DB::table('permisos_usuarios')->where('id_seccion',$permiso)->get()->pluck('id_usuario')->unique();
-
-        $supervisores=DB::table('users')
-            ->where(function ($q) use($supervisores_perfil,$supervisores_usuario){
-                $q->wherein('cod_nivel',$supervisores_perfil);
-                $q->orwherein('id',$supervisores_usuario);
-            })
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->wherein('users.id_cliente',clientes());
-                }
-            })
-            ->orderby('name')
-            ->get();
-            
+        ->get();            
 
         //$usersObjects = users::with('grupo','perfile')->paginate(25);
 
-        return view('users.index', compact('usersObjects','supervisores'));
+        return view('users.index', compact('usersObjects'));
     }
 
+    public function search(Request $r){
+        $usersObjects = DB::table('users')
+        ->select('users.*','niveles_acceso.*','sup.name as nom_supervisor','sup.id as id_supervisor')
+        ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
+        ->leftjoin('users AS sup','users.id_usuario_supervisor', 'sup.id')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->wherein('users.id_cliente',clientes());
+            }
+        })
+        ->where(function($q){
+            if (isSupervisor(Auth::user()->id)) {
+                $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',Auth::user()->id)->pluck('id')->toArray();
+                $q->wherein('users.id',$usuarios_supervisados);
+            }
+        })
+        ->when($r->cliente, function($q) use($r){
+            $q->wherein('users.id_cliente',$r->cliente);
+        })
+        ->when($r->edificio, function($q) use($r){
+            $q->wherein('users.id_edificio',$r->edificio);
+        })
+        ->when($r->cod_nivel, function($q) use($r){
+            $q->wherein('users.cod_nivel',$r->cod_nivel);
+        })
+        ->when($r->planta, function($q) use($r){
+            $q->join('plantas_usuario','users.id', 'plantas_usuario.id_usuario');
+            $q->wherein('plantas_usuario.id_planta',$r->planta);
+        })
+        ->when($r->tipo, function($q) use($r){
+            $q->wherenotnull('users.tipos_puesto_admitidos');
+            $q->where(function($q2) use($r){
+                foreach($r->tipo as $tipo){
+                    $q2->orwhereraw("FIND_IN_SET(".$tipo.",users.tipos_puesto_admitidos)<>0");
+                }
+            });
+        })
+        ->when($r->user, function($q) use($r){
+            $q->wherein('users.id',$r->user);
+        })
+        ->when($r->id_departamento, function($q) use($r){
+            $q->wherein('users.id_departamento',$r->id_departamento);
+        })
+        ->when($r->id_turno, function($q) use($r){
+            $q->join('turnos_usuarios','users.id', 'turnos_usuarios.id_usuario');
+            $q->wherein('turnos_usuarios.id_turno',$r->id_turno);
+        })
+        ->when($r->supervisor, function($q) use($r){
+            $q->wherein('users.id_usuario_supervisor',$r->supervisor);
+        })
+
+        ->get();
+
+        return view('users.fill_tabla_usuarios', compact('usersObjects'));
+    }
+
+    //////////////////////////FUNCIONES DEL EDITOR DE USUARIO//////////////////////////////
     public function edit($id)
     {
         if($id==0){
@@ -96,8 +128,12 @@ class UsersController extends Controller
         
         validar_acceso_tabla($id,"users");
         $users = users::findOrFail($id);
-        $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();
-        // dd($Perfiles);
+        $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)
+            ->where(function($q){
+                $q->where('id_cliente',Auth::user()->id_cliente);
+                $q->orwhere('mca_fijo','S');
+            })
+            ->get();
 
         $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
 
@@ -245,14 +281,7 @@ class UsersController extends Controller
 
         return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras','tipos_puestos','pref_turnos','tipos_puesto_usuario','colectivos_cliente','colectivos_user'));
     }
-    /**
-     * Update the specified users in the storage.
-     *
-     * @param int $id
-     * @param Illuminate\Http\Request $request
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
-     */
+
     public function update($id, Request $request)
     {
         validar_acceso_tabla($id,"users");
@@ -378,13 +407,7 @@ class UsersController extends Controller
 
         }
     }
-    /**
-     * Remove the specified users from the storage.
-     *
-     * @param int $id
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
-     */
+
     public function destroy($id)
     {
         validar_acceso_tabla($id,"users");
@@ -415,7 +438,11 @@ class UsersController extends Controller
                     savebitacora('Usuario '.$users->email. ' borrado',"Usuarios","Destroy","OK");
                 }
                 
-                
+                return [
+                    'title' => "Usuarios",
+                    'message' => 'Usuarios '.implode(",",$id_ok). ' borrados',
+                    'url' => url('users')
+                ];
             }
         } catch (Exception $exception) {
             return [
@@ -425,18 +452,9 @@ class UsersController extends Controller
             ];
         }
 
-        return [
-            'title' => "Usuarios",
-            'message' => 'Usuarios '.implode(",",$id_ok). ' borrados',
-            'url' => url('users')
-        ];
+        
     }
-    /**
-     * Get the request's data from the request.
-     *
-     * @param Illuminate\Http\Request\Request $request
-     * @return array
-     */
+
     protected function getData(Request $request)
     {
         $rules = [
@@ -464,6 +482,7 @@ class UsersController extends Controller
         return $data;
     }
 
+    ////////////////////////////FUNCIONES PARA EL LISTADO DE USUARIOS
     public function plantas_usuario($id,$check){
         validar_acceso_tabla($id,'users');
         $user=users::findorfail($id);
@@ -556,6 +575,187 @@ class UsersController extends Controller
             'usuario' =>$usuario,
             'estado' =>$estado
         ];
+    }
+
+    public function editor_modificar_usuarios(Request $r){
+        $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();
+        $turnos=DB::table('turnos')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+        $edificios=DB::table('edificios')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+        $tipos_puestos=DB::table('puestos_tipos')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+        $colectivos_cliente=DB::table('colectivos')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+        $clientes=DB::table('clientes')
+            ->wherein('id_cliente',clientes())
+            ->get();
+        $usuarios=DB::table('users')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->orderby('name')
+            ->get();
+        $plantas=DB::table('plantas')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+        return view('users.fill_modificar_datos_usuario', compact('Perfiles','turnos','edificios','tipos_puestos','colectivos_cliente','clientes','usuarios','plantas','r'));
+    }
+
+    public function modificar_usuarios(Request $r){
+        $datos_actualizados="";
+        if(!is_array($r->id_usuario)){
+            $r->id_usuario=explode(",",$r->id_usuario);
+        }
+        if(isset($r->id_cliente)){
+            DB::table('users')->wherein('id',$r->id_usuario)->update(['id_cliente'=>$r->id_cliente]);
+            $datos_actualizados.='Cliente='.$r->id_cliente.', ';
+        }
+        if(isset($r->cod_nivel)){
+            DB::table('users')->wherein('id',$r->id_usuario)->update(['cod_nivel'=>$r->cod_nivel]);
+            $datos_actualizados.='Perfil='.$r->cod_nivel.', ';
+        }
+        if(isset($r->val_timezone)){
+            DB::table('users')->wherein('id',$r->id_usuario)->update(['val_timezone'=>$r->val_timezone]);
+            $datos_actualizados.='Zona horaria='.$r->val_timezone.', ';
+        }
+        if(isset($r->id_edificio)){
+            DB::table('users')->wherein('id',$r->id_usuario)->update(['id_edificio'=>$r->id_edificio]);
+            $datos_actualizados.='Edificio='.$r->id_edificio.', ';
+        }
+        if(isset($r->id_departamento)){
+            DB::table('users')->wherein('id',$r->id_usuario)->update(['id_departamento'=>$r->id_departamento]);
+            $datos_actualizados.='Departamento='.$r->id_departamento.', ';
+        }
+
+        if(isset($r->val_colectivo)){
+            switch ($r->colectivo_accion) {
+                case 'add':
+                    foreach($r->id_usuario as $user){
+                        foreach($r->val_colectivo as $dato){
+                            DB::table('colectivos_usuarios')->insert(['id_usuario'=>$user, 'cod_colectivo'=>$dato]);
+                        }
+                    }
+                    break;
+                case 'del':
+                    DB::table('colectivos_usuarios')->wherein('id_usuario',$r->id_usuario)->wherein('cod_colectivo',$r->val_colectivo)->delete();
+                    break;
+                case 'set':
+                    DB::table('colectivos_usuarios')->wherein('id_usuario',$r->id_usuario)->delete();
+                    foreach($r->id_usuario as $user){
+                        foreach($r->val_colectivo as $dato){
+                            DB::table('colectivos_usuarios')->insert(['id_usuario'=>$user, 'cod_colectivo'=>$dato]);
+                        }
+                    }
+                    break;
+            }
+            $datos_actualizados.='<b>'.strtoupper($r->colectivo_accion).'</b> colectivo=['.implode(",",$r->val_colectivo).'], ';
+        }
+
+        if(isset($r->turno)){
+            switch ($r->turno_accion) {
+                case 'add':
+                    foreach($r->id_usuario as $user){
+                        foreach($r->turno as $dato){
+                            DB::table('turnos_usuarios')->insert(['id_usuario'=>$user, 'id_turno'=>$dato]);
+                        }
+                    }
+                    break;
+                case 'del':
+                    DB::table('turnos_usuarios')->wherein('id_usuario',$r->id_usuario)->wherein('id_turno',$r->turno)->delete();
+                    break;
+                case 'set':
+                    DB::table('turnos_usuarios')->wherein('id_usuario',$r->id_usuario)->delete();
+                    foreach($r->id_usuario as $user){
+                        foreach($r->turno as $dato){
+                            DB::table('turnos_usuarios')->insert(['id_usuario'=>$user, 'id_turno'=>$dato]);
+                        }
+                    }
+                    break;
+            }
+            $datos_actualizados.='<b>'.strtoupper($r->turno_accion).'</b> turno=['.implode(",",$r->turno).'], ';
+        }
+
+        if(isset($r->id_usuario_asig_auto)){
+            $config_asignacion=users::find($r->id_usuario_asig_auto);
+            DB::table('users')->wherein('id',$r->id_usuario)->update(['list_puestos_preferidos'=>$config_asignacion->list_puestos_preferidos]);
+            $datos_actualizados.='Reglas asignacion automatica de puestos igual que el usuario '.$r->id_usuario_asig_auto.', ';
+        }
+
+        if(isset($r->plantas)){
+            switch ($r->planta_accion) {
+                case 'add':
+                    foreach($r->id_usuario as $user){
+                        foreach($r->plantas as $dato){
+                            DB::table('plantas_usuario')->insert(['id_usuario'=>$user, 'id_planta'=>$dato]);
+                        }
+                    }
+                    break;
+                case 'del':
+                    DB::table('plantas_usuario')->wherein('id_usuario',$r->id_usuario)->wherein('id_planta',$r->plantas)->delete();
+                    break;
+                case 'set':
+                    DB::table('plantas_usuario')->wherein('id_usuario',$r->id_usuario)->delete();
+                    foreach($r->id_usuario as $user){
+                        foreach($r->plantas as $dato){
+                            DB::table('plantas_usuario')->insert(['id_usuario'=>$user, 'id_planta'=>$dato]);
+                        }
+                    }
+                    break;
+            }
+            $datos_actualizados.='<b>'.strtoupper($r->planta_accion).'</b> planta=['.implode(",",$r->plantas).'], ';
+        }
+
+        if(isset($r->tipos_puesto_admitidos)){
+            switch ($r->tipo_puesto_accion) {
+                case 'add':
+                    foreach($r->id_usuario as $user){
+                        $u=users::find($user);
+                        $tipos=explode(",",$u->tipos_puesto_admitidos??[]);
+                        $tipos=array_unique(array_merge($tipos,$r->tipos_puesto_admitidos));
+                        $u->tipos_puesto_admitidos=implode(",",$tipos);
+                        $u->save();
+                    }
+                    break;
+                case 'del':
+                    foreach($r->id_usuario as $user){
+                        $u=users::find($user);
+                        $tipos=explode(",",$u->tipos_puesto_admitidos??[]);
+                        foreach($r->tipos_puesto_admitidos as $t){
+                            foreach (array_keys($tipos, $t) as $key) {
+                                unset($tipos[$key]);
+                            }
+                        }
+                        $u->tipos_puesto_admitidos=implode(",",$tipos);
+                        $u->save();
+                    }
+                    break;
+                case 'set':
+                    DB::table('users')->wherein('id',$r->id_usuario)->update([
+                        'tipos_puesto_admitidos'=>implode(",",$r->tipos_puesto_admitidos)
+                    ]);
+                    break;
+            }
+            $datos_actualizados.='<b>'.strtoupper($r->tipo_puesto_accion).'</b> tipo de puesto=['.implode(",",$r->tipos_puesto_admitidos).'], ';
+        }
+        
+        savebitacora($datos_actualizados.'actualizado en '.count($r->id_usuario).' usuarios',"Usuarios","modificar_usuarios","OK");
+        return [
+            'title' => "Actualizacion de datos de usuarioss",
+            'message' => $datos_actualizados.' en '.count($r->id_usuario).' usuarios',
+            //'url' => url('users')
+        ];
+        try{
+
+        } catch(\Throwable $e){
+            return [
+                'title' => "Usuarios",
+                'message' => 'Error al actualizar los datos de usuarios '.mensaje_exception($e),
+                'url' => url('users')
+            ];
+        }
     }
 
     public function setdefcamera($id){
@@ -800,11 +1000,7 @@ class UsersController extends Controller
         
         return view('puestos.content_mapa',compact('puestos','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','checks','puestos_check','id_check','url_check'));
     }
-    /**
-     * @param mixed $id 
-     * @return View|Factory 
-     * @throws BindingResolutionException 
-     */
+
     public function puestos_usuario($id){
         $usuario=users::find($id);
 
@@ -1218,7 +1414,6 @@ class UsersController extends Controller
         return view('users.miperfil', compact('users',));
     }
 
-    //Obtener el objeto User como jso
     public function gen_password($usuario)
     {
         $pwd = randomPassword(16,true,true);

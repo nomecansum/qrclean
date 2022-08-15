@@ -327,7 +327,6 @@
 															@endforeach
 														@endisset
 													</select>
-
 												<br>
 											</div>
 										</div>

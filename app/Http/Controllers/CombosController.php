@@ -31,12 +31,23 @@ class CombosController extends Controller
     
     public function loadedificios(Request $r){
         $r=$this->filtro_clientes($r);
+        $supervisores_perfil=[0];
+        $supervisores_usuario=[0];
+
+    
+        $permiso=DB::table('secciones')->where('des_seccion','Supervisor')->first()->cod_seccion??0;
+
+        $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->get()->pluck('id_perfil')->unique();
+
+        $supervisores_usuario=DB::table('permisos_usuarios')->where('id_seccion',$permiso)->get()->pluck('id_usuario')->unique();
+
         return
         [
             "edificios" => DB::table('edificios')
                 ->select('clientes.id_cliente','clientes.nom_cliente','edificios.id_edificio','edificios.des_edificio')
                 ->join('clientes','clientes.id_cliente','edificios.id_cliente')
                 ->wherein('clientes.id_cliente',$r->cliente)
+                ->orderby('des_edificio')
                 ->get(),
 
             "plantas" => DB::table('plantas')
@@ -44,6 +55,7 @@ class CombosController extends Controller
                     ->join('clientes','clientes.id_cliente','plantas.id_cliente')
                     ->join('edificios','edificios.id_edificio','plantas.id_edificio')
                     ->whereIn('clientes.id_cliente',$r->cliente)
+                    ->orderby('des_planta')
                     ->get(),
 
             "puestos" => DB::table('puestos')
@@ -52,6 +64,7 @@ class CombosController extends Controller
                 ->join('edificios','edificios.id_edificio','puestos.id_edificio')
                 ->join('plantas','plantas.id_planta','puestos.id_planta')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('cod_puesto')
                 ->where(function($q){
                     if (isSupervisor(Auth::user()->id)) {
                         $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
@@ -64,7 +77,62 @@ class CombosController extends Controller
                 ->select('clientes.id_cliente','clientes.nom_cliente','tags.id_tag','tags.nom_tag')
                 ->join('clientes','clientes.id_cliente','tags.id_cliente')
                 ->whereIn('clientes.id_cliente',$r->cliente)
-                ->get()
+                ->orderby('nom_tag')
+                ->get(),
+
+            "users" => DB::table('users')
+                ->select('clientes.id_cliente','clientes.nom_cliente','users.id','users.name')
+                ->join('clientes','clientes.id_cliente','users.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('name')
+                ->get(),
+
+            "tipos" => DB::table('puestos_tipos')
+                ->select('clientes.id_cliente','clientes.nom_cliente','puestos_tipos.id_tipo_puesto as id_tipo','puestos_tipos.des_tipo_puesto as des_tipo')
+                ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('des_tipo_puesto')
+                ->get(),
+
+            "departamentos" => DB::table('departamentos')
+                ->select('clientes.id_cliente','clientes.nom_cliente','departamentos.cod_departamento','departamentos.nom_departamento')
+                ->join('clientes','clientes.id_cliente','departamentos.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('nom_departamento')
+                ->get(),
+            
+            "perfiles" => DB::table('niveles_acceso')
+                ->select('clientes.id_cliente','clientes.nom_cliente','niveles_acceso.cod_nivel as id_perfil','niveles_acceso.des_nivel_acceso as des_perfil')
+                ->join('clientes','clientes.id_cliente','niveles_acceso.id_cliente')
+                ->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)
+                ->where(function($q) use($r){
+                    $q->whereIn('clientes.id_cliente',$r->cliente);
+                    $q->orwhere('mca_fijo','S');
+                })
+                ->orderby('des_nivel_acceso')
+                ->get(),
+
+            "supervisores" => DB::table('users')
+                ->select('clientes.id_cliente','clientes.nom_cliente','users.id','users.name')
+                ->join('clientes','clientes.id_cliente','users.id_cliente')
+                ->where(function ($q) use($supervisores_perfil,$supervisores_usuario){
+                    $q->wherein('cod_nivel',$supervisores_perfil);
+                    $q->orwherein('id',$supervisores_usuario);
+                })
+                ->where(function($q){
+                    if (!isAdmin()) {
+                        $q->wherein('users.id_cliente',clientes());
+                    }
+                })
+                ->orderby('name')
+                ->get(),
+
+            "turnos" => DB::table('turnos')
+                ->select('clientes.id_cliente','clientes.nom_cliente','turnos.id_turno','turnos.des_turno')
+                ->join('clientes','clientes.id_cliente','turnos.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('des_turno')
+                ->get(),
         ];
     }
 

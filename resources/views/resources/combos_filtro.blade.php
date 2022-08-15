@@ -9,9 +9,15 @@
     use App\Models\marcas;
 @endphp
 
+<style>
+     .select-all{
+            max-height: 46px !important;
+        }
+</style>
+
 
 @if(!(isset($hide['head']) || (isset($hide['head']) && ($hide['head']!==1))))
-<div class="panel " style="padding-right: 10px" >
+<div class="panel" style="padding-right: 10px;" >
     <div class="panel-heading cursor-pointer" style="padding-top: 2px" id="headfiltro" >
         {{--  <span class="mt-3 ml-2 font-18"></span>  --}}
         <div id="expand_campos" data-div="divfiltro"  class="expandir ml-2  font-18 p-t-10"><i class="fad fa-filter"></i> Filtro <a href=javascript:void(0); class="expand"><i class="fas fa-caret-right text-mint"></i></a></div>
@@ -33,6 +39,7 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group  col-md-12" style="{{ (isset($hide['edi']) && $hide['edi']==1) ? 'display: none' : ''  }}">
             <label>Edificio</label>
             <div class="input-group select2-bootstrap-append">
@@ -52,6 +59,7 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group  col-md-12" style="{{ (isset($hide['tag']) && $hide['tag']==1) ? 'display: none' : ''  }}">
             <label>Tag
                 <input id="demo-sw-checkstate" name="andor" type="checkbox">
@@ -64,6 +72,7 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group  col-md-12" style="{{ (isset($hide['pue']) && $hide['pue']==1) ? 'display: none' : ''  }}">
             <label>Puesto</label>
             <div class="input-group select2-bootstrap-append">
@@ -73,11 +82,12 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group  col-md-12" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
             <label>Tipo de puesto</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipo[]" id="multi-tipo" >
-                    @foreach(puestos_tipos::where(function($q) {
+                    {{-- @foreach(puestos_tipos::where(function($q) {
                         $q->where('id_cliente',Auth::user()->id_cliente);
                         $q->orwhere('mca_fijo','S');
                         })
@@ -85,13 +95,14 @@
                         ->orderby('des_tipo_puesto')
                         ->get() as $tipo)
                         <option value="{{ $tipo->id_tipo_puesto }}">{{ $tipo->des_tipo_puesto }}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>
                 <div class="input-group-btn">
                     <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
+
         <div class="form-group  col-md-12" style="{{ (isset($hide['est']) && $hide['est']==1) ? 'display: none' : ''  }}">
             <label>Estado puesto</label>
             <div class="input-group select2-bootstrap-append">
@@ -109,6 +120,7 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group  col-md-12" style="{{ (isset($hide['est_inc']) && $hide['est_inc']==1) ? 'display: none' : ''  }}">
             <label>Estado incidencia</label>
             <div class="input-group select2-bootstrap-append">
@@ -128,6 +140,7 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group  col-md-12" style="{{ (isset($hide['tip_inc']) && $hide['tip_inc']==1) ? 'display: none' : ''  }}">
             <label>Tipo incidencia</label>
             <div class="input-group select2-bootstrap-append">
@@ -146,24 +159,31 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group  col-md-12" style="{{ (isset($hide['usu']) && $hide['usu']==1) ? 'display: none' : ''  }}">
             <label>Usuario</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="user[]" id="multi-user" >
-                    @foreach(users::where(function($q) {
-                        $q->where('id_cliente',Auth::user()->id_cliente);
-                        })
-                        ->orderby('name')
-                        ->orderby('name')
-                        ->get() as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                    @endforeach
+
                 </select>
                 <div class="input-group-btn">
                     <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                 </div>
             </div>
         </div>
+
+        <div class="form-group  col-md-12" style="{{ (isset($show['sup']) && $show['sup']==1) ? 'display: none' : ''  }}">
+            <label>Supervisor</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="supervisor[]" id="multi-supervisor" >
+
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group  col-md-12" style="{{ (isset($hide['tip_mark']) && $hide['tip_mark']==1) ? 'display: none' : ''  }}">
             <label>Marca</label>
             <div class="input-group select2-bootstrap-append">
@@ -178,7 +198,42 @@
                 </div>
             </div>
         </div>
-        
+
+        <div class="form-group  col-md-12" style="{{ (isset($show['perfil']) && $show['perfil']==1) ? '' : 'display: none'  }}">
+            <label>Perfil</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="cod_nivel[]" id="multi-perfiles" >
+                    
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary select-all" data-select="multi-perfiles"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group  col-md-12" style="{{ (isset($show['dep']) && $show['dep']==1) ? '' : 'display: none'  }}">
+            <label>Departamento</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_departamento[]" id="multi-departamentos" >
+                    
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary select-all" data-select="multi-departamentos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group  col-md-12" style="{{ (isset($show['tur']) && $show['tur']==1) ? '' : 'display: none'  }}">
+            <label>Turno</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_turno[]" id="multi-turnos" >
+                    
+                </select>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary select-all" data-select="multi-turnos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+                </div>
+            </div>
+        </div>
         
         <div class="row" style="{{ (isset($hide['btn']) && $hide['btn']==1) ? 'display: none' : ''  }}">
             <div class="col-md-12 text-right mb-3">
@@ -189,50 +244,6 @@
     </div>
 </div>
 @endif
-
-
-
-
-
-{{--  <div class="modal fade" id="save-favorite">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content"><div><img src="/images/onthespot_20.png" class="float-right"></div>
-            <div class="modal-header"   style="justify-content: left"><i class="mdi mdi-export text-primary mdi-48px"></i><h4 style="margin-top: 20px"><label>{{ __('general.guardar_filtro_favorito') }}</label></h4></div>
-            <div class="modal-body">
-                <input type="text" class="form-control" placeholder="Descripción del filtro" id="des_filtro">
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="save-favorite-button" class="btn btn-info">{{trans('strings.save')}}</button>
-                <button type="button" data-dismiss="modal" class="btn btn-warning">{{trans('strings.cancel')}}</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="favorites-table">
-    <div class="modal-dialog">
-        <div class="modal-content"><div><img src="/images/onthespot_20.png" class="float-right"></div>
-            <div class="modal-header"   style="justify-content: left">
-                <i class="mdi mdi-import text-primary mdi-48px"></i>
-                <h3 style="margin-top: 15px"><label>{{ __('general.cargar_filtro_favorito') }}</label></h3>
-            </div>
-            <div class="modal-body">
-                <table id="tablafavoritos" class="table table-bordered table-condensed table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>{{trans('general.descripcion')}}</th>
-                            <th>{{trans('general.opciones')}}</th>
-                        </tr>
-                    </thead>
-                    <tbody id="all-favorites">
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>  --}}
 
 <br>
 
@@ -334,6 +345,65 @@
                     tag_c=val.id_cliente;
                 }
                 $('#multi-tag').append('<option value="'+val.id_tag+'">'+val.nom_tag+'</option>');
+            });
+
+            dep_c="";
+            $.each(data.departamentos, function(index, val) {
+                if(dep_c!=val.id_cliente){
+                    $('#multi-departamentos').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    dep_c=val.id_cliente;
+                }
+                $('#multi-departamentos').append('<option value="'+val.cod_departamento+'">'+val.nom_departamento+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            perf_c="";
+            $.each(data.perfiles, function(index, val) {
+                if(perf_c!=val.id_cliente){
+                    $('#multi-perfiles').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    perf_c=val.id_cliente;
+                }
+                $('#multi-perfiles').append('<option value="'+val.id_perfil+'">'+val.des_perfil+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            turno_c="";
+            $.each(data.turnos, function(index, val) {
+                if(turno_c!=val.id_cliente){
+                    $('#multi-turnos').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    turno_c=val.id_cliente;
+                }
+                $('#multi-turnos').append('<option value="'+val.id_turno+'">'+val.des_turno+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            tipo_c="";
+            $.each(data.tipos, function(index, val) {
+                if(tipo_c!=val.id_cliente){
+                    $('#multi-tipo').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    tipo_c=val.id_cliente;
+                }
+                $('#multi-tipo').append('<option value="'+val.id_tipo+'">'+val.des_tipo+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            tipo_u="";
+            $.each(data.users, function(index, val) {
+                if(tipo_u!=val.id_cliente){
+                    $('#multi-user').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    tipo_u=val.id_cliente;
+                }
+                $('#multi-user').append('<option value="'+val.id+'">'+val.name+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            tipo_s="";
+            $.each(data.supervisores, function(index, val) {
+                if(tipo_s!=val.id_cliente){
+                    $('#multi-supervisor').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    tipo_s=val.id_cliente;
+                }
+                $('#multi-supervisor').append('<option value="'+val.id+'">'+val.name+'</option>');
             });
             $('#loadfilter').hide();
             //try{ end_update_filtros('cliente') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
@@ -501,8 +571,9 @@
     $('.select-all').css('height',46);
         //$(':checkbox').on('change', handleCheckboxClick);
 
-    $('.expand').click(function(){
+    $('.expand, .expandir').click(function(){
         $(this).find('i').toggleClass('fas fa-caret-right fas fa-caret-down');
+        $('#div_filtro').toggleClass('col-md-8');
     });
 </script>
 @stop

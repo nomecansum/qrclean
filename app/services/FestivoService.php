@@ -94,13 +94,15 @@ class FestivoService
             $fes->save();
 
             //dd($fes);
-            savebitacora("Festivo ".$r->des_festivo. " creado");
+
+            savebitacora("Festivo ".$r->des_festivo. " creado" ,"Festivos","insertar","OK");
             return [
                 'result' => true,
                 'mensaje' => "Festivo ".$r->des_festivo. " creado",
                 'id'=>$fes->cod_festivo
             ];
             } catch(\Exception $e){
+            savebitacora("Ocurrio un error procesndo el festivo ".mensaje_excepcion($e) ,"Festivos","insertar","ERROR");
             return [
                 'result' => false,
                 'mensaje' => "Ocurrio un error procesndo el festivo ".mensaje_excepcion($e)
@@ -143,13 +145,15 @@ class FestivoService
             $fes->save();
 
 
-            savebitacora("Festivo ".$r->des_festivo. " actualizado" );
+
+            savebitacora("Festivo ".$r->des_festivo. " actualizado" ,"Festivos","insertar","OK");
             return [
                 'result' => true,
                 'mensaje' => "Festivo ".$r->des_festivo. " actualizado",
                 'id'=>$fes->cod_festivo
             ];
         } catch(\Exception $e){
+            avebitacora("Ocurrio un error procesndo el festivo ".mensaje_excepcion($e) ,"Festivos","insertar","ERROR");
             return [
                 'result' => false,
                 'mensaje' => "Ocurrio un error procesndo el festivo ".mensaje_excepcion($e)

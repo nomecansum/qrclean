@@ -200,7 +200,7 @@
 									<label for="hora_liberar_puestos">Hora def. de liberar</label><br>
 									<input type="time" autocomplete="off" name="hora_liberar_puestos" id="hora_liberar_puestos"   class="form-control" value="{{isset($config->hora_liberar_puestos)?$config->hora_liberar_puestos:'23:59'}}" />
 								</div> --}}
-								<div class="form-group col-md-2" style="{{ $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
+								<div class="form-group col-md-2" style="{{ isset($config->mca_liberar_puestos_auto) && $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
 									<label for="mca_mostrar_puestos_reservas">Mostrar puestos reservas</label><br>
 									<select name="mca_mostrar_puestos_reservas" id="mca_mostrar_puestos_reservas" class="form-control" style="width: 100%">
 										<option value="D" {{ isset($config->mca_mostrar_puestos_reservas)&&$config->mca_mostrar_puestos_reservas=='D'?'selected':'' }}>Solo disponibles</option>

@@ -12,6 +12,7 @@
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
         <li class="breadcrumb-item">Configuracion</li>
+        <li class="breadcrumb-item">Utilidades</li>
         <li class="breadcrumb-item"><a href="{{url('/users')}}">señaletica</a></li>
         <li class="breadcrumb-item active">configurador de url</li>
     </ol>
@@ -109,6 +110,7 @@
 @section('scripts')
     <script>
         $('.configuracion').addClass('active active-sub');
+        $('.menu_utilidades').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
         $('.mkd').addClass('active-link');
         var lista=[];

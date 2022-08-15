@@ -237,6 +237,26 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/save_zonas','PlantasController@save_zonas')->name('plantas.puestos.save_zonas')->where('id', '[0-9]+');
     });
 
+    ////////////////////////////   DEPARTAMENTOS   ////////////////////////////////
+	Route::group(['prefix' => 'departments'], function() {
+	    Route::get('/',['middleware'=>'permissions:["Departamentos"],["R"]', 'uses' => 'DepartmentsController@index'])->name('departamentos.index');
+		Route::get('create',['middleware'=>'permissions:["Departamentos"],["W"]', 'uses' => 'DepartmentsController@create']);
+		Route::post('save',['middleware'=>'permissions:["Departamentos"],["W"]', 'uses' => 'DepartmentsController@save']);
+        Route::get('edit/{id}',['middleware'=>'permissions:["Departamentos"],["C"]', 'uses' => 'DepartmentsController@edit']);
+		Route::post('update',['middleware'=>'permissions:["Departamentos"],["C"]', 'uses' => 'DepartmentsController@update']);
+		Route::get('delete/{id}',['middleware'=>'permissions:["Departamentos"],["D"]', 'uses' => 'DepartmentsController@delete']);
+	});
+
+    ////////////////////////////   COLECTIVOS   ////////////////////////////////
+    Route::group(['prefix' => 'collective'], function() {
+        Route::get('/',['middleware'=>'permissions:["Colectivos"],["R"]', 'uses' => 'CollectiveController@index'])->name('departamentos.index');
+        Route::get('create',['middleware'=>'permissions:["Colectivos"],["W"]', 'uses' => 'CollectiveController@edit']);
+        Route::post('save',['middleware'=>'permissions:["Colectivos"],["W"]', 'uses' => 'CollectiveController@save']);
+        Route::get('edit/{id}',['middleware'=>'permissions:["Colectivos"],["C"]', 'uses' => 'CollectiveController@edit']);
+        Route::post('update/{id}',['middleware'=>'permissions:["Colectivos"],["C"]', 'uses' => 'CollectiveController@update']);
+        Route::get('delete/{id}',['middleware'=>'permissions:["Colectivos"],["D"]', 'uses' => 'CollectiveController@delete']);
+    });
+
     ////////////////////RONDAS DE LIMPIEZA Y MANTENIMIENTO////////////////////
     Route::group(['prefix' => 'rondas'], function () {
         Route::get('/view/{id}/{print}', 'LimpiezaController@view')->name('rondas.view');
@@ -481,6 +501,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/regiones/{id_cliente}', 'CombosController@combo_regiones');
         Route::get('/provincias/{id_cliente}', 'CombosController@combo_provincias');
         Route::get('/paises/{id_cliente}', 'CombosController@combo_paises');
+        Route::get('/ReloadDepartamentoPadre/{cliente}/{padre}/{id}', 'CombosController@ReloadDepartamentoPadre');
     });
     Route::group(['prefix' => 'filters'], function () {
         Route::post('/loadedificios', 'CombosController@loadedificios');

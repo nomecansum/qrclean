@@ -11,7 +11,7 @@
 @section('breadcrumb')
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
-        <li class="breadcrumb-item">Ccnfiguracion</li>
+        <li class="breadcrumb-item">Configuracion</li>
         <li class="breadcrumb-item"><a href="{{url('/users')}}">usuarios</a></li>
         <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>
     </ol>

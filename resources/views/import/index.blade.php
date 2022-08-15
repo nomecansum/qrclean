@@ -14,7 +14,8 @@
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
         <li class="breadcrumb-item">Configuracion</li>
-        <li class="breadcrumb-item"><a href="{{url('/import')}}">Importar datos</a></li>
+        <li class="breadcrumb-item">Utilidades</li>
+        <li class="breadcrumb-item"><a href="{{url('/import')}}">importar datos</a></li>
     </ol>
 @endsection
 
@@ -236,7 +237,7 @@ Dropzone.options.dZUpload= {
 }
 
     $('.configuracion').addClass('active active-sub');
-    $('.menu_parametrizacion').addClass('active active-sub');
+    $('.menu_utilidades').addClass('active active-sub');
     $('.importar').addClass('active-link');
 </script>
 @endsection

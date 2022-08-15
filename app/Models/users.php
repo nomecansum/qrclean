@@ -53,7 +53,8 @@ class users extends Model
                   'token_acceso',
                   'token_expires',
                   'val_timezone',
-                  'val_vista_puestos'
+                  'val_vista_puestos',
+                  'id_departamento'
               ];
 
     /**

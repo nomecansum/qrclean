@@ -15,5 +15,13 @@
     .bg-yellow{
         background-color: #fefef0 !important;
     }
+
+    #mainnav-menu > .active-sub .active-sub > a{
+        font-weight: 200 !important;
+    }
+
+    .breadcrumb > li{
+        text-transform: lowercase !important;
+    }
     
 </style>

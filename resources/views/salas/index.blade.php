@@ -13,8 +13,9 @@
 @section('breadcrumb')
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
-        <li class="breadcrumb-item">Parametrizacion</li>
-        <li class="breadcrumb-item active"><a href="{{url('/users')}}">Estado de salas de reunion</a></li>
+        <li class="breadcrumb-item">parametrizacion</li>
+	    <li class="breadcrumb-item">espacios</li>
+        <li class="breadcrumb-item active"><a href="{{url('/salas')}}">salas de reunion</a></li>
 @endsection
 
 @section('content')
@@ -48,6 +49,7 @@
     <script>
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
+	    $('.espacios').addClass('active active-sub');
         $('.salas').addClass('active-link');
 
         $('#fecha').daterangepicker({

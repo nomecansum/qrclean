@@ -12,7 +12,8 @@
 	<ol class="breadcrumb">
 		<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
 		<li class="breadcrumb-item">Configuracion</li>
-		<li class="breadcrumb-item active"><a href="{{url('/users')}}">Tareas programadas</a></li>
+		<li class="breadcrumb-item">Utilidades</li>
+		<li class="breadcrumb-item active"><a href="{{url('/users')}}">tareas programadas</a></li>
 		{{-- <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li> --}}
 	</ol>
 @endsection
@@ -257,6 +258,7 @@
 <script src="{{url('/plugins/jQuery-slimScroll-1.3.8/jquery.slimscroll.min.js')}}"></script>
     <script>
         $('.configuracion').addClass('active active-sub');
+		$('.menu_utilidades').addClass('active active-sub');
         $('.tareas_programadas').addClass('active-link');
 	</script>
 	

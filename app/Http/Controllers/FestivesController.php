@@ -8,6 +8,7 @@ use Auth;
 use DB;
 use Carbon\Carbon;
 use App\Services\FestivoService;
+use App\Models\festivos;
 
 class FestivesController extends Controller
 {
@@ -207,15 +208,22 @@ class FestivesController extends Controller
 					'id_cliente' => $cliente,
 				]);
 			}
+			savebitacora("Se ha creado el calendario para el año ".$r->to." a partir del año ".$r->from ,"Festivos","calendar_regenerar","OK");
+			return [
+				'title' => trans('strings.festives'),
+				'message' => "Se ha creado el calendario para el año ".$r->to." a partir del año ".$r->from,
+				'url' => [url('festives')]
+			];
 		} catch(\Exception $e){
-
+			savebitacora("Error creando calendario para el año ".$r->to." a partir del año ".$r->from ,"Festivos","calendar_regenerar","ERROR");
+			return [
+				'title' => trans('strings.festives'),
+				'error' => "Error creando calendario para el año ".$r->to." a partir del año ".$r->from,
+				//'url' => [url('festives')]
+			];
 		}
 
-		return [
-			'title' => trans('strings.festives'),
-            'message' => "Se ha creado el calendario para el año ".$r->to." a partir del año ".$r->from,
-            'url' => [url('festives')]
-		];
+		
 	}
 
 	public function TablaFilter(Request $r)
@@ -440,13 +448,15 @@ class FestivesController extends Controller
 	{
 		validar_acceso_tabla($id,"festivos");
 		$svc_fes=new FestivoService;
-
+		$fes=festivos::find($id);
 		$resultado=$svc_fes->delete($id);
-
+		
 		if($resultado['result'])
 			{
+				savebitacora("Se ha borrado el festivo ".$fes->des_festivo ,"Festivos","delete","OK");
 				flash($resultado['mensaje'])->success();
 			} else{
+				savebitacora("ERROR borrando festivo ".$resultado['mensaje'] ,"Festivos","delete","ERROR");
 				flash($resultado['mensaje'])->error();
 			}
 		return back();

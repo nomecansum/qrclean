@@ -7,7 +7,8 @@
 <ol class="breadcrumb">
     <li><a href="{{url('/')}}"><i class="demo-pli-home"></i> </a></li>
     <li class="">Configuracion</li>
-    <li class="active">Perfiles</li>
+	<li class="breadcrumb-item">Permisos</li>
+    <li class="active">perfiles</li>
 </ol>
 
 @endsection
@@ -146,6 +147,10 @@
 
 	$('#btn_nueva_seccion').click(function(){
 		$('#editor').show();
+		$('#editor').load("{{ url('profiles/edit') }}/0", function(data){
+			$('.box-title').html("Crear perfil");
+			$('#formperfil').attr("action","{{url('profiles/save')}}")
+		});
 		animateCSS('#editor','bounceInRight');
 		$('.box-title').html("Crear perfil");
 		$('#id').val(0);

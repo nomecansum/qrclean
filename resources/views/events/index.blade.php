@@ -12,6 +12,7 @@
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
         <li class="breadcrumb-item">Configuracion</li>
+        <li class="breadcrumb-item">Utilidades</li>
         <li class="breadcrumb-item active">eventos</li>
     </ol>
 @endsection
@@ -141,6 +142,7 @@
     <script src="{{url('/plugins/jQuery-slimScroll-1.3.8/jquery.slimscroll.min.js')}}"></script>
     <script>
         $('.configuracion').addClass('active active-sub');
+        $('.menu_utilidades').addClass('active active-sub');
         $('.eventos').addClass('active-link');
 
         $('.log_regla').click(function(){

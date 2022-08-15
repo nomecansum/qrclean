@@ -7,7 +7,8 @@
 <ol class="breadcrumb">
     <li><a href="{{url('/')}}"><i class="demo-pli-home"></i> </a></li>
     <li class="">Configuracion</li>
-    <li class="active">Secciones</li>
+	<li class="breadcrumb-item">Permisos</li>
+    <li class="active">secciones</li>
 </ol>
 
 @endsection

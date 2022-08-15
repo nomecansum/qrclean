@@ -234,22 +234,73 @@
                         <!--Submenu-->
                         <ul class="collapse">
                             @if(checkPermissions(['Bitacora'],['R']))<li class="bitacora"><a href="/bitacoras"><i class="fad fa-clipboard-list"></i> Bitacora</a></li> @endif
-                            @if(checkPermissions(['Clientes'],['R']))<li class="clientes"><a href="/clientes"><i class="fad fa-user-tie"></i> Clientes</a></li> @endif
-                            @if(checkPermissions(['Usuarios'],['R']))
-                               
-                                <li class="menu_usuarios">
+                           
+                            
+                            
+                            
+                           
+                            @if(checkPermissions(['Parametrizacion'],['R']))
+                                <li class="menu_parametrizacion">
                                     <a href="#">
-                                        <i class="fad fa-user"></i>
-                                        <span class="menu-title">  Usuarios</span>
+                                        <i class="fad fa-browser"></i>
+                                        <span class="menu-title">  Parametrizacion</span>
                                         <i class="arrow"></i>
                                     </a>
                                     <ul class="collapse">
-                                        @if(checkPermissions(['Usuarios'],['R'])) <li class="usuarios"><a href="/users"><i class="fad fa-user"></i>Gestion usuarios</a></li>  @endif
-                                        @if(checkPermissions(['Plantas usuarios'],['R']))<li class="plantas_usuarios"><a href="/users/plantas_usuarios"> <i class="fas fa-layer-plus"></i> Asignacion de plantas</a></li> @endif
-                                        @if(checkPermissions(['Puestos supervisores'],['R']))<li class="puestos_supervisores"><a href="/users/puestos_supervisores"> <i class="fad fa-vector-square"></i> Supervision de puestos</a></li> @endif
+                                        <li class="espacios">
+                                            <a href="#">
+                                                <i class="fa-duotone fa-city"></i>
+                                                <span class="menu-title">  Espacios</span>
+                                                <i class="arrow"></i>
+                                            </a>
+                                            <ul class="collapse">
+                                                @if(checkPermissions(['Clientes'],['R']))<li class="clientes text-nowrap ml-2"><a href="/clientes"><i class="fad fa-user-tie"></i> Clientes</a></li> @endif
+                                                @if(checkPermissions(['Edificios'],['R']))<li class="edificios text-nowrap ml-2"><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li> @endif
+                                                @if(checkPermissions(['Plantas'],['R']))<li class="plantas text-nowrap ml-2"><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li> @endif
+                                                @if(checkPermissions(['Puestos'],['R']))<li class="puestos text-nowrap ml-2"><a href="/puestos"> <i class="fad fa-desktop-alt"></i> Puestos</a></li> @endif
+                                                @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas text-nowrap ml-2"><a href="/salas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas reunion</a></li> @endif
+                                                @if(checkPermissions(['Tipos de puesto'],['R']))<li class="puestostipos  text-nowrap ml-2"><a href="/puestos/tipos"> <i class="fal fa-desktop-alt"></i> Tipos de puesto</a></li> @endif
+                                                @if(checkPermissions(['Tags'],['R']))<li class="tags  text-nowrap ml-2"><a href="/tags"> <i class="fad fa-tags"></i> Tags</a></li> @endif
+                                                @if(checkPermissions(['Encuestas'],['R']))<li class="encuestas text-nowrap ml-2"><a href="/encuestas"><i class="fad fa-poll-h"></i> Encuestas</a></li> @endif
+                                            </ul>
+                                        </li>
+                                        @if(checkPermissions(['Usuarios'],['R']))
+                                        <li class="menu_usuarios">
+                                            <a href="#">
+                                                <i class="fad fa-user"></i>
+                                                <span class="menu-title">  Personas</span>
+                                                <i class="arrow"></i>
+                                            </a>
+                                            <ul class="collapse">
+                                                @if(checkPermissions(['Usuarios'],['R'])) <li class="usuarios text-nowrap ml-2"><a href="/users"><i class="fad fa-user"></i>Usuarios</a></li>  @endif
+                                                @if(checkPermissions(['Plantas usuarios'],['R']))<li class="plantas_usuarios text-nowrap ml-2"><a href="/users/plantas_usuarios"> <i class="fas fa-layer-plus"></i> Asignar plantas</a></li> @endif
+                                                @if(checkPermissions(['Puestos supervisores'],['R']))<li class="puestos_supervisores text-nowrap ml-2"><a href="/users/puestos_supervisores"> <i class="fa-duotone fa-magnifying-glass-location"></i> Supervision puestos</a></li> @endif
+                                                @if(checkPermissions(['Departamentos'],['R']))<li class="departamentos text-nowrap ml-2"><a href="/departments"><i class="fa-solid fa-sitemap"></i> Departamentos</a></li> @endif
+                                                @if(checkPermissions(['Colectivos'],['R']))<li class="colectivos text-nowrap ml-2"><a href="/collective"><i class="fa-solid fa-user-tag"></i> Colectivos</a></li> @endif
+                                                @if(checkPermissions(['Turnos'],['R']))<li class="turnos text-nowrap ml-2"><a href="/turnos"><i class="fa-solid fa-repeat-1"></i> Turnos</a></li> @endif
+                                                @if(checkPermissions(['Festivos'],['R']))<li class="festivos text-nowrap ml-2"><a href="/festives"><i class="fa-solid fa-calendar-range"></i> Festivos</a></li> @endif
+                                            </ul>
+                                        </li>
+                                        @endif
+                                        @if(checkPermissions(['Tipos de incidencia'],['R']))
+                                        <li class="tipos_incidencia">
+                                            <a href="#">
+                                                <i class="fad fa-exclamation-triangle"></i>
+                                                <span class="menu-title">  Incidencias</span>
+                                                <i class="arrow"></i>
+                                            </a>
+                                            <ul class="collapse">
+                                                @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="incidencias_tipos text-nowrap ml-2"><a href="/incidencias/tipos"> <i class="fad fa-exclamation-triangle"></i> Tipos de incidencia</a></li> @endif
+                                                @if(checkPermissions(['Causas de cierre'],['R']))<li class="incidencias_causas text-nowrap ml-2"><a href="/incidencias/causas"> <i class="fad fa-times-hexagon"></i> Causas de cierre</a></li> @endif
+                                                @if(checkPermissions(['Estados de incidencia'],['R']))<li class="incidencias_estados text-nowrap ml-2"><a href="/incidencias/estados"> <i class="fad fa-sign"></i> Estados</a></li> @endif
+                                            </ul>
+                                        </li>
+                                        @endif
                                     </ul>
                                 </li>
                             @endif
+
+
                             @if(checkPermissions(['Permisos'],['R']))
                                 <li class="menu_permisos">
                                     <a href="#">
@@ -264,50 +315,21 @@
                                     </ul>
                                 </li>
                             @endif
-                            
-                            @if(checkPermissions(['Tipos de incidencia'],['R']))
-                            <li class="tipos_incidencia">
+                            <li class="menu_utilidades">
                                 <a href="#">
-                                    <i class="fad fa-exclamation-triangle"></i>
-                                    <span class="menu-title">  Incidencias</span>
+                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                    <span class="menu-title">  Utilidades</span>
                                     <i class="arrow"></i>
                                 </a>
                                 <ul class="collapse">
-                                    @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="incidencias_tipos text-nowrap"><a href="/incidencias/tipos"> <i class="fad fa-exclamation-triangle"></i> Tipos de incidencia</a></li> @endif
-                                    @if(checkPermissions(['Causas de cierre'],['R']))<li class="incidencias_causas"><a href="/incidencias/causas"> <i class="fad fa-times-hexagon"></i> Causas de cierre</a></li> @endif
-                                    @if(checkPermissions(['Estados de incidencia'],['R']))<li class="incidencias_estados"><a href="/incidencias/estados"> <i class="fad fa-sign"></i> Estados</a></li> @endif
+                                    @if(checkPermissions(['Tareas programadas'],['R']))<li class="tareas_programadas"><a href="/tasks" class="text-nowrap"> <i class="mdi mdi-camera-timer"></i>Tareas programadas</a></li> @endif
+                                    @if (checkPermissions(['Eventos'],["R"]))<li class="eventos"><a href="{{url('/events')}}"><i class="mdi mdi-engine"></i> Eventos</a></li>@endif
+                                    @if(checkPermissions(['Señaletica'],['R']))<li class="mkd"><a href="/MKD"><i class="fad fa-sign"></i> Señaletica</a></li> @endif
+                        
+                                    @if(checkPermissions(['Importar datos'],['W']))<li class="importar"> <a href="/import"><i class="fad fa-upload"></i> Importar datos</a></li> @endif
                                 </ul>
                             </li>
-                            @endif
-                            @if(checkPermissions(['Parametrizacion'],['R']))
-                                <li class="menu_parametrizacion">
-                                    <a href="#">
-                                        <i class="fad fa-browser"></i>
-                                        <span class="menu-title">  Parametrizacion</span>
-                                        <i class="arrow"></i>
-                                    </a>
-                                    <ul class="collapse">
-                                        @if(checkPermissions(['Edificios'],['R']))<li class="edificios"><a href="/edificios"><i class="fad fa-building"></i> Edificios</a></li> @endif
-                                        @if(checkPermissions(['Plantas'],['R']))<li class="plantas"><a href="/plantas"> <i class="fad fa-layer-group"></i> Plantas</a></li> @endif
-                                        @if(checkPermissions(['Puestos'],['R']))<li class="puestos"><a href="/puestos"> <i class="fad fa-desktop-alt"></i> Puestos</a></li> @endif
-                                        @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas"><a href="/salas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas reunion</a></li> @endif
-                                        {{-- @if(checkPermissions(['Puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif --}}
-                                        @if(checkPermissions(['Turnos'],['R']))<li class="turnos"><a href="/turnos"><i class="fa-solid fa-repeat-1"></i> Turnos</a></li> @endif
-                                        @if(checkPermissions(['Festivos'],['R']))<li class="festivos"><a href="/festives"><i class="fa-solid fa-calendar-range"></i> Festivos</a></li> @endif
-
-                                        @if(checkPermissions(['Tipos de puesto'],['R']))<li class="puestostipos text-nowrap"><a href="/puestos/tipos"> <i class="fal fa-desktop-alt"></i> Tipos de puesto</a></li> @endif
-                                        @if(checkPermissions(['Tags'],['R']))<li class="tags text-nowrap"><a href="/tags"> <i class="fad fa-tags"></i> Tags</a></li> @endif
-                                        
-                                        @if(checkPermissions(['Encuestas'],['R']))<li class="encuestas"><a href="/encuestas"><i class="fad fa-poll-h"></i> Encuestas</a></li> @endif
-                                        @if(checkPermissions(['Señaletica'],['R']))<li class="mkd"><a href="/MKD"><i class="fad fa-sign"></i> Señaletica</a></li> @endif
-                                        
-                                        @if(checkPermissions(['Importar datos'],['W']))<li class="importar"> <a href="/import"><i class="fad fa-upload"></i> Importar datos</a></li> @endif
-                                    </ul>
-                                </li>
-                            @endif
                             
-                            @if(checkPermissions(['Tareas programadas'],['R']))<li class="tareas_programadas"><a href="/tasks" class="text-nowrap"> <i class="mdi mdi-camera-timer"></i>Tareas programadas</a></li> @endif
-                            @if (checkPermissions(['Eventos'],["R"]))<li><a href="{{url('/events')}}"><i class="mdi mdi-engine"></i> Eventos</a></li>@endif
                         </ul>
                     </li>
                     @endif

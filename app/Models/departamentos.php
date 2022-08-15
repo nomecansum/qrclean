@@ -34,7 +34,7 @@ class departamentos extends Model
      */
     protected $fillable = [
                   'cod_centro',
-                  'cod_cliente',
+                  'id_cliente',
                   'cod_departamento_padre',
                   'nom_departamento',
                   'num_nivel'

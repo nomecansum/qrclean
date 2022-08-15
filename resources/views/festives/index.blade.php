@@ -25,8 +25,9 @@
 @section('breadcrumb')
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
-        <li class="breadcrumb-item">Parametrizacion</li>
-        <li class="breadcrumb-item active"><a href="{{url('/festivos')}}">Dias festivos</a></li>
+        <li class="breadcrumb-item">parametrizacion</li>
+		<li class="breadcrumb-item">personas</li>
+        <li class="breadcrumb-item active"><a href="{{url('/festivos')}}">dias festivos</a></li>
 	</ol
 @endsection
 
@@ -214,6 +215,7 @@
 <script>
 	$('.configuracion').addClass('active active-sub');
     $('.menu_parametrizacion').addClass('active active-sub');
+	$('.menu_usuarios').addClass('active active-sub');
 	$('.festivos').addClass('active-link');
 
 var anio = {{ Carbon\Carbon::now()->year }};

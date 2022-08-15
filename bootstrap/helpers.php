@@ -14,7 +14,7 @@ function stripAccents($str) {
 
 function getProfilePic()
 {
-    $e = \DB::table('cug_empleados')->where('cod_empleado',Auth::user()->cod_empleado)->first();
+    $e = \DB::table('empleados')->where('cod_empleado',Auth::user()->cod_empleado)->first();
     if ($e) {
         if ($e->img_empleado) {
             return url('uploads/employees/images',$e->img_empleado);
@@ -251,7 +251,6 @@ function decimal_to_time($dec)
     }
 }
 
-
 function get_local_tz(){
     try{
         $ip = request()->ip();
@@ -263,7 +262,6 @@ function get_local_tz(){
     }
     return $tz;
 }
-
 
 function time_to_dec($time,$out='s'){
     //Devuelve en segundos una fecha pasada en HH:mm:ss
@@ -388,7 +386,6 @@ function enviar_email($user,$from,$to,$to_name,$subject,$plantilla,$error=null,$
     }
     return true;
 }
-
 
 function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1,$triangulo="alerta_05"){
     try{
@@ -635,7 +632,6 @@ function genColorCodeFromText($text,$min_brightness=100,$spec=10)
     return '#'.$output;
 }
 
-
 function checkPermissions($secciones = [],$permisos = [])
 {
     $a = 0;
@@ -739,7 +735,6 @@ function beauty_fecha($date,$mostrar_hora=-1){
     }
     return "<b>".$fecha."</b> ".$hora;
 }
-
 
 function validar_request($r,$metodo_notif,$tipo,$reglas,$mensajes=[]){
     $validator = Validator::make($r->all(), $reglas,$mensajes);
@@ -850,10 +845,20 @@ function validar_acceso_tabla($id,$tabla){
             $ruta="festivos.index";
             break;
         case "turnos":
-                $descriptivo="turno";
-                $campo="id_turno";
-                $ruta="turnos.index";
-                break;
+            $descriptivo="turno";
+            $campo="id_turno";
+            $ruta="turnos.index";
+            break;
+        case "departamentos":
+            $descriptivo="departamento";
+            $campo="cod_departamento";
+            $ruta="departamentos.index";
+            break;
+        case "colectivos":
+            $descriptivo="colectivo";
+            $campo="cod_colectivo";
+            $ruta="colectivos.index";
+            break;
         default:
             $descriptivo=$tabla;
     }
@@ -1045,26 +1050,7 @@ function config_cliente($clave,$cliente=null){
     } catch (\Exception $e){
         return null;
     }
-    
-//Decodificar JSON mejorado
-
-function decodeComplexJson($string) { # list from www.json.org: (\b backspace, \f formfeed)
-    $string = preg_replace("/[\r\n]+/", "", $string); //Retornos de carro
-    $string = preg_replace('/[ ]{2,}|[\t]/', '', trim($string));  //tabs
-    $json = utf8_encode($string);
-    $json = json_decode($json);
-    return $json;
-}
-
-//Funcion para que las tareas programadas escriban su log
-function log_tarea($mensaje,$id,$tipo='info'){
-    DB::table('tareas_programadas_log')->insert([
-        'txt_log'=>$mensaje,
-        'cod_tarea'=>$id,
-        'tip_mensaje'=>$tipo,
-        'fec_log'=>Carbon::now()
-    ]);
-}
+}    
 
 //Funcion para que los eventos escriban su log
 function log_evento($texto,$cod_regla,$tipo="info"){
@@ -1092,4 +1078,113 @@ function log_evento($texto,$cod_regla,$tipo="info"){
     return $days[$num];
 }
 
+//Funciones para la gestion de departamentos
+function lista_departamentos($tipo, $id, $r = null){
+    global $arr_dep;
+    function pintarhijos($dep,$padre){
+        global $arr_dep;
+        foreach($dep as $d){
+            if($d->cod_departamento_padre==$padre){
+                $nodo= new \StdClass();
+                $nodo=(object) ["cod_departamento"=>$d->cod_departamento,"nom_departamento"=>$d->nom_departamento,"num_nivel"=>$d->num_nivel,"cod_padre"=>$d->cod_departamento_padre,"des_centro"=>"","empleados"=>$d->empleados,"nom_cliente"=>$d->nom_cliente,"cod_cliente"=>$d->cod_cliente,"img_logo"=>$d->img_logo];
+                $arr_dep[]=$nodo;
+                pintarhijos($dep,$d->cod_departamento);
+            }
+        }
+    }
+    $dep = DB::table('departamentos')
+    ->select('departamentos.cod_departamento', 'departamentos.nom_departamento', 'departamentos.cod_departamento_padre', 'clientes.nom_cliente','clientes.img_logo','clientes.id_cliente as cod_cliente','departamentos.num_nivel')
+    ->selectraw('(select count(id) from users where id_departamento=departamentos.cod_departamento) as empleados')
+    ->join('clientes','clientes.id_cliente','departamentos.id_cliente')
+    ->where('departamentos.cod_departamento','>',0)
+    ->whereNull('clientes.fec_borrado')
+    ->groupBy('departamentos.cod_departamento',
+    'departamentos.nom_departamento',
+    'clientes.nom_cliente',
+    'departamentos.cod_departamento_padre',
+    'departamentos.num_nivel')
+    ->orderby('clientes.id_cliente')
+    ->orderby('departamentos.nom_departamento');
+
+    switch($tipo){
+        case "cliente":
+            $dep = $dep->where('departamentos.id_cliente', $id);
+            $dep=$dep->get();
+            pintarhijos($dep,0);
+        break;
+        case "departamento":
+            $cliente=departamentos::find($id)->cod_cliente;
+            $dep = $dep->where('departamentos.id_cliente', $cliente);
+            $dep=$dep->get();
+            pintarhijos($dep,$id);
+        break;
+        case "global":
+            $dep = $dep->when(!isadmin(), function($query){
+                $query->wherein('departamentos.id_cliente', clientes());
+            });
+
+			$dep = $dep->where(function($q) use ($r){
+				if (session('cod_cliente'))
+					$q->where('departamentos.id_cliente', session('cod_cliente'));
+				elseif(!empty($r->cod_cliente))
+					$q->wherein('departamentos.id_cliente', $r->cod_cliente);
+				else $q->where('departamentos.id_cliente', Auth::user()->id_cliente);
+			});
+            $dep=$dep->get();
+            pintarhijos($dep,0);
+        break;
+        default:
+            return;
+    }
+    return($arr_dep);
+}
+
+function departamentos_hijos($id){
+    $data = DB::select( DB::raw("
+    with recursive dep (cod_departamento, nom_departamento, num_nivel, cod_departamento_padre) as (
+        select     departamentos.cod_departamento,
+                   departamentos.nom_departamento,
+                   departamentos.num_nivel,
+                   departamentos.cod_departamento_padre
+        from       departamentos
+        where      cod_departamento_padre = ".$id."
+        union all
+        select     p.cod_departamento,
+                   p.nom_departamento,
+                   p.num_nivel,
+                   p.cod_departamento_padre
+        from       departamentos p
+        inner join dep
+                on p.cod_departamento_padre = dep.cod_departamento
+      )
+      select * from dep order by cod_departamento_padre;"));
+
+      return $data;
+}
+
+function departamentos_padres($id,$salida='collect'){
+    $data = DB::select( DB::raw("
+    with recursive dep (cod_departamento, nom_departamento, num_nivel, cod_departamento_padre) as (
+        select     departamentos.cod_departamento,
+                     departamentos.nom_departamento,
+                   departamentos.num_nivel,
+                   departamentos.cod_departamento_padre
+        from       departamentos
+        where      cod_departamento = ".$id."
+        union all
+        select     p.cod_departamento,
+                   p.nom_departamento,
+                   p.num_nivel,
+                   p.cod_departamento_padre
+        from       departamentos p
+        inner join dep
+                on p.cod_departamento = dep.cod_departamento_padre
+      )
+      select * from dep order by cod_departamento_padre;"));
+
+      if($salida!='simple'){
+        return $data;
+      } else {
+          return Collect($data)->pluck('cod_departamento')->toarray();
+      }
 }

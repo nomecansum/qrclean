@@ -76,8 +76,8 @@
             @endif
             {{-- {{$f->des_centro}} --}}
             <div class="pull-right floating-like-gmail mt-3">
-                @if(checkPermissions(['Festivos'],["W"]))<a href="#" onclick="editar_festivo({{ $f->cod_festivo }});" class="btn btn-xs btn-success">{{trans('strings.edit')}}</a>@endif
-                @if(checkPermissions(['Festivos'],["D"]))<a href="#eliminar-festivo-{{$f->cod_festivo}}" data-toggle="modal" class="btn btn-xs btn-danger">{{trans('strings.delete')}}</a>@endif
+                @if(checkPermissions(['Festivos'],["W"]))<a href="#" onclick="editar_festivo({{ $f->cod_festivo }});" class="btn btn-xs btn-info"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                @if(checkPermissions(['Festivos'],["D"]))<a href="#eliminar-festivo-{{$f->cod_festivo}}" data-toggle="modal" class="btn btn-xs btn-danger"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
             </div>
             @if(checkPermissions(['Festivos'],["D"]))
             <div class="modal fade" id="eliminar-festivo-{{$f->cod_festivo}}">

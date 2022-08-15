@@ -228,5 +228,10 @@
         "model-name": "departamentos",
         "resource-file": "departamentos.json",
         "table-name": "departamentos"
+    },
+    {
+        "model-name": "colectivos",
+        "resource-file": "colectivos.json",
+        "table-name": "colectivos"
     }
 ]

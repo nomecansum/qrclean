@@ -313,6 +313,34 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+											<div class="form-group">
+												<label>Departamento</label>
+													<select   name="id_departamento" class="select2 tab_general" style="width: 100%" id="id_departamento">
+														<option value="0"> </option>
+														@php $departamentos=lista_departamentos("cliente",$users->id_cliente); @endphp
+														@isset($departamentos)
+															@foreach($departamentos as $departamento)
+                                                                <option style="padding-left: 20px"  value="{{ $departamento->cod_departamento}}"  {{ old('id_departamento', optional($users)->id_departamento) == $departamento->cod_departamento ? 'selected' : '' }}>
+                                                                    @for($i = 1; $i <= $departamento->num_nivel; $i++) &nbsp;&nbsp;&nbsp; @endfor{{ $departamento->nom_departamento}}
+                                                                </option>
+															@endforeach
+														@endisset
+													</select>
+
+												<br>
+											</div>
+										</div>
+                                        <div class="col-md-12" >
+                                            <div class="form-group"  style="overflow: hidden">
+                                                <label class="text-nowrap">{{trans('strings.collectives')}}</label><br>
+                                                <select  name="val_colectivo[]" multiple="" class="form-control  select2" style="width: 100%" id="val_colectivo">
+                                                    @foreach ($colectivos_cliente as $col)
+                                                        <option {{ in_array($col->cod_colectivo,$colectivos_user)===true ? 'selected' : ''}} value="{{$col->cod_colectivo}}">{{$col->des_colectivo}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row rounded b-all">
                                         <div class="form-group col-md-3 ">

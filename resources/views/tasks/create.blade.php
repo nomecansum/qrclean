@@ -12,6 +12,7 @@
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
         <li class="breadcrumb-item">Configuracion</li>
+		<li class="breadcrumb-item">utilidades</li>
         <li class="breadcrumb-item"><a href="{{url('/tasks')}}">Tareas programadas</a></li>
         <li class="breadcrumb-item active">Editar tarea {{ !empty($t->des_tarea) ? $t->des_tarea : '' }}</li>
     </ol>
@@ -215,6 +216,7 @@
 @section('scripts')
     <script>
         $('.configuracion').addClass('active active-sub');
+		$('.menu_utilidades').addClass('active active-sub');
         $('.tareas_programadas').addClass('active-link');
 	</script>
 	

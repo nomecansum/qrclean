@@ -12,7 +12,9 @@
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
         <li class="breadcrumb-item">configuración</li>
-        <li class="breadcrumb-item">estados de incidencia</li>
+        <li class="breadcrumb-item">parametrizacion</li>
+	    <li class="breadcrumb-item">incidencias</li>
+        <li class="breadcrumb-item active">estados de incidencia</li>
         {{--  <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
         <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
     </ol>
@@ -134,6 +136,7 @@
 @section('scripts')
     <script>
         $('.configuracion').addClass('active active-sub');
+        $('.menu_parametrizacion').addClass('active active-sub');
         $('.tipos_incidencia').addClass('active active-sub');
         $('.incidencias_estados').addClass('active-link');
         

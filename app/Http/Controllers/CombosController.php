@@ -232,6 +232,7 @@ class CombosController extends Controller
             ->get();
         return view('resources.combo_generico',compact('datos'));
     }
+
     public function combo_regiones($id_cliente){
         $datos = DB::table('provincias')
             ->select('regiones.cod_region as id', 'nom_region as nombre')
@@ -249,6 +250,7 @@ class CombosController extends Controller
             ->get();
         return view('resources.combo_generico',compact('datos'));
     }
+
     public function combo_provincias($id_cliente){
         $datos = DB::table('provincias')
             ->select('id_prov as id', 'nombre')
@@ -266,7 +268,6 @@ class CombosController extends Controller
             ->get();
         return view('resources.combo_generico',compact('datos'));
     }
-
     
     public function search_clientes_json(Request $r){
         $r->searchTerm=strtoupper($r->searchTerm);
@@ -293,6 +294,10 @@ class CombosController extends Controller
         }
         
         //return view('combos.fill_combo_clientes',compact('clientes'));
+    }
+
+    public function ReloadDepartamentoPadre($cliente,$padre,$id){
+        return View('departments.autocomplete_dep',compact('cliente','padre','id'));
     }
 
 }

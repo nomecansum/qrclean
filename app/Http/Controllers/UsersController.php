@@ -232,9 +232,18 @@ class UsersController extends Controller
             ->where('plantas.id_cliente',$users->id_cliente)
             ->orderby('edificios.id_edificio')
             ->get();
+
+        $colectivos_cliente=DB::table('colectivos')
+            ->where('id_cliente',$users->id_cliente)
+            ->get();
+
+        $colectivos_user=DB::table('colectivos_usuarios')
+            ->where('id_usuario',$users->id)
+            ->pluck('cod_colectivo')
+            ->toarray();
         
 
-        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras','tipos_puestos','pref_turnos','tipos_puesto_usuario'));
+        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras','tipos_puestos','pref_turnos','tipos_puesto_usuario','colectivos_cliente','colectivos_user'));
     }
     /**
      * Update the specified users in the storage.
@@ -278,7 +287,6 @@ class UsersController extends Controller
             $users->update($data);
 
             //Añadimos los usuarios supervisados
-
             if(isset($request->lista_id)){
                 DB::table('users')->where('id_usuario_supervisor',$id)->update([
                     'id_usuario_supervisor'=>null
@@ -289,6 +297,21 @@ class UsersController extends Controller
                     ]);
                 }
             }
+
+            //Colectivos
+            if (isset($request->val_colectivo)) {
+                if (!is_array($request->val_colectivo)){
+                    $request->val_colectivo=explode(",",$request->val_colectivo);
+                }
+                DB::table('colectivos_usuarios')->where('id_usuario',$id)->delete();
+                foreach ($request->val_colectivo as $col) {
+                    DB::table('colectivos_usuarios')->insert([
+                        'cod_colectivo' => $col,
+                        'id_usuario' => $id
+                    ]);
+                }
+            }
+
             savebitacora('Usuario '.$request->email. ' actualizado',"Usuarios","Update","OK");
             return [
                 'title' => "Usuarios",
@@ -428,10 +451,12 @@ class UsersController extends Controller
             'val_timezone' => 'nullable|string|min:0|max:100',
             'nivel_acceso'=>'nullable',
             'token_acceso'=>'nullable',
-            'id_edificio'=>'numeric',
+            'id_edificio'=>'nullable|numeric',
             'id_turno'=>'nullable',
             'token_expires'=>'nullable|numeric',
             'list_puestos_preferidos'=>'nullable',
+            'id_departamento'=>'nullable',
+            'val_colectivo'=>'nullable',
         ];
 
 

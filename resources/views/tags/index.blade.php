@@ -12,6 +12,8 @@
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
         <li class="breadcrumb-item">configuración</li>
+        <li class="breadcrumb-item">parametrizacion</li>
+	    <li class="breadcrumb-item">espacios</li>
         <li class="breadcrumb-item">tags</li>
         {{--  <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
         <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
@@ -131,6 +133,7 @@
     <script>
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
+	    $('.espacios').addClass('active active-sub');
         $('.tags').addClass('active-link');
         
         $('#btn_nueva_puesto').click(function(){

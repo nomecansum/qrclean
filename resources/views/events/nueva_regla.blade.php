@@ -19,6 +19,7 @@
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
         <li class="breadcrumb-item">Configuracion</li>
+        <li class="breadcrumb-item">Utilidades</li>
         <li class="breadcrumb-item"><a href="{{url('/events')}}">eventos</a></li>
         <li class="breadcrumb-item active">regla de evento</li>
     </ol>
@@ -203,6 +204,7 @@
 @section('scripts')
     <script>
         $('.configuracion').addClass('active active-sub');
+        $('.menu_utilidades').addClass('active active-sub');
         $('.eventos').addClass('active-link');
     </script>
 

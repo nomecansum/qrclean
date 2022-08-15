@@ -26,7 +26,8 @@
 @section('breadcrumb')
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
-        <li class="breadcrumb-item">parametrización</li>
+        <li class="breadcrumb-item">parametrizacion</li>
+	    <li class="breadcrumb-item">espacios</li>
         <li class="breadcrumb-item active">puestos</li>
         {{--  <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
         <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
@@ -444,6 +445,7 @@
     //Menu
     $('.configuracion').addClass('active active-sub');
     $('.menu_parametrizacion').addClass('active active-sub');
+	$('.espacios').addClass('active active-sub');
     $('.puestos').addClass('active-link');
 
     $('.chk_accion').click(function(){

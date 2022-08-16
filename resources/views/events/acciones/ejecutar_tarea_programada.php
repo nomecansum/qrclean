@@ -7,6 +7,8 @@ $descripcion="Ejecuta inmediatamente la tarea programada seleccionada";
 
 $campos_notificaciones=false;
 
+$tipo_destino='*';
+
 $icono='<i class="fa-solid fa-calendar-clock"></i>';
 
 $detalle_regla=reglas::find($regla??0);

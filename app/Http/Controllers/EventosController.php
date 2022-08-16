@@ -153,6 +153,7 @@ class EventosController extends Controller
         if(!isset($campos_notificaciones)){
             $campos_notificaciones=true;
         }
+        $tipo_destino_comando=$tipo_destino??"";
         //Primero vamos a ver si la accion es una nueva (esta vacia) o tiene datos, para ello, hay que ver si tiene fichero de accion
         $accion=acciones::find($accion);
         $descripcion="";
@@ -162,7 +163,7 @@ class EventosController extends Controller
             $fic_comando=$path.'/'.$accion->nom_accion;
             include_once($fic_comando);
         }
-        //dd($accion);
+        $tipo_destino_accion=$tipo_destino??"";
         if(($accion->param_accion)!=null){
             $parametros=json_decode($accion->param_accion);
         } else {
@@ -174,7 +175,7 @@ class EventosController extends Controller
                 $parametros=[];
             }
         }
-        return view('events.param_accion',compact('regla','accion','parametros','descripcion','campos','campos_notificaciones'));
+        return view('events.param_accion',compact('regla','accion','parametros','descripcion','campos','campos_notificaciones','tipo_destino_comando','tipo_destino_accion'));
     }
 
     public function acciones_save(Request $r){

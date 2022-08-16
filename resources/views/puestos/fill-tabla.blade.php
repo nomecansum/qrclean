@@ -106,20 +106,35 @@
                                     
                                     </div>
                                 </td>
-                                <td class="text-center opts">
-                                    <a href="javascript:void(0)" onclick="hoverdiv($(this),event,'toolbutton',{{ $puesto->id_puesto }},'{{ $puesto->cod_puesto }}','{{ $puesto->token }}');"><i class="fa fa-bars add-tooltip opts" title="Acciones"></i></a>
+                                <td class="text-center opts" style="position: relative">
+                                    {{-- <a href="javascript:void(0)" onclick="hoverdiv($(this),event,'toolbutton',{{ $puesto->id_puesto }},'{{ $puesto->cod_puesto }}','{{ $puesto->token }}');"><i class="fa fa-bars add-tooltip opts" title="Acciones"></i></a> --}}
+                                    <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                                        <div class="btn-group btn-group pull-right ml-1" role="group">
+                                            @if(isAdmin() || config('app.env')=='local')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan('{{ $puesto->token }}')"  data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-qrcode" aria-hidden="true"></span> Scan</a>  @endif
+                                            @if(checkPermissions(['Puestos'],['W']))<a href="#"  class="btn btn-info btn_editar add-tooltip toolbutton ml-2" onclick="editar({{ $puesto->id_puesto }})" title="Editar puesto" data-id=""> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                            {{-- @if(checkPermissions(['Puestos'],['D']))<a href="#" data-target="#eliminar-puesto" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del toolbutton"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif --}}
+                                            @if(checkPermissions(['Reservas'],['D']))<a href="#"  title="Cancelar Reserva" class="btn btn-pink add-tooltip btn_del toolbutton" onclick="cancelar('{{ $puesto->token }}')"><span class="fad fa-calendar-times" aria-hidden="true"></span> Res</a>@endif
+                                        
+                                            @if(checkPermissions(['Puestos'],['W']))
+                                                <a href="#"  class="btn btn-success btn_estado add-tooltip toolbutton"  onclick="estado(1,'{{ $puesto->token }}')" title="Disponible" data-token="{{ $puesto->token }}"  data-estado="1" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-thumbs-up" aria-hidden="true"></span></a>
+                                                <a href="#"  class="btn btn-danger btn_estado add-tooltip toolbutton"  onclick="estado(2,'{{ $puesto->token }}')" title="Usado"  data-token="{{ $puesto->token }}"  data-estado="2" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-lock-alt" aria-hidden="true"></span></a>
+                                                <a href="#"  class="btn btn-info btn_estado add-tooltip toolbutton"  onclick="estado(3,'{{ $puesto->token }}')" title="Limpiar"  data-token="{{ $puesto->token }}"  data-estado="3" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-broom" aria-hidden="true"></span></a>
+                                                
+                                            @endif
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table> 
                 </form>
-                <div id="toolbutton"  style="display: none;position: absolute; ">
+                {{-- <div id="toolbutton"  style="display: none;position: absolute; ">
                     <div style="display: flex; flex-direction: row;">
                         <div class="pad-all rounded bg-white" style="border: 3px solid navy; background-color: #fff; ">
                             <label>Acciones<span class="font-bold ml-2" id="nombrepuesto"></span></label><br>
                             <div class="btn-group btn-group pull-right ml-1" role="group">
-                                @if(isAdmin() || config('app.env')=='local')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan()"  data-id=""> <span class="fa fa-qrcode" aria-hidden="true"></span></a>@endif
+                                @if(isAdmin() || config('app.env')=='local')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan()"  data-id=""> <span class="fa fa-qrcode" aria-hidden="true"></span> Scan</a>@endif
                                 @if(checkPermissions(['Puestos'],['W']))<a href="#"  class="btn btn-info btn_editar add-tooltip toolbutton ml-2" onclick="editar()" title="Editar puesto" data-id=""> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                                 @if(checkPermissions(['Puestos'],['D']))<a href="#" data-target="#eliminar-puesto" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del toolbutton"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
                                 @if(checkPermissions(['Reservas'],['D']))<a href="#"  title="Cancelar Reserva" class="btn btn-pink add-tooltip btn_del toolbutton" onclick="cancelar()"><span class="fad fa-calendar-times" aria-hidden="true"></span> Res</a>@endif
@@ -138,7 +153,7 @@
                             <i class="fas fa-caret-right fa-3x"></i>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

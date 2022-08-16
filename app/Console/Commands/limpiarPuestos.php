@@ -60,7 +60,6 @@ class limpiarPuestos extends Command
             $clientes=implode(",",clientes()->ToArray());
         } 
         return $clientes;
-        
     }
     
     static function params(){

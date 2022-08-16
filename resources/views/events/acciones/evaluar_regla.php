@@ -1,8 +1,12 @@
 <?php
 
 $descripcion = "Envia un email a un usuario concreto";
+
 $campos_notificaciones=false;
+
 $icono='<i class="fa-solid fa-gears"></i>';
+
+$tipo_destino='*';
 
 $params='{
     "parametros":[

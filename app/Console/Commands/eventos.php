@@ -167,6 +167,9 @@ class eventos extends Command
     
                 Log::notice("Resultado del comando: ".$resultado->respuesta);
             } catch(\Throwable $e){
+                if(config('app.env')=="local"){
+                    dump($e);
+                }
                 Log::error('Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando.', no encontrado');
                 $this->log_evento('Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando.', no encontrado',$evento->cod_regla,'error');
                 $resultado=json_decode(json_encode([
@@ -209,6 +212,9 @@ class eventos extends Command
                         //Se elimina la funcion por si hay mas acciones en la misma regla
                         unset($func_accion);
                     } catch(\Throwable $e){
+                        if(config('app.env')=="local"){
+                            dump($e);
+                        }
                         Log::error('Error al ejecutar la accion :'.$accion->nom_accion.', '.mensaje_excepcion($e));
                         $this->log_evento('Error al ejecutar la accion :'.$accion->nom_accion.', '.mensaje_excepcion($e),$evento->cod_regla,'error');
                     }

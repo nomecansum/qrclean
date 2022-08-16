@@ -58,7 +58,7 @@
     </tbody>
 </table>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 text-right">
         <button type="submit" class="btn btn-primary btn_form float-right">{{trans('general.submit')}}</button>
     </div>
 </div>

@@ -98,9 +98,9 @@
                                                         <li>{{$c}}</li>
                                                 @endforeach
                                                 <div class="pull-right floating-like-gmail mt-3" style="width: 200px">
-                                                    <a href="javascript:void(0);" data-cod_regla="{{$ev->cod_regla}}"  class="btn btn-xs btn-info log_regla">{{ __('general.detalles') }}</a>
-                                                    @if(checkPermissions(['Eventos'],['W']))<a href="{{url(config('app.carpeta_asset').'/edit',$ev->cod_regla)}}" class="btn btn-xs btn-success">{{trans('general.edit')}}</a>@endif
-                                                    @if(checkPermissions(['Eventos'],['D']))<a href="#eliminar-regla-{{$ev->cod_regla}}" data-toggle="modal" class="btn btn-xs btn-danger">{{trans('general.delete')}}</a>@endif
+                                                    <a href="javascript:void(0);" data-cod_regla="{{$ev->cod_regla}}"  class="btn btn-xs btn-mint log_regla"><i class="fa-solid fa-magnifying-glass"></i> {{__('general.detalles')}}</a>
+                                                    @if(checkPermissions(['Eventos'],['W']))<a href="{{url(config('app.carpeta_asset').'/edit',$ev->cod_regla)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>@endif
+                                                    @if(checkPermissions(['Eventos'],['D']))<a href="#eliminar-regla-{{$ev->cod_regla}}" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>@endif
                                                 </div>
                                                 <div class="modal fade" id="eliminar-regla-{{$ev->cod_regla}}">
                                                     <div class="modal-dialog">

@@ -1,8 +1,12 @@
 <?php
 
 $descripcion = "Escribe un mensaje en el log de la tarea de eventos";
+
 $campos_notificaciones=true;
+
 $icono='<i class="fa-solid fa-file-lines"></i>';
+
+$tipo_destino='*';
 
 $params='{
     "parametros":[

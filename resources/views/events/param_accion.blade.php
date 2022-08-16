@@ -15,6 +15,11 @@
 <input type="hidden" name="cod_accion" value="{{ $accion->cod_accion }}">
 <input type="hidden" name="val_iteracion" value="{{ $accion->val_iteracion }}">
 
+@if(isset($tipo_destino_comando) && isset($tipo_destino_accion) && $tipo_destino_comando!=$tipo_destino_accion && $tipo_destino_accion!='*')
+    <div class="alert alert-danger">
+        <strong>Error!</strong> El comando seleccionado esta preparado para devolver <b>{{ $tipo_destino_comando }}</b> y esta accion esta preparada para recibir <b>{{ $tipo_destino_accion }}</b>. No coinciden los tipos.
+    </div> 
+@endif
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
@@ -60,7 +65,7 @@
 @endif
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 text-right">
         <button type="submit" class="btn btn-primary btn_accion float-right">{{trans('general.submit')}}</button>
     </div>
 </div>

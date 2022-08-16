@@ -5,30 +5,22 @@
        }
 </style>
 @php
-if(isset($reglas)&&strlen($reglas->clientes)>0){
-    $clientes=DB::table('clientes')
-        ->where('id_cliente',clientes())
-        ->wherein('clientes.id_cliente',explode(",",$reglas->clientes))
+$clientes=DB::table('clientes')
+        ->wherein('id_cliente',clientes())
         ->get();
-    $clientes=collect($clientes);
-}
-else {
-    $clientes=[];
-    $clientes=collect($clientes);
-}
 @endphp
 
 <div class="row">
     <div class="form-group  pr-5 col-md-12" style="{{ (isset($hide['cli']) && $hide['cli']===1) ? 'display: none' : ''}}">
         <label>{{trans('general.clientes')}}
             @include('resources.spin_puntitos',['id_spin'=>'spin_cli','clase'=>'spin_cli'])
-        </label>
+        </label><br>
         <select class="mb-2 col-md-11  form-control" multiple="multiple" name="clientes[]" id="multi-clientes" lang="{{ config('app.lang', 'es') }}">
             @foreach ($clientes as $c)
-                <option value="{{$c->id_cliente}}" @if(isset($reglas)&&in_array($c->id_cliente,explode(",",$reglas->clientes))) selected @endif>{{$c->nombre_cliente}}</option>
+                <option value="{{$c->id_cliente}}" @if(isset($reglas)&&in_array($c->id_cliente,explode(",",$reglas->clientes))) selected @endif>{{$c->nom_cliente}}</option>
             @endforeach
         </select>
-        <button class="btn btn-info float-right mt-0 position-absolute select-all"data-select="multi-clientes" style="height: 47px"  type="button"><i class="fad fa-check-double"></i></button>
+        <button class="btn btn-primary float-right mt-0 position-absolute select-all"data-select="multi-clientes" style="height: 47px"  type="button"><i class="fad fa-check-double"></i> Todos</button>
         @if(count(clientes())==1)
                 <input type="hidden" value="{{$clientes->first()->id_cliente}}" name="clientes[]" >
         @endif
@@ -50,24 +42,7 @@ else {
     {
         placeholder: "Todos",
         allowClear: true,
-        width: '90%',
-        minimumInputLength: 3,
-        ajax: { url: "{{ asset('/combos/clientes_search') }}", type: "post", dataType: 'json', delay: 500,data: function (params) {
-        $('#spin_cli').show();
-        return {
-            searchTerm: params.term,// search term
-            _token:'{{csrf_token()}}'
-            };
-
-        },
-        processResults: function (response) {
-            $('#spin_cli').hide();
-            return {
-                results: response
-            };
-        },
-        cache: true
-        }
+        width: '90%'
     });
     $('.select-all').click(function(event) {
         $(this).parent().parent().find('select option').prop('selected', true)

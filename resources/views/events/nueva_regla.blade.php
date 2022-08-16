@@ -33,11 +33,7 @@
     }
 
     $clientes=DB::table('clientes')
-        ->where(function($q) {
-            if(!isAdmin()){
-                $q->wherein('clientes.id_cliente',clientes());
-            }
-        })
+        ->wherein('clientes.id_cliente',clientes())
         ->get();
 
 @endphp
@@ -133,7 +129,7 @@
                                     <input type="checkbox" class="form-control  magic-checkbox mt-3" name="mca_activa"  id="mca_activa" value="S" {{ isset($reglas->mca_activa)&&$reglas->mca_activa=='S'?'checked':'' }}> 
                                     <label class="custom-control-label"   for="mca_activa">Activa</label>
                                 </div>
-                                <div class="col-md-4 d-flex flex-row p-t-20">
+                                <div class="col-md-5 d-flex flex-row p-t-20">
                                     <label class="mt-2 mr-1" for="" title="{{ __('eventos.hint_tiempo_espera') }}">{{ __('eventos.intervalo_de_espera') }}</label>
                                     <input required type="number" name="int_espera" id="int_espera" class="form-control col-4" value="{{ $reglas->nomolestar??'' }}" min="0" max="365">
                                     <select class="form-control col-4"  name="tip_espera" id="tip_espera">
@@ -305,12 +301,10 @@
     });
 
     $("#cod_propietario").select2({
-            placeholder: "{{ __('general.seleccione_un_cliente') }}",
-            dropdownAutoWidth: false,
-            width: '100%',
-            minimumResultsForSearch: 1,
-            language: "es",
-        });
+        placeholder: "{{ __('general.seleccione_un_cliente') }}",
+        width: '100%',
+        language: "es",
+    });
 
 
 </script>

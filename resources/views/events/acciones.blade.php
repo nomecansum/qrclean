@@ -42,7 +42,7 @@
         <div id="it{{ $n }}" data-iteracion="{{ $n }}" data-regla="{{ $id }}" class="col-md-2 b-all rounded m-2 iteracion sortable connectedSortable mr-3" style="background-color: {{ $colores[$n-1]  }}">
             <h6 class="text-center mt-2 text-white">{{ __('eventos.iteracion') }} {{ $n }}</h6>
             @foreach($acciones->where('val_iteracion',$n)->sortby('num_orden') as $acc)
-                <div class="b-all rounded m-1 p-1 border-dark accion mb-2" data-regla="{{ $id }}" data-accion="{{ $acc->cod_accion }}" style="background-color: {{ genColorCodeFromText($acc->nom_accion.$id."AA") }}; height: 80px; color: #fff; position: relative; width:100%;">
+                <div class="b-all rounded m-1 p-1 border-dark accion mb-2" data-regla="{{ $id }}" data-accion="{{ $acc->cod_accion }}" style="background-color: {{ genColorCodeFromText($acc->nom_accion.$id."AABA") }}; height: 80px; color: #fff; position: relative; width:100%;">
                     @if(isset($acc->val_icono)) {!! $acc->val_icono !!} @endif
                     {{-- @if(config('app.env')=='local')[{{ $acc->cod_accion }}]@endif --}}
                     {{ str_replace(".php","",str_replace("_"," ",basename($acc->nom_accion))) }}<br>

@@ -142,9 +142,15 @@ $campos='{
     ]
 }';
 
-function ejecutar(){
-    //aqui va el codigo que queramos ejecutar, puede ser una simple consulta a BDD o cualquier logica compleja que se necesite
+$tipo_destino='id_puesto';  //Determina el tipo de entidad que busca para poder compararlo con el tipo de entidad que soporta la accion
 
+function ejecutar($evento,$output){
+    //aqui va el codigo que queramos ejecutar, puede ser una simple consulta a BDD o cualquier logica compleja que se necesite
+    $parametros = json_decode(json_decode($evento->param_comando));
+    //Log::debug('Parametros de busqueda '.$evento->param_comando);
+    $param1=valor($parametros,"val_margen");
+    $param2=valor($parametros,"val_texto");
+    //El identificador principal siempre tiene que ser el campo id
     $query=[];
 
     //Al final se debe retornar un JSON con la lista de ID que se han obtenido de la consulta y sobre los que se actuará en las acciones

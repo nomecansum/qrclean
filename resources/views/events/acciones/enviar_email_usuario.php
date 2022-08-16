@@ -4,6 +4,10 @@ $descripcion = "Envia un email a un usuario concreto";
 
 $icono='<i class="fa-solid fa-envelope"></i>';
 
+$tipo_destino='*';
+
+$campos_notificaciones=true;
+
 $params='{
     "parametros":[
         {
@@ -42,7 +46,7 @@ $func_accion = function($accion, $resultado, $campos,$id) {
     //A partir de aqui empieza la parte "personalizada" de la accion
     //Especial atencion a la funcion comodines_texto
 
-    $result_email=enviar_email(valor($param_accion, "e-mail"), config('mail.from.address'), valor($param_accion, "e-mail"),valor($param_accion, "e-mail"), valor($param_accion, "titulo"), "email.mail_eventos", null, comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos));
+    $result_email=enviar_email(valor($param_accion, "e-mail"), config('mail.from.address'), valor($param_accion, "e-mail"),valor($param_accion, "e-mail"), valor($param_accion, "titulo"), "emails.mail_eventos", null, comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos));
 
     $this->log_evento("Enviado email a ".$datos->nombre." ".valor($param_accion, "e-mail").': '.$result_email,$accion->cod_regla);
   

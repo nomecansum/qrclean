@@ -109,7 +109,7 @@
             <div @if($p->multiple) class="col-md-12" @else class="col-md-4" @endif  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
-                    <select @if($p->multiple) class="select2 mb-2 col-md-11 select2-multiple form-control" style="width: 100%" multiple="multiple" name="{{ $p->name }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2':'' }}"  name="{{ $p->name }}"  @endif id="multi-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
+                    <select @if($p->multiple) class="select2f mb-2 col-md-11 select2f-multiple form-control" style="width: 100%" multiple="multiple" name="{{ $p->name }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2f':'' }}"  name="{{ $p->name }}"  @endif id="multi-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
                         @foreach($qr as $item)
 
                             @if($p->multiple)
@@ -139,7 +139,7 @@
             <div @if($p->multiple) class="col-md-12" @else class="col-md-4" @endif  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
-                    <select @if($p->multiple) class="select2 mb-2 col-md-11 select2-multiple form-control" multiple="multiple" style="width: 100%" name="{{ $p->name }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2':'' }}"  name="{{ $p->name }}"  @endif id="multi-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
+                    <select @if($p->multiple) class="select2f mb-2 col-md-11 select2f-multiple form-control" multiple="multiple" style="width: 100%" name="{{ $p->name }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2f':'' }}"  name="{{ $p->name }}"  @endif id="multi-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
                         @php
                             $lista=explode("|",$p->list);
                             $valores=explode("|",$p->values);
@@ -161,7 +161,7 @@
                 <script>
                     $('#multi-clientes').attr("required", "true");
                     $('#multi-clientes').attr("data-placeholder", "Debe seleccionar al menos un cliente");
-                    //$('#multi-clientes').select2({placeholder:"Debe seleccionar al menos un cliente"});
+                    //$('#multi-clientes').select2f({placeholder:"Debe seleccionar al menos un cliente"});
                 </script>
             @endif
         @endif
@@ -173,7 +173,7 @@
 <script src="{{ asset('/plugins/html5-editor/wysihtml5-0.3.0.js') }}"></script>
 <script src="{{ asset('/plugins/html5-editor/bootstrap-wysihtml5.js') }}"></script>
 <script>
-    $(".select2-multiple,.select2").select2({
+    $(".select2f-multiple,.select2f").select2({
             allowClear: true
         });
 

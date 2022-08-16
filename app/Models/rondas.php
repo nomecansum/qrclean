@@ -26,6 +26,7 @@ class rondas extends Model
     * @var string
     */
     protected $primaryKey = 'id_ronda';
+    public $incrementing = true;
 
     /**
      * Attributes that should be mass-assignable.

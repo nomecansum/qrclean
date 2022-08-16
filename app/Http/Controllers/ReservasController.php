@@ -513,7 +513,7 @@ class ReservasController extends Controller
 
         //Anulamos la reserva anterior si exsiste
         if($r->id_reserva!=null){
-           reservas::find($r->id_reserva)->delete();
+            DB::table('reservas')->where('id_reserva',$r->id_reserva)->update(['mca_anulada'=>'S']);
            savebitacora('Eliminada reserva  '.$r->id_reserva.' por modificacion',"Reservas","save","OK");
         }
         //Si todo ha ido bien y no hemos devuelto ningun mensaje de error entonces podemos insertar
@@ -535,48 +535,8 @@ class ReservasController extends Controller
             savebitacora('Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,"Reservas","save","OK");
             $id_reserva[]=$res->id_reserva;
         }
-        if(isset($r->mca_ical) && $r->mca_ical=='S'){
-            $det_puesto=puestos::find($r->id_puesto);
-            if(isset($r->salas)){
-                $des_evento="Reserva de sala de reunion [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto;
-                $tipo="la sala de reunion";
-            } else {
-                $des_evento="Reserva de puesto [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto;
-                $tipo="el puesto";
-            }
-            $body="Tiene reservado ".$tipo. " [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto." con los siguientes identificadores de reserva: ".implode(",",$id_reserva);
-            if($r->id_reserva!=null){
-                $body.=".\n\n Su reserva anterior ha sido anulada";
-            }
-            $subject="Detalles de su reserva con Spotdesking";
-            $user=users::find(Auth::user()->id);
-            $cal=Calendar::create('Reserva de puestos Spotdesking');
-            foreach($period as $p){
-                $evento=Event::create()
-                    ->name($des_evento)
-                    ->description($body)
-                    ->uniqueIdentifier(implode(",",$id_reserva))
-                    ->organizer(Auth::user()->email, Auth::user()->name)
-                    ->createdAt(Carbon::now())
-                    ->startsAt(Carbon::parse($p->format('Y-m-d').' '.$r->hora_inicio))
-                    ->endsAt(Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin));
-                $cal->event($evento);
-            }
-
-            $cal=$cal->get();
-            \Mail::send('emails.plantilla_generica', ['user' => $user,'body'=>$body], function ($m) use ($user,$subject,$cal) {
-                if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
-                    $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
-                } else {
-                    $m->to($user->email, $user->name)->subject($subject);
-                }
-                $m->from(config('mail.from.address'),config('mail.from.name'));
-                $m->attachData($cal,"reserva_".Auth::user()->id."_".Carbon::now()->format('Ymdhi').".ics",[
-                    'mime'=>'text/calendar'
-                ]);
-            });
-           
-        }
+        enviar_mail_reserva($res->id_reserva,$r->mca_ical);
+        
         return [
             'title' => "Reservas",
             'mensaje' => 'Puesto '.$r->des_puesto.' reservado. Identificadores de reserva: '.implode(",",$id_reserva),

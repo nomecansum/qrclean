@@ -6,7 +6,11 @@
         $max_orden=1;
     }
 @endphp
-
+<style>
+    .select-all{
+           max-height: 46px !important;
+       }
+</style>
 <input type="hidden" name="cod_regla" value="{{ $accion->cod_regla }}">
 <input type="hidden" name="cod_accion" value="{{ $accion->cod_accion }}">
 <input type="hidden" name="val_iteracion" value="{{ $accion->val_iteracion }}">

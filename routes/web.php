@@ -21,6 +21,8 @@ Auth::routes();
 //Route::post('/getsitio','HomeController@getsitio');
 // Route::get('/setqr/{sitio}','HomeController@setqr');
 // Route::get('/getqr/{sitio}','HomeController@getqr');
+
+
 Route::get('/puesto/{puesto}','HomeController@getpuesto');
 Route::get('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
 Route::post('/puesto/estado/{puesto}/{estado}','HomeController@estado_puesto');
@@ -47,7 +49,7 @@ Route::post('/encuestas/save_data','EncuestasController@save_data');
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Route::get('/logout','Auth\LoginController@logout');
+Route::get('/logout','Auth\LoginController@logout')->name('logout');;
 //route::view('test_zonas','plantas.zonas');
 
 //Route::view('/scan2', 'scan2');
@@ -100,6 +102,7 @@ Route::group(['middleware' => 'auth'], function() {
     
     ////////////////////GESTION DE USUAR IOS////////////////////
     Route::group(['prefix' => 'users'], function () {
+        
         Route::get('/',['middleware'=>'permissions:["Usuarios"],["R"]','uses'=>'UsersController@index'])->name('users.index');
         Route::get('/create',['middleware'=>'permissions:["Usuarios"],["C"]','uses'=>'UsersController@create'])->name('users.users.create');
         Route::get('/show/{users}',['middleware'=>'permissions:["Usuarios"],["R"]','uses'=>'UsersController@show'])->name('users.users.show');

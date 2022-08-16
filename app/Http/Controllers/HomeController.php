@@ -34,12 +34,14 @@ class HomeController extends Controller
     {
         
 
-        $contenido_home=DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->home_page;
-        $contenido_home='home.'.$contenido_home;
+        
 
         if(session('CL')==null){
             return redirect('/logout');
         }
+
+        $contenido_home=DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->home_page;
+        $contenido_home='home.'.$contenido_home;
 
         return view('home',compact('contenido_home'));
     }

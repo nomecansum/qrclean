@@ -1,5 +1,9 @@
 
-
+<style>
+    .select-all{
+           max-height: 46px !important;
+       }
+</style>
 <div class="row">
     <div class="form-group col-md-12">
         <div class="form-group" style="{{ ((!fullAccess() && count(clientes())==1) || (isset($hide['cli']) && $hide['cli']===1)) ? 'display: none' : ''}}">

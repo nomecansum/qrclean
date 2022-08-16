@@ -100,7 +100,6 @@
 
     })
 
-
     $('.form-ajax').submit(form_ajax_submit);
 
     //Date range picker
@@ -116,6 +115,7 @@
         },
         opens: 'right',
     });
+    
     $(".select2").select2();
 
     $('.minicolors').minicolors({

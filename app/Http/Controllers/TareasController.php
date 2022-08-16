@@ -299,6 +299,7 @@ class TareasController extends Controller
 
 			$tarea= new tareas;
 			$this->poner_datos_tarea($r,$tarea,$parametros);
+			$tarea->usu_audit=Auth::user()->id;
 			$tarea->save();
 			savebitacora(trans('tareas.tarea')." ".$r->des_tarea." ".trans('tareas.added'),"Tareas","save","OK");
 			return [
@@ -331,6 +332,7 @@ class TareasController extends Controller
 
 			$tarea= tareas::find($id);
 			$this->poner_datos_tarea($r,$tarea,$parametros);
+			$tarea->usu_audit=Auth::user()->id;
 			$tarea->save();
 
 			savebitacora(trans('tareas.tarea')." ".$r->des_tarea." modificada","Tareas","save","OK");

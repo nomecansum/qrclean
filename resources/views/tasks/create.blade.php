@@ -142,7 +142,7 @@
 								<div class="col-sm-1">
 									<div class="form-group">
 										<label>{{__('general.icono')}}</label><br>
-										<button type="button" autocomplete="no"  role="iconpicker" required name="val_icono_tarea"  id="val_icono_tarea" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
+										<button type="button" autocomplete="no"  role="iconpicker" required name="val_icono_tarea"  id="val_icono_tarea" data-iconset="fontawesome5" data-icon="{{isset($t) ? ($t->val_icono) : ''}}"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
 									</div>
 								</div>
 							</div>
@@ -221,9 +221,12 @@
 	</script>
 	
 	<script>
-		$('#val_icono_tarea').iconpicker({
-			icon:'{{isset($t) ? ($t->val_icono) : ''}}'
-		});
+		$(function(){
+			$('.iconpicker').iconpicker({
+				icon:'{{isset($t) ? ($t->val_icono) : ''}}'
+			});
+		})
+		
 	
 		$('#val_intervalo').change(function(){
 			$("#det_minuto").hide();

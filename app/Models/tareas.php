@@ -53,7 +53,8 @@ class tareas extends Model
                   'val_intervalo',
                   'val_parametros',
                   'val_timeout',
-                  'clientes'
+                  'clientes',
+                  'usu_audit'
               ];
 
     /**

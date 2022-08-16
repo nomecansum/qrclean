@@ -105,6 +105,12 @@ class taskejemplo extends Command
                     "list": "Motivo1,Motivo2,Motivo3,Motivo4,Motivo5,Motivo6",
                     "values": "1,2,3,4,5,6",
                     "required": false
+                },
+                {
+                    "label": "Poniendo este parametro a true, indicaremos que necesariamente se debe seleccionar un cliente",
+                    "name": "control_cliente",
+                    "tipo": "cli",
+                    "required": true
                 }
             ]
         }';

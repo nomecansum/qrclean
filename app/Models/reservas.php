@@ -26,6 +26,7 @@ class reservas extends Model
     * @var string
     */
     protected $primaryKey = 'id_reserva';
+    public $incrementing = true;
 
     /**
      * Attributes that should be mass-assignable.

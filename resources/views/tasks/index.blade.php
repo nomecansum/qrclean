@@ -13,7 +13,7 @@
 		<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
 		<li class="breadcrumb-item">Configuracion</li>
 		<li class="breadcrumb-item">Utilidades</li>
-		<li class="breadcrumb-item active"><a href="{{url('/users')}}">tareas programadas</a></li>
+		<li class="breadcrumb-item active"><a href="{{url('/tasks')}}">tareas programadas</a></li>
 		{{-- <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li> --}}
 	</ol>
 @endsection

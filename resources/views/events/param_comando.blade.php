@@ -1,5 +1,9 @@
 
-
+<style>
+    .select-all{
+           max-height: 46px !important;
+       }
+</style>
 @php
 if(isset($reglas)&&strlen($reglas->clientes)>0){
     $clientes=DB::table('clientes')

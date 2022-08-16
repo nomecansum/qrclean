@@ -174,7 +174,7 @@ try{
             zonas ++;
             id="zona"+zonas;
             n.text=$("#nombre").val();
-            n.id="zona"+(Math.random() + 1).toString(36).substring(7);
+            n.id="zona"+randomString(10);
             n.content = "<i class='fa-solid fa-trash-can text-danger icono_borrar fa-2z' onClick='grid.removeWidget(this.parentNode.parentNode)'></i><div class='num_zona'>"+zonas+"</div><div class='nombre_zona'>"+n.text+"</div>";
             grid.addWidget(n);
             //item=grid.addWidget($('<div><div class="grid-stack-item-content"  onclick="seleccionada('+zonas+')" idzona='+zonas+' >'+$("#nombre").val()+'</div></div>'), 0, 0, Math.floor(1 + 3 * Math.random()), Math.floor(4 + 3 * Math.random()), true,null,null,null,null,id);
@@ -217,7 +217,7 @@ try{
             items.forEach(function(item){
                 item.el.style.backgroundColor = stringToColor(item.text);
                 item.el.style.opacity=0.7;
-                item.id="zona"+(Math.random() + 1).toString(36).substring(7);
+                //item.id="zona"+randomString(10);
                 zonas++;
             })
         });

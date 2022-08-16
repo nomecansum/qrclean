@@ -4,6 +4,9 @@ use Carbon\Carbon;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Models\users;
+use App\Models\reservas;
+use App\Models\salas;
+use App\Models\puestos;
 use App\Models\config_clientes;
 use App\Models\clientes;
 use Jenssegers\Agent\Agent;
@@ -387,7 +390,7 @@ function enviar_email($user,$from,$to,$to_name,$subject,$plantilla,$error=null,$
     return true;
 }
 
-function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1,$triangulo="alerta_05"){
+function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1,$triangulo="alerta_05",$attachments=[]){
     try{
         switch ($metodo) {
             case 0:
@@ -1187,4 +1190,154 @@ function departamentos_padres($id,$salida='collect'){
       } else {
           return Collect($data)->pluck('cod_departamento')->toarray();
       }
+}
+
+//Comprobar si un usuario tiene reserva para un dia y un tipo
+function comprobar_reserva_usuario($id_user,$fecha,$tipo,$hora_inicio="00:00",$hora_fin="23:59"){
+    $usuario=users::find($id_user);
+    
+    $fec_desde=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_inicio.':00');
+    $fec_hasta=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_fin.':00');
+    //Primero comprobamos si tiene una reserva para ese dia de ese tipo de puesto
+    $reservas=DB::table('reservas')
+    ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+    ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+    ->join('users','reservas.id_usuario','users.id')
+    ->where('puestos.id_tipo_puesto',$tipo)
+    ->where('reservas.id_usuario',$id_user)
+    ->where(function($q) use($fec_desde,$fec_hasta,$fecha){
+        $q->where(function($q) use($fec_desde,$fec_hasta,$fecha){
+            $q->wherenull('fec_fin_reserva');
+            $q->where('fec_reserva',adaptar_fecha($fecha));
+        });
+        $q->orwhere(function($q) use($fec_desde,$fec_hasta){
+            $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+            $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+            $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
+            $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
+        });
+    })
+    ->where('mca_anulada','N')
+    ->where('puestos.id_cliente',$usuario->id_cliente)
+    ->first();
+
+    if(isset($reservas)){
+        return true;
+    }
+
+    //Despues comprobamos si tiene una asignacion para ese dia de ese tipo de puesto
+    $asignado=DB::table('puestos_asignados')
+        ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+        ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+        ->join('users','puestos_asignados.id_usuario','users.id')
+        ->where('puestos.id_tipo_puesto',$tipo)
+        ->where('puestos_asignados.id_usuario',$id_user)
+        ->where(function($q) use($fec_desde,$fec_hasta){
+            $q->where(function($q){
+                $q->wherenull('fec_desde');
+                $q->orwherenull('fec_hasta');
+            });
+            $q->orwhereraw("'".$fec_desde->format('Y-m-d')."' between fec_desde AND fec_hasta");
+        })
+        ->where('puestos.id_cliente',$usuario->id_cliente)
+        ->first();
+
+    if(isset($asignado)){
+        return true;
+    }
+    return false;
+}
+
+//Lista de puestos disponibles para reserva en un dia y un tipo
+function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fin="23:59"){
+    
+    $fec_desde=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_inicio.':00');
+    $fec_hasta=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_fin.':00');
+    //Primero comprobamos si tiene una reserva para ese dia de ese tipo de puesto
+    $reservas=DB::table('reservas')
+    ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+    ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+    ->where('puestos.id_tipo_puesto',$tipo)
+    ->where(function($q) use($fec_desde,$fec_hasta,$fecha){
+        $q->where(function($q) use($fec_desde,$fec_hasta,$fecha){
+            $q->wherenull('fec_fin_reserva');
+            $q->where('fec_reserva',adaptar_fecha($fecha));
+        });
+        $q->orwhere(function($q) use($fec_desde,$fec_hasta){
+            $q->whereraw("'".$fec_desde->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+            $q->orwhereraw("'".$fec_hasta->format('Y-m-d H:i:s')."' between fec_reserva AND fec_fin_reserva");
+            $q->orwherebetween('fec_reserva',[$fec_desde,$fec_hasta]);
+            $q->orwherebetween('fec_fin_reserva',[$fec_desde,$fec_hasta]);
+        });
+    })
+    ->where('mca_anulada','N')
+    ->where('puestos.id_cliente',$cliente)
+    ->pluck('puestos.id_puesto')
+    ->toArray();
+
+    //Despues comprobamos si tiene una asignacion para ese dia de ese tipo de puesto
+    $asignados=DB::table('puestos_asignados')
+        ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+        ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+        ->where('puestos.id_tipo_puesto',$tipo)
+        ->where(function($q) use($fec_desde,$fec_hasta){
+            $q->where(function($q){
+                $q->wherenull('fec_desde');
+                $q->orwherenull('fec_hasta');
+            });
+            $q->orwhereraw("'".$fec_desde->format('Y-m-d')."' between fec_desde AND fec_hasta");
+        })
+        ->where('puestos.id_cliente',$cliente)
+        ->pluck('puestos.id_puesto')
+        ->toArray();
+    $no_disponibles=array_merge($reservas,$asignados);
+    
+    $puestos_disponibles=DB::table('puestos')
+        ->where('id_tipo_puesto',$tipo)
+        ->whereNotIn('id_puesto',$no_disponibles)
+        ->where('id_cliente',$cliente)
+        ->where('mca_incidencia','N')
+        ->where('mca_reservar','S')
+        ->get();
+    return $puestos_disponibles;
+}
+
+function enviar_mail_reserva($id_reserva,$mca_ical,$sender_name=null){
+    $det_reserva=reservas::find($id_reserva);
+    $det_puesto=puestos::find($det_reserva->id_puesto);
+    $salas=salas::find($det_puesto->id_sala);
+    $user=users::find($det_reserva->id_usuario);
+    if(isset($salas)){
+        $des_evento="Reserva de sala de reunion [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto;
+        $tipo="la sala de reunion";
+    } else {
+        $des_evento="Reserva de puesto [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto;
+        $tipo="el puesto";
+    }
+    $body="Tiene reservado ".$tipo. " [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto." con el siguiente identificador de reserva: ".$id_reserva;
+    if($id_reserva!=null){
+        $body.=".\n\n Su reserva anterior ha sido anulada";
+    }
+    $subject="Detalles de su reserva con Spotdesking";
+    $str_notificacion=$sender_name??$user->name.' ha creado una Reserva  del puesto ['.$det_puesto->cod_puesto.'] '.$det_puesto->des_puesto.' para usted en el periodo  '.$det_reserva->fec_reserva.' - '.$det_reserva->fec_fin_reserva;
+
+    if(isset($mca_ical) && $mca_ical=='S'){
+        $cal=Calendar::create('Reserva de puestos Spotdesking');
+        foreach($period as $p){
+            $evento=Event::create()
+                ->name($des_evento)
+                ->description($body)
+                ->uniqueIdentifier(implode(",",$id_reserva))
+                ->organizer($user->email, $user->name)
+                ->createdAt(Carbon::now())
+                ->startsAt($det_reserva->fec_reserva)
+                ->endsAt($reserva->fec_fin_reserva);
+            $cal->event($evento);
+        }
+        $cal=$cal->get();
+        $attach=['nombre'=>"reserva_".Auth::user()->id."_".Carbon::now()->format('Ymdhi').".ics","tipo"=>'text/calendar','dato'=>$cal];
+    } else {
+        $attach=null;
+    }
+    notificar_usuario($user,$des_evento,'emails.mail_reserva',$body,1,"alerta_05",$attach);
 }

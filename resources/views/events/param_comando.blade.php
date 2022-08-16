@@ -62,53 +62,6 @@ $clientes=DB::table('clientes')
     $('#txt-desc').html("{!! $descripcion !!}");
 
 
-    $('#multi-clientes').change(function(event) {
-        $('.multi2').empty();
-        $('.spin_tag').show();
-        $('.spin_disp').show();
-        $.post('{{url(config('app.carpeta_asset').'/filters/loadtags')}}', {_token:'{{csrf_token()}}',clientes:$(this).val()}, function(data, textStatus, xhr) {
-            console.log("hemos leido");
-            $('.multitags').empty();
-            $('.multitags').val(null).trigger('change');
-            $('.multidispositivos').empty();
-            $('.multidispositivos').val(null).trigger('change');
-            cliente="";
-            $.each(data.tags, function(index, val) {
-                if(cliente!=val.nombre_cliente){
-                    $('.multitags').append('<optgroup label="'+val.nombre_cliente+'"></optgroup>');
-                    cliente=val.nombre_cliente;
-                }
-                $('.multitags').append('<option value="'+val.id_tag+'">'+val.nombre_tag+'</option>');
-            });
-            setTimeout(() => {
-                $('.spin_tag').hide();
-            }, 1000);
-            
-
-            cliente="";
-            $.each(data.dispositivos, function(index, val) {
-                if(cliente!=val.nombre_cliente){
-                    $('.multidispositivos').append('<optgroup label="'+val.nombre_cliente+'"></optgroup>');
-                    cliente=val.nombre_cliente;
-                }
-                $('.multidispositivos').append('<option value="'+val.id_dispositivo+'">'+val.nombre+'</option>');
-            });
-            setTimeout(() => {
-                $('.spin_disp').hide();
-            }, 1000);
-
-        //Ahora tenemos que seleccionar los tags o dispositivos que estuvieran marcados
-        @if(isset($parametros))
-            @foreach($parametros as $p)
-                @if(($p->tipo=="tags" || $p->tipo=="disp") && isset($p->value))
-                    $("#{{ $p->tipo }}-{{ $p->name }}").val({!! js_array($p->value,'num') !!});
-                    $("#{{ $p->tipo }}-{{ $p->name }}").trigger('change');
-                @endif
-            @endforeach
-        @endif
-
-        });
-    });
 
     $('.select2-multiple').on('change', function(){
         $(this).find('option').css('bg-primary');

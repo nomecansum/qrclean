@@ -75,6 +75,7 @@ Route::group(['prefix' => 'salas','middleware' => 'auth:api'], function() {
     Route::get('/sincronizar_incidencias_desde_fecha/{fecha}/{cliente}', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@request_sincro']);
     //Listado de incidencias
     Route::get('/get_incidencias_desde_fecha/{fecha}/{cliente}', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@get_incidencias_desde_fecha']);
-
-
+    //Reecibimos los pares de incidencias de ambos extremos y los sincronizamos
+    Route::post('/add_incidencia_id_puestos_pendientes', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@add_incidencia_id_puestos_pendientes']);
+    
 });

@@ -1253,6 +1253,76 @@ paths:
       security:
         -
           passport: []
+  /salas/add_incidencia_id_puestos_pendientes:
+    post:
+      tags:
+        - 'Integracion con salas'
+      summary: 'Recibe los pares de ID de incidencie en puestos y en salas para emparejar las que falten'
+      operationId: UCQMBWIWn4Q2547ba5e9f70585c13dffd3dd7f88b75
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+                - incidencias
+                - id_cliente
+              properties:
+                id_cliente:
+                  description: 'ID de cliente'
+                  type: integer
+                incidencias:
+                  description: 'Lista de pares de incidencia'
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      incidencia_sala_id:
+                        description: 'ID de la incidencia en salas'
+                        type: integer
+                      incidencia_puestos_id:
+                        description: 'ID de la incidencia en salas'
+                        type: integer
+              type: object
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - ok
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+        400:
+          description: 'Error en la peticion'
+          content:
+            application/json:
+              schema:
+                properties:
+                  result:
+                    description: 'Resultado de la operacion'
+                    type: string
+                    enum:
+                    - error
+                  error:
+                    description: 'Descripcion del error'
+                    type: string
+                  timestamp:
+                    description: 'Fecha de ejecucion de la accion'
+                    type: string
+                    format: date-time
+                type: object
+      security:
+        -
+          passport: []
 tags:
   -
     name: Autorizacion

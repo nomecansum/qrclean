@@ -554,8 +554,28 @@ class APIController extends Controller
                 'a_incidencias_pendientes' => $incidencias]);
         }catch (\Throwable $e) {
             savebitacora('ERROR Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","ERROR"); 
-            dd($e);
             return $this->respuesta_error('ERROR Solicitud de listado de incidencias '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
+        }
+    }
+
+    public function add_incidencia_id_puestos_pendientes(Request $r){
+        try{
+
+            $r->request->add(['id_cliente' => [$this->get_cliente_ext($r)]]);
+            $r->request->add(['procedencia' => "salas"]);
+            $lista_incidencias=$r->incidencias;
+            $lista_incidencias=json_decode($lista_incidencias);
+            $pendientes=[];
+            //Primero vemos las que tengan id_incidencia_salas y el id_incidencia_puestos a null o algo distinto de lo que debe ser y las guardamos para sincronizar
+            
+
+            savebitacora('Solicitud de actualizacion de id de incidencias en salas '.json_encode($r->all()),"API","add_incidencia_id_puestos_pendientes","OK"); 
+            return response()->json([
+                'result'=>'ok',
+                'timestamp'=>Carbon::now()]);
+        }catch (\Throwable $e) {
+            savebitacora('ERROR Solicitud de actualizacion de id de incidencias en salas '.json_encode($r->all()),"API","add_incidencia_id_puestos_pendientes","ERROR"); 
+            return $this->respuesta_error('ERROR Solicitud de actualizacion de id de incidencias en salas '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         }
     }
 

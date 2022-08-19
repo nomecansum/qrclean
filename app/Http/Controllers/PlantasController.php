@@ -234,7 +234,7 @@ class PlantasController extends Controller
         validar_acceso_tabla($id,'plantas');
         $plantas = plantas::findOrFail($id);
         $puestos= DB::Table('puestos')
-            ->select('puestos.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','plantas.factor_puesto','plantas.factor_letra','puestos.val_color as hex_color')
+            ->select('puestos.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','plantas.factor_puestow','plantas.factor_puestoh','plantas.factor_puestob','plantas.factor_puestor','plantas.factor_letra','puestos.val_color as hex_color')
             ->join('plantas','plantas.id_planta','puestos.id_planta')
             ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
             ->where('puestos.id_planta',$id)
@@ -254,7 +254,10 @@ class PlantasController extends Controller
         validar_acceso_tabla($r->id_planta,'plantas');
         $planta = plantas::findOrFail($r->id_planta);
         $planta->posiciones=$r->json;
-        $planta->factor_puesto=$r->factor_puesto;
+        $planta->factor_puestow=$r->factor_puestow;
+        $planta->factor_puestoh=$r->factor_puestoh;
+        $planta->factor_puestor=$r->factor_puestor;
+        $planta->factor_puestob=$r->factor_puestob;
         $planta->factor_letra=$r->factor_letra;
         $planta->save();
         savebitacora('Distribucion de puestos en  '.$planta->des_planta. ' actualizada',"Plantas","puestos_save","OK");

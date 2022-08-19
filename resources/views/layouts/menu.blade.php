@@ -141,7 +141,7 @@
                         </ul>
                     </li>
                     @endif
-                    @if(checkPermissions(['Parametrizacion'],['R']))
+                    @if(checkPermissions(['Mi oficina'],['R']))
                     <li class="parametrizacion">
                         <a href="#">
                             <i class="fad fa-browser"></i>
@@ -151,7 +151,8 @@
                         
                         <!--Submenu-->
                         <ul class="collapse">
-                            @if(checkPermissions(['Puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
+                            @if(checkPermissions(['Mapa puestos'],['R']))<li class="mapa"><a href="/puestos/mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
+                            @if(checkPermissions(['Compañeros'],['R']))<li class="compas"><a href="/puestos/compas"><i class="fa-duotone fa-users"></i> Mis compañeros</a></li> @endif
                         </ul>
                     </li>
                     @endif
@@ -201,6 +202,8 @@
                             @if(checkPermissions(['Informes > Uso de puestos'],['R']))<li class="inf_puestos text-nowrap"><a href="/reports/puestos" class="text-nowrap"><i class="fad fa-file-alt"></i> Uso de puestos</a></li> @endif
                             @if(checkPermissions(['Informes > Puestos por usuario'],['R']))<li class="inf_usuarios"><a href="/reports/users" class="text-nowrap"><i class="fad fa-file-alt"></i> Puestos por usuario</a></li> @endif
                             @if(checkPermissions(['Informes > Reservas canceladas'],['R']))<li class="inf_reservas"><a href="/reports/canceladas" class="text-nowrap"><i class="fad fa-file-alt"></i> Reservas canceladas</a></li> @endif
+                            @if(checkPermissions(['Informes > Uso de espacio'],['R']))<li class="inf_heatmap"><a href="/reports/heatmap" class="text-nowrap"><i class="fad fa-file-alt"></i> Uso de espacio</a></li> @endif
+                            
                             @if(checkPermissions(['Informes > Ferias'],['R']))<li class="inf_reservas"><a href="/reports/ferias" class="text-nowrap"><i class="fad fa-file-alt"></i> Ferias</a></li> @endif
                             @if(checkPermissions(['Informes programados'],["R"]))<li class="inf_programados"><a href="{{url('prog_report')}}" class="text-nowrap"><i class="fa-solid fa-envelope"></i> Informes Programados</a></li>@endif
                         </ul>

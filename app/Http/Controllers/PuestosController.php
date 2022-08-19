@@ -811,6 +811,80 @@ class PuestosController extends Controller
         return view('puestos.plano',compact('puestos','cualpuesto','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil'));
     }
 
+    function ver_companeros(Request $r){
+     
+        if(isset($r->fecha)){
+            $fecha_mirar=Carbon::parse(adaptar_fecha($r->fecha));
+        } else {
+            $fecha_mirar=Carbon::now();
+        }
+        
+
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','reservas.id_usuario','users.id')
+            ->where(function($q) use($fecha_mirar){
+                $q->wheredate('fec_reserva',$fecha_mirar);
+                $q->orwhereraw("'".$fecha_mirar->format('Y-m-d')."' between fec_reserva AND fec_fin_reserva");
+            })
+            ->where(function($q){
+                $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+            })
+            ->where(function($q){
+                $q->where('users.id_departamento',Auth::user()->id_departamento);
+            })
+            ->get();
+
+        $asignados_usuarios=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')    
+            ->where(function($q) use($fecha_mirar){
+                $q->wherenull('fec_desde');
+                $q->orwhereraw("'".$fecha_mirar->format('Y-m-d')."' between fec_desde AND fec_hasta");
+            })
+            ->where(function($q){
+                $q->where('users.id_departamento',Auth::user()->id_departamento);
+            })
+            ->get();
+
+
+        $asignados_miperfil=Collect([]);
+        
+        $asignados_nomiperfil=Collect([]);
+
+        $puestos_mostrar=array_merge($reservas->pluck('id_puesto')->toArray(),$asignados_usuarios->pluck('id_puesto')->toArray());
+
+
+        $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            })
+            
+            ->wherein('puestos.id_puesto',$puestos_mostrar)
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $edificios=DB::table('edificios')
+            ->select('id_edificio','des_edificio')
+            ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
+            ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
+            ->where(function($q){
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            })
+            ->wherein('id_edificio',$puestos->pluck('id_edificio')->toArray())
+            ->get();
+        
+        return view('compas.index',compact('puestos_mostrar','edificios','reservas','asignados_usuarios','asignados_miperfil','asignados_nomiperfil','r'));
+    }
+
     function save_pos($id,$top,$left,$offtop,$offleft){
         $puesto=puestos::find($id);
         $puesto->top=round($top);

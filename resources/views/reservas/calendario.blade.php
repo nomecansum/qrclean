@@ -40,6 +40,11 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 	.table_calendar {
 		border-spacing: 10px !important;
 		border-collapse: separate !important;
+		}
+
+	.celda{
+		max-height: 114px !important;
+		overflow-y: hidden !important;
 	}
 </style>
 {{-- <div class="panel-heading">
@@ -121,7 +126,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 							@endphp
 							{{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
 							
-							<td style="background-color: {{$color}}; height: 10vw; width: 15vw;  color: #999; border-radius: 12px; {{ $borde }}; "  class="add-tooltip dia text-center  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" data-past="{{ $noclickable }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
+							<td style="background-color: {{$color}}; height: 10vw;  width: 10vw;  color: #999; border-radius: 12px; {{ $borde }}; "  class="add-tooltip dia text-center  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" data-past="{{ $noclickable }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
 								
                                 <span class="font-bold" style="font-size: 4.5vw; font-weigth: 400;position relative; color: #fff; -webkit-text-stroke: 1px #999;" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
 								<div style="color: #fff; cursor: pointer;" class="text-left">

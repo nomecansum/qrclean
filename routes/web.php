@@ -202,8 +202,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/borrar_puestos',['middleware'=>'permissions:["Puestos"],["D"]', 'uses' => 'PuestosController@borrar_puestos']);
         Route::post('/modificar_puestos',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@modificar_puestos']);
         Route::get('/vmapa/{id}',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@ver_en_mapa']);
+        Route::get('/compas',['middleware'=>'permissions:["Compañeros"],["R"]', 'uses' => 'PuestosController@ver_companeros']);
         Route::get('/save_pos/{id}/{top}/{left}/{ot}/{ol}',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@save_pos']);
-
         Route::get('/tipos',['middleware'=>'permissions:["Tipos de puesto"],["R"]', 'uses' => 'PuestosController@index_tipos'])->name('puestos_tipos.index');
         Route::post('/tipos/save',['middleware'=>'permissions:["Tipos de puesto"],["W"]', 'uses' => 'PuestosController@tipos_save']);
         Route::get('/tipos/edit/{id?}',['middleware'=>'permissions:["Tipos de puesto"],["C"]', 'uses' => 'PuestosController@tipos_edit']);
@@ -216,6 +216,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/edit/{id?}',['middleware'=>'permissions:["Tags"],["C"]', 'uses' => 'TagsController@edit']);
         Route::get('/delete/{id?}',['middleware'=>'permissions:["Tags"],["D"]', 'uses' => 'TagsController@delete']);
     });
+
+
 
     ////////////////////EDIFICIOS////////////////////
     Route::group(['prefix' => 'edificios'], function () {
@@ -409,6 +411,9 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::get('/ferias',['middleware' => 'permissions:["Informes > Ferias"],["R"]', 'uses' => 'ReportsController@ferias_index']);
 	    Route::post('/ferias/filter',['middleware' => 'permissions:["Informes > Ferias"],["R"]', 'uses' => 'ReportsController@ferias']);
+
+        Route::get('/heatmap',['middleware' => 'permissions:["Informes > Uso de espacio"],["R"]', 'uses' => 'ReportsController@heatmap_index']);
+	    Route::post('/heatmap/filter',['middleware' => 'permissions:["Informes > Uso de espacio"],["R"]', 'uses' => 'ReportsController@heatmap']);
 
         Route::get('program/{id}', ['middleware' => 'permissions:["Informes programados"],["R"]', 'uses' => 'ReportsController@reportFromEmail']);
 		

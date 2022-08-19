@@ -37,7 +37,7 @@ use Auth;
 class colorPuesto
 {
     static function colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$origen="P"){
-        $tam_borde=isMobile()?$puesto->factor_puesto-1:$puesto->factor_puesto;
+        $tam_borde=isMobile()?$puesto->factor_puestob-1:$puesto->factor_puestob;
         
         if(Auth::user()->id_cliente===5){  //Generali
             $borde=$puesto->val_color?$puesto->val_color:$puesto->hex_color;
@@ -47,7 +47,7 @@ class colorPuesto
                     'font_color'=>"#fff",
                     'clase_disp'=>"",
                     'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
-                    'borde'=>"border: 3px solid #f00; border-radius: 6px",
+                    'borde'=>"border: 3px solid #f00; border-radius: ".$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if($puesto->id_estado==5){  //Inoperativo
@@ -85,7 +85,7 @@ class colorPuesto
                     'font_color'=>"#fff",
                     'clase_disp'=>"",
                     'title'=>"Puesto permanentemente asignado a ".$asignado_usuario->name,
-                    'borde'=>"border: 3px solid #ff9f1a; border-radius: 8px",
+                    'borde'=>"border: 3px solid #ff9f1a; border-radius: ".$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if(isset($asignado_otroperfil)){
@@ -103,7 +103,7 @@ class colorPuesto
                     'font_color'=>"#05688f",
                     'clase_disp'=>"disponible",
                     'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso,
-                    'borde'=>"border: 3px solid #05688f; border-radius: 6px",
+                    'borde'=>"border: 3px solid #05688f; border-radius: ".$puesto->factor_puestor."px",
                     "transp"=>1
                 ];
             } else if($puesto->id_estado==5){  //Bloqueado
@@ -178,7 +178,7 @@ class colorPuesto
                     'font_color'=>"#fff",
                     'clase_disp'=>"",
                     'title'=>"Puesto permanentemente asignado a ".$asignado_usuario->name,
-                    'borde'=>"border: 3px solid #ff9f1a; border-radius: 8px",
+                    'borde'=>"border: 3px solid #ff9f1a; border-radius: ".$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if(isset($asignado_otroperfil)){
@@ -196,7 +196,7 @@ class colorPuesto
                     'font_color'=>"#05688f",
                     'clase_disp'=>"disponible",
                     'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso,
-                    'borde'=>"border: 3px solid #05688f; border-radius: 6px",
+                    'borde'=>"border: 3px solid #05688f; border-radius: ".$puesto->factor_puestor."px",
                     "transp"=>1
                 ];
             } else if($puesto->id_estado==5){  //Bloqueado

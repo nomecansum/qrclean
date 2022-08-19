@@ -50,19 +50,15 @@
             $es_reserva="P";
             $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$es_reserva);
         @endphp
-        @if(session('CL')['modo_visualizacion_puestos']=='C')
-        <div class="text-center rounded add-tooltip align-middle flpuesto draggable {{ $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }}" id="puesto{{ $puesto->id_puesto }}" title="{{ strip_tags($puesto->des_puesto." \r\n ".$cuadradito['title']) }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $cuadradito['color'] }}; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
-            <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">{{ $puesto->cod_puesto }}</span>
-            @include('resources.adornos_iconos_puesto')
-        </div>
-        @else
-        <div class="text-center rounded add-tooltip align-middle flpuesto draggable {{ $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }}" id="puesto{{ $puesto->id_puesto }}" title="{{ strip_tags($puesto->des_puesto." \r\n ".$cuadradito['title']) }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px;color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
-            <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#FFF">
+        <div class="text-center  add-tooltip align-middle flpuesto draggable {{ $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }}" id="puesto{{ $puesto->id_puesto }}" title="{{ strip_tags($puesto->des_puesto." \r\n ".$cuadradito['title']) }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestoh }}vh ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $cuadradito['color'] }}; @if(session('CL')['modo_visualizacion_puestos']=='C') color: {{ $cuadradito['font_color'] }} @endif; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
+            @if(session('CL')['modo_visualizacion_puestos']=='C')
+                <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">{{ $puesto->cod_puesto }}</span>
+                @include('resources.adornos_iconos_puesto')
+            @else
                 <i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i><br>
                 {{ $puesto->cod_puesto }}</span>
-            {{--  @include('resources.adornos_iconos_puesto')  --}}
+            @endif
         </div>
-        @endif
     @php
         $left+=50;
         if($left==500){

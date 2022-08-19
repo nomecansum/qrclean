@@ -1,4 +1,4 @@
-<div class="panel" id="editor">
+<div class="panel editor" id="editor">
 	@php
 		//dd($c);
 	@endphp
@@ -135,7 +135,7 @@
 							</div>
 	
 							<div class="row">
-								<div class="col-md-12 p-b-10">
+								<div class="col-md-12 p-b-10 mt-4 ">
 									<div class="col-md-2">
 										<div class="form-group">
 											<label for="">Notificar a usuarios</label>
@@ -478,6 +478,11 @@
 		$('.form-ajax').submit(form_ajax_submit);
 
 		$('.select2').select2();
+
+		
+		$('.demo-psi-cross').click(function(){
+            $('.editor').hide();
+        });
 
 		@if(checkPermissions(['Clientes'],["W"]))
 			$('#btn_generar_token').click(function(event){

@@ -61,17 +61,19 @@
                         $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
                         
                         if(isMobile()){
-                            if($puesto->factor_puesto<3.5){
-                                $puesto->factor_puesto=12;
+                            if($puesto->factor_puestow<3.5){
+                                $puesto->factor_puestow=12;
+                                $puesto->factor_puestoh=12;
                                 $puesto->factor_letra=2.8;
                             } else {
-                                $puesto->factor_puesto=$puesto->factor_puesto*4;
+                                //En  mosaico los queremos curadrados siempre
+                                $puesto->factor_puestow=$puesto->factor_puestow*4;
+                                $puesto->factor_puestoh=$puesto->factor_puestow*4;
                                 $puesto->factor_letra=$puesto->factor_letra*4;
                             }
-                            
-                            
-                        } else if($puesto->factor_puesto<3.5){
-                            $puesto->factor_puesto=4.7;
+                        } else if($puesto->factor_puestow<3.5){
+                            $puesto->factor_puestow=3.7;
+                            $puesto->factor_puestoh=3.7;
                             $puesto->factor_letra=0.8;
                         }
                         $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
@@ -79,7 +81,7 @@
                     @endphp
 
                     
-                    <div class="text-center rounded add-tooltip flpuesto draggable {{ $cuadradito['clase_disp'] }} p-0 mr-2 mb-2 bg-{{ $puesto->color_estado }}" id="puesto{{ $puesto->id_puesto }}" title="{!! strip_tags($puesto->des_puesto." \r\n ".$cuadradito['title']) !!}  @if(config('app.env')=='local')[#{{ $puesto->id_puesto }}]@endif" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}"  data-planta="{{ $value }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}">
+                    <div class="text-center rounded add-tooltip flpuesto draggable {{ $cuadradito['clase_disp'] }} p-0 mr-2 mb-2 bg-{{ $puesto->color_estado }}" id="puesto{{ $puesto->id_puesto }}" title="{!! strip_tags($puesto->des_puesto." \r\n ".$cuadradito['title']) !!}  @if(config('app.env')=='local')[#{{ $puesto->id_puesto }}]@endif" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}"  data-planta="{{ $value }}" style="height: {{ $puesto->factor_puestow }}vw ; width: {{ $puesto->factor_puestow }}vw; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}">
                          @if(isset($checks) && $checks==1){{-- Mostrar checkbox para seleccionar los puestos --}}
                             <div style="position: absolute; margin-top: 2em; margin-left: 2em">
                                 <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chkp{{ $puesto->id_puesto }}" data-idedificio="{{ $puesto->id_edificio }}" data-idplanta="{{$puesto->id_planta}}" value="{{ $puesto->id_puesto }}" {{ isset($puestos_check) && array_search($puesto->id_puesto,$puestos_check)?'checked':'' }}>

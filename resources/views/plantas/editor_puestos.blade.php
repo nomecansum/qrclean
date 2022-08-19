@@ -47,7 +47,10 @@
                 @csrf
                 <input type="hidden" name="json" id="json">
                 <input type="hidden" name="id_planta" value="{{ $plantas->id_planta }}">
-                <input type="hidden" name="factor_puesto" id="factor_puesto" value="{{ $plantas->factor_puesto }}">
+                <input type="hidden" name="factor_puestow" id="factor_puestow" value="{{ $plantas->factor_puestow }}">
+                <input type="hidden" name="factor_puestoh" id="factor_puestoh" value="{{ $plantas->factor_puestoh }}">
+                <input type="hidden" name="factor_puestob" id="factor_puestob" value="{{ $plantas->factor_puestob }}">
+                <input type="hidden" name="factor_puestor" id="factor_puestor" value="{{ $plantas->factor_puestor }}">
                 <input type="hidden" name="factor_letra" id="factor_letra"  value="{{ $plantas->factor_letra }}">
                 @if(isset($plantas->img_plano))
                 {{--  style="background-image: url('{{ url('img/plantas/'.$plantas->img_plano) }}'); background-repeat: no-repeat; background-size: contain;"  --}}
@@ -67,7 +70,7 @@
                          $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
                          //$borde="border: 5px solid ".$puesto->val_color??"#fff".";";   
                         @endphp
-                            <div class="text-center font-bold rounded add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $puesto->des_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }}">
+                            <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $puesto->des_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="height: {{ $puesto->factor_puestoh }}vw ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }}">
                                 <span class="h-100 align-middle texto_puesto" style="font-size: 0.8vw;">{{ $puesto->cod_puesto }}</span>
                             </div>
                         @php
@@ -84,22 +87,31 @@
                 @endif
                 @if(checkPermissions(['Plantas'],['C']))
                 <div class="row mt-3">
-                    <div class="form-group col-md-3">
-                        <label>Tamaño de puestos: </label> <span id="puesto-range-def-val"></span>
-                        <div id="puesto-range-def"></div>	
+                    <div class="form-group col-md-2">
+                        <label>Ancho de puestos: </label> <span id="puesto-rangew-def-val"></span>
+                        <div id="puesto-rangew-def"></div>	
                     </div>
-                    <div class="col-md-2">
-
+                    <div class="form-group col-md-2">
+                        <label>Alto de puestos: </label> <span id="puesto-rangeh-def-val"></span>
+                        <div id="puesto-rangeh-def"></div>	
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
+                        <label>Borde: </label> <span id="puesto-rangeb-def-val"></span>
+                        <div id="puesto-rangeb-def"></div>	
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Redondeo: </label> <span id="puesto-ranger-def-val"></span>
+                        <div id="puesto-ranger-def"></div>	
+                    </div>
+                    <div class="form-group col-md-2">
                         <label>Tamaño de letra: </label> <span id="letra-range-def-val"></span>
                         <div id="letra-range-def"></div>	
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label>Tamaño de grid: </label> <span id="grid-range-def-val"></span>
                         <div id="grid-range-def"></div>	
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-12 text-right">
                         <input class="btn btn-primary" id="btn_guardar" type="submit" value="Guardar">
                     </div>
                 </div>
@@ -145,6 +157,39 @@
             }
         });
         setTimeout(recolocar_puestos, 800);
+
+        pw_def.noUiSlider.on('update', function( values, handle ) {
+            pw_def_value.innerHTML = values[handle];
+            $('.flpuesto').css('width',values[handle]+'vw');
+            $('#factor_puestow').val(values[handle]);
+        });
+        ph_def.noUiSlider.on('update', function( values, handle ) {
+            ph_def_value.innerHTML = values[handle];
+            $('.flpuesto').css('height',values[handle]+'vh');
+            $('#factor_puestoh').val(values[handle]);
+        });
+        pr_def.noUiSlider.on('update', function( values, handle ) {
+            pr_def_value.innerHTML = values[handle];
+            $('.flpuesto').css('border-radius',values[handle]+'px');
+            $('#factor_puestob').val(values[handle]);
+        });
+        pb_def.noUiSlider.on('update', function( values, handle ) {
+            pb_def_value.innerHTML = values[handle];
+             $('.flpuesto').css('border-width',values[handle]+'px');
+            $('#factor_puestor').val(values[handle]);
+        });
+        l_def.noUiSlider.on('update', function( values, handle ) {
+            l_def_value.innerHTML = values[handle];
+            $('.texto_puesto').css('font-size',values[handle]+'vw');
+            $('#factor_letra').val(values[handle]);
+        });
+        g_def.noUiSlider.on('update', function( values, handle ) {
+            g_def_value.innerHTML = values[handle];
+            console.log(values[handle]);
+            $('.draggable').draggable("option", "grid", [values[handle],values[handle]]);
+            // $('.texto_puesto').css('font-size',values[handle]+'vw');
+            // $('#factor_letra').val(values[handle]);
+        });
     } );
 
     $('#btn_guardar').click(function(){
@@ -172,8 +217,17 @@
         recolocar_puestos();
     })
 
-    var p_def = document.getElementById('puesto-range-def');
-    var p_def_value = document.getElementById('puesto-range-def-val');
+    var pw_def = document.getElementById('puesto-rangew-def');
+    var pw_def_value = document.getElementById('puesto-rangew-def-val');
+
+    var ph_def= document.getElementById('puesto-rangeh-def');
+    var ph_def_value = document.getElementById('puesto-rangeh-def-val');
+
+    var pb_def = document.getElementById('puesto-rangeb-def');
+    var pb_def_value = document.getElementById('puesto-rangeb-def-val');
+
+    var pr_def = document.getElementById('puesto-ranger-def');
+    var pr_def_value = document.getElementById('puesto-ranger-def-val');
 
     var l_def = document.getElementById('letra-range-def');
     var l_def_value = document.getElementById('letra-range-def-val');
@@ -181,12 +235,48 @@
     var g_def = document.getElementById('grid-range-def');
     var g_def_value = document.getElementById('grid-range-def-val');
 
-    noUiSlider.create(p_def,{
-        start   : [ {{ $plantas->factor_puesto }} ],
+    noUiSlider.create(pw_def,{
+        start   : [ {{ $plantas->factor_puestow }} ],
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
             'max': [ 6 ]
+        },
+        format: wNumb({
+            decimals: 2
+        }),
+    });
+
+    noUiSlider.create(ph_def,{
+        start   : [ {{ $plantas->factor_puestoh }} ],
+        connect : 'lower',
+        range   : {
+            'min': [  0.5 ],
+            'max': [ 6 ]
+        },
+        format: wNumb({
+            decimals: 2
+        }),
+    });
+
+    noUiSlider.create(pr_def,{
+        start   : [ {{ $plantas->factor_puestor }} ],
+        connect : 'lower',
+        range   : {
+            'min': [  0 ],
+            'max': [ 10 ]
+        },
+        format: wNumb({
+            decimals: 2
+        }),
+    });
+
+    noUiSlider.create(pb_def,{
+        start   : [ {{ $plantas->factor_puestob }} ],
+        connect : 'lower',
+        range   : {
+            'min': [  0 ],
+            'max': [ 10 ]
         },
         format: wNumb({
             decimals: 2
@@ -217,24 +307,7 @@
         }),
     });
 
-    p_def.noUiSlider.on('update', function( values, handle ) {
-        p_def_value.innerHTML = values[handle];
-        $('.flpuesto').css('height',values[handle]+'vw');
-        $('.flpuesto').css('width',values[handle]+'vw');
-        $('#factor_puesto').val(values[handle]);
-    });
-    l_def.noUiSlider.on('update', function( values, handle ) {
-        l_def_value.innerHTML = values[handle];
-        $('.texto_puesto').css('font-size',values[handle]+'vw');
-        $('#factor_letra').val(values[handle]);
-    });
-    g_def.noUiSlider.on('update', function( values, handle ) {
-        g_def_value.innerHTML = values[handle];
-        console.log(values[handle]);
-        $('.draggable').draggable("option", "grid", [values[handle],values[handle]]);
-        // $('.texto_puesto').css('font-size',values[handle]+'vw');
-        // $('#factor_letra').val(values[handle]);
-    });
+    
 
     $('.demo-psi-cross').click(function(){
             $('.editor').hide();

@@ -33,18 +33,21 @@ class plantas extends Model
      * @var array
      */
     protected $fillable = [
-                  'id_edificio',
-                  'id_cliente',
-                  'des_planta',
-                  'img_plano',
-                  'posiciones',
-                  'num_orden',
-                  'factor_puesto',
-                  'factor_letra',
                   'abreviatura',
-                  'zonas',
+                  'des_planta',
+                  'factor_letra',
+                  'factor_puestob',
+                  'factor_puestoh',
+                  'factor_puestor',
+                  'factor_puestow',
+                  'height',
+                  'id_cliente',
+                  'id_edificio',
+                  'img_plano',
+                  'num_orden',
+                  'posiciones',
                   'width',
-                  'height'
+                  'zonas'
               ];
 
     /**
@@ -62,16 +65,6 @@ class plantas extends Model
     protected $casts = [];
     
     /**
-     * Get the Edificio for this model.
-     *
-     * @return App\Models\Edificio
-     */
-    public function Edificio()
-    {
-        return $this->belongsTo('App\Models\Edificio','id_edificio','id_edificio');
-    }
-
-    /**
      * Get the Cliente for this model.
      *
      * @return App\Models\Cliente
@@ -79,6 +72,16 @@ class plantas extends Model
     public function Cliente()
     {
         return $this->belongsTo('App\Models\Cliente','id_cliente','id_cliente');
+    }
+
+    /**
+     * Get the Edificio for this model.
+     *
+     * @return App\Models\Edificio
+     */
+    public function Edificio()
+    {
+        return $this->belongsTo('App\Models\Edificio','id_edificio','id_edificio');
     }
 
     /**
@@ -99,16 +102,6 @@ class plantas extends Model
     public function plantasUsuarios()
     {
         return $this->hasMany('App\Models\PlantasUsuario','id_planta','id_planta');
-    }
-
-    /**
-     * Get the plantasZona for this model.
-     *
-     * @return App\Models\PlantasZona
-     */
-    public function plantasZona()
-    {
-        return $this->hasOne('App\Models\PlantasZona','id_planta','id_planta');
     }
 
     /**

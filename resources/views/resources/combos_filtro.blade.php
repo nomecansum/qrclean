@@ -172,7 +172,7 @@
             </div>
         </div>
 
-        <div class="form-group  col-md-12" style="{{ (isset($show['sup']) && $show['sup']==1) ? 'display: none' : ''  }}">
+        <div class="form-group  col-md-12" style="{{ (isset($show['sup']) && $show['sup']==1) ? '' : 'display: none' }}">
             <label>Supervisor</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="supervisor[]" id="multi-supervisor" >
@@ -573,7 +573,7 @@
 
     $('.expand, .expandir').click(function(){
         $(this).find('i').toggleClass('fas fa-caret-right fas fa-caret-down');
-        $('#div_filtro').toggleClass('col-md-8');
+        $('#div_filtro').toggleClass('col-md-8 col-xs-12');
     });
 </script>
 @stop

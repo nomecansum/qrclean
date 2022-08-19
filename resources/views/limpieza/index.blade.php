@@ -28,9 +28,9 @@
     <div class="panel-body">
         <div id="all_toolbar">
             <div class="input-group">
-                <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
-                <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
-                <button id="btn-toggle" class="btn btn-mint float-right ml-3"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
+                <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="width: 180px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
+                <span class="btn input-group-text btn-mint btn_calendario"   style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+                <button id="btn-toggle" class="btn btn-mint float-right ml-3 "><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
             </div>
         </div>
         <table id="tablarondas"  
@@ -142,6 +142,10 @@
        $('#btn-toggle').click(function(){
          $('#tablarondas').bootstrapTable('toggleView')
        })
+
+       $('.btn_calendario').click(function(){
+            $('#fechas').trigger('click');
+        })
 
 
        $('#tablarondas').on('click-cell.bs.table', function(e, value, row, $element){

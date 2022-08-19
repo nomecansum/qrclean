@@ -47,6 +47,7 @@ class CombosController extends Controller
                 ->select('clientes.id_cliente','clientes.nom_cliente','edificios.id_edificio','edificios.des_edificio')
                 ->join('clientes','clientes.id_cliente','edificios.id_cliente')
                 ->wherein('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
                 ->orderby('des_edificio')
                 ->get(),
 
@@ -55,6 +56,7 @@ class CombosController extends Controller
                     ->join('clientes','clientes.id_cliente','plantas.id_cliente')
                     ->join('edificios','edificios.id_edificio','plantas.id_edificio')
                     ->whereIn('clientes.id_cliente',$r->cliente)
+                    ->orderby('clientes.nom_cliente')
                     ->orderby('des_planta')
                     ->get(),
 
@@ -64,6 +66,7 @@ class CombosController extends Controller
                 ->join('edificios','edificios.id_edificio','puestos.id_edificio')
                 ->join('plantas','plantas.id_planta','puestos.id_planta')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
                 ->orderby('cod_puesto')
                 ->where(function($q){
                     if (isSupervisor(Auth::user()->id)) {
@@ -77,6 +80,7 @@ class CombosController extends Controller
                 ->select('clientes.id_cliente','clientes.nom_cliente','tags.id_tag','tags.nom_tag')
                 ->join('clientes','clientes.id_cliente','tags.id_cliente')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
                 ->orderby('nom_tag')
                 ->get(),
 
@@ -84,6 +88,7 @@ class CombosController extends Controller
                 ->select('clientes.id_cliente','clientes.nom_cliente','users.id','users.name')
                 ->join('clientes','clientes.id_cliente','users.id_cliente')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
                 ->orderby('name')
                 ->get(),
 
@@ -91,6 +96,7 @@ class CombosController extends Controller
                 ->select('clientes.id_cliente','clientes.nom_cliente','puestos_tipos.id_tipo_puesto as id_tipo','puestos_tipos.des_tipo_puesto as des_tipo')
                 ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
                 ->orderby('des_tipo_puesto')
                 ->get(),
 
@@ -98,6 +104,7 @@ class CombosController extends Controller
                 ->select('clientes.id_cliente','clientes.nom_cliente','departamentos.cod_departamento','departamentos.nom_departamento')
                 ->join('clientes','clientes.id_cliente','departamentos.id_cliente')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
                 ->orderby('nom_departamento')
                 ->get(),
             
@@ -109,6 +116,7 @@ class CombosController extends Controller
                     $q->whereIn('clientes.id_cliente',$r->cliente);
                     $q->orwhere('mca_fijo','S');
                 })
+                ->orderby('clientes.nom_cliente')
                 ->orderby('des_nivel_acceso')
                 ->get(),
 
@@ -124,6 +132,7 @@ class CombosController extends Controller
                         $q->wherein('users.id_cliente',clientes());
                     }
                 })
+                ->orderby('clientes.nom_cliente')
                 ->orderby('name')
                 ->get(),
 
@@ -131,6 +140,7 @@ class CombosController extends Controller
                 ->select('clientes.id_cliente','clientes.nom_cliente','turnos.id_turno','turnos.des_turno')
                 ->join('clientes','clientes.id_cliente','turnos.id_cliente')
                 ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
                 ->orderby('des_turno')
                 ->get(),
         ];

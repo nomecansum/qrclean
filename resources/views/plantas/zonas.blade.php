@@ -84,63 +84,72 @@ try{
     
     </style>
     
-        <div class="panel editor">
-            <div class="panel-heading">
-                <div class="panel-control">
-                    <button class="btn btn-default" data-panel="dismiss" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
+        <div class="card editor mb-5">
+            <div class="card-header toolbar">
+                <div class="toolbar-start">
+                    <h5 class="m-0">Distribucion de zonas en planta {{ $plantas->des_planta }}</h5>
                 </div>
-                <h3 class="panel-title">Distribucion de zonas en planta {{ $plantas->des_planta }}</h3>
-                
+                <div class="toolbar-end">
+                    <button type="button" class="btn-close btn-close-card">
+                        <span class="visually-hidden">Close the card</span>
+                    </button>
+                </div>
             </div>
+            
             @if(isset($error))
             <div class="alert alert-danger">
                 {{-- <button class="close" data-dismiss="alert"><i class="pci-cross pci-circle"></i></button> --}}
                 <strong>ERROR!</strong> {{ $error }}
             </div>
             @else
-            <div class="panel-body">
-                <form method="POST" action="{{ url('/plantas/save_zonas') }}" id="edit_plantas_form" name="edit_plantas_form" accept-charset="UTF-8" class="form-horizontal form-ajax"  enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="json_zonas" id="json_zonas" value="{{ $plantas->json_zonas??"" }}"> 
-                    <input type="hidden" name="id_planta" value="{{ $plantas->id_planta }}">
-                    <input type="hidden" name="width" value="{{ $width }}">
-                    <input type="hidden" name="height" value="{{ $height }}">
-                    <div class="row">
-                        <div class="col-md-1 text-right">
-                            <div>
-                                <div class="btn-group btn-group-sm" role="group" style="margin-top: 23px">
-                                    <a href="#" id="pre-add-widget"  class="btn btn-success" title="Añadir zona">
-                                        <span  class="fa fa-plus-square pt-1" style="font-size: 20px" aria-hidden="true"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-3" style="display: none" id="editor_nombre">
-                            <label for="">Nombre</label>
-                            <div class="input-group float-right" id="div_fechas">
-                                <input type="text" class="form-control pull-left" id="nombre" name="nombre" style="width: 120px">
-                                <span class="btn input-group-text btn-success" style="height: 40px" id="add-widget"><i class="fa-solid fa-square-arrow-down"></i> Añadir</span>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-9"></div>
-                    </div>
-                    @if(isset($plantas->img_plano))
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="layout">
-                                    <div class="grid-stack" id="gridCont">
+            <div class="card-body">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" action="{{ url('/plantas/save_zonas') }}" id="edit_plantas_form" name="edit_plantas_form" accept-charset="UTF-8" class="form-horizontal form-ajax"  enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="json_zonas" id="json_zonas" value="{{ $plantas->json_zonas??"" }}"> 
+                            <input type="hidden" name="id_planta" value="{{ $plantas->id_planta }}">
+                            <input type="hidden" name="width" value="{{ $width }}">
+                            <input type="hidden" name="height" value="{{ $height }}">
+                            <div class="row">
+                                <div class="col-md-1 text-end">
+                                    <div>
+                                        <div class="btn-group btn-group-sm" role="group" style="margin-top: 23px">
+                                            <a href="#" id="pre-add-widget"  class="btn btn-success" title="Añadir zona">
+                                                <span  class="fa fa-plus-square pt-1" style="font-size: 20px" aria-hidden="true"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="form-group col-md-3" style="display: none" id="editor_nombre">
+                                    <label for="">Nombre</label>
+                                    <div class="input-group float-right" id="div_fechas">
+                                        <input type="text" class="form-control pull-left" id="nombre" name="nombre" style="width: 120px">
+                                        <span class="btn input-group-text btn-success" style="height: 40px" id="add-widget"><i class="fa-solid fa-square-arrow-down"></i> Añadir</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-9"></div>
                             </div>
-                        </div>
-                    @endif
-                    <div class="form-group">
-                        <div class="col-md-12 text-right">
-                            <input class="btn btn-primary" id="btn_guardar" type="button" value="Guardar">
-                        </div>
+                            @if(isset($plantas->img_plano))
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="layout">
+                                            <div class="grid-stack" id="gridCont">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="form-group">
+                                <div class="col-md-12 text-end">
+                                    <input class="btn btn-primary" id="btn_guardar" type="button" value="Guardar">
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
+                
             </div>
             
             @endif
@@ -251,7 +260,5 @@ try{
         });
 
     
-        $('.demo-psi-cross').click(function(){
-                $('.editor').hide();
-            });
+        document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
     </script>

@@ -1,20 +1,5 @@
-@extends('layout')
-@section('breadcrumb')
-    <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
-        <li class="breadcrumb-item">Configuracion</li>
-        <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
-        <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>
-    </ol>
-@endsection
 
-@section('styles')
-    <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
-    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
-
-    <link href="{{ asset('/plugins/fullcalendar/lib/main.css') }}" rel="stylesheet">
-    
-    
+<link href="{{ asset('/plugins/fullcalendar/lib/main.css') }}" rel="stylesheet">
 <style>
     .floating-like-gmail {
         position: absolute;
@@ -69,7 +54,7 @@
         min-width: 250px;
         font-size: 18px;
         list-style-type: none;
-        width: 100%;
+        width: 400px;
     }
 
     .ui-draggable-handle{
@@ -80,7 +65,7 @@
         min-height: 40px;
         min-width: 120px;
         list-style-type: none;
-        width: 100%;
+        width: 400px;
     }
 
     .fc-event-title{
@@ -102,18 +87,23 @@
     
 </style>
 
-@endsection
-
-@section('content')
 
 
 
-    <div class="panel">
-        <div class="panel-heading">
-            
-            <h3 class="panel-title">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</h3>
+
+    <div class="card editor mb-5">
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</h5>
+            </div>
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
         </div>
-        <div class="panel-body">
+        
+        <div class="card-body">
 
             @if ($errors->any())
                 <ul class="alert alert-danger">
@@ -122,39 +112,35 @@
                     @endforeach
                 </ul>
             @endif
-
             <form method="POST" action="{{ url('users/update',$users->id) }}" id="edit_users_form" name="edit_users_form" accept-charset="UTF-8" class="form-horizontal mt-4 form-ajax" enctype="multipart/form-data">
             {{ csrf_field() }}
-                <div class="tab-base tab-stacked-left">		
+                <div class="tab-base">		
                     <!--Nav tabs-->
-                    <ul class="nav nav-tabs">
-                        <li class="active">
-                            <a data-toggle="tab" href="#demo-stk-lft-tab-1" aria-expanded="true">Datos generales</a>
+                    <ul class="nav nav-tabs"  role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-1" type="button" role="tab" aria-controls="generales" aria-selected="true">Datos generales</button>
                         </li>
-                        <li class="">
-                            <a data-toggle="tab" href="#demo-stk-lft-tab-2" aria-expanded="false">Configuracion</a>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link"data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-2"  type="button" role="tab" aria-controls="config" aria-selected="false">Configuracion</button>
                         </li>
                         @if (isset($users))
-                            <li class="">
-                                <a data-toggle="tab" href="#demo-stk-lft-tab-3" aria-expanded="false">Reserva automatica</a>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab"  data-bs-target="#demo-stk-lft-tab-3" type="button" role="tab" aria-controls="reserva" aria-selected="false">Reserva automatica</button>
                             </li>
-                            <li class="">
-                                <a data-toggle="tab" href="#demo-stk-lft-tab-4" aria-expanded="false">Plantas/puestos</a>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-4"  type="button" role="tab" aria-controls="puestos" aria-selected="false">Plantas/puestos</button>
                             </li>
-                            <li class="">
-                                <a data-toggle="tab" href="#demo-stk-lft-tab-5" aria-expanded="false" id="actividad">Actividad</a>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab"  data-bs-target="#demo-stk-lft-tab-5"  id="actividad" type="button" role="tab" aria-controls="actividad" aria-selected="false">Actividad</button>
                             </li>
                         @endif
                     </ul>
                 
                     <!--Tabs Content-->
                     <div class="tab-content">
-                        <div id="demo-stk-lft-tab-1" class="tab-pane fade active in">
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <p class="text-main text-semibold">Datos generales</p>
-                                </div>
-                                <div class="panel-body">
+                        <div id="demo-stk-lft-tab-1" class="tab-pane fade active show" role="tabpanel" aria-labelledby="generales-tab">
+                            <div class="card">
+                                <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-10">
                                             <div class="row">
@@ -164,36 +150,34 @@
                                                     {!! $errors->first('name', '<p class="help-block">:message</p>') !!}
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row mt-2">
                                                 <div class="form-group col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}">
                                                     <label for="email" class="control-label">e-mail</label>
                                                     <input class="form-control" name="email" type="text" id="email" value="{{ old('email', optional($users)->email) }}" minlength="1" maxlength="255" required="true" placeholder="Enter email here...">
                                                     {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
                                                 </div>
                                                 <div class="form-group col-md-6 {{ $errors->has('password') ? 'has-error' : '' }}">
-                                                    <div class="input-group mb-3">
-                                                        <label for="password" class="control-label">Password</label>
+                                                    <label for="password" class="control-label">Password</label>
+                                                    <div class="input-group mb-4">
                                                         <input class="form-control" name="password" type="password" id="password"  minlength="4" maxlength="255" placeholder="Enter password here...">
                                                         {!! $errors->first('password', '<p class="help-block">:message</p>') !!}
-                                                        <div class="input-group-btn">
-                                                            <button class="btn btn-mint mt-4" type="button"  id="btn_generar_password">Generar</button>
-                                                        </div>
+                                                        <button class="btn btn-secondary" type="button"  id="btn_generar_password">Generar</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                            <div class="row mt-n2">
                                                 <div class="col-md-10">
                                                     <label class="control-label">Token acceso</label>
                                                     <div class="input-group mb-3">
                                                         <input type="text" name="token_acceso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($users) ? $users->token_acceso : ''}}">
                                                         <div class="input-group-btn">
-                                                            <button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>
+                                                            <button class="btn btn-secondary" type="button"  id="btn_generar_token">Generar</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label for="name" class="control-label">Expira (d)</label>
+                                                        <label for="name" class="control-label">Expira (dias)</label>
                                                         <input class="form-control" name="token_expires" type="number" id="token_expires" value="{{ old('token_expires', optional($users)->token_expires) }}" min="1" max="1000000" >
                                                         {!! $errors->first('token_expires', '<p class="help-block">:message</p>') !!}
                                                     </div>
@@ -210,7 +194,7 @@
                                                         <img src="{{ isset($users) ? Storage::disk(config('app.img_disk'))->url('img/users/'.$users->img_usuario) : ''}}" style="margin: auto; display: block; width: 156px; heigth:180px" alt="" id="img_preview" class="img-fluid">
                                                     </label>
                                                     <div class="custom-file">
-                                                        <input type="file" accept=".jpg,.png,.gif" class="form-control  custom-file-input" name="img_usuario" id="img_usuario" lang="es" value="{{ isset($users) ? $users->img_usuario : ''}}">
+                                                        <input type="file" accept=".jpg,.png,.gif,.webp.jiff" class="form-control  custom-file-input" name="img_usuario" id="img_usuario" lang="es" value="{{ isset($users) ? $users->img_usuario : ''}}">
                                                         <label class="custom-file-label" for="img_usuario"></label>
                                                     </div>
                                                 </div>
@@ -222,14 +206,14 @@
                             </div>
                             
                         </div>
-                        <div id="demo-stk-lft-tab-2" class="tab-pane fade">
-                            <div class="panel">
-                                <div class="panel-heading">
+                        <div id="demo-stk-lft-tab-2"  class="tab-pane fade" role="tabpanel" aria-labelledby="config-tab">
+                            <div class="card">
+                                <div class="card-header">
                                     <p class="text-main text-semibold">Configuracion</p>
                                 </div>
-                                <div class="panel-body">
+                                <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-3 mr-3">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Cliente</label><br>
                                                 <select required name="id_cliente" id="id_cliente" class="select2" style="width: 100%">
@@ -244,7 +228,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3 mr-3">
+                                        <div class="col-md-5">
                                             <div class="form-group {{ $errors->has('id_perfil') ? 'has-error' : '' }}">
                                                 <label for="id_perfil">Perfil</label>
                                                 <select class="select2 notsearch"  id="cod_nivel" name="cod_nivel">
@@ -302,7 +286,9 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-3 mr-3">
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label>Edificio de referencia</label><br>
                                                 <select name="id_edificio" id="id_edificio" class="select2 notsearch">
@@ -313,7 +299,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
 											<div class="form-group">
 												<label>Departamento</label>
 													<select   name="id_departamento" class="select2 tab_general" style="width: 100%" id="id_departamento">
@@ -330,6 +316,15 @@
 												<br>
 											</div>
 										</div>
+                                        <div class="col-md-3">
+											<div class="form-group">
+												<label for="name" class="control-label">ID Externo</label>
+                                                <input class="form-control" name="id_externo" type="text" id="id_externo" value="{{ old('id_externo', optional($users)->id_externo) }}" minlength="1" maxlength="255" required="true" placeholder="Enter id_externo here...">
+                                                {!! $errors->first('id_externo', '<p class="help-block">:message</p>') !!}
+											</div>
+										</div>
+                                    </div>
+                                    <div class="row mt-2">
                                         <div class="col-md-12" >
                                             <div class="form-group"  style="overflow: hidden">
                                                 <label class="text-nowrap">{{trans('strings.collectives')}}</label><br>
@@ -341,15 +336,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row rounded b-all">
-                                        <div class="form-group col-md-3 ">
-                                            <label><b>Supervisor</b></label><br>
-                                            <select name="id_usuario_supervisor" id="id_usuario_supervisor" class="select2">
-                                                <option value=""></option>
-                                                @foreach ($supervisores as $c)
-                                                    <option {{isset($users) && $users->id_usuario_supervisor == $c->id ? 'selected' : ''}} value="{{$c->id}}">{{$c->name}}</option>
-                                                @endforeach
-                                            </select>
+                                    <div class="row rounded b-all mt-4 pb-3">
+                                        <div class="col-md-4" >
+                                            <div class="form-group ">
+                                                <label><b>Supervisor</b></label><br>
+                                                <select name="id_usuario_supervisor" id="id_usuario_supervisor" class="select2 form-control" style="width:350px">
+                                                    <option value=""></option>
+                                                    @foreach ($supervisores as $c)
+                                                        <option {{isset($users) && $users->id_usuario_supervisor == $c->id ? 'selected' : ''}} value="{{$c->id}}">{{$c->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                         @if(isset($users) && isSupervisor($users->id))
                                             <div class="col-md-8">
@@ -368,21 +365,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="demo-stk-lft-tab-3" class="tab-pane fade">
-                            <div class="panel">
-                                <div class="panel-heading">
+                        <div id="demo-stk-lft-tab-3"  class="tab-pane fade " role="tabpanel" aria-labelledby="reserva-tab">
+                            <div class="card">
+                                <div class="card-header">
                                     <p class="text-main text-semibold">Reserva automatica</p>
                                 </div>
                                 <input type="hidden" name="list_puestos_preferidos" id="list_puestos_preferidos" value="{{ $users->list_puestos_preferidos }}">
-                                <div class="panel-body">
+                                <div class="card-body">
                                     @if(isset($users))
                                         <div class="row rounded b-all mb-2 bg-gray-light">
                                             <div class="col-md-12">
                                                 <label><b>Turno de asistencia</b></label><br>
                                                 @foreach($turnos as $t)
                                                 <div class="form-group col-md-3">
-                                                    <input type="checkbox" class="form-control  magic-checkbox chkdia" name="turno[]" id="turno{{$t->id_turno}}" value="{{$t->id_turno}}" {{ in_array($t->id_turno,$turnos_usuario)?'checked':'' }}> 
-                                                    <label class="custom-control-label"   for="turno{{$t->id_turno}}"><b>{{$t->des_turno}} <i class="fa-solid fa-square" style="color: {{ $t->val_color }}"></i></b></label><br>
+                                                    <div class="form-check pt-2">
+                                                        <input  name="turno[]" id="turno{{$t->id_turno}}" value="{{$t->id_turno}}" {{ in_array($t->id_turno,$turnos_usuario)?'checked':'' }} class="form-check-input chkdia" type="checkbox">
+                                                        <label class="form-check-label" for="turno{{$t->id_turno}}"><b>{{$t->des_turno}} <i class="fa-solid fa-square" style="color: {{ $t->val_color }}"></i></b></label>
+                                                    </div>
                                                 </div>
                                                 @endforeach
                                             </div>
@@ -401,7 +400,7 @@
                                                             <div id="puesto_pref" class="draggable" style="background-color:{{ $pf->color }} ">
                                                                 <h4 class="text-white">{!! $pf->icono !!} </h4>
                                                                 <div class="detalle" data-id="{{ $pf->id }}" data-tipo="{{ $pf->tipo }}">{{ $pf->text }}</div>
-                                                                <div class="bottom-right text-right papelera text-danger">
+                                                                <div class="bottom-right text-end papelera text-danger">
                                                                     <a href="#" class="btn_borrar"><i class="fa-solid fa-trash-can"></i></a>
                                                                 </div>
                                                             </div>
@@ -438,7 +437,7 @@
                                                             @endforeach
                                                         </select>
                                                         <div class="detalle" data-id="0" data-tipo="pu" style="display: none"></div>
-                                                        <div class="bottom-right text-right papelera text-danger"  style="display: none">
+                                                        <div class="bottom-right text-end papelera text-danger"  style="display: none">
                                                             <a href="#" class="btn_borrar"><i class="fa-solid fa-trash-can"></i></a>
                                                         </div>
                                                     </div>
@@ -461,7 +460,7 @@
                                                             @endforeach
                                                         </select>
                                                         <div class="detalle" data-id="0" data-tipo="pl" style="display: none"> </div>
-                                                        <div class="bottom-right text-right papelera text-danger"  style="display: none">
+                                                        <div class="bottom-right text-end papelera text-danger"  style="display: none">
                                                             <a href="#" class="btn_borrar"><i class="fa-solid fa-trash-can"></i></a>
                                                         </div>
                                                     </div>
@@ -491,7 +490,7 @@
                                                             @endforeach
                                                         </select>
                                                         <div class="detalle" data-id="0" data-tipo="zo" style="display: none"> </div>
-                                                        <div class="bottom-right text-right papelera text-danger"  style="display: none">
+                                                        <div class="bottom-right text-end papelera text-danger"  style="display: none">
                                                             <a href="#" class="btn_borrar"><i class="fa-solid fa-trash-can"></i></a>
                                                         </div>
                                                     </div>
@@ -507,51 +506,53 @@
                             
                             
                         </div>
-                        <div id="demo-stk-lft-tab-4" class="tab-pane fade">
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Tipos de puesto que puede reservar</h3>
+                        <div id="demo-stk-lft-tab-4"  class="tab-pane fade" role="tabpanel" aria-labelledby="puestos-tab">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Tipos de puesto que puede reservar</h3>
                                 </div>
-                                <div class="panel-body">
+                                <div class="card-body">
                                     <div class="row rounded b-all mb-2 bg-gray-light">
                                         <div class="col-md-12">
                                             <label><b>Tipos de puesto que puede reservar</b></label><br>
                                             @foreach($tipos_puestos as $t)
                                                 <div class="form-group col-md-4">
-                                                    <input type="checkbox" class="form-control  magic-checkbox chkdia" name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" {{ in_array($t->id_tipo_puesto,$tipos_puesto_usuario)?'checked':'' }}> 
-                                                    <label class="custom-control-label" for="tipo_puesto{{$t->id_tipo_puesto}}"> {{$t->des_tipo_puesto}} </label><br>
+                                                    <div class="form-check pt-2">
+                                                        <input name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" {{ in_array($t->id_tipo_puesto,$tipos_puesto_usuario)?'checked':'' }} class="form-check-input chkdia" type="checkbox">
+                                                        <label class="form-check-label" for="tipo_puesto{{$t->id_tipo_puesto}}"> {{$t->des_tipo_puesto}}</label>
+                                                    </div>
                                                 </div>
                                             @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Plantas en las que puede reservar</h3>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Plantas en las que puede reservar</h3>
                                 </div>
-                                <div class="panel-body" id="plantas_usuario">
+                                <div class="card-body" id="plantas_usuario">
                         
                                 </div>
                             </div>
                             @if(isSupervisor($users->id))
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Puestos que puede gestionar como supervisor</h3>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Puestos que puede gestionar como supervisor</h3>
                                 </div>
-                                <div class="panel-body" id="puestos_usuario">
+                                <div class="card-body" id="puestos_usuario">
                         
                                 </div>
                             </div>
                             @endif
                         </div>
-                        <div id="demo-stk-lft-tab-5" class="tab-pane fade">
+                        <div id="demo-stk-lft-tab-5"  class="tab-pane fade" role="tabpanel" aria-labelledby="actividad-tab">
                             
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Bitácora de {{ $users->name }}</h3>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Bitácora de {{ $users->name }}</h3>
                                 </div>
-                                <div class="panel-body panel-body-with-table">
+                                <div class="card-body">
                                     <div class="table-responsive">
                                         <table id="tablapuestos"  data-toggle="table"
                                             data-locale="es-ES"
@@ -561,9 +562,7 @@
                                             data-page-list="[5, 10, 20, 30, 40, 50]"
                                             data-page-size="10"
                                             data-pagination="true" 
-                                            data-show-pagination-switch="true"
-                                            data-show-button-icons="true"
-                                            data-toolbar="#all_toolbar"
+                                            data-show-button-text="true"
                                             >
                                             <thead>
                                                 <tr>
@@ -580,7 +579,7 @@
                                                     <td>{{ $bitacora->id_modulo }}</td>
                                                     <td>{{ $bitacora->id_seccion }}</td>
                                                     <td style="word-break: break-all;">{{ $bitacora->accion }}</td>
-                                                    <td class="text-center" ><span @if(strtoupper($bitacora->status)=="OK") class="bg-success" @else class="bg-danger" @endif style="padding: 0 5px 0 5px">{{ $bitacora->status }}</span></td>
+                                                    <td class="text-center" ><span @if(strtoupper($bitacora->status)=="OK") class="badge p-2 bg-success" @else class="badge p-2 bg-danger" @endif style="padding: 0 5px 0 5px">{{ $bitacora->status }}</span></td>
                                                     <td>{!! beauty_fecha($bitacora->fecha) !!}</td>
                                                 </tr>
                                             @endforeach
@@ -589,19 +588,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Reservas de {{ $users->name }}</h3>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Reservas de {{ $users->name }}</h3>
                                 </div>
-                                <div class="panel-body">
+                                <div class="card-body">
                                     <div class="row mt-2 ">
-                                        <div class="col-md-1"></div>
-                                        <div class="fluid col-md-10">
+                                        <div class="fluid col-md-12">
                                             <div id='demo-calendar'></div>
                                             <div id="events-popover-head" class="hide">Events</div>
                                             <div id="events-popover-content" class="hide">Test</div>
                                         </div>
-                                        <div class="col-md-2"></div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -609,7 +607,7 @@
                     </div>
                 </div>
                 <div class="form-group mt-2">
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-12 text-end">
                         <input class="btn btn-primary btn-lg btn_guardar" type="submit" value="Guardar">
                     </div>
                 </div>
@@ -617,9 +615,8 @@
 
         </div>
     </div>
-@endsection
 
-@section('scripts')
+
 <script src="{{ asset('plugins/fullcalendar/lib/main.min.js') }}"></script>
 <script src="{{ asset('plugins/fullcalendar/lib/locales/es.js') }}"></script>
 <script src="{{ asset('plugins/fullcalendar/tooltip.min.js') }}"></script>
@@ -635,6 +632,8 @@
                 $('#puestos_usuario').load("{{ url('users/puestos_supervisor/'.$users->id) }}")
             });
         @endif
+
+        $('#tablapuestos').bootstrapTable();
         
         
         function readURL(input) {
@@ -647,11 +646,13 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        $(".select2").select2();
     
         $(".select2-filtro").select2({
             placeholder: "Todos",
             allowClear: true,
-            width: "99.2%",
+            width: "90%",
         });
     
         $('.select-all').click(function(event) {
@@ -830,13 +831,15 @@
             themeSystem: 'bootstrap',
             moreLinkClick: "popover",
             dayMaxEventRows: 4,
+            initialView: 'listWeek',
             events: {!! $eventos !!}
         });
         calendar.render();
 
+
+        $('.form-ajax').submit(form_ajax_submit);
+
+        document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
     
 </script>
 
-    
-@endsection
-@include('layouts.scripts_panel')

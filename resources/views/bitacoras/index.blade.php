@@ -1,9 +1,9 @@
 @php
 Use \Carbon\Carbon;
-if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
-    $fechas=explode(" - ",$r->fechas);
-    $fechas[0]=Carbon::parse($fechas[0]);
-    $fechas[1]=Carbon::parse($fechas[1]);
+if (isset($r->fechas)){
+    $f = explode(' - ',$r->fechas);
+    $f1 = Carbon::parse(adaptar_fecha($f[0]));
+    $f2 = Carbon::parse(adaptar_fecha($f[1]));
     //dd($fechas);
 } else {
     $fechas[0]=Carbon::now()->startOfMonth();
@@ -47,7 +47,7 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">configuración</li>
         <li class="breadcrumb-item">bitácora</li>
         {{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
@@ -69,20 +69,20 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
         </div>
     @endif
 
-    <div class="panel " >
-        <div class="panel-heading cursor-pointer" style="padding-top: 10px" id="headfiltro" >
+    <div class="card " >
+        <div class="card-header cursor-pointer" style="padding-top: 10px" id="headfiltro" >
             <span class="mt-3 ml-2 font-18"><i class="fad fa-filter"></i> Filtro</span>
         </div>
-        <div class="panel-body" id="divfiltro" style="display:none" >
+        <div class="card-body" id="divfiltro" style="display:none" >
             <form name="frm_busca_bitacora" method="POST" action="{{ url('bitacoras/search') }}">
                 {{ csrf_field() }}
                 <div class="row">
                     
                 
-                    <div class="col-md-1" style="width: 110px">
+                    <div class="col-md-3" style="width: 110px">
                         <div class="form-group">
                             <label>Mostrar</label>
-                            <select class="form-control select2" name="tipo_log" id="tipo_log" style="height: 43px">
+                            <select class="form-control" name="tipo_log" id="tipo_log">
                                 <option value=""></option>
                                 <option  {{ isset($r) && $r->tipo_log=="ok" ? 'selected' : '' }} value="ok" id="ok">ok</option>
                                 <option {{ isset($r) && $r->tipo_log=="error" ? 'selected' : '' }} value="error" id="error">error</option>
@@ -91,10 +91,10 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                     </div>
                 
                     
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Usuario</label>
-                            <select class="form-control select2" tabindex="-1" aria-hidden="true" name="usuario"  style="height: 43px">
+                            <select class="form-control" tabindex="-1" aria-hidden="true" name="usuario">
                                 <option value=""></option>
                                 @foreach($usuarios as $key=>$value)
                                 <option {{ isset($r) && $r->usuario==$key ? 'selected' : '' }} value="{{ $key }}">{{ $value }}</option>
@@ -102,50 +102,52 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                             </select>
                         </div>
                     </div>
+                    
                     <div class="col-md-4">
-                        <div class="form-group">  
-                            <label>Modulo</label>
-                            <select class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Seleccione modulo" tabindex="-1" aria-hidden="true" name="modulos[]"> 
-                                @forelse($modulos as $modulo)
-                                <option {{ isset($r) && in_array($modulo,$r->modulos) ? 'selected' : '' }}  value="{{ $modulo }}">{{ $modulo }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Fechas:</label>
                             <div class="input-group mar-btm">
-                                <input type="text" class="form-control pull-right" id="fechas" name="fechas" value="{{ isset($r)?Carbon::parse($fechas[0])->format('d/m/Y').' - '.Carbon::parse($fechas[1])->format('d/m/Y'):'' }}">
+                                <input type="text" class="form-control pull-right" id="fechas" name="fechas" value="{{ isset($r)?$f1->format('d/m/Y').' - '.$f2->format('d/m/Y'):'' }}">
                                 <div class="input-group-btn">
-                                    <span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+                                    <span class="btn input-group-text btn-secondary"  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                                 </div>
                             </div>
                             <!-- /.input group -->
                         </div> 
                     </div>
-
-                    
-                        
-                    <div class="col-md-1 form-group text-right">
-                        <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 24px; height: 40px;"><i class="fa fa-search"></i> Buscar</button>
+                    <div class="col-md-2 form-group text-end">
+                        <button type="submit" class="btn btn-primary mt-3"><i class="fa fa-search"></i> Buscar</button>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-11">
+                        <div class="form-group">  
+                            <label>Modulo</label>
+                            <select class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Seleccione modulo" tabindex="-1" aria-hidden="true" name="modulos[]"> 
+                                @forelse($modulos as $modulo)
+                                <option {{ isset($r) &&is_array($r->modulos) && in_array($modulo,$r->modulos) ? 'selected' : '' }}  value="{{ $modulo }}">{{ $modulo }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                        
+                    
                     
                 </div>
             </form>
         </div>
     </div>
-    <div class="panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">Bitácora</h3>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Bitácora</h3>
         </div>
         @if(count($bitacoras) == 0)
-            <div class="panel-body text-center">
+            <div class="card-body text-center">
                 <h4>No Bitacoras Available.</h4>
             </div>
         @else
         
-            <div class="panel-body panel-body-with-table">
+            <div class="card-body panel-body-with-table">
                 <div class="table-responsive">
 
                     <table id="tablapuestos"  data-toggle="table"
@@ -157,7 +159,7 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                         data-page-size="50"
                         data-pagination="true" 
                         data-show-pagination-switch="true"
-                        data-show-button-icons="true"
+                        data-show-button-text="true"
                         data-toolbar="#all_toolbar"
                         >
                         <thead>
@@ -179,7 +181,7 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
                                 <td>{{ $bitacora->id_modulo }}</td>
                                 <td>{{ $bitacora->id_seccion }}</td>
                                 <td style="word-break: break-all;">{{ $bitacora->accion }}</td>
-                                <td ><span @if(strtoupper($bitacora->status)=="OK") class="bg-success" @else class="bg-danger" @endif style="padding: 0 5px 0 5px">{{ $bitacora->status }}</span></td>
+                                <td class="text-center" ><span @if(strtoupper($bitacora->status)=="OK") class="badge p-2 bg-success" @else class="badge p-2 bg-danger" @endif style="padding: 0 5px 0 5px">{{ $bitacora->status }}</span></td>
                                 <td>{!! beauty_fecha($bitacora->fecha) !!}</td>
                             </tr>
                         @endforeach
@@ -210,20 +212,28 @@ if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
         $('#divfiltro').toggle();
     })  
 
-    $('#tipo_log').select2({
-        minimumResultsForSearch: -1
-    });
 
-     //Date range picker
-     $('#fechas').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-                cancelLabel: 'Clear'
-            },
-            opens: 'left',
-        }, function(start_date, end_date) {
-            $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
-        });
+    var rangepicker = new Litepicker({
+        element: document.getElementById( "fechas" ),
+        singleMode: false,
+        numberOfMonths: 2,
+        numberOfColumns: 2,
+        autoApply: true,
+        format: 'DD/MM/YYYY',
+        lang: "es-ES",
+        tooltipText: {
+            one: "day",
+            other: "days"
+        },
+        tooltipNumber: (totalDays) => {
+            return totalDays - 1;
+        },
+        setup: (rangepicker) => {
+            rangepicker.on('selected', (date1, date2) => {
+                //comprobar_puestos();
+            });
+        }
+    });
 
     @if(isset($fechas) && $fechas[0]!='' && $fechas[1]!='')
         $('#fechas').val('{{ $fechas[0] }} - {{ $fechas[1] }}');

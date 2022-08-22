@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Gestión de festivos</h1>
+    <h1 class="page-header text-overflow pad-no">Días festivos</h1>
 @endsection
 @section('styles')
 	<link href="{{url('/plugins/js-year-calendar')}}/js-year-calendar.min.css" rel="stylesheet" media="all">
@@ -24,11 +24,11 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">parametrizacion</li>
 		<li class="breadcrumb-item">personas</li>
         <li class="breadcrumb-item active"><a href="{{url('/festivos')}}">dias festivos</a></li>
-	</ol
+	</ol>
 @endsection
 
 @section('content')
@@ -46,21 +46,21 @@
         <div class="col-md-4">
             <br>
         </div>
-        <div class="col-md-4 text-right">
-            <div class="btn-group btn-group-sm pull-right mb-1 " role="group">
-				@if(checkPermissions(['Festivos'],['C']))
-					<a href="#new-calendar" data-toggle="modal" id="btn_nuevo_cal" class="btn btn-mint mr-2" title="Nueva planta">
-						<i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-						<span>Nuevo calendario</span>
-					</a>
-				@endif
-				@if(checkPermissions(['Festivos'],['C']))
-					<a href="#" id="btn_nuevo_festivo" onclick="editar_festivo(0);"  class="btn btn-success" title="Nuevo festivo">
-						<i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-						<span>Nuevo</span>
-					</a>
-				@endif
-			</div>
+        <div class="col-md-4 text-end">
+
+			@if(checkPermissions(['Festivos'],['C']))
+				<a href="#new-calendar" data-toggle="modal" id="btn_nuevo_cal" class="btn btn-secondary mr-2" title="Nueva planta">
+					<i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
+					<span>Nuevo calendario</span>
+				</a>
+			@endif
+			@if(checkPermissions(['Festivos'],['C']))
+				<a href="#" id="btn_nuevo_festivo" onclick="editar_festivo(0);"  class="btn btn-success" title="Nuevo festivo">
+					<i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
+					<span>Nuevo</span>
+				</a>
+			@endif
+
         </div>
     </div>
 
@@ -68,11 +68,11 @@
 		<div class="col-12" id="edit_festivo"></div>
 	</div>
 {{-- KPI y tabla --}}
-	<div class="panel">
-		<div class="panel-heading">
-			<h3 class="panel-title">Festivos</h3>
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title">Festivos</h3>
 		</div>
-		<div class="panel-body">
+		<div class="card-body">
 			{{-- Fila de KPI --}}
 			<div id="fila_kpi">
 				@include('festives.fill_kpi_festivos')
@@ -130,11 +130,11 @@
 			{{-- Fin tabla festivos --}}
 		</div>
 	</div>
-	<div class="panel">
-		<div class="panel-heading">
-			<h3 class="panel-title"></h3>
+	<div class="card">
+		<div class="card-header">
+			<h3 class="card-title"></h3>
 		</div>
-		<div class="panel-body">
+		<div class="card-body">
 			{{-- Calendario --}}
 			<div class="row">
 				<div class="col-12">
@@ -153,7 +153,7 @@
 
 	<div class="modal fade" id="full-calendar">
 		<div class="modal-dialog modal-lg">
-			<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+			<div class="modal-content">
 				<div id="calendar-festives">
 
 				</div>
@@ -167,11 +167,13 @@
 				<form action="{{ url('festives/calendar')}}" class="form-ajax" method="POST" id="new-calendar-form">
 					{{csrf_field()}}
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
 						<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-						<h4 class="modal-title">Crear calendario</h4>
-					</div>
+						<h1 class="modal-title text-nowrap">Crear calendario </h1>
+						<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+							<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+						</button>
+					</div>    
+
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-6">
@@ -200,7 +202,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" onclick="checkNewCalendar()" class="btn btn-info mr-auto">GENERAR</button>
-						<button type="button" data-dismiss="modal" class="btn btn-warning">{{trans('strings.cancel')}}</button>
+						<button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">{{trans('strings.cancel')}}</button>
 					</div>
 				</form>
 			</div>

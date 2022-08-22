@@ -1,16 +1,18 @@
 
-    <div class="panel">
+    <div class="card">
 
-        <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0"> Detalle de la incidencia #{{ $incidencia->id_incidencia }}</h5>
             </div>
-            <h3 class="panel-title" id="titulo">
-               Detalle de la incidencia #{{ $incidencia->id_incidencia }}
-            </h3>
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
         </div>
 
-        <div class="panel-body" style="font-size: 14px">
+        <div class="card-body" style="font-size: 14px">
             <div class="row">
                 <div class="col-md-8"><h4>{{ $incidencia->des_incidencia }}</h4></div>
                 <div class="col-md-2"><h5>{!! $incidencia->estado_incidencia !!}</h5></div>
@@ -66,46 +68,59 @@
                     @endif
                 </div>
             </div>
+            
+
             <div class="row mt-3">
                 <!-- Timeline -->
                 <!--===================================================-->
                 <div class="timeline">
         
                     <!-- Timeline header -->
-                    <div class="timeline-header">
-                        <div class="timeline-header-title bg-primary">{!! beauty_fecha($incidencia->fec_apertura) !!}</div>
+                    <div class="tl-header">
+                        <div class="tl-header-title bg-primary text-white">{!! beauty_fecha($incidencia->fec_apertura) !!}</div>
                     </div>
-                    {{--  <div class="timeline-entry">
-                        <div class="timeline-stat">
-                            <div class="timeline-icon"></div>
-                            <div class="timeline-time">3 Hours ago</div>
+                    <div class="tl-entry">
+                        <div class="tl-time">
+                            <div class="tl-date">{!! beauty_fecha($incidencia->fec_apertura) !!}</div>
+                            <div class="tl-time text-info">{!! Carbon\Carbon::parse($incidencia->fec_apertura)->format('H:i') !!}</div>
                         </div>
-                        <div class="timeline-label">
-                            <p class="mar-no pad-btm"><a href="#" class="btn-link">Lisa D.</a> commented on <a href="#" class="text-semibold"><i>The Article</i></a></p>
-                            <blockquote class="bq-sm bq-open mar-no">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.</blockquote>
+                        <div class="tl-media">
+                            @if (isset($incidencia->img_usuario ) && $incidencia->img_usuario!='')
+                                <img class="img-xs rounded-circle add-tooltip" title="{{ $incidencia->name }}" src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$incidencia->img_usuario) }}" alt="{{ $incidencia->name }}">
+                            @else
+                            {!! icono_nombre($incidencia->name,32,14) !!}
+                            @endif
                         </div>
-                    </div>  --}}
+                        <div class="tl-content card bg-info text-white">
+                            <div class="card-body">
+                                <i class="fa-solid fa-circle-exclamation"></i> Apertura de la incidencia
+                            </div>
+                        </div>
+                    </div>
                     @foreach($acciones as $accion)
-                    <div class="timeline-entry">
-                        <div class="timeline-stat">
-                            <div class="timeline-icon"></div>
-                            <div class="timeline-time">{!! beauty_fecha($accion->fec_accion) !!}</div>
+                    <div class="tl-entry">
+                        <div class="tl-time">
+                            <div class="tl-date">{!! beauty_fecha($accion->fec_accion,0) !!}</div>
+                            <div class="tl-time">{!! Carbon\Carbon::parse($accion->fec_accion)->format('H:i') !!}</div>
                         </div>
-                        <div class="timeline-label">
+                        <div class="tl-media">
                             @if (isset($accion->img_usuario ) && $accion->img_usuario!='')
                                 <img class="img-xs img-circle" src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$accion->img_usuario) }}" alt="{{ $accion->name }}">
                             @else
                             {!! icono_nombre($accion->name,32,14) !!}
                             @endif
-                            
-                            <span class="btn-link">{{ $accion->name }}</span> <i>{{ $accion->des_accion }}</i>
-                            <br>
-                            <div class="float-right">
-                                @if(isset($accion->img_attach1)  && $accion->img_attach1!='')<a class="link_imagen" href="#modal_img_accion" data-toggle="modal" data-src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" style="height: 100px"></a>@endif
-                                @if(isset($accion->img_attach2)  && $accion->img_attach2!='')<a class="link_imagen" href="#modal_img_accion" data-toggle="modal" data-src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" style="height: 100px"></a>@endif
-                            </div>
-                            
                         </div>
+                        <div class="tl-content card border-light">
+                            <div class="card-body">
+                                <span class="btn-link">{{ $accion->name }}</span> <i>{{ $accion->des_accion }}</i>
+                                <br>
+                                <div class="float-right">
+                                    @if(isset($accion->img_attach1)  && $accion->img_attach1!='')<a class="link_imagen" href="#modal_img_accion" data-toggle="modal" data-src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" style="height: 100px"></a>@endif
+                                    @if(isset($accion->img_attach2)  && $accion->img_attach2!='')<a class="link_imagen" href="#modal_img_accion" data-toggle="modal" data-src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" style="height: 100px"></a>@endif
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     @endforeach
                 </div>
@@ -140,6 +155,7 @@
             $(this).closest('.panel').hide('slow');   
         });
 
+        document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
     </script>
     @include('layouts.scripts_panel')

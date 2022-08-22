@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">configuración</li>
         <li class="breadcrumb-item">parametrizacion</li>
 	    <li class="breadcrumb-item">incidencias</li>
@@ -25,10 +25,10 @@
     <div class="col-md-4">
 
     </div>
-    <div class="col-md-7">
+    <div class="col-md-6">
         <br>
     </div>
-    <div class="col-md-1 text-right">
+    <div class="col-md-2 text-end">
         <div class="btn-group btn-group-sm pull-right" role="group">
             @if(checkPermissions(['Estados de incidencia'],['C']))    
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo estado">
@@ -52,18 +52,18 @@
         </div>
     @endif
 
-    <div class="panel">
+    <div class="card">
 
-        <div class="panel-heading">
-            <h3 class="panel-title">Estados de incidencia</h3>
+        <div class="card-header">
+            <h3 class="card-title">Estados de incidencia</h3>
         </div>
         
         @if(count($estados) == 0)
-            <div class="panel-body text-center">
+            <div class="card-body text-center">
                 <h4>No hay datos.</h4>
             </div>
         @else
-        <div class="panel-body panel-body-with-table">
+        <div class="card-body panel-body-with-table">
             <div class="table-responsive w-100" >
 
                 <table id="tabla"  data-toggle="table"
@@ -74,8 +74,8 @@
                     data-page-list="[5, 10, 20, 30, 40, 50]"
                     data-page-size="50"
                     data-pagination="true" 
-                    data-show-pagination-switch="true"
-                    data-show-button-icons="true"
+                    data-buttons-class="secondary"
+                    data-show-button-text="true"
                     data-toolbar="#all_toolbar"
                     >
                     <thead>
@@ -94,22 +94,26 @@
                             <td class="text-center"><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
                             <td>{{ $tipo->des_estado }}</td>
                             <td>{{ $tipo->nom_cliente }}</td>
-
-                            <td>
-                                <div class="pull-right floating-like-gmail mt-2" role="group">
-                                    {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tipo->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_estado }})" title="Editar tipo" data-id="{{ $tipo->id_estado }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
-                                    @if(checkPermissions(['Estados de incidencia'],['D']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess())))<a href="#eliminar-planta-{{$tipo->id_estado}}" data-target="#eliminar-planta-{{$tipo->id_estado}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif
+                            <td style="position: relative">
+                                <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                                    <div class="btn-group btn-group pull-right ml-1" role="group">
+                                        {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tipo->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
+                                        <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_estado }})" title="Editar tipo" data-id="{{ $tipo->id_estado }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
+                                        @if(checkPermissions(['Estados de incidencia'],['D']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess())))<a href="#eliminar-planta-{{$tipo->id_estado}}" onclick="del({{ $tipo->id_estado }})"  data-target="#eliminar-planta-{{$tipo->id_estado}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif
+                                    </div>
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$tipo->id_estado}}" style="display: none;">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                        <div class="modal-header">
-
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+                                            <div class="modal-header">
                                                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                                                <h4 class="modal-title">¿Borrar causa de cierre {{$tipo->des_estado}}?</h4>
+                                                <h1 class="modal-title text-nowrap">Borrar causa de cierre </h1>
+                                                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                                                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                                                </button>
+                                            </div>    
+                                            <div class="modal-body">
+                                                ¿Borrar causa de cierre {{$tipo->des_estado}}?
                                             </div>
                                             <div class="modal-footer">
                                                 <a class="btn btn-info" href="{{url('/incidencias/estados/delete',$tipo->id_estado)}}">Si</a>
@@ -118,7 +122,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                             </td>
                         </tr>
                     @endforeach
@@ -144,14 +147,16 @@
             $('#editorCAM').load("{{ url('/incidencias/estados/edit/0') }}", function(){
                 animateCSS('#editorCAM','bounceInRight');
             });
-            // window.scrollTo(0, 0);
-            //stopPropagation()
         });
 
         function editar(id){
             $('#editorCAM').load("{{ url('/incidencias/estados/edit/') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
             });
+        }
+
+        function del(id){
+            $('#eliminar-planta-'+id).modal('show');
         }
 
         $('.td').click(function(event){

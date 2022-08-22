@@ -25,7 +25,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">parametrizacion</li>
 	    <li class="breadcrumb-item">espacios</li>
         <li class="breadcrumb-item active">puestos</li>
@@ -40,48 +40,44 @@
         <div class="col-md-8">
 
         </div>
-        <div class="col-md-4 text-right">
-            <div class="btn-group btn-group-xs pull-right" role="group">
-                <div class="btn-group mr-3">
-                    <div class="dropdown">
-                        <button class="btn btn-warning dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false" title="Acciones sobre la seleccion de puestos">
-                            <i class="fad fa-poll-people pt-2" style="font-size: 20px" aria-hidden="true"></i> Acciones <i class="dropdown-caret"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="" id="dropdown-acciones">
-                            @if(checkPermissions(['Puestos'],['W']))
-                                <li class="dropdown-header">Cambiar estado</li>
-                                <li><a href="#" data-estado="1" class="btn_estado_check"><i class="fas fa-square text-success"></i> Disponible</a></li>
-                                <li><a href="#" data-estado="2" class="btn_estado_check"><i class="fas fa-square text-danger"></i> Usado</a></li>
-                                @if(session('CL')['mca_limpieza']=='S')<li><a href="#" data-estado="3" class="btn_estado_check"><i class="fas fa-square text-info"></i> Limpieza</a></li>@endif
-                                <li><a href="#" data-estado="6" class="btn_estado_check"><i class="fas fa-square text-warning"></i> Incidencia</a></li>
-                                <li><a href="#" data-estado="5" class="btn_estado_check"><i class="fas fa-square text-secondary"></i> Bloqueado</a></li>
-                                <li><a href="#" data-estado="7" class="btn_estado_check"><i class="fas fa-square text-secondary"></i> No usable (encuesta)</a></li>
-                            @endif
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Atributos</li>
-                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
-                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
-                            @if(checkPermissions(['Puestos'],['W']))<li><a href="#modificar-puesto" class="btn_modificar_puestos btn_toggle_dropdown" data-toggle="modal" data-tipo="M"><i class="fad fa-pencil"></i> Modificar puestos</a></li>@endif
-                            @if(checkPermissions(['Reservas'],['C']) && checkPermissions(['Reservas global'],['C']))<li><a href="#modal-reservas" class="btn_crear_reservas btn_toggle_dropdown btn_modal_reserva" data-toggle="modal" data-tipo="C" data-accion="Crear"><i class="fad fa-calendar-alt"></i> Crear reserva</a></li>@endif
-                            @if(checkPermissions(['Reservas'],['D']) && checkPermissions(['Reservas global'],['D']))<li><a href="#modal-reservas" class="btn_cancelar_reservas btn_toggle_dropdown btn_modal_reserva" data-toggle="modal" data-tipo="D" data-accion="Cancelar"><i class="fad fa-calendar-times"></i> Cancelar reservas</a></li>@endif
-                            <li class="divider"></li>
-                            <li class="dropdown-header">Acciones</li>
-                            <li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
-                            <li><a href="#" class="btn_export_qr"><i class="fad fa-file-export"></i></i> Exportar QR</a></li>
-                            @if(checkPermissions(['Rondas de limpieza'],['C']) && session('CL')['mca_limpieza']=='S')<li><a href="#" class="btn_asignar" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
-                            @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li><a href="#" class="btn_asignar" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
-                            @if(checkPermissions(['Puestos'],['D']))<li><a href="#" class="btn_borrar_puestos btn_toggle_dropdown"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar puestos</a> </li>@endif
-                        </ul>
-                    </div>
+        <div class="col-md-4 text-end">
+            <div class="btn-group mr-3">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-secondary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fad fa-poll-people pt-2" aria-hidden="true"></i> Acciones</button>
+                    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="" id="dropdown-acciones">
+                        @if(checkPermissions(['Puestos'],['W']))
+                            <li class="dropdown-header">Cambiar estado</li>
+                            <li class="dropdown-item"><a href="#" data-estado="1" class="btn_estado_check dropdown-item"><i class="fas fa-square text-success"></i> Disponible</a></li>
+                            <li class="dropdown-item"><a href="#" data-estado="2" class="btn_estado_check dropdown-item"><i class="fas fa-square text-danger"></i> Usado</a></li>
+                            @if(session('CL')['mca_limpieza']=='S')<li class="dropdown-item"><a href="#" data-estado="3" class="btn_estado_check dropdown-item"><i class="fas fa-square text-info"></i> Limpieza</a></li>@endif
+                            <li class="dropdown-item"><a href="#" data-estado="6" class="btn_estado_check dropdown-item"><i class="fas fa-square text-warning"></i> Incidencia</a></li>
+                            <li class="dropdown-item"><a href="#" data-estado="5" class="btn_estado_check dropdown-item"><i class="fas fa-square text-secondary"></i> Bloqueado</a></li>
+                            <li class="dropdown-item"><a href="#" data-estado="7" class="btn_estado_check dropdown-item"><i class="fas fa-square text-secondary"></i> No usable (encuesta)</a></li>
+                        @endif
+                        <li class="divider"></li>
+                        <li class="dropdown-header">Atributos</li>
+                        @if(checkPermissions(['Puestos'],['W']))<li class="dropdown-item"><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
+                        @if(checkPermissions(['Puestos'],['W']))<li class="dropdown-item"><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
+                        @if(checkPermissions(['Puestos'],['W']))<li class="dropdown-item"><a href="#modificar-puesto" class="btn_modificar_puestos btn_toggle_dropdown dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-pencil"></i> Modificar puestos</a></li>@endif
+                        @if(checkPermissions(['Reservas'],['C']) && checkPermissions(['Reservas global'],['C']))<li class="dropdown-item"><a href="#modal-reservas" class="btn_crear_reservas btn_toggle_dropdown btn_modal_reserva dropdown-item" data-toggle="modal" data-tipo="C" data-accion="Crear"><i class="fad fa-calendar-alt"></i> Crear reserva</a></li>@endif
+                        @if(checkPermissions(['Reservas'],['D']) && checkPermissions(['Reservas global'],['D']))<li class="dropdown-item"><a href="#modal-reservas" class="btn_cancelar_reservas btn_toggle_dropdown btn_modal_reserva dropdown-item" data-toggle="modal" data-tipo="D" data-accion="Cancelar"><i class="fad fa-calendar-times"></i> Cancelar reservas</a></li>@endif
+                        <li class="divider"></li>
+                        <li class="dropdown-header">Acciones</li>
+                        <li class="dropdown-item"><a href="#" class="btn_qr dropdown-item"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
+                        <li class="dropdown-item"><a href="#" class="btn_export_qr dropdown-item"><i class="fad fa-file-export"></i></i> Exportar QR</a></li>
+                        @if(checkPermissions(['Rondas de limpieza'],['C']) && session('CL')['mca_limpieza']=='S')<li class="dropdown-item"><a href="#" class="btn_asignar dropdown-item" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
+                        @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li class="dropdown-item"><a href="#" class="btn_asignar dropdown-item" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
+                        @if(checkPermissions(['Puestos'],['D']))<li class="dropdown-item"><a href="#" class="btn_borrar_puestos btn_toggle_dropdown dropdown-item"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar puestos</a> </li>@endif
+                    </ul>
                 </div>
-                <div class="btn">
-                    @if(checkPermissions(['Puestos'],['C']))
-                    <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo puesto">
-                        <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-                        <span>Nuevo</span>
-                    </a>
-                    @endif
-                </div>
+            </div>
+            <div class="btn">
+                @if(checkPermissions(['Puestos'],['C']))
+                <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo puesto">
+                    <i class="fa fa-plus-square pt-2" aria-hidden="true"></i>
+                    <span>Nuevo</span>
+                </a>
+                @endif
             </div>
         </div>
     </div>
@@ -106,22 +102,21 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                    <h4 class="modal-title">¿Borrar <span id="cuenta_puestos_borrar"></span> puestos?</h4><br>
-                   
-                </div>
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <h1 class="modal-title text-nowrap">Borrar puesto </h1>
+                    <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                    </button>
+                </div>    
                 <div class="modal-body">
+                    ¿Borrar <span id="cuenta_puestos_borrar"></span> puestos?<br>
                     Esta accion no puede deshacerse
                 </div>
 
                 <div class="modal-footer">
                     <a class="btn btn-info" href="javascript:void(0)" id="borrar_muchos">Si</a>
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
             </div>
         </div>
     </div>
@@ -133,11 +128,13 @@
                     {{csrf_field()}}
                     <input type="hidden" name="lista_id" id=lista_id_modif>
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                        <h4 class="modal-title">Modificar datos de <span id="cuenta_puestos_borrar"></span> puestos</h4><br>
-                    
-                    </div>
+                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                        <h3 class="modal-title">Modificar datos de <span id="cuenta_puestos_borrar"></span> puestos </h3>
+                        <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                        </button>
+                    </div>    
+
                     <div class="modal-body">
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -223,7 +220,7 @@
                                 </select>
                             </div>
                             @if(session('CL')['mca_reserva_horas']=='S')
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <label for="max_horas_reservar">Max reserva(horas)</label>
                                     <input type="text" autocomplete="off" name="max_horas_reservar" id="max_horas_reservar"   class="form-control hourMask" />
                                 </div>
@@ -232,33 +229,33 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-info" id="modificar_muchos">Si</button>
-                        <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
                     </div>
                 </div>
             </form>
-            <div class="modal-footer">
-                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-            </div>
         </div>
     </div>
 
     <div class="modal fade" id="eliminar-puesto" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                    <h4 class="modal-title">¿Borrar puesto <span id="txt_borrar"></span>?</h4>
+                <div class="modal-header">
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <h1 class="modal-title text-nowrap">Borrar puesto </h1>
+                    <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                    </button>
+                </div>    
+                <div class="modal-body">
+                    ¿Borrar puesto <span id="txt_borrar"></span>?
                 </div>
+            
                 <div class="modal-footer">
                     <a class="btn btn-info" href="" id="link_borrar">Si</a>
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-            </div>
+
         </div>
     </div>
 
@@ -266,17 +263,22 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div><h4 class="modal-title">Habilitar acceso anonimo para los puestos</h4>
-                </div>
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <h3 class="modal-title">Habilitar acceso anonimo para los puestos </h3>
+                    <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                    </button>
+                </div>    
+                
                 <div class="modal-body">
-                    <input type="checkbox" class="form-control  magic-checkbox chk_accion" name="mca_anonimo" data-label="lbl_anonimo" id="mca_anonimo" checked value="S"> 
-					<label class="custom-control-label" id="lbl_anonimo"  for="mca_anonimo">Habilitado</label>
+                    <div class="form-check pt-2">
+                        <input   name="mca_anonimo" data-label="lbl_anonimo" id="mca_anonimo" checked value="S" class="form-check-input" type="checkbox">
+                        <label for="mca_anonimo" class="form-check-label">Habilitado</label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-info" id="btn_si_anonimo" href="javascript:void(0)">Si</a>
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
                 </div>
             </div>
         </div>
@@ -285,19 +287,22 @@
     <div class="modal fade" id="reserva-puesto" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                        <h4 class="modal-title">Habilitar reserva para los puestos</h4>
-                </div>
+                <<div class="modal-header">
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <h3 class="modal-title">Habilitar reserva para los puestos </h3>
+                    <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                    </button>
+                </div> 
                 <div class="modal-body">
-                    <input type="checkbox" class="form-control  magic-checkbox chk_accion" name="mca_reserva" data-label="lbl_reserva" id="mca_reserva" checked value="S"> 
-					<label class="custom-control-label" id="lbl_reserva"  for="mca_reserva">Habilitado</label>
+                    <div class="form-check pt-2">
+                        <input  name="mca_reserva" data-label="lbl_reserva" id="mca_reserva" checked value="S" class="form-check-input" type="checkbox">
+                        <label for="mca_reserva" class="form-check-label">Habilitado</label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <a class="btn btn-info" id="btn_si_reserva" href="javascript:void(0)">Si</a>
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
                 </div>
             </div>
         </div>
@@ -306,12 +311,13 @@
     <div class="modal fade" id="ronda-limpieza" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                    <input type="hidden" name="tip_ronda" value="L" id="tip_ronda">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                    <h3 class="modal-title">Crear ronda de <span class="tipo_ronda"></span></h3><br>
-                </div>
+                <div class="modal-header">
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <h3 class="modal-title">Crear ronda de <span class="tipo_ronda"></span> </h3>
+                    <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                    </button>
+                </div> 
                 
                 <div class="modal-body" style="height: 250px">
                     <input type="hidden" id="listaID">
@@ -327,9 +333,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
                     <a class="btn btn-info" id="btn_crear_ronda" href="javascript:void(0)">Si</a>
-                    <button type="button" id="btn_cancel_ronda" data-dismiss="modal" class="btn btn-warning">No</button>
+                    <button type="button" id="btn_cancel_ronda" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
                     
                 </div>
             </div>
@@ -339,12 +344,12 @@
     <div class="modal fade" id="modal-reservas" style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-            <div class="modal-header">
-                    <input type="hidden" name="tip_ronda" value="L" id="tip_ronda">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                    <span class="float-right" id="spin_reserva" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
-                    <h3 class="modal-title"><span class="tipo_accion"></span> multiples reservas.</h3><br>
+                <div class="modal-header">
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <span class="float-right" id="spin_reserva" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span><h1 class="modal-title text-nowrap"><span class="tipo_accion"></span> multiples reservas. </h1>
+                    <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                    </button>
                 </div>
                 <form  action="{{url('puestos/modificar_puestos')}}" method="POST" name="frm_modif_puestos" id="frm_modif_puestos" class="form-ajax">
                     {{csrf_field()}}
@@ -353,11 +358,12 @@
                         <input type="hidden" name="accion_reserva" id="accion_reserva">
                         <input type="hidden" name="hora_inicio" id="hora_inicio" value="00:00">
                         <input type="hidden" name="hora_fin" id="hora_fin" value="23:59">
-                        <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control pull-left rangepicker" id="fechas_reserva" name="fechas" style="height: 40px; width: 200px">
-                            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
-                        
+                        <div class="col-md-5">
+                            <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
+                            <div class="input-group mb-3">
+                                <input type="text"  autocomplete="off" class="form-control pull-left rangepicker" id="fechas_reserva" name="fechas">
+                                <span class="btn input-group-text btn-secondary btn_fechas"   style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+                            </div>
                         </div>
                         <div id="div_usuario_multiple">
                             <label><span class="badge badge-primary">2</span> Seleccione usuario </label>
@@ -385,8 +391,7 @@
                 
                 <div class="modal-footer">
                     <a class="btn btn-info" id="btn_res_multiple" href="javascript:void(0)">Si</a>
-                    <button type="button" id="btn_cancel_res_multiple" data-dismiss="modal" class="btn btn-warning">No</button>
-                    <div><img src="/img/Mosaic_brand_20.png" class="float-left"></div>
+                    <button type="button" id="btn_cancel_res_multiple" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
                 </div>
             </div>
         </div>
@@ -747,24 +752,33 @@
 
     Inputmask({regex:"^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$"}).mask('.hourMask');
 
-
-    $('#fechas_reserva').daterangepicker({
-        autoUpdateInput: true,
-        locale: {
-            format: '{{trans("general.date_format")}}',
-            applyLabel: "OK",
-            cancelLabel: "Cancelar",
-            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-            firstDay: {{trans("general.firstDayofWeek")}}
+    var rangepicker = new Litepicker({
+        element: document.getElementById( "fechas_reserva" ),
+        singleMode: false,
+        numberOfMonths: 2,
+        numberOfColumns: 2,
+        autoApply: true,
+        format: 'DD/MM/YYYY',
+        lang: "es-ES",
+        tooltipText: {
+            one: "day",
+            other: "days"
         },
-        opens: 'right',
-        parentEl: "#modal-reservas .modal-body" 
+        tooltipNumber: (totalDays) => {
+            return totalDays - 1;
+        },
+        setup: (rangepicker) => {
+            rangepicker.on('selected', (date1, date2) => {
+                comprobar_reserva_multiple();
+            });
+        }
     });
 
-    $('#fechas_reserva').change(function(){
-        comprobar_reserva_multiple();
+    $('.btn_fechas').click(function(){
+        rangepicker.show();
     })
+
+
     $('#id_usuario_res_multiple').change(function(){
         comprobar_reserva_multiple();
     })

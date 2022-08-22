@@ -11,7 +11,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item"><a href="{{url('/rondas')}}">Rondas de limpieza</a></li>
         <li class="breadcrumb-item active">Ronda de limpieza #{{ $ronda->id_ronda }} {{ $ronda->des_ronda }}</li>
     </ol>
@@ -30,14 +30,14 @@
             $cnt_plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('id_planta')->unique()->count();
             $cnt_puestos=$puestos->where('id_edificio',$e->id_edificio)->pluck('cod_puesto')->unique()->count();
         @endphp
-        <div class="panel">
-            <div class="panel-heading bg-gray-dark">
+        <div class="card">
+            <div class="card-header bg-gray-dark">
                 <div class="row">
                     <div class="col-md-3">
-                        <span class="text-2x ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}</span>
+                        <span class="fs-2 ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}</span>
                     </div>
                     <div class="col-md-7"></div>
-                    <div class="col-md-2 text-right">
+                    <div class="col-md-2 text-end">
                         <h4>
                             <span class="mr-2"><i class="fad fa-layer-group"></i> {{ $cnt_plantas }}</span>
                             <span class="mr-2"><i class="fad fa-desktop-alt"></i> {{ $cnt_puestos }}</span>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 @php
                     $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
                 @endphp

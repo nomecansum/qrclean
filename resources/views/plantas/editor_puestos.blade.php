@@ -21,17 +21,22 @@
 
 </style>
 
-    <div class="panel editor">
-        <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
+    <div class="card editor mb-5">
+
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">Ubicacion de puestos en planta {{ $plantas->des_planta }}</h5>
             </div>
-            <h3 class="panel-title">Ubicacion de puestos en planta {{ $plantas->des_planta }}</h3>
-            
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
         </div>
         
+        
 
-        <div class="panel-body">
+        <div class="card-body">
 
             @if ($errors->any())
                 <ul class="alert alert-danger">
@@ -52,47 +57,52 @@
                 <input type="hidden" name="factor_puestob" id="factor_puestob" value="{{ $plantas->factor_puestob }}">
                 <input type="hidden" name="factor_puestor" id="factor_puestor" value="{{ $plantas->factor_puestor }}">
                 <input type="hidden" name="factor_letra" id="factor_letra"  value="{{ $plantas->factor_letra }}">
-                @if(isset($plantas->img_plano))
-                {{--  style="background-image: url('{{ url('img/plantas/'.$plantas->img_plano) }}'); background-repeat: no-repeat; background-size: contain;"  --}}
-                    <div class="row container" id="plano" >
-                        <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="width: 100%" id="img_fondo" class="container">
-                        @php
-                            $left=0;
-                            $top=0;
-                        @endphp
-                        @foreach($puestos as $puesto)
-                        
-                        @php
-                         $asignado_usuario=null;
-                         $asignado_miperfil=null;
-                         $asignado_otroperfil=null;
-                         $reserva=null;
-                         $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
-                         //$borde="border: 5px solid ".$puesto->val_color??"#fff".";";   
-                        @endphp
-                            <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $puesto->des_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="height: {{ $puesto->factor_puestoh }}vw ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }}">
-                                <span class="h-100 align-middle texto_puesto" style="font-size: 0.8vw;">{{ $puesto->cod_puesto }}</span>
+                <div class="card">
+                    <div class="card-body">
+                        @if(isset($plantas->img_plano))
+                        {{--  style="background-image: url('{{ url('img/plantas/'.$plantas->img_plano) }}'); background-repeat: no-repeat; background-size: contain;"  --}}
+                            <div class="row container" id="plano" >
+                                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="width: 100%" id="img_fondo" class="container">
+                                @php
+                                    $left=0;
+                                    $top=0;
+                                @endphp
+                                @foreach($puestos as $puesto)
+                                
+                                @php
+                                 $asignado_usuario=null;
+                                 $asignado_miperfil=null;
+                                 $asignado_otroperfil=null;
+                                 $reserva=null;
+                                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
+                                 //$borde="border: 5px solid ".$puesto->val_color??"#fff".";";   
+                                @endphp
+                                    <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $puesto->des_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="height: {{ $puesto->factor_puestoh }}vw ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }}">
+                                        <span class="h-100 align-middle texto_puesto" style="font-size: 0.8vw;">{{ $puesto->cod_puesto }}</span>
+                                    </div>
+                                @php
+                                    $left+=50;
+                                    if($left==500){
+                                        $left=0;
+                                        $top+=50;
+                                    }
+                                 @endphp
+                                @endforeach
+        
+        
                             </div>
-                        @php
-                            $left+=50;
-                            if($left==500){
-                                $left=0;
-                                $top+=50;
-                            }
-                         @endphp
-                        @endforeach
-
-
+                        @endif
                     </div>
-                @endif
+                </div>
+                
                 @if(checkPermissions(['Plantas'],['C']))
                 <div class="row mt-3">
                     <div class="form-group col-md-2">
-                        <label>Ancho de puestos: </label> <span id="puesto-rangew-def-val"></span>
+                        <label>Ancho puestos: </label> <span id="puesto-rangew-def-val"></span>
                         <div id="puesto-rangew-def"></div>	
                     </div>
                     <div class="form-group col-md-2">
-                        <label>Alto de puestos: </label> <span id="puesto-rangeh-def-val"></span>
+                        <label>Alto puestos: </label> <span id="puesto-rangeh-def-val"></span>
                         <div id="puesto-rangeh-def"></div>	
                     </div>
                     <div class="form-group col-md-2">
@@ -104,14 +114,14 @@
                         <div id="puesto-ranger-def"></div>	
                     </div>
                     <div class="form-group col-md-2">
-                        <label>Tamaño de letra: </label> <span id="letra-range-def-val"></span>
+                        <label>Tamaño letra: </label> <span id="letra-range-def-val"></span>
                         <div id="letra-range-def"></div>	
                     </div>
                     <div class="form-group col-md-2">
-                        <label>Tamaño de grid: </label> <span id="grid-range-def-val"></span>
+                        <label>Tamaño grid: </label> <span id="grid-range-def-val"></span>
                         <div id="grid-range-def"></div>	
                     </div>
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-12 text-end pt-3">
                         <input class="btn btn-primary" id="btn_guardar" type="submit" value="Guardar">
                     </div>
                 </div>
@@ -309,7 +319,5 @@
 
     
 
-    $('.demo-psi-cross').click(function(){
-            $('.editor').hide();
-        });
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 </script>

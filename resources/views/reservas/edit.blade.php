@@ -15,16 +15,19 @@
 
 </style>
 
-<div class="panel" id="editor">
-    <div class="panel">
-        {{-- <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+<div class="card" id="editor">
+    <div class="card">
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">Reserva de puesto</h5>
             </div>
-            <h3 class="panel-title" id="titulo">Reserva de puesto</h3>
-            <span style="font-size: 30px; font-weight: bolder; color: #888; margin-top:60px" id="des_puesto"></span>
-        </div> --}}
-        <div class="panel-body">
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
             @if(count($misreservas)>0)
                 <div class="row b-all rounded mb-2">
                     <div class="col-md-12">
@@ -52,7 +55,7 @@
                                             @if($res->mca_anulada=='N')
                                                 <div class="pull-right floating-like-gmail mt-3" style="width: 300px;">
                                                     <a href="javascript:void(0)" class="btn btn-info btn-xs btn_edit  add-tooltip mr-1" title="Modificar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-pencil-alt"></i> Modificar</a>
-                                                    <a href="#planta{{ $res->id_planta }}" class="btn btn-mint btn-xs btn_ver  add-tooltip mr-1" title="Ver puesto en plano/mapa" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-puesto="{{ $res->id_puesto }}"><i class="fad fa-search-location"></i> Ver puesto</a>
+                                                    <a href="#planta{{ $res->id_planta }}" class="btn btn-secondary btn-xs btn_ver  add-tooltip mr-1" title="Ver puesto en plano/mapa" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-puesto="{{ $res->id_puesto }}"><i class="fad fa-search-location"></i> Ver puesto</a>
                                                     <a href="javascript:void(0)" class="btn btn-danger btn-xs btn_del  add-tooltip mr-1" title="Cancelar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-trash-alt"></i> Borrar</a> 
                                                 </div>
                                             @endif
@@ -77,15 +80,15 @@
                     <input type="hidden" name="hora_inicio" id="hora_inicio" value="{{ isset($reserva->fec_reserva)?Carbon\Carbon::parse($reserva->fec_reserva)->format('H:i'):'00:00' }}">
                     <input type="hidden" name="hora_fin" id="hora_fin" value="{{ isset($reserva->fec_fin_reserva)?Carbon\Carbon::parse($reserva->fec_fin_reserva)->format('H:i'):'23:59' }}">
                     {{csrf_field()}}
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label for="fechas">Fecha</label>
                         {{--  <div class="input-group">
                             <input type="text" class="form-control pull-left singledate" id="fechas" name="fechas" style="width: 180px" value="{{ $f1->format('d/m/Y')}}">
-                            <span class="btn input-group-text btn-mint datepickerbutton" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
+                            <span class="btn input-group-text btn-secondary datepickerbutton" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
                         </div>  --}}
                         <div class="input-group">
-                            <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 33px; width: 180px" value="{{ $f1->format('d/m/Y').' - '.$f1->format('d/m/Y') }}">
-                            <span class="btn input-group-text btn-mint btn_calendario"   style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+                            <input type="text" class="form-control pull-left" id="fechas" autocomplete="off" name="fechas" style="" value="{{ $f1->format('d/m/Y').' - '.$f1->format('d/m/Y') }}">
+                            <span class="btn input-group-text btn-secondary btn_calendario"   style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                         </div>
 
                     </div>
@@ -97,7 +100,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="planta"><i class="fad fa-layer-group"></i> Planta</label>
                         <select name="id_planta" id="id_planta" class="form-control">
                             <option value="0">Cualquiera</option>
@@ -121,7 +124,7 @@
                 </div>
                 <div class="row mt-2">
                     @if(session('CL')['mca_reserva_horas']=='S')
-                    <div class="form-group col-md-7" id="slider">
+                    <div class="form-group col-md-7" id="slider" style="padding-left: 30px; padding-right: 30px">
                         <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>] <span id="obs" class="text-info"></span></label>
                         <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
                     </div>
@@ -142,9 +145,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-3">
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_ical"  id="mca_ical" value="S"> 
-						<label class="custom-control-label" for="mca_ical">Añadir a mi calendario</label>
+                    <div class="d-flex">
+                        
+                        <div class="form-check form-switch">
+                            <input id="_dm-dbInvisibleMode" class="form-check-input" type="checkbox"  name="mca_ical"  id="mca_ical" value="S">
+                        </div>
+                        <label class="form-check-label h6 mt-1" for="_dm-dbInvisibleMode">Añadir a mi calendario</label>
                     </div>
                 </div>
             
@@ -181,7 +187,7 @@
     };
 
     $('.btn_calendario').click(function(){
-        $('#fechas').trigger('click');
+        picker.show();
     })
 
     $('#id_tipo_puesto').change(function(){
@@ -262,9 +268,8 @@
         });
     });
 
-    $('.demo-psi-cross').click(function(){
-        $('#editor').hide();
-    })
+
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
     $('#val_icono').iconpicker({
         icon:'{{isset($t) ? ($t->val_icono) : ''}}'
@@ -281,32 +286,40 @@
       comprobar_puestos();
     })
 
-    $('#fechas').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-                format: '{{trans("general.date_format")}}',
-                applyLabel: "OK",
-                cancelLabel: "Cancelar",
-                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-                firstDay: {{trans("general.firstDayofWeek")}}
-            },
-            "maxSpan": {"days": {{ config_cliente('max_dias_reserva',Auth::user()->id_cliente) }}},
-            opens: 'right',
-            isInvalidDate: function(ele) {
-                var currDate = moment(ele._d).format('YYYY-MM-DD');
-                return ({!! $festivos_usuario !!}.indexOf(currDate) != -1 && {{ $perfil_usuario->mca_reservar_festivos=='N'?'true':'false' }})||(moment(ele._d).isoWeekday() == 6 && {{ $perfil_usuario->mca_reservar_sabados=='N'?'true':'false' }})||(moment(ele._d).isoWeekday() == 7 && {{ $perfil_usuario->mca_reservar_domingos=='N'?'true':'false' }});
-            },
-        }, function(start_date, end_date) {
-            $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
-            $('#fechas').data('fecha_inicio',moment(start_date).format('Y-MM-DD'));
-            $('#fechas').data('fecha_fin',moment(start_date).format('Y-MM-DD'));
-            //window.location.href = '{{ url('/rondas/index/') }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
-            comprobar_puestos();
-        });
+    var picker = new Litepicker({
+        element: document.getElementById( "fechas" ),
+        singleMode: false,
+        numberOfMonths: 2,
+        numberOfColumns: 2,
+        autoApply: true,
+        format: 'DD/MM/YYYY',
+        lang: "es-ES",
+        lockDays: [{!! $festivos_usuario !!}],
+        maxDays: {{ config_cliente('max_dias_reserva',Auth::user()->id_cliente) }},
+        tooltipText: {
+            one: "day",
+            other: "days"
+        },
+        tooltipNumber: (totalDays) => {
+            return totalDays - 1;
+        },
+        lockDaysFilter: (day) => {
+            const d = day.getDay();
+            return [-1{{ $perfil_usuario->mca_reservar_sabados=='N'?'':',6' }}{{ $perfil_usuario->mca_reservar_domingos=='N'?'':',0' }}].includes(d);
+        },
+        setup: (picker) => {
+            picker.on('selected', (date1, date2) => {
+                comprobar_puestos();
+            });
+        }
+    });
+
+
+
+
 
     
-        $('.btn_guardar').click(function(){
+    $('.btn_guardar').click(function(){
         if($('#id_puesto').val()==null || $('#id_puesto').val()==""){
             toast_error('Error', 'Seleccione un puesto para reservar');
             event.preventDefault();

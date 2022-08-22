@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">configuracion</li>
 		<li class="breadcrumb-item">parametrizacion</li>
 		<li class="breadcrumb-item">personas</li>
@@ -23,15 +23,15 @@
     <div class="col-md-4">
 
     </div>
-    <div class="col-md-7">
+    <div class="col-md-6">
         <br>
     </div>
-    <div class="col-md-1 text-right">
+    <div class="col-md-2 text-end">
         @if(checkPermissions(['Departamentos'],['C']))
         <div class="btn-group btn-group-sm pull-right" role="group">
 				<a href="#" class="btn float-right hidden-sm-down btn-success btn_nuevo">
                 <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-                <span>Nuevo departamento</span>
+                <span>Nuevo</span>
             </a>
         </div>
         @endif
@@ -40,11 +40,11 @@
 <div id="editorCAM" class="mt-2">
 
 </div>
-<div class="panel">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
 
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 		<div class="table-responsive">
 			<table id="tabladeps"  data-toggle="table"
 				data-locale="es-ES"
@@ -55,8 +55,6 @@
 				data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
 				data-page-size="50"
 				data-pagination="true" 
-				data-show-pagination-switch="true"
-				data-show-button-icons="true"
 				data-toolbar="#all_toolbar"
 				data-buttons-class="secondary"
 				data-show-button-text="true"
@@ -65,7 +63,7 @@
 					<tr>
 						<th data-sortable="true" style="width: 20px" >ID</th>
 						<th data-sortable="true"  style="width: 60%" >Nombre</th>
-						<th data-sortable="true" class="text-center" ><i class="fa-solid fa-user"></i></th>
+						<th data-sortable="true" class="text-center"  ><i class="fa-solid fa-user add-tooltip" title="Usuarios en el departamento"></i></th>
 					</tr>
 				</thead>
 				<tbody> 
@@ -75,7 +73,7 @@
 					@endphp
 					@if(isset($deps))
 						@foreach ($deps as $d)
-							@include('resources.fila_departamento')
+							@include('departments.fila_departamento')
 						@endforeach
 					@endif
 				</tbody>
@@ -99,6 +97,10 @@
 			$('#editorCAM').load("{{ url('/departments/edit/') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
             });
+		}
+
+		function del(id){
+			$('#eliminar-usuario-'+id).modal('show');
 		}
 
 		$('.btn_nuevo').click(function(){

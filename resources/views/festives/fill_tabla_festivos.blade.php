@@ -75,9 +75,11 @@
                 @if(isset($f->cod_pais))<b><i class="flag-icon flag-icon-{{ strtolower($pais->cod_iso_pais) }}"></i> NACIONAL</b> [{{$pais->nom_pais }}]@endif
             @endif
             {{-- {{$f->des_centro}} --}}
-            <div class="pull-right floating-like-gmail mt-3">
-                @if(checkPermissions(['Festivos'],["W"]))<a href="#" onclick="editar_festivo({{ $f->cod_festivo }});" class="btn btn-xs btn-info"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
-                @if(checkPermissions(['Festivos'],["D"]))<a href="#eliminar-festivo-{{$f->cod_festivo}}" data-toggle="modal" class="btn btn-xs btn-danger"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
+            <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                <div class="btn-group btn-group pull-right ml-1" role="group">
+                    @if(checkPermissions(['Festivos'],["W"]))<a href="#" onclick="editar_festivo({{ $f->cod_festivo }});" class="btn btn-xs btn-info"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                    @if(checkPermissions(['Festivos'],["D"]))<a href="#eliminar-festivo-{{$f->cod_festivo}}" onclick="del({{ $f->cod_festivo }});" data-toggle="modal" class="btn btn-xs btn-danger"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
+                </div>
             </div>
             @if(checkPermissions(['Festivos'],["D"]))
             <div class="modal fade" id="eliminar-festivo-{{$f->cod_festivo}}">

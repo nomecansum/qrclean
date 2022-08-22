@@ -39,7 +39,7 @@ class BitacorasController extends Controller
     
     public function search(Request $r)
     {
-           // dd($r->all());
+            //dd($r->all());
             $todas_bitacoras = DB::table('bitacora')
             ->join('users','bitacora.id_usuario','users.id')
             ->join('clientes','clientes.id_cliente','users.id_cliente')
@@ -51,16 +51,12 @@ class BitacorasController extends Controller
 
             //D($r->modulos);
            
-            if (isset($r->fechas) && $r->fechas[0]!=null && $r->fechas[1]!=null){
-                $fechas=explode(" - ",$r->fechas);
-                $fechas[0]=Carbon::parse($fechas[0]);
-                $fechas[1]=Carbon::parse($fechas[1]);
-                //dd($fechas);
-            } else {
-                $fechas=null;
+            if (isset($r->fechas)){
+                $f = explode(' - ',$r->fechas);
+                $f1 = adaptar_fecha($f[0]);
+                $f2 = adaptar_fecha($f[1]);
             }
-            //dd($fechas);
-            //dd($fechas[0].' '.$fechas[1]);
+
             $bitacoras=DB::table('bitacora')
             ->join('users','bitacora.id_usuario','users.id')
             ->join('clientes','clientes.id_cliente','users.id_cliente')
@@ -70,8 +66,8 @@ class BitacorasController extends Controller
             ->when($r->usuario, function($query) use ($r) {
                 return  $query->where('id_usuario', $r->usuario);
                })
-            ->when($fechas, function($query) use ($fechas) {
-                return  $query->whereBetween('fecha', [$fechas[0],$fechas[1]]);
+            ->when($r->fechas, function($query) use ($f1,$f2) {
+                return  $query->whereBetween('fecha', [$f1,$f2]);
                })
             ->when($r->modulos, function($query) use ($r) {
                 return  $query->whereIn('id_modulo', $r->modulos);

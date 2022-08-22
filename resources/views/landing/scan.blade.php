@@ -43,11 +43,11 @@
 @endsection
 
 @section('cuerpo')
-<div class="panel">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
        
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row bg-dark mb-5" style="height: 100px">
             <div class="col-md-2"></div>
             <div class="col-md-8">

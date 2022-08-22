@@ -25,7 +25,7 @@
 
 @section('breadcrumb')
 <ol class="breadcrumb">
-	<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+	<li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
 	<li class="breadcrumb-item">configuracion</li>
     <li class="breadcrumb-item">parametrizacion</li>
 	<li class="breadcrumb-item">personas</li>
@@ -46,25 +46,25 @@
 	<div class="col-md-7">
 		<br>
 	</div>
-	<div class="col-md-1 text-right">
+	<div class="col-md-1 text-end">
 		
 	</div>
 </div>
 
 <div class="row mt-2">
 	<div class="col-12">
-		<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Gestor de plantas por usuarios</h3>
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Gestor de plantas por usuarios</h3>
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<table id="tabla" class="table table-condensed table-hover  table-responsive-lg">
 					<thead>
 						<tr>
 							
 							<th></th>
                             @foreach ($plantas as $planta)
-                                <th data-sortable="true" style="font-size: 10px;" class="tdplanta" data-checked="false" data-planta="{{ $planta->id_planta }}" title="{{ $planta->des_planta }}"><div class="vertical" style="margin-left: 10px;">{{ acronimo($planta->des_planta,30) }}</div></th>
+                                <th data-sortable="true" style="font-size: 12px;" class="tdplanta" data-checked="false" data-planta="{{ $planta->id_planta }}" title="{{ $planta->des_planta }}"><div class="vertical" style="margin-left: 10px;">{{ acronimo($planta->des_planta,30) }}</div></th>
                             @endforeach
 						</tr>
 					</thead>
@@ -77,8 +77,10 @@
                                 <td class="tduser" data-usuario="{{ $u->id }}" data-checked="false">{{ $u->name }}</td>
                                 @foreach($plantas as $pl)
                                     <td class="text-center" title="{{ $pl->des_planta }} -> {{ $u->name }}" id="pastilla_{{ $u->id }}_{{ $pl->id_planta }}" >
-                                        <input type="checkbox" class="form-control  magic-checkbox chkplanta" name="chk_{{ $u->id }}_{{ $pl->id_planta }}"  id="chk_{{ $u->id }}_{{ $pl->id_planta }}" data-usuario="{{ $u->id }}"  data-planta="{{ $pl->id_planta }}" {{ in_array($pl->id_planta,$asignadas)?'checked':'' }}> 
-								        <label class="custom-control-label"   for="chk_{{ $u->id }}_{{ $pl->id_planta }}"></label>
+                                        <div class="form-check pt-2">
+                                            <input  name="chk_{{ $u->id }}_{{ $pl->id_planta }}"  id="chk_{{ $u->id }}_{{ $pl->id_planta }}" data-usuario="{{ $u->id }}"  data-planta="{{ $pl->id_planta }}" {{ in_array($pl->id_planta,$asignadas)?'checked':'' }} class="form-check-input chkplanta" type="checkbox">
+                                            <label class="form-check-label" for="chk_{{ $u->id }}_{{ $pl->id_planta }}"></label>
+                                        </div>
                                     </td>
                                 @endforeach
                             </tr>

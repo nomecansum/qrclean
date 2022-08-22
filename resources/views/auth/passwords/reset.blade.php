@@ -4,8 +4,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="panel">
-                <div class="panel-header text-center">
+            <div class="card">
+                <div class="card-header text-center">
                     <div class="mar-ver pad-btm">
                         <img src="{{url('/img/Mosaic_brand_300.png')}}" style="width:300px">
                     </div>
@@ -14,7 +14,7 @@
                 
                 <br>
                 <br>
-                <div class="panel-body">
+                <div class="card-body">
                     <form method="POST" action="{{ route('password.update') }}">
                         @csrf
 

@@ -10,13 +10,13 @@
 <div class="modal fade" id="modal-url" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+            <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <h4 class="modal-title">URL del servicio</h4>
-            </div>
+                <h1 class="modal-title text-nowrap">URL del servicio </h1>
+                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                </button>
+            </div>    
             <div class="modal-body">
                 El formato de la URL deberá ser el estandar, sin parámetros ni interrogacion <b>?</b> que se añadiran en el siguiente campo<br><br>
                 Ejemplo:<br>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">OK</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">OK</button>
             </div>
         </div>
     </div>
@@ -55,12 +55,12 @@
 <div class="modal fade" id="modal-param_url" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+            <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <h4 class="modal-title">Parametros por URL</h4>
+                <h1 class="modal-title text-nowrap">Parametros URL </h1>
+                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                </button>
             </div>
             <div class="modal-body">
                 El formato de los parámetros por URL será de pares nombre=valor separados por el caracter <b>&</b><br><br>
@@ -92,7 +92,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">OK</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">OK</button>
             </div>
         </div>
     </div>
@@ -100,12 +100,12 @@
 <div class="modal fade" id="modal-param_header" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+            <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <h4 class="modal-title">Header</h4>
+                <h1 class="modal-title text-nowrap">Header </h1>
+                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                </button>
             </div>
             <div class="modal-body">
                 El formato de la cabecera de la peticion deberá ser un unico objeto JSON con los valores requeridos<br><br>
@@ -117,7 +117,7 @@
 }</pre>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">OK</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">OK</button>
             </div>
         </div>
     </div>
@@ -126,13 +126,13 @@
 <div class="modal fade" id="modal-param_respuesta" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+            <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <h4 class="modal-title">Respuesta</h4>
-            </div>
+                <h1 class="modal-title text-nowrap">Respuesta </h1>
+                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                </button>
+            </div>    
             <div class="modal-body">
                 El formato de las reglas de evaluacion de la respuesta de la peticion deberá ser un unico objeto JSON con los valores requeridos<br>
                 En la etiqueta se deberá poner el nombre del campo que se actualizará en la BDD en formato <b>"tabla.campo"</b> Las tablas que se pueden actualizar son <b>puestos</b> e <b>incidencias</b><br><br>
@@ -145,7 +145,7 @@
 }</pre>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">OK</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">OK</button>
             </div>
         </div>
     </div>
@@ -154,12 +154,12 @@
 <div class="modal modal-lg fade" id="modal-param_body" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header">
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+            <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <h4 class="modal-title">Body</h4>
+                <h1 class="modal-title text-nowrap">Body </h1>
+                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                </button>
             </div>
             <div class="modal-body">
                 El formato del cuerpo de la peticion deberá ser un texto, el formato dependerá del lo que precise el sistema de destino, con los valores que se quieran enviar al sistema remoto<br><br>
@@ -208,7 +208,7 @@ En las peticiones se pueden utilizar los siguientes comodines que serán sustitu
             </div>
             </div>
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">OK</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">OK</button>
             </div>
         </div>
     </div>

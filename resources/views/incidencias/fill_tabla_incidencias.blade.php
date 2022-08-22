@@ -31,25 +31,27 @@
         
         <td style="position: relative; vertical-align: middle" class="pt-2">
             {{ $descripcion}}
-            <div class="floating-like-gmail mt-2 w-100" style="width: 100%">
-                @if (checkPermissions(['Incidencias'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $inc->id_incidencia }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $inc->id_incidencia }})"><span class="fa fa-eye pt-1" aria-hidden="true"></span> Ver</a>@endif
-                @if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#accion-incidencia" title="Acciones incidencia" data-toggle="modal" class="btn btn-xs btn-warning add-tooltip btn-accion" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-accion{{ $inc->id_incidencia }}" onclick="accion_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-plus pt-1" aria-hidden="true"></span> Accion</a>@endif
-                @if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-cierre{{ $inc->id_incidencia }}" onclick="cierre_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-thumbs-up pt-1" aria-hidden="true"></span> Cerrar</a>@endif
-                @if (isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#reabrir-incidencia" title="Reabrir incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-reabrir" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-reabrir{{ $inc->id_incidencia }}" onclick="reabrir_incidencia({{ $inc->id_incidencia}})"><i class="fad fa-external-link-square-alt"></i> Reabrir</a>@endif
-                @if (checkPermissions(['Incidencias'],["D"]))<a href="#eliminar-incidencia-{{$inc->id_incidencia}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
-                {{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$inc->id_incidencia}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
+            <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                <div class="btn-group btn-group pull-right ml-1" role="group">
+                    @if (checkPermissions(['Incidencias'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $inc->id_incidencia }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $inc->id_incidencia }})"><span class="fa fa-eye pt-1" aria-hidden="true"></span> Ver</a>@endif
+                    @if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#accion-incidencia" title="Acciones incidencia" data-toggle="modal" class="btn btn-xs btn-warning add-tooltip btn-accion" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-accion{{ $inc->id_incidencia }}" onclick="accion_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-plus pt-1" aria-hidden="true"></span> Accion</a>@endif
+                    @if (!isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-cierre{{ $inc->id_incidencia }}" onclick="cierre_incidencia({{ $inc->id_incidencia}})"><span class="fad fa-thumbs-up pt-1" aria-hidden="true"></span> Cerrar</a>@endif
+                    @if (isset($inc->fec_cierre) && checkPermissions(['Incidencias'],["W"]))<a href="#reabrir-incidencia" title="Reabrir incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-reabrir" data-desc="{{ $inc->des_incidencia}}" data-id="{{ $inc->id_incidencia}}" id="boton-reabrir{{ $inc->id_incidencia }}" onclick="reabrir_incidencia({{ $inc->id_incidencia}})"><i class="fad fa-external-link-square-alt"></i> Reabrir</a>@endif
+                    @if (checkPermissions(['Incidencias'],["D"]))<a href="#eliminar-incidencia-{{$inc->id_incidencia}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip " onclick="$('#eliminar-incidencia-{{$inc->id_incidencia}}').modal('show')"><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
+                    {{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$inc->id_incidencia}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
+                </div>
             </div>
             @if (checkPermissions(['Incidencias'],["D"]))
                 <div class="modal fade" id="eliminar-incidencia-{{$inc->id_incidencia}}">
                     <div class="modal-dialog modal-md">
                         <div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                            <div class="modal-header"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i>
+                            <div class="modal-header"><i class="fa-solid fa-circle-question text-warning fa-3x"></i>
                                 ¿Borrar incidencia {{ $descripcion}}?
                             </div>
                             
                             <div class="modal-footer">
                                 <a class="btn btn-info" href="{{url('/incidencias/delete',$inc->id_incidencia)}}">Si</a>
-                                <button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+                                <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()" onclick="$('.modal').modal('hide')">Cancelar</button>
                             </div>
                         </div>
                     </div>
@@ -72,11 +74,11 @@
         }   
         //dd($incidencias); 
     @endphp
-    <div class="panel">
-        <div class="panel-heading">
-            <h3 class="panel-title font-bold"><span class="font-bold text-2x">{{ $incidencias->count() }}</span> Incidencias</h3>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title font-bold"><span class="font-bold fs-2">{{ $incidencias->count() }}</span> Incidencias</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             Tipo de incidencia
             <div id="chartdiv_incidencias" style="width:100%; height:300px;  ml-0"></div>
     
@@ -84,6 +86,7 @@
     </div>
    
     <script>
+
         am4core.ready(function() {
         // Themes begin
         am4core.useTheme(am4themes_animated);
@@ -137,8 +140,8 @@
 
             //dd($datos_quesito);
         @endphp
-        <div class="panel">
-            <div class="panel-body">
+        <div class="card">
+            <div class="card-body">
                 Estado de incidencia
                 <div id="chartdiv_incidencias2" style="width:100%; height:300px;  ml-0"></div>
         
@@ -196,8 +199,8 @@
 
             //dd($datos_quesito);
         @endphp
-        <div class="panel">
-            <div class="panel-body">
+        <div class="card">
+            <div class="card-body">
                 Causa de cierre
                 <div id="chartdiv_incidencias3" style="width:100%; height:300px;  ml-0"></div>
         

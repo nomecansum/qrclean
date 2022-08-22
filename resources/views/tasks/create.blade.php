@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Configuracion</li>
 		<li class="breadcrumb-item">utilidades</li>
         <li class="breadcrumb-item"><a href="{{url('/tasks')}}">Tareas programadas</a></li>
@@ -22,15 +22,15 @@
 <div class="row botones_accion mb-2">
     <br><br>
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">@isset ($t)Editar tarea {{ !empty($t->des_tarea) ? $t->des_tarea : '' }}@else Crear tarea @endif</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@isset ($t)Editar tarea {{ !empty($t->des_tarea) ? $t->des_tarea : '' }}@else Crear tarea @endif</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 		<div class="row">
 			<div class="col-12">
-				<div class="panel">
-					<div class="panel-body">
+				<div class="card">
+					<div class="card-body">
 						@isset ($t)
 						<form action="{{url('tasks/update',$t->cod_tarea)}}" class="form-ajax" method="POST">
 						<input type="hidden" name="cod_tarea" id="cod_tarea" value="{{ $t->cod_tarea }}">
@@ -60,7 +60,7 @@
 								</div>
 							</div>
 	
-							<div class="row">
+							<div class="row mt-2">
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>Intervalo</label>
@@ -147,7 +147,7 @@
 								</div>
 							</div>
 	
-							<div class="row">
+							<div class="row mt-2">
 								<div class="col-sm-7" id="cmd-txt" style="display:none">
 									<div class="form-group">
 										<label>{{__('general.comando')}}</label>
@@ -186,19 +186,19 @@
 								</div>
 							</div>
 	
-							<div class="row" id="div_regla" style="display:none">
+							<div class="row mt-3" id="div_regla" style="display:none">
 								<div class="col-md-12">
-									<div class="panel totales_resultados b-all" >
+									<div class="card totales_resultados b-all" >
 										<h4 class="mt-2 ml-2" >{{__('tareas.parametrizacion_del_comando')}}</h4>
-										<div class="panel-body" id="param_regla">
+										<div class="card-body" id="param_regla">
 	
 										</div>
 									</div>
 								</div>
 							</div>
 	
-							<div class="row">
-								<div class="col-md-12 text-right">
+							<div class="row mt-2">
+								<div class="col-md-12 text-end">
 									<button type="submit" class="btn btn-primary btn_form float-right">{{__('general.submit')}}</button>
 								</div>
 							</div>

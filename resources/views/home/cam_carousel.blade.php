@@ -5,9 +5,9 @@
 
 </style>
 
-<div id="demo-panel-network" class="panel pb-3">
-    <div class="panel-heading">
-        <div class="panel-control">
+<div id="demo-panel-network" class="card pb-3">
+    <div class="card-header">
+        <div class="card-control">
             <button id="demo-panel-network-refresh" class="btn btn-default btn-active-primary" data-toggle="panel-overlay" data-target="#mosaico"><i class="demo-psi-repeat-2"></i></button>
             <div class="dropdown">
                 <button class="dropdown-toggle btn btn-default btn-active-primary" data-toggle="dropdown" aria-expanded="false"><i class="demo-psi-dot-vertical"></i></button>
@@ -20,7 +20,7 @@
                 </ul>
             </div>
         </div>
-        <h3 class="panel-title">Camaras(<span id="paginade"></span>/<span id="paginatotal"></span>)</h3>
+        <h3 class="card-title">Camaras(<span id="paginade"></span>/<span id="paginatotal"></span>)</h3>
     </div>
 
     <div class="row" id="mosaico">

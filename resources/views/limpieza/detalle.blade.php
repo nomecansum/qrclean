@@ -35,7 +35,7 @@ try{
         <link rel="stylesheet" href="{{ URL('/css/materialdesignicons.min.css') }}">
         <link href="{{ asset('/plugins/fontawesome5/css/all.min.css') }}" rel="stylesheet">
         <link href="{{ url('/css/mosaic.css') }}" rel="stylesheet">
-        <h1 class="modal-title">Ronda de limpieza <span class="idronda">#{{ $ronda->id_ronda }}</span></h1>
+        <h1 class="modal-title text-nowrap">Ronda de limpieza <span class="idronda">#{{ $ronda->id_ronda }}</span></h1>
     </head>
 @endif
 
@@ -61,16 +61,16 @@ try{
 </div>
 <div class="row">
     <div class="col-md-3 form-group ">
-        <div class="text-2x text-center add-tooltip" title="{{ $cnt_edificios }} Edificios"> <i class="fad fa-building"></i> {{ $cnt_edificios }} </div>
+        <div class="fs-2 text-center add-tooltip" title="{{ $cnt_edificios }} Edificios"> <i class="fad fa-building"></i> {{ $cnt_edificios }} </div>
     </div>
     <div class="col-md-3 form-group"> 
-        <div class="text-2x text-center add-tooltip" title="{{ $cnt_plantas }} Plantas"><i class="fad fa-layer-group"></i> {{ $cnt_plantas }}</div>
+        <div class="fs-2 text-center add-tooltip" title="{{ $cnt_plantas }} Plantas"><i class="fad fa-layer-group"></i> {{ $cnt_plantas }}</div>
     </div>
     <div class="col-md-3 form-group">
-        <div class="text-2x text-center add-tooltip" title="{{ $cnt_puestos }} Puestos"> <i class="fad fa-desktop-alt"></i> {{ $cnt_puestos }}</div>
+        <div class="fs-2 text-center add-tooltip" title="{{ $cnt_puestos }} Puestos"> <i class="fad fa-desktop-alt"></i> {{ $cnt_puestos }}</div>
     </div>
     <div class="col-md-3 form-group  text-center">
-        <div class="text-2x font-bold text-center text-{{ color_porcentaje($pct_completado) }}">{{ round($pct_completado) }} %</div>
+        <div class="fs-2 font-bold text-center text-{{ color_porcentaje($pct_completado) }}">{{ round($pct_completado) }} %</div>
     </div>
 </div>
 <div class="row b-all rounded mb-2">
@@ -82,25 +82,25 @@ try{
     </ul>
 </div>
 <div class="row mb-3  b-all rounded">
-    <label class="mt-1 ml-1 mb-1">Puestos</label>
+    <label class="mt-1 ml-1 mb-1 fs-3">Puestos</label>
 
     @foreach($edificios as $key_edif=>$value_edif)
     
-        <div class="col-md-12 bg-gray-dark font-2x font-bold">
+        <div class="col-md-12 bg-gray-dark font-2x text-white text-start">
             <i class="fad fa-building"></i> {{ $value_edif }}
         </div>
         @php
             $plantas=$detalles->where('id_edificio',$key_edif)->pluck('des_planta','id_planta')->unique();
         @endphp
         @foreach($plantas as $key_planta=>$value_planta)
-            <div class="col-md-12 bg-gray font-2x font-bold">
+            <div class="col-md-12 bg-gray font-2x text-white  text-start">
                 <i class="fad fa-layer-group"></i> {{ $value_planta }}
             </div>
             @php
                 $puestos=$detalles->where('id_planta',$key_planta);
             @endphp
             @foreach($puestos as $p)
-                <div class="col-md-2 rounded add-tooltip divpuesto_ronda mb-2 mr-1" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->cod_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto prendiente de completar @else Completado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer;  @else border: 1px solid #ccc; background-color:#98fb98 @endif">
+                <div class="col-md-2 rounded add-tooltip divpuesto_ronda mb-2 mr-1 mt-3" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->cod_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto prendiente de completar @else Completado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer;  @else border: 1px solid #ccc; background-color:#98fb98 @endif">
                     <i class="{{ $p->val_icono }}" style="color: {{ $p->color_puesto }}"> &nbsp;</i>{{ $p->cod_puesto }} ({{ $p->val_tiempo_limpieza }}')<br>
                     @if(isset($p->user_audit))<i class="fas fa-male" style="color: {{ genColorCodeFromText("EMPLEADO".$p->user_audit,2) }}"></i> <span style="font-size: 12px">{!! beauty_fecha($p->fec_fin) !!}</span> @else --- @endif
                 </div>

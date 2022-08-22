@@ -68,7 +68,7 @@ class IncidenciasController extends Controller
         return $subject;
     }
   
-  //////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
   
     //LISTADO DE INCIDENCIAS
     public function index($f1=0,$f2=0){
@@ -827,11 +827,9 @@ class IncidenciasController extends Controller
         $tipos = DB::table('incidencias_tipos')
         ->join('clientes','clientes.id_cliente','incidencias_tipos.id_cliente')
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('incidencias_tipos.id_cliente',Auth::user()->id_cliente);
-                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                    $q->orwhere('incidencias_tipos.mca_fijo','S');
-                }
+            $q->where('incidencias_tipos.id_cliente',Auth::user()->id_cliente);
+            if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                $q->orwhere('incidencias_tipos.mca_fijo','S');
             }
         })
         ->get();
@@ -964,11 +962,9 @@ class IncidenciasController extends Controller
         $causas = DB::table('causas_cierre')
         ->join('clientes','clientes.id_cliente','causas_cierre.id_cliente')
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('causas_cierre.id_cliente',Auth::user()->id_cliente);
-                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                    $q->orwhere('causas_cierre.mca_fija','S');
-                }
+            $q->where('causas_cierre.id_cliente',Auth::user()->id_cliente);
+            if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                $q->orwhere('causas_cierre.mca_fija','S');
             }
         })
         ->get();
@@ -985,7 +981,6 @@ class IncidenciasController extends Controller
         $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
         return view('incidencias.causas.edit', compact('causa','Clientes','id'));
     }
-
 
     public function causas_save(Request $r){
         try {
@@ -1033,11 +1028,9 @@ class IncidenciasController extends Controller
         $estados = DB::table('estados_incidencias')
         ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
-                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                    $q->orwhere('estados_incidencias.mca_fijo','S');
-                }
+            $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
+            if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                $q->orwhere('estados_incidencias.mca_fijo','S');
             }
         })
         ->get();

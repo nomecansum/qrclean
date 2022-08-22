@@ -12,8 +12,8 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
-        <li class="breadcrumb-item">Reserva de puestos</li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
+        <li class="breadcrumb-item active">Reserva de puestos</li>
     </ol>
 @endsection
 
@@ -25,7 +25,7 @@
     <div class="col-md-7">
         <br>
     </div>
-    <div class="col-md-1 text-right">
+    <div class="col-md-1 text-end">
         {{-- <div class="btn-group btn-group-sm pull-right" role="group">
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva reserva">
                 <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
@@ -34,15 +34,15 @@
         </div> --}}
     </div>
 </div>
-<div id="editorCAM" class="mt-2">
+<div id="editorCAM" class="mt-2 mb-5">
 
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Mis reservas</h3>
+<div class="card">
+    <div class="card-header bg-light">
+        <h3 class="card-title ">Mis reservas</h3>
         <span class="float-right" id="spin" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div id="calendario"></div>
     </div>
 </div>
@@ -107,29 +107,17 @@
         }
 
 
-        function recolocar_puestos(posiciones){
-            $('.container').each(function(){
-                plano=$(this);
-                //console.log(plano.data('posiciones'));
-                
-                $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
-                    
-                    puesto=$('#puesto'+item.id);
-                    //console.log(item);
-                    puesto.css('top',plano.height()*item.offsettop/100);
-                    puesto.css('left',plano.width()*item.offsetleft/100);
-                });
-
-            }) 
-        }
-
+    
         $(window).resize(function(){
             recolocar_puestos();
         })
 
-        $('.mainnav-toggle').click(function(){
-            recolocar_puestos();
-        })
+        document.querySelectorAll(".nav-toggler").forEach(item => 
+            item.addEventListener("click", () => {
+                setTimeout(() => {
+                    recolocar_puestos();
+                }, 300);
+        }));
 
 
     </script>

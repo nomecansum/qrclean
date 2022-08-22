@@ -38,7 +38,7 @@
         </table>
     </div>
     <div class="col-md-5">
-        <div class="slimScrollDiv style="position: relative; overflow: hidden; width: auto; height: 100%;">
+        <div class="slimScrollDiv ml-2" style="position: relative; overflow: hidden; width: auto; height: 100%;">
             <div class="card" id="cardlog{{$id}}"  style="display: none;">
             <div class="spinner-border text-primay" id="spinlog{{$id}}" role="status" style="display: none;">
                     <span class="sr-only">Loading...</span>

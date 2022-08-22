@@ -25,10 +25,10 @@
         <div class="col-md-4">
 
         </div>
-        <div class="col-md-7">
+        <div class="col-md-6">
             <br>
         </div>
-        <div class="col-md-1 text-right">
+        <div class="col-md-2 text-right">
             @if(checkPermissions(['Plantas'],['C']))
             <div class="btn-group btn-group-sm pull-right" role="group">
                     <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva planta">
@@ -56,20 +56,21 @@
         </div>
     @endif
 
-    <div class="panel">
+    <div class="card">
         
         @if(count($plantasObjects) == 0)
             <div class="panel-body text-center">
                 <h4>No Plantas Available.</h4>
             </div>
         @else
-        <div class="panel-heading">
+        <div class="card-header">
             <h3 class="panel-title">Plantas</h3>
         </div>
-        <div class="panel-body panel-body-with-table">
+        <div class="card-body card-body-with-table">
             <div class="table-responsive w-100">
 
-                <table id="tablaplantas"  data-toggle="table"
+                <table id="tablaplantas"  
+                data-toggle="table"
                 data-locale="es-ES"
                 data-search="true"
                 data-show-columns="true"
@@ -78,8 +79,6 @@
                 data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
                 data-page-size="50"
                 data-pagination="true" 
-                data-show-pagination-switch="true"
-                data-show-button-icons="true"
                 data-toolbar="#all_toolbar"
                 data-buttons-class="secondary"
                 data-show-button-text="true"
@@ -110,23 +109,29 @@
                             <td class="text-center">{{ $cnt_zonas->cnt_zonas??0 }}</td>
                             <td class="text-center" style="position: relative">@if(isset($plantas->img_plano))<img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="height: 50px; position: absoluite">@endif
                             
-                                <div class="pull-right floating-like-gmail mt-3" style="width: 200px;">
-                                    {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $plantas->id_planta }})" title="Editar planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
-                                    @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-mint btn_puestos add-tooltip" onclick="puestos({{ $plantas->id_planta }})" title="Distribucion de puestos en la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-desktop-alt pt-1" aria-hidden="true"></span> Pos</a>@endif
-                                    @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-mint btn_zonas add-tooltip" onclick="edit_zonas({{ $plantas->id_planta }})" title="Zonas de la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa-solid fa-draw-square pt-1" aria-hidden="true"></span> Zonas</a>@endif
-                                    @if(checkPermissions(['Plantas'],['D']))<a href="#eliminar-planta-{{$plantas->id_planta}}" data-target="#eliminar-planta-{{$plantas->id_planta}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
+                                <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                                    <div class="btn-group btn-group pull-right ml-1" role="group">
+                                        {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
+                                        @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $plantas->id_planta }})" title="Editar planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                        @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-secondary btn_puestos add-tooltip" onclick="puestos({{ $plantas->id_planta }})" title="Distribucion de puestos en la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa fa-desktop-alt pt-1" aria-hidden="true"></span> Pos</a>@endif
+                                        @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-primary btn_zonas add-tooltip" onclick="edit_zonas({{ $plantas->id_planta }})" title="Zonas de la  planta" data-id="{{ $plantas->id_planta }}"> <span class="fa-solid fa-draw-square pt-1" aria-hidden="true"></span> Zonas</a>@endif
+                                        @if(checkPermissions(['Plantas'],['D']))<a href="#eliminar-planta-{{$plantas->id_planta}}" data-target="#eliminar-planta-{{$plantas->id_planta}}" onclick="del({{ $plantas->id_planta }})" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
+                                    </div>
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$plantas->id_planta}}" style="display: none;">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                        <div class="modal-header">
-
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+                                            <div class="modal-header">
                                                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                                                <h4 class="modal-title">¿Borrar planta {{$plantas->des_planta}}?</h4>
+                                                <h1 class="modal-title text-nowrap">Borrar planta </h1>
+                                                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                                                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                                                </button>
+                                            </div>    
+                                            <div class="modal-body">
+                                                ¿Borrar planta {{$plantas->des_planta}}?
                                             </div>
+                                            
                                             <div class="modal-footer">
                                                 <a class="btn btn-info" href="{{url('/plantas/delete',$plantas->id_planta)}}">Si</a>
                                                 <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
@@ -167,6 +172,10 @@
             //stopPropagation()
         });
 
+        function del(id){
+            $('#eliminar-planta-'+id).modal('show');
+        }
+
         function editar(id){
             $('#editorCAM').load("{{ url('/plantas/edit/') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
@@ -185,6 +194,7 @@
                 
             });
         }
+        
         
 
         $('.td').click(function(event){

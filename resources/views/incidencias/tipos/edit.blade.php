@@ -2,22 +2,26 @@
     @php
         use App\Models\puestos_tipos;   
     @endphp
-    <div class="panel editor">
-        <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
-            </div>
-            <h3 class="panel-title" id="titulo">
-                @if($id==0)
-                    Nuevo tipo de incidencia
-                @else
-                    Editar tipo de incidencia
-                @endif
+    <div class="card editor mb-5">
 
-            </h3>
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">
+                    @if($id==0)
+                        Nuevo tipo de incidencia
+                    @else
+                        Editar tipo de incidencia
+                    @endif
+                </h5>
+            </div>
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
 
             @if ($errors->any())
                 <ul class="alert alert-danger">
@@ -54,19 +58,9 @@
 
                         
                 </div>
-                <div class="row">
+                <div class="row mt-2">
                     
-                    <div class="form-group col-md-2" style="margin-top: 7px">
-                        <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
-                    </div>
-                    <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
-                        <div class="form-group">
-                            <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-placement="right"  class="btn btn-light iconpicker" data-iconset-version="5.3.1_pro" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-3 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
+                    <div class="form-group col-md-6 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
                         <label for="id_estado_inicial" class="control-label">Estado inicial</label>
                         <select class="form-control" required id="id_estado_inicial" name="id_estado_inicial">
                             @foreach ($estados as $estado)
@@ -93,6 +87,20 @@
                         <input class="form-control"  name="id_tipo_externo" type="text" id="id_tipo_externo" value="{{ old('id_tipo_externo', optional($tipo)->id_tipo_externo) }}" maxlength="200" placeholder="Enter id_tipo_externo here...">
                         {!! $errors->first('id_tipo_externo', '<p class="help-block">:message</p>') !!}
                     </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="form-group col-md-2" style="margin-top: 7px">
+                        <label for="val_color">Color</label><br>
+                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                    </div>
+                    <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
+                        <div class="form-group">
+                            <label>Icono</label><br>
+                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-placement="right"  class="btn btn-light iconpicker" data-iconset-version="5.3.1_pro" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
                     <div class="form-group  col-md-12" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
                         <label>Tipo de puesto</label>
                         <div class="input-group select2-bootstrap-append">
@@ -115,7 +123,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row bg-gray">
+                <div class="row bg-gray mt-4">
                     <div class="col-md-3">
                         <h5>Postprocesado de la incidencia<h5>
                     </div>
@@ -144,7 +152,7 @@
                 
 
                 <div class="form-group">
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-12 text-end">
                         @if(checkPermissions(['Tipos de incidencia'],['D']) && ( $tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
@@ -213,7 +221,7 @@
         $(this).parent().parent().find('select').select2({
             placeholder: "Todos",
             allowClear: true,
-            width: "99.2%",
+            width: "90%",
         });
         $(this).parent().parent().find('select').change();
     });
@@ -221,12 +229,10 @@
     $(".select2-filtro").select2({
         placeholder: "Todos",
         allowClear: true,
-        width: "99.2%",
+        width: "90%",
     });
 
-    $('.demo-psi-cross').click(function(){
-            $('.editor').hide();
-    });
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
     
     </script>

@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Configuracion</li>
         <li class="breadcrumb-item">{{ $entidades['tipo'] }}</li>
         <li class="breadcrumb-item active">rondas de {{ $entidades['tipo'] }}</li>
@@ -21,16 +21,16 @@
 <div class="row botones_accion mb-2">
     <br><br>
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Rondas de {{ $entidades['tipo'] }}</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Rondas de {{ $entidades['tipo'] }}</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div id="all_toolbar">
             <div class="input-group">
-                <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="width: 180px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
-                <span class="btn input-group-text btn-mint btn_calendario"   style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
-                <button id="btn-toggle" class="btn btn-mint float-right ml-3 "><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
+                <input type="text" class="form-control pull-left" id="fechas"  autocomplete="off" name="fechas" style="width: 200px"  value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
+                <span class="btn input-group-text btn-secondary btn_calendario"   style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+                <button id="btn-toggle" class="btn btn-secondary float-right ml-3 "><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
             </div>
         </div>
         <table id="tablarondas"  
@@ -43,8 +43,8 @@
             data-page-size="50"
             data-pagination="true" 
             data-show-pagination-switch="true"
-            data-show-button-icons="true"
             data-toolbar="#all_toolbar"
+            data-show-button-text="true"
             >
             <thead>
                 <tr>
@@ -83,26 +83,20 @@
                         {{ $r->des_ronda }}
                     </td>
                     
-                    <td class="td text-center text-2x" data-id="">{{ $cnt_edificios }}</td>
-                    <td class="td text-center text-2x" data-id="">{{ $cnt_plantas }}</td>
-                    <td class="td text-center text-2x" data-id="">{{ $cnt_puestos }}</td>
+                    <td class="td text-center fs-2" data-id="">{{ $cnt_edificios }}</td>
+                    <td class="td text-center fs-2" data-id="">{{ $cnt_plantas }}</td>
+                    <td class="td text-center fs-2" data-id="">{{ $cnt_puestos }}</td>
                     <td class="td" data-id="" >
                         @foreach(explode('#',$r->user_asignado) as $u)
                             <li>{{ $u }}</li>
                         @endforeach
                     </td>
-                    @if($entidades['tipo']=='limpieza')<td class="td text-center text-2x" data-id="">{{ decimal_to_time($tiempo) }}</td>@endif
+                    @if($entidades['tipo']=='limpieza')<td class="td text-center fs-2" data-id="">{{ decimal_to_time($tiempo) }}</td>@endif
                     <td class="text-center " >
                         <span class="text-{{ color_porcentaje($pct_completado) }} font-bold " style="font-size: 3.5vw ">{{ round($pct_completado) }} %</span>
                     </td>
-                    {{-- onclick="hoverdiv($(this),event,'toolbutton',{{ $puesto->id_puesto }},'{{ $puesto->cod_puesto }}','{{ $puesto->token }}');" --}}
-                    {{--  <td class="text-center opts">
-                        <a href="javascript:void(0)" ><i class="fa fa-bars add-tooltip opts" title="Acciones"></i></a>
-                    </td>  --}}
                 </tr>
-                {{-- <tr id="detalle_ronda_{{ $r->id_ronda }}" data-id="{{ $r->id_ronda }}" style="display: none:">
-                    <td colspan="8"></td>
-                </tr> --}}
+
                 @endforeach
             </tbody>
         </table> 
@@ -111,11 +105,14 @@
 <div class="modal fade" id="ronda-limpieza" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+                
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <span class="float-right" id="loading" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span><h1 class="modal-title">Ronda de {{ $entidades['tipo'] }} <span class="idronda">#</span></h1>
+                <span class="float-right" id="loading" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span><h1 class="modal-title text-nowrap">Ronda de {{ $entidades['tipo'] }} <span class="idronda">#</span></h1>
+                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                </button>
             </div>
             <div class="modal-body" id="detalle_modal">
                 
@@ -123,7 +120,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-id_ronda=0 id="btn_completar"><i class="fad fa-check-double"></i> Completar ronda</button>
                 <a  class="btn btn-info" id="btn_print" href=""><i class="fad fa-print"></i> Imprimir</a>
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Cerrar</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cerrar</button>
             </div>
         </div>
     </div>
@@ -147,7 +144,6 @@
             $('#fechas').trigger('click');
         })
 
-
        $('#tablarondas').on('click-cell.bs.table', function(e, value, row, $element){
            //console.log($element._data.id);
            @if(Auth::user()->nivel_acceso==10)
@@ -165,24 +161,29 @@
            //animateCSS('#detalle_ronda'+$element._data.id,'bounceInRight');
         });
 
-        $('.add-tooltip').tooltip({container:'body'});
-
-        //Date range picker
-        $('#fechas').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-                format: '{{trans("general.date_format")}}',
-                applyLabel: "OK",
-                cancelLabel: "Cancelar",
-                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-                firstDay: {{trans("general.firstDayofWeek")}}
+        var picker = new Litepicker({
+            element: document.getElementById( "fechas" ),
+            singleMode: false,
+            numberOfMonths: 2,
+            numberOfColumns: 2,
+            autoApply: true,
+            format: 'DD/MM/YYYY',
+            lang: "es-ES",
+            tooltipText: {
+                one: "day",
+                other: "days"
             },
-            opens: 'right',
-        }, function(start_date, end_date) {
-            $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
-            window.location.href = '{{ url('/rondas/index/') }}/{{ $tipo }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
+            tooltipNumber: (totalDays) => {
+                return totalDays - 1;
+            },
+            setup: (picker) => {
+                picker.on('selected', (date1, date2) => {
+                    window.location.href = '{{ url('/rondas/index/') }}/{{ $tipo }}/'+date1.format('YYYY-MM-DD')+'/'+date2.format('YYYY-MM-DD');
+                });
+            }
         });
+
+        
 
         $('#btn_completar').click(function(){
             get_ajax("{{ url('/rondas/completar_ronda/') }}/"+$(this).data('id_ronda')+'/'+id_user,'loading',function(){

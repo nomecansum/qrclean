@@ -1,20 +1,25 @@
-<div class="panel editor" id="editor">
+<div class="card editor mb-5" id="editor">
 	@php
 		//dd($c);
 	@endphp
-    <div class="panel">
-        <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+    <div class="card">
+		<div class="card-header toolbar">
+			<div class="toolbar-start">
+				<h5 class="m-0">
+					@if($c->id_cliente!=0)
+					<h3 class="card-title">Modificar cliente</h3>
+					@else
+					<h3 class="card-title">Nuevo cliente</h3>
+					@endif
+				</h5>
 			</div>
-			@if($c->id_cliente!=0)
-			<h3 class="panel-title">Modificar cliente</h3>
-			@else
-			<h3 class="panel-title">Nuevo cliente</h3>
-			@endif
-           
-        </div>
-        <div class="panel-body">
+			<div class="toolbar-end">
+				<button type="button" class="btn-close btn-close-card">
+					<span class="visually-hidden">Close the card</span>
+				</button>
+			</div>
+		</div>
+        <div class="card-body">
 			@if($c->id_cliente!=0)
 				<form action="{{url('/clientes/update')}}" method="POST" class="form-ajax" id="frm_cliente" enctype='multipart/form-data'>
 				<input type="hidden" name="id" value="{{$c->id_cliente}}">
@@ -22,32 +27,29 @@
 				<form action="{{url('/clientes/save')}}" method="POST" class="form-ajax"  id="frm_cliente" enctype='multipart/form-data'>
 			@endif
 			{{csrf_field()}}
-			<div class="tab-base tab-stacked-left">
+			<div class="tab-base">
 					
 				<!--Nav tabs-->
-				<ul class="nav nav-tabs">
-					<li class="active">
-						<a data-toggle="tab" href="#demo-stk-lft-tab-1" aria-expanded="true">Datos generales</a>
+				<ul class="nav nav-tabs" role="tablist">
+					<li class="nav-item active" role="presentation">
+						<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-1" type="button" role="tab" aria-controls="general" aria-selected="true">Datos generales</button>
 					</li>
-					<li class="">
-						<a data-toggle="tab" href="#demo-stk-lft-tab-2" aria-expanded="false">Configuracion</a>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-2" type="button" role="tab" aria-controls="config" aria-selected="true">Configuracion</button>
 					</li>
-					<li class="">
-						<a data-toggle="tab" href="#demo-stk-lft-tab-3" aria-expanded="false">Logos</a>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-3" type="button" role="tab" aria-controls="logos" aria-selected="true">Logos</button>
 					</li>
-					<li class="">
-						<a data-toggle="tab" href="#demo-stk-lft-tab-4" aria-expanded="false">Tema</a>
+					<li class="nav-item" role="presentation">
+						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-4" type="button" role="tab" aria-controls="tema" aria-selected="true">Tema</button>
 					</li>
 				</ul>
 	
 				<!--Tabs Content-->
 				<div class="tab-content">
-					<div id="demo-stk-lft-tab-1" class="tab-pane fade active in">
-						<p class="text-main text-semibold">Datos generales</p>
+					<div id="demo-stk-lft-tab-1" class="tab-pane fade active show"  role="tabpanel" aria-labelledby="general-tab">
 						<div class="row">
 							<div class="col-12">
-			
-									
 								<div class="row">
 									<div class="col-sm-12">
 										<div class="row">
@@ -58,24 +60,9 @@
 												</div>
 											</div>
 											<div class="col-sm-6">
-												<label class="control-label">Token registro</label>
-												<div class="input-group mb-3">
-													<input type="text" name="token_1uso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($c) ? $c->token_1uso : ''}}">
-													<div class="input-group-btn">
-														@if(checkPermissions(['Clientes'],["W"]))<button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>@endif
-													</div>
-												</div>
-											</div>
-											<div class="col-sm-12">
-												<div class="form-group">
-													<label for="">Informacion de contacto</label>
-													<input type="text" name="nom_contacto" class="form-control" value="{{isset($c) ? $c->nom_contacto : ''}}">
-												</div>
-											</div>
-											<div class="col-sm-4">
 												<div class="form-group">
 													<label for="">Distribuidor</label>
-													<select name="id_distribuidor" id="id_distribuidor" class="form-control select2" style="width: 100%">
+													<select name="id_distribuidor" id="id_distribuidor" class="form-control" style="width: 100%">
 														<option value=""></option>
 														@foreach (\DB::table('distribuidores')->get() as $d)
 															<option {{isset($c) && $c->id_distribuidor == $d->id_distribuidor ? 'selected' : ''}} value="{{$d->id_distribuidor}}">{{$d->nom_distribuidor}}</option>
@@ -86,163 +73,194 @@
 											</div>
 										</div>
 										
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						
-					</div>
-					<div id="demo-stk-lft-tab-2" class="tab-pane fade">
-						<p class="text-main text-semibold">Configuracion</p>
-						<div class="row b-all rounded  p-b-10">
-							<div class="col-md-12 p-b-10">
-								<p class="text-main text-bold text-uppercase text-left">Configuracion de cliente</p>
-								<div class="col-md-3 mt-1">
-									<input type="checkbox" class="form-control  magic-checkbox" name="mca_restringir_usuarios_planta"  id="mca_restringir_usuarios_planta" value="S" {{ isset($config->mca_restringir_usuarios_planta)&&$config->mca_restringir_usuarios_planta=='S'?'checked':'' }}> 
-									<label class="custom-control-label"   for="mca_restringir_usuarios_planta">Restringir plantas usuarios</label>
-								</div>
-								<div class="col-md-3  mt-1">
-									<input type="checkbox" class="form-control  magic-checkbox" name="mca_limpieza"  id="mca_limpieza" value="S" {{ isset($config->mca_limpieza)&&$config->mca_limpieza=='S'?'checked':'' }}> 
-									<label class="custom-control-label"   for="mca_limpieza">Funcion de limpieza</label>
-								</div>
-								<div class="col-md-3  mt-1">
-									<input type="checkbox" class="form-control  magic-checkbox" name="mca_salas"  id="mca_salas" value="S" {{ isset($config->mca_salas)&&$config->mca_salas=='S'?'checked':'' }}> 
-									<label class="custom-control-label"   for="mca_salas">Gestion de salas</label>
-								</div>
-								<div class="col-md-3 mt-1">
-									<input type="checkbox" class="form-control  magic-checkbox" name="mca_permitir_anonimo"  id="mca_permitir_anonimo" value="S" {{ isset($config->mca_permitir_anonimo)&&$config->mca_permitir_anonimo=='S'?'checked':'' }}> 
-									<label class="custom-control-label"   for="mca_permitir_anonimo">Permitir escaneo anónimo</label>
-								</div>
-								<div class="col-md-3 mt-1">
-									<input type="checkbox" class="form-control  magic-checkbox" name="mca_reserva_horas"  id="mca_reserva_horas" value="S" {{ isset($config->mca_reserva_horas)&&$config->mca_reserva_horas=='S'?'checked':'' }}> 
-									<label class="custom-control-label"   for="mca_reserva_horas">Reservas por horas</label>
-								</div>
-								<div class="col-md-3 mt-1">
-									<input type="checkbox" class="form-control  magic-checkbox" name="mca_mostrar_nombre_usando"  id="mca_mostrar_nombre_usando" value="S" {{ isset($config->mca_mostrar_nombre_usando)&&$config->mca_mostrar_nombre_usando=='S'?'checked':'' }}> 
-									<label class="custom-control-label"   for="mca_mostrar_nombre_usando">Mostrar nombre que usa puesto</label>
-								</div>
-								<div class="col-md-3 mt-1">
-									<input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_puestos_auto"  id="mca_liberar_puestos_auto" value="S" {{ isset($config->mca_liberar_puestos_auto)&&$config->mca_liberar_puestos_auto=='S'?'checked':'' }}> 
-									<label class="custom-control-label"   for="mca_liberar_puestos_auto">Liberar puestos auto</label>
-								</div>
-								<div class="col-md-3 mt-1">
-									<input type="checkbox" class="form-control  magic-checkbox" name="mca_mostrar_datos_fijos"  id="mca_mostrar_datos_fijos" value="S" {{ isset($config->mca_mostrar_datos_fijos)&&$config->mca_mostrar_datos_fijos=='S'?'checked':'' }}> 
-									<label class="custom-control-label"   for="mca_mostrar_datos_fijos">Mostrar datos fijos</label>
-								</div>
-								
-								
-							</div>
-	
-							<div class="row">
-								<div class="col-md-12 p-b-10 mt-4 ">
-									<div class="col-md-2">
-										<div class="form-group">
-											<label for="">Notificar a usuarios</label>
-											<select name="val_metodo_notificacion" id="val_metodo_notificacion" class="form-control">
-												<option value="0"  {{isset($config->val_metodo_notificacion) && $config->val_metodo_notificacion == 0 ? 'selected' : ''}}>No</option>
-												<option value="1"  {{isset($config->val_metodo_notificacion) && $config->val_metodo_notificacion == 1 ? 'selected' : ''}}>e-mail</option>
-												{{--  <option value="2"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Notificacion APP</option>
-												<option value="3"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Ambas</option>  --}}
-											</select>
+										<div class="row mt-2">
+											<div class="col-sm-12">
+												<div class="form-group">
+													<label for="">Informacion de contacto</label>
+													<input type="text" name="nom_contacto" class="form-control" value="{{isset($c) ? $c->nom_contacto : ''}}">
+												</div>
+											</div>
 										</div>
-									</div>
-									<div class="col-md-2">
-										<div class="form-group">
-											<label for="">Tamaño QR</label>
-											<input type="number" class="form-control" min="50" max="500"  required name="tam_qr" value="{{ $config->tam_qr??230 }}">
+										<div class="row mt-2">
+											<div class="col-sm-12">
+												<label class="control-label">Token registro</label>
+												<div class="input-group mb-3">
+													<input type="text" name="token_1uso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($c) ? $c->token_1uso : ''}}">
+													<div class="input-group-btn">
+														@if(checkPermissions(['Clientes'],["W"]))<button class="btn btn-secondary" type="button"  id="btn_generar_token">Generar</button>@endif
+													</div>
+												</div>
+											</div>
 										</div>
-									</div>
-									<div class="col-md-2">
-										<div class="form-group">
-											<label for="">Layout incidencias</label>
-											<select name="val_layout incidencias" id="val_layout incidencias" class="form-control ">
-												<option value="A"  {{isset($config->val_layout_incidencias) && $config->val_layout_incidencias == 'A' ? 'selected' : ''}}>Titulo y descripcion</option>
-												<option value="T"  {{isset($config->val_layout_incidencias) && $config->val_layout_incidencias == 'T' ? 'selected' : ''}}>Solo titulo</option>
-												<option value="D"  {{isset($config->val_layout_incidencias) && $config->val_layout_incidencias == 'D' ? 'selected' : ''}}>Solo descripcion</option>
-												{{--  <option value="2"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Notificacion APP</option>
-												<option value="3"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Ambas</option>  --}}
-											</select>
-										</div>
-									</div>
-									<div class="col-md-2">
-										<div class="form-group">
-											<label for="">Imagenes incidencias</label>
-											<input type="number" class="form-control" min="0" max="2"  required name="num_imagenes_incidencias" value="{{ $config->num_imagenes_incidencias??1 }}">
-										</div>
-									</div>
-								</div>
-							</div>
-							<DIV class="row">
-								<div class="col-md-2 ml-2">
-									<label for="modo_visualizacion_reservas">Vista por defecto en reservas</label>
-									<select name="modo_visualizacion_reservas" id="modo_visualizacion_reservas" class="form-control" style="width: 100%">
-										<option value="M" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='M'?'selected':'' }}>Mosaico (Puestos)</option>
-										<option value="P" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='P'?'selected':'' }}>Plano</option>
-									</select>
-								</div>
-								<div class="col-md-2">
-									<label for="modo_visualizacion_puestos">Representacion de puestos</label>
-									<select name="modo_visualizacion_puestos" id="modo_visualizacion_puestos" class="form-control" style="width: 100%">
-										<option value="C" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='C'?'selected':'' }}>Cuadro</option>
-										<option value="I" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='I'?'selected':'' }}>Icono</option>
-									</select>
-								</div>
-								<div class="col-md-2">
-									<label for="val_campo_puesto_mostrar">Mostrar en nombre de puesto</label>
-									<select name="val_campo_puesto_mostrar" id="val_campo_puesto_mostrar" class="form-control" style="width: 100%">
-										<option value="D" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='D'?'selected':'' }}>Descripcion</option>
-										<option value="I" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='I'?'selected':'' }}>Identificador</option>
-										<option value="A" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='A'?'selected':'' }}>[Identif] Descripcion</option>
-									</select>
-								</div>
-								{{-- <div class="form-group col-md-2" style="{{ $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
-									<label for="hora_liberar_puestos">Hora def. de liberar</label><br>
-									<input type="time" autocomplete="off" name="hora_liberar_puestos" id="hora_liberar_puestos"   class="form-control" value="{{isset($config->hora_liberar_puestos)?$config->hora_liberar_puestos:'23:59'}}" />
-								</div> --}}
-								<div class="form-group col-md-2" style="{{ isset($config->mca_liberar_puestos_auto) && $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
-									<label for="mca_mostrar_puestos_reservas">Mostrar puestos reservas</label><br>
-									<select name="mca_mostrar_puestos_reservas" id="mca_mostrar_puestos_reservas" class="form-control" style="width: 100%">
-										<option value="D" {{ isset($config->mca_mostrar_puestos_reservas)&&$config->mca_mostrar_puestos_reservas=='D'?'selected':'' }}>Solo disponibles</option>
-										<option value="T" {{ isset($config->mca_mostrar_puestos_reservas)&&$config->mca_mostrar_puestos_reservas=='T'?'selected':'' }}>Todos</option>
-									</select>
-								</div>
-								
-								<div class="form-group col-md-2">
-									<label for="max_dias_reserva">Maximo de dias para reserva</label><br>
-									<select name="max_dias_reserva" id="max_dias_reserva"  class="form-control ">
-										@for ($n=1;$n<=31;$n++)
-											<option value={{$n}}  {{  isset($config->max_dias_reserva)&&$config->max_dias_reserva==$n?'selected':''  }}>{{ $n }}</option>
-										@endfor
 										
-									</select>
-								</div>
-							</DIV>
-							<div class="row">
-								<div class="col-md-12 ml-2">
-									Rango de horas de reserva
-								</div>
-								<div class="col-md-2 ml-2">
-									<div class="form-group">
-										<label for="max_horas_reservar">Min</label>
-										<input type="text" autocomplete="off" name="min_hora_reservas" id="min_hora_reservas"   class="form-control hourMask" value="{{isset($config->min_hora_reservas)?decimal_to_time($config->min_hora_reservas/60):'00:00'}}" />						
 									</div>
 								</div>
-								<div class="col-md-2">
-									<div class="form-group">
-										<label for="max_horas_reservar">Max</label>
-										<input type="text" autocomplete="off" name="max_hora_reservas" id="max_hora_reservas"   class="form-control hourMask" value="{{isset($config->max_hora_reservas)?decimal_to_time($config->max_hora_reservas/60):'23:59'}}" />
-									</div>
-								</div>
-
 							</div>
 						</div>
+						
+						
 					</div>
-					<div id="demo-stk-lft-tab-3" class="tab-pane fade">
+					<div id="demo-stk-lft-tab-2" class="tab-pane fade"  role="tabpanel" aria-labelledby="config-tab">
+						<div class="row">
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input name="mca_restringir_usuarios_planta"  id="mca_restringir_usuarios_planta" value="S" {{ isset($config->mca_restringir_usuarios_planta)&&$config->mca_restringir_usuarios_planta=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label" for="mca_restringir_usuarios_planta">Restringir plantas usuarios</label>
+								</div>
+							</div>
+							<div class="col-md-3  mt-1">
+								<div class="form-check pt-2">
+									<input  name="mca_limpieza"  id="mca_limpieza" value="S" {{ isset($config->mca_limpieza)&&$config->mca_limpieza=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label" for="mca_limpieza">Funcion de limpieza</label>
+								</div>
+							</div>
+							<div class="col-md-3  mt-1">
+								<div class="form-check pt-2">
+									<input  name="mca_salas"  id="mca_salas" value="S" {{ isset($config->mca_salas)&&$config->mca_salas=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label"  for="mca_salas">Gestion de salas</label>
+								</div>
+							</div>
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input  name="mca_permitir_anonimo"  id="mca_permitir_anonimo" value="S" {{ isset($config->mca_permitir_anonimo)&&$config->mca_permitir_anonimo=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label" for="mca_permitir_anonimo">Permitir escaneo anónimo</label>
+								</div>
+							</div>
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input  name="mca_reserva_horas"  id="mca_reserva_horas" value="S" {{ isset($config->mca_reserva_horas)&&$config->mca_reserva_horas=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label" ffor="mca_reserva_horas">Reservas por horas</label>
+								</div>
+							</div>
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input name="mca_mostrar_nombre_usando"  id="mca_mostrar_nombre_usando" value="S" {{ isset($config->mca_mostrar_nombre_usando)&&$config->mca_mostrar_nombre_usando=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label" for="mca_mostrar_nombre_usando">Mostrar nombre que usa puesto</label>
+								</div>
+							</div>
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input  name="mca_liberar_puestos_auto"  id="mca_liberar_puestos_auto" value="S" {{ isset($config->mca_liberar_puestos_auto)&&$config->mca_liberar_puestos_auto=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label" for="mca_liberar_puestos_auto">Liberar puestos auto</label>
+								</div>
+							</div>
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input name="mca_mostrar_datos_fijos"  id="mca_mostrar_datos_fijos" value="S" {{ isset($config->mca_mostrar_datos_fijos)&&$config->mca_mostrar_datos_fijos=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label"  for="mca_mostrar_datos_fijos">Mostrar datos fijos</label>
+								</div>
+							</div>
+							
+							
+						</div>
+
+						<div class="row mt-4">
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">Notificar a usuarios</label>
+									<select name="val_metodo_notificacion" id="val_metodo_notificacion" class="form-control">
+										<option value="0"  {{isset($config->val_metodo_notificacion) && $config->val_metodo_notificacion == 0 ? 'selected' : ''}}>No</option>
+										<option value="1"  {{isset($config->val_metodo_notificacion) && $config->val_metodo_notificacion == 1 ? 'selected' : ''}}>e-mail</option>
+										{{--  <option value="2"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Notificacion APP</option>
+										<option value="3"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Ambas</option>  --}}
+									</select>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">Tamaño QR</label>
+									<input type="number" class="form-control" min="50" max="500"  required name="tam_qr" value="{{ $config->tam_qr??230 }}">
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">Layout incidencias</label>
+									<select name="val_layout incidencias" id="val_layout incidencias" class="form-control ">
+										<option value="A"  {{isset($config->val_layout_incidencias) && $config->val_layout_incidencias == 'A' ? 'selected' : ''}}>Titulo y descripcion</option>
+										<option value="T"  {{isset($config->val_layout_incidencias) && $config->val_layout_incidencias == 'T' ? 'selected' : ''}}>Solo titulo</option>
+										<option value="D"  {{isset($config->val_layout_incidencias) && $config->val_layout_incidencias == 'D' ? 'selected' : ''}}>Solo descripcion</option>
+										{{--  <option value="2"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Notificacion APP</option>
+										<option value="3"  {{isset($c) && $c->val_metodo_notificacion == 0 ? 'selected' : ''}}>Ambas</option>  --}}
+									</select>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">Imagenes incidencias</label>
+									<input type="number" class="form-control" min="0" max="2"  required name="num_imagenes_incidencias" value="{{ $config->num_imagenes_incidencias??1 }}">
+								</div>
+							</div>
+						</div>
+						<div class="row mt-4">
+							<div class="col-md-2">
+								<label for="modo_visualizacion_reservas">Vista por defecto en reservas</label>
+								<select name="modo_visualizacion_reservas" id="modo_visualizacion_reservas" class="form-control" style="width: 100%">
+									<option value="M" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='M'?'selected':'' }}>Mosaico (Puestos)</option>
+									<option value="P" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='P'?'selected':'' }}>Plano</option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<label for="modo_visualizacion_puestos">Representacion de puestos</label>
+								<select name="modo_visualizacion_puestos" id="modo_visualizacion_puestos" class="form-control" style="width: 100%">
+									<option value="C" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='C'?'selected':'' }}>Cuadro</option>
+									<option value="I" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='I'?'selected':'' }}>Icono</option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<label for="val_campo_puesto_mostrar">Mostrar en nombre de puesto</label>
+								<select name="val_campo_puesto_mostrar" id="val_campo_puesto_mostrar" class="form-control" style="width: 100%">
+									<option value="D" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='D'?'selected':'' }}>Descripcion</option>
+									<option value="I" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='I'?'selected':'' }}>Identificador</option>
+									<option value="A" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='A'?'selected':'' }}>[Identif] Descripcion</option>
+								</select>
+							</div>
+							{{-- <div class="form-group col-md-2" style="{{ $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
+								<label for="hora_liberar_puestos">Hora def. de liberar</label><br>
+								<input type="time" autocomplete="off" name="hora_liberar_puestos" id="hora_liberar_puestos"   class="form-control" value="{{isset($config->hora_liberar_puestos)?$config->hora_liberar_puestos:'23:59'}}" />
+							</div> --}}
+							<div class="form-group col-md-2" style="{{ isset($config->mca_liberar_puestos_auto) && $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
+								<label for="mca_mostrar_puestos_reservas">Mostrar puestos reservas</label><br>
+								<select name="mca_mostrar_puestos_reservas" id="mca_mostrar_puestos_reservas" class="form-control" style="width: 100%">
+									<option value="D" {{ isset($config->mca_mostrar_puestos_reservas)&&$config->mca_mostrar_puestos_reservas=='D'?'selected':'' }}>Solo disponibles</option>
+									<option value="T" {{ isset($config->mca_mostrar_puestos_reservas)&&$config->mca_mostrar_puestos_reservas=='T'?'selected':'' }}>Todos</option>
+								</select>
+							</div>
+							
+							<div class="form-group col-md-2">
+								<label for="max_dias_reserva">Maximo de dias para reserva</label><br>
+								<select name="max_dias_reserva" id="max_dias_reserva"  class="form-control ">
+									@for ($n=1;$n<=31;$n++)
+										<option value={{$n}}  {{  isset($config->max_dias_reserva)&&$config->max_dias_reserva==$n?'selected':''  }}>{{ $n }}</option>
+									@endfor
+									
+								</select>
+							</div>
+						</div>
+						<div class="row mt-4">
+							<div class="col-md-12 text-muted">
+								Rango de horas de reserva
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="max_horas_reservar">Min</label>
+									<input type="text" autocomplete="off" name="min_hora_reservas" id="min_hora_reservas"   class="form-control hourMask" value="{{isset($config->min_hora_reservas)?decimal_to_time($config->min_hora_reservas/60):'00:00'}}" />						
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="max_horas_reservar">Max</label>
+									<input type="text" autocomplete="off" name="max_hora_reservas" id="max_hora_reservas"   class="form-control hourMask" value="{{isset($config->max_hora_reservas)?decimal_to_time($config->max_hora_reservas/60):'23:59'}}" />
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+					<div id="demo-stk-lft-tab-3" class="tab-pane fade"  role="tabpanel" aria-labelledby="logos-tab">
 						<p class="text-main text-semibold">Logos</p>
 						<div class="row">
 							<div class="col-md-12 p-b-10">
-								<p class="text-main text-bold text-uppercase text-left">Logos</p>
+								<p class="text-main text-bold text-uppercase text-start">Logos</p>
 							</div>
 						</div>
 						<div class="row mb-0">
@@ -276,7 +294,7 @@
 						</div>
 						
 					</div>
-					<div id="demo-stk-lft-tab-4" class="tab-pane fade">
+					<div id="demo-stk-lft-tab-4" class="tab-pane fade"  role="tabpanel" aria-labelledby="tema-tab">
 						<p class="text-main text-semibold">Tema</p>
 						<input type="hidden" name="theme_type" id="theme_type" value="{{ isset($config->theme_type)?$config->theme_type:'navy' }}"> 
 						<input type="hidden" name="theme_name" id="theme_name"  value="{{ isset($config->theme_name)?$config->theme_name:'e' }}"> 
@@ -284,7 +302,7 @@
 							<div class="row">
 								<div class="col-lg-8" style="padding-left: 30px">
 									<div id="demo-theme">
-										<p class="text-main text-bold text-uppercase text-left">Tema de la aplicacion</p>
+										<p class="text-main text-bold text-uppercase text-start">Tema de la aplicacion</p>
 										<hr class="new-section-xs">
 										<div class="clearfix demo-full-theme">
 											<div class="col-md-6">
@@ -335,7 +353,7 @@
 													<a href="#" class="demo-theme demo-theme-purple add-tooltip" data-theme="theme-purple" data-type="e" data-title="(E). Purple"></a>
 													<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="e" data-title="(E). Dust"></a>
 			
-													<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="e" data-title="(E). Mint"></a>
+													<a href="#" class="demo-theme demo-theme-secondary add-tooltip" data-theme="theme-secondary" data-type="e" data-title="(E). secondary"></a>
 													<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="e" data-title="(E). Yellow"></a>
 													<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="e" data-title="(E). Well Red"></a>
 			
@@ -362,7 +380,7 @@
 													<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="a" data-title="(A). Dust"></a>
 												</div>
 												<div class="demo-justify-theme">
-													<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="a" data-title="(A). Mint"></a>
+													<a href="#" class="demo-theme demo-theme-secondary add-tooltip" data-theme="theme-secondary" data-type="a" data-title="(A). secondary"></a>
 													<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="a" data-title="(A). Yellow"></a>
 													<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="a" data-title="(A). Well Red"></a>
 												</div>
@@ -388,7 +406,7 @@
 													<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="b" data-title="(B). Dust"></a>
 												</div>
 												<div class="demo-justify-theme">
-													<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="b" data-title="(B). Mint"></a>
+													<a href="#" class="demo-theme demo-theme-secondary add-tooltip" data-theme="theme-secondary" data-type="b" data-title="(B). secondary"></a>
 													<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="b" data-title="(B). Yellow"></a>
 													<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="b" data-title="(B). Well red"></a>
 												</div>
@@ -414,7 +432,7 @@
 													<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="c" data-title="(C). Dust"></a>
 												</div>
 												<div class="demo-justify-theme">
-													<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="c" data-title="(C). Mint"></a>
+													<a href="#" class="demo-theme demo-theme-secondary add-tooltip" data-theme="theme-secondary" data-type="c" data-title="(C). secondary"></a>
 													<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="c" data-title="(C). Yellow"></a>
 													<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="c" data-title="(C). Well Red"></a>
 												</div>
@@ -440,7 +458,7 @@
 													<a href="#" class="demo-theme demo-theme-dust add-tooltip" data-theme="theme-dust" data-type="d" data-title="(D). Dust"></a>
 												</div>
 												<div class="demo-justify-theme">
-													<a href="#" class="demo-theme demo-theme-mint add-tooltip" data-theme="theme-mint" data-type="d" data-title="(D). Mint"></a>
+													<a href="#" class="demo-theme demo-theme-secondary add-tooltip" data-theme="theme-secondary" data-type="d" data-title="(D). secondary"></a>
 													<a href="#" class="demo-theme demo-theme-yellow add-tooltip" data-theme="theme-yellow" data-type="d" data-title="(D). Yellow"></a>
 													<a href="#" class="demo-theme demo-theme-well-red add-tooltip" data-theme="theme-well-red" data-type="d" data-title="(D). Well Red"></a>
 												</div>
@@ -461,7 +479,7 @@
 			</div>
 			
 			<div class="row mt-2">
-				<div class="col-md-offset-11 col-md-12">
+				<div class="col-md-12 text-end">
 					@if(checkPermissions(['Clientes'],["C"]) || checkPermissions(['Clientes'],["W"]))<button type="submit" class="btn btn-primary btn_guardar">Guardar</button>@endif
 				</div>
 			</div>
@@ -479,10 +497,7 @@
 
 		$('.select2').select2();
 
-		
-		$('.demo-psi-cross').click(function(){
-            $('.editor').hide();
-        });
+		document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
 		@if(checkPermissions(['Clientes'],["W"]))
 			$('#btn_generar_token').click(function(event){

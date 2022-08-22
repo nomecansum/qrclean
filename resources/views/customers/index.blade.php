@@ -13,7 +13,7 @@
 
 @section('breadcrumb')
 <ol class="breadcrumb">
-	<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+	<li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
 	<li class="breadcrumb-item">configuración</li>
 	<li class="breadcrumb-item">parametrizacion</li>
 	<li class="breadcrumb-item">espacios</li>
@@ -27,10 +27,10 @@
 	<div class="col-md-4">
 
 	</div>
-	<div class="col-md-7">
+	<div class="col-md-6">
 		<br>
 	</div>
-	<div class="col-md-1 text-right">
+	<div class="col-md-2 text-end">
 		@if(checkPermissions(['Clientes'],['C']))
 		<div class="btn-group btn-group-sm pull-right" role="group">
 				<a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva cliente">
@@ -46,22 +46,23 @@
 </div>
 <div class="row mt-2">
 	<div class="col-12">
-		<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Clientes</h3>
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Clientes</h3>
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<table id="tabla"  data-toggle="table"
-                    data-locale="es-ES"
-                    data-search="true"
-                    data-show-columns="true"
-                    data-show-columns-toggle-all="true"
-                    data-page-list="[5, 10, 20, 30, 40, 50]"
-                    data-page-size="50"
-                    data-pagination="true" 
-                    data-show-pagination-switch="true"
-                    data-show-button-icons="true"
-                    data-toolbar="#all_toolbar"
+					data-locale="es-ES"
+					data-search="true"
+					data-show-columns="true"
+					data-show-toggle="true"
+					data-show-columns-toggle-all="true"
+					data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+					data-page-size="50"
+					data-pagination="true" 
+					data-toolbar="#all_toolbar"
+					data-buttons-class="secondary"
+					data-show-button-text="true"
                     >
 					<thead>
 						<tr>
@@ -88,40 +89,28 @@
 								<td>{{ $cus->edificios}}</td>
 								<td>{{ $cus->plantas}}</td>
 								<td style="position: relative;" class="pt-2">
-									<div class="floating-like-gmail mt-2">
-										@if (checkPermissions(['Clientes'],["W"]))<a href="#" title="Editar cliente" data-id="{{ $cus->id_cliente }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $cus->id_cliente }})"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
-										@if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-usuario-{{$cus->id_cliente}}" title="Borrar cliente" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
-										{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$cus->id_cliente}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
+									<div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+										<div class="btn-group btn-group pull-right ml-1" role="group">
+											@if (checkPermissions(['Clientes'],["W"]))<a href="#" title="Editar cliente" data-id="{{ $cus->id_cliente }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $cus->id_cliente }})"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+											@if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-usuario-{{$cus->id_cliente}}" onclick="del({{ $cus->id_cliente }})" title="Borrar cliente" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
+											{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$cus->id_cliente}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
+										</div>
 									</div>
 									@if (checkPermissions(['Clientes'],["D"]))
-										<div class="modal fade" id="eliminar-usuario-{{$cus->id_cliente}}">
-											<div class="modal-dialog modal-md">
-												<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-													<div class="modal-header"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i><b>
-														Borrar cliente
-													</div>
-													<div class="modal-body text-left">
-														El cliente tiene:<br>
-														<ul>
-															<li>{{ $cus->puestos }} Puestos</li>
-															<li>{{ $cus->edificios }} Edificios</li>
-															<li>{{ $cus->plantas }} Plantas</li>
-														</ul>
-													</div>
-													<div class="modal-footer">
-														<a class="btn btn-info" href="{{url('/clientes/delete',$cus->id_cliente)}}">Si</a>
-														<button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
-													</div>
-												</div>
-											</div>
-										</div>
+										
 										<div class="modal fade" id="eliminar-Cliente-{{$cus->id_cliente}}">
 											<div class="modal-dialog modal-md">
-												<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-													<div class="modal-header"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i>
-														<b>Esta opción no se podrá deshacer! Seguro que quiere seguir?</b>
-													</div>
-													<div class="modal-body text-left">
+												<div class="modal-content">
+													<div class="modal-header">
+														<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+														<h1 class="modal-title text-nowrap">Borrar cliente </h1>
+														<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+															<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+														</button>
+													</div>    
+
+													<div class="modal-body text-start">
+														<div class="alert alert-danger"><b>Esta opción no se podrá deshacer! Seguro que quiere seguir?</b></div><br>
 														El cliente tiene:<br>
 														<ul>
 															<li>{{ $cus->puestos }} Puestos</li>
@@ -131,7 +120,7 @@
 													</div>
 													<div class="modal-footer">
 														<a class="btn btn-info" href="{{url('/clientes/deleteCompleto',$cus->id_cliente)}}">¡Si!</a>
-														<button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+														<button type="button" data-dismiss="modal" class="btn btn-warning close">Cancelar</button>
 													</div>
 												</div>
 											</div>
@@ -175,6 +164,11 @@
     $('.td').click(function(event){
         editar( $(this).data('id'));
 	})
+
+	function del(id){
+		$('#eliminar-Cliente-'+id).modal('show');
+	}
+
 
 	</script>
 

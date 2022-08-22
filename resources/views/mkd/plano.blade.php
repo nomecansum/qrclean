@@ -49,15 +49,15 @@
                 <div class="col-md-6"><span style="font-size: 40px">{{ $plantas->des_planta }}</span></div>
             </div>
             <div class="row">
-                <div class="col-md-4 text-center text-2x">
+                <div class="col-md-4 text-center fs-2">
                     Aforo<br>
                     <span id="activos" style="font-size: 40px; font-weight: bolder;">{{ $puestos_activos }}</span>
                 </div>
-                <div class="col-md-4 text-center text-2x text-success">
+                <div class="col-md-4 text-center fs-2 text-success">
                     Disponibles<br>
                     <span id="disponibles" style="font-size: 40px; font-weight: bolder;">{{ $disponibles }}</span>
                 </div>
-                <div class="col-md-4 text-center text-2x" style="color: rgb(241, 241, 14); text-shadow: 0 0 2px rgb(34, 41, 83); font-weight: bolder;">
+                <div class="col-md-4 text-center fs-2" style="color: rgb(241, 241, 14); text-shadow: 0 0 2px rgb(34, 41, 83); font-weight: bolder;">
                     Reservados<br>
                     <span id="reservados" style="font-size: 40px; font-weight: bolder;">{{ $puestos_reservados }}</span>
                 </div>
@@ -65,7 +65,7 @@
         </div>
         
         <div class="col-md-2">
-            <div class="text-center text-2x" style="padding-top: 30px">
+            <div class="text-center fs-2" style="padding-top: 30px">
                
                 <span id="ocupacion" class="mt-3 text-{{ color_porcentaje_inv($pct_aforo) }}" style="font-size: 60px;font-weight: bolder;">{{ $pct_aforo }}%</span>
                 Ocupacion
@@ -77,8 +77,8 @@
         
         
     </div>
-    <div class="panel">
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-body">
             @if(isset($pl->img_plano))
             {{--  {!! json_encode($pl->posiciones) !!}  --}}
 
@@ -133,20 +133,7 @@
             posiciones=[];
         }
         document.getElementById('plano{{ $pl->id_planta }}').setAttribute("data-posiciones", posiciones);
-        function recolocar_puestos(posiciones){
-            $('.container').each(function(){
-                plano=$(this);
-                console.log(posiciones);
-                //console.log(plano.data('posiciones'));
-                
-                $.each(posiciones, function(i, item) {//console.log(item);
-                    puesto=$('#puesto'+item.id);
-                    puesto.css('top',plano.height()*item.offsettop/100);
-                    puesto.css('left',plano.width()*item.offsetleft/100);
-                });
-
-            }) 
-        }
+        
         $(window).resize(function(){
             recolocar_puestos(posiciones);
         })

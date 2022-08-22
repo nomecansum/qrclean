@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">configuración</li>
         <li class="breadcrumb-item">parametrizacion</li>
 	    <li class="breadcrumb-item">espacios</li>
@@ -25,10 +25,10 @@
     <div class="col-md-4">
 
     </div>
-    <div class="col-md-7">
+    <div class="col-md-6">
         <br>
     </div>
-    <div class="col-md-1 text-right">
+    <div class="col-md-2 text-end">
         <div class="btn-group btn-group-sm pull-right" role="group">
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo edificio">
                 <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
@@ -50,18 +50,18 @@
         </div>
     @endif
 
-    <div class="panel">
+    <div class="card">
 
-        <div class="panel-heading">
-            <h3 class="panel-title">Tags</h3>
+        <div class="card-header">
+            <h3 class="card-title">Tags</h3>
         </div>
         
         @if(count($tags) == 0)
-            <div class="panel-body text-center">
+            <div class="card-body text-center">
                 <h4>No hay datos.</h4>
             </div>
         @else
-        <div class="panel-body panel-body-with-table">
+        <div class="card-body panel-body-with-table">
             <div class="table-responsive w-100" >
 
                 <table id="tabla"  data-toggle="table"
@@ -73,7 +73,8 @@
                     data-page-size="50"
                     data-pagination="true" 
                     data-show-pagination-switch="true"
-                    data-show-button-icons="true"
+                    data-buttons-class="secondary"
+                    data-show-button-text="true"
                     data-toolbar="#all_toolbar"
                     >
                     <thead>
@@ -92,20 +93,25 @@
                             <td>{{ $tag->nom_cliente }}</td>
 
                             <td style="position: relative;">
-                                <div class="pull-right floating-like-gmail mt-2" role="group">
-                                    {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tag->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
-                                    <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tag->id_tag }})" title="Editar tag" data-id="{{ $tag->id_tag }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
-                                    <a href="#eliminar-planta-{{$tag->id_tag}}" data-target="#eliminar-planta-{{$tag->id_tag}}" title="Borrar tag" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>
+                                <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                                    <div class="btn-group btn-group pull-right ml-1" role="group">
+                                        {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tag->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
+                                        <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tag->id_tag }})" title="Editar tag" data-id="{{ $tag->id_tag }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
+                                        <a href="#eliminar-planta-{{$tag->id_tag}}" data-target="#eliminar-planta-{{$tag->id_tag}}" onclick="del({{ $tag->id_tag }})"  title="Borrar tag" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>
+                                    </div>
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$tag->id_tag}}" style="display: none;">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                        <div class="modal-header">
-
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+                                            <div class="modal-header">
                                                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                                                <h4 class="modal-title">¿Borrar tag {{$tag->nom_tag}}?</h4>
+                                                <h1 class="modal-title text-nowrap">Borrar tag  </h1>
+                                                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                                                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                                                </button>
+                                            </div>    
+                                            <div class="modal-body">
+                                                ¿Borrar tag {{$tag->nom_tag}}?
                                             </div>
                                             <div class="modal-footer">
                                                 <a class="btn btn-info" href="{{url('/tags/delete',$tag->id_tag)}}">Si</a>
@@ -143,6 +149,10 @@
             // window.scrollTo(0, 0);
             //stopPropagation()
         });
+
+        function del(id){
+            $('#eliminar-planta-'+id).modal('show');
+        }
 
         function editar(id){
             $('#editorCAM').load("{{ url('/tags/edit/') }}"+"/"+id, function(){

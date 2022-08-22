@@ -1,18 +1,19 @@
 
 
 @foreach($usersObjects as $users)
-    <tr class="hover-this" data-id="{{ $users->id }}" data-href="{{ route('users.users.edit', $users->id ) }}">
+    <tr class="hover-this p-0" data-id="{{ $users->id }}" data-href="{{ route('users.users.edit', $users->id ) }}">
         <td class="text-center">
-            <input type="checkbox" class="form-control chkuser magic-checkbox" name="lista_id[]" data-id="{{ $users->id }}" id="chku{{ $users->id }}" value="{{ $users->id }}">
-            <label class="custom-control-label"   for="chku{{ $users->id }}"></label>
+            <div class="form-check pt-2">
+                <input  name="lista_id[]" data-id="{{ $users->id }}" id="chku{{ $users->id }}" value="{{ $users->id }}" class="form-check-input chkuser" type="checkbox">
+                <label for="chku{{ $users->id }}" class="form-check-label">{{ $users->id }}</label>
+            </div>
         </td>
         <td class="center">
             @if (isset($users->img_usuario ) && $users->img_usuario!='')
-                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$users->img_usuario) }}" class="img-circle" style="height:50px; width:50px; object-fit: cover;">
+                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$users->img_usuario) }}" class="img-md rounded-circle" style="height:40px; width:40px; object-fit: cover;">
             @else
-                {!! icono_nombre($users->name) !!}
+                {!! icono_nombre($users->name,40,14) !!}
             @endif
-            @if(config('app.env')=='local')[#{{ $users->id }}]@endif
         </td>
         <td class="pt-3">{{ $users->name }}</td>
         <td>
@@ -25,19 +26,21 @@
             @endif
         </td>
 
-        <td>{!! beauty_fecha($users->last_login) !!}</td>
-        <td style="vertical-align: middle">
+        <td>{!! beauty_fecha($users->last_login,0) !!}</td>
+        <td style="vertical-align: middle; font-size:12px; position: relative">
             {{ $users->email }}
             <form method="POST" action="{!! route('users.users.destroy', $users->id) !!}" accept-charset="UTF-8">
             <input name="_method" value="DELETE" type="hidden">
             {{ csrf_field() }}
-                <div class="pull-right floating-like-gmail" role="group" style="width: 170px; position: relative">
+            <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                <div class="btn-group btn-group pull-right ml-1" role="group">
                     @if (checkPermissions(['ReLogin'],["R"]))<a href="{{url('relogin',$users->id)}}" class="btn btn-xs btn-warning"><i class="fa fa-user" ></i> Suplantar</a>@endif
-                    <a href="{{ route('users.users.edit', $users->id ) }}" class="btn btn-xs btn-info  add-tooltip" title="Editar Usuario"  style="float: left"><span class="fa fa-pencil pt-1" ></span> Edit</a>
-                    <a class="btn btn-xs btn-danger add-tooltip ml-1 btn_eliminar"  data-target="#eliminar-usuario" data-toggle="modal" style="float: left" title="Borrar usuario" onclick="$('#txt_borrar').html('{{ $users->name }}'); $('#id_usuario_borrar').val({{ $users->id }})" data-name="{{ $users->name }}"   style="float: right">
+                    <a href="#" onclick="editar({{ $users->id }})" class="btn btn-xs btn-info  add-tooltip" title="Editar Usuario"  style="float: left"><span class="fa fa-pencil pt-1" ></span> Edit</a>
+                    <a class="btn btn-xs btn-danger add-tooltip ml-1 btn_eliminar"   data-target="#eliminar-usuario" data-toggle="modal" style="float: left" title="Borrar usuario" onclick="del({{ $users->id }});$('#txt_borrar').html('{{ $users->name }}'); $('#id_usuario_borrar').val({{ $users->id }})" data-name="{{ $users->name }}"   style="float: right">
                         <span class="fa fa-trash"></span> Del
                     </a>
                 </div>
+            </div>
             </form>
         </td>
     </tr>

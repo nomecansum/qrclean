@@ -1,8 +1,3 @@
-
-@php
-    // dd($pl);   
-@endphp
-
 @if(isset($pl->img_plano))
 {{--  {!! json_encode($pl->posiciones) !!}  --}}
 

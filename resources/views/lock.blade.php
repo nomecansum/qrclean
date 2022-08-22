@@ -84,7 +84,7 @@
 		<!--===================================================-->
 		<div class="cls-content">
 		    <div class="cls-content-sm panel">
-		        <div class="panel-body">
+		        <div class="card-body">
 		            <div class="mar-ver pad-btm">
 		                <h1 class="h3">{{ Auth::user()->name }}</h1>
 		                <span>{{ DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->des_nivel_acceso }}</span>
@@ -104,7 +104,7 @@
 		                <div class="form-group">
 		                    <input type="password" class="form-control" placeholder="Password">
 		                </div>
-		                <div class="form-group text-right">
+		                <div class="form-group text-end">
 		                    <button class="btn btn-block btn-lg btn-success" type="submit">Login In</button>
 		                </div>
 		            </form>

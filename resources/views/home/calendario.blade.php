@@ -4,12 +4,12 @@
     }
 </style>
 
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Mis reservas</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Mis reservas</h3>
         <span class="float-right" id="spin" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div id="calendario"></div>
     </div>
 </div>

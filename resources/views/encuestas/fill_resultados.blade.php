@@ -1,11 +1,16 @@
-<div class="panel">
-<div class="panel-heading">
-    <div class="input-group mb-3">
-        <input type="text" class="form-control pull-left" id="fechas_resul" name="fechas" style="height: 33px; width: 300px" value="{{ Carbon\Carbon::now()->startOfMonth()->format('d/m/Y').' - '.Carbon\Carbon::now()->endOfMonth()->format('d/m/Y') }}">
-        <span class="btn input-group-text btn-mint" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+<div class="card">
+    <div class="card-header">
+        <div class="form-group col-md-5" >
+            <label>Fechas </label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" value="{{  Carbon\Carbon::parse($encuesta->fec_inicio)->format('d/m/Y').' - '.Carbon\Carbon::parse($encuesta->fec_fin)->format('d/m/Y') }}">
+                <span class="btn input-group-text btn-secondary btn_fechas" ><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+            </div>
+        </div>
     </div>
-</div>
-<div class="panel-body">
+
+
+<div class="card-body">
     <div class="row">
         <div class="col-md-12">
             <h4>Resultados de la encuesta: {{ $encuesta->titulo }}</h4>
@@ -20,7 +25,7 @@
                     <i class="fas fa-tired  fa-2x text-danger valor" data-value="1"></i> 1
                     <i class="fas fa-frown  fa-2x text-warning valor" data-value="2"></i> 2
                     <i class="fas fa-meh-rolling-eyes  fa-2x text-primary valor" data-value="3"></i> 3
-                    <i class="fas fa-smile  fa-2x text-mint valor" data-value="4"></i> 4
+                    <i class="fas fa-smile  fa-2x text-secondary valor" data-value="4"></i> 4
                     <i class="fas fa-grin-alt fa-2x text-success valor" data-value="5"></i> 5
                     @break
                 @case(2)
@@ -53,29 +58,39 @@
 <script src="{{url('plugins')}}/amcharts4/themes/kelly.js"></script>
 <script src="{{url('plugins')}}/amcharts4/lang/es_ES.js"></script>
 
-<script src="/js/demo/nifty-demo.min.js"></script>
+
 
 <script>
-    $('#fechas_resul').on('apply.daterangepicker',function(){
-        console.log('Refresh '+$('#fechas').val());
-        $.post('{{url('/encuestas/resultados')}}', {_token:'{{csrf_token()}}',id_encuesta: {{ $encuesta->id_encuesta }},fechas: $('#fechas_resul').val()}, function(data, textStatus, xhr) {
-               $('#body_resultados').html(data);
-            });
-    })
+
     
-    $('#fechas_resul').daterangepicker({
-        autoUpdateInput: true,
-        locale: {
-            format: '{{trans("general.date_format")}}',
-            applyLabel: "OK",
-            cancelLabel: "Cancelar",
-            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-            firstDay: {{trans("general.firstDayofWeek")}}
+    var rangepicker = new Litepicker({
+        element: document.getElementById( "fechas" ),
+        singleMode: false,
+        numberOfMonths: 2,
+        numberOfColumns: 2,
+        autoApply: true,
+        format: 'DD/MM/YYYY',
+        lang: "es-ES",
+        tooltipText: {
+            one: "day",
+            other: "days"
         },
-        opens: 'right',
-        parentEl: "#modal-resultados .body_resultados" 
+        tooltipNumber: (totalDays) => {
+            return totalDays - 1;
+        },
+        setup: (rangepicker) => {
+            rangepicker.on('selected', (date1, date2) => {
+                console.log('Refresh '+$('#fechas').val());
+                $.post('{{url('/encuestas/resultados')}}', {_token:'{{csrf_token()}}',id_encuesta: {{ $encuesta->id_encuesta }},fechas: $('#fechas_resul').val()}, function(data, textStatus, xhr) {
+                    $('#body_resultados').html(data);
+                });
+            });
+        }
     });
+
+    $('.btn_fechas').click(function(){
+        rangepicker.show();
+    })
 
     am4core.ready(function() {
         // Themes begin

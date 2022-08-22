@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
 	<ol class="breadcrumb">
-		<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+		<li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
 		<li class="breadcrumb-item">Configuracion</li>
 		<li class="breadcrumb-item">Utilidades</li>
 		<li class="breadcrumb-item active"><a href="{{url('/tasks')}}">tareas programadas</a></li>
@@ -23,10 +23,10 @@
 	<div class="col-md-4">
 
 	</div>
-	<div class="col-md-7">
+	<div class="col-md-6">
 		<br>
 	</div>
-	<div class="col-md-1 text-right">
+	<div class="col-md-2 text-end">
 		@if(checkPermissions(['Tareas programadas'],['C']))
 		<div class="btn-group btn-group-sm pull-right" role="group">
 				<a  href="{{url('tasks/create')}}" id="btn_nueva_puesto" class="btn btn-success" title="Nueva tarea">
@@ -37,11 +37,11 @@
 		@endif
 	</div>
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Tareas programadas</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Tareas programadas</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 		<div class="table-responsive m-t-40">
 			<table id="myTable" class="table table-bordered table-condensed table-hover" style="width: 100%">
 				<thead>
@@ -110,21 +110,29 @@
 							</td>
 							<td style="position: relative;" class="align-middle">
 								{!! beauty_fecha($t->fec_ult_ejecucion)!!}
-								<div class="floating-like-gmail" style="width: 220px">
-									<a href="javascript:void(0)" class="btn btn-xs btn-warning btn_run" data-id="{{ $t->cod_tarea }}"><i class="fas fa-play"></i> {{__('tareas.ejecutar')}}</a>
-									<a href="{{url('tasks/edit',$t->cod_tarea)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>
-									<a href="#eliminar-tarea-{{$t->cod_tarea}}" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>
+								<div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+									<div class="btn-group btn-group pull-right ml-1" role="group">
+										<a href="javascript:void(0)" class="btn btn-xs btn-warning btn_run" data-id="{{ $t->cod_tarea }}"><i class="fas fa-play"></i> {{__('tareas.ejecutar')}}</a>
+										<a href="{{url('tasks/edit',$t->cod_tarea)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>
+										<a href="#eliminar-tarea-{{$t->cod_tarea}}" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>
+									</div>
 								</div>
 								<div class="modal fade" id="eliminar-tarea-{{$t->cod_tarea}}">
 									<div class="modal-dialog modal-sm">
 										<div class="modal-content p-2">
-											<div class="modal-header"  style="justify-content: left"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i>
-												{{-- borrar ciclo --}}
-												<h3><b>{{__('tareas.desea_eliminar_tarea')}} {{ $t->des_tarea }}?</b></h3>
+											<div class="modal-header">
+												<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+												<h1 class="modal-title text-nowrap">Borrar tarea </h1>
+												<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+													<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+												</button>
+											</div>    
+											<div class="modal-body">
+												{{__('tareas.desea_eliminar_tarea')}} {{ $t->des_tarea }}?
 											</div>
 											<div class="modal-footer">
 												<a class="btn btn-info" href="{{url('tasks/delete',$t->cod_tarea)}}">{{__('general.yes')}}</a>
-												<button type="button" data-dismiss="modal" class="btn btn-warning">{{__('general.cancelar')}}</button>
+												<button type="button" data-dismiss="modal" class="btn btn-warning" onclick="cerrar_modal()" >{{__('general.cancelar')}}</button>
 											</div>
 											<div class="modal-footer">
 												<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
@@ -141,11 +149,11 @@
     </div>
 </div>
 
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Cronjobs</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Cronjobs</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 		<div class="row">
 			<div class="col-12">
 				<div class="card">
@@ -187,11 +195,11 @@
     </div>
 </div>
 
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Colas de proceso</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Colas de proceso</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 		<div class="row">
 			<div class="col-12">
 				<div class="card">
@@ -240,12 +248,12 @@
 					<b>Ejecutar tarea <span id="des_tarea_run"></span></b></h3>
 				
 			</div>
-			<div class="modal-body text-left" id="log_fichero" style="height: 350px; overflow: Auto">
+			<div class="modal-body text-start" id="log_fichero" style="height: 350px; overflow: Auto">
 
 			</div>
 			<div class="modal-footer">
 				{{--  <a class="btn btn-info" href="{{url('tasks/delete',$t->cod_tarea)}}">{{trans('strings.yes')}}</a>  --}}
-				<button type="button" data-dismiss="modal" class="btn btn-warning">Cerrar</button>
+				<button type="button" data-dismiss="modal" onclick="cerrar_modal()" class="btn btn-warning">Cerrar</button>
 			</div>
 		</div>
 	</div>

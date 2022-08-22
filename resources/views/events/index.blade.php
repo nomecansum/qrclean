@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Configuracion</li>
         <li class="breadcrumb-item">Utilidades</li>
         <li class="breadcrumb-item active">eventos</li>
@@ -31,17 +31,17 @@
     <div class="col-md-4">
         <br>
     </div>
-    <div class="col-md-4 text-right">
+    <div class="col-md-4 text-end">
         <div class="btn-group btn-group-sm pull-right mb-1 " role="group">
-            @if (checkPermissions(['Eventos'],['C']))<a href="{{url(config('app.carpeta_asset').'/add')}}" class="btn float-right hidden-sm-down btn-success"><i class="fas fa-plus-circle"></i> Nueva regla</a>@endif
+            @if (checkPermissions(['Eventos'],['C']))<a href="{{url(config('app.carpeta_asset').'/add')}}" class="btn float-right hidden-sm-down btn-success"><i class="fas fa-plus-circle"></i> Nuevo</a>@endif
         </div>
     </div>
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Eventos</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Eventos</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -69,19 +69,16 @@
                                             <td>{{$ev->cod_regla}}</td>
                                             <td>{{$ev->nom_regla}}</td>
                                             <td>{{ str_replace(".php","",str_replace("_"," ",basename($ev->nom_comando))) }}</td>
-                                            <td class="text-center pt-4">
+                                            <td class="text-center pl-4">
                                                 {{-- <div class="custom-control custom-checkbox" style="display: inline-block; margin-right: 6px">
                                                     <input {{$ev->mca_activa == "S" ? 'checked' : ''}} type="checkbox" class="check-f2f custom-control-input">
                                                     <label class="custom-control-label"></label>
                                                 </div> --}}
                                                 @if($ev->mca_activa == "S")
-												<div class="pretty p-icon p-curve p-smooth p-0 m-0 mt-3 p-locked">
-													<input type="checkbox" checked type="checkbox" class="check-f2f" />
-													<div class="state p-success p-smooth" style="font-size:22px">
-														<i class="icon fa fa-check"></i>
-														<label></label>
-													</div>
-												</div>
+                                                <div class="form-check pt-2 ">
+                                                    <input readonly class="form-check-input fs-4" type="checkbox" checked>
+                                                    <label class="form-check-label" for="chktodos"></label>
+                                                </div>
 											@endif
                                             </td>
                                             <td nowrap="nowrap">
@@ -97,18 +94,23 @@
                                                 @foreach ($clientes as $c)
                                                         <li>{{$c}}</li>
                                                 @endforeach
-                                                <div class="pull-right floating-like-gmail mt-3" style="width: 200px">
-                                                    <a href="javascript:void(0);" data-cod_regla="{{$ev->cod_regla}}"  class="btn btn-xs btn-mint log_regla"><i class="fa-solid fa-magnifying-glass"></i> {{__('general.detalles')}}</a>
-                                                    @if(checkPermissions(['Eventos'],['W']))<a href="{{url(config('app.carpeta_asset').'/edit',$ev->cod_regla)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>@endif
-                                                    @if(checkPermissions(['Eventos'],['D']))<a href="#eliminar-regla-{{$ev->cod_regla}}" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>@endif
+                                                <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                                                    <div class="btn-group btn-group pull-right ml-1" role="group">
+                                                        <a href="javascript:void(0);" data-cod_regla="{{$ev->cod_regla}}"  class="btn btn-xs btn-secondary log_regla"><i class="fa-solid fa-magnifying-glass"></i> {{__('general.detalles')}}</a>
+                                                        @if(checkPermissions(['Eventos'],['W']))<a href="{{url(config('app.carpeta_asset').'/edit',$ev->cod_regla)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>@endif
+                                                        @if(checkPermissions(['Eventos'],['D']))<a href="#eliminar-regla-{{$ev->cod_regla}}" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>@endif
+                                                    </div>
                                                 </div>
                                                 <div class="modal fade" id="eliminar-regla-{{$ev->cod_regla}}">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h4 class="modal-title">{{ __('general.eliminar') }}</h4>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                            </div>
+                                                                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                                                                <h1 class="modal-title text-nowrap">Borrar regla </h1>
+                                                                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                                                                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                                                                </button>
+                                                            </div>    
                                                             <div class="modal-body">
                                                                 {{ __('eventos.eliminar_la_regla') }} {{ $ev->nom_regla }}?
                                                             </div>

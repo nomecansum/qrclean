@@ -15,10 +15,19 @@
 
 </style>
 
-<div class="panel" id="editor">
-    <div class="panel">
-
-        <div class="panel-body">
+<div class="card mb-5" id="editor">
+    <div class="card">
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">Editar reserva</h5>
+            </div>
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
             <form  action="{{url('reservas/save')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax">
                 <div class="row">
                     <input type="hidden" name="id_reserva" value="{{ $reserva->id_reserva }}">
@@ -30,15 +39,15 @@
                     <input type="hidden" name="hora_inicio" id="hora_inicio" value="{{ Carbon\Carbon::now()->format('H:i') }}">
                     <input type="hidden" name="hora_fin" id="hora_fin" value="{{ Carbon\Carbon::now()->addHours()->format('H:i') }}">
                     {{csrf_field()}}
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label for="fechas">Fecha</label>
                         {{--  <div class="input-group">
                             <input type="text" class="form-control pull-left singledate" id="fechas" name="fechas" style="width: 180px" value="{{ $f1->format('d/m/Y')}}">
-                            <span class="btn input-group-text btn-mint datepickerbutton" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
+                            <span class="btn input-group-text btn-secondary datepickerbutton" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
                         </div>  --}}
                         <div class="input-group">
-                            <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f1->format('d/m/Y') }}">
-                            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+                            <input type="text" class="form-control pull-left" id="rango_fechas" name="fechas"  value="{{ $f1->format('d/m/Y').' - '.$f1->format('d/m/Y') }}">
+                            <span class="btn input-group-text btn-secondary" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                         </div>
 
                     </div>
@@ -51,7 +60,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                             <label for="planta"><i class="fad fa-layer-group"></i> Planta</label>
                             <select name="id_planta" id="id_planta" class="form-control">
                                 <option value="0">Cualquiera</option>
@@ -87,14 +96,19 @@
                     </div>
                     @endif
                     <div class="col-md-4 text-center mt-5">
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_ical"  id="mca_ical" value="S"> 
-						<label class="custom-control-label"   for="mca_ical">Añadir a mi calendario</label>
+                        <div class="d-flex">
+                            <div class="form-check form-switch">
+                                <input id="_dm-dbInvisibleMode" class="form-check-input" type="checkbox"  name="mca_ical"  id="mca_ical" value="S">
+                            </div>
+                            <label class="form-check-label h6 mt-1" for="_dm-dbInvisibleMode">Añadir a mi calendario</label>
+                        </div>
                     </div>
                 </div>                
             </form>
         </div>
     </div>
  </div>
+
 
  <script>
 
@@ -172,7 +186,7 @@
 
     function comprobar_puestos(){
         console.log($('#fechas').val());
-        $.post('{{url('/salas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val(),id_planta:$('#id_planta').val(),tags:$('#multi-tag').val(),sala:{{ $sala }}}, function(data, textStatus, xhr) {
+        $.post('{{url('/salas/comprobar')}}', {_token: '{{csrf_token()}}',fecha: $('#rango_fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val(),id_planta:$('#id_planta').val(),tags:$('#multi-tag').val(),sala:{{ $sala }}}, function(data, textStatus, xhr) {
             $('#detalles_reserva').html(data);
         });
     }
@@ -181,27 +195,34 @@
       comprobar_puestos();
     })
 
-
-
-$('#fechas').daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            format: '{{trans("general.date_format")}}',
-            applyLabel: "OK",
-            cancelLabel: "Cancelar",
-            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-            firstDay: {{trans("general.firstDayofWeek")}}
+    var rangepicker = new Litepicker({
+        element: document.getElementById( "rango_fechas" ),
+        singleMode: false,
+        numberOfMonths: 2,
+        numberOfColumns: 2,
+        autoApply: true,
+        format: 'DD/MM/YYYY',
+        lang: "es-ES",
+        lockDays: [{!! session('perfil')->mca_reservar_festivos=='N'?$festivos_usuario:'' !!}],
+        maxDays: {{ config_cliente('max_dias_reserva',Auth::user()->id_cliente) }},
+        tooltipText: {
+            one: "day",
+            other: "days"
         },
-        "maxSpan": {"days": {{ config_cliente('max_dias_reserva',Auth::user()->id_cliente) }}},
-        opens: 'right',
-    }, function(start_date, end_date) {
-        $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
-        $('#fechas').data('fecha_inicio',moment(start_date).format('Y-MM-DD'));
-        $('#fechas').data('fecha_fin',moment(start_date).format('Y-MM-DD'));
-        //window.location.href = '{{ url('/rondas/index/') }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
-        comprobar_puestos();
+        tooltipNumber: (totalDays) => {
+            return totalDays - 1;
+        },
+        lockDaysFilter: (day) => {
+            const d = day.getDay();
+            return [-1{{ session('perfil')->mca_reservar_sabados=='N'?'':',6' }}{{ session('perfil')->mca_reservar_domingos=='N'?'':',0' }}].includes(d);
+        },
+        setup: (rangepicker) => {
+            rangepicker.on('selected', (date1, date2) => {
+                comprobar_puestos();
+            });
+        }
     });
+
 
     $('.btn_guardar').click(function(){
         if($('#id_puesto').val()==null || $('#id_puesto').val()==""){
@@ -258,9 +279,6 @@ $('#fechas').daterangepicker({
         $('#hora_inicio').val(values[0]);
         $('#hora_fin').val(values[1]);
         comprobar_puestos();
-        // r_def_value.innerHTML = values[handle];
-        // $('.texto_puesto').css('font-size',values[handle]+'vw');
-        // $('#factor_letra').val(values[handle]);
     });
 
         
@@ -272,5 +290,7 @@ $('#fechas').daterangepicker({
 
     $('.noUi-tooltip').css('padding','0px');
     $('.noUi-tooltip').css('font-size','11px');
+
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
     
  </script>

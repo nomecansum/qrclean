@@ -1,5 +1,5 @@
 
-<div class="row">
+<div class="row mt-2">
     <div class="form-group col-md-11 {{ $errors->has('des_edificio') ? 'has-error' : '' }}">
         <label for="des_edificio" class="control-label">Nombre</label>
         <input class="form-control" required name="des_edificio" type="text" id="des_edificio" value="{{ old('des_edificio', optional($edificios)->des_edificio) }}" maxlength="200" placeholder="Enter des edificio here...">
@@ -11,7 +11,7 @@
         {!! $errors->first('abreviatura', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
-<div class="row">
+<div class="row mt-2">
     @php
         $provincia_poner=old('id_provincia', optional($edificios)->id_provincia);
     @endphp

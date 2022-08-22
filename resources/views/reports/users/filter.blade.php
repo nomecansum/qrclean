@@ -110,7 +110,7 @@
 					@if($r->output!=="excel")
 						<td style="width: 60px" class="text-center" rowspan="2">
 							@if (isset($inf->first()->img_usuario ) && $inf->first()->img_usuario!='' && $r->output!=="excel" )
-								<img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$inf->first()->img_usuario) }}" class="img-circle" style="height: 50px">
+								<img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$inf->first()->img_usuario) }}" class="img-md rounded-circle" style="width: 50px; height:50px">
 							@else
 								{!! icono_nombre($inf->first()->name) !!}
 							@endif

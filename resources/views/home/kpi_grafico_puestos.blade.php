@@ -8,11 +8,11 @@
 @endphp
 
 
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Estado {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Estado {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div id="chartdiv_puestos" style="width:100%; height:300px;  ml-0"></div>
 
     </div>

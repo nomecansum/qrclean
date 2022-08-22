@@ -177,7 +177,9 @@ class SalasController extends Controller
             ->orderby('id_tipo_puesto')
             ->get();
 
-        return view('salas.edit_reserva', compact('reserva','f1','plantas_usuario','tipos','edificios','sala'));
+        $festivos_usuario=\App\Http\Controllers\Reservascontroller::festivos_usuario(Auth::user()->id);
+
+        return view('salas.edit_reserva', compact('reserva','f1','plantas_usuario','tipos','edificios','sala','festivos_usuario'));
     }
 
     public function comprobar(Request $r){

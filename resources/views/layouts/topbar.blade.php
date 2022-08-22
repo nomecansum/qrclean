@@ -1,190 +1,235 @@
+<div class="header__inner">
 
-<!--Brand logo & name-->
-<!--================================-->
-<div class="navbar-header">
-    <a href="{{url('/')}}" class="navbar-brand">
-        @if(session('logo_cliente_menu'))
-        <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente_menu')) }}" style="width: 55px; height: 55px" alt="" class="brand-icon">
-        @else   
-        <img src="/img/logo.png" alt="Spotlinker" class="brand-icon">
-        @endif
-        <div class="brand-title">
-            <span class="brand-text"> <img src="/img/logo_menu_arriba.png" alt="Spotlinker" class="brand-text"></span>
+    <!-- Brand -->
+    <div class="header__brand">
+        <div class="brand-wrap">
+
+            <!-- Brand logo -->
+            <a href="{{url('/')}}" class="brand-img stretched-link">
+                @if(session('logo_cliente_menu'))
+                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente_menu')) }}" style="width: 45px; height: 45px" alt="" class="Nifty logo rounded">
+                @else   
+                <img src="/img/logo.png" alt="Spotlinker" class="Nifty logo">
+                @endif
+                
+            </a>
+
+           
+
+            <!-- Brand title -->
+            <div class="brand-title">
+                <span class="brand-text"> Spotlinker</span>
+            </div>
+
+            <!-- You can also use IMG or SVG instead of a text element. -->
+
         </div>
-    </a>
-</div>
-<!--================================-->
-<!--End brand logo & name-->
+    </div>
+    <!-- End - Brand -->
 
+    <div class="header__content">
 
-<!--Navbar Dropdown-->
-<!--================================-->
-<div class="navbar-content">
-    <ul class="nav navbar-top-links">
+        <!-- Content Header - Left Side: -->
+        <div class="header__content-start">
 
-        <!--Navigation toogle button-->
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <li class="tgl-menu-btn">
-            <a class="mainnav-toggle" href="#">
-                <i class="demo-pli-list-view"></i>
-            </a>
-        </li>
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <!--End Navigation toogle button-->
+            <!-- Navigation Toggler -->
+            <button type="button" class="nav-toggler header__btn btn btn-icon btn-sm">
+                <i class="demo-psi-view-list"></i>
+            </button>
 
+            <!-- Searchbox -->
+            <div class="header-searchbox">
 
+                <!-- Searchbox toggler for small devices -->
+                <label for="header-search-input" class="header__btn d-md-none btn btn-icon rounded-pill shadow-none border-0 btn-sm" type="button">
+                    <i class="demo-psi-magnifi-glass"></i>
+                </label>
 
-        <!--Search-->
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <li>
-            <div class="custom-search-form">
-                {{--  <label class="btn btn-trans" for="search-input" data-toggle="collapse" data-target="#nav-searchbox">
-                    <i class="demo-pli-magnifi-glass"></i>
-                </label>  --}}
-                {{--  <form>
-                    <div class="search-container collapse" id="nav-searchbox">
-                        <input id="search-input" type="text" class="form-control" placeholder="Type for search...">
+                <!-- Searchbox input -->
+                <form class="searchbox searchbox--auto-expand searchbox--hide-btn input-group">
+                    <input id="header-search-input" class="searchbox__input form-control bg-transparent" type="search" placeholder="Type for search . . ." aria-label="Search">
+                    <div class="searchbox__backdrop">
+                        <button class="searchbox__btn header__btn btn btn-icon rounded shadow-none border-0 btn-sm" type="button" id="button-addon2">
+                            <i class="demo-pli-magnifi-glass"></i>
+                        </button>
                     </div>
-                </form>  --}}
+                </form>
             </div>
-        </li>
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <!--End Search-->
+        </div>
+        <!-- End - Content Header - Left Side -->
 
-    </ul>
-    <ul class="nav navbar-top-links">
-        <!--Notification dropdown-->
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        {{--  <li class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                <i class="fa fa-bell"></i>
-                <span class="badge badge-header badge-danger"></span>
-            </a>
+        <!-- Content Header - Right Side: -->
+        <div class="header__content-end">
 
+            <!-- Notification Dropdown -->
+            {{-- <div class="dropdown">
 
-            <!--Notification dropdown menu-->
-            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                <div class="nano scrollable">
-                    <div class="nano-content">
-                        <ul class="head-list">
-                            <li>
-                                <a href="#" class="media add-tooltip" data-title="Used space : 95%" data-container="body" data-placement="bottom">
-                                    <div class="media-left">
-                                        <i class="demo-pli-data-settings icon-2x text-main"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <p class="text-nowrap text-main text-semibold">HDD is full</p>
-                                        <div class="progress progress-sm mar-no">
-                                            <div style="width: 95%;" class="progress-bar progress-bar-danger">
-                                                <span class="sr-only">95% Complete</span>
-                                            </div>
+                <!-- Toggler -->
+                <button class="header__btn btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="d-block position-relative">
+                        <i class="demo-psi-bell"></i>
+                        <span class="badge badge-super rounded bg-danger p-1">
+
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </span>
+                </button>
+
+                <!-- Notification dropdown menu -->
+                <div class="dropdown-menu dropdown-menu-end w-md-300px">
+                    <div class="border-bottom px-3 py-3 mb-3">
+                        <h5>Notifications</h5>
+                    </div>
+
+                    <div class="list-group list-group-borderless">
+
+                        <!-- List item -->
+                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
+                            <div class="flex-shrink-0 me-3">
+                                <i class="demo-pli-data-settings fs-2"></i>
+                            </div>
+                            <div class="flex-grow-1 ">
+                                <a href="#" class="h6 d-block mb-0 stretched-link text-decoration-none">Your storage is full</a>
+                                <small class="text-muted">Local storage is nearly full.</small>
+                            </div>
+                        </div>
+
+                        <!-- List item -->
+                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
+                            <div class="flex-shrink-0 me-3">
+                                <i class="demo-pli-file-edit fs-2"></i>
+                            </div>
+                            <div class="flex-grow-1 ">
+                                <a href="#" class="h6 d-block mb-0 stretched-link text-decoration-none">Writing a New Article</a>
+                                <small class="text-muted">Wrote a news article for the John Mike</small>
+                            </div>
+                        </div>
+
+                        <!-- List item -->
+                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
+                            <div class="flex-shrink-0 me-3">
+                                <i class="demo-pli-speech-bubble-7 fs-2"></i>
+                            </div>
+                            <div class="flex-grow-1 ">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <a href="#" class="h6 mb-0 stretched-link text-decoration-none">Comment sorting</a>
+                                    <span class="badge bg-info rounded ms-auto">NEW</span>
+                                </div>
+                                <small class="text-muted">You have 1,256 unsorted comments.</small>
+                            </div>
+                        </div>
+
+                        <!-- List item -->
+                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
+                            <div class="flex-shrink-0 me-3">
+                                <img class="img-xs rounded-circle" src="./assets/img/profile-photos/7.png" alt="Profile Picture" loading="lazy">
+                            </div>
+                            <div class="flex-grow-1 ">
+                                <a href="#" class="h6 d-block mb-0 stretched-link text-decoration-none">Lucy Sent you a message</a>
+                                <small class="text-muted">30 minutes ago</small>
+                            </div>
+                        </div>
+
+                        <!-- List item -->
+                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
+                            <div class="flex-shrink-0 me-3">
+                                <img class="img-xs rounded-circle" src="./assets/img/profile-photos/3.png" alt="Profile Picture" loading="lazy">
+                            </div>
+                            <div class="flex-grow-1 ">
+                                <a href="#" class="h6 d-block mb-0 stretched-link text-decoration-none">Jackson Sent you a message</a>
+                                <small class="text-muted">1 hours ago</small>
+                            </div>
+                        </div>
+
+                        <a href="#" class="btn btn-link shadow-none">Show all Notifications</a>
+
+                    </div>
+                </div>
+            </div> --}}
+            <!-- End - Notification dropdown -->
+
+           <!-- User dropdown -->
+            <div class="dropdown">
+
+                <!-- Toggler -->
+                <button class="header__btn btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-user"></i>
+                </button>
+
+                <!-- User dropdown menu -->
+                <div class="dropdown-menu dropdown-menu-end w-md-450px">
+
+                    <!-- User dropdown header -->
+                    <div class="d-flex align-items-center border-bottom p-3">
+                        <div class="flex-shrink-0">
+                            @if(Auth::user()->img_usuario!="" && file_exists( public_path().'/img/users/'.Auth::user()->img_usuario))
+                            <img class="img-sm rounded-circle"  src="{{Storage::disk(config('app.img_disk'))->url('img/users/'.Auth::user()->img_usuario)}}" alt="Profile Picture" loading="lazy">
+                            @else
+                            {!! icono_nombre(Auth::user()->name,50,18) !!}
+                            @endif
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">{{ Auth::user()->name }}</h5>
+                            <span class="text-muted fst-italic">{{Auth::user()->email}}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-7">
+
+                            <!-- Simple widget and reports -->
+                            <div class="list-group list-group-borderless mb-3">
+                                <div class="list-group-item text-center border-bottom mb-3">
+                                    <p class="display-2 text-warning cuenta_reservas">{{ session('reservas')!==null?count(session('reservas')):0 }}</p>
+                                    <p class="h6 mb-0"><i class="fa-light fa-calendar-circle-user"></i> Reservas</p>
+                                    <small class="text-muted">Reservas para hoy {!! beauty_fecha(Carbon\Carbon::now(),0) !!}</small>
+                                </div>
+                                @if(session('reservas')!==null)
+                                    @foreach(session('reservas') as $reserva)
+                                        <div class="list-group-item py-0 d-flex justify-content-between align-items-center">
+                                            <i class="{{ $reserva->icono_tipo }}"></i> {{ $reserva->des_tipo_puesto }} 
+                                            <small class="fw-bolder"> {{ $reserva->cod_puesto }}</small>
                                         </div>
-                                    </div>
+                                    @endforeach
+                                @endif
+                            </div>
+
+                        </div>
+                        <div class="col-md-5">
+
+                            <!-- User menu link -->
+                            <div class="list-group list-group-borderless h-100 py-3">
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <span><i class="fa-light fa-bell fs-5 me-3"></i> Avisos</span>
+                                    <span class="badge bg-danger rounded-pill cuenta_notificaciones">0</span>
                                 </a>
-                            </li>
-                            <li>
-                                <a class="media" href="#">
-                                    <div class="media-left">
-                                        <i class="demo-pli-file-edit icon-2x"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <p class="mar-no text-nowrap text-main text-semibold">Write a news article</p>
-                                        <small>Last Update 8 hours ago</small>
-                                    </div>
+                                <a href="{{ url('/miperfil/'.Auth::user()->id) }}" class="nav-link">
+                                    <i class="demo-pli-male fs-5 me-3"></i> Perfil
                                 </a>
-                            </li>
-                            <li>
-                                <a class="media" href="#">
-                                    <span class="label label-info pull-right">New</span>
-                                    <div class="media-left">
-                                        <i class="demo-pli-speech-bubble-7 icon-2x"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <p class="mar-no text-nowrap text-main text-semibold">Comment Sorting</p>
-                                        <small>Last Update 8 hours ago</small>
-                                    </div>
+                                <a class="list-group-item list-group-item-action" id="_dm-settingsToggler" class="_dm-btn-settings list-group-item list-group-item-action" data-bs-toggle="offcanvas" data-bs-target="#_dm-settingsContainer" aria-controls="_dm-settingsContainer">
+                                    <i class="demo-pli-gear fs-5 me-3"></i> Ajustes
                                 </a>
-                            </li>
-                            <li>
-                                <a class="media" href="#">
-                                    <div class="media-left">
-                                        <i class="demo-pli-add-user-star icon-2x"></i>
-                                    </div>
-                                    <div class="media-body">
-                                        <p class="mar-no text-nowrap text-main text-semibold">New User Registered</p>
-                                        <small>4 minutes ago</small>
-                                    </div>
+
+                                <a href="{{ url('/lockscreen') }}" class="nav-link">
+                                    <i class="demo-pli-computer-secure fs-5 me-3"></i> Bloquear
                                 </a>
-                            </li>
-                        </ul>
+                                <a href="{{url('/logout')}}" class="nav-link">
+                                    <i class="demo-pli-unlock fs-5 me-3"></i> Logout
+                                </a>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
 
-                <!--Dropdown footer-->
-                <div class="pad-all bord-top">
-                    <a href="#" class="btn-link text-main box-block">
-                        <i class="pci-chevron chevron-right pull-right"></i>Show All Notifications
-                    </a>
                 </div>
             </div>
-        </li>  --}}
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <!--End notifications dropdown-->
-        <!--User dropdown-->
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <li id="dropdown-user" class="dropdown">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
-                <span class="ic-user pull-right">
-                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                    <!--You can use an image instead of an icon.-->
-                    <!--<img class="img-circle img-user media-object" src="img/profile-photos/1.png" alt="Profile Picture">-->
-                    <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                    <i class="fa fa-user"></i>
-                </span>
-                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-                <!--You can also display a user name in the navbar.-->
-                <!--<div class="username hidden-xs">Aaron Chavez</div>-->
-                <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-            </a>
+            <!-- End - User dropdown -->
 
+            <!-- Sidebar Toggler -->
+            {{-- <button class="sidebar-toggler header__btn btn btn-icon btn-sm" type="button">
+                <i class="demo-psi-dot-vertical"></i>
+            </button> --}}
 
-            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right panel-default">
-                <div class="font-bold text-center w100 mt-2">{{ Auth::user()->name }}</div>
-                <ul class="head-list">
-                    
-                    <li>
-                        <a href="{{ url('/miperfil/'.Auth::user()->id) }}"><i class="fad fa-user"></i> Mi Perfil</a>
-                    </li>
-                    {{-- <li>
-                        <a href="#"><span class="badge badge-danger pull-right">9</span><i class="demo-pli-mail icon-lg icon-fw"></i> Messages</a>
-                    </li> --}}
-                    {{-- <li>
-                        <a href="#"><span class="label label-success pull-right">New</span><i class="demo-pli-gear icon-lg icon-fw"></i> Settings</a>
-                    </li> --}}
-                    <li>
-                        <a href="{{ url('/lockscreen') }}"><i class="fad fa-user-lock"></i> Bloquear pantalla</a>
-                    </li>
-                   
-                    <li>
-                        <a href="{{url('/logout')}}"><i class="fad fa-sign-out-alt"></i> Logout</a>
-                    </li>
-                    @if(session('back_id') && session('back_id')!=Auth::user()->id)
-                        <li role="separator" class="divider"></li>
-                        <button class="btn btn-warning ml-5 mb-2" onclick="document.location='{{url('reback')}}'"> <i class="mdi mdi-format-rotate-90"></i> Volver a mi sesion</button>
-                    @endif
-                </ul>
-            </div>
-        </li>
-        <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-        <!--End user dropdown-->
-
-
-        {{-- <li>
-            <a href="#" class="aside-toggle">
-                <i class="demo-pli-dot-vertical"></i>
-            </a>
-        </li> --}}
-    </ul>
+        </div>
+    </div>
 </div>
-<!--================================-->
-<!--End Navbar Dropdown-->

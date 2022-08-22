@@ -6,12 +6,12 @@
 
 @section('styles')
     <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
-    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    {{-- <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet"> --}}
 @endsection
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item"><a href="{{url('/puestos')}}">Puestos</a></li>
         <li class="breadcrumb-item active">Mapa de puestos</li>
     </ol>
@@ -24,26 +24,34 @@
 
 @section('content')
         <div class="row botones_accion mb-2">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <form action="{{ url('puestos/mapa') }}" name="form_mapa" id="form_mapa" method="POST">
                     {{ csrf_field() }}
                     <div class="input-group float-right" id="div_fechas">
-                        <input type="text" class="form-control pull-left" id="fecha" name="fecha" style="width: 100px" value="{{isset($r->fecha)?$r->fecha:Carbon\Carbon::now()->format('d/m/Y') }}">
-                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                        <input type="text" class="form-control pull-left" id="fecha_ver" name="fecha" value="{{isset($r->fecha)?$r->fecha:Carbon\Carbon::now()->format('d/m/Y') }}">
+                        <span class="btn input-group-text btn-secondary btn_fecha" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                     </div>
                 </form>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-5">
                 
             </div>
-            <div class="col-md-2 text-right">
-                <a href="#modal-leyenda" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
+            <div class="col-md-2 text-end pt-4">
+                <a href="#modal-leyenda " class="link-light" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
             </div>
-            <div class="col-md-3 text-right">
-                <a href="{{ url('puestos/lista') }}" class="mr-2 text-white" ><i class="fad fa-list"></i> Lista</a>
-                <a href="{{ url('puestos/mapa') }}" class="mr-2" style="color: #1e1ed3; font-weight: bold"><i class="fad fa-th"></i> Mosaico</a>
-                <a href="{{ url('puestos/plano') }}" class="mr-2 text-white"><i class="fad fa-map-marked-alt"></i> Plano</a>
+            <div class="col-md-3 text-end pt-4">
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" data-href="lista" autocomplete="off">
+                    <label class="btn btn-outline-light btn-xs boton_modo"  for="btnradio3"><i class="fad fa-list"></i> Lista</label>
+
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" data-href="mapa" autocomplete="off"  checked="">
+                    <label class="btn btn-outline-light btn-xs boton_modo"  for="btnradio1"><i class="fad fa-th"></i> Mosaico</label>
+                    
+                    <input type="radio" class="btn-check" name="btnradio" data-href="plano"  id="btnradio2" autocomplete="off" >
+                    <label class="btn btn-outline-light btn-xs boton_modo" for="btnradio2"><i class="fad fa-map-marked-alt"></i> Plano</label>
+                </div>
             </div>
+            
         </div>
         @include('puestos.content_mapa')
 @endsection
@@ -51,28 +59,38 @@
 
 @section('scripts')
     <script>
-        var tooltip = $('.add-tooltip');
-        if (tooltip.length)tooltip.tooltip();
+
 
         $('.parametrizacion').addClass('active active-sub');
         $('.mapa').addClass('active-link');
 
-        $('#fecha').daterangepicker({
-            singleDatePicker: true,
-            showDropdowns: true,
-            autoUpdateInput : true,
-            //autoApply: true,
-            locale: {
-                format: '{{trans("general.date_format")}}',
-                applyLabel: "OK",
-                cancelLabel: "Cancelar",
-                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-                firstDay: {{trans("general.firstDayofWeek")}}
-            }
+        
+        $('.btn_fecha').click(function(){
+            console.log("click");
+            picker.open('#fecha_ver');
+        })
+
+        const picker = MCDatepicker.create({
+            el: "#fecha_ver",
+            dateFormat: cal_formato_fecha,
+            autoClose: true,
+            closeOnBlur: true,
+            firstWeekday: 1,
+            disableWeekDays: cal_dias_deshabilitados,
+            customMonths: cal_meses,
+            customWeekDays: cal_diassemana
         });
-        $('#fecha').on('apply.daterangepicker', function(ev, picker) {
+
+        picker.onSelect((date, formatedDate) => {
+            lafecha=moment(formatedDate,"DD/MM/YYYY").format('YYYY-MM-DD');
             $('#form_mapa').submit();
         });
+
+        document.querySelectorAll(".btn-check").forEach(item => 
+            item.addEventListener("click", () => {
+                window.location.href = item.getAttribute("data-href");
+        }));
+
+
     </script>
 @endsection

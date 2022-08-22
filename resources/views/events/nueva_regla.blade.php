@@ -17,11 +17,11 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Configuracion</li>
         <li class="breadcrumb-item">Utilidades</li>
         <li class="breadcrumb-item"><a href="{{url('/events')}}">eventos</a></li>
-        <li class="breadcrumb-item active">regla de evento</li>
+        <li class="breadcrumb-item active">regla de evento {{ isset($reglas->nom_regla)?$reglas->nom_regla:'' }}</li>
     </ol>
 @endsection
 
@@ -42,18 +42,18 @@
 <div class="row botones_accion mb-2">
     <br><br>
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Titulo</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">{{ isset($reglas->nom_regla)?$reglas->nom_regla:'' }}</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <form action="{{url(config('app.carpeta_asset').'/save')}}" method="POST" class="form-ajax" id="formcomando">
             {{csrf_field()}}
             <input type="hidden" name="cod_regla" value="{{ $cod_regla }}">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="panel">
-                        <div class="panel-body">
+                    <div class="card">
+                        <div class="card-body">
                             {{-- <h4 class="card-title">Nueva regla</h4> --}}
                             <div class="row">
                                 <div class="col-md-8">
@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mt-2">
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="">{{ __('general.comando') }}</label>
@@ -98,7 +98,7 @@
                                     {!! isset($descripcion)?$descripcion:'' !!}
                                 </div>
                             </div>
-                            <div class="row" id="row_intervalo" style="display: none">
+                            <div class="row mt-2" id="row_intervalo" style="display: none">
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="">{{ __('general.intervalo') }} (min)</label><br>
@@ -126,8 +126,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-1" style="padding-top: 30px">
-                                    <input type="checkbox" class="form-control  magic-checkbox mt-3" name="mca_activa"  id="mca_activa" value="S" {{ isset($reglas->mca_activa)&&$reglas->mca_activa=='S'?'checked':'' }}> 
-                                    <label class="custom-control-label"   for="mca_activa">Activa</label>
+                                    <div class="form-check">
+                                        <input name="mca_activa"  id="mca_activa" value="S" {{ isset($reglas->mca_activa)&&$reglas->mca_activa=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                        <label class="form-check-label" for="mca_activa">Activa</label>
+                                    </div>
                                 </div>
                                 <div class="col-md-5 d-flex flex-row p-t-20">
                                     <label class="mt-2 mr-1" for="" title="{{ __('eventos.hint_tiempo_espera') }}">{{ __('eventos.intervalo_de_espera') }}</label>
@@ -146,9 +148,9 @@
             </div>
             <div class="row" id="div_regla" style="display:none">
                 <div class="col-md-12">
-                    <div class="panel totales_resultados b-all" >
+                    <div class="card totales_resultados b-all" >
                         <h4 class="mt-2 ml-2" >{{ __('eventos.parametrizacion_del_comando') }}</h4>
-                        <div class="panel-body" id="param_regla">
+                        <div class="card-body" id="param_regla">
     
                         </div>
                     </div>
@@ -157,9 +159,9 @@
     
             <div class="row" id="div_prog" style="display:none">
                 <div class="col-md-12">
-                    <div class="panel" >
+                    <div class="card" >
                         <h4 class="mt-2 ml-2" >{{ __('eventos.programacion_de_la_regla') }}</h4>
-                        <div class="panel-body" id="prog_regla">
+                        <div class="card-body" id="prog_regla">
     
                         </div>
                     </div>
@@ -170,21 +172,23 @@
             {{csrf_field()}}
             <div class="row" id="div_acc" style="display:none">
                 <div class="col-md-12">
-                    <div class="panel" >
-                        <div class="panel-header bg-white">
+                    <div class="card" >
+                        <div class="card-header bg-white">
                             <h4 class="mt-2 ml-2" >Acciones</h4>                          
-                                <div class="dropdown text-right">
-                                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">
-                                        <i class="fas fa-plus-circle"></i> Añadir <i class="dropdown-caret"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right" style="">
-                                        <li><a class="dropdown-item nueva_accion p-1"  id="nueva_iteracion" data-tipo="iteracion" href="javascript:void(0)"><i class="fad fa-recycle" style="width:20px"></i> {{ __('eventos.iteracion') }}</a></li>
+                                <div class="dropdown text-end">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-plus-circle"></i> Añadir 
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item nueva_accion p-1"  id="nueva_iteracion" data-tipo="iteracion" href="javascript:void(0)"><i class="fad fa-recycle" style="width:20px"></i> {{ __('eventos.iteracion') }}</a></li>
                                         <li><a class="dropdown-item nueva_accion p-1" id="nueva_accion" data-tipo="accion" href="javascript:void(0)"><i class="fad fa-shoe-prints" style="width:20px"></i> {{ __('general.accion') }}</a></li>
-                                    </ul>
+                                        </ul>
+                                    </div>
                                 </div>
                         </div>
                         
-                        <div class="panel-body" id="acciones_regla">
+                        <div class="card-body" id="acciones_regla">
     
                         </div>
                     </div>

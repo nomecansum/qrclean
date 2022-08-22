@@ -16,7 +16,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Informes</li>
         <li class="breadcrumb-item active">Informes programados</li>
     </ol>
@@ -26,13 +26,13 @@
 <div class="row botones_accion mb-2">
     <br><br>
 </div>
-<div class="panel">
-    <div class="panel-body">
+<div class="card">
+    <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <div class="panel">
-                    <div class="panel-body">
-                        {{-- <h2 class="panel-title float-left">{{ trans('strings.incidents') }} </h2> --}}
+                <div class="card">
+                    <div class="card-body">
+                        {{-- <h2 class="card-title float-left">{{ trans('strings.incidents') }} </h2> --}}
                         {{-- @include('resources.combo_clientes') --}}
                         <div class="table-responsive m-t-40">
                             <table  class="table table-bordered table-condensed table-hover text-lg-center">
@@ -127,9 +127,11 @@
                                             </td>
                                             <td class="text-center" style="position: relative;">
                                                 {!! beauty_fecha($i->fec_prox_ejecucion) !!}
-                                                <div class="floating-like-gmail">
-                                                    @if((checkPermissions(['Informes programados'],["W"])) || fullAccess())<a href="#edit_informe_programado" data-toggle="modal" class="btn btn-xs btn-success btn-edit" data-url="{{$i->url_informe}}" data-id="{{ $i->cod_informe_programado }}">{{trans('strings.edit')}}</a>@endif
-                                                    @if((checkPermissions(['Informes programados'],["D"])) || fullAccess())<a href="#eliminar-usuario-{{$i->cod_informe_programado}}" data-toggle="modal" class="btn btn-xs btn-danger">{{trans('strings.delete')}}</a>@endif
+                                                <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                                                    <div class="btn-group btn-group pull-right ml-1" role="group">
+                                                        @if((checkPermissions(['Informes programados'],["W"])) || fullAccess())<a href="#edit_informe_programado" data-toggle="modal" class="btn btn-xs btn-info btn-edit" data-url="{{$i->url_informe}}" data-id="{{ $i->cod_informe_programado }}"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                                        @if((checkPermissions(['Informes programados'],["D"])) || fullAccess())<a href="#eliminar-usuario-{{$i->cod_informe_programado}}" data-toggle="modal" class="btn btn-xs btn-danger"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
+                                                    </div>
                                                 </div>
                                                 <div class="modal fade" id="eliminar-usuario-{{$i->cod_informe_programado}}">
                                                     <div class="modal-dialog modal-sm">
@@ -257,15 +259,19 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Editar configuración de informe programado</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <span class="float-right" id="loading" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span><h1 class="modal-title text-nowrap">Editar configuración de informe programado</h1>
+                    <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                    </button>
                 </div>
+
                 <div class="modal-body" id="body_inf">
     
                 </div>
                 <div class="modal-footer">
                      <button type="submit" class="btn btn-info btn_submit" >{{trans('strings.edit')}}</button>
-                    <button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -313,18 +319,18 @@
                 $('#cod_informe_programado').val(id_informe);
                 console.log("Ponemos el cod_informe_programado a " + id_informe);
                 $('#frm_programar_informe').submit(form_ajax_submit);
-                $('.singledate').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    locale: {
-                        format: '{{trans("strings.date_format")}}',
-                        applyLabel: "OK",
-                        cancelLabel: "Cancelar",
-                        daysOfWeek:["{{trans('strings.domingo')}}","{{trans('strings.lunes')}}","{{trans('strings.martes')}}","{{trans('strings.miercoles')}}","{{trans('strings.jueves')}}","{{trans('strings.viernes')}}","{{trans('strings.sabado')}}"],
-                        monthNames: ["{{trans('strings.enero')}}","{{trans('strings.febrero')}}","{{trans('strings.marzo')}}","{{trans('strings.abril')}}","{{trans('strings.mayo')}}","{{trans('strings.junio')}}","{{trans('strings.julio')}}","{{trans('strings.agosto')}}","{{trans('strings.septiembre')}}","{{trans('strings.octubre')}}","{{trans('strings.noviembre')}}","{{trans('strings.diciembre')}}"],
-                        firstDay: {{trans("strings.firstDayofWeek")}}
-                    },
+                $('.btn_fecha').click(function(){
+                    simplepicker.open('#val_fecha');
+                })
 
+                const simplepicker = MCDatepicker.create({
+                    el: "#val_fecha",
+                    dateFormat: cal_formato_fecha,
+                    autoClose: true,
+                    closeOnBlur: true,
+                    firstWeekday: 1,
+                    customMonths: cal_meses,
+                    customWeekDays: cal_diassemana
                 });
                 $('.edit_tag').on("keypress", function(e) {
                 if (e.keyCode == 13) {
@@ -358,6 +364,7 @@
                     }],
                     freeInput: true,
                     allowDuplicates: false,
+                    tagClass: 'label label-primary p-3 rounded'
                 });
 
                 $('.edit_tag').on('itemAdded', function(event) {

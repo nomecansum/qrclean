@@ -64,11 +64,11 @@
 }
 </style>
 
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title"><span class="font-bold text-2x" id="cuenta">{{ $rondas->count() }}</span> Rondas de {{ $tipo_ronda=='M'?'mantenimiento':'limpieza' }} con algun puesto pendiente {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><span class="font-bold fs-2" id="cuenta">{{ $rondas->count() }}</span> Rondas de {{ $tipo_ronda=='M'?'mantenimiento':'limpieza' }} con algun puesto pendiente {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         @foreach($rondas as $r)
             @php
                 $cnt_edificios=$detalles->where('id_ronda',$r->id_ronda)->pluck('id_edificio')->unique()->count();
@@ -86,7 +86,7 @@
             @endphp
             @if($pct_completado<100)
                 <div class="row">
-                    <div class="col-md-2 text-2x text-center">
+                    <div class="col-md-2 fs-2 text-center">
                         {!! beauty_fecha($r->fec_ronda,0) !!}
                     </div>
                     <div class="col-md-2 text-3x font-bold text-center text-{{ color_porcentaje($pct_completado) }}">
@@ -94,13 +94,13 @@
                     </div>
                     
                     <div class="col-md-2  text-center">
-                        <i class="fad fa-building text-2x"></i> <span class="text-3x ml-2"> {{ $cnt_edificios }}</span>
+                        <i class="fad fa-building fs-2"></i> <span class="text-3x ml-2"> {{ $cnt_edificios }}</span>
                     </div>
                     <div class="col-md-2  text-center">
-                        <i class="fad fa-layer-group  text-2x"></i> <span class="text-3x ml-2"> {{ $cnt_plantas }}</span>
+                        <i class="fad fa-layer-group  fs-2"></i> <span class="text-3x ml-2"> {{ $cnt_plantas }}</span>
                     </div>
                     <div class="col-md-2  text-center">
-                        <i class="fad fa-desktop-alt  text-2x"></i> <span class="text-3x ml-2"> {{ $cnt_puestos }}</span>
+                        <i class="fad fa-desktop-alt  fs-2"></i> <span class="text-3x ml-2"> {{ $cnt_puestos }}</span>
                     </div>
                     <div class="col-md-2 font-16  text-center">
                         {{ $r->des_ronda }}

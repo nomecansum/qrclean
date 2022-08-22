@@ -113,7 +113,7 @@
             @if(!$reserva || isset($mireserva))
                 @if($puesto->id_estado<3)
                     <div class="row mt-5 mb-5">
-                        <div class="col-md-12 pt-3 pb-3 text-2x text-center">
+                        <div class="col-md-12 pt-3 pb-3 fs-2 text-center">
                             ¿Que quiere hacer?
                         </div>
                     </div>
@@ -242,7 +242,7 @@
             @if(Auth::check())
                 <div class="row">
                     <div class="col-md-12 text-center mt-3">
-                        <a class="btn btn-lg btn-primary text-2x rounded btn_otravez" href="{{ url('/scan_usuario/') }} "><i class="fad fa-qrcode fa-3x"></i> Escanear otra vez</a>
+                        <a class="btn btn-lg btn-primary fs-2 rounded btn_otravez" href="{{ url('/scan_usuario/') }} "><i class="fad fa-qrcode fa-3x"></i> Escanear otra vez</a>
                     </div>
                 </div>
             @endif
@@ -250,7 +250,7 @@
     @endif
     <div class="row mt-3" id="boton_home" style="display:none">
         <div class="col-md-12 text-center">
-            <a class="btn btn-lg btn-mint text-2x rounded btn_home" href="{{ url('/') }} "><i class="fa fa-home"></i> Inicio</a>
+            <a class="btn btn-lg btn-secondary fs-2 rounded btn_home" href="{{ url('/') }} "><i class="fa fa-home"></i> Inicio</a>
         </div>
     </div>
 @endsection
@@ -303,19 +303,7 @@
         })
 
         @if(isset($respuesta['disponibles']) && Auth::user())
-            function recolocar_puestos(posiciones){
-                $('.container').each(function(){
-                    plano=$(this);
-                    //console.log(plano.data('posiciones'));
-                    
-                    $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
-                        puesto=$('#puesto'+item.id);
-                        puesto.css('top',plano.height()*item.offsettop/100);
-                        puesto.css('left',plano.width()*item.offsetleft/100);
-                    });
-                }) 
-            }
-
+            
             $(window).resize(function(){
                 recolocar_puestos();
             })

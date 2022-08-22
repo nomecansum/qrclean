@@ -5,22 +5,26 @@
     }
 </style>
 
-    <div class="panel editor">
-        <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
-            </div>
-            <h3 class="panel-title" id="titulo">
-                @if($id==0)
-                    Nuevo tipo de puesto
-                @else
-                    Editar tipo de puesto
-                @endif
+    <div class="card editor mb-5">
 
-            </h3>
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">
+                    @if($id==0)
+                        Nuevo tipo de puesto
+                    @else
+                        Editar tipo de puesto
+                    @endif
+                </h5>
+            </div>
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
 
             @if ($errors->any())
                 <ul class="alert alert-danger">
@@ -31,7 +35,7 @@
             @endif
             <form method="POST" action="{{ url('/puestos/tipos/save') }}" id="edit_tipos_puesto_form" name="edit_tipos_puesto_form" accept-charset="UTF-8" class="form-horizontal form-ajax">
             {{ csrf_field() }}
-                <div class="row">
+                <div class="row mt-2">
                         <input type="hidden" name="id" value="{{ $id }}">
                         <div class="form-group col-md-10 {{ $errors->has('des_tipo_puesto') ? 'has-error' : '' }}">
                             <label for="des_tipo_puesto" class="control-label">Nombre</label>
@@ -43,6 +47,8 @@
                             <input class="form-control" name="abreviatura" type="text" id="abreviatura_edificio" value="{{ old('abreviatura', optional($tipo)->abreviatura) }}" maxlength="200" placeholder="Enter abreviatura here...">
                             {!! $errors->first('abreviatura', '<p class="help-block">:message</p>') !!}
                         </div>
+                </div>
+                <div class="row mt-2">
 
                         <div class="form-group col-md-4 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
                             <label for="id_cliente" class="control-label">Cliente</label>
@@ -69,17 +75,21 @@
                         </div>
                         @if(isAdmin())
                         <div class="col-md-1 p-t-30 mt-1">
-                            <input type="checkbox" class="form-control  magic-checkbox" name="mca_fijo"  id="mca_fijo" value="S" {{ $tipo->mca_fijo=='S'?'checked':'' }}> 
-                            <label class="custom-control-label"   for="mca_fijo">Fijo</label>
+                            <div class="form-check pt-1">
+                                <input name="mca_fijo"  id="mca_fijo" value="S" {{ $tipo->mca_fijo=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
+                                <label for="mca_fijo" class="form-check-label">Fijo</label>
+                            </div>
                         </div>
                         @endif
                         
                         
                 </div>
-                <div class="row">
+                <div class="row mt-2">
                     <div class="col-md-3 p-t-20 mt-2">
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ $tipo->mca_liberar_auto=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_liberar_auto">Liberar reservas AUTO</label>
+                        <div class="form-check pt-1">
+                            <input name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ $tipo->mca_liberar_auto=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
+                            <label for="mca_liberar_auto" class="form-check-label">Liberar reservas AUTO</label>
+                        </div>
                     </div>
                     <div class="form-group col-md-2">
                         <label for="max_usos">Cortesia (min)</label><br>
@@ -98,14 +108,16 @@
                 
 
                 
-                <div class="panel panel-bordered">
-                    <div class="panel-heading">
+                <div class="card panel-bordered">
+                    <div class="card-header">
                         <div class="form-group">
-                            <input type="checkbox" class="form-control  magic-checkbox" name="mca_slots"   id="mca_slots" value="S" {{ isset($tipo->slots_reserva)?'checked':'' }}> 
-                            <label class="custom-control-label" style="margin-left: 5px"  for="mca_slots">Slots de reserva </label>
+                            <div class="form-check pt-2">
+                                <input  name="mca_slots"   id="mca_slots" value="S" {{ isset($tipo->slots_reserva)?'checked':'' }}  class="form-check-input" type="checkbox">
+                                <label for="mca_slots" class="form-check-label">Slots de reserva</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="panel-body bg-gray-light" id="body_slots" style="{{ !isset($tipo->slots_reserva)?'display:none':'' }}">
+                    <div class="card-body bg-gray-light" id="body_slots" style="{{ !isset($tipo->slots_reserva)?'display:none':'' }}">
                         <div class="row d-flex flex-wrap" id="slots">
                             @if(isset($tipo->slots_reserva))
                                 @php
@@ -148,7 +160,7 @@
                 
                 
 
-                <div class="row">
+                <div class="row ">
                     <div class="form-group col-md-12">
                         <label for="des_tipo_puesto" class="control-label">Observaciones</label>
                         <input class="form-control" name="observaciones" type="text" id="observaciones" value="{{ old('observaciones', optional($tipo)->observaciones) }}" maxlength="200" placeholder="Enter observaciones here...">
@@ -157,8 +169,8 @@
                 </div>
                 
 
-                <div class="form-group">
-                    <div class="col-md-12 text-right">
+                <div class="form-group mt-3">
+                    <div class="col-md-12 text-end">
                         @if(checkPermissions(['Tipos de puesto'],['W']) && ($tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess()))) <input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
@@ -195,16 +207,14 @@
         icon:'{{isset($tipo) ? ($tipo->val_icono) : ''}}'
     });
 
-    $('.demo-psi-cross').click(function(){
-        $('.editor').hide();
-    });
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
     $('.add_nuevo').click(function(){
         $($('#editor_nuevo').html()).insertBefore("#div_nuevo");
         //$('#editor_nuevo').show();
     });
 
-    $('#mca_slots').change(function(){
+    $('#mca_slots').click(function(){
         if($(this).is(':checked')){
             $('#body_slots').show();
         }else{

@@ -13,7 +13,7 @@
 
 @section('breadcrumb')
 <ol class="breadcrumb">
-	<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+	<li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
 	<li class="breadcrumb-item">ferias</li>
 	<li class="breadcrumb-item">marcas</li>
 	{{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
@@ -29,10 +29,10 @@
 	<div class="col-md-4">
 
 	</div>
-	<div class="col-md-7">
+	<div class="col-md-6">
 		<br>
 	</div>
-	<div class="col-md-1 text-right">
+	<div class="col-md-2 text-end">
 		@if(checkPermissions(['Incidencias'],['C']))
 		<div class="btn-group btn-group-sm pull-right" role="group">
 				<a href="javascript:void(0)" id="btn_nueva" class="btn btn-success" data-toggle="modal" title="Nueva marca">
@@ -51,23 +51,26 @@
 
 <div class="row mt-2">
 	<div class="col-12">
-		<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Marcas</h3>
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Marcas</h3>
 			</div>
 			
-			<div class="panel-body">
+			<div class="card-body">
 				<div id="all_toolbar">
-					<input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos">Todos</label>
-					<div class="btn-group btn-group-xs pull-bottom" role="group">
-						<div class="btn-group mr-3">
-							<div class="dropdown">
-								<button class="btn btn-warning dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false" title="Acciones sobre la seleccion de marcas">
-									<i class="fad fa-poll-people pt-2" style="font-size: 20px" aria-hidden="true"></i> Acciones <i class="dropdown-caret"></i>
-								</button>
-								<ul class="dropdown-menu dropdown-menu-lg dropdown-menu-bottom" style="" id="dropdown-acciones">
-									<li><a href="#" class="btn_qr"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
-									<li><a href="#" class="btn_export_qr"><i class="fad fa-file-export"></i></i> Exportar QR</a></li>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-check pt-2">
+								<input id="chktodos" name="chktodos" class="form-check-input" type="checkbox">
+								<label for="_dm-gridCheck" class="form-check-label">Todos</label>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="btn-group">
+								<button type="button" class="btn btn-secondary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fad fa-poll-people pt-2" aria-hidden="true"></i> Acciones</button>
+								<ul class="dropdown-menu" style="">
+									<li class="dropdown-item"><a href="#" class="btn_qr dropdown-item"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
+									<li class="dropdown-item"><a href="#" class="btn_export_qr dropdown-item"><i class="fad fa-file-export"></i></i> Exportar QR</a></li>
 								</ul>
 							</div>
 						</div>
@@ -82,7 +85,7 @@
 					data-page-size="50"
 					data-pagination="true" 
 					data-show-pagination-switch="true"
-					data-show-button-icons="true"
+					data-show-button-text="true"
 					data-toolbar="#all_toolbar"
 					>
 					<thead>
@@ -99,8 +102,10 @@
                         @foreach ($datos as $marca)
                             <tr class="hover-this" @if (checkPermissions(['Clientes'],["W"])) @endif>
                                 <td class="text-center">
-                                    <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $marca->id_marca }}" id="chkp{{ $marca->id_marca }}" value="{{ $marca->id_marca }}">
-									<label class="custom-control-label"   for="chkp{{ $marca->id_marca  }}"></label>
+									<div class="form-check">
+										<input name="lista_id[]" data-id="{{ $marca->id_marca }}" id="chkp{{ $marca->id_marca }}" value="{{ $marca->id_marca }}" class="form-check-input chkpuesto" type="checkbox">
+										<label class="form-check-label" for="chkp{{ $marca->id_marca  }}"></label>
+									</div>
                                 </td>
 								<td>{{$marca->id_marca}}</td>
                                 <td>
@@ -113,18 +118,27 @@
 								</td>
                                 <td style="position: relative; vertical-align: middle" class="pt-2">
                                     {{ $marca->observaciones}}
-                                    <div class="floating-like-gmail mt-2 w-100" style="width: 100%">
-                                        @if (checkPermissions(['Ferias marcas'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $marca->id_marca }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $marca->id_marca }})"><span class="fa fa-eye pt-1" aria-hidden="true"></span> Ver</a>@endif
-                                        @if (checkPermissions(['Ferias marcas'],["D"]))<a href="#eliminar-incidencia-{{$marca->id_marca}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
+									<div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+										<div class="btn-group btn-group pull-right ml-1" role="group">
+											@if (checkPermissions(['Ferias marcas'],["W"]))<a href="#" title="Ver incidencia " data-id="{{ $marca->id_marca }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $marca->id_marca }})"><span class="fa fa-eye pt-1" aria-hidden="true"></span> Ver</a>@endif
+											@if (checkPermissions(['Ferias marcas'],["D"]))<a href="#eliminar-incidencia-{{$marca->id_marca}}" title="Borrar incidencia" data-toggle="modal" onclick="del({{ $marca->id_marca }})" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
+										</div>
                                         {{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$inc->id_incidencia}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
                                     </div>
                                     @if (checkPermissions(['Incidencias'],["D"]))
                                         <div class="modal fade" id="eliminar-incidencia-{{$marca->id_marca}}">
                                             <div class="modal-dialog modal-md">
-                                                <div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                                                    <div class="modal-header"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i>
-                                                        ¿Borrar marca {{ $marca->des_marca}}?
-                                                    </div>
+													<div class="modal-content">
+													<div class="modal-header">
+														<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+														<h1 class="modal-title text-nowrap">Borrar marca </h1>
+														<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+															<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+														</button>
+													</div>    
+													<div class="modal-body">
+														¿Borrar marca {{ $marca->des_marca}}?
+													</div>
                                                     
                                                     <div class="modal-footer">
                                                         <a class="btn btn-info" href="{{url('/ferias/marcas/delete',$marca->id_marca)}}">Si</a>
@@ -166,6 +180,9 @@
 			animateCSS('#editorCAM','bounceInRight');
 		});
 	}
+	function del(id){
+		$('#eliminar-incidencia-'+id).modal('show');
+	}
 
     $('#btn_nueva').click(function(){
         $('#editorCAM').load("{{ url('/ferias/marcas/edit/0') }}", function(){
@@ -204,6 +221,7 @@
 	$("#chktodos").click(function(){
 		$('.chkpuesto').not(this).prop('checked', this.checked);
 	});
+	
 
 	</script>
 

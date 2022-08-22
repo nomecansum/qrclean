@@ -20,7 +20,7 @@
     <table style="width:100%">
         <tr>
             <td class="text-center">
-                @if($r->output!=="excel")<img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$cl->img_logo) }}" style="width: 180px; margin-top: 20px" alt="" onerror="this.src='{{ url('/img/logo.png') }}';">@endif<br>
+                @if($r->output!=="excel")<img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$cl->img_logo) }}" class="rounded" style="width: 180px; margin-top: 20px" alt="" onerror="this.src='{{ url('/img/logo.png') }}';">@endif<br>
                 {{ $cl->nom_cliente }}
             </td>
             <td class="text-center">
@@ -36,7 +36,7 @@
 @else
     <div class="row" style="color: #333">
         <div class="col-md-3 text-center">
-            <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$cl->img_logo) }}" style="width: 120px; margin-top: 20px" alt="" onerror="this.src='{{ url('/img/logo.png') }}';"><br>
+            <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$cl->img_logo) }}" class="rounded"  style="width: 120px; margin-top: 20px" alt="" onerror="this.src='{{ url('/img/logo.png') }}';"><br>
             {{ $cl->nom_cliente }}
         </div>
         <div class="col-md-6 text-center vertical-middle">
@@ -44,7 +44,7 @@
             <h1>{{$nombre_informe}}</h1>
             @endisset
         </div>
-        <div class="col-md-3 mt-4  text-right vertical-middle">
+        <div class="col-md-3 mt-4  text-end vertical-middle">
             {{ Carbon::now()->timezone(Auth::user() ? Auth::user()->val_timezone : "Europe/Madrid")->isoFormat('lll')  }}
         </div>
     </div>

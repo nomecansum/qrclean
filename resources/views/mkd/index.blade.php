@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Configuracion</li>
         <li class="breadcrumb-item">Utilidades</li>
         <li class="breadcrumb-item"><a href="{{url('/users')}}">señaletica</a></li>
@@ -25,11 +25,11 @@
 <div class="row botones_accion mb-2">
     <br><br>
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Configurar URL</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Configurar URL</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="form-group col-md-4">
                 <label for="id_usuario">Utilizar cuenta de usuario</label>
@@ -78,11 +78,11 @@
         </div>
     </div>
 </div>
-<div class="panel" id="descarga" style="display: none">
-    <div class="panel-heading">
-        <h3 class="panel-title">Descarga de aplicacion de señaletica</h3>
+<div class="card" id="descarga" style="display: none">
+    <div class="card-header">
+        <h3 class="card-title">Descarga de aplicacion de señaletica</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 
         <div class="row">
             <div class="col-md-12">
@@ -98,7 +98,7 @@
                 El reproductor de señaletica y las instrucciones para su configuracion puede descargarlos aqui
             </div>
             <div class="col-md-12">
-                <a href="https://spotdesking.s3-eu-west-1.amazonaws.com/spotdesking/PlayerWEB.zip" id="zip_player" class="text-mint text-bold font-20"><i class="fad fa-file fa-2x"></i> playerweb.zip</a>
+                <a href="https://spotdesking.s3-eu-west-1.amazonaws.com/spotdesking/PlayerWEB.zip" id="zip_player" class="text-secondary text-bold font-20"><i class="fad fa-file fa-2x"></i> playerweb.zip</a>
             </div>
         </div>
     </div>

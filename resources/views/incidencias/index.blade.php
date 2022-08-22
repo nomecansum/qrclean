@@ -13,7 +13,7 @@
 
 @section('breadcrumb')
 <ol class="breadcrumb">
-	<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+	<li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
 	<li class="breadcrumb-item">mantenimiento</li>
 	<li class="breadcrumb-item">incidencias</li>
 	{{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
@@ -37,10 +37,10 @@
 	<div class="col-md-4">
 
 	</div>
-	<div class="col-md-7">
+	<div class="col-md-6">
 		<br>
 	</div>
-	<div class="col-md-1 text-right">
+	<div class="col-md-2 text-end">
 		@if(checkPermissions(['Incidencias'],['C']))
 		<div class="btn-group btn-group-sm pull-right" role="group">
 				<a href="#nueva-incidencia" id="btn_nueva_incidencia" class="btn btn-success" data-toggle="modal" title="Nueva incidencia">
@@ -56,36 +56,37 @@
 </div>
 <div class="row mt-2">
 	<div class="col-12">
-		<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Incidencias</h3>
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Incidencias</h3>
 			</div>
 			<form method="post" name="form_puestos" id="formbuscador" action="{{ url('/incidencias') }}" class="form-horizontal ajax-filter">
 				@csrf
 				<input type="hidden" name="document" value="pantalla">
 				<input type="hidden" name="output" value="pantalla">
 				@include('resources.combos_filtro',[$hide=['est_mark'=>1]])
-				<div class="col-md-3" style="padding-left: 15px">
-					@include('resources.combo_fechas')
-				</div>
-				<div class="col-md-3" style="padding-left: 15px">
-					<div class="form-group">
-						<label>Situacion</label>
-						<select class="form-control" id="ac" name="ac">
-								<option value="A" >Abiertas</option>
-								<option value="C" >Cerradas</option>
-								<option value="B" >Todas</option>
-						</select>
+				<div class="row">
+					<div class="col-md-4" style="padding-left: 15px">
+						@include('resources.combo_fechas')
+					</div>
+					<div class="col-md-3" style="padding-left: 15px">
+						<div class="form-group">
+							<label>Situacion</label>
+							<select class="form-control" id="ac" name="ac">
+									<option value="A" >Abiertas</option>
+									<option value="C" >Cerradas</option>
+									<option value="B" >Todas</option>
+							</select>
+						</div>
 					</div>
 				</div>
-				<br>
 			</form>
-			<div class="panel-body">
+			<div class="card-body">
 				{{-- <div id="all_toolbar">
 					<div class="input-group">
 						<input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
-						<span class="btn input-group-text btn-mint"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
-						<button id="btn-toggle" class="btn btn-mint float-right ml-3 add-tooltip" title="Cambiar vista tabla/tarjetas"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
+						<span class="btn input-group-text btn-secondary"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+						<button id="btn-toggle" class="btn btn-secondary float-right ml-3 add-tooltip" title="Cambiar vista tabla/tarjetas"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
 					</div>
 				</div> --}}
 				<table id="tabla"  data-toggle="table"
@@ -97,7 +98,7 @@
 					data-page-size="50"
 					data-pagination="true" 
 					data-show-pagination-switch="true"
-					data-show-button-icons="true"
+					data-show-button-text="true"
 					data-toolbar="#all_toolbar"
 					>
 					<thead>
@@ -122,20 +123,29 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade" id="cerrar-incidencia">
+
+
+
+
+<div class="modal fade" id="cerrar-incidencia" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<form method="POST" action="{{ url('/incidencias/cerrar') }}" accept-charset="UTF-8" class="form-horizontal form-ajax">	
 		@csrf
-		<div class="modal-dialog modal-md">
-			<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-				<div class="modal-header"><i class="mdi mdi-thumb-up text-success mdi-48px"></i>
-					Cerrar incidencia <span id="des_incidencia_cerrar"></span>
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					
+					<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+					<h1 class="modal-title text-nowrap">Cerrar incidencia</h1>
+					<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+						<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+					</button>
 				</div>
-				<div class="modal-body" id="body_cierre">
+				<div class="modal-body text-start" id="body_cierre">
 					
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-info btn_cerrar_incidencia">Si</button>
-					<button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+					<button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
 				</div>
 			</div>
 		</div>
@@ -146,16 +156,21 @@
 		@csrf
 		<input type="hidden" name="adjuntos[]" id="adjuntos" value="">
 		<div class="modal-dialog modal-md">
-			<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-				<div class="modal-header"><i class="fad fa-plus fa-2x"></i>
-					Añadir accion a la incidencia <span id="des_incidencia_accion"></span>
+			<div class="modal-content">
+				<div class="modal-header">
+                
+					<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+					<h1 class="modal-title text-nowrap">Añadir accion</h1>
+					<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+						<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+					</button>
 				</div>
 				<div class="modal-body" id="body_accion">
 					
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-info btn_accion_incidencia">Si</button>
-					<button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+					<button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
 				</div>
 			</div>
 		</div>
@@ -163,14 +178,19 @@
 </div>
 <div class="modal fade" id="nueva-incidencia">
 	<div class="modal-dialog modal-md">
-		<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-			<div class="modal-header"><i class="fad fa-plus-hexagon text-info fa-2x"></i>
-				Nueva incidencia 
-			</div>
+		<div class="modal-content">
+			<div class="modal-header">
+                
+                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                <h1 class="modal-title text-nowrap">Nueva incidencia</h1>
+                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                </button>
+            </div>
 			<div class="modal-body">
 				<div class="form-group col-md-12">
 					<label for="id_cliente" class="control-label">Puesto</label>
-					<select class="form-control" id="id_puesto" name="id_puesto">
+					<select class="form-control select2" id="id_puesto" name="id_puesto">
 						<option value="" ></option>
 						@php
 							$planta=0;
@@ -217,10 +237,19 @@
 	//$('.formbuscador').submit(ajax_filter);
 
 	$(function(){
+
 		$('#fechas, #ac').change(function(){
 			$('#formbuscador').submit();
 		})
+
+		$('#divfiltro').hide();
 	})     
+
+	function change_fechas(){
+		$('#formbuscador').submit();
+	}
+
+	
 
 	$('.minicolors').minicolors({
           control: $(this).attr('data-control') || 'hue',
@@ -239,108 +268,88 @@
           theme: 'bootstrap'
         })
 
+
+
+	$('#accion-incidencia').on('shown.bs.modal', function (e) {
+		window.Laravel = {!! json_encode([
+			'csrfToken' => csrf_token(),
+		]) !!};
 		
+		//Dropzone para adjuntos de acciones
+		lista_ficheros=[];	
+		$('#adjuntos').val('');
+		var myDropzone = new Dropzone("#dZUpload" , {
+			url: '{{ url('/incidencias/upload_imagen/') }}',
+			autoProcessQueue: true,
+			uploadMultiple: true,
+			parallelUploads: 1,
+			maxFiles: {{ $config->num_imagenes_incidencias??2 }},
+			addRemoveLinks: true,
+			maxFilesize: 15,
+			autoProcessQueue: true,
+			acceptedFiles: 'image/*,video/*',
+			dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg"><i class="fa fa-caret-right text-danger"></i> Arrastre archivos <span class="font-xs">para subirlos</span></span><span>&nbsp&nbsp<h4 class="display-inline"> (O haga Click)</h4></span>',
+			dictResponseError: 'Error subiendo fichero!',
+			dictDefaultMessage :
+				'<span class="bigger-150 bolder"><i class=" fa fa-caret-right red"></i> Drop files</span> to upload \
+				<span class="smaller-80 grey">(or click)</span> <br /> \
+				<i class="upload-icon fa fa-cloud-upload blue fa-3x"></i>'
+			,
+			dictResponseError: 'Error while uploading file!',
+			headers: {
+				'X-CSRF-TOKEN': Laravel.csrfToken
+			},
+			init: function() {
+				dzClosure = this; // Makes sure that 'this' is understood inside the functions below.
+				this.on("sending", function(file, xhr, formData) {
+					formData.append("id_cliente", {{ Auth::user()->id_cliente }});
+					// formData.append("enviar_email", $("#enviar_email").is(':checked'));
+					console.log(formData)
+				});
+				
+				//send all the form data along with the files:
+				this.on("sendingmultiple", function(data, xhr, formData) {
+					console.log("multiple")
+				});
 
-	 //Date range picker
-	 $('#fechas').daterangepicker({
-            autoUpdateInput: true,
-            locale: {
-                format: '{{trans("general.date_format")}}',
-                applyLabel: "OK",
-                cancelLabel: "Cancelar",
-                daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-                monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-                firstDay: {{trans("general.firstDayofWeek")}}
-            },
-            opens: 'right',
-        }, function(start_date, end_date) {
-            $('#fechas').val(start_date.format('DD/MM/YYYY')+' - '+end_date.format('DD/MM/YYYY'));
-			// console.log($('#fechas').val());
-			// $('#formbuscador').submit();
-            //window.location.href = '{{ url('/incidencias/') }}/'+start_date.format('YYYY-MM-DD')+'/'+end_date.format('YYYY-MM-DD');
-        });
-
-		$('#accion-incidencia').on('shown.bs.modal', function (e) {
-			window.Laravel = {!! json_encode([
-				'csrfToken' => csrf_token(),
-			]) !!};
-			
-			//Dropzone para adjuntos de acciones
-			lista_ficheros=[];	
-			$('#adjuntos').val('');
-			var myDropzone = new Dropzone("#dZUpload" , {
-				url: '{{ url('/incidencias/upload_imagen/') }}',
-				autoProcessQueue: true,
-				uploadMultiple: true,
-				parallelUploads: 1,
-				maxFiles: {{ $config->num_imagenes_incidencias??2 }},
-				addRemoveLinks: true,
-				maxFilesize: 15,
-				autoProcessQueue: true,
-				acceptedFiles: 'image/*,video/*',
-				dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg"><i class="fa fa-caret-right text-danger"></i> Arrastre archivos <span class="font-xs">para subirlos</span></span><span>&nbsp&nbsp<h4 class="display-inline"> (O haga Click)</h4></span>',
-				dictResponseError: 'Error subiendo fichero!',
-                dictDefaultMessage :
-                    '<span class="bigger-150 bolder"><i class=" fa fa-caret-right red"></i> Drop files</span> to upload \
-                    <span class="smaller-80 grey">(or click)</span> <br /> \
-                    <i class="upload-icon fa fa-cloud-upload blue fa-3x"></i>'
-                ,
-                dictResponseError: 'Error while uploading file!',
-				headers: {
-					'X-CSRF-TOKEN': Laravel.csrfToken
-				},
-				init: function() {
-					dzClosure = this; // Makes sure that 'this' is understood inside the functions below.
-					this.on("sending", function(file, xhr, formData) {
-						formData.append("id_cliente", {{ Auth::user()->id_cliente }});
-						// formData.append("enviar_email", $("#enviar_email").is(':checked'));
-						console.log(formData)
-					});
+				this.on("drop", function(event) {
 					
-					//send all the form data along with the files:
-					this.on("sendingmultiple", function(data, xhr, formData) {
-						console.log("multiple")
+				});
+
+				this.on("removedfile", function(event) {
+					console.log(event);
+					value=event.name;
+					lista_ficheros = lista_ficheros.filter(item => item.orig !== value);
+					console.log(lista_ficheros);     
+					ficheros_final=lista_ficheros.map(function(item,index,array){
+						return item.nuevo;
 					});
+					$('#adjuntos').val(ficheros_final);
+				});
 
-					this.on("drop", function(event) {
-						
+
+				this.on("maxfilesexceeded", function(event) {
+					toast_warning('Incidencias','El numero maximo de adjuntos es {{ $config->num_imagenes_incidencias??2 }}')   
+				});
+
+				this.on("success", function(file, responseText) {
+					//Dropzone.forElement("#dZUpload").removeAllFiles(true);
+					fic=new Object();
+					fic.orig=responseText.filename;
+					fic.nuevo=responseText.newfilename;
+					lista_ficheros.push(fic);
+					ficheros_final=lista_ficheros.map(function(item,index,array){
+						return item.nuevo;
 					});
-
-					this.on("removedfile", function(event) {
-						console.log(event);
-						value=event.name;
-						lista_ficheros = lista_ficheros.filter(item => item.orig !== value);
-						console.log(lista_ficheros);     
-						ficheros_final=lista_ficheros.map(function(item,index,array){
-							return item.nuevo;
-						});
-						$('#adjuntos').val(ficheros_final);
-					});
-
-
-					this.on("maxfilesexceeded", function(event) {
-						toast_warning('Incidencias','El numero maximo de adjuntos es {{ $config->num_imagenes_incidencias??2 }}')   
-					});
-
-					this.on("success", function(file, responseText) {
-						//Dropzone.forElement("#dZUpload").removeAllFiles(true);
-						fic=new Object();
-						fic.orig=responseText.filename;
-						fic.nuevo=responseText.newfilename;
-						lista_ficheros.push(fic);
-						ficheros_final=lista_ficheros.map(function(item,index,array){
-							return item.nuevo;
-						});
-						$('#adjuntos').val(ficheros_final);
-						console.log(lista_ficheros);
-					});
-				}
-            });
-
+					$('#adjuntos').val(ficheros_final);
+					console.log(lista_ficheros);
+				});
+			}
 		});
 
+	});
+
 	function post_form_ajax(data){
-		console.log(data);
 		$('#cell'+data.id).removeClass('bg-pink');
 		$('#cell'+data.id).addClass('bg-success');
 		$('#cell'+data.id).html('Cerrada');
@@ -348,6 +357,7 @@
 	}
    
    function cierre_incidencia(id){
+	 	$('#cerrar-incidencia').modal('show');
 	    $('#des_incidencia_cerrar').html($(this).data('desc'));
 		$('#body_cierre').load("{{ url('/incidencias/form_cierre/') }}/"+id);
    }
@@ -355,6 +365,7 @@
    
 
    function accion_incidencia(id){
+		$('#accion-incidencia').modal('show');
 	    $('#des_incidencia_accion').html($(this).data('desc'));
 		
 		$.get("{{ url('/incidencias/form_accion/') }}/"+id,function(data){
@@ -404,7 +415,11 @@
 	})
 
 	$('#id_puesto').change(function(e){
-		window.open("{{ url('incidencias/create') }}/"+$('#id_puesto').val(),'_self');
+		//window.open("{{ url('incidencias/create') }}/"+$('#id_puesto').val(),'_self');
+		$('#editorCAM').load("{{ url('incidencias/create') }}/"+$('#id_puesto').val()+'/embed', function(){
+			animateCSS('#editorCAM','bounceInRight');
+			$('.modal').modal('hide');
+		});
 	})
 	
 

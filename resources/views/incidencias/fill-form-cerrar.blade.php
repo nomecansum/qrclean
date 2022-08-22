@@ -6,7 +6,7 @@
     <div class="radio">
         <i class="{{ $causa->val_icono }}" style="color:{{ $causa->val_color }}; font-weight: bold;"></i>
         <input required id="id_causa_cierre{{ $causa->id_causa_cierre }}" name="id_causa_cierre" class="magic-radio" type="radio" value="{{ $causa->id_causa_cierre }}">
-        <label for="id_causa_cierre{{ $causa->id_causa_cierre }}" style="color:{{ $causa->val_color }}; font-weight: bold;">{{ $causa->des_causa }} </label>
+        <label for="id_causa_cierre{{ $causa->id_causa_cierre }}" style="color:{{ $causa->val_color }}; font-weight: 400; font-size: 16px">{{ $causa->des_causa }} </label>
     </div>
     @endforeach
 </ul>

@@ -19,7 +19,7 @@ use Spatie\IcalendarGenerator\Components\Event;
 class ReservasController extends Controller
 {
     ///////////////FUNCIONES AUXILIARES/////////////////////////////
-    private function festivos_usuario($id){
+    public static function festivos_usuario($id){
         //Lista total de festivos del cliente para desactivarlos en el selector de fecha
         $ubicacion_usuario=DB::table('edificios')
             ->join('users','users.id_edificio','edificios.id_edificio')

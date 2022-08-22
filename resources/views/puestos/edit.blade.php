@@ -4,15 +4,19 @@
   overflow-y: auto;
 }
 </style>
-<div class="panel editor" id="editor">
-    <div class="panel">
-        <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+<div class="card editor mb-5" id="editor">
+    <div class="card">
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">Modificar puesto {{ $puesto->id_puesto }}</h5>
             </div>
-            <h3 class="panel-title">Modificar puesto {{ $puesto->id_puesto }}</h3>
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <form  action="{{url('puestos/update')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax"  enctype="multipart/form-data">
                
                 <div class="row">
@@ -80,12 +84,18 @@
                         </select>
                     </div>
                     <div class="col-md-2 p-t-30">
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_acceso_anonimo"  id="mca_acceso_anonimo" value="S" {{ $puesto->mca_acceso_anonimo=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_acceso_anonimo">Permitir anonimo</label>
+
+                        <div class="form-check pt-2">
+                            <input name="mca_acceso_anonimo"  id="mca_acceso_anonimo" value="S" {{ $puesto->mca_acceso_anonimo=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label for="mca_acceso_anonimo" class="form-check-label">Permitir anonimo</label>
+                        </div>
                     </div>
                     <div class="col-md-2  p-t-30">
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_reservar"  id="mca_reservar" value="S" {{ $puesto->mca_reservar=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_reservar">Permitir reserva</label>
+
+                        <div class="form-check pt-2">
+                            <input name="mca_reservar"  id="mca_reservar" value="S" {{ $puesto->mca_reservar=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label for="mca_reservar" class="form-check-label">Permitir reserva</label>
+                        </div>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="id_usuario">Tipo de puesto</label>
@@ -120,8 +130,8 @@
                     </div>
                     
                 </div>
-                <div class="row mt-2 ">
-                    <div class="col-md-12   text-right ">
+                <div class="row mt-2 mt-4 mb-4">
+                    <div class="col-md-12   text-end ">
                         @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary mr-2 btn_submit">GUARDAR</button>@endif  
                     </div>
                 </div>
@@ -141,33 +151,45 @@
                     </div>
                     <div class="col-md-2">
                         <i class="fad fa-projector fa-2x"></i>
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_proyector"  id="mca_proyector" value="S" {{ isset($puesto->mca_proyector)&&$puesto->mca_proyector=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_proyector"> Proyector</label>
+                        <div class="form-check pt-2">
+                            <input name="mca_proyector"  id="mca_proyector" value="S" {{ isset($puesto->mca_proyector)&&$puesto->mca_proyector=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label for="mca_proyector" class="form-check-label">Proyector</label>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <i class="fad fa-tv-alt fa-2x"></i>
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_pantalla"  id="mca_pantalla" value="S" {{ isset($puesto->mca_pantalla)&&$puesto->mca_pantalla=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_pantalla"> Pantalla</label>
+                        <div class="form-check pt-2">
+                            <input name="mca_pantalla"  id="mca_pantalla" value="S" {{ isset($puesto->mca_pantalla)&&$puesto->mca_pantalla=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label for="mca_pantalla" class="form-check-label">Pantalla</label>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <i class="fad fa-webcam fa-2x"></i>
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_videoconferencia"  id="mca_videoconferencia" value="S" {{ isset($puesto->mca_videoconferencia)&&$puesto->mca_videoconferencia=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_videoconferencia"> Videoconferencia</label>
+                        <div class="form-check pt-2">
+                            <input name="mca_videoconferencia"  id="mca_videoconferencia" value="S" {{ isset($puesto->mca_videoconferencia)&&$puesto->mca_videoconferencia=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label for="mca_videoconferencia" class="form-check-label">Videoconferencia</label>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <i class="fad fa-volume-up fa-2x"></i>
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_manos_libres"  id="mca_manos_libres" value="S" {{ isset($puesto->mca_manos_libres)&&$puesto->mca_manos_libres=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_manos_libres"> Manos Libres</label>
+                        <div class="form-check pt-2">
+                            <input name="mca_manos_libres"  id="mca_manos_libres" value="S" {{ isset($puesto->mca_manos_libres)&&$puesto->mca_manos_libres=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label for="mca_manos_libres" class="form-check-label">Manos Libres</label>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <i class="fad fa-chalkboard fa-2x"></i>
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_pizarra"  id="mca_pizarra" value="S" {{ isset($puesto->mca_pizarra)&&$puesto->mca_pizarra=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_pizarra"> Pizarra</label>
+                        <div class="form-check pt-2">
+                            <input  name="mca_pizarra"  id="mca_pizarra" value="S" {{ isset($puesto->mca_pizarra)&&$puesto->mca_pizarra=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label for="mca_pizarra" class="form-check-label">Pizarra</label>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <i class="fad fa-chalkboard-teacher fa-2x"></i>
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_pizarra_digital"  id="mca_pizarra_digital" value="S" {{ isset($puesto->mca_pizarra_digital)&&$puesto->mca_pizarra_digital=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_pizarra_digital"> Pizarra digital</label>
+                        <div class="form-check pt-2">
+                            <input  name="mca_pizarra_digital"  id="mca_pizarra_digital" value="S" {{ isset($puesto->mca_pizarra_digital)&&$puesto->mca_pizarra_digital=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label for="mca_pizarra_digital" class="form-check-label">Pizarra digital</label>
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-0">
@@ -192,17 +214,24 @@
                         @include('puestos.posicion_plano')
                     </div>
                 </div>
-                <div class="row mt-2 ">
-                    <div class="col-md-12   text-right ">
+                {{-- <div class="row mt-4 ">
+                    <div class="col-md-12   text-end ">
                         @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary mr-2 btn_submit">GUARDAR</button>@endif  
                     </div>
-                </div>
-                <div class="row mt-2 ">
-                    <div class="col-md-2"></div>
-                    <div class="fluid col-md-8">
-                        <div id='demo-calendar'></div>
+                </div> --}}
+                <div class="row mt-4 ">
+                    <div class="col-md-1"></div>
+                    <div class="fluid col-md-10">
+                        <div class="card">
+                            <div class="card-header">
+                                Uso del puesto
+                            </div>
+                            <div class="card-body" id='demo-calendar'></div>
+                        </div>
+                        
+                        {{-- <div id='demo-calendar'></div> --}}
                     </div>
-                    <div class="col-md-2"></div>
+                    <div class="col-md-1"></div>
                 </div>
             </form>
         </div>
@@ -252,9 +281,7 @@
     //$('#frm_contador').on('submit',form_ajax_submit);
     
 
-    $('.demo-psi-cross').click(function(){
-        $('#editor').hide();
-    })
+     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
     $('#val_icono').iconpicker({
         icon:'{{$puesto->val_icono??''}}'
@@ -318,7 +345,7 @@
     $(".select2").select2({
         placeholder: "Seleccione",
         allowClear: true,
-        width: "99.2%",
+        width: "90%",
     });
 
     $('#id_perfil').on('select2:select', function (e) {
@@ -346,6 +373,7 @@
                 right: 'dayGridMonth,timeGridWeek,listWeek'
             },
             editable: false,
+            initialView: 'listWeek',
             droppable: false, // this allows things to be dropped onto the calendar
             drop: function() {
                 // is the "remove after drop" checkbox checked?
@@ -368,6 +396,6 @@
     
 
     Inputmask({regex:"^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$"}).mask('.hourMask');
-    
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
  </script>

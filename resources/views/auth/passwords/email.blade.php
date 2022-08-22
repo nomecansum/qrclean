@@ -4,7 +4,7 @@
 @section('content')
 <div class="cls-content">
     <div class="cls-content-sm panel">
-        <div class="panel-body">
+        <div class="card-body">
             <div class="mar-ver pad-btm">
                 <img src="{{url('/img/Mosaic_brand_300.png')}}" style="width:300px">
             </div>

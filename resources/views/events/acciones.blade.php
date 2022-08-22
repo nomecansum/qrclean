@@ -28,9 +28,9 @@
     
 <div class="row" id="div_detalle_accion" style="display:none">
     <div class="col-md-12">
-        <div class="panel totales_resultados b-all" >
+        <div class="card totales_resultados b-all" >
             <h4 class="mt-2 ml-2" >{{ __('eventos.parametrizacion_de_accion') }}</h4>
-            <div class="panel-body" id="param_accion">
+            <div class="card-body" id="param_accion">
             
             </div>
         </div>

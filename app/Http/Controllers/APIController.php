@@ -68,6 +68,18 @@ class APIController extends Controller
         }
     }
 
+    public static function get_tipo($r){
+        try{
+
+            $result=incidencias_tipos::where('id_cliente',$r->id_cliente)
+                ->where('id_tipo_externo',$r->id_tipo_incidencia)
+                ->first()->id_tipo_incidencia;
+            return $result;
+        } catch (\Exception $e) {
+            throw new \ErrorException('El tipo '.$r->tipo_incidencia_id.' no existe',406);
+        }
+    }
+
     public static function get_causa_cierre($r){
         try{
             $result=causas_cierre::where('id_cliente',Auth::user()->id_cliente)
@@ -323,13 +335,18 @@ class APIController extends Controller
 
         try{
             $r->request->add(['id_cliente' => Auth::user()->id_cliente]);
-            if($this->check_existe_incidencia($r,"id_externo",$r->id_incidencia_externo)===true){
-                throw new \ErrorException('La incidencia ID '.$r->id_incidencia_externo.' ya existe',403);
-            };
+            if(strlen($r->id_incidencia_externo)>0){
+                if($this->check_existe_incidencia($r,"id_externo",$r->id_incidencia_externo)===true){
+                    throw new \ErrorException('La incidencia ID '.$r->id_incidencia_externo.' ya existe',403);
+                };
+            } else {
+                throw new \ErrorException('Debe indicar un ID de incidencia',400);
+            } 
             $r->request->add(['fec_apertura' => Carbon::now()]);
             $r->request->add(['id_usuario_apertura' => $this->get_usuario($r)]);
             $r->request->add(['id_cliente' => Auth::user()->id_cliente]);
             $r->request->add(['id_puesto' => $this->get_puesto($r)]);
+            $r->request->add(['id_tipo_incidencia' => $this->get_tipo($r)]);
             $r->request->add(['procedencia' => "api"]);
             $r->request->add(['id_externo' => $r->id_incidencia_externo]);
             $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);

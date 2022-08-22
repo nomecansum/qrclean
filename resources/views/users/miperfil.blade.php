@@ -1,7 +1,7 @@
 @extends('layout')
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Configuracion</li>
         <li class="breadcrumb-item">Usuarios</li>
         <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>
@@ -58,14 +58,14 @@
 @endsection
 
 @section('content')
-    <div class="panel">
-        <div class="panel-heading">
-            <div class="panel-control">
+    <div class="card">
+        <div class="card-header">
+            <div class="card-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
             </div>
-            <h3 class="panel-title">Mi perfil: {{ !empty($users->name) ? $users->name : '' }}</h3>
+            <h3 class="card-title">Mi perfil: {{ !empty($users->name) ? $users->name : '' }}</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             @if ($errors->any())
                 <ul class="alert alert-danger">

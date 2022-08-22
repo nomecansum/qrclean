@@ -12,7 +12,7 @@
 
 @section('breadcrumb')
 <ol class="breadcrumb">
-    <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+    <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
     <li class="breadcrumb-item">Incidencias</li>
     <li class="breadcrumb-item active">crear nueva incidencia</li>
     {{--  <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
@@ -21,8 +21,8 @@
 @endsection
 
 @section('content')
-<div class="panel" style="margin-top: 150px">
-    <div class="panel-body">
+<div class="card" style="margin-top: 150px">
+    <div class="card-body">
         <div class="row">
             <div class="form-group col-md-12">
                 <label for="id_cliente" class="control-label">Seleccione un puesto para crear la incidencia</label>
@@ -50,8 +50,8 @@
         </div>
     </div>
 </div>
-<div class="panel">
-    <div class="panel_body" id="form_incidencia">
+<div class="card">
+    <div class="card_body" id="form_incidencia">
 
     </div>
 </div>

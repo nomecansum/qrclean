@@ -11,7 +11,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">ferias</li>
         <li class="breadcrumb-item">listado de ferias</li>
         {{--  <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
@@ -27,7 +27,7 @@
         <div class="col-md-7">
             <br>
         </div>
-        <div class="col-md-1 text-right">
+        <div class="col-md-2 text-end">
             @if(checkPermissions(['Ferias'],['C']))
             <div class="btn-group btn-group-sm pull-right" role="group">
                     <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva feria">
@@ -55,17 +55,17 @@
         </div>
     @endif
 
-    <div class="panel">
+    <div class="card">
         
         @if(count($ferias) == 0)
-            <div class="panel-body text-center">
+            <div class="card-body text-center">
                 <h4>No Ferias Available.</h4>
             </div>
         @else
-        <div class="panel-heading">
-            <h3 class="panel-title">Ferias</h3>
+        <div class="card-header">
+            <h3 class="card-title">Ferias</h3>
         </div>
-        <div class="panel-body panel-body-with-table">
+        <div class="card-body panel-body-with-table">
             <div class="table-responsive w-100">
 
                 <table id="tablaplantas"  data-toggle="table"
@@ -78,7 +78,6 @@
                 data-page-size="50"
                 data-pagination="true" 
                 data-show-pagination-switch="true"
-                data-show-button-icons="true"
                 data-toolbar="#all_toolbar"
                 data-buttons-class="secondary"
                 data-show-button-text="true"
@@ -98,24 +97,25 @@
                             <td>{!! beauty_fecha($feria->fec_feria) !!}</td>
                             <td class="text-center" style="position: relative;">{{ $feria->des_feria }}
                             
-                                <div class="pull-right floating-like-gmail mt-3" style="width: 140px;">
-                                   
-                                    @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $feria->id_feria }})" title="Editar planta" data-id="{{ $feria->id_feria }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
-                                    @if(checkPermissions(['Plantas'],['D']))<a href="#eliminar-planta-{{$feria->id_feria}}" data-target="#eliminar-planta-{{$feria->id_feria}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
+                                <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+                                    <div class="btn-group btn-group pull-right ml-1" role="group">
+                                        @if(checkPermissions(['Plantas'],['W']))<a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $feria->id_feria }})" title="Editar planta" data-id="{{ $feria->id_feria }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+                                        @if(checkPermissions(['Plantas'],['D']))<a href="#eliminar-planta-{{$feria->id_feria}}" data-target="#eliminar-planta-{{$feria->id_feria}}" title="Borrar planta" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
+                                    </div>
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$feria->id_feria}}" style="display: none;">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                        <div class="modal-header">
-
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true"><i class="fa-solid fa-circle-xmark"></i></span></button>
+                                            <div class="modal-header">
                                                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                                                <h4 class="modal-title">¿Borrar planta {{$feria->des_feria}}?</h4>
+                                                <h1 class="modal-title text-nowrap">¿Borrar planta {{$feria->des_feria}}?</h1>
+                                                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                                                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                                                </button>
                                             </div>
                                             <div class="modal-footer">
                                                 <a class="btn btn-info" href="{{url('/ferias/delete',$feria->id_feria)}}">Si</a>
-                                                <button type="button" data-dismiss="modal" class="btn btn-warning">No</button>
+                                                <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
                                             </div>
                                         </div>
                                     </div>

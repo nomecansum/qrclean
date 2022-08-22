@@ -49,11 +49,11 @@
 @endsection
 
 @section('content')
-<div class="panel">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
        
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
@@ -380,7 +380,7 @@
 
             }).catch(err => {
                 loguear('Error camaras2 '+err);
-                $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> No se ha podido acceder a la camara. <br> Debe dar permiso de acceso a la camara a QRClean');
+                $('#mensaje_error').html('<i class="fad fa-exclamation-triangle"></i> No se ha podido acceder a la camara. <br> Debe dar permiso de acceso a la camara a {{config('app.name')}}');
                 $('#mensaje_error').show();
                 $('#btn_requestPermission').show();
             });

@@ -47,7 +47,7 @@
 
 <div class="row">
     <div class="col-md-3">
-        <div class="panel panel-purple panel-colorful media middle pad-all">
+        <div class="card panel-purple panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
                     <i class="fad fa-building fa-2x"></i>
@@ -55,12 +55,12 @@
             </div>
             <div class="media-body">
                 <p class="text-3x mar-no text-semibold">{{ $edificios->count() }}</p>
-                <p class="mar-no  text-2x">Edificios</p>
+                <p class="mar-no  fs-2">Edificios</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="panel panel-info panel-colorful media middle pad-all">
+        <div class="card panel-info panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
                     <i class="fad fa-layer-group fa-2x"></i>
@@ -68,12 +68,12 @@
             </div>
             <div class="media-body">
                 <p class="text-3x mar-no text-semibold">{{ $plantas->count() }}</p>
-                <p class="mar-no  text-2x">Plantas</p>
+                <p class="mar-no  fs-2">Plantas</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="panel panel-mint panel-colorful media middle pad-all">
+        <div class="card panel-secondary panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
                     <i class="fad fa-desktop-alt fa-2x"></i>
@@ -81,12 +81,12 @@
             </div>
             <div class="media-body">
                 <p class="text-3x mar-no text-semibold">{{ $puestos->count() }}</p>
-                <p class="mar-no  text-2x">Puestos</p>
+                <p class="mar-no  fs-2">Puestos</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="panel panel-{{ color_porcentaje($pct_completado) }} panel-colorful media middle pad-all">
+        <div class="card panel-{{ color_porcentaje($pct_completado) }} panel-colorful media middle pad-all">
             <div class="media-left">
                 <div class="pad-hor">
                     <i class="fad fa-check fa-2x"></i>
@@ -94,7 +94,7 @@
             </div>
             <div class="media-body">
                 <p class="text-3x mar-no text-semibold">{{ round($pct_completado) }}%   </p>
-                <p class="mar-no text-2x">Operativos</p>
+                <p class="mar-no fs-2">Operativos</p>
             </div>
         </div>
     </div>

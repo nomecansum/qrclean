@@ -188,8 +188,11 @@
             </label><br>
             @foreach($turnos as $t)
             <div class="form-group col-md-3">
-                <input type="checkbox" class="form-control  magic-checkbox chkdia" name="turno[]" id="turno{{$t->id_turno}}" value="{{$t->id_turno}}"> 
-                <label class="custom-control-label"   for="turno{{$t->id_turno}}"><b>{{$t->des_turno}} <i class="fa-solid fa-square" style="color: {{ $t->val_color }}"></i></b></label><br>
+
+                <div class="form-check pt-2">
+                    <input   name="turno[]" id="turno{{$t->id_turno}}" value="{{$t->id_turno}}" class="form-check-input chkdia" type="checkbox">
+                    <label class="form-check-label" for="turno{{$t->id_turno}}"><b>{{$t->des_turno}} <i class="fa-solid fa-square" style="color: {{ $t->val_color }}"></i></b></label>
+                </div>
             </div>
             @endforeach
         </div>
@@ -213,8 +216,10 @@
             </label><br>
             @foreach($tipos_puestos as $t)
                 <div class="form-group col-md-3">
-                    <input type="checkbox" class="form-control  magic-checkbox chkdia" name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}"> 
-                    <label class="custom-control-label" for="tipo_puesto{{$t->id_tipo_puesto}}"> {{$t->des_tipo_puesto}} </label><br>
+                    <div class="form-check pt-2">
+                        <input  name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" class="form-check-input chkdia" type="checkbox">
+                        <label class="form-check-label" for="tipo_puesto{{$t->id_tipo_puesto}}"> {{$t->des_tipo_puesto}} </label>
+                    </div>
                 </div>
             @endforeach
         </div>

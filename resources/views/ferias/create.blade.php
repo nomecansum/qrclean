@@ -1,14 +1,14 @@
 
-    <div class="panel editor">
+    <div class="card editor">
 
-        <div class="panel-heading">
-            <div class="panel-control">
+        <div class="card-header">
+            <div class="card-control">
                 <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
             </div>
-            <h3 class="panel-title">Nueva feria</h3>
+            <h3 class="card-title">Nueva feria</h3>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
         
             @if ($errors->any())
                 <ul class="alert alert-danger">
@@ -25,7 +25,7 @@
                                       ])
 
                 <div class="form-group">
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-12 text-end">
                         <input class="btn btn-primary" type="submit" value="Guardar">
                     </div>
                 </div>

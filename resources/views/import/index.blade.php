@@ -12,7 +12,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Configuracion</li>
         <li class="breadcrumb-item">Utilidades</li>
         <li class="breadcrumb-item"><a href="{{url('/import')}}">importar datos</a></li>
@@ -23,19 +23,19 @@
 <div class="row botones_accion mb-2">
     <br><br>
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Importar datos</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Importar datos</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <div class="panel">
+                <div class="card">
                     <div class="alert" style="display: none"  id="msg_result">
                         <button type="button" class="close" onclick="$('#msg_result').hide();" aria-label="Close"> <span aria-hidden="true">×</span> </button>
                         <h3 id="h_titulo" class=""><i id="icono_msg" class=""></i> <span id="tit_msg"></span></h3> <span id="msg"></span>
                     </div>
-                    <div class="panel-body wizard-content">
+                    <div class="card-body wizard-content">
                         <form name="form_fichero" id="form_fichero"  enctype="multipart/form-data"  action="{{ url('import/process_import') }}" class="tab-wizard wizard-circle form-horizontal" method="POST">
                             <input type="hidden" name="fichero" id="fic">
                             <input type="hidden" name="cod_cliente" id="cod_cliente" value="{{ Auth::user()->id_cliente }}">
@@ -108,10 +108,12 @@
                                 <h4>Es importante que <b>suba la plantilla en ultimo lugar</b>, pues al subir la plantilla se iniciará el procesado de la informacion y una vez subida ya no se podrán subir más ficheros con fotos.</h4>
                                 <br><br>
                                 <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-warning">
+                                    <label class="btn btn-primary">
                                         <div class="custom-control mr-sm-2">
-                                            <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="enviar_email"  id="enviar_email">
-                                            <label class="custom-control-label"   for="enviar_email">Marque si desea que se envie un email de invitacion a los usuarios creados</label>
+                                            <div class="form-check pt-2">
+                                                <input  name="enviar_email"  id="enviar_email" class="form-check-input" type="checkbox">
+                                                <label class="form-check-label" for="enviar_email">Marque si desea que se envie un email de invitacion a los usuarios creados</label>
+                                            </div>
                                         </div>
                                     </label>
                                 </div>

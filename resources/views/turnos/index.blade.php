@@ -13,7 +13,7 @@
 
 @section('breadcrumb')
 <ol class="breadcrumb">
-	<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+	<li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
 	<li class="breadcrumb-item">parametrizacion</li>
 	<li class="breadcrumb-item">personas</li>
 	<li class="breadcrumb-item active">turnos</li>
@@ -27,10 +27,10 @@
 	<div class="col-md-4">
 
 	</div>
-	<div class="col-md-7">
+	<div class="col-md-6">
 		<br>
 	</div>
-	<div class="col-md-1 text-right">
+	<div class="col-md-2 text-end">
 		@if(checkPermissions(['Clientes'],['C']))
 		<div class="btn-group btn-group-sm pull-right" role="group">
 				<a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo turno">
@@ -46,11 +46,11 @@
 </div>
 <div class="row mt-2">
 	<div class="col-12">
-		<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Turnos</h3>
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Turnos</h3>
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<table id="tabla"  data-toggle="table"
                     data-locale="es-ES"
                     data-search="true"
@@ -59,9 +59,8 @@
                     data-page-list="[5, 10, 20, 30, 40, 50]"
                     data-page-size="50"
                     data-pagination="true" 
-                    data-show-pagination-switch="true"
-                    data-show-button-icons="true"
                     data-toolbar="#all_toolbar"
+					data-show-button-text="true"
                     >
 					<thead>
 						<tr>
@@ -90,22 +89,31 @@
 											echo "<li>".$dias[$dia-1].'</li>';
 										}
 									@endphp
-									<div class="floating-like-gmail">
-										@if (checkPermissions(['Turnos'],["W"]))<a href="#" title="Editar turno" data-id="{{ $dato->id_turno }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $dato->id_turno }})"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
-										@if (checkPermissions(['Turnos'],["D"]))<a href="#eliminar-{{$dato->id_turno}}" title="Borrar turno" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
-										{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$cus->id_cliente}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
+									<div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+										<div class="btn-group btn-group pull-right ml-1" role="group">
+											@if (checkPermissions(['Turnos'],["W"]))<a href="#" title="Editar turno" data-id="{{ $dato->id_turno }}" class="btn btn-xs btn-info add-tooltip btn_edit" onclick="edit({{ $dato->id_turno }})"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
+											@if (checkPermissions(['Turnos'],["D"]))<a href="#eliminar-{{$dato->id_turno}}" title="Borrar turno" data-toggle="modal" onclick="del({{ $dato->id_turno }})" class="btn btn-xs btn-danger add-tooltip "><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
+											{{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$cus->id_cliente}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
+										</div>
 									</div>
 									@if (checkPermissions(['Turnos'],["D"]))
 										<div class="modal fade" id="eliminar-{{$dato->id_turno}}">
 											<div class="modal-dialog modal-md">
-												<div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-													<div class="modal-header"><i class="mdi mdi-comment-question-outline text-warning mdi-48px"></i><b>
-														Borrar turno
+												<div class="modal-content">
+													<div class="modal-header">
+														<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+														<h1 class="modal-title text-nowrap">Borrar turno </h1>
+														<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+															<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+														</button>
+													</div>    
+													<div class="modal-body">
+														¿Borrar turno {{ $dato->des_turno }}?
 													</div>
 													
 													<div class="modal-footer">
 														<a class="btn btn-info" href="{{url('/turnos/delete',$dato->id_turno)}}">Si</a>
-														<button type="button" data-dismiss="modal" class="btn btn-warning">Cancelar</button>
+														<button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
 													</div>
 												</div>
 											</div>
@@ -148,6 +156,10 @@
 		$('#editorCAM').load("{{ url('/turnos/edit/') }}"+"/"+id, function(){
 			animateCSS('#editorCAM','bounceInRight');
 		});
+	}
+
+	function del(id){
+		$('#eliminar-'+id).modal('show');
 	}
 
 

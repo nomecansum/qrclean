@@ -11,7 +11,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Ccnfiguracion</li>
         <li class="breadcrumb-item"><a href="{{url('/users')}}">mantenimiento</a></li>
         <li class="breadcrumb-item active">Incidencia de puesto {{ $puesto->cod_puesto }}</li>
@@ -22,15 +22,15 @@
 <div class="row botones_accion mb-2">
     <br><br>
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">Incidencia de puesto {{ $puesto->cod_puesto }}</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Incidencia de puesto {{ $puesto->cod_puesto }}</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         @if($incidencia)
             @include('incidencias.fill-detalle-incidencia',compact('incidencia'))
             <div class="col-md-12 text-center mt-3">
-                <a class="btn btn-lg btn-success text-2x rounded btn_cerrar" href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-id="{{ $incidencia->id_incidencia}}" id="boton-cierre{{ $incidencia->id_incidencia }}" onclick="cierre_incidencia({{ $incidencia->id_incidencia}})"><i class="fad fa-thumbs-up fa-2x"></i></i> Cerrar incidencia</a>
+                <a class="btn btn-lg btn-success fs-2 rounded btn_cerrar" href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-id="{{ $incidencia->id_incidencia}}" id="boton-cierre{{ $incidencia->id_incidencia }}" onclick="cierre_incidencia({{ $incidencia->id_incidencia}})"><i class="fad fa-thumbs-up fa-2x"></i></i> Cerrar incidencia</a>
             </div>
         @else
             <h3>El puesto no tiene incidencias</h3>
@@ -40,7 +40,7 @@
 </div>
 <div class="row">
     <div class="col-md-12 text-center mt-3">
-        <a class="btn btn-lg btn-primary text-2x rounded btn_otravez" href="{{ url('/scan_mantenimiento/') }} "><i class="fad fa-qrcode fa-3x"></i> Escanear otra vez</a>
+        <a class="btn btn-lg btn-primary fs-2 rounded btn_otravez" href="{{ url('/scan_mantenimiento/') }} "><i class="fad fa-qrcode fa-3x"></i> Escanear otra vez</a>
     </div>
 </div>
 

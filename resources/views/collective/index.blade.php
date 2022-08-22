@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">configuracion</li>
 		<li class="breadcrumb-item">parametrizacion</li>
 		<li class="breadcrumb-item">personas</li>
@@ -23,15 +23,15 @@
     <div class="col-md-4">
 
     </div>
-    <div class="col-md-7">
+    <div class="col-md-6">
         <br>
     </div>
-    <div class="col-md-1 text-right">
+    <div class="col-md-2 text-end">
         @if(checkPermissions(['Colectivos'],['C']))
         <div class="btn-group btn-group-sm pull-right" role="group">
 			<a href="#" class="btn float-right hidden-sm-down btn-success btn_nuevo">
 				<i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-				<span>Nuevo colectivo</span>
+				<span>Nuevo</span>
 			</a>
         </div>
         @endif
@@ -40,11 +40,11 @@
 <div id="editorCAM" class="mt-2">
 
 </div>
-<div class="panel">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
 
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 		<div class="table-responsive">
 			<table id="tabladeps"  data-toggle="table"
 				data-locale="es-ES"
@@ -55,8 +55,6 @@
 				data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
 				data-page-size="50"
 				data-pagination="true" 
-				data-show-pagination-switch="true"
-				data-show-button-icons="true"
 				data-toolbar="#all_toolbar"
 				data-buttons-class="secondary"
 				data-show-button-text="true"
@@ -67,7 +65,7 @@
 						<th data-sortable="true"  style="width: 80%" >Nombre</th>
 						<th data-width="250" data-sortable="true"  >Cliente</th>
 						<th data-width="1%" data-sortable="true"  >Informes</th>
-						<th data-width="80" data-sortable="true" style="width: 1%" class="text-center" ><i class="fa-solid fa-user"></i></th>
+						<th data-width="80" data-sortable="true" style="width: 1%" class="text-center" ><i class="fa-solid fa-user add-tooltip" title="Usuarios en el colectivo"></i></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -79,30 +77,36 @@
 							<td>{{$col->des_colectivo}}</td>
 							<td>{{ $col->nom_cliente }}</td>
 							<td class="text-center">
-								<div class="custom-control custom-checkbox" style="display: inline-block; margin-right: 6px">
-									<input {{$col->mca_noinformes == "S" ? 'checked' : ''}} type="checkbox" class="check-f2f custom-control-input">
-									<label class="custom-control-label"></label>
+								<div class="form-check fs-4 ml-4">
+									<input  class="form-check-input ml-4" type="checkbox" {{$col->mca_noinformes == "S" ? 'checked' : ''}} >
 								</div>
 							</td>
 							<td style="position: relative;" class="text-center">
+								{{ $col->cuenta }}
 								
-								<div class="pull-right floating-like-gmail mt-3" style="width: 200px;">
-									@if (checkPermissions(['Colectivos'],["C"]))<a href="#" onclick="editar({{ $col->cod_colectivo }},'{{ $col->des_colectivo }}','{{ $col->id_cliente }}','{{ $col->mca_noinformes }}','{{ $col->nom_cliente }}')" class="btn btn-xs btn-info"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a></a>@endif
-									@if (checkPermissions(['Colectivos'],["D"]))<a href="#eliminar-colectivo-{{$col->cod_colectivo}}" data-toggle="modal" class="btn btn-xs btn-danger"><span class="fa fa-trash" aria-hidden="true"></span> Del</a></a>@endif
+								<div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
+									<div class="btn-group btn-group pull-right ml-1" role="group">
+										@if (checkPermissions(['Colectivos'],["C"]))<a href="#" onclick="editar({{ $col->cod_colectivo }},'{{ $col->des_colectivo }}','{{ $col->id_cliente }}','{{ $col->mca_noinformes }}','{{ $col->nom_cliente }}')" class="btn btn-xs btn-info"><span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a></a>@endif
+										@if (checkPermissions(['Colectivos'],["D"]))<a href="#eliminar-colectivo-{{$col->cod_colectivo}}" onclick="del({{ $col->cod_colectivo }})" data-toggle="modal" class="btn btn-xs btn-danger"><span class="fa fa-trash" aria-hidden="true"></span> Del</a></a>@endif
+									</div>
 								</div>
 								<div class="modal fade" id="eliminar-colectivo-{{$col->cod_colectivo}}">
 									<div class="modal-dialog">
 										<div class="modal-content">
 											<div class="modal-header">
-												<h4 class="modal-title">Borrar colectivo</h4>
-												<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-											</div>
+												<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+												<h1 class="modal-title text-nowrap">Borrar colectivo </h1>
+												<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+													<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+												</button>
+											</div>    
 											<div class="modal-body">
 												¿Borrar colectivo {{ $col->des_colectivo }}?
 											</div>
+					
 											<div class="modal-footer">
 												<a class="btn btn-info" href="{{url('collective/delete',$col->cod_colectivo)}}">{{trans('strings.yes')}}</a>
-												<button type="button" data-dismiss="modal" class="btn btn-warning">{{trans('strings.cancel')}}</button>
+												<button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">{{trans('strings.cancel')}}</button>
 											</div>
 										</div>
 									</div>
@@ -131,6 +135,10 @@
 			$('#editorCAM').load("{{ url('/collective/edit/') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
             });
+		}
+
+		function del(id){
+			$('#eliminar-colectivo-'+id).modal('show');
 		}
 
 		$('.btn_nuevo').click(function(){

@@ -345,7 +345,7 @@ class UsersController extends Controller
             return [
                 'title' => "Usuarios",
                 'message' => 'Usuario '.$request->name. ' actualizado con exito',
-                'url' => url('users/'.$id.'/edit')
+                'url' => url('users/')
             ];
             // flash('Usuario '.$request->name. 'actualizado con exito')->success();
             // return redirect()->route('users.users.index');
@@ -475,6 +475,7 @@ class UsersController extends Controller
             'list_puestos_preferidos'=>'nullable',
             'id_departamento'=>'nullable',
             'val_colectivo'=>'nullable',
+            'id_externo'=>'nullable',
         ];
 
 
@@ -867,7 +868,8 @@ class UsersController extends Controller
             ->get();
 
         $usuarios=DB::table('users')
-            ->where('id_cliente',Auth::user()->id_cliente)
+            ->where('users.id_cliente',Auth::user()->id_cliente)
+            ->join('niveles_acceso','niveles_acceso.cod_nivel', 'users.cod_nivel')
             ->orderby('name')
             ->get();
 
@@ -1444,5 +1446,68 @@ class UsersController extends Controller
                 "action" => "del turno",
             ];
         }
+    }
+
+    //Devuelve los puestos que tiene el usuario para hoy
+    public static function mis_puestos($id){
+        $mispuestos=null;
+
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->join('users','reservas.id_usuario','users.id')
+            ->wheredate('fec_reserva',Carbon::now()->format('Y-m-d'))
+            ->where('reservas.id_usuario',Auth::user()->id)
+            ->get();
+        
+        $asignado_usuario=DB::table('puestos_asignados')
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')    
+            ->where('puestos_asignados.id_usuario','=',Auth::user()->id)
+            ->where(function($q){
+                $q->wherenull('fec_desde');
+                $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
+            })
+            ->first();
+        $asignado_miperfil=[];
+        $asignado_otroperfil=[];
+
+        if(!$reservas->isempty()){
+            $mispuestos=DB::table('puestos')
+                ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color','puestos_tipos.val_icono as icono_tipo', 'puestos_tipos.val_color as color_tipo','puestos_tipos.des_tipo_puesto')
+                ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+                ->join('plantas','puestos.id_planta','plantas.id_planta')
+                ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+                ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
+                ->wherein('puestos.id_puesto',$reservas->pluck('id_puesto')->toArray())
+                ->get();
+        }
+
+        if(isset($asignado_usuario)){
+            $misasignados=DB::table('puestos')
+                ->select('puestos.*','plantas.*','puestos_asignados.id_perfil','puestos_asignados.id_usuario','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color','puestos_tipos.val_icono as icono_tipo', 'puestos_tipos.val_color as color_tipo','puestos_tipos.des_tipo_puesto')
+                ->join('plantas','puestos.id_planta','plantas.id_planta')
+                ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+                ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+                ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
+                ->where('puestos_asignados.id_usuario','=',Auth::user()->id)
+                ->where(function($q){
+                    $q->wherenull('puestos_asignados.fec_desde');
+                    $q->orwhereraw("'".Carbon::now()."' between puestos_asignados.fec_desde AND puestos_asignados.fec_hasta");
+                })
+                ->where('puestos.id_puesto',$asignado_usuario->id_puesto)
+                ->get();
+                if(isset($mispuestos)){
+                    $mispuestos=$mispuestos->merge($misasignados);
+                } else {
+                    $mispuestos=$misasignados;
+                }
+        }
+        return([
+                "mispuestos"=>$mispuestos,
+                "reservas"=>$reservas,
+                "asignado_otroperfil"=>$asignado_otroperfil,
+                "asignado_miperfil"=>$asignado_miperfil,
+                "asignado_usuario"=>$asignado_usuario
+                ]);
     }
 }

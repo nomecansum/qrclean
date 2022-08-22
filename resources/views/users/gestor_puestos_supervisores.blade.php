@@ -25,7 +25,7 @@
 
 @section('breadcrumb')
 <ol class="breadcrumb">
-	<li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+	<li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
 	<li class="breadcrumb-item">configuracion</li>
 	<li class="breadcrumb-item">parametrizacion</li>
 	<li class="breadcrumb-item">personas</li>
@@ -46,18 +46,18 @@
 	<div class="col-md-7">
 		<br>
 	</div>
-	<div class="col-md-1 text-right">
+	<div class="col-md-1 text-end">
 		
 	</div>
 </div>
 
 <div class="row mt-2">
 	<div class="col-12">
-		<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Gestor de puestos para supervisores</h3>
+		<div class="card">
+			<div class="card-header">
+				<h3 class="card-title">Gestor de puestos para supervisores</h3>
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 				<table id="myTable" class="table table-condensed table-hover table-responsive-lg">
 					<thead>
 						<tr>
@@ -77,8 +77,10 @@
                                 <td class="text-center nowrap" style="background-color:#696969; color: #fff; font-weight: bold; padding: 18px" ><div>{{ $e->des_edificio }}</div></td>
                                 @foreach($usuarios as $u)
                                     <td class="text-center" style="background-color:#696969 "  title="{{ $e->des_edificio }} -> {{ $u->name }}" id="pastillaE_{{ $u->id }}_{{ $e->id_edificio }}" >
-                                        <input type="checkbox" class="form-control  magic-checkbox chkedificio" name="chkE_{{ $u->id }}_{{ $e->id_edificio }}"  id="chkE_{{ $u->id }}_{{ $e->id_edificio }}" data-usuario="{{ $u->id }}"  data-edificio="{{ $e->id_edificio }}" > 
-                                        <label class="custom-control-label"   for="chkE_{{ $u->id }}_{{ $e->id_edificio }}"></label>
+                                        <div class="form-check pt-2">
+                                            <input  name="chkE_{{ $u->id }}_{{ $e->id_edificio }}"  id="chkE_{{ $u->id }}_{{ $e->id_edificio }}" data-usuario="{{ $u->id }}"  data-edificio="{{ $e->id_edificio }}"  class="form-check-input chkedificio" type="checkbox">
+                                            <label class="form-check-label" for="chkE_{{ $u->id }}_{{ $e->id_edificio }}"></label>
+                                        </div>
                                     </td>
                                 @endforeach 
                             </tr>
@@ -90,8 +92,10 @@
                                     <td class="text-center nowrap" style="background-color:#d3d3d3; font-weight: bold" ><div >{{ $pl->des_planta }}</div></td>
                                     @foreach($usuarios as $u)
                                         <td class="text-center"  style="background-color:#d3d3d3 " title="{{ $pl->des_planta }} -> {{ $u->name }}" id="pastillaP_{{ $u->id }}_{{ $pl->id_planta }}" >
-                                            <input type="checkbox" class="form-control  magic-checkbox chkplanta" name="chkP_{{ $u->id }}_{{ $pl->id_planta }}"  id="chkP_{{ $u->id }}_{{ $pl->id_planta }}" data-usuario="{{ $u->id }}"  data-planta="{{ $pl->id_planta }}" data-edificio="{{ $pl->id_edificio }}" > 
-                                            <label class="custom-control-label"   for="chkP_{{ $u->id }}_{{ $pl->id_planta }}"></label>
+                                            <div class="form-check pt-2">
+                                                <input  name="chkP_{{ $u->id }}_{{ $pl->id_planta }}"  id="chkP_{{ $u->id }}_{{ $pl->id_planta }}" data-usuario="{{ $u->id }}"  data-planta="{{ $pl->id_planta }}" data-edificio="{{ $pl->id_edificio }}" class="form-check-input chkplanta" type="checkbox">
+                                                <label class="form-check-label"  for="chkP_{{ $u->id }}_{{ $pl->id_planta }}"></label>
+                                            </div>
                                         </td>
                                     @endforeach 
                                 </tr>
@@ -103,8 +107,10 @@
                                         <td style="width: 15px">{{ nombrepuesto($p) }}</td>
                                         @foreach($usuarios as $u)
                                             <td class="text-center" title="[{{ $p->cod_puesto }}]{{ $p->des_puesto }} -> {{ $u->name }}" id="pastilla_{{ $u->id }}_{{ $p->id_puesto }}" >
-                                                <input type="checkbox" class="form-control  magic-checkbox chkpuesto" {{ in_array($u->id,$marcados)?'checked':'' }} name="chk_{{ $u->id }}_{{ $p->id_puesto }}"  id="chk_{{ $u->id }}_{{ $p->id_puesto }}" data-usuario="{{ $u->id }}"  data-puesto="{{ $p->id_puesto }}"  data-planta="{{ $p->id_planta }}" data-edificio="{{ $p->id_edificio }}" > 
-                                                <label class="custom-control-label"   for="chk_{{ $u->id }}_{{ $p->id_puesto }}"></label>
+                                                <div class="form-check pt-2">
+                                                    <input  {{ in_array($u->id,$marcados)?'checked':'' }} name="chk_{{ $u->id }}_{{ $p->id_puesto }}"  id="chk_{{ $u->id }}_{{ $p->id_puesto }}" data-usuario="{{ $u->id }}"  data-puesto="{{ $p->id_puesto }}"  data-planta="{{ $p->id_planta }}" data-edificio="{{ $p->id_edificio }}"  class="form-check-input chkpuesto" type="checkbox">
+                                                    <label class="form-check-label"  for="chk_{{ $u->id }}_{{ $p->id_puesto }}"></label>
+                                                </div>
                                             </td>
                                         @endforeach 
                                     </tr>

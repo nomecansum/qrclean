@@ -9,7 +9,7 @@
         <label for="id_cliente" class="control-label">Fecha</label>
         <div class="input-group float-right" id="div_fechas">
             <input type="text" class="form-control pull-left ml-1" id="fec_feria" name="fec_feria" style="width: 100px" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}">
-            <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+            <span class="btn input-group-text btn-secondary" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
         </div>
     </div>
     <div class="form-group col-md-4 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">

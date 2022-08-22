@@ -1,21 +1,23 @@
 
-    <div class="panel editor">
-
-        <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+    <div class="card editor mb-5">
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">
+                    @if($id==0)
+                        Nueva causa de cierre
+                    @else
+                        Editar causa de cierre
+                    @endif
+                </h5>
             </div>
-            <h3 class="panel-title" id="titulo">
-                @if($id==0)
-                    Nueva causa de cierre
-                @else
-                    Editar causa de cierre
-                @endif
-
-            </h3>
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
 
             @if ($errors->any())
                 <ul class="alert alert-danger">
@@ -52,32 +54,35 @@
 
                         
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-2" style="margin-top: 7px">
+                <div class="row mt-2">
+                    <div class="form-group col-md-2" >
                         <label for="val_color">Color</label><br>
                         <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($causa->val_color)?$causa->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
-                    <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
+                    <div class="form-group col-md-1" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
                             <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
                         </div>
                     </div>
-                    @if(isAdmin())
-                    <div class="col-md-2 p-t-30 mt-1">
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_fija"  id="mca_fija" value="S" {{ $causa->mca_fija=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_fija">Fija</label>
-                    </div>
-                    @endif
+                    
                     <div class="form-group col-md-2 {{ $errors->has('id_externo') ? 'has-error' : '' }}">
                         <label for="id_externo" class="control-label">ID Externo</label>
                         <input class="form-control" required name="id_externo" type="text" id="id_externo" value="{{ old('id_externo', optional($causa)->id_externo) }}" maxlength="200" placeholder="Enter id_externo here...">
                         {!! $errors->first('id_externo', '<p class="help-block">:message</p>') !!}
                     </div>
+                    @if(isAdmin())
+                    <div class="col-md-2 p-t-30">
+                        <div class="form-check">
+                            <input  name="mca_fija"  id="mca_fija" value="S" {{ $causa->mca_fija=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label class="form-check-label"  for="mca_fija">Fija</label>
+                        </div>
+                    </div>
+                    @endif
                 </div>
 
                 <div class="form-group">
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-12 text-end">
                         @if(checkPermissions(['Causas de cierre'],['W']) && ($causa->mca_fija!='S' || ($causa->mca_fija=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
@@ -110,7 +115,5 @@
         $('#val_icono').iconpicker({
             icon:'{{isset($causa) ? ($causa->val_icono) : ''}}'
         });
-        $('.demo-psi-cross').click(function(){
-            $('.editor').hide();
-        });
+        document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
     </script>

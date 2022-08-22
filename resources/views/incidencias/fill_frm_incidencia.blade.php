@@ -1,6 +1,6 @@
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title" id="titulo">
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title" id="titulo">
             Crear incidencia para el puesto 
             @isset($puesto->val_icono)
                 <i class="{{ $puesto->val_icono }} fa-2x" style="color:{{ $puesto->val_color }}"></i>
@@ -9,7 +9,7 @@
 
         </h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <form method="POST" action="{{ url('/incidencias/save') }}" id="incidencia_form" name="incidencia_form" accept-charset="UTF-8" class="form-horizontal form-ajax">
         {{ csrf_field() }}
             <div class="row">
@@ -26,11 +26,12 @@
                 @endif
                 <div class="form-group col-md-4 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">
                     <label for="id_tipo_incidencia" class="control-label">Tipo</label>
-                    <select class="form-control selectpicker" required id="id_tipo_incidencia" name="id_tipo_incidencia">
+                    <select class="form-control" required id="id_tipo_incidencia" name="id_tipo_incidencia">
                         @foreach ($tipos as $tipo)
-                            <option value="{{ $tipo->id_tipo_incidencia }}" data-content="<i class='fa {{ $tipo->val_icono }}' aria-hidden='true' style='color: {{ $tipo->val_color }}'></i> {{ $tipo->des_tipo_incidencia }}"></option>
+                            <option value="{{ $tipo->id_tipo_incidencia }}">{{ $tipo->des_tipo_incidencia }}</option>
                         @endforeach
                     </select>
+                    
                 </div>   
             </div>
             @if((isset($config->val_layout_incidencias) && ($config->val_layout_incidencias=='D' || $config->val_layout_incidencias=='A')) || (!isset($config->val_layout_incidencias)))
@@ -42,9 +43,9 @@
                 </div>
             </div>
             @endif
-            <div id="dZUpload" class="dropzone">
+            <div id="dZUpload" class="dropzone mt-3">
                 <div class="dz-default dz-message">
-                    <h2><i class="mdi mdi-cloud-upload"></i> Arrastre archivos <span class="text-blue">para subirlos</span></h2>&nbsp&nbsp<h6 class="display-inline text-muted"> (o Click aqui)</h6>
+                    <h2><i class="demo-psi-upload-to-cloud display-2 text-muted"></i> Arrastre archivos <span class="text-blue">para subirlos</span></h2>&nbsp&nbsp<h6 class="display-inline text-muted"> (o Click aqui)</h6>
                 </div>
             </div>
 
@@ -62,11 +63,13 @@
         var originalOption = icon.element;
         return $('<span><i class="mdi ' + $(originalOption).data('icon') + '"></i> ' + icon.text + '</span>');
     }
+
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
+
     window.Laravel = {!! json_encode([
 				'csrfToken' => csrf_token(),
 			]) !!};
 			
-    $('#id_tipo_incidencia').selectpicker();
     $('.form-ajax').submit(form_ajax_submit);
     //Dropzone para adjuntos de acciones
     lista_ficheros=[];	

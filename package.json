@@ -26,6 +26,7 @@
         "heatmap.js": "^2.0.5",
         "html5-qrcode": "^1.0.9",
         "instascan": "^1.0.0",
+        "litepicker": "^2.0.12",
         "qr-scanner": "^1.1.1"
     }
 }

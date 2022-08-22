@@ -13,7 +13,7 @@
                         @csrf
                         <div class="cls-content">
                             <div class="cls-content-lg panel">
-                                <div class="panel-body">
+                                <div class="card-body">
                                     <div class="mar-ver pad-btm">
                                         <img src="{{url('/img/Mosaic_brand_300.png')}}" style="width:300px">
                                     </div>
@@ -39,7 +39,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="checkbox pad-btm text-left">
+                                        <div class="checkbox pad-btm text-start">
                                             <input id="demo-form-checkbox" class="magic-checkbox" type="checkbox">
                                             <label for="demo-form-checkbox">I agree with the <a href="#" class="btn-link text-bold">Terms and Conditions</a></label>
                                         </div>

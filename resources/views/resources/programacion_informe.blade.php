@@ -1,5 +1,6 @@
 {{-- Programacion del informe --}}
 {{-- style="display: none" --}}
+
 <link href="{{ asset('/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.css') }}" rel="stylesheet">
 @if(empty($r->reportFromEmail) && checkPermissions(['Informes programados'],["R"]))
     <br>
@@ -14,16 +15,16 @@
                 <input type="hidden" name="url_orig" id="url_orig" value="{{url($_SERVER['REQUEST_URI'])}}">
                 <input type="hidden" name="cod_informe_programado" id="cod_informe_programado"  value=0>
                 {{-- <input type="hidden" value="{{isset($inf->cod_cliente)?$inf->cod_cliente:Auth::user()->cod_cliente}}" name="cod_cliente"> --}}
-                <div class="panel border-primary border">
+                <div class="card border-primary border">
                     @if(!isset($edit))
-                        <div class="panel-header bg-transparent text-primary ml-3" style="font-size: 20px">
+                        <div class="card-header bg-transparent text-primary ml-3" style="font-size: 20px">
                             <i class="mdi mdi-calendar-clock"></i> {{ __('reports.programar_este_informe') }}</h2>
-                            <button type="button" class="btn btn-primary mt-0  p-0 pl-2 pr-2" onclick="showbody();">
+                            <button type="button" class="btn btn-outline-primary mt-0  p-1 pl-2 pr-2" onclick="showbody();">
                                 <i class="fa-solid fa-circle-caret-down"></i>
                             </button>
                         </div>
                     @endif
-                    <div class="panel-body mt-0" style="display:none" id="body_programar" id="btn_det_programar">
+                    <div class="card-body mt-0" style="display:none" id="body_programar" id="btn_det_programar">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -32,7 +33,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>{{ __('reports.periodo') }}</label>
@@ -99,14 +100,14 @@
                             <div class="form-group col-md-3">
                                 <label for="">{{ __('reports.comenzando_en') }}</label>
                                 <div class="input-group float-right" id="div_fechas">
-                                    <input required type="text" name="val_fecha" class="form-control singledate" style="width: 100px"  value="{{ isset($inf->fec_inicio)?Carbon\Carbon::parse($inf->fec_inicio)->format('d/m/Y'):'' }}">
-                                    <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                                    <input required type="text" name="val_fecha" id="val_fecha" class="form-control singledate" style="width: 100px" autocomplete="off"  value="{{ isset($inf->fec_inicio)?Carbon\Carbon::parse($inf->fec_inicio)->format('d/m/Y'):'' }}">
+                                    <span class="btn input-group-text btn-secondary" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                                 </div>
                             </div>
 
                             
                         </div>
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     
@@ -119,8 +120,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 text-right">
-                                <button id="btn_programar" class="btn btn-primary float-right mt-2"><i class="mdi mdi-calendar-clock"></i> {{ __('reports.programar_informe') }}</button>
+                            <div class="col-md-12 text-end">
+                                <button id="btn_programar" class="btn btn-primary float-right mt-2"><i class="fa-solid fa-calendar-clock"></i> {{ __('reports.programar_informe') }}</button>
                             </div>
                         </div>
                     </div>
@@ -156,6 +157,20 @@
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             );
         };
+
+        $('.btn_fecha').click(function(){
+            simplepicker.open('#val_fecha');
+        })
+
+        const simplepicker = MCDatepicker.create({
+            el: "#val_fecha",
+            dateFormat: cal_formato_fecha,
+            autoClose: true,
+            closeOnBlur: true,
+            firstWeekday: 1,
+            customMonths: cal_meses,
+            customWeekDays: cal_diassemana
+        });
 
         $('#frm_programar_informe').submit(form_ajax_submit);
 
@@ -248,6 +263,7 @@
             }],
             freeInput: true,
             allowDuplicates: false,
+            tagClass: 'label label-primary p-3 rounded'
         });
 
         $('.edit_tag').on('beforeItemAdd', function(event) {

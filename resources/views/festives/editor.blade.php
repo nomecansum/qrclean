@@ -1,11 +1,15 @@
-<div class="panel editor">
-    <div class="panel-heading">
-        <div class="panel-control">
-            <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+<div class="card editor mb-5">
+    <div class="card-header toolbar">
+        <div class="toolbar-start">
+            <h5 class="m-0">Modificar festivo</h5>
         </div>
-        <h3 class="panel-title">Datos del festivo</h3>
+        <div class="toolbar-end">
+            <button type="button" class="btn-close btn-close-card">
+                <span class="visually-hidden">Close the card</span>
+            </button>
+        </div>
     </div>
-    <div class="panel-body collapse show">
+    <div class="card-body collapse show">
 
         <form  @if($fes->cod_festivo!=0) action="{{url('festives/update',$fes->cod_festivo)}}" @else action="{{url('festives/save')}}"  @endif method="POST" class="form-ajax formfestivo">
             <div class="row">
@@ -19,15 +23,17 @@
                 </div>
                 @if(isAdmin())
                 <div class="form-group col-md-1 p-t-20 mt-1">
-                    <input type="checkbox" class="form-control  magic-checkbox" name="mca_fijo"  id="mca_fijo" value="S" {{isset($fes) ? ($fes->mca_fijo == 'S' ? 'checked' : '') : ''}}> 
-                    <label class="custom-control-label"   for="mca_fijo">Fijo</label>
+                    <div class="form-check pt-2">
+                        <input name="mca_fijo"  id="mca_fijo" value="S" {{isset($fes) ? ($fes->mca_fijo == 'S' ? 'checked' : '') : ''}} class="form-check-input" type="checkbox">
+                        <label class="form-check-label"  for="mca_fijo">Fijo</label>
+                    </div>
                 </div>
                 @endif
                 <div class="form-group col-md-2">
                     <label for="">{{trans('strings._employees.festives.date')}}</label>
                     <div class="input-group float-right" id="div_fechas">
-                        <input type="text" class="form-control pull-left singledate" id="val_fecha" name="val_fecha" style="width: 120px" required value="{{isset($fes) ? \Carbon\Carbon::parse($fes->val_fecha)->format('d/m/Y') : ''}}">
-                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+                        <input type="text" class="form-control pull-left singledate" id="val_fecha" name="val_fecha"  required value="{{isset($fes) ? \Carbon\Carbon::parse($fes->val_fecha)->format('d/m/Y') : ''}}">
+                        <span class="btn input-group-text btn-secondary btn_fecha"   style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
                     </div>
                 </div>
 
@@ -41,13 +47,15 @@
                     </select>
                 </div>
                 <div class="form-group col-md-2 p-t-30 mt-1" >
-                    <input type="checkbox" class="form-control  magic-checkbox" name="mca_nacional"  id="mca_nacional" value="S" {{isset($fes) ? ($fes->mca_nacional == 'S' ? 'checked' : '') : ''}}> 
-                    <label class="custom-control-label"   for="mca_nacional">Festivo nacional</label>
+                    <div class="form-check pt-2">
+                        <input  name="mca_nacional"  id="mca_nacional" value="S" {{isset($fes) ? ($fes->mca_nacional == 'S' ? 'checked' : '') : ''}} class="form-check-input" type="checkbox">
+                        <label class="form-check-label"  for="mca_nacional">Festivo nacional</label>
+                    </div>
                 </div>
 
             </div>
             <div class="row">
-                <div class="col-sm-12" id="div_pais" style="{{ isset($fes)&&$fes->mca_nacional=='S'?'':'display:none' }};margin-right: 20px;">
+                <div class="col-md-4" id="div_pais" style="{{ isset($fes)&&$fes->mca_nacional=='S'?'':'display:none' }};margin-right: 20px;">
                     <div class="form-group" >
                         <label for="">{{trans('strings.pais')}}</label><br>
                         <select name="cod_pais" id="cod_pais" class="select2 form-control" style="width:100%" >
@@ -87,7 +95,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="md-12 text-right" style="margin-top:32px">
+                <div class="md-12 text-end" style="margin-top:32px">
                     @if(checkPermissions(['Festivos'],["C"]))<button type="submit" class="btn btn-primary btnguardar">{{trans('strings.submit')}}</button>@endif
                 </div>
             </div>
@@ -147,27 +155,26 @@
 
     $('.form-ajax').submit(form_ajax_submit);
 
-    $('.singledate').daterangepicker({
-        singleDatePicker: true,
-		showDropdowns: true,
-		//autoUpdateInput : false,
-		//autoApply: true,
-		locale: {
-			format: '{{trans("strings.date_format")}}',
-			applyLabel: "OK",
-			cancelLabel: "Cancelar",
-			daysOfWeek:["{{trans('strings.domingo')}}","{{trans('strings.lunes')}}","{{trans('strings.martes')}}","{{trans('strings.miercoles')}}","{{trans('strings.jueves')}}","{{trans('strings.viernes')}}","{{trans('strings.sabado')}}"],
-			monthNames: ["{{trans('strings.enero')}}","{{trans('strings.febrero')}}","{{trans('strings.marzo')}}","{{trans('strings.abril')}}","{{trans('strings.mayo')}}","{{trans('strings.junio')}}","{{trans('strings.julio')}}","{{trans('strings.agosto')}}","{{trans('strings.septiembre')}}","{{trans('strings.octubre')}}","{{trans('strings.noviembre')}}","{{trans('strings.diciembre')}}"],
-			firstDay: {{trans("strings.firstDayofWeek")}}
-		},
+    $('.btn_fecha').click(function(){
+        picker.open('#val_fecha');
+    })
+
+    picker = MCDatepicker.create({
+        el: "#val_fecha",
+        dateFormat: cal_formato_fecha,
+        autoClose: true,
+        closeOnBlur: true,
+        firstWeekday: 1,
+        disableWeekDays: cal_dias_deshabilitados,
+        customMonths: cal_meses,
+        customWeekDays: cal_diassemana
     });
+
     $(".select2").select2();
 
     $(function(){
         $('#cod_cliente').trigger('change');
     })
 
-    $('.demo-psi-cross').click(function(){
-            $('.editor').hide();
-        });
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 </script>

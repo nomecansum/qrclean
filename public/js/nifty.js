@@ -415,7 +415,7 @@
         'show' : function(el){
             var target = $(el.attr('data-target')),
                 ovId = 'nifty-overlay-' + uID() + uID()+"-" + uID(),
-                panelOv = $('<div id="'+ ovId +'" class="panel-overlay"></div>');
+                panelOv = $('<div id="'+ ovId +'" class="card-overlay"></div>');
 
             el.prop('disabled', true).data('niftyOverlay',ovId);
             target.addClass('panel-overlay-wrap');
@@ -439,8 +439,8 @@
             return null;
         }
         var opt = $.extend({},defaults,options),
-            icon = (opt.displayIcon)?'<span class="panel-overlay-icon '+opt.iconColor+'"><i class="'+opt.iconClass+'"></i></span>':'';
-        el.data('overlayTemplate', '<div class="panel-overlay-content pad-all unselectable">'+icon+'<h4 class="panel-overlay-title">'+opt.title+'</h4><p>'+opt.desc+'</p></div>');
+            icon = (opt.displayIcon)?'<span class="card-overlay-icon '+opt.iconColor+'"><i class="'+opt.iconClass+'"></i></span>':'';
+        el.data('overlayTemplate', '<div class="card-overlay-content pad-all unselectable">'+icon+'<h4 class="card-overlay-title">'+opt.title+'</h4><p>'+opt.desc+'</p></div>');
         return null;
     };
 
@@ -660,7 +660,7 @@
 
 
                 if(!$panelct.length){
-                    notyContainer = $('<div class="panel-alert"></div>');
+                    notyContainer = $('<div class="card-alert"></div>');
                     if($panelhd.length){
                         $panelhd.after(notyContainer);
                     }else{

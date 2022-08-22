@@ -9,15 +9,15 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-2 text-right mb-1"><img src="{{ url('img/puesto_reservado.png') }}"></div><div class="col-md-10 mb-1" style="padding-top: 9px">Puesto reservado</div>
-                    <div class="col-md-2 text-right mb-1"><img src="{{ url('img/puesto_disponible.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto disponible</div>
-                    <div class="col-md-2 text-right mb-1"><img src="{{ url('img/puesto_ocupado.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto ocupado</div>
-                    <div class="col-md-2 text-right mb-1"><img src="{{ url('img/puesto_limpieza.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto en proceso de limpieza</div>
-                    <div class="col-md-2 text-right mb-1"><img src="{{ url('img/puesto_bloqueado.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto bloqueado/inoperativo</div>
-                    <div class="col-md-2 text-right mb-1"><img src="{{ url('img/puesto_incidencia.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto con incidencia</div>
-                    <div class="col-md-2 text-right mb-1"><img src="{{ url('img/puesto_perfil.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto reservado para un perfil distinto del mío</div>
-                    <div class="col-md-2 text-right mb-1"><img src="{{ url('img/puesto_miperfil.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto reservado para mi perfil</div>
-                    <div class="col-md-2 text-right mb-1"><img src="{{ url('img/puesto_persona.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto reservado para una persona concreta</div>
+                    <div class="col-md-2 text-end mb-1"><img src="{{ url('img/puesto_reservado.png') }}"></div><div class="col-md-10 mb-1" style="padding-top: 9px">Puesto reservado</div>
+                    <div class="col-md-2 text-end mb-1"><img src="{{ url('img/puesto_disponible.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto disponible</div>
+                    <div class="col-md-2 text-end mb-1"><img src="{{ url('img/puesto_ocupado.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto ocupado</div>
+                    <div class="col-md-2 text-end mb-1"><img src="{{ url('img/puesto_limpieza.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto en proceso de limpieza</div>
+                    <div class="col-md-2 text-end mb-1"><img src="{{ url('img/puesto_bloqueado.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto bloqueado/inoperativo</div>
+                    <div class="col-md-2 text-end mb-1"><img src="{{ url('img/puesto_incidencia.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto con incidencia</div>
+                    <div class="col-md-2 text-end mb-1"><img src="{{ url('img/puesto_perfil.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto reservado para un perfil distinto del mío</div>
+                    <div class="col-md-2 text-end mb-1"><img src="{{ url('img/puesto_miperfil.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto reservado para mi perfil</div>
+                    <div class="col-md-2 text-end mb-1"><img src="{{ url('img/puesto_persona.png') }}"></div><div class="col-md-10 mb-1"  style="padding-top: 9px">Puesto reservado para una persona concreta</div>
                     <div class="col-md-12 text-center mb-1"><img src="{{ url('img/partes_puesto.png') }}"></div>
 
                 </div>

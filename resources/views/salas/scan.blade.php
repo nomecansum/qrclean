@@ -13,7 +13,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Parametrizacion</li>
         <li class="breadcrumb-item "><a href="{{url('/salas')}}">Estado de salas de reunion</a></li>
         <li class="breadcrumb-item active"><a href="{{url('/sala/'.$sala->token)}}">{{ $sala->des_puesto }}</a></li>
@@ -26,11 +26,11 @@
 <div id="editorCAM" class="mt-2">
 
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">{{ $sala->des_puesto }} {!!beauty_fecha(Carbon::now(),0) !!}</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">{{ $sala->des_puesto }} {!!beauty_fecha(Carbon::now(),0) !!}</h3>
     </div>
-    <div class="panel-body" id="detalles_reserva">
+    <div class="card-body" id="detalles_reserva">
         @php
             $reserva_sala=$reservas->where('id_puesto',$sala->id_puesto);
         @endphp
@@ -38,11 +38,11 @@
     </div>
 </div>
 
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">¿Que quiere hacer?</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">¿Que quiere hacer?</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row text-center">
             <div class="col-md-1">
      

@@ -115,6 +115,14 @@ class LoginController extends Controller
             if(isset($request->intended)&&$request->intended!=''){
                 session(['redirectTo' => $request->intended]);
             }
+
+            //Vemos las reservas que tiene el usuario y las metemos en sesion
+            $reservas=\App\Http\Controllers\UsersController::mis_puestos(auth()->user()->id)['mispuestos'];
+            session(['reservas'=>$reservas]);
+
+            ///Perfil del usuario en session
+            session(['perfil'=>$nivel]);
+
             //session(['CL'=>$config_cliente]);
             return redirect ('/');
         }else{

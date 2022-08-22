@@ -1,16 +1,16 @@
 
 
 
-    <div class="panel editor">
+    <div class="card editor">
 
-        <div class="panel-heading">
-            <div class="panel-control">
+        <div class="card-header">
+            <div class="card-control">
                 <button class="btn btn-default" data-panel="dismiss" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
             </div>
-            <h3 class="panel-title">Editar feria</h3>
+            <h3 class="card-title">Editar feria</h3>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
 
             @if ($errors->any())
                 <ul class="alert alert-danger">

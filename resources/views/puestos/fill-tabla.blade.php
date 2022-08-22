@@ -8,19 +8,22 @@
         </form>
     </div>
 </div>
-<div class="row mt-2">
-    <div class="panel" style="width: 100%">
-        <div class="panel-heading">
-            <h3 class="panel-title">Puestos</h3>
+<div class="row">
+    <div class="card" style="width: 100%">
+        <div class="card-header">
+            <h3 class="card-title">Puestos</h3>
         </div>
-        <div class="panel-body w-100" id="main_panel">
+        <div class="card-body w-100" id="main_panel">
             <div class="table-responsive w-100" style="position: relative">
                 <form action="{{url('/puestos/print_qr')}}" method="POST"  id="frmpuestos" enctype='multipart/form-data'>
                     @csrf
                         {{-- <div class="td"><div class="loader"></div></div> --}}
                      {{-- <table class="table table-striped table-hover table-vcenter" id="tablapuestos"  style="width: 98%" data-toggle="table"  data-pagination="true" data-search="true"> --}}
                         <div id="all_toolbar" class="ml-3">
-                            <input type="checkbox" class="form-control custom-control-input magic-checkbox" name="chktodos" id="chktodos"><label  class="custom-control-label"  for="chktodos">Todos</label>
+                            <div class="form-check pt-2">
+								<input id="chktodos" name="chktodos" class="form-check-input" type="checkbox">
+								<label for="chktodos" class="form-check-label">Todos</label>
+							</div>
                         </div>
                         <table id="tablapuestos"  data-toggle="table" onclick="tabla_click()"
                         data-locale="es-ES"
@@ -31,8 +34,6 @@
                         data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
                         data-page-size="50"
                         data-pagination="true" 
-                        data-show-pagination-switch="true"
-                        data-show-button-icons="true"
                         data-toolbar="#all_toolbar"
                         data-buttons-class="secondary"
                         data-show-button-text="true"
@@ -56,9 +57,12 @@
                             @foreach($puestos as $puesto)
                             <tr class="hover-this" >
                                 <td class="text-center">
-                                    <input type="checkbox" class="form-control chkpuesto magic-checkbox" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chkp{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}">
-                                    <label class="custom-control-label"   for="chkp{{ $puesto->id_puesto }}"></label>
+                                    <div class="form-check">
+                                        <input name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chkp{{ $puesto->id_puesto }}" value="{{ $puesto->id_puesto }}" class="form-check-input chkpuesto" type="checkbox">
+                                        <label class="form-check-label" for="chkp{{ $puesto->id_puesto }}"></label>
+                                    </div>
                                 </td>
+                                
                                 <td class="thumb text-center" data-id="">
                                     @isset($puesto->icono_tipo)
                                         <i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i>

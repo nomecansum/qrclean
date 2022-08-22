@@ -1,14 +1,19 @@
 <link rel="stylesheet" href="{{ url('/plugins/html5-editor/bootstrap-wysihtml5.css') }}" />
 
-<div class="panel editor">
-    <div class="panel-heading">
-        <div class="panel-control">
-            <button class="btn btn-default" data-panel="dismiss" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
+<div class="card editor mb-5">
+
+    <div class="card-header toolbar">
+        <div class="toolbar-start">
+            <h5 class="m-0">Editar encuesta</h5>
         </div>
-        <h3 class="panel-title">Editar encuesta</h3>
+        <div class="toolbar-end">
+            <button type="button" class="btn-close btn-close-card">
+                <span class="visually-hidden">Close the card</span>
+            </button>
+        </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
 
         @if ($errors->any())
             <ul class="alert alert-danger">
@@ -37,7 +42,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-2">
                 <div class="form-group col-md-12 {{ $errors->has('pregunta') ? 'has-error' : '' }}">
                     <label for="pregunta" class="control-label">Pregunta</label>
                     <textarea  class="textarea_editor form-control" required name="pregunta" id="pregunta" rows="8" maxlength="5000" placeholder="Enter text ...">{!! $encuesta->pregunta !!}</textarea>
@@ -45,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mt-2">
                 <div class="form-group col-md-3">
                     <label for="id_cliente" class="control-label">Cliente</label>
                     <select class="form-control" required id="id_cliente" name="id_cliente">
@@ -57,19 +62,21 @@
                     </select>
                     {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="id_cliente" class="control-label">Tipo</label>
+                <div class="form-group col-md-5">
+                    <label for="" class="control-label">Tipo</label><br>
                     <input type="hidden" name="id_tipo_encuesta" id="id_tipo_encuesta" value="{{$encuesta->id_tipo_encuesta}}"></inpout>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false" title="Tipo de encuesta">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"  title="Tipo de encuesta">
                             <img src="{{ url('/img',$encuesta->img_tipo) }}" id="img_tipo">  <span id="des_tipo" class="ml-3">{{ $encuesta->des_tipo_encuesta }}</span> <i class="dropdown-caret"></i>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="" id="dropdown-acciones">
+                        <ul class="dropdown-menu" id="dropdown-acciones">
                             @foreach($tipos as $tipo)
-                                <li><a href="#" data-tipo="{{ $tipo->id_tipo_encuesta }}" data-imagen="{{ $tipo->img_tipo }}" data-desc="{{ $tipo->des_tipo_encuesta }}" class="btn_tipo_check"> <img src="{{ url('/img',$tipo->img_tipo) }}"><div>{{ $tipo->des_tipo_encuesta }}</div> </a></li>
+                                <li class="dropdown-item"><a href="#" data-tipo="{{ $tipo->id_tipo_encuesta }}" data-imagen="{{ $tipo->img_tipo }}" data-desc="{{ $tipo->des_tipo_encuesta }}" class="btn_tipo_check"> <img src="{{ url('/img',$tipo->img_tipo) }}"><div>{{ $tipo->des_tipo_encuesta }}</div> </a></li>
                             @endforeach
                         </ul>
                     </div>
+                    
+
                 </div>
                 <div class="form-group col-md-2" style="margin-top: 7px">
                     <label for="val_color">Color</label><br>
@@ -81,68 +88,75 @@
                         <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
                     </div>
                 </div>
-                <div class="col-md-1 p-t-30 mt-1">
-                    <input type="checkbox" class="form-control  magic-checkbox" name="mca_activa"  id="mca_activa" value="S" {{ $encuesta->mca_activa=='S'?'checked':'' }}> 
-                    <label class="custom-control-label"   for="mca_activa">Activa</label>
-                </div>
-                <div class="col-md-1 p-t-30 mt-1">    
-                    <input type="checkbox" class="form-control  magic-checkbox" name="mca_anonima"  id="mca_anonima" value="S" {{ $encuesta->mca_anonima=='S'?'checked':'' }}> 
-                    <label class="custom-control-label"   for="mca_anonima">Anonima</label>
-                </div>
+                
+               
             </div>
-            <div class="row">
-                <div class="form-group col-md-3" style="padding-top: 7px">
+            <div class="row mt-2">
+                <div class="form-group col-md-4" style="padding-top: 7px">
                     <label>Fechas </label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" style="height: 33px; width: 200px" value="{{  Carbon\Carbon::parse($encuesta->fec_inicio)->format('d/m/Y').' - '.Carbon\Carbon::parse($encuesta->fec_fin)->format('d/m/Y') }}">
-                        <span class="btn input-group-text btn-mint" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+                        <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" value="{{  Carbon\Carbon::parse($encuesta->fec_inicio)->format('d/m/Y').' - '.Carbon\Carbon::parse($encuesta->fec_fin)->format('d/m/Y') }}">
+                        <span class="btn input-group-text btn-secondary btn_fechas" ><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                     </div>
                 </div>
                 
                 <div class="form-group col-md-3">
-                    <label for="val_momento" class="control-label">Momento en el que mostrarla</label>
+                    <label for="val_momento" class="control-label">Momento para mostrar</label>
                     <select class="form-control" required id="val_momento" name="val_momento">
                             <option value="0" {{ $encuesta->val_momento == '0' ? 'selected' : '' }}>Independiente</option>
                             <option value="A" {{ $encuesta->val_momento == 'A' ? 'selected' : '' }}>Al escanear sitio</option>
                             <option value="D" {{ $encuesta->val_momento == 'D' ? 'selected' : '' }}>Al dejar sitio</option>
                     </select>
                 </div>
-                <div class="form-group col-md-2 {{ $errors->has('val_periodo_minimo') ? 'has-error' : '' }}">
+                <div class="form-group col-md-3 {{ $errors->has('val_periodo_minimo') ? 'has-error' : '' }}">
                     <label for="val_periodo_minimo" class="control-label">Intervalo minimo votos</label>
                         <input class="form-control" required name="val_periodo_minimo" type="number" id="val_periodo_minimo" value="{{ $encuesta->val_periodo_minimo }}" min="0" max="1440" placeholder="Enter periodo minimo">
                         {!! $errors->first('val_periodo_minimo', '<p class="help-block">:message</p>') !!}
                 </div>
-                <div class="col-md-2 p-t-30 mt-1">
-                    <input type="checkbox" class="form-control  magic-checkbox" name="mca_mostrar_comentarios"  id="mca_mostrar_comentarios" value="S" {{ $encuesta->mca_mostrar_comentarios=='S'?'checked':'' }}> 
-                    <label class="custom-control-label" for="mca_mostrar_comentarios">Pedir feedback</label>
-                </div>
-                <div class="form-group col-md-2" >
-                   
-                </div>
             </div>
             <div class="row">
+                <div class="col-md-2 p-t-30 mt-1">
+                    <div class="form-check pt-1">
+                        <input name="mca_mostrar_comentarios"  id="mca_mostrar_comentarios" value="S" {{ $encuesta->mca_mostrar_comentarios=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                        <label for="mca_mostrar_comentarios" class="form-check-label">Pedir feedback</label>
+                    </div>
+                </div>
+                <div class="col-md-2 p-t-30 mt-1">    
+                    <div class="form-check pt-1">
+                        <input name="mca_anonima"  id="mca_anonima" value="S" {{ $encuesta->mca_anonima=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                        <label for="mca_anonima" class="form-check-label">Anonima</label>
+                    </div>
+                </div>
+                <div class="col-md-2 p-t-30 mt-1">
+                    <div class="form-check pt-1">
+                        <input name="mca_activa"  id="mca_activa" value="S" {{ $encuesta->mca_activa=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                        <label for="mca_activa" class="form-check-label">Activa</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
                 <div class="form-group col-md-12">
                     <label class="control-label">Token</label>
                     <div class="input-group mb-3">
                         <input type="text" name="token" readonly=""  id="token_1uso"  class="form-control" value="{{$encuesta->token }}">
                         <div class="input-group-btn">
-                            <button class="btn btn-mint" type="button"  id="btn_generar_token">Generar</button>
+                            <button class="btn btn-secondary" type="button"  id="btn_generar_token">Generar</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row b-all" style="width: 98%">
+            <div class="row b-all mt-2" style="width: 98%">
                 <div class="form-group col-md-11">
                     <label>URL de acceso</label><br>
                     <a href="{{ url('encuestas/get',$encuesta->token) }}" id="link_url" target="_blank"><h5 id="span_url">{{ url('encuestas/get',$encuesta->token) }}</h5></a>
                 </div>
-                <div class="form-group col-md-1 text-right mt-3">
-                    <a href="#modal_img"  class="btn  btn-warning add-tooltip  btn_url" id="btn_gen_qr" data-toggle="modal" title="Generar QR" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}"> <span class="fad fa-qrcode pt-1" aria-hidden="true"></span> Ver QR</a>
-                    <a href="#"  class="btn  btn-info  add-tooltip btn_url" id="boton_url" title="Copiar URL" data-id="{{ $encuesta->id_encuesta }}" data-clipboard-text="{{ url('encuestas/get',$encuesta->token) }}"> <span class="fa fa-copy pt-1" aria-hidden="true"></span> Copiar</a>
-                    <a href="{{ url('encuestas/get',$encuesta->token) }}" target="_blank"  class="btn  btn-success  add-tooltip btn_url" id="boton_abrir" title="Abrir URL" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}"> <i class="fad fa-external-link-square-alt"></i> Abrir</a>
+                <div class="form-group col-md-1 text-end mt-3">
+                    <a href="#modal_img"  class="btn  btn-warning add-tooltip  btn_url text-nowrap" id="btn_gen_qr" data-toggle="modal" title="Generar QR" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <span class="fad fa-qrcode pt-1" aria-hidden="true"></span> Ver QR</a>
+                    <a href="#"  class="btn  btn-info  add-tooltip btn_url" id="boton_url" title="Copiar URL" data-id="{{ $encuesta->id_encuesta }}" data-clipboard-text="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <span class="fa fa-copy pt-1" aria-hidden="true"></span> Copiar</a>
+                    <a href="{{ url('encuestas/get',$encuesta->token) }}" target="_blank"  class="btn  btn-success  add-tooltip btn_url" id="boton_abrir" title="Abrir URL" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <i class="fad fa-external-link-square-alt"></i> Abrir</a>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-2">
                 <div class="form-group col-md-12">
                     <label>Aplicar solo a perfiles</label><br>
                     <select name="perfiles[]" id="list_perfiles" class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple">
@@ -159,7 +173,7 @@
             </div>
            
             <div class="row">
-                <div class="form-group col-md-12 text-right mt-3">
+                <div class="form-group col-md-12 text-end mt-3">
                     <input class="btn btn-primary" type="submit" value="Guardar">
                 </div>
             </div>
@@ -190,8 +204,12 @@
     $(".select2").select2({
         placeholder: "Seleccione",
         allowClear: true,
-        width: "99.2%",
+        width: "90%",
     });
+
+    $('.btn_fechas').click(function(){
+        rangepicker.show();
+    })
 
     //Ponemos los valores seleccionados que tengan los select2
     $(document).ready(function() {
@@ -258,11 +276,27 @@
         a.click();
     })
 
-
-
-
-
-
+    var rangepicker = new Litepicker({
+        element: document.getElementById( "fechas" ),
+        singleMode: false,
+        numberOfMonths: 2,
+        numberOfColumns: 2,
+        autoApply: true,
+        format: 'DD/MM/YYYY',
+        lang: "es-ES",
+        tooltipText: {
+            one: "day",
+            other: "days"
+        },
+        tooltipNumber: (totalDays) => {
+            return totalDays - 1;
+        },
+        setup: (rangepicker) => {
+            rangepicker.on('selected', (date1, date2) => {
+                //comprobar_puestos();
+            });
+        }
+    });
 
     $('.form-ajax').submit(form_ajax_submit);
     $('input[type="file"]').change(function(e){
@@ -297,19 +331,7 @@
     });
     $('.textarea_editor').wysihtml5();
 
-    $('#fechas').daterangepicker({
-        autoUpdateInput: true,
-        locale: {
-            format: '{{trans("general.date_format")}}',
-            applyLabel: "OK",
-            cancelLabel: "Cancelar",
-            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-            firstDay: {{trans("general.firstDayofWeek")}}
-        },
-        opens: 'right',
-        parentEl: "#asignar-puesto .modal-body" 
-    });
+    
 
     $('#btn_generar_token').click(function(event){
         //console.log('token');
@@ -334,9 +356,7 @@
 		});
     })
 
-    $('.demo-psi-cross').click(function(){
-            $('.editor').hide();
-        });
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 </script>
 @include('layouts.scripts_panel')
 

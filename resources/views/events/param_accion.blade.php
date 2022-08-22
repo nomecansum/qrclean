@@ -65,7 +65,7 @@
 @endif
 
 <div class="row">
-    <div class="col-md-12 text-right">
+    <div class="col-md-12 text-end">
         <button type="submit" class="btn btn-primary btn_accion float-right">{{trans('general.submit')}}</button>
     </div>
 </div>
@@ -73,9 +73,9 @@
 <br><br>
 <div class="row campos_notificaciones">
     <div class="col-md-12">
-        <div class="panel" style="background-color: #fff3cd">
+        <div class="card" style="background-color: #fff3cd">
             <h4 class="mt-2 ml-2"><i class="fas fa-information"></i> {{ __('eventos.campos_para_notificaciones') }}:</h4>
-            <div class="panel-body">
+            <div class="card-body">
                 <ul class="text-muted" style="columns: 2;-webkit-columns: 2;-moz-columns: 2;">
                     @if($campos!="")
                         @foreach($campos as $campo)

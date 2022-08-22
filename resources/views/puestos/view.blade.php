@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item"><a href="{{url('/camaras')}}">Camaras</a></li>
         <li class="breadcrumb-item active">Camara {{ !empty($camara->etiqueta) ? $camara->etiqueta : '' }}</li>
         {{--  <li class="breadcrumb-item"><a href="{{url('/users')}}">Usuarios</a></li>
@@ -20,9 +20,9 @@
 
 @section('content')
     <div class="row">
-        <div class="panel">
-           <div class="panel">
-               <div class="panel-body">
+        <div class="card">
+           <div class="card">
+               <div class="card-body">
                     <div class="col-md-11">
                         <img id="imgcam" style="width:800px; height:600px" data-id="0" class="rounded_cam imgcam">
                     </div>

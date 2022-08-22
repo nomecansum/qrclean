@@ -1,12 +1,16 @@
-<div class="panel editor">
-    <div class="panel-heading">
-        <div class="panel-control">
-            <button class="btn btn-default" data-panel="dismiss" data-dismiss="panel"><i class="demo-psi-cross"></i></button>
+<div class="card editor mb-5">
+    <div class="card-header toolbar">
+        <div class="toolbar-start">
+            <h5 class="m-0">Editar contacto</h5>
         </div>
-        <h3 class="panel-title">Editar contacto</h3>
+        <div class="toolbar-end">
+            <button type="button" class="btn-close btn-close-card">
+                <span class="visually-hidden">Close the card</span>
+            </button>
+        </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <form method="POST" action="{{ url('/ferias/asistentes/save') }}" id="formulario" name="formulario" accept-charset="UTF-8" class="form-horizontal form-ajax"  enctype="multipart/form-data">
         {{ csrf_field() }}
             <div class="row">
@@ -73,7 +77,7 @@
             
 
             <div class="form-group mt-3">
-                <div class="col-md-12 text-center">
+                <div class="col-md-12 text-end">
                     <input class="btn btn-lg btn-primary" type="submit" value="Guardar">
                 </div>
             </div>
@@ -105,25 +109,5 @@
         }
     }
 
-    $('#fecha').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        autoUpdateInput : true,
-        //autoApply: true,
-        locale: {
-            format: '{{trans("general.date_format")}}',
-            applyLabel: "OK",
-            cancelLabel: "Cancelar",
-            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-            firstDay: {{trans("general.firstDayofWeek")}}
-        },
-        function() {
-            
-        }  
-    });
-
-    $('.demo-psi-cross').click(function(){
-        $('.editor').hide();
-    });
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 </script>

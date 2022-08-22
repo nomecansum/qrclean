@@ -1,21 +1,23 @@
 
-    <div class="panel editor">
-
-        <div class="panel-heading">
-            <div class="panel-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+    <div class="card editor mb-5">
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">
+                    @if($id==0)
+                        Nueva tag
+                    @else
+                        Editar tag
+                    @endif
+                </h5>
             </div>
-            <h3 class="panel-title" id="titulo">
-                @if($id==0)
-                    Nueva tag
-                @else
-                    Editar tag
-                @endif
-
-            </h3>
+            <div class="toolbar-end">
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
 
             @if ($errors->any())
                 <ul class="alert alert-danger">
@@ -50,7 +52,7 @@
                         </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-12 text-end mt-2">
                         <input class="btn btn-primary" type="submit" value="Guardar">
                     </div>
                 </div>
@@ -61,7 +63,5 @@
 
     <script>
         $('.form-ajax').submit(form_ajax_submit);
-        $('.demo-psi-cross').click(function(){
-            $('.editor').hide();
-        });
+        document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
     </script>

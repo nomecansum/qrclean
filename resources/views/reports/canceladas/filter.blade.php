@@ -75,7 +75,7 @@
 		</tr>
 		<tr>
 			<td colspan="11">
-				<h4 class="text-muted">Periodo {!! beauty_fecha($f1,0) !!} <i class="mdi mdi-arrow-right-bold"></i> {!! beauty_fecha($f2,0) !!}</h4>
+				<h4 class="text-muted text-center">Periodo {!! beauty_fecha($f1,0) !!} <i class="mdi mdi-arrow-right-bold"></i> {!! beauty_fecha($f2,0) !!}</h4>
 			</td>
 		</tr>
 	@endif
@@ -88,11 +88,11 @@
 	</tr>
 	@foreach ($inf as $puesto)
 		<tr>
-			<th>{{ $puesto->cod_puesto }}</th>
-			<th>{{ $puesto->name }}</th>
-			<th>@if($r->output!="excel"){!! beauty_fecha($puesto->fec_reserva) !!} @else {{ Carbon::parse($puesto->fec_reserva)->format('d/m/Y H:i') }} @endif</th>
-			<th>@if($r->output!="excel"){!! beauty_fecha($puesto->fec_fin_reserva) !!} @else  {{ Carbon::parse($puesto->fec_fin_reserva)->format('d/m/Y H:i') }} @endif</th>
-			<th>@if($r->output!="excel"){!! beauty_fecha($puesto->fec_utilizada) !!} @else {{ Carbon::parse($puesto->fec_utilizada)->format('d/m/Y H:i') }}  @endif</th>
+			<td>{{ $puesto->cod_puesto }}</td>
+			<td>{{ $puesto->name }}</td>
+			<td>@if($r->output!="excel"){!! beauty_fecha($puesto->fec_reserva) !!} @else {{ Carbon::parse($puesto->fec_reserva)->format('d/m/Y H:i') }} @endif</td>
+			<td>@if($r->output!="excel"){!! beauty_fecha($puesto->fec_fin_reserva) !!} @else  {{ Carbon::parse($puesto->fec_fin_reserva)->format('d/m/Y H:i') }} @endif</td>
+			<td>@if($r->output!="excel"){!! beauty_fecha($puesto->fec_utilizada) !!} @else {{ Carbon::parse($puesto->fec_utilizada)->format('d/m/Y H:i') }}  @endif</td>
 		</tr>
 		
 	@endforeach

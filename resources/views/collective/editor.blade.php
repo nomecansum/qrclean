@@ -1,12 +1,17 @@
-<div class="panel"  id="editor">
-    <div class="panel-header">
-        <span id="edit_col" class="d-none">{{trans('strings._collective.edit')}}</span>    
-        <span id="nuevo_col" class="d-none">{{trans('strings._collective.create')}}</span>   
-        <div class="card-actions">
-            <a class="btn-close" ><i class="ti-close"></i></a>
+<div class="card mb-5"  id="editor">
+    <div class="card-header toolbar">
+        <div class="toolbar-start">
+            <h5 class="m-0">
+                Modificar colectivo  
+            </h5>
+        </div>
+        <div class="toolbar-end">
+            <button type="button" class="btn-close btn-close-card">
+                <span class="visually-hidden">Close the card</span>
+            </button>
         </div>
     </div>
-    <div class="panel-body collapse show">
+    <div class="card-body collapse show">
         <form  action="{{url('collective/update',$id)}}" method="POST" name="frm_colectivo" id="frm_colectivo" class="form-ajax">
             <div class="row">
                 <input type="hidden" name="id" value="{{ $id }}">
@@ -29,11 +34,13 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-3 mt-4">
-                        <input type="checkbox" class="form-control  magic-checkbox" name="mca_noinformes"  id="mca_noinformes" value="S"  {{  $c->mca_noinformes=='S'?'checked':'' }}> 
-                        <label class="custom-control-label"   for="mca_noinformes">No aparecer en informes</label>
+                        <div class="form-check pt-2">
+                            <input  name="mca_noinformes"  id="mca_noinformes" value="S"  {{  $c->mca_noinformes=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label class="form-check-label" for="mca_noinformes">No aparecer en informes</label>
+                        </div>
                     </div>
                 </div>
-                <div class="md-12 text-right" style="margin-top:32px">   
+                <div class="md-12 text-end" style="margin-top:32px">   
                     @if(checkPermissions(['Colectivos'],["W"]))<button type="submit" class="btn btn-primary">{{trans('strings.submit')}}</button>@endif
                 </div>
             </div>
@@ -43,4 +50,5 @@
 
 <script>
     $('.form-ajax').submit(form_ajax_submit);
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 </script>

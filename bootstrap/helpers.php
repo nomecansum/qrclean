@@ -291,34 +291,63 @@ function time_to_dec($time,$out='s'){
 
 }
 
-///Convertir fecha en español a mysql
-function adaptar_fecha($d){
+///Convertir fecha en español a mysql  S: devuelve string | C: devuelve Carbon
+function adaptar_fecha($d,$formato='S'){
     if(!isset($d)){
         return null;
     }
     try{
+        if (Carbon::createFromFormat('d/m/Y', $d)!== false) {
+            if($formato=='S'){
+                return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
+            } else {
+                return Carbon::createFromFormat('d/m/Y', $d);
+            }
+        }
+    } catch (\Exception $e){}
+    try{
         if (Carbon::createFromFormat('d/m/Y H:i:s', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y H:i:s', $d)->format('Y-m-d H:i:s');
+            if($formato=='S'){
+                return Carbon::createFromFormat('d/m/Y H:i:s', $d)->format('Y-m-d H:i:s');
+            } else {
+                return Carbon::createFromFormat('d/m/Y H:i:s', $d);
+            }
         }
     } catch (\Exception $e){}
     try{
         if (Carbon::createFromFormat('d/m/Y H:i', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y H:i', $d)->format('Y-m-d H:i');
+            if($formato=='S'){
+                return Carbon::createFromFormat('d/m/Y H:i', $d)->format('Y-m-d H:i');
+            } else {
+                return Carbon::createFromFormat('d/m/Y H:i', $d);
+            }
         }
     } catch (\Exception $e){}
     try{
         if (Carbon::createFromFormat('d/m/Y', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
+            if($formato=='S'){
+                return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
+            } else {
+                return Carbon::createFromFormat('d/m/Y', $d);
+            }
         }
     } catch (\Exception $e){}
     try{
         if (Carbon::createFromFormat('Y-m-d', $d)!== false) {
-            return Carbon::createFromFormat('d/m/Y', $d)->format('Y-m-d');
+            if($formato=='S'){
+                return Carbon::createFromFormat('Y-m-d', $d)->format('Y-m-d');
+            } else {
+                return Carbon::createFromFormat('Y-m-d', $d);
+            }
         }
     } catch (\Exception $e){}
     try{
         if (Carbon::parse($d)!== false) {
-            return Carbon::parse($d)->format('Y-m-d');
+            if($formato=='S'){
+                return Carbon::parse($d)->format('Y-m-d');
+            } else {
+                return Carbon::parse($d);
+            }
         }
     } catch (\Exception $e){}
     return  $d;
@@ -591,8 +620,14 @@ function icono_nombre($nombre,$height=50,$font=18){
     $padding=intdiv($height,11);
     $rand=Str::random(9);
     $acronym = iniciales($nombre,2);
-    $top_letras=0;
-    $left_letras=2;
+    if($height<50){
+        $top_letras=-10;
+        $left_letras=0;
+    } else {
+        $top_letras=0;
+        $left_letras=2;
+    }
+   
     //return '<span class="round" id="'.$rand.'" style="text-transform: uppercase; background-color: '.App\Classes\RandomColor::one().'">'.$acronym.'</span>';
     return '<div class="round add-tooltip" id="'.$rand.'" style="line-height: 50px; padding: 0px; font-weight: bold; font-size: '.$font.'px; width: '.$height.'px;height: '.$height.'px; text-transform: uppercase; background-color: '.genColorCodeFromText($nombre).'" data-toggle="tooltip" data-placement="bottom" title="'.$nombre.'"><span style="position: relative; top: '.$top_letras.'%; left:'.$left_letras.'%;">'.$acronym.'</span></div>';
 }

@@ -40,12 +40,17 @@
     <div class="col-md-8">
         <span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
     </div>
-    <div class="col-md-2 text-right">
-        <a href="#modal-leyenda" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
+    <div class="col-md-2 text-end">
+        <a href="#modal-leyenda " class="link-primary" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
     </div>
-    <div class="col-md-2 text-right">
-        <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar" style="color: #1e90ff"><i class="fad fa-th"></i> Mosaico</a>
-        <a href="javascript:void(0)" class="mr-2 boton_modo" data-href="comprobar_plano"><i class="fad fa-map-marked-alt"></i> Plano</a>
+    <div class="col-md-2 text-end">
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
+            <label class="btn btn-outline-primary btn-xs boton_modo" data-href="comprobar" for="btnradio1"><i class="fad fa-th"></i> Mosaico</label>
+            
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+            <label class="btn btn-outline-primary btn-xs boton_modo" data-href="comprobar_plano" for="btnradio2"><i class="fad fa-map-marked-alt"></i> Plano</label>
+        </div>
     </div>
 </div>
 
@@ -57,8 +62,8 @@
     </div>
 @endif
 @foreach ($edificios as $e)
-<div class="panel">
-    <div class="panel-body">
+<div class="card">
+    <div class="card-body">
         @php
         
             $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');

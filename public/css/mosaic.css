@@ -321,10 +321,6 @@
     padding-bottom: 0px !important;
 }
 
-
-.modal {
-    text-align: center !important;
-}
 .hover-this:hover .floating-like-gmail,.floating-like-gmail:hover {
     opacity: 1;
     cursor: pointer;
@@ -368,4 +364,199 @@ td{
 .modal-content{
   border: #aaa 5px dotted;
   border-radius: 8px;
+}
+
+
+/* LABEL */
+/*======================================*/
+
+.label:empty {
+  display: inline-block;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: sub;
+}
+.label.label-fw {
+  margin-right: 0.5em;
+}
+.labels .label {
+  display: inline-block;
+  margin-right: 3px;
+  margin-bottom: 3px;
+}
+.label-md {
+  font-size: 100%;
+}
+.label-table {
+  display: inline-block;
+  width: 80%;
+  min-width: 8ex;
+  font-size: 1em;
+  max-width: 100px;
+  padding: 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  vertical-align: top;
+}
+.label-default {
+  background-color: #e3e8ee;
+  color: #333;
+}
+.label-default[href]:hover,
+.label-default[href]:focus {
+  background-color: #d3dbe4;
+}
+.label-primary {
+  background-color: #25476a;
+}
+.label-primary[href]:hover,
+.label-primary[href]:focus {
+  background-color: #1e3a57;
+}
+.label-info {
+  background-color: #03a9f4;
+}
+.label-info[href]:hover,
+.label-info[href]:focus {
+  background-color: #0398db;
+}
+.label-success {
+  background-color: #8bc34a;
+}
+.label-success[href]:hover,
+.label-success[href]:focus {
+  background-color: #7eb73d;
+}
+.label-warning {
+  background-color: #ffb300;
+}
+.label-warning[href]:hover,
+.label-warning[href]:focus {
+  background-color: #e6a100;
+}
+.label-danger {
+  background-color: #f44336;
+}
+.label-danger[href]:hover,
+.label-danger[href]:focus {
+  background-color: #f32c1e;
+}
+.label-mint {
+  background-color: #26a69a;
+}
+.label-mint[href]:hover,
+.label-mint[href]:focus {
+  background-color: #219187;
+}
+.label-purple {
+  background-color: #ab47bc;
+}
+.label-purple[href]:hover,
+.label-purple[href]:focus {
+  background-color: #9b3eab;
+}
+.label-pink {
+  background-color: #f06292;
+}
+.label-pink[href]:hover,
+.label-pink[href]:focus {
+  background-color: #ee4b82;
+}
+.label-dark {
+  background-color: #3a444e;
+}
+.label-dark[href]:hover,
+.label-dark[href]:focus {
+  background-color: #2f373f;
+}
+
+.btn-mint,
+.btn-mint:focus {
+  background-color: #29b2a6;
+  border-color: #26a69a !important;
+  color: #fff;
+}
+.btn-mint:hover,
+.btn-mint:active,
+.btn-mint.active,
+.btn-mint:disabled,
+.btn-mint.disabled,
+.btn-mint:not([class*="btn-active-"]) + .dropdown-menu > li > a:hover,
+.btn-mint:not([class*="btn-active-"]) + .dropdown-menu > li > a:focus,
+.btn-mint:not([class*="btn-active-"]) + .dropdown-menu > .active > a,
+.btn-mint + .dropdown-menu:not(.head-list) > li > a.active,
+.open > .dropdown-toggle.btn-mint,
+.btn-hover-mint:hover,
+.btn-hover-mint:active,
+.btn-hover-mint.active,
+.btn-active-mint.btn:active,
+.btn-active-mint.btn.active,
+.btn-active-mint + .dropdown-menu > li > a:hover,
+.btn-active-mint + .dropdown-menu > li > a:focus,
+.btn-active-mint + .dropdown-menu > .active > a,
+.open .dropdown-toggle.btn.btn-active-mint,
+.btn-group.open .dropdown-toggle.btn.btn-active-mint {
+  background-color: #1f897f !important;
+  border-color: #1f897f !important;
+  color: #fff !important;
+}
+.btn-purple,
+.btn-purple:focus {
+  background-color: #b052c0;
+  border-color: #ab47bc !important;
+  color: #fff;
+}
+.btn-purple:hover,
+.btn-purple:active,
+.btn-purple.active,
+.btn-purple:disabled,
+.btn-purple.disabled,
+.btn-purple:not([class*="btn-active-"]) + .dropdown-menu > li > a:hover,
+.btn-purple:not([class*="btn-active-"]) + .dropdown-menu > li > a:focus,
+.btn-purple:not([class*="btn-active-"]) + .dropdown-menu > .active > a,
+.btn-purple + .dropdown-menu:not(.head-list) > li > a.active,
+.open > .dropdown-toggle.btn-purple,
+.btn-hover-purple:hover,
+.btn-hover-purple:active,
+.btn-hover-purple.active,
+.btn-active-purple.btn:active,
+.btn-active-purple.btn.active,
+.btn-active-purple + .dropdown-menu > li > a:hover,
+.btn-active-purple + .dropdown-menu > li > a:focus,
+.btn-active-purple + .dropdown-menu > .active > a,
+.open .dropdown-toggle.btn.btn-active-purple,
+.btn-group.open .dropdown-toggle.btn.btn-active-purple {
+  background-color: #953ca4 !important;
+  border-color: #953ca4 !important;
+  color: #fff !important;
+}
+.btn-pink,
+.btn-pink:focus {
+  background-color: #f1709c;
+  border-color: #f06292 !important;
+  color: #fff;
+}
+.btn-pink:hover,
+.btn-pink:active,
+.btn-pink.active,
+.btn-pink:disabled,
+.btn-pink.disabled,
+.btn-pink:not([class*="btn-active-"]) + .dropdown-menu > li > a:hover,
+.btn-pink:not([class*="btn-active-"]) + .dropdown-menu > li > a:focus,
+.btn-pink:not([class*="btn-active-"]) + .dropdown-menu > .active > a,
+.btn-pink + .dropdown-menu:not(.head-list) > li > a.active,
+.open > .dropdown-toggle.btn-pink,
+.btn-hover-pink:hover,
+.btn-hover-pink:active,
+.btn-hover-pink.active,
+.btn-active-pink.btn:active,
+.btn-active-pink.btn.active,
+.btn-active-pink + .dropdown-menu > li > a:hover,
+.btn-active-pink + .dropdown-menu > li > a:focus,
+.btn-active-pink + .dropdown-menu > .active > a,
+.open .dropdown-toggle.btn.btn-active-pink,
+.btn-group.open .dropdown-toggle.btn.btn-active-pink {
+  background-color: #ed417b !important;
+  border-color: #ed417b !important;
+  color: #fff !important;
 }

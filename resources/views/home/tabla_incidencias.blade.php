@@ -22,11 +22,11 @@
         
 @endphp
 
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title"><span class="font-bold text-2x">{{ $incidencias->count() }}</span> Incidencias abiertas a {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><span class="font-bold fs-2">{{ $incidencias->count() }}</span> Incidencias abiertas a {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <table id="tabla"  
             data-toggle="table"
             data-locale="es-ES"

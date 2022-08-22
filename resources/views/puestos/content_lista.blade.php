@@ -9,11 +9,11 @@ if(!isset($id_check))
         $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
         $cuenta_fila=1;
     @endphp
-    <div class="panel" id="panel{{ $e->id_edificio }}" style="{{ $plantas->isempty()?'display:none':'' }}">
-        <div class="panel-heading bg-gray-dark">
+    <div class="card" id="panel{{ $e->id_edificio }}" style="{{ $plantas->isempty()?'display:none':'' }}">
+        <div class="card-header bg-gray-dark text-white">
             <div class="row">
                 <div class="col-md-5">
-                    <span class="text-2x ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}
+                    <span class="fs-2 ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}
                         @if(isset($checks) && $checks==1)    
                             <input type="checkbox" class="form-control chk_edificio_puestos magic-checkbox" name="lista_id[]" data-id="{{ $e->id_edificio }}" id="chkep{{ $e->id_edificio }}" value="{{ $e->id_edificio }}">
                             <label class="custom-control-label" for="chkep{{ $e->id_edificio }}"></label>
@@ -21,8 +21,8 @@ if(!isset($id_check))
                     </span>
                 </div>
                 <div class="col-md-5"></div>
-                <div class="col-md-2 text-right  sp_edificio">
-                    <h4>
+                <div class="col-md-2 text-end  sp_edificio">
+                    <h4 class="text-white">
                         <span class="mr-2"><i class="fad fa-layer-group"></i> {{ $e->plantas }}</span>
                         <span class="mr-2"><i class="fad fa-desktop-alt"></i> {{ $e->puestos }}</span>
                     </h4>
@@ -30,7 +30,7 @@ if(!isset($id_check))
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             
             @if($plantas->isempty())
             
@@ -79,9 +79,10 @@ if(!isset($id_check))
                     @php
                         $cuenta_fila++;
                     @endphp    
+                    
                     <tr class="ocultable" data-fila="{{ $cuenta_fila }}" data-tabla="tablapuestos{{ $e->id_edificio }}">
                         <td colspan="{{ isset($checks) && $checks==1?10:9 }}">
-                            <h3 class="pad-all w-100 bg-gray rounded" style="font-size: 2vh">PLANTA {{ $value }}
+                            <h3 class="pad-all bg-gray card-header" style="font-size: 2vh">{{ $value }}
                                 @if(isset($checks) && $checks==1)    
                                     <input type="checkbox" class="form-control chk_planta_puestos magic-checkbox" name="lista_id[]" data-id="{{ $key }}" id="chkpp{{ $key }}" value="{{ $key }}">
                                     <label class="custom-control-label" for="chkpp{{ $key }}"></label>
@@ -126,17 +127,21 @@ if(!isset($id_check))
                                 }
                                 
                                 if(isMobile()){
-                                    if($puesto->factor_puesto<3.5){
-                                        $puesto->factor_puesto=12;
+                                    if($puesto->factor_puestow<3.5){
+                                        $puesto->factor_puestow=12;
+                                        $puesto->factor_puestoh=12;
                                         $puesto->factor_letra=2.8;
                                     } else {
-                                        $puesto->factor_puesto=$puesto->factor_puesto*4;
+                                        //En  mosaico los queremos curadrados siempre
+                                        $puesto->factor_puestow=$puesto->factor_puestow*4;
+                                        $puesto->factor_puestoh=$puesto->factor_puestow*4;
                                         $puesto->factor_letra=$puesto->factor_letra*4;
                                     }
                                     
                                     
-                                } else if($puesto->factor_puesto<3.5){
-                                    $puesto->factor_puesto=4.7;
+                                } else if($puesto->factor_puestow<3.5){
+                                    $puesto->factor_puestow=3.7;
+                                    $puesto->factor_puestoh=3.7;
                                     $puesto->factor_letra=0.8;
                                 }
                                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
@@ -160,28 +165,28 @@ if(!isset($id_check))
                                     @if($puesto->mca_incidencia=='N')
                                         @switch($puesto->id_estado)
                                             @case(1)
-                                                <div class="bg-success rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="bg-success badge rounded-pill"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @case(2)
-                                                <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="bg-danger badge rounded-pill"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @case(3)
-                                                <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="bg-info badge rounded-pill"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break     
                                             @case(4)
-                                                <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="bg-dark badge rounded-pill"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @case(5)
-                                                <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="bg-dark badge rounded-pill"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @case(7)
-                                                <div class="bg-white rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="bg-white badge rounded-pill"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @default
                                         @endswitch
                                         {{ $puesto->des_estado }}
                                     @else
-                                        <div class="bg-warning rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;"><i class="fad fa-exclamation-triangle"></i>
+                                        <div class="bg-warning badge rounded-pill"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;"><i class="fad fa-exclamation-triangle"></i>
                                         Incidencia
                                     @endif
                                         </div>

@@ -115,8 +115,8 @@
 		</tbody>
 	</table>
 	@if($r->output=="pdf" || $r->output=="pantalla")
-        <div class="panel">
-            <div class="panel-body">
+        <div class="card">
+            <div class="card-body">
                 @foreach($plantas as $planta)
 					@php
 						$datos_planta=App\Models\plantas::find($planta);
@@ -130,32 +130,40 @@
 							$obj->data[]=$props;
 						});
 					@endphp
-                    <h3 class="pad-all w-100 bg-gray rounded">PLANTA {{ $datos_planta->des_planta }}</h3>
-                    <style>
-						<style type="text/css">
-						.mapa{{ $planta }} {
-							background-image: url("{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$datos_planta->img_plano) }}");
-						}
-						</style>
-					</style>
-					<div id="wrapper{{ $planta }}">
-						<div id="mapa{{ $planta }}" class="mapa{{ $planta }}" style="width: {{ $datos_planta->width }}px; height: {{ $datos_planta->height }}px" >
-							<img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$datos_planta->img_plano) }}" id="img_fondo{{ $datos_planta->id_planta }}">
+					<div class="card border-dark mb-3">
+						<div class="card-header bg-gray">
+							<h3 >{{ $datos_planta->des_planta }}</h3>
 						</div>
-						<div class="tooltip{{ $planta }}" style="display: none; transform: translate(325px, 15px);">605</div>
+						<div class="card-body">
+							<style>
+								<style type="text/css">
+								.mapa{{ $planta }} {
+									background-image: url("{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$datos_planta->img_plano) }}");
+								}
+								</style>
+							</style>
+							<div id="wrapper{{ $planta }}">
+								<div id="mapa{{ $planta }}" class="mapa{{ $planta }}" style="width: {{ $datos_planta->width }}px; height: {{ $datos_planta->height }}px" >
+									<img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$datos_planta->img_plano) }}" id="img_fondo{{ $datos_planta->id_planta }}">
+								</div>
+							</div>
+							<script>
+								var config = {
+									container: document.querySelector('#mapa{{ $planta }}'),
+									radius: 10,
+									maxOpacity: 1,
+									minOpacity: 0,
+									blur: .75
+								};
+								var heatmapInstance{{ $planta }} = h337.create(config);
+								heatmapInstance{{ $planta }}.setData({!! str_replace('"','',json_encode($obj)) !!});
+								//console.log(heatmapInstance{{ $planta }});
+							</script>
+						</div>
 					</div>
-					<script>
-						var config = {
-							container: document.querySelector('#mapa{{ $planta }}'),
-							radius: 10,
-							maxOpacity: 1,
-							minOpacity: 0,
-							blur: .75
-						};
-						var heatmapInstance{{ $planta }} = h337.create(config);
-						heatmapInstance{{ $planta }}.setData({!! str_replace('"','',json_encode($obj)) !!});
-						//console.log(heatmapInstance{{ $planta }});
-					</script>
+
+                   
+                    
                 @endforeach
             </div>
         </div>

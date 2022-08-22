@@ -41,19 +41,13 @@
 {{--  <h1 class="page-header text-overflow pad-no">Helper Classes</h1>  --}}
 @endsection
 
-@section('breadcrumb')
-<ol class="breadcrumb">
-    <li><a href="{{url('/')}}"><i class="demo-pli-home"></i> Home</a></li>
-    {{--  <li class="active">Helper Classes</li>  --}}
-</ol>
-@endsection
 
 @section('content')
     <div id="page-head">
         <div class="row">
             <div class="col-md-12 text-center">
                 @if(session('logo_cliente'))
-                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" style="max-width:400px; width: 30vw" alt="">
+                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" class="rounded" style="max-width:400px; width: 30vw" alt="">
                 @else   
                 <img src="{{ url('/img/Mosaic_brand_white.png') }}" style="height: 100px">
                 @endif

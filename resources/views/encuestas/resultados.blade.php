@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Encuestas</li>
         <li class="breadcrumb-item"><a href="{{url('/users')}}">resultados</a></li>
         <li class="breadcrumb-item active">{{ !empty($encuesta->titulo) ? $encuesta->titulo : '' }}</li>
@@ -21,11 +21,11 @@
 <div class="row botones_accion mb-2">
     <br><br>
 </div>
-<div class="panel">
-    <div class="panel-heading">
-        <h3 class="panel-title">$encuesta->titulo</h3>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">$encuesta->titulo</h3>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 
     </div>
 </div>

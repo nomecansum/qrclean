@@ -4,8 +4,10 @@
     <span class="font-bold">{{ $value }}</span>
     @foreach($usuarios as $u)
         <div class="ml-3">
-            <input type="checkbox" class="form-control chkuser magic-checkbox" name="lista_user[]" data-id="{{ $u->id }}" id="chk{{ $u->id }}" value="{{ $u->id }}">
-            <label class="custom-control-label"   for="chk{{ $u->id }}">{{ $u->name }}</label>
+            <div class="form-check pt-2">
+                <input name="lista_user[]" data-id="{{ $u->id }}" id="chk{{ $u->id }}" value="{{ $u->id }}" class="form-check-input" type="checkbox">
+                <label f class="form-check-label text-start" for="chk{{ $u->id }}">{{ $u->name }}</label>
+            </div>
         </div>
 
     @endforeach

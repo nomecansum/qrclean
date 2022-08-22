@@ -2,14 +2,18 @@
     $dias=['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO','DOMINGO'];
     $dias_semana=json_decode($dato->dias_semana);
 @endphp
-<div class="panel editor">
-    <div class="panel-heading">
-        <div class="panel-control">
-            <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+<div class="card editor mb-5">
+    <div class="card-header toolbar">
+        <div class="toolbar-start">
+            <h5 class="m-0">Modificar turno</h5>
         </div>
-        <h3 class="panel-title">Datos del turno</h3>
+        <div class="toolbar-end">
+            <button type="button" class="btn-close btn-close-card">
+                <span class="visually-hidden">Close the card</span>
+            </button>
+        </div>
     </div>
-    <div class="panel-body collapse show">
+    <div class="card-body collapse show">
 
         <form  action="{{url('turnos/save')}}" method="POST" class="form-ajax formturno">
             <div class="row">
@@ -23,11 +27,11 @@
                     <label for="val_color">Color</label><br>
                     <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <label for="">Fecha de efectividad (sin año)</label>
                     <div class="input-group">
-                        <input type="text" class="form-control pull-left" id="fechas" name="fechas" style="  width: 200px" value="{{ Carbon\Carbon::parse($dato->fec_inicio)->format('d/m/Y').' - '.Carbon\Carbon::parse($dato->fec_fin)->format('d/m/Y') }}">
-                        <span class="btn input-group-text btn-mint" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
+                        <input type="text" class="form-control pull-left" id="fechas" name="fechas" value="{{ Carbon\Carbon::parse($dato->fec_inicio)->format('d/m/Y').' - '.Carbon\Carbon::parse($dato->fec_fin)->format('d/m/Y') }}">
+                        <span class="btn input-group-text btn-secondary btn_fechas"  style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                     </div>
                 </div>
 
@@ -46,11 +50,13 @@
                 </div> --}}
 
             </div>
-            <div class="row d-flex flex-wrap">
+            <div class="row d-flex flex-wrap mt-4">
                 @for ($i = 1; $i < 8; $i++)
                     <div class="form-group rounded b-all text-center p-10 " style="width: 14%; margin-right: 2px" >
-                        <input type="checkbox" class="form-control  magic-checkbox chkdia" name="dia[]" id="dia{{$i}}" value="{{$i}}" {{ in_array($i,$dias_semana->dia)?'checked':'' }}> 
-                        <label class="custom-control-label"   for="dia{{$i}}"><b>{{$dias[$i-1]}}</b></label><br>
+                        <div class="form-check pt-2">
+                            <input  name="dia[]" id="dia{{$i}}" value="{{$i}}" {{ in_array($i,$dias_semana->dia)?'checked':'' }} class="form-check-input" type="checkbox">
+                            <label class="form-check-label"  for="dia{{$i}}"><b>{{$dias[$i-1]}}</b></label><br>
+                        </div>
                         <div class="form-group">
                             <label for="">Inicio</label>
                             <input type="time" name="hora_inicio[]" id="hora_inicio{{ $i }}" {{ in_array($i,$dias_semana->dia)?'':'disabled' }} class="form-control control{{ $i }}" value="{{ in_array($i,$dias_semana->dia)?$dias_semana->hora_inicio[array_search($i,$dias_semana->dia)]:'' }}">
@@ -74,7 +80,7 @@
             </div>
             
             <div class="row">
-                <div class="col-md-12 text-right" style="margin-top:32px">
+                <div class="col-md-12 text-end" style="margin-top:32px">
                     @if(checkPermissions(['Festivos'],["C"]))<button type="submit" class="btn btn-primary btnguardar">{{trans('strings.submit')}}</button>@endif
                 </div>
             </div>
@@ -103,18 +109,31 @@
     $('.form-ajax').submit(form_ajax_submit);
 
     //Date range picker
-    $('#fechas').daterangepicker({
-        autoUpdateInput: false,
-        locale: {
-            format: '{{trans("general.date_format")}}',
-            applyLabel: "OK",
-            cancelLabel: "Cancelar",
-            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-            firstDay: {{trans("general.firstDayofWeek")}}
+    var rangepicker = new Litepicker({
+        element: document.getElementById( "fechas" ),
+        singleMode: false,
+        numberOfMonths: 2,
+        numberOfColumns: 2,
+        autoApply: true,
+        format: 'DD/MM/YYYY',
+        lang: "es-ES",
+        tooltipText: {
+            one: "day",
+            other: "days"
         },
-        opens: 'right',
+        tooltipNumber: (totalDays) => {
+            return totalDays - 1;
+        },
+        setup: (rangepicker) => {
+            rangepicker.on('selected', (date1, date2) => {
+                //comprobar_puestos();
+            });
+        }
     });
+
+    $('.btn_fechas').click(function(){
+        rangepicker.show();
+    })
     
     $(".select2").select2();
 
@@ -135,7 +154,6 @@
           theme: 'bootstrap'
         });
 
-    $('.demo-psi-cross').click(function(){
-            $('.editor').hide();
-        });
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
+
 </script>

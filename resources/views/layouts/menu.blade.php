@@ -189,7 +189,7 @@
                         <li class="nav-item has-sub espacios">
                             <a href="#" class="mininav-toggle nav-link collapsed"><i class="fa-light fa-city fs-5 me-2"></i> Espacios</a>
                             <ul class="mininav-content nav collapse">
-                                @if(checkPermissions(['Clientes'],['R']))<li class="clientes text-nowrap ml-2 nav-item"><a href="/clientes" class="nav-link"><i class="fa-light fa-user-tie"></i> Clientes</a></li> @endif
+                                @if(checkPermissions(['Clientes'],['R']))<li class="clientes text-nowrap ml-2 nav-item"><a href="/clientes" class="nav-link"><i class="fa-light fa-user-tie"></i> Empresas</a></li> @endif
                                 @if(checkPermissions(['Edificios'],['R']))<li class="edificios text-nowrap ml-2 nav-item"><a href="/edificios" class="nav-link"><i class="fa-light fa-building"></i> Edificios</a></li> @endif
                                 @if(checkPermissions(['Plantas'],['R']))<li class="plantas text-nowrap ml-2 nav-item"><a href="/plantas" class="nav-link"> <i class="fa-light fa-layer-group"></i> Plantas</a></li> @endif
                                 @if(checkPermissions(['Puestos'],['R']))<li class="puestos text-nowrap ml-2 nav-item"><a href="/puestos" class="nav-link"> <i class="fa-light fa-desktop-alt"></i> Puestos</a></li> @endif

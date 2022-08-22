@@ -1,3 +1,11 @@
+<style type="text-css">
+	.center_input {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+</style>
+
 <div class="card editor mb-5" id="editor">
 	@php
 		//dd($c);
@@ -47,7 +55,7 @@
 	
 				<!--Tabs Content-->
 				<div class="tab-content">
-					<div id="demo-stk-lft-tab-1" class="tab-pane fade active show"  role="tabpanel" aria-labelledby="general-tab">
+					<div id="demo-stk-lft-tab-1" class="tab-pane fade "  role="tabpanel" aria-labelledby="general-tab">
 						<div class="row">
 							<div class="col-12">
 								<div class="row">
@@ -172,7 +180,7 @@
 									<input type="number" class="form-control" min="50" max="500"  required name="tam_qr" value="{{ $config->tam_qr??230 }}">
 								</div>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-3">
 								<div class="form-group">
 									<label for="">Layout incidencias</label>
 									<select name="val_layout incidencias" id="val_layout incidencias" class="form-control ">
@@ -192,7 +200,7 @@
 							</div>
 						</div>
 						<div class="row mt-4">
-							<div class="col-md-2">
+							<div class="col-md-3">
 								<label for="modo_visualizacion_reservas">Vista por defecto en reservas</label>
 								<select name="modo_visualizacion_reservas" id="modo_visualizacion_reservas" class="form-control" style="width: 100%">
 									<option value="M" {{ isset($config->modo_visualizacion_reservas)&&$config->modo_visualizacion_reservas=='M'?'selected':'' }}>Mosaico (Puestos)</option>
@@ -200,14 +208,14 @@
 								</select>
 							</div>
 							<div class="col-md-2">
-								<label for="modo_visualizacion_puestos">Representacion de puestos</label>
+								<label for="modo_visualizacion_puestos">Vista de puesto</label>
 								<select name="modo_visualizacion_puestos" id="modo_visualizacion_puestos" class="form-control" style="width: 100%">
 									<option value="C" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='C'?'selected':'' }}>Cuadro</option>
 									<option value="I" {{ isset($config->modo_visualizacion_puestos)&&$config->modo_visualizacion_puestos=='I'?'selected':'' }}>Icono</option>
 								</select>
 							</div>
-							<div class="col-md-2">
-								<label for="val_campo_puesto_mostrar">Mostrar en nombre de puesto</label>
+							<div class="col-md-3">
+								<label for="val_campo_puesto_mostrar">Mostrar como nombre de puesto</label><br>
 								<select name="val_campo_puesto_mostrar" id="val_campo_puesto_mostrar" class="form-control" style="width: 100%">
 									<option value="D" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='D'?'selected':'' }}>Descripcion</option>
 									<option value="I" {{ isset($config->val_campo_puesto_mostrar)&&$config->val_campo_puesto_mostrar=='I'?'selected':'' }}>Identificador</option>
@@ -219,7 +227,7 @@
 								<input type="time" autocomplete="off" name="hora_liberar_puestos" id="hora_liberar_puestos"   class="form-control" value="{{isset($config->hora_liberar_puestos)?$config->hora_liberar_puestos:'23:59'}}" />
 							</div> --}}
 							<div class="form-group col-md-2" style="{{ isset($config->mca_liberar_puestos_auto) && $config->mca_liberar_puestos_auto=='N'?'display:none':'' }}" id="grupo_liberar">
-								<label for="mca_mostrar_puestos_reservas">Mostrar puestos reservas</label><br>
+								<label for="mca_mostrar_puestos_reservas">Mostrar en reserva</label><br>
 								<select name="mca_mostrar_puestos_reservas" id="mca_mostrar_puestos_reservas" class="form-control" style="width: 100%">
 									<option value="D" {{ isset($config->mca_mostrar_puestos_reservas)&&$config->mca_mostrar_puestos_reservas=='D'?'selected':'' }}>Solo disponibles</option>
 									<option value="T" {{ isset($config->mca_mostrar_puestos_reservas)&&$config->mca_mostrar_puestos_reservas=='T'?'selected':'' }}>Todos</option>
@@ -227,7 +235,7 @@
 							</div>
 							
 							<div class="form-group col-md-2">
-								<label for="max_dias_reserva">Maximo de dias para reserva</label><br>
+								<label for="max_dias_reserva">Max de dias reserva</label><br>
 								<select name="max_dias_reserva" id="max_dias_reserva"  class="form-control ">
 									@for ($n=1;$n<=31;$n++)
 										<option value={{$n}}  {{  isset($config->max_dias_reserva)&&$config->max_dias_reserva==$n?'selected':''  }}>{{ $n }}</option>
@@ -256,13 +264,7 @@
 						</div>
 
 					</div>
-					<div id="demo-stk-lft-tab-3" class="tab-pane fade"  role="tabpanel" aria-labelledby="logos-tab">
-						<p class="text-main text-semibold">Logos</p>
-						<div class="row">
-							<div class="col-md-12 p-b-10">
-								<p class="text-main text-bold text-uppercase text-start">Logos</p>
-							</div>
-						</div>
+					<div id="demo-stk-lft-tab-3" class="tab-pane fade active show"  role="tabpanel" aria-labelledby="logos-tab">
 						<div class="row mb-0">
 							<div class="col-md-6 text-center bg-gray-light pad-all">
 								<img src="img/img_logo_grande.png" style="width: 50px"> Logo grande (Home, informes) <span style="font-size:8px"> 500px</span></label>
@@ -272,20 +274,20 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-6 text-center b-all" style="height: 244px">
+							<div class="col-md-6 text-center b-all">
 								<img src="{{ isset($c) ? Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$c->img_logo) : ''}}" style="width: 300px; margin-top: 50px" alt="" class="img-fluid ml-0">
 								<div class="form-group">
 	
-									<div class="custom-file">
+									<div class="custom-file center_input ">
 										<input type="file" accept=".jpg,.png,.gif,.svg" class="form-control  custom-file-input" name="img_logo" id="img_logo" lang="es">
 										<label class="custom-file-label" for="img_logo"></label>
 									</div>
 								</div>
 							</div>
-							<div class="col-md-6 text-center b-all"  style="height: 244px">
+							<div class="col-md-6 text-center b-all" >
 								<img src="{{ isset($c) ? Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$c->img_logo_menu) : ''}}" style="idth: 300px;  margin-top: 50px" alt="" class="img-fluid ml-0">
 								<div class="form-group">
-									<div class="custom-file">
+									<div class="custom-file center_input ">
 										<input type="file" accept=".jpg,.png,.gif,.svg" class="form-control  custom-file-input" name="img_logo_menu" id="img_logo_menu" lang="es">
 										<label class="custom-file-label" for="img_logo_menu"></label>
 									</div>

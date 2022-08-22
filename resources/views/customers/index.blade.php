@@ -4,11 +4,11 @@
 
 
 @section('styles')
-
+	
 @endsection
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Gestión de clientes</h1>
+    <h1 class="page-header text-overflow pad-no">Empresas</h1>
 @endsection
 
 @section('breadcrumb')
@@ -17,7 +17,7 @@
 	<li class="breadcrumb-item">configuración</li>
 	<li class="breadcrumb-item">parametrizacion</li>
 	<li class="breadcrumb-item">espacios</li>
-	<li class="breadcrumb-item active">clientes</li>
+	<li class="breadcrumb-item active">empresas</li>
 	{{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
 </ol>
 @endsection
@@ -47,9 +47,6 @@
 <div class="row mt-2">
 	<div class="col-12">
 		<div class="card">
-			<div class="card-header">
-				<h3 class="card-title">Clientes</h3>
-			</div>
 			<div class="card-body">
 				<table id="tabla"  data-toggle="table"
 					data-locale="es-ES"

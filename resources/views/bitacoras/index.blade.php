@@ -175,13 +175,13 @@ if (isset($r->fechas)){
                         </thead>
                         <tbody>
                         @foreach($bitacoras as $bitacora)
-                            <tr @if($bitacora->status=="error" || strpos($bitacora->accion,"ERROR:")!==false) class="bg-red color-palette" @endif>
+                            <tr >
                                 <td>{{ $bitacora->name }}</td>
                                 <td>{{ $bitacora->nom_cliente }}</td>
                                 <td>{{ $bitacora->id_modulo }}</td>
                                 <td>{{ $bitacora->id_seccion }}</td>
                                 <td style="word-break: break-all;">{{ $bitacora->accion }}</td>
-                                <td class="text-center" ><span @if(strtoupper($bitacora->status)=="OK") class="badge p-2 bg-success" @else class="badge p-2 bg-danger" @endif style="padding: 0 5px 0 5px">{{ $bitacora->status }}</span></td>
+                                <td class="text-center" ><a href="#"  onclick="ver({{ $bitacora->id_bitacora }},'{!! beauty_fecha($bitacora->fecha) !!}')"><span @if(strtoupper($bitacora->status)=="OK") class="badge p-2 bg-success" @else class="badge p-2 bg-danger" @endif style="padding: 0 5px 0 5px">{{ $bitacora->status }}</span></a></td>
                                 <td>{!! beauty_fecha($bitacora->fecha) !!}</td>
                             </tr>
                         @endforeach
@@ -190,6 +190,28 @@ if (isset($r->fechas)){
                 </div>
             </div>
         @endif
+    </div>
+
+    <div class="modal fade" id="ver_detalle" style="display: none;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                
+                <div class="modal-header">
+                    
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <span class="float-right" id="loading" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span><h1 class="modal-title text-nowrap">Entrada <span class="fecha"></span></h1>
+                    <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body" id="detalle_modal">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cerrar</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 @php
@@ -212,6 +234,13 @@ if (isset($r->fechas)){
         $('#divfiltro').toggle();
     })  
 
+    function ver(id,fecha){
+        console.log("ver");
+        $('#detalle_modal').html('<div class="text-center"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;"> LOADING</div>');
+        $('#ver_detalle').modal('show');
+        $('#detalle_modal').load('{{ url('/bitacoras/detalle') }}/'+id);
+        $('#fecha').html(fecha);
+    }
 
     var rangepicker = new Litepicker({
         element: document.getElementById( "fechas" ),

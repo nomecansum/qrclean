@@ -84,6 +84,11 @@ class BitacorasController extends Controller
         }        
     }
 
+    public function ver_entrada($id){
+        $bitacora=bitacora::find($id);
+        return view('bitacoras.ver_entrada', compact('bitacora'));
+    }
+
     protected function getData(Request $request)
     {
         $rules = [

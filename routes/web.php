@@ -146,6 +146,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'bitacoras'], function () {
         Route::get('/', 'BitacorasController@index')->name('bitacoras.bitacora.index');
         Route::post('/search', 'BitacorasController@search')->name('bitacoras.bitacora.search');
+        Route::get('/detalle/{id}', 'BitacorasController@ver_entrada')->name('bitacoras.ver_entrada');
     });
 
     ////////////////////PERFILES////////////////////

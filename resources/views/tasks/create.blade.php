@@ -178,10 +178,10 @@
 										<input value="{{isset($t) ? $t->val_timeout : '180'}}" type="number" min="0" class="form-control" name="val_timeout">
 									</div>
 								</div>
-								<div class="col-sm-2">
+								<div class="col-sm-1">
 									<div class="form-group">
 										<label>{{__('general.color')}}</label><br>
-										<input type="text" autocomplete="no" name="val_color_tarea" class="minicolors form-control" value="{{isset($t) ? $t->val_color : App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+										<input type="color" autocomplete="no" name="val_color_tarea" class="form-control" value="{{isset($t) ? $t->val_color : App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
 									</div>
 								</div>
 							</div>

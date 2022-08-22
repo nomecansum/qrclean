@@ -60,7 +60,7 @@
                 </div>
                 <div class="row mt-2">
                     
-                    <div class="form-group col-md-6 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
+                    <div class="form-group col-md-3 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
                         <label for="id_estado_inicial" class="control-label">Estado inicial</label>
                         <select class="form-control" required id="id_estado_inicial" name="id_estado_inicial">
                             @foreach ($estados as $estado)
@@ -87,19 +87,18 @@
                         <input class="form-control"  name="id_tipo_externo" type="text" id="id_tipo_externo" value="{{ old('id_tipo_externo', optional($tipo)->id_tipo_externo) }}" maxlength="200" placeholder="Enter id_tipo_externo here...">
                         {!! $errors->first('id_tipo_externo', '<p class="help-block">:message</p>') !!}
                     </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="form-group col-md-2" style="margin-top: 7px">
+                    <div class="form-group col-md-1" style="margin-top: 7px; ">
                         <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        <input type="color" autocomplete="off" name="val_color" id="val_color"  class="form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
                     <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-placement="right"  class="btn btn-light iconpicker" data-iconset-version="5.3.1_pro" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
+                            <button type="button"  role="iconpicker"  data-selectedClass="btn-warning"   data-unselectedClass="btn-primary" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-placement="bottom"  class="btn btn-light iconpicker" data-iconset-version="5.3.1_pro" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
                         </div>
                     </div>
                 </div>
+
                 <div class="row mt-2">
                     <div class="form-group  col-md-12" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
                         <label>Tipo de puesto</label>
@@ -184,22 +183,7 @@
         })
         $('#tip_metodo').change();
 
-        $('.minicolors').minicolors({
-          control: $(this).attr('data-control') || 'hue',
-          defaultValue: $(this).attr('data-defaultValue') || '',
-          format: $(this).attr('data-format') || 'hex',
-          keywords: $(this).attr('data-keywords') || '',
-          inline: $(this).attr('data-inline') === 'true',
-          letterCase: $(this).attr('data-letterCase') || 'lowercase',
-          opacity: $(this).attr('data-opacity'),
-          position: $(this).attr('data-position') || 'bottom',
-          swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
-          change: function(value, opacity) {
-            if( !value ) return;
-            if( opacity ) value += ', ' + opacity;
-          },
-          theme: 'bootstrap'
-        });
+        
 
     //$('#frm_contador').on('submit',form_ajax_submit);
     $('#frm_contador').submit(form_ajax_submit);

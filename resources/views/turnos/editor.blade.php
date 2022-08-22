@@ -23,9 +23,9 @@
                     <label for="">Nombre</label>
                     <input required type="text" name="des_turno" class="form-control" required value="{{isset($dato) ? $dato->des_turno : ''}}">
                 </div>
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-1">
                     <label for="val_color">Color</label><br>
-                    <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                    <input type="color" autocomplete="off" name="val_color" id="val_color"  class="form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                 </div>
                 <div class="form-group col-md-4">
                     <label for="">Fecha de efectividad (sin año)</label>
@@ -137,22 +137,7 @@
     
     $(".select2").select2();
 
-    $('.minicolors').minicolors({
-          control: $(this).attr('data-control') || 'hue',
-          defaultValue: $(this).attr('data-defaultValue') || '',
-          format: $(this).attr('data-format') || 'hex',
-          keywords: $(this).attr('data-keywords') || '',
-          inline: $(this).attr('data-inline') === 'true',
-          letterCase: $(this).attr('data-letterCase') || 'lowercase',
-          opacity: $(this).attr('data-opacity'),
-          position: $(this).attr('data-position') || 'bottom',
-          swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
-          change: function(value, opacity) {
-            if( !value ) return;
-            if( opacity ) value += ', ' + opacity;
-          },
-          theme: 'bootstrap'
-        });
+    
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 

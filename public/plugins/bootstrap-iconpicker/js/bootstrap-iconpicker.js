@@ -13,11 +13,11 @@
     // ICONPICKER PUBLIC CLASS DEFINITION
     // ==============================
     var Iconpicker = function (element, options) {
-
+/*
       if (typeof $.fn.popover === 'undefined' || typeof $.fn.popover.Constructor.VERSION === 'undefined') {
         throw new TypeError('Bootstrap iconpicker require Bootstrap popover');
       }
-
+*/
       this.$element = $(element);
       this.options  = $.extend({}, Iconpicker.DEFAULTS, this.$element.data());
       this.options  = $.extend({}, this.options, options);
@@ -44,7 +44,6 @@
         flagicon: $.iconset_flagicon || Iconpicker.ICONSET_EMPTY,
         fontawesome4: $.iconset_fontawesome_4 || Iconpicker.ICONSET_EMPTY,
         fontawesome5: $.iconset_fontawesome_5 || Iconpicker.ICONSET_EMPTY,
-        fontawesome6: $.iconset_fontawesome_6 || Iconpicker.ICONSET_EMPTY,
         glyphicon: $.iconset_glyphicon || Iconpicker.ICONSET_EMPTY,
         ionicon: $.iconset_ionicon || Iconpicker.ICONSET_EMPTY,
         mapicon: $.iconset_mapicon || Iconpicker.ICONSET_EMPTY,
@@ -53,8 +52,6 @@
         typicon: $.iconset_typicon || Iconpicker.ICONSET_EMPTY,
         weathericon: $.iconset_weathericon || Iconpicker.ICONSET_EMPTY
     };
-
-    
 
     // ICONPICKER DEFAULTS
     // ==============================
@@ -76,7 +73,7 @@
         search: true,
         searchText: 'Search icon',
         selectedClass: 'btn-warning',
-        unselectedClass: 'btn-secondary'
+        unselectedClass: 'btn-primary'
     };
 
     // ICONPICKER PRIVATE METHODS
@@ -95,7 +92,7 @@
             e.preventDefault();
             el.select($(this).val());
             if(op.inline === false){
-                el.$element.popover(($.fn.bsVersion() === '3.x') ? 'destroy' : 'dispose');
+                el.$element.popover('dispose');
             }
             else{
                 op.table.find("i[class$='" + $(this).val() + "']").parent().addClass(op.selectedClass);
@@ -324,7 +321,7 @@
         var search = [
             '<tr>',
             '   <td colspan="' + op.cols + '">',
-            '       <input type="text" class="form-control search-control" style="width: ' + op.cols * (($.fn.bsVersion() === '3.x') ? 39 : 41) + 'px;" placeholder="' + op.searchText + '">',
+            '       <input type="text" class="form-control search-control" style="width: ' + op.cols * (41) + 'px;" placeholder="' + op.searchText + '">',
             '   </td>',
             '</tr>'
         ];
@@ -484,8 +481,7 @@
                         .append('<i></i>')
                         .append('<input type="hidden" ' + name + '></input>')
                         .append('<span class="caret"></span>')
-                        .addClass('iconpicker ' + (($.fn.bsVersion() === '3.x') ? '' : 'dropdown-toggle'));
-
+                        .addClass('iconpicker dropdown-toggle');
                     data.setIconset(op.iconset);
                     $this.on('click', function(e) {
                         e.preventDefault();
@@ -496,16 +492,14 @@
                             content: op.table,
                             container: 'body',
                             placement: op.placement
-                        }).on('inserted.bs.popover', function() {
-                            var el = $this.data('bs.popover');
-                            var tip = ($.fn.bsVersion() === '3.x') ? el.tip() : $(el.getTipElement())
-                            tip.addClass('iconpicker-popover');
                         }).on('shown.bs.popover', function () {
                             data.switchPage(op.icon);
                             data.bindEvents();
+                            
                         });
                         //console.log($.fn.bsVersion());
                         $this.popover('show');
+                        $('.popover').attr('style', 'max-width: 1000px !important');
                     });
                 }
                 else{
@@ -526,18 +520,17 @@
 
     $.fn.iconpicker.Constructor = Iconpicker;
 
-
     // ICONPICKER NO CONFLICT
     // ==================
     $.fn.iconpicker.noConflict = function () {
         $.fn.iconpicker = old;
         return this;
     };
-
+/*
     $.fn.bsVersion = function() {
         return $.fn.popover.Constructor.VERSION.substr(0,2) + 'x';
     };
-
+*/
     // ICONPICKER DATA-API
     // ===============
     $(document).on('click', 'body', function (e) {
@@ -545,7 +538,7 @@
             //the 'is' for buttons that trigger popups
             //the 'has' for icons within a button that triggers a popup
             if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
-                $(this).popover(($.fn.bsVersion() === '3.x') ? 'destroy' : 'dispose');
+                $(this).popover('dispose');
             }
         });
     });

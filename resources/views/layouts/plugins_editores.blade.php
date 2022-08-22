@@ -1,7 +1,5 @@
     {{-- Custom file --}}
     <link href="{{ URL('/plugins/custom_file.css') }}" rel="stylesheet">
-    {{--  Colorpicker  --}}
-    <link href="{{url('/plugins/jquery-minicolors-master/jquery.minicolors.css')}}" rel="stylesheet" media="all">
     {{--  sweetAlert  --}}
     <link href="{{url('/plugins/sweetalert/dist/sweetalert2.min.css')}}" rel="stylesheet" media="all">
     {{-- Iconpicker --}}

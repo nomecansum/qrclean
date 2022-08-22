@@ -200,13 +200,11 @@
 
     <!-- Select2 -->
     <script src="{{ url('/plugins/select2/js/select2.full.min.js') }}"></script>
-    {{--  Colorpicker  --}}
-    <script src="{{url('/plugins/jquery-minicolors-master/jquery.minicolors.min.js')}}"></script>
     {{--  SweetAlert  --}}
     <script src="{{url('/plugins/sweetalert/dist/sweetalert2.all.min.js')}}"></script>
     {{-- Iconpicker --}}
     <script src="{{ asset('/plugins/bootstrap-iconpicker/js/bootstrap-iconpicker-iconset-all.min.js') }}"></script>
-    <script src="{{ asset('/plugins/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js') }}"></script>
+    <script src="{{ asset('/plugins/bootstrap-iconpicker/js/bootstrap-iconpicker.js') }}"></script>
 
     {{--  Toast  --}}
     <script src="{{url('/plugins/toast-master/js/jquery.toast.js')}}"></script>

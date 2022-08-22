@@ -24,5 +24,9 @@
         text-transform: lowercase !important;
     }
 
+    input[type=color]{
+        height: 40px;
+    }
+
 
 </style>

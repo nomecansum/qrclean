@@ -62,20 +62,20 @@
                                 
                             {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
                         </div>
-                        <div class="form-group col-md-2" style="margin-top: 7px">
+                        <div class="form-group col-md-1">
                             <label for="val_color">Color</label><br>
-                            <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                            <input type="color" autocomplete="off" name="val_color" id="val_color"  class="form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                         </div>
                         
-                        <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
+                        <div class="form-group col-md-1" style="margin-left: 10px">
                             <div class="form-group">
                                 <label>Icono</label><br>
                                 <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-align="right" data-placement="inline" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
                             </div>
                         </div>
                         @if(isAdmin())
-                        <div class="col-md-1 p-t-30 mt-1">
-                            <div class="form-check pt-1">
+                        <div class="col-md-1 p-t-30 ">
+                            <div class="form-check">
                                 <input name="mca_fijo"  id="mca_fijo" value="S" {{ $tipo->mca_fijo=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
                                 <label for="mca_fijo" class="form-check-label">Fijo</label>
                             </div>
@@ -181,24 +181,6 @@
 
     <script>
     $('.form-ajax').submit(form_ajax_submit);
-
-
-    $('.minicolors').minicolors({
-        control: $(this).attr('data-control') || 'hue',
-        defaultValue: $(this).attr('data-defaultValue') || '',
-        format: $(this).attr('data-format') || 'hex',
-        keywords: $(this).attr('data-keywords') || '',
-        inline: $(this).attr('data-inline') === 'true',
-        letterCase: $(this).attr('data-letterCase') || 'lowercase',
-        opacity: $(this).attr('data-opacity'),
-        position: $(this).attr('data-position') || 'bottom',
-        swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
-        change: function(value, opacity) {
-        if( !value ) return;
-        if( opacity ) value += ', ' + opacity;
-        },
-        theme: 'bootstrap'
-    });
 
     //$('#frm_contador').on('submit',form_ajax_submit);
     $('#frm_contador').submit(form_ajax_submit);

@@ -847,11 +847,9 @@ class IncidenciasController extends Controller
         $estados = DB::table('estados_incidencias')
             ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
             ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
-                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                        $q->orwhere('estados_incidencias.mca_fijo','S');
-                    }
+                $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('estados_incidencias.mca_fijo','S');
                 }
             })
         ->get();

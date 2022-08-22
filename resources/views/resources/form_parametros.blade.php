@@ -177,38 +177,6 @@
             allowClear: true
         });
 
-    $('.colorpicker').minicolors({
-        control: $(this).attr('data-control') || 'hue',
-        defaultValue: $(this).attr('data-defaultValue') || '',
-        format: $(this).attr('data-format') || 'hex',
-        keywords: $(this).attr('data-keywords') || '',
-        inline: $(this).attr('data-inline') === 'true',
-        letterCase: $(this).attr('data-letterCase') || 'lowercase',
-        opacity: $(this).attr('data-opacity'),
-        position: $(this).attr('data-position') || 'bottom',
-        swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
-        change: function(value, opacity) {
-        if( !value ) return;
-        if( opacity ) value += ', ' + opacity;
-        },
-        theme: 'bootstrap'
-    });
-
-    $('.singledate').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        autoUpdateInput : true,
-        autoApply: true,
-        locale: {
-            format: '{{trans("general.date_format")}}',
-            applyLabel: "OK",
-            cancelLabel: "Cancelar",
-            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-            firstDay: {{trans("general.firstDayofWeek")}}
-        },
-    });
-
     $('.textarea_editor').each(function(){$(this).wysihtml5();});
 
     $('.custom-file-input').on('change',function(){

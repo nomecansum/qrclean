@@ -49,8 +49,6 @@
     <link rel="stylesheet" href="{{ URL('/plugins/select2/css/select2.min.css') }}">
     {{--  Toast  --}}
     <link href="{{url('/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet" media="all">
-    {{--  Colorpicker  --}}
-    <link href="{{url('/plugins/jquery-minicolors-master/jquery.minicolors.css')}}" rel="stylesheet" media="all">
     {{--  sweetAlert  --}}
     <link href="{{url('/plugins/sweetalert/dist/sweetalert2.min.css')}}" rel="stylesheet" media="all">
     {{-- Iconpicker --}}
@@ -245,9 +243,6 @@
     <script src="{{ url('/plugins/select2/js/select2.full.min.js') }}"></script>
     {{--  Toast  --}}
     <script src="{{url('/plugins/toast-master/js/jquery.toast.js')}}"></script>
-    {{--  Colorpicker  --}}
-    <script src="{{url('/plugins/jquery-minicolors-master/jquery.minicolors.min.js')}}"></script>
-   
     {{--  SweetAlert  --}}
     <script src="{{url('/plugins/sweetalert/dist/sweetalert2.all.min.js')}}"></script>
     {{-- Iconpicker --}}

@@ -55,9 +55,9 @@
                         
                 </div>
                 <div class="row mt-2">
-                    <div class="form-group col-md-2" >
+                    <div class="form-group col-md-1" >
                         <label for="val_color">Color</label><br>
-                        <input type="text" autocomplete="off" name="val_color" id="val_color"  class="minicolors form-control" value="{{isset($causa->val_color)?$causa->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                        <input type="color" autocomplete="off" name="val_color" id="val_color"  class="form-control" value="{{isset($causa->val_color)?$causa->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
                     <div class="form-group col-md-1" style="margin-left: 10px">
                         <div class="form-group">
@@ -95,22 +95,7 @@
         $('.form-ajax').submit(form_ajax_submit);
         
 
-        $('.minicolors').minicolors({
-          control: $(this).attr('data-control') || 'hue',
-          defaultValue: $(this).attr('data-defaultValue') || '',
-          format: $(this).attr('data-format') || 'hex',
-          keywords: $(this).attr('data-keywords') || '',
-          inline: $(this).attr('data-inline') === 'true',
-          letterCase: $(this).attr('data-letterCase') || 'lowercase',
-          opacity: $(this).attr('data-opacity'),
-          position: $(this).attr('data-position') || 'bottom',
-          swatches: $(this).attr('data-swatches') ? $(this).attr('data-swatches').split('|') : [],
-          change: function(value, opacity) {
-            if( !value ) return;
-            if( opacity ) value += ', ' + opacity;
-          },
-          theme: 'bootstrap'
-        });
+        
 
         $('#val_icono').iconpicker({
             icon:'{{isset($causa) ? ($causa->val_icono) : ''}}'

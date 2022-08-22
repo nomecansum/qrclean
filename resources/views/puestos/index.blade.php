@@ -152,7 +152,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label for="val_color">Color</label><br>
-                                <input type="text" autocomplete="off" name="val_color" id="modif_val_color"  class="minicolors form-control" value="" />
+                                <input type="color" autocomplete="off" name="val_color" id="modif_val_color"  class="form-control" value="" />
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">

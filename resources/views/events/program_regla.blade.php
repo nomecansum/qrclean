@@ -20,14 +20,14 @@
         <label for="fec_inicio">Desde</label><br>
         <div class="input-group float-right" id="div_fechas">
             <input type="text" class="form-control pull-left singledate" name="fec_inicio"  id="fec_inicio" style="width:120px"  value="{{ isset($regla->fec_inicio) ? Carbon\Carbon::parse($regla->fec_inicio)->format('d/m/Y') : Carbon\Carbon::now()->format('d/m/Y') }}">
-            <span class="btn input-group-text btn-secondary" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+            <span class="btn input-group-text btn-secondary btn_fecha"   style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
         </div>
     </div>
     <div class="col-md-3">
         <label for="fec_inicio">Hasta</label><br>
         <div class="input-group float-right" id="div_fechas">
             <input type="text" class="form-control pull-left singledate" name="fec_fin"  id="fec_fin" style="width:120px"  value="{{ isset($regla->fec_fin) ? Carbon\Carbon::parse($regla->fec_fin)->format('d/m/Y') : Carbon\Carbon::now()->addYear()->format('d/m/Y') }}">
-            <span class="btn input-group-text btn-secondary" disabled  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+            <span class="btn input-group-text btn-secondary btn_fecha2"   style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
         </div>
     </div>
 </div>
@@ -66,27 +66,9 @@
 </div>
 
 <script>
-    $('.singledate').daterangepicker({
-        singleDatePicker: true,
-        showDropdowns: true,
-        autoUpdateInput : true,
-        autoApply: true,
-        locale: {
-            format: '{{trans("general.date_format")}}',
-            applyLabel: "OK",
-            cancelLabel: "Cancelar",
-            daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-            monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-            firstDay: {{trans("general.firstDayofWeek")}}
-        },
-    });
 
-    $('.singledate').change(function(){
-        if(Date.parse($(fec_inicio).val()) > Date.parse($(fec_fin).val())){
-        //end is less than start
-        $(fec_inicio).val($(fec_fin).val());
-        }
-    })
+    
+
 
     $('.td_dia').click(function(){
         $('*[data-dia='+$(this).data('dia')+']').each(function () { this.checked = !this.checked; });
@@ -99,4 +81,48 @@
     $('.chk_dia').click(function(){
         $(this).checked=!$(this).is('checked');
     })
+
+    $('.btn_fecha').click(function(){
+        picker.open('#fec_inicio');
+    })
+
+    $('.btn_fecha2').click(function(){
+        picker.open('#fec_fin');
+    })
+
+    function check_fechas(){
+        if(moment($('#fec_inicio').val(),"DD/MM/YYYY") > moment($('#fec_fin').val(),"DD/MM/YYYY"))
+            $('#fec_inicio').val($('#fec_fin').val());
+    }
+
+    const picker1 = MCDatepicker.create({
+        el: "#fec_inicio",
+        dateFormat: cal_formato_fecha,
+        autoClose: true,
+        closeOnBlur: true,
+        firstWeekday: 1,
+        disableWeekDays: cal_dias_deshabilitados,
+        customMonths: cal_meses,
+        customWeekDays: cal_diassemana
+    });
+
+    const picker2 = MCDatepicker.create({
+        el: "#fec_fin",
+        dateFormat: cal_formato_fecha,
+        autoClose: true,
+        closeOnBlur: true,
+        firstWeekday: 1,
+        disableWeekDays: cal_dias_deshabilitados,
+        customMonths: cal_meses,
+        customWeekDays: cal_diassemana
+    });
+
+    picker1.onSelect((date, formatedDate) => {
+        check_fechas();
+        
+    });
+
+    picker2.onSelect((date, formatedDate) => {
+        check_fechas();
+    });
 </script>

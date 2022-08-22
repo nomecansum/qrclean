@@ -353,7 +353,7 @@ class APIController extends Controller
             savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
-            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()),"API","crear_incidencia","ERROR");
+            savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()).' '.$e->getMessage(),"API","crear_incidencia","ERROR");
             return $this->respuesta_error('ERROR creando incidencia '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
     }
@@ -368,7 +368,7 @@ class APIController extends Controller
             savebitacora('Añadir accion en incidencia '.json_encode($r->all()),"API","add_accion","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
-            savebitacora('ERROR añadiendo accion a incidencia '.json_encode($r->all()),"API","add_accion","ERROR");
+            savebitacora('ERROR añadiendo accion a incidencia '.json_encode($r->all()).' '.$e->getMessage(),"API","add_accion","ERROR");
             return $this->respuesta_error('ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
         
@@ -385,7 +385,7 @@ class APIController extends Controller
             savebitacora('Cerrar incidencia incidencia '.json_encode($r->all()),"API","cerrar_ticket","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
-            savebitacora('ERROR cerrando incidencia '.json_encode($r->all()),"API","cerrar_ticket","ERROR");
+            savebitacora('ERROR cerrando incidencia '.json_encode($r->all()).' '.$e->getMessage(),"API","cerrar_ticket","ERROR");
             return $this->respuesta_error('ERROR: Ocurrio un error cerrando incidencia '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
     }
@@ -400,7 +400,7 @@ class APIController extends Controller
             savebitacora('Reabrir incidencia incidencia '.json_encode($r->all()),"API","reabrir_ticket","OK"); 
             return response()->json($respuesta);
         }catch (\Throwable $e) {
-            savebitacora('ERROR reabriendo incidencia '.json_encode($r->all()),"API","reabrir_ticket","ERROR");
+            savebitacora('ERROR reabriendo incidencia '.json_encode($r->all()).' '.$e->getMessage(),"API","reabrir_ticket","ERROR");
             return $this->respuesta_error('ERROR: Ocurrio un error reabriendo incidencia '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         } 
     }

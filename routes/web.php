@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,8 @@ Route::post('/encuestas/save_data','EncuestasController@save_data');
  //Links del footer
 Route::get('/politica','HomeController@politica');
 Route::get('/terminos','HomeController@terminos');
+
+Route::get('/send-notification', [NotificationController::class, 'sendOfferNotification']);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -530,6 +533,14 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/loadplantas', 'CombosController@loadplantas');
         Route::post('/loadpuestos', 'CombosController@loadpuestos');
         Route::get('/loadclientes','FiltrosController@loadclientes');
+    });
+
+    ////////////////////NOTIFICACIONES////////////////////
+    Route::group(['prefix' => 'notif'], function () {
+        Route::get('/', 'NotifController@index')->name('notificaciones.index');
+        Route::get('/list', 'NotifController@list')->name('notificaciones.list');
+        Route::get('/leida', 'NotifController@leida')->name('notificaciones.leida');
+
     });
 });
 

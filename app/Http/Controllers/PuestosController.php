@@ -353,7 +353,7 @@ class PuestosController extends Controller
                 //Notificar al usuario entrante
                 $usuario=users::find($r->id_usuario);
                 $str_notificacion=Auth::user()->name.' ha creado una nueva asignacion indefinida del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted';
-                notificar_usuario($usuario,"Se le ha asignado un nuevo puesto de forma indefinida",'emails.asignacion_puesto',$str_notificacion,1);
+                notificar_usuario($usuario,"Se le ha asignado un nuevo puesto de forma indefinida",'emails.asignacion_puesto',$str_notificacion,[1],4,[],$puesto->id_puesto);
                
             } else {
 
@@ -949,9 +949,10 @@ class PuestosController extends Controller
                 }
             }
 
+
         foreach($usuarios as $u){
             limpiadores::create(['id_ronda'=>$ronda->id_ronda,'id_limpiador'=>$u->id]);
-            notificar_usuario($u,'Creada nueva ronda de limpieza','emails.asignacion_puesto',$body,1);
+            notificar_usuario($u,'Creada nueva ronda de limpieza','emails.asignacion_puesto',$body,[1],5,[],$ronda->id_ronda);
         }
         foreach($puestos as $p){
             puestos_ronda::create(['id_ronda'=>$ronda->id_ronda,'fec_inicio'=>Carbon::now(),'id_puesto'=>$p->id_puesto]);

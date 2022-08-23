@@ -684,15 +684,12 @@ class HomeController extends Controller
     }
 
     public function check_notificaciones(){
-        $notificaciones=DB::table('notificaciones')
-            ->where('id_usuario',Auth::user()->id)
-            ->where('fec_notificacion',Carbon::now()->format('Y-m-d'))
-            ->get();
-        if($notificaciones){
-            return 1;
-        }else{
-            return 0;
-        }
+        $reservas=\App\Http\Controllers\UsersController::mis_puestos(auth()->user()->id)['mispuestos'];
+        session(['reservas'=>$reservas]);
+
+        $notificaciones=cuenta_notificaciones();
+            
+        return response()->json($notificaciones);
     }
 
 }

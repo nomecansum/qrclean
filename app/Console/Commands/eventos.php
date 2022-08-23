@@ -190,7 +190,7 @@ class eventos extends Command
             $max_iteracion=DB::table('eventos_acciones')->where('cod_regla',$evento->cod_regla)->max('val_iteracion');
             Log::debug('Iteraciones maximas de la regla: '.$max_iteracion);
             //Sacamos las acciones para la iteracion
-            $acciones=DB::table('eventos_acciones')->where('cod_regla',$evento->cod_regla)->get();
+            $acciones=DB::table('eventos_acciones')->where('cod_regla',$evento->cod_regla)->wherenotnull('nom_accion')->get();
             //Y sacamos la iteracion en que que esta cada ID
             $evolucion=DB::table('eventos_evolucion_id')->where('cod_regla',$evento->cod_regla)->get();
             //Vamos a hacer las acciones

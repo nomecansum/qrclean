@@ -174,7 +174,7 @@ class liberarReserva extends Command
             savebitacora('Anulada reserva # '.$res->id_reserva.' de '.$res->name.' para el puesto '.$res->cod_puesto.' por no utilizarla a tiempo ['.Carbon::parse($res->fec_reserva)->format('d/m/Y H:i').'] -> ['.Carbon::now()->format('d/m/Y H:i').']',"Tareas programadas","liberarReserva","OK");
             $body="<span class='super_negrita'>Se ha anulado su reserva....<br></span>Le notificamos que <span class='super_negrita'>su reserva del puesto ".$res->cod_puesto." que tenía para hoy a las ".Carbon::parse($res->fec_reserva)->format('d/m/Y H:i')." ha sido anulada</span> porque a las ".Carbon::now()->format('d/m/Y H:i')." (".Carbon::now()->diffForHumans(Carbon::parse($res->fec_reserva)).") no consta que haya hecho uso del puesto.<br>".chr(13);
             $body.="<span class='super_negrita'>Si quiere seguir haciendo uso del puesto puede volver a reservarlo</span> o acceder a el directamente, siempre que no haya sido reservado por otro usuario";
-            notificar_usuario($res,'Anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1,"alerta_03");
+            notificar_usuario($res,'Anulacion de su reserva de puesto','emails.asignacion_puesto',$body,[1],3,[],$res->id_reserva);
         }
 
         $lista_reservas=$reservas->pluck('id_reserva')->toArray();
@@ -211,7 +211,7 @@ class liberarReserva extends Command
             $body="<span class='super_negrita'>No se ha hecho el check-in....<br></span>Estimado usuario:<br><span class='super_negrita'>No consta que haya hecho ckeck-in del puesto ".$res->cod_puesto." </span>que tenía para hoy a las ".Carbon::parse($res->fec_reserva)->format('d/m/Y H:i')." le recordamos que si no hace uso del mismo ".$val_minutos." despues de la hora en la que lo tenia reservado, se anulará automáticamente su reserva y el puesto podrá ser reservado por otra persona<br>".chr(13);
             $body.="Le recordamos que si no hace uso del mismo 20 minutos después de la hora a la que lo tenía reservado, se anulará automáticamente su reserva y el puesto podrá ser reservado por otra persona.<br>".chr(13);
             $body.="Si quiere seguir haciendo uso del puesto puede volver a reservarlo o acceder a el directamente, siempre que no haya sido reservado por otro usuario";
-            notificar_usuario($res,'Preaviso de anulacion de su reserva de puesto','emails.asignacion_puesto',$body,1,"alerta_03");
+            notificar_usuario($res,'Preaviso de anulacion de su reserva de puesto','emails.asignacion_puesto',$body,[1],3,[],$res->id_reserva);
         }
 
         //Ahora buscamos los puestos que deben liberarse automaticamente

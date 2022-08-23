@@ -62,15 +62,17 @@
         <div class="header__content-end">
 
             <!-- Notification Dropdown -->
-            {{-- <div class="dropdown">
+            <div class="dropdown">
 
+                @php
+                    $cn=cuenta_notificaciones();
+                @endphp
                 <!-- Toggler -->
-                <button class="header__btn btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="header__btn btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="btn_notif">
                     <span class="d-block position-relative">
                         <i class="demo-psi-bell"></i>
-                        <span class="badge badge-super rounded bg-danger p-1">
-
-                            <span class="visually-hidden">unread messages</span>
+                        <span class="badge badge-super rounded bg-danger p-1" id="badge_notificaciones" style="{{ count($cn)>0?'':'display:none' }}" >
+                            <span class="cuenta_notificaciones">{{ count($cn)>0?count($cn):'' }}</span><span class="visually-hidden">unread messages</span>
                         </span>
                     </span>
                 </button>
@@ -78,74 +80,16 @@
                 <!-- Notification dropdown menu -->
                 <div class="dropdown-menu dropdown-menu-end w-md-300px">
                     <div class="border-bottom px-3 py-3 mb-3">
-                        <h5>Notifications</h5>
+                        <h5>Notificaciones</h5>
                     </div>
 
-                    <div class="list-group list-group-borderless">
+                    <div class="list-group list-group-borderless" id="lista_notif">
 
-                        <!-- List item -->
-                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
-                            <div class="flex-shrink-0 me-3">
-                                <i class="demo-pli-data-settings fs-2"></i>
-                            </div>
-                            <div class="flex-grow-1 ">
-                                <a href="#" class="h6 d-block mb-0 stretched-link text-decoration-none">Your storage is full</a>
-                                <small class="text-muted">Local storage is nearly full.</small>
-                            </div>
-                        </div>
-
-                        <!-- List item -->
-                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
-                            <div class="flex-shrink-0 me-3">
-                                <i class="demo-pli-file-edit fs-2"></i>
-                            </div>
-                            <div class="flex-grow-1 ">
-                                <a href="#" class="h6 d-block mb-0 stretched-link text-decoration-none">Writing a New Article</a>
-                                <small class="text-muted">Wrote a news article for the John Mike</small>
-                            </div>
-                        </div>
-
-                        <!-- List item -->
-                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
-                            <div class="flex-shrink-0 me-3">
-                                <i class="demo-pli-speech-bubble-7 fs-2"></i>
-                            </div>
-                            <div class="flex-grow-1 ">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <a href="#" class="h6 mb-0 stretched-link text-decoration-none">Comment sorting</a>
-                                    <span class="badge bg-info rounded ms-auto">NEW</span>
-                                </div>
-                                <small class="text-muted">You have 1,256 unsorted comments.</small>
-                            </div>
-                        </div>
-
-                        <!-- List item -->
-                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
-                            <div class="flex-shrink-0 me-3">
-                                <img class="img-xs rounded-circle" src="./assets/img/profile-photos/7.png" alt="Profile Picture" loading="lazy">
-                            </div>
-                            <div class="flex-grow-1 ">
-                                <a href="#" class="h6 d-block mb-0 stretched-link text-decoration-none">Lucy Sent you a message</a>
-                                <small class="text-muted">30 minutes ago</small>
-                            </div>
-                        </div>
-
-                        <!-- List item -->
-                        <div class="list-group-item list-group-item-action d-flex align-items-start mb-3">
-                            <div class="flex-shrink-0 me-3">
-                                <img class="img-xs rounded-circle" src="./assets/img/profile-photos/3.png" alt="Profile Picture" loading="lazy">
-                            </div>
-                            <div class="flex-grow-1 ">
-                                <a href="#" class="h6 d-block mb-0 stretched-link text-decoration-none">Jackson Sent you a message</a>
-                                <small class="text-muted">1 hours ago</small>
-                            </div>
-                        </div>
-
-                        <a href="#" class="btn btn-link shadow-none">Show all Notifications</a>
 
                     </div>
+                    <a href="{{ url('/notif') }}" class="btn btn-link shadow-none">Ver todas las notificaciones</a>
                 </div>
-            </div> --}}
+            </div>
             <!-- End - Notification dropdown -->
 
            <!-- User dropdown -->
@@ -200,7 +144,7 @@
 
                             <!-- User menu link -->
                             <div class="list-group list-group-borderless h-100 py-3">
-                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <a href="{{ url('/notif') }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                                     <span><i class="fa-light fa-bell fs-5 me-3"></i> Avisos</span>
                                     <span class="badge bg-danger rounded-pill cuenta_notificaciones">0</span>
                                 </a>

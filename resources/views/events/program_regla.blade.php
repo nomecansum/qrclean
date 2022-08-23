@@ -66,16 +66,12 @@
 </div>
 
 <script>
-
-    
-
-
     $('.td_dia').click(function(){
-        $('*[data-dia='+$(this).data('dia')+']').each(function () { this.checked = !this.checked; });
+        $('[data-dia='+$(this).data('dia')+']').each(function () { this.checked = !this.checked; });
     })
 
     $('.td_hora').click(function(){
-        $('*[data-hora='+$(this).data('hora')+']').each(function () { this.checked = !this.checked; });
+        $('[data-hora='+$(this).data('hora')+']').each(function () { this.checked = !this.checked; });
     })
 
     $('.chk_dia').click(function(){

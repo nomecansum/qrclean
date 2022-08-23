@@ -9,6 +9,8 @@ use App\Models\salas;
 use App\Models\puestos;
 use App\Models\config_clientes;
 use App\Models\clientes;
+use App\Models\notif;
+use App\Models\notificaciones_tipos;
 use Jenssegers\Agent\Agent;
 
 function stripAccents($str) {
@@ -419,34 +421,59 @@ function enviar_email($user,$from,$to,$to_name,$subject,$plantilla,$error=null,$
     return true;
 }
 
-function notificar_usuario($user,$subject,$plantilla,$body,$metodo=1,$triangulo="alerta_05",$attachments=[]){
+function insertar_notificacion_web($user,$tipo,$texto,$id){
+    $notif=DB::table('notificaciones')->insertGetId(
+        [
+            'id_usuario'=>$user,
+            'id_tipo_notificacion'=>$tipo,
+            'txt_notificacion'=>$texto,
+            'fec_notificacion'=>Carbon::now(),
+            'mca_leida'=>'N',
+            'url_notificacion'=>url(notificaciones_tipos::find($tipo)->url_base??'/',$id)
+        ]
+    );
+
+}
+
+function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$attachments=[],$id=null){
     try{
-        switch ($metodo) {
-            case 0:
-                //No hacer nada
-            break;
-            case 1: //Mail
-                $cliente=clientes::find($user->id_cliente);
-                \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'triangulo'=>$triangulo], function ($m) use ($user,$subject) {
-                    if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
-                        $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
-                    } else {
-                        $m->to($user->email, $user->name)->subject($subject);
-                    }
-                    $m->from(config('mail.from.address'),config('mail.from.name'));
-                });
+        
+        //Añadimos notificacion en la web
+        insertar_notificacion_web($user->id,$tipo,$body,$id);
+
+
+        foreach($metodo as $m){
+            switch ($m) {
+                case 0:
+                    //No hacer nada
                 break;
-            case 2:
-            case 3:  //Notificacion push
-                # code...
-                break;
+                case 1: //Mail
+                    $cliente=clientes::find($user->id_cliente);
+                    \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'triangulo'=>$triangulo], function ($m) use ($user,$subject) {
+                        if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
+                            $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
+                        } else {
+                            $m->to($user->email, $user->name)->subject($subject);
+                        }
+                        $m->from(config('mail.from.address'),config('mail.from.name'));
+                    });
+                    break;
+                case 2:
+                case 3:  //Notificacion push
+                    # code...
+                    break;
+            }
+
         }
+        
     } catch(\Exception $e){
         //dump($e);
         return $e->getMessage();
     }
     return true;
 }
+
+
 
 function tags($string, $encoding = 'UTF-8'){
     $string = trim(strip_tags(html_entity_decode(urldecode($string))));
@@ -1419,4 +1446,18 @@ function clase_sticky(){
         } catch(\Throwable $e){
         return '';
     }
+}
+
+function cuenta_notificaciones(){
+    $notificaciones=DB::table('notificaciones')
+        ->select('notificaciones.id_notificacion')
+        ->join('notificaciones_tipos','notificaciones.id_tipo_notificacion','notificaciones_tipos.id_tipo_notificacion')
+        ->where('id_usuario',Auth::user()->id)
+        ->where('mca_leida','N')
+        ->orderby('notificaciones_tipos.val_prioridad')
+        ->orderby('notificaciones.fec_notificacion','desc')
+        ->get();
+
+    return $notificaciones;
+    
 }

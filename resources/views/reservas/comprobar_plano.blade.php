@@ -167,7 +167,7 @@
    
    @if(isset($r->id_reserva)&&$r->id_reserva!=0)
     $(function(){
-            $('#puesto{{ $id_puesto_edit }}').addClass('glow');
+        $('#puesto{{ $id_puesto_edit }}').addClass('glow');
     })
    @endif
     

@@ -533,6 +533,7 @@ class ReservasController extends Controller
             $res->id_cliente=Auth::user()->id_cliente;
             $res->save();
             savebitacora('Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,"Reservas","save","OK");
+            insertar_notificacion_web($res->id_usuario,2,'Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,$res->id_reserva);
             $id_reserva[]=$res->id_reserva;
         }
         enviar_mail_reserva($res->id_reserva,$r->mca_ical);
@@ -752,7 +753,7 @@ class ReservasController extends Controller
         }
         savebitacora('Reserva  de puesto '.$r->des_puesto.' creada para el usuario '.$usuario->name.' para el periodo  '.$r->desde.' - '.$r->hasta.". ".$cuenta." dias reservados","Reservas","asignar_reserva_multiple","OK");
         $str_notificacion=Auth::user()->name.' ha creado una Reserva  del puesto '.$r->des_puesto.' para usted en el periodo  '.$r->desde.' - '.$r->hasta.". ".$cuenta." dias reservados";
-        notificar_usuario($usuario,"<span class='super_negrita'>Asignacion de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'Se le ha asignado un nuevo puesto</span>",'emails.asignacion_puesto',$str_notificacion,1,"alerta_05");
+        notificar_usuario($usuario,"<span class='super_negrita'>Asignacion de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'Se le ha asignado un nuevo puesto</span>",'emails.asignacion_puesto',$str_notificacion,[1],2,[],$res->id_reserva);
         return [
             'title' => "Reservas",
             'message' => 'Reserva  de puesto '.$r->des_puesto.' creada para el usuario '.$usuario->name.' para el periodo  '.$r->desde.' - '.$r->hasta.". ".$cuenta." dias reservados",
@@ -831,7 +832,7 @@ class ReservasController extends Controller
                 $user_puesto=users::find($res->id_usuario);
                 $str_notificacion=Auth::user()->name.' ha realizado una cancelacion masiva de reservas ';
                 $str_respuesta=' Se ha cancelado su reserva de puesto que tenía para el día '.Carbon::parse($res->fec_reserva)->format('d/m/Y');
-                notificar_usuario($user_puesto,"<span class='super_negrita'>Cambio en su reserva de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'>Se han producido cambios en su reserva de puesto</span>",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,1,"alerta_03"); 
+                notificar_usuario($user_puesto,"<span class='super_negrita'>Cambio en su reserva de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'>Se han producido cambios en su reserva de puesto</span>",'emails.asignacion_puesto',$str_notificacion.$str_respuesta,[1],2,[],$res->id_reserva); 
             }
             savebitacora(" Se han eliminado las reservas para ".count($r->lista_id).'puestos ['.implode(",",$r->lista_id).']en el intervalo'.$r->rango.' por cancelacion masiva creada por '.Auth::user()->name,"Usuarios","reservas_multiples_admin","OK");
             return [
@@ -908,7 +909,7 @@ class ReservasController extends Controller
                     }
                     $usuario=users::find($r->id_usuario);
                     $str_notificacion=Auth::user()->name.' ha creado una nueva reserva de los puestos '.implode(",",$lista_nombres_puestos).' para usted en el intervalo '.$r->rango;
-                    notificar_usuario($usuario,"<span class='super_negrita'>Reserva de puesto creada por administrador....<br></span>Estimado usuario:<br><span class='super_negrita'>Se le ha reservado un nuevo puesto</span>",'emails.asignacion_puesto',$str_notificacion,1,"alerta_05");
+                    notificar_usuario($usuario,"<span class='super_negrita'>Reserva de puesto creada por administrador....<br></span>Estimado usuario:<br><span class='super_negrita'>Se le ha reservado un nuevo puesto</span>",'emails.asignacion_puesto',$str_notificacion,[1],2,[],$res->id_reserva);
                     $mensaje="Se han creado ".count($lista_nombres_puestos)." reservas de ".(count($r->lista_id)-count(array_unique($lista_puestos_pillados))).' puestos para el usuario '.$usuario->name.' y el intervalo '.$r->rango;
                     if(count($lista_puestos_pillados)>0){
                         $mensaje.="<br>Se detectaron ".count($lista_puestos_pillados)." conflictos con otras reservas realizadas por otros usuarios o puestos asignados a nominalmente a usuarios durante este proceso en alguna de las fechas, por lo tanto no pueden ser reservados";

@@ -193,6 +193,7 @@
     })
 
 
+    //////////////////////////////LOGICA DE GESTION DE FORMS CON AJAX/////////////////////////////
     $('.form-ajax').submit(form_ajax_submit);
 
     //Form enviado por AJAX con notificaciones mediabte TOAST
@@ -357,6 +358,52 @@
 
     }
 
+    //formularios de informes
+    $('.ajax-filter').submit(function(event) {
+        block_espere("Obteniendo datos...");
+        let form = $(this);
+        let tipo = form.find('[name="output"]').val();
+
+        if (tipo == 'pantalla') {
+            event.preventDefault();
+        }
+        $('#action_orig').val($(this).attr('action'));
+
+        $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
+            block_espere("Renderizando datos...");
+            @if (checkPermissions(['Informes programados'],["W"]))
+                if($('#div_programar_informe').length)
+                {
+                    $('#request_orig').val(request_orig);
+                    $('#div_programar_informe').show();
+                    animateCSS('#div_programar_informe','bounceInRight');
+                }
+            @endif
+            if($('.btn_print').length)
+            {
+                $('.btn_print').show();
+                animateCSS('.btn_print','zoomIn');
+            }
+
+            if (tipo == 'pantalla') {
+                $('#myFilter').html(data);
+                $('#divfiltro').toggle();
+            }
+            fin_espere();
+
+        })
+        .fail(function(err) {
+            let error = JSON.parse(err.responseText);
+            console.log(error);
+
+            toast_error("{{trans('strings.error')}}",error.message);
+        })
+        .always(function() {
+            fin_espere();
+            //console.log("complete");
+            form.find('[type="submit"]').attr('disabled',false);
+        });
+    });
 
     $('#loginform,#recoverform').submit(function(event) {
         event.preventDefault();
@@ -384,7 +431,15 @@
             $('#spin_login').hide();
         });
     });
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    $('.btn_print').click(function(){
+        $('#myFilter').printThis({
+            importCSS: true,
+            importStyle: true,
+            footer: "<img src='{{ url('/img/Mosaic_brand_20.png') }}' class='float-right'>"
+        });
+    })
 
     function setCookie(name,value,days) {
         var expires = "";
@@ -457,82 +512,34 @@
             return 'pink';
     }
 
-    //formularios de informes
 
-    $('.ajax-filter').submit(function(event) {
-        block_espere("Obteniendo datos...");
-        let form = $(this);
-        let tipo = form.find('[name="output"]').val();
-
-        if (tipo == 'pantalla') {
-            event.preventDefault();
-        }
-        $('#action_orig').val($(this).attr('action'));
-
-        $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
-            block_espere("Renderizando datos...");
-            @if (checkPermissions(['Informes programados'],["W"]))
-                if($('#div_programar_informe').length)
-                {
-                    $('#request_orig').val(request_orig);
-                    $('#div_programar_informe').show();
-                    animateCSS('#div_programar_informe','bounceInRight');
-                }
-            @endif
-            if($('.btn_print').length)
-            {
-                $('.btn_print').show();
-                animateCSS('.btn_print','zoomIn');
-            }
-
-            if (tipo == 'pantalla') {
-                $('#myFilter').html(data);
-                $('#divfiltro').toggle();
-            }
-            fin_espere();
-
+    //Comprobacion de notificaciones
+    notif=setInterval(() => {
+        fetch('{{url('/check')}}')
+        .then(response => response.json())
+        .then(function(response){
+            $('.cuenta_notificaciones').html(response.length);
         })
-        .fail(function(err) {
-            let error = JSON.parse(err.responseText);
-            console.log(error);
+    }, 45000);
 
-            toast_error("{{trans('strings.error')}}",error.message);
-        })
-        .always(function() {
-            fin_espere();
-            //console.log("complete");
-            form.find('[type="submit"]').attr('disabled',false);
-        });
+
+    //Boton de notificaicones en el header
+    $('#btn_notif').click(function(){
+        $('#div_notif').toggle();
+        $('#lista_notif').load("{{ url('/notif/list') }}");
     });
-
-    $('.btn_print').click(function(){
-        $('#myFilter').printThis({
-            importCSS: true,
-            importStyle: true,
-            footer: "<img src='{{ url('/img/Mosaic_brand_20.png') }}' class='float-right'>"
-        });
-    })
-
-    /**
-     * Pseudo-random string generator
-     * http://stackoverflow.com/a/27872144/383904
-     * Default: return a random alpha-numeric string
-     * 
-     * @param {Integer} len Desired length
-     * @param {String} an Optional (alphanumeric), "a" (alpha), "n" (numeric)
-     * @return {String}
-     */
+     //Pseudo-random string generator para passwords
     function randomString(len, an) {
-    an = an && an.toLowerCase();
-    var str = "",
-        i = 0,
-        min = an == "a" ? 10 : 0,
-        max = an == "n" ? 10 : 62;
-    for (; i++ < len;) {
-        var r = Math.random() * (max - min) + min << 0;
-        str += String.fromCharCode(r += r > 9 ? r < 36 ? 55 : 61 : 48);
-    }
-    return str;
+        an = an && an.toLowerCase();
+        var str = "",
+            i = 0,
+            min = an == "a" ? 10 : 0,
+            max = an == "n" ? 10 : 62;
+        for (; i++ < len;) {
+            var r = Math.random() * (max - min) + min << 0;
+            str += String.fromCharCode(r += r > 9 ? r < 36 ? 55 : 61 : 48);
+            }
+        return str;
     }
 
     function recolocar_puestos(posiciones){

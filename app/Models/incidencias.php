@@ -52,7 +52,8 @@ class incidencias extends Model
                   'id_incidencia_salas',
                   'url_detalle_incidencia',
                   'val_procedencia',
-                  'val_prioridad'
+                  'val_prioridad',
+                  'fec_audit'
               ];
 
     /**

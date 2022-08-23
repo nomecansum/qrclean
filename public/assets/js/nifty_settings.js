@@ -123,39 +123,6 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
 
 
 
-
-
-    // ADDITIONAL OFFCANVAS
-    // ----------------------------------------------
-    // HINT : Please visit Bootstrap's documentation for more information and examples.
-    // https://getbootstrap.com/docs/5.0/components/offcanvas/
-
-    const offCanvasDemo     = document.getElementById( "_dm-offcanvas" );
-    const bsOffcanvas       = new bootstrap.Offcanvas( offCanvasDemo );
-
-    const settingToggler    = document.getElementById( "_dm-settingsToggler" );
-    const settingContainer  = document.getElementById( "_dm-settingsContainer" );
-
-    [...document.querySelectorAll( "._dm-offcanvasBtn" )].map( ( _btn ) => {
-        _btn.addEventListener( "click", () => {
-
-                // Set the offcanvas position to the user's choice.
-                offCanvasDemo.className = `offcanvas ${ _btn.value }`;
-                offCanvasDemo.style = "transition-duration: 0s";
-
-
-                // Hide the settings container and then show the additional offCanvas.
-                settingToggler.dispatchEvent( new Event( "click" ) );
-                settingContainer.addEventListener( "transitionend", () => {
-                    offCanvasDemo.style = "";
-                    bsOffcanvas.show();
-                }, { once : true } )
-
-        })
-    } );
-
-
-
     // STICKY NAVIGATION
     // ----------------------------------------------
     // HINT : Toggle the .mn--sticky class on #root element.

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class modelo extends Model
+class notif extends Model
 {
     
     /**

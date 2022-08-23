@@ -6,6 +6,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>{{ config('app.name') }}</title>
+    <link rel="shortcut icon" type="image/jpg" href="/img/logo.png"/>
 
     <!-- STYLESHEETS -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~--- -->
@@ -228,6 +229,10 @@
     {{-- switchery switchs deslizable --}}
     <script src="{{ asset('/plugins/switchery/switchery.min.js') }}"></script>
  
+    @auth
+    <script charset="UTF-8" src="//web.webpushs.com/js/push/3db5bf16706bf2e654b7ece99765ab72_1.js" async></script>
+    @endauth
+
      @include('layouts.main_scripts')
      @yield('scripts')
      @yield('scripts2')

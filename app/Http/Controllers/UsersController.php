@@ -1518,6 +1518,10 @@ class UsersController extends Controller
             $u->theme=json_encode($r->all());
         }else{
             $u->theme=json_decode($u->theme);
+            //El tema azul que no lleva nada
+            if(isset($r->tema) && $r->tema=="/color-schemes/"){
+                $r->tema="";
+            }
             if (isset($r->tema)) $u->theme->tema=$r->tema;
             if (isset($r->tema) && ($r->tema=='/color-schemes/light') ){
                 $u->theme->esquema='';

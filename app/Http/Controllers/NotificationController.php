@@ -1,9 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Users;
 use Notification;
 use App\Notifications\OffersNotification;
+
 class NotificationController extends Controller
 {
     public function __construct()
@@ -17,7 +18,7 @@ class NotificationController extends Controller
     }
     
     public function sendOfferNotification() {
-        $userSchema = User::first();
+        $userSchema = Users::first();
   
         $offerData = [
             'name' => 'BOGO',

@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Gestión de cámaras</h1>
+    <h1 class="page-header text-overflow pad-no">Pagina de prueba</h1>
 @endsection
 
 @section('styles')
@@ -26,7 +26,7 @@
         <h3 class="card-title">Titulo</h3>
     </div>
     <div class="card-body">
-       @php
+       {{-- @php
            $icons=[];
            $json=file_get_contents(public_path('/plugins/fontawesome6/metadata/categories.json'));
            $json=json_decode($json);
@@ -39,6 +39,13 @@
            }
            $icons=array_unique($icons);
            dd(json_encode(array_values($icons)));
+       @endphp --}}
+
+       @php
+           use App\Notifications\WebPushNotification;
+           $user = \App\User::find(14);
+
+           $user->notify(new WebPushNotification);
        @endphp
     </div>
 </div>

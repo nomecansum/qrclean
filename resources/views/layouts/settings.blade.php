@@ -346,7 +346,7 @@
                                 <div class="_dm-colorSchemesMode__colors">
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <button class="_dm-themeColors _dm-box-xs _dm-bg-gray" type="button" data-dir="all-headers/gray" data-hd="expanded"></button>
-                                        <button class="_dm-themeColors _dm-box-xs _dm-bg-navy active" type="button" data-dir="" data-hd="expanded"></button>
+                                        <button class="_dm-themeColors _dm-box-xs _dm-bg-navy" type="button" data-dir="" data-hd="expanded"></button>
                                         <button class="_dm-themeColors _dm-box-xs _dm-bg-ocean" type="button" data-dir="all-headers/ocean" data-hd="expanded"></button>
                                         <button class="_dm-themeColors _dm-box-xs _dm-bg-lime" type="button" data-dir="all-headers/lime" data-hd="expanded"></button>
 

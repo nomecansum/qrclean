@@ -8,7 +8,6 @@
 
     <title>Lock Screen | Nifty - Admin Template</title>
 
-
     <!--STYLESHEET-->
     <!--=================================================-->
 
@@ -17,7 +16,7 @@
 
 
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    @if(session('template')!==null && isset(session('template')->esquema)) <link rel="stylesheet" href="{{ asset('/assets/css'.session('template')->esquema.'/bootstrap.min.css') }}"> @else <link rel="stylesheet" href="{{ asset('/assets/css/bootstrap.min.css') }}"> @endif
 
 
     <!--Nifty Stylesheet [ REQUIRED ]-->
@@ -82,35 +81,40 @@
 		
 		<!-- LOCK SCREEN -->
 		<!--===================================================-->
-		<div class="cls-content">
+		<div class="cls-content" style=" backgroud-color: none">
 		    <div class="cls-content-sm panel">
 		        <div class="card-body">
-		            <div class="mar-ver pad-btm">
-		                <h1 class="h3">{{ Auth::user()->name }}</h1>
-		                <span>{{ DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->des_nivel_acceso }}</span>
-		            </div>
-		            <div class="pad-btm mar-btm">
-                        
-                        @if(Auth::user()->img_usuario!="" && file_exists( public_path().'/img/users/'.Auth::user()->img_usuario))
-                        <img alt="Profile Picture" class="img-lg img-circle img-border-light" src="{{url('/img/users/'.Auth::user()->img_usuario)}}">
-                        @else
-                        {!! icono_nombre(Auth::user()->name) !!}
-                        @endif
-		            </div>
-		            <p>Introduzca su password para desbloquear!</p>
-                    <form method="POST" id="loginform" action="{{ route('login') }}">
-                        @csrf
-                        <input type="hidden" class="form-control"  name="email" value="{{ Auth::user()->email }}" required autocomplete="email" autofocus>
-		                <div class="form-group">
-		                    <input type="password" class="form-control" placeholder="Password">
-		                </div>
-		                <div class="form-group text-end">
-		                    <button class="btn btn-block btn-lg btn-success" type="submit">Login In</button>
-		                </div>
-		            </form>
-		            <div class="pad-ver">
-		                <a href="{{ url('/login') }}" class="btn-link mar-rgt text-bold">Utilizar una cuenta distinta</a>
-		            </div>
+                    <div class="card border-primary">
+                        <div class="card-body">
+                            <div class="mar-ver pad-btm">
+                                <h1 class="h3">{{ Auth::user()->name }}</h1>
+                                <span>{{ DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->des_nivel_acceso }}</span>
+                            </div>
+                            <div class="pad-btm mar-btm">
+                                
+                                @if (isset(Auth::user()->img_usuario ) && Auth::user()->img_usuario!='')
+                                    <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.Auth::user()->img_usuario) }}" id="main_user_image" class="img-md rounded-circle">
+                                @else
+                                    {!! icono_nombre(Auth::user()->name) !!}
+                                @endif
+                            </div>
+                            <p>Introduzca su password para desbloquear!</p>
+                            <form method="POST" id="loginform" action="{{ route('login') }}">
+                                @csrf
+                                <input type="hidden" class="form-control"  name="email" value="{{ Auth::user()->email }}" required autocomplete="email" autofocus>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" placeholder="Password">
+                                </div>
+                                <div class="form-group text-center mt-3">
+                                    <button class="btn btn-block btn-lg btn-success" type="submit">Login In</button>
+                                </div>
+                            </form>
+                            <div class="pad-ver">
+                                <a href="{{ url('/login') }}" class="btn-link mar-rgt text-bold">Utilizar una cuenta distinta</a>
+                            </div>
+                        </div>
+                    </div>
+		            
 		        </div>
 		    </div>
 		</div>

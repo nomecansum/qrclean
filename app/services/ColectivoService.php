@@ -1,5 +1,5 @@
 <?php
-namespace App\Services;
+namespace App\services;
 use DB;
 use Validator;
 use App\User;

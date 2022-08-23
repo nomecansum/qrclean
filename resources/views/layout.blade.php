@@ -58,9 +58,7 @@
     @yield('styles2')
     @include('layouts.styles')
     {{-- Worker de Sendpush --}}
-    @auth
-    <script charset="UTF-8" src="//web.webpushs.com/js/push/3db5bf16706bf2e654b7ece99765ab72_1.js" async></script>
-    @endauth
+    <script charset="UTF-8" src="https://web.webpushs.com/js/push/3db5bf16706bf2e654b7ece99765ab72_1.js" async></script>
 </head>
 
 <body class="in-out-back {{ clase_body() }}" {!! image_body() !!}>

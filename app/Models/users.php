@@ -54,7 +54,8 @@ class users extends Model
                   'token_expires',
                   'val_timezone',
                   'val_vista_puestos',
-                  'id_departamento'
+                  'id_departamento',
+                  'previous_login',
               ];
 
     /**
@@ -63,7 +64,7 @@ class users extends Model
      * @var array
      */
     protected $dates = ['email_expire_at',
-    'email_verified_at','last_login'];
+    'email_verified_at','last_login','previous_login'];
     
     /**
      * The attributes that should be cast to native types.

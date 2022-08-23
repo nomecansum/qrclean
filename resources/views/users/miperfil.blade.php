@@ -59,11 +59,13 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">
-            <div class="card-control">
-                <button class="btn btn-default" data-panel="dismiss"><i class="demo-psi-cross"></i></button>
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">Mi perfil: {{ !empty($users->name) ? $users->name : '' }}</h5>
             </div>
-            <h3 class="card-title">Mi perfil: {{ !empty($users->name) ? $users->name : '' }}</h3>
+            <div class="toolbar-end">
+
+            </div>
         </div>
         <div class="card-body">
 
@@ -128,7 +130,7 @@
                                 }
             
                         @endphp
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group" style="margin-left: 0px">
                                 <label>Zona horaria</label>
                                 <select name="val_timezone" class="select2" style="width: 100%; margin-top: 25px; height: 38px">
@@ -167,10 +169,10 @@
                 </div>
             </div>
                 
-        <div class="row">
+        <div class="row mt-4">
             <div class="form-group">
-                <div class="col-md-10">
-                    <input class="btn btn-primary btn-lg" type="submit" value="Actualizar">
+                <div class="col-md-12 text-end">
+                    <input class="btn btn-primary" type="submit" value="Actualizar">
                 </div>
             </div>
         </div>

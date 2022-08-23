@@ -37,7 +37,6 @@ class config_clientes extends Model
                   'mca_restringir_usuarios_planta',
                   'mca_limpieza',
                   'mca_permitir_anonimo',
-                  'theme_type',
                   'theme_name',
                   'mca_reserva_horas',
                   'val_metodo_notificacion',

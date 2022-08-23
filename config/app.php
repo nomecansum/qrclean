@@ -147,6 +147,9 @@ return [
     'url_base_api_salas'=>env('URL_BASE_API_SALAS','https://salas-test.spotlinker.com/puestos_api/'),
     'token_api_salas'=>env('TOKEN_API_SALAS','SP.JlYzRknsAClwUuYZZkMxRwPHJYbHhEdRakcDAPdjkJFwjcIEoD.6e09d8332dffd653f994'),
     'carpeta_asset'=>env('CARPETA_ASSET','/events'),
+
+    'link_politica'=>env('LINK_POLITICA','http://www.spotlinker.com/lopd/spotlinker/politica_privacidad_tratamiento_datos_y_asistencia'),
+    'link_contacto'=>env('LINK_CONTACTO','https://www.crambo.eu/es/contacta/'),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

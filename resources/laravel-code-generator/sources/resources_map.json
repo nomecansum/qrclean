@@ -233,5 +233,15 @@
         "model-name": "plantas",
         "resource-file": "plantas.json",
         "table-name": "plantas"
+    },
+    {
+        "model-name": "modelo",
+        "resource-file": "modelos.json",
+        "table-name": "notificaciones"
+    },
+    {
+        "model-name": "notificaciones_tipos",
+        "resource-file": "notificaciones_tipos.json",
+        "table-name": "notificaciones_tipos"
     }
 ]

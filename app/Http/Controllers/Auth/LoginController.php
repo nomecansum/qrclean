@@ -73,6 +73,7 @@ class LoginController extends Controller
             session(['logo_cliente_menu'=>$cliente->img_logo_menu]);
             Cookie::queue('qrcleanid', $user->id, 999999);
 
+            auth()->user()->previous_login = $user->last_login;
             auth()->user()->last_login = Carbon::now();
             auth()->user()->save();
             session(['lang' => auth()->user()->lang]);
@@ -122,6 +123,18 @@ class LoginController extends Controller
 
             ///Perfil del usuario en session
             session(['perfil'=>$nivel]);
+
+            //Temas del usuario
+            try{
+                if($user->theme===null){
+                    session()->put('template',json_decode($config_cliente->theme_name));
+                } else {
+                    session()->put('template',json_decode($user->theme));
+                }
+            } catch (\Exception $e) {}
+            
+            
+            
 
             //session(['CL'=>$config_cliente]);
             return redirect ('/');

@@ -132,6 +132,13 @@ let miniNavContentsCollapse     = null;
     mainNav.addEventListener( "transitionend", (e) => {
         if (!e.target.classList.contains( "mainnav" ) || e.propertyName != "max-width" ) return;
         buildNav();
+        if(isMiniNav){
+            document.getElementById( "main_user_image" ).classList.remove('img-md');
+            document.getElementById( "main_user_image" ).classList.add('img-xs');
+        } else {
+            document.getElementById( "main_user_image" ).classList.remove('img-xs');
+            document.getElementById( "main_user_image" ).classList.add('img-md');
+        }
     });
 
 
@@ -204,7 +211,8 @@ const bsCollapseHide = (e) => {
     if ( !e.target.classList.contains( "mininav-content" )) return;
 
     if ( !isMiniNav || window.innerWidth < 1024 ) e.target.toggler.classList.add( "collapsed" );
-    else e.target.removeEventListener( "hide.bs.collapse", bsCollapseHide);
+    else e.target.removeEventListener( "hide.bs.collapse", bsCollapseHide);ç
+    
 }
 
 
@@ -220,6 +228,7 @@ const bsCollapseShow = ( e ) => {
             e.target.popper.update();
         } catch (err) {}
     }
+    
 }
 
 
@@ -227,6 +236,7 @@ const bsCollapseShow = ( e ) => {
 // Hide all the sub-menus.
 const hideAllMiniNavContent = (e) => {
 	if ( window.innerWidth >= 1024 && ( !mainNav.contains( e.target ) || e.target.classList.contains( "mainnav__top-content" )) ) miniNavContentsCollapse.map( ( el ) => el.hide() );
+
 }
 
 
@@ -276,6 +286,7 @@ const buildNav = () => {
 			}
 
 			miniNavToggler._mainnav.target.addEventListener( "hide.bs.collapse", bsCollapseHide );
+           
 
 		} else {
 

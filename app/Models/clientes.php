@@ -38,7 +38,7 @@ class clientes extends Model
                   'img_logo',
                   'locked',
                   'val_apikey',
-                  'token_1uso',
+                  'token_acceso_salas',
                   'mca_appmovil',
                   'tel_cliente',
                   'CIF',
@@ -48,7 +48,8 @@ class clientes extends Model
                   'id_distribuidor',
                   'img_logo_menu',
                   'id_cliente_salas',
-                  'id_externo'
+                  'id_externo',
+                  'token_1uso',
               ];
 
     /**

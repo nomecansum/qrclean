@@ -21,52 +21,52 @@
                     <h5 class="mb-4">Blurred</h5>
                     <div class="_dm-boxbg__img-container d-flex flex-wrap">
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/1.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/1.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/2.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/2.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/3.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/3.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/4.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/4.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/5.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/5.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/6.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/6.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/7.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/7.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/8.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/8.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/9.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/9.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/10.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/10.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/11.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/11.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/12.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/12.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/13.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/13.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/14.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/14.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/15.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/15.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/blurred/thumbs/16.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/blurred/thumbs/16.jpg" alt="Background Image" loading="lazy">
                         </a>
                     </div>
                 </div>
@@ -77,52 +77,52 @@
                     <h5 class="mb-4">Polygon &amp; Geometric</h5>
                     <div class="_dm-boxbg__img-container d-flex flex-wrap">
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/1.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/1.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/2.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/2.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/3.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/3.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/4.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/4.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/5.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/5.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/6.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/6.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/7.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/7.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/8.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/8.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/9.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/9.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/10.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/10.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/11.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/11.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/12.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/12.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/13.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/13.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/14.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/14.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/15.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/15.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/polygon/thumbs/16.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/polygon/thumbs/16.jpg" alt="Background Image" loading="lazy">
                         </a>
                     </div>
                 </div>
@@ -133,52 +133,52 @@
                     <h5 class="mb-4">Abstract</h5>
                     <div class="_dm-boxbg__img-container d-flex flex-wrap">
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/1.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/1.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/2.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/2.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/3.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/3.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/4.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/4.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/5.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/5.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/6.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/6.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/7.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/7.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/8.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/8.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/9.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/9.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/10.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/10.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/11.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/11.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/12.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/12.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/13.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/13.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/14.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/14.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/15.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/15.jpg" alt="Background Image" loading="lazy">
                         </a>
                         <a href="#" class="_dm-boxbg__thumb ratio ratio-16x9">
-                            <img class="img-responsive" src="./assets/premium/boxed-bg/abstract/thumbs/16.jpg" alt="Background Image" loading="lazy">
+                            <img class="img-responsive" src="/assets/premium/boxed-bg/abstract/thumbs/16.jpg" alt="Background Image" loading="lazy">
                         </a>
                     </div>
                 </div>
@@ -193,12 +193,18 @@
     <!-- END - BOXED LAYOUT : BACKGROUND IMAGES CONTENT [ DEMO ] -->
     <!-- SETTINGS CONTAINER [ DEMO ] -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <div id="_dm-settingsContainer" class="_dm-setting-container offcanvas offcanvas-end rounded-start" tabindex="-1">
+    <div id="_dm-settingsContainer" class="_dm-setting-container offcanvas offcanvas-end rounded-start" tabindex="-1" style="border-left: 0px">
         {{-- <button id="_dm-settingsToggler" class="_dm-btn-settings btn btn-sm btn-dark p-2 rounded-0 rounded-start" type="button" data-bs-toggle="offcanvas" data-bs-target="#_dm-settingsContainer" aria-controls="_dm-settingsContainer">
             <i class="demo-psi-gear fs-2"></i>
         </button> --}}
 
         <div class="offcanvas-body py-0">
+            <div class="offcanvas-header border-bottom p-0 pb-3">
+                <div>
+                    <h4 class="offcanvas-title">Personalizacion de la aplicacion</h4>
+                </div>
+                <button type="button" class="btn-close btn-lg text-reset shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
             <div class="_dm-setting-container__content row">
                 <div class="col-lg-3 p-4">
 
@@ -209,7 +215,7 @@
                     <div class="d-flex align-items-center pt-1 mb-2">
                         <label class="form-check-label flex-fill" for="_dm-fluidLayoutRadio">Fluido</label>
                         <div class="form-check form-switch">
-                            <input id="_dm-fluidLayoutRadio" class="form-check-input ms-0" type="radio" name="settingLayouts" autocomplete="off" checked>
+                            <input id="_dm-fluidLayoutRadio" class="form-check-input ms-0" type="radio" name="settingLayouts" autocomplete="off">
                         </div>
                     </div>
 
@@ -263,7 +269,7 @@
                     <div class="d-flex align-items-center pt-1 mb-2">
                         <label class="form-check-label flex-fill" for="_dm-maxiNavRadio">Maximizado</label>
                         <div class="form-check form-switch">
-                            <input id="_dm-maxiNavRadio" class="form-check-input ms-0" type="radio" name="navigation-mode" autocomplete="off" checked>
+                            <input id="_dm-maxiNavRadio" class="form-check-input ms-0" type="radio" name="navigation-mode" autocomplete="off">
                         </div>
                     </div>
 
@@ -303,7 +309,7 @@
                                     <div class="_dm-color-box bg-light"></div>
                                 </div>
                                 <div class="flex-grow-1 ">
-                                    <a href="#" data-dir="light" data-single="true" class="_dm-themeColors schemes-btn h6 d-block mb-0 stretched-link text-decoration-none">Claro</a>
+                                    <a href="#" data-dir="light" id="btn_schena_light" data-single="true" class="_dm-themeColors schemes-btn h6 d-block mb-0 stretched-link text-decoration-none">Claro</a>
                                     <small class="text-muted">Tema completamente claro.</small>
                                 </div>
                             </div>
@@ -316,7 +322,7 @@
                                     <div class="_dm-color-box bg-dark"></div>
                                 </div>
                                 <div class="flex-grow-1 ">
-                                    <a href="#" data-dir="dark" data-hd="expanded" class="_dm-themeColors schemes-btn h6 d-block mb-0 stretched-link text-decoration-none">Oscuro</a>
+                                    <a href="#" data-dir="dark" id="btn_schena_dark" data-hd="expanded" class="_dm-themeColors schemes-btn h6 d-block mb-0 stretched-link text-decoration-none">Oscuro</a>
                                     <small class="text-muted">Tema completamente oscuro.</small>
                                 </div>
                             </div>
@@ -333,7 +339,7 @@
 
                                 <!-- Scheme Button -->
                                 <button type="button" class="btn shadow-none">
-                                    <img src="./assets/img/color-schemes/expanded-header.png" alt="color scheme illusttration" loading="lazy">
+                                    <img src="/assets/img/color-schemes/expanded-header.png" alt="color scheme illusttration" loading="lazy">
                                 </button>
 
                                 <!-- Scheme Colors -->
@@ -365,7 +371,7 @@
 
                                 <!-- Scheme Button -->
                                 <button type="button" class="btn shadow-none">
-                                    <img src="./assets/img/color-schemes/fair-header.png" alt="color scheme illusttration" loading="lazy">
+                                    <img src="/assets/img/color-schemes/fair-header.png" alt="color scheme illusttration" loading="lazy">
                                 </button>
 
                                 <!-- Scheme Colors -->
@@ -397,7 +403,7 @@
 
                                 <!-- Scheme Button -->
                                 <button type="button" class="btn shadow-none">
-                                    <img src="./assets/img/color-schemes/full-header.png" alt="color scheme illusttration" loading="lazy">
+                                    <img src="/assets/img/color-schemes/full-header.png" alt="color scheme illusttration" loading="lazy">
                                 </button>
 
                                 <!-- Scheme Colors -->
@@ -431,7 +437,7 @@
 
                                 <!-- Scheme Button -->
                                 <button type="button" class="btn shadow-none">
-                                    <img src="./assets/img/color-schemes/navigation.png" alt="color scheme illusttration" loading="lazy">
+                                    <img src="/assets/img/color-schemes/navigation.png" alt="color scheme illusttration" loading="lazy">
                                 </button>
 
                                 <!-- Scheme Colors -->
@@ -463,7 +469,7 @@
 
                                 <!-- Scheme Button -->
                                 <button type="button" class="btn shadow-none">
-                                    <img src="./assets/img/color-schemes/brand.png" alt="color scheme illusttration" loading="lazy">
+                                    <img src="/assets/img/color-schemes/brand.png" alt="color scheme illusttration" loading="lazy">
                                 </button>
 
                                 <!-- Scheme Colors -->
@@ -494,7 +500,7 @@
 
                                 <!-- Scheme Button -->
                                 <button type="button" class="btn shadow-none">
-                                    <img src="./assets/img/color-schemes/tall-header.png" alt="color scheme illusttration" loading="lazy">
+                                    <img src="/assets/img/color-schemes/tall-header.png" alt="color scheme illusttration" loading="lazy">
                                 </button>
 
                                 <!-- Scheme Colors -->

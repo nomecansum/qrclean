@@ -47,6 +47,11 @@ Route::post('/encuestas/save_data','EncuestasController@save_data');
  //Cambiar pwd por defecto
  Route::get('/firstlogin','Auth\LoginController@firstlogin')->name('firstlogin');
 
+ //Links del footer
+Route::get('/politica','HomeController@politica');
+Route::get('/terminos','HomeController@terminos');
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Route::get('/logout','Auth\LoginController@logout')->name('logout');;
@@ -84,6 +89,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/scan_usuario', 'HomeController@scan_usuario')->name('main_scan');
     Route::get('/scan_mantenimiento', 'HomeController@scan_mantenimiento')->name('mantenimiento_scan');
 
+    //Check de notificaciones y cambios
+    Route::get('/check', 'HomeController@check_notificaciones')->name('check_notificaciones');
 
     //Relogin
     Route::get("relogin/{id}",['middleware' => 'permissions:["ReLogin"],["R"]', 'uses' => 'UsersController@authwith']);
@@ -139,6 +146,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/gen_token/{id}',['middleware'=>'permissions:["API_TOKEN"],["R"]','uses'=>'APIAuthController@gen_token'])->name('users.api.gen_token');
         Route::get('/gen_password/{id}',['middleware'=>'permissions:["API_TOKEN"],["R"]','uses'=>'UsersController@gen_password'])->name('users.api.gen_password');
         Route::get('/turno/{id}/{turno}/{estado}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@turno_usuario'])->name('users.turno_usuario');
+
+        Route::post('/tema','UsersController@tema_usuario');
         
     });
 

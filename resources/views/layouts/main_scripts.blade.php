@@ -160,43 +160,6 @@
         }
     });
 
-    // $('.input-daterange-datepicker').daterangepicker({
-    //     timePicker: false,
-    //     timePickerIncrement: 30,
-    //     timePicker24Hour: true,
-    //     autoUpdateInput : true,
-    //     locale: {
-    //         format: 'DD/MM/YYYY',
-    //         applyLabel: "OK",
-    //         cancelLabel: "Cancelar"
-    //     },
-    //     buttonClasses: ['btn', 'btn-sm'],
-    //     applyClass: 'btn-info',
-    //     cancelClass: 'btn-warning',
-    //     autoUpdateInput: true,
-    //     autoApply: true,
-    //     onSelect: function () {
-    //         $('#data').text(this.value);
-    //     }
-    // });
-
-    // $('.singledate').daterangepicker({
-    //     singleDatePicker: true,
-    //     showDropdowns: true,
-    //     autoUpdateInput : true,
-    //     //autoApply: true,
-    //     locale: {
-    //         format: '{{trans("general.date_format")}}',
-    //         applyLabel: "OK",
-    //         cancelLabel: "Cancelar",
-    //         daysOfWeek:["{{trans('general.domingo2')}}","{{trans('general.lunes2')}}","{{trans('general.martes2')}}","{{trans('general.miercoles2')}}","{{trans('general.jueves2')}}","{{trans('general.viernes2')}}","{{trans('general.sabado2')}}"],
-    //         monthNames: ["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"],
-    //         firstDay: {{trans("general.firstDayofWeek")}}
-    //     },
-    //     onSelect: function () {
-    //         $('#data').text(this.value);
-    //     }
-    // });
 
     $('[data-toggle="modal"]').click(function(event) {
         event.stopPropagation();
@@ -586,6 +549,16 @@
 
         }) 
     }
+
+    $('#boton_politica').click(function() {
+        $('.offcanvas-title').html('Politica de privacidad');
+        $('.body_politica').load("{{ url('/politica') }}");
+    });
+
+    $('#boton_terminos').click(function() {
+        $('.offcanvas-title').html('Términos y condiciones');
+        $('.body_politica').load("{{ url('/terminos') }}");
+    });
 
     function cerrar_modal(){
         $('.modal').modal('hide');

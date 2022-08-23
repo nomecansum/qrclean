@@ -18,6 +18,15 @@ use Session;
 class CustomersController extends Controller
 {
     //
+    private function esquema_colores($r){
+        $colores=new \stdClass;
+        $colores->tema=$r->tema;
+        $colores->rootClass=$r->rootClass;
+        $colores->menu=$r->menu;
+        $colores->esquema=$r->esquema;
+        return json_encode($colores);
+    }
+    
     public function index()
     {
         $clientes = DB::table('clientes')
@@ -88,6 +97,7 @@ class CustomersController extends Controller
             $config->mca_mostrar_nombre_usando=$r->mca_mostrar_nombre_usando??'N';
             $config->mca_mostrar_puestos_reservas=$r->mca_mostrar_puestos_reservas??'D';
             $config->mca_mostrar_datos_fijos=$r->mca_mostrar_datos_fijos??'N';
+            $config->theme_name=$this->esquema_colores($r);
             
             $config->save();
 
@@ -142,6 +152,7 @@ class CustomersController extends Controller
             $config->hora_liberar_puestos=$r->hora_liberar_puestos;
             $config->mca_mostrar_puestos_reservas=$r->mca_mostrar_puestos_reservas??'D';
             $config->mca_mostrar_datos_fijos=$r->mca_mostrar_datos_fijos??'N';
+            $config->theme_name=$this->esquema_colores($r);
             $config->save();
             
             Session::put('CL',$config->toArray());

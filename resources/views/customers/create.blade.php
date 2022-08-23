@@ -264,7 +264,7 @@
 						</div>
 
 					</div>
-					<div id="demo-stk-lft-tab-3" class="tab-pane fade active show"  role="tabpanel" aria-labelledby="logos-tab">
+					<div id="demo-stk-lft-tab-3" class="tab-pane fade"  role="tabpanel" aria-labelledby="logos-tab">
 						<div class="row mb-0">
 							<div class="col-md-6 text-center bg-gray-light pad-all">
 								<img src="img/img_logo_grande.png" style="width: 50px"> Logo grande (Home, informes) <span style="font-size:8px"> 500px</span></label>
@@ -296,11 +296,13 @@
 						</div>
 						
 					</div>
-					<div id="demo-stk-lft-tab-4" class="tab-pane fade"  role="tabpanel" aria-labelledby="tema-tab">
-						<p class="text-main text-semibold">Tema</p>
-						<input type="hidden" name="theme_type" id="theme_type" value="{{ isset($config->theme_type)?$config->theme_type:'navy' }}"> 
-						<input type="hidden" name="theme_name" id="theme_name"  value="{{ isset($config->theme_name)?$config->theme_name:'e' }}"> 
-						@include('layouts.setting_include')
+					<div id="demo-stk-lft-tab-4" class="tab-pane fade active show"  role="tabpanel" aria-labelledby="tema-tab">
+						<p class="text-main text-semibold">Tema que tendrán por defecto los usuarios que no lo hayan personalizado</p>
+						<input type="hidden" name="tema" id="tema" value="{{ isset($config->theme->tema)?$config->theme->tema:'/color-schemes' }}"> 
+						<input type="hidden" name="rootClass" id="rootClass"  value="{{ isset($config->theme->rootClass)?$config->theme->rootClass:'' }}"> 
+						<input type="hidden" name="esquema" id="esquema"  value="{{ isset($config->theme->esquema)?$config->theme->esquema:'' }}"> 
+						<input type="hidden" name="menu" id="menu"  value="{{ isset($config->theme->menu)?$config->theme->menu:'mn--max' }}"> 
+						@include('customers.setting_include')
 					</div>
 				</div>
 			</div>

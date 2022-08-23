@@ -85,6 +85,7 @@ class ClienteService
         $cl->nom_contacto = $r->nom_contacto;
         $cl->val_apikey = $r->val_apikey;
         $cl->token_1uso = $r->token_1uso;
+        $cl->token_acceso_salas = $r->token_acceso_salas;
         $cl->mca_appmovil = isset($r->mca_appmovil) ? $r->mca_appmovil : 'N';
         $cl->tel_cliente = $r->tel_cliente;
         $cl->cif = isset($r->cif) ? $r->cif : '';
@@ -104,6 +105,7 @@ class ClienteService
         $cl->nom_contacto = $r->nom_contacto;
         $cl->val_apikey = $r->val_apikey;
         $cl->token_1uso = $r->token_1uso;
+        $cl->token_acceso_salas = $r->token_acceso_salas;
         $cl->mca_appmovil = isset($r->mca_appmovil) ? $r->mca_appmovil : 'N';
         $cl->tel_cliente = $r->tel_cliente;
         $cl->cif = isset($r->cif) ? $r->cif : '';

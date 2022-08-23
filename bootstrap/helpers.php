@@ -1376,3 +1376,47 @@ function enviar_mail_reserva($id_reserva,$mca_ical,$sender_name=null){
     }
     notificar_usuario($user,$des_evento,'emails.mail_reserva',$body,1,"alerta_05",$attach);
 }
+
+//Funcion para aplicar los colores de la pagina
+function clase_root(){
+    try{
+        $clase=session('template')->rootClass;
+        foreach(explode(",",$clase) as $c){
+            echo "hd--".$c." ";
+        }
+        } catch(\Throwable $e){
+        return 'hd--expanded';
+    }
+}
+
+function clase_body(){
+    try{
+        return session('template')->layout;
+        } catch(\Throwable $e){
+        return '';
+    }
+}
+
+function image_body(){
+    try{
+        return ' style="margin-bottom: 30px; background-image: '.session('template')->boximg.';"';
+        } catch(\Throwable $e){
+        return '';
+    }
+}
+
+function clase_menu(){
+    try{
+        return session('template')->menu;
+        } catch(\Throwable $e){
+        return 'mn-max';
+    }
+}
+
+function clase_sticky(){
+    try{
+        return session('template')->menu_sticky;
+        } catch(\Throwable $e){
+        return '';
+    }
+}

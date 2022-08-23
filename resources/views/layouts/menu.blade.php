@@ -9,10 +9,10 @@
 
                 <!-- Profile picture  -->
                 <div class="mininav-toggle text-center py-2">
-                    @if(Auth::user()->img_usuario!="" && file_exists( public_path().'/img/users/'.Auth::user()->img_usuario))
-                    <img class="mainnav__avatar img-md rounded-circle" clas src="{{Storage::disk(config('app.img_disk'))->url('img/users/'.Auth::user()->img_usuario)}}" alt="Profile Picture">
+                    @if (isset(Auth::user()->img_usuario ) && Auth::user()->img_usuario!='')
+                        <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.Auth::user()->img_usuario) }}" id="main_user_image" class="img-md rounded-circle">
                     @else
-                    {!! icono_nombre(Auth::user()->name,40,16) !!}
+                        {!! icono_nombre(Auth::user()->name,40,16) !!}
                     @endif
                 </div>
         

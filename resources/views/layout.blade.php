@@ -16,12 +16,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS [ REQUIRED ] -->
-    <link rel="stylesheet" href="{{ asset('/assets/css/bootstrap.min.css') }}">
+    @if(session('template')!==null && isset(session('template')->esquema)) <link rel="stylesheet" href="{{ asset('/assets/css'.session('template')->esquema.'/bootstrap.min.css') }}"> @else <link rel="stylesheet" href="{{ asset('/assets/css/bootstrap.min.css') }}"> @endif
+    
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> --}}
 
 
     <!-- Nifty CSS [ REQUIRED ] -->
-    <link rel="stylesheet" href="{{ asset('/assets/css/nifty.min.css') }}">
+    @if(session('template')!==null && isset(session('template')->tema)) <link rel="stylesheet" href="{{ asset('/assets/css'.session('template')->tema.'/nifty.min.css') }}"> @else <link rel="stylesheet" href="{{ asset('/assets/css/nifty.min.css') }}"> @endif
+    
 
     <!-- Nifty Demo Icons [ OPTIONAL ] -->
     <link rel="stylesheet" href="{{ asset('/assets/css/demo-purpose/demo-icons.min.css') }}">
@@ -56,16 +58,17 @@
     @include('layouts.styles')
 </head>
 
-<body class="in-out-back">
+<body class="in-out-back {{ clase_body() }}" {!! image_body() !!}>
 
     <!-- PAGE CONTAINER -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <div id="root" class="root mn--max hd--expanded">
+    <div id="root" class="root {{ clase_root() }} {{ clase_menu() }} {{ clase_sticky() }}">
 
         <!-- CONTENTS -->
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        {{--  --}}
         <section id="content" class="content">
-            <div class="content__header content__boxed overlapping">
+            <div class="content__header content__boxed overlapping ">
                 <div class="content__wrap pt-3 pb-4">
                     <nav aria-label="breadcrumb">
                         @yield('breadcrumb')
@@ -159,21 +162,22 @@
 
     <!-- OFFCANVAS [ DEMO ] -->
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <div id="_dm-offcanvas" class="offcanvas" tabindex="-1">
+    <div id="offcanvasBottom" class="offcanvas offcanvas-bottom" tabindex="-1">
 
         <!-- Offcanvas header -->
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Offcanvas Header</h5>
+            <h5 class="offcanvas-title">Politica de privacidad</h5>
             <button type="button" class="btn-close btn-lg text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
 
         <!-- Offcanvas content -->
-        <div class="offcanvas-body">
+        <div class="offcanvas-body body_politica">
             <h5>Content Here</h5>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente eos nihil earum aliquam quod in dolor, aspernatur obcaecati et at. Dicta, ipsum aut, fugit nam dolore porro non est totam sapiente animi recusandae obcaecati dolorum, rem ullam cumque. Illum quidem reiciendis autem neque excepturi odit est accusantium, facilis provident molestias, dicta obcaecati itaque ducimus fuga iure in distinctio voluptate nesciunt dignissimos rem error a. Expedita officiis nam dolore dolores ea. Soluta repellendus delectus culpa quo. Ea tenetur impedit error quod exercitationem ut ad provident quisquam omnis! Nostrum quasi ex delectus vero, facilis aut recusandae deleniti beatae. Qui velit commodi inventore.</p>
         </div>
 
     </div>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- END - OFFCANVAS [ DEMO ] -->
 

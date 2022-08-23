@@ -8,11 +8,14 @@ use App\Models\edificios;
 use App\Models\plantas;
 use App\Models\logpuestos;
 use App\Models\users;
+use App\Models\notificaciones;
+use App\Models\notificaciones_tipos;
 use DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -666,6 +669,30 @@ class HomeController extends Controller
     public function gen_qr(Request $r)
     {
         return base64_encode(QRCode::format('png')->size(500)->generate($r->url));
+    }
+
+    public function politica(){
+        $response=Http::withOptions(['verify' => false])->get(config('app.link_politica'));
+        
+        if($response->status()==200){
+           return $response->body();
+        } 
+    }
+
+    public function terminos(){
+        return "";
+    }
+
+    public function check_notificaciones(){
+        $notificaciones=DB::table('notificaciones')
+            ->where('id_usuario',Auth::user()->id)
+            ->where('fec_notificacion',Carbon::now()->format('Y-m-d'))
+            ->get();
+        if($notificaciones){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 
 }

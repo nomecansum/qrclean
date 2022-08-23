@@ -162,8 +162,9 @@
                     <!-- User dropdown header -->
                     <div class="d-flex align-items-center border-bottom p-3">
                         <div class="flex-shrink-0">
-                            @if(Auth::user()->img_usuario!="" && file_exists( public_path().'/img/users/'.Auth::user()->img_usuario))
-                            <img class="img-sm rounded-circle"  src="{{Storage::disk(config('app.img_disk'))->url('img/users/'.Auth::user()->img_usuario)}}" alt="Profile Picture" loading="lazy">
+
+                            @if (isset(Auth::user()->img_usuario ) && Auth::user()->img_usuario!='')
+                                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.Auth::user()->img_usuario) }}" class="img-md rounded-circle">
                             @else
                             {!! icono_nombre(Auth::user()->name,50,18) !!}
                             @endif
@@ -187,7 +188,7 @@
                                 @if(session('reservas')!==null)
                                     @foreach(session('reservas') as $reserva)
                                         <div class="list-group-item py-0 d-flex justify-content-between align-items-center">
-                                            <i class="{{ $reserva->icono_tipo }}"></i> {{ $reserva->des_tipo_puesto }} 
+                                            <i class="{{ $reserva->icono_tipo }}" style="color: {{ $reserva->color_tipo }}"></i> {{ $reserva->des_tipo_puesto }} 
                                             <small class="fw-bolder"> {{ $reserva->cod_puesto }}</small>
                                         </div>
                                     @endforeach

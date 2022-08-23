@@ -1510,4 +1510,34 @@ class UsersController extends Controller
                 "asignado_usuario"=>$asignado_usuario
                 ]);
     }
+
+    ///Funciones para el control de los settings de usuario
+    public static function tema_usuario(Request $r){
+        $u=users::find(Auth::user()->id);
+        if($u->theme==null){
+            $u->theme=json_encode($r->all());
+        }else{
+            $u->theme=json_decode($u->theme);
+            if (isset($r->tema)) $u->theme->tema=$r->tema;
+            if (isset($r->tema) && ($r->tema=='/color-schemes/light') ){
+                $u->theme->esquema='';
+            }  else {
+                $u->theme->esquema=$r->tema;
+            }
+            if (isset($r->rootClass)) $u->theme->rootClass=$r->rootClass;
+            if (isset($r->layout)) $u->theme->layout=$r->layout;
+            if (isset($r->boximg)) $u->theme->boximg=$r->boximg;
+            if (isset($r->menu)) $u->theme->menu=$r->menu;
+            if (isset($r->menu_sticky)) $u->theme->menu_sticky=$r->menu_sticky;
+            $u->theme=json_encode($u->theme);
+        }
+        $u->save();
+        session()->put('template',json_decode($u->theme));
+
+        return [
+            'result' => "OK",
+            'tema' => json_encode($r->all())
+        ];
+    }
+
 }

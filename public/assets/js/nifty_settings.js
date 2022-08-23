@@ -14,6 +14,21 @@ const radioEvent = new Event( "changed" );
 });
 
 
+function notificar_cambios(data){
+    fetch('/users/tema', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-type': 'application/json; charset=UTF-8'
+        }
+    })
+    .then(response => response.json())
+    .then(json => {
+        console.log(json);
+    });
+}
+
+
 
 
 
@@ -38,6 +53,9 @@ if ( document.getElementById( "_dm-boxedBgContent" ) ) {
 
             let targetIMG = boxedImgThumb.querySelector( "img" ).getAttribute( "src" ).replace( "thumbs", "bg" );
             body.style.backgroundImage = `url( ${targetIMG} )`;
+
+            notificar_cambios({boximg: `url( ${targetIMG} )`});
+
         });
     });
 
@@ -67,6 +85,9 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
             // Enable the background images option
             boxedBgOption.classList.remove( "opacity-50" );
             boxedBgBtn.removeAttribute( "disabled" );
+            
+            estilo="boxed-layout";
+            
 
         } else {
 
@@ -77,7 +98,11 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
             // Disable the background images option
             boxedBgOption.classList.add( "opacity-50" );
             boxedBgBtn.setAttribute( "disabled", true );
+            estilo="0";
         }
+
+        notificar_cambios({layout: estilo});
+
     });
 
 
@@ -92,6 +117,7 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
 
         // Set the current layout to Center Mode.
         body.classList.toggle( "centered-layout" );
+        notificar_cambios({layout: "centered-layout"});
 
     });
 
@@ -130,6 +156,20 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
 
 
 
+    // STICKY NAVIGATION
+    // ----------------------------------------------
+    // HINT : Toggle the .mn--sticky class on #root element.
+
+    document.getElementById( "_dm-stickyNavCheckbox" ).addEventListener( "change", () => {
+
+        // Toggle the sticky navigation class.
+        root.classList.toggle( "mn--sticky" );
+
+        notificar_cambios({menu_sticky: "mn--sticky"});
+
+    });
+
+
 
 
     // MINI NAVIGATION MODE
@@ -137,9 +177,11 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
     // HINT : Toggle the .mn--min class on #root element.
 
     document.getElementById( "_dm-miniNavRadio" ).addEventListener( "changed", () => {
-
         // Set the navigation to Mini Mode.
+        root.classList.remove( "mn--min", "mn--max","mn--push","mn--slide","mn--reveal" );
         root.classList.toggle( "mn--min" );
+
+        notificar_cambios({menu: "mn--min"});
 
     });
 
@@ -152,10 +194,11 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
     // HINT : Toggle the .mn--max class on #root element.
 
     document.getElementById( "_dm-maxiNavRadio" ).addEventListener( "changed", () => {
-
         // Set the navigation to Maxi Mode.
+        root.classList.remove( "mn--min", "mn--max","mn--push","mn--slide","mn--reveal" );
         root.classList.toggle( "mn--max" );
 
+        notificar_cambios({menu: "mn--max"});
     });
 
 
@@ -186,7 +229,9 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
 
 
         // Set the navigation to Push Mode.
+        root.classList.remove( "mn--min", "mn--max","mn--push","mn--slide","mn--reveal" );
         root.classList.toggle( "mn--push" );
+        notificar_cambios({menu: "mn--push"});
 
     });
 
@@ -206,7 +251,9 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
 
 
         // Set the navigation to Slide on Top Mode.
+        root.classList.remove( "mn--min", "mn--max","mn--push","mn--slide","mn--reveal" );
         root.classList.toggle( "mn--slide" );
+        notificar_cambios({menu: "mn--slide"});
 
     });
 
@@ -226,7 +273,9 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
 
 
         // Set the navigation to Reveal Mode.
+        root.classList.remove( "mn--min", "mn--max","mn--push","mn--slide","mn--reveal" );
         root.classList.toggle( "mn--reveal" );
+        notificar_cambios({menu: "mn--reveal"});
 
     });
 
@@ -285,6 +334,10 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
         console.log( "==================================" );*/
         if ( _dir.length <= 0 ) _file == "bootstrap" ? newPath = defaultBsUrl : newPath = defaultNiftyUrl;
 
+        //console.log(newPath);
+        
+
+
         return newPath;
     }
 
@@ -295,7 +348,7 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
         if ( stylesLoaded < totalStyles ) return;
 
         // Hide the settings panel
-        bootstrap.Offcanvas.getInstance( "#_dm-settingsContainer" ).hide();
+        //bootstrap.Offcanvas.getInstance( "#_dm-settingsContainer" ).hide();
 
         // Remove the loading screen
         body.classList.remove( "_dm-load-scheme-css" );
@@ -354,7 +407,14 @@ if ( document.getElementById( "_dm-settingsContainer" ) ) {
                     if ( _class == "border" ) contentHeader.classList.add( "border-radius-start" );
                     else root.classList.add( `hd--${ _class }` );
                 });
+                console.log( rootClass );
             }
+
+            notificar_cambios({
+                tema: "/color-schemes/"+colorsBtn.getAttribute( "data-dir" ),
+                rootClass: rootClass
+            });
+
 
             // Toggle sctive class for the scheme button.
             if ( currentActiveBtn ) currentActiveBtn.classList.remove( "active" );

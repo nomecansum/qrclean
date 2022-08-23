@@ -4,21 +4,21 @@
 
         <h5 class="fw-bold pb-3 mb-2">Menu</h5>
     
-        <!-- OPTION : Sticky Navigation -->
+        {{-- <!-- OPTION : Sticky Navigation -->
         <h6 class="mb-2 pb-1">Navegacion</h6>
         <div class="d-flex align-items-center pt-1 mb-2">
             <label class="form-check-label flex-fill" for="_dm-stickyNavCheckbox">Scroll</label>
             <div class="form-check form-switch">
-                <input id="_dm-stickyNavCheckbox" class="form-check-input ms-0" type="checkbox" autocomplete="off">
+                <input id="_dm-stickyNavCheckbox_cus" class="form-check-input ms-0" type="checkbox" autocomplete="off" data-value="mn--sticky" data-control="_dm-stickyNavCheckbox">
             </div>
-        </div>
+        </div> --}}
     
         <h6 class="mb-2 pb-1 pt-3">Apariencia</h6>
         <!-- OPTION : Mini navigation mode -->
         <div class="d-flex align-items-center pt-1 mb-2">
             <label class="form-check-label flex-fill" for="_dm-miniNavRadio">Minimizado</label>
             <div class="form-check form-switch">
-                <input id="_dm-miniNavRadio" class="form-check-input ms-0" type="radio" name="navigation-mode" autocomplete="off">
+                <input id="_dm-miniNavRadio_cus" class="form-check-input ms-0 chk_menu" type="radio" name="navigation-mode" autocomplete="off"  data-value="mn--min" data-control="_dm-miniNavRadio">
             </div>
         </div>
     
@@ -26,7 +26,7 @@
         <div class="d-flex align-items-center pt-1 mb-2">
             <label class="form-check-label flex-fill" for="_dm-maxiNavRadio">Maximizado</label>
             <div class="form-check form-switch">
-                <input id="_dm-maxiNavRadio" class="form-check-input ms-0" type="radio" name="navigation-mode" autocomplete="off" checked>
+                <input id="_dm-maxiNavRadio_cus" class="form-check-input ms-0 chk_menu" type="radio" name="navigation-mode" autocomplete="off"  data-value="mn--max" data-control="_dm-maxiNavRadio">
             </div>
         </div>
     
@@ -34,7 +34,7 @@
         <div class="d-flex align-items-center pt-1 mb-2">
             <label class="form-check-label flex-fill" for="_dm-pushNavRadio">Push Mode</label>
             <div class="form-check form-switch">
-                <input id="_dm-pushNavRadio" class="form-check-input ms-0" type="radio" name="navigation-mode" autocomplete="off">
+                <input id="_dm-pushNavRadio_cus" class="form-check-input ms-0 chk_menu" type="radio" name="navigation-mode" autocomplete="off" data-value="mn--push" data-control="_dm-pushNavRadio">
             </div>
         </div>
     
@@ -42,7 +42,7 @@
         <div class="d-flex align-items-center pt-1 mb-2">
             <label class="form-check-label flex-fill" for="_dm-slideNavRadio">Superponer</label>
             <div class="form-check form-switch">
-                <input id="_dm-slideNavRadio" class="form-check-input ms-0" type="radio" name="navigation-mode" autocomplete="off">
+                <input id="_dm-slideNavRadio_cus" class="form-check-input ms-0 chk_menu" type="radio" name="navigation-mode" autocomplete="off" data-value="mn--slide" data-control="_dm-slideNavRadio">
             </div>
         </div>
     
@@ -50,12 +50,12 @@
         <div class="d-flex align-items-center pt-1 mb-2">
             <label class="form-check-label flex-fill" for="_dm-revealNavRadio">Desplazar</label>
             <div class="form-check form-switch">
-                <input id="_dm-revealNavRadio" class="form-check-input ms-0" type="radio" name="navigation-mode" autocomplete="off">
+                <input id="_dm-revealNavRadio_cus" class="form-check-input ms-0 chk_menu" type="radio" name="navigation-mode" autocomplete="off" data-value="mn--reveal" data-control="_dm-revealNavRadio">
             </div>
         </div>
     
     </div>
-    <div class="col-md-6 p-4">
+    <div class="col-md-8 p-4">
         <h5 class="fw-bold pb-3 mb-2">Esquema de color</h5>
     
         <div class="row mb-3 pb-3">
@@ -65,8 +65,8 @@
                     <div class="flex-shrink-0 me-3">
                         <div class="_dm-color-box bg-light"></div>
                     </div>
-                    <div class="flex-grow-1 ">
-                        <a href="#" data-dir="light" data-single="true" class="_dm-themeColors schemes-btn h6 d-block mb-0 stretched-link text-decoration-none">Claro</a>
+                    <div class="flex-grow-1 div_light div_eesquema" >
+                        <a href="#" data-dir="light" data-single="true" class="_dm-themeColors esquema schemes-btn h6 d-block mb-0 stretched-link text-decoration-none" data-esquema="">Claro</a>
                         <small class="text-muted">Tema completamente claro.</small>
                     </div>
                 </div>
@@ -78,8 +78,8 @@
                     <div class="flex-shrink-0 me-3">
                         <div class="_dm-color-box bg-dark"></div>
                     </div>
-                    <div class="flex-grow-1 ">
-                        <a href="#" data-dir="dark" data-hd="expanded" class="_dm-themeColors schemes-btn h6 d-block mb-0 stretched-link text-decoration-none">Oscuro</a>
+                    <div class="flex-grow-1 div_dark div_eesquema">
+                        <a href="#" data-dir="dark" data-hd="expanded" class="_dm-themeColors esquema schemes-btn h6 d-block mb-0 stretched-link text-decoration-none" data-esquema="/color-schemes/dark">Oscuro</a>
                         <small class="text-muted">Tema completamente oscuro.</small>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
                     <div class="_dm-colorSchemesMode__colors">
                         <div class="d-flex flex-wrap justify-content-center">
                             <button class="_dm-themeColors _dm-box-xs _dm-bg-gray" type="button" data-dir="all-headers/gray" data-hd="expanded"></button>
-                            <button class="_dm-themeColors _dm-box-xs _dm-bg-navy active" type="button" data-dir="" data-hd="expanded"></button>
+                            <button class="_dm-themeColors _dm-box-xs _dm-bg-navy" type="button" data-dir="" data-hd="expanded"></button>
                             <button class="_dm-themeColors _dm-box-xs _dm-bg-ocean" type="button" data-dir="all-headers/ocean" data-hd="expanded"></button>
                             <button class="_dm-themeColors _dm-box-xs _dm-bg-lime" type="button" data-dir="all-headers/lime" data-hd="expanded"></button>
     
@@ -285,3 +285,37 @@
         </div>
     </div>
 </div>
+
+@php
+    $colores=json_decode($config->theme_name);
+
+@endphp
+
+
+<script>
+    $('.chk_menu').click(function() {
+        if ($(this).is(':checked')) {
+            $('#menu').val($(this).data('value'));
+        } 
+        //$('#'+$(this).data('control')).trigger('click');
+    });
+    $('.esquema').click(function() {
+        $('#tema').val("/color-schemes/"+$(this).data('dir'));
+        $('#esquema').val($(this).data('esquema'));
+        $(this).toggle('active');
+        console.log($('.div_'+$(this).data('dir')));
+        $('.div_eesquema').not(this).removeClass('btn btn-outline-primary');
+        $('.div_'+$(this).data('dir')).addClass('btn btn-outline-primary');
+    });
+
+    $('._dm-box-xs').click(function() {
+        $('._dm-box-xs').removeClass('active');
+        $('#tema').val("/color-schemes/"+$(this).data('dir'));
+        $('#rootClass').val($(this).data('hd'));
+        $(this).addClass('active');
+    });
+
+    $('[data-value="{{ $colores->menu??'' }}"]').prop('checked', true);
+    $('[data-dir="{{ str_replace('/color-schemes/','',$colores->tema??'') }}"][data-hd="{{ $colores->rootClass??'' }}"]').addClass('active');
+   
+</script>

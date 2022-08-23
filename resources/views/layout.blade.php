@@ -57,6 +57,10 @@
     @yield('styles')
     @yield('styles2')
     @include('layouts.styles')
+    {{-- Worker de Sendpush --}}
+    @auth
+    <script charset="UTF-8" src="//web.webpushs.com/js/push/3db5bf16706bf2e654b7ece99765ab72_1.js" async></script>
+    @endauth
 </head>
 
 <body class="in-out-back {{ clase_body() }}" {!! image_body() !!}>
@@ -229,9 +233,7 @@
     {{-- switchery switchs deslizable --}}
     <script src="{{ asset('/plugins/switchery/switchery.min.js') }}"></script>
  
-    @auth
-    <script charset="UTF-8" src="//web.webpushs.com/js/push/3db5bf16706bf2e654b7ece99765ab72_1.js" async></script>
-    @endauth
+
 
      @include('layouts.main_scripts')
      @yield('scripts')

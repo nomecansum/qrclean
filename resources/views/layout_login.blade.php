@@ -26,7 +26,7 @@
 
     <!-- Premium solid icons [ OPTIONAL ] -->
     <link rel="stylesheet" href="./assets/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css">
-    <script charset="UTF-8" src="https://web.webpushs.com/js/push/3db5bf16706bf2e654b7ece99765ab72_1.js" async></script>
+
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~---
 
     [ REQUIRED ]

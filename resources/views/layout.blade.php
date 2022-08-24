@@ -57,8 +57,15 @@
     @yield('styles')
     @yield('styles2')
     @include('layouts.styles')
-    {{-- Worker de Sendpush --}}
-    <script charset="UTF-8" src="https://web.webpushs.com/js/push/3db5bf16706bf2e654b7ece99765ab72_1.js" async></script>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+      window.OneSignal = window.OneSignal || [];
+      OneSignal.push(function() {
+        OneSignal.init({
+          appId: "379eadd5-2481-4f03-88d9-da14b5ded959",
+        });
+      });
+    </script>
 </head>
 
 <body class="in-out-back {{ clase_body() }}" {!! image_body() !!}>

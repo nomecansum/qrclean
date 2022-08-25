@@ -8,26 +8,6 @@ const root                      = document.getElementById("root");
 // BOOTSTRAP COMPONENTS
 // ----------------------------------------------
 
-// Bootstrap's Dropdown with transition in out
-// ----------------------------------------------
-let dropdownElementList = [...document.querySelectorAll(".dropdown-toggle")];
-let dropdownList = dropdownElementList.map( dropdownToggleEl => {
-
-    // Delete all classes in the Dropdown Menu before showing.
-    dropdownToggleEl.addEventListener( "show.bs.dropdown", () => dropdownToggleEl.parentElement.querySelector( ".dropdown-menu" ).classList.remove( "mot", "mol", "mor" ));
-
-    dropdownToggleEl.addEventListener( "hide.bs.dropdown", () => {
-        let menu = dropdownToggleEl.parentElement.querySelector( ".dropdown-menu" );
-        let menuAttr = menu.getAttribute( "data-popper-placement" );
-
-        if ( menuAttr == "top-start" || menuAttr == "top-end" ) menu.classList.add("mot");
-        else if ( menuAttr == "left-start" || menuAttr == "left-end" ) menu.classList.add("mol");
-        else if (menu.getAttribute("data-bs-popper")) menu.classList.add("mst");
-    });
-})
-
-
-
 // Boostrap's Cards view mode
 // ----------------------------------------------
 document.querySelectorAll("[data-view]").forEach((el) => {
@@ -52,6 +32,7 @@ document.querySelectorAll("[data-view]").forEach((el) => {
             }
         } else {
             el.targetEl.classList.toggle("content-full-page");
+            body.classList.toggle("body-sc");
         }
     })
 });
@@ -75,7 +56,7 @@ document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListene
 // ----------------------------------------------
 document.querySelectorAll( ".nav-toggler" ).forEach( ( navToggler ) => {
     navToggler.addEventListener( "click", () => {
-        if ( window.innerWidth < 1024 || ( !root.classList.contains( "mn--min" ) && !root.classList.contains( "mn--max" ) )) {
+        if ( window.innerWidth < 992 || ( !root.classList.contains( "mn--min" ) && !root.classList.contains( "mn--max" ) )) {
             root.classList.toggle( "mn--show" );
         } else {
             root.classList.toggle( "mn--min" );
@@ -99,7 +80,7 @@ document.querySelectorAll( ".sidebar-toggler" ).forEach( ( sidebarToggler ) => {
 document.addEventListener( "click", ( e ) => {
 	if ( e.target.classList.contains( "root" ) ) {
 		root.classList.remove( "mn--show" );
-		if (!root.classList.contains( "sb--pinned" ) && !root.classList.contains( "sb-stuck" )) root.classList.remove( "sb--show" );
+		if (!root.classList.contains( "sb-stuck" )) root.classList.remove( "sb--show" );
 	}
 });
 
@@ -146,7 +127,7 @@ let miniNavContentsCollapse     = null;
     // Initialize Bootstrap's Collapse
     miniNavContentsCollapse   = miniNavContents.map(( collapseEl ) => {
         const activeToggler = collapseEl.parentElement.querySelector( ".mininav-toggle.active" );
-        if ( activeToggler && ( !isMiniNav || window.innerWidth < 1024 ) ) {
+        if ( activeToggler && ( !isMiniNav || window.innerWidth < 992 ) ) {
             const parent = collapseEl.parentElement;
             parent.classList.add( "open" );
             let clp = new bootstrap.Collapse( collapseEl, { toggle: true } );
@@ -210,9 +191,8 @@ const addVariables = (el) => {
 const bsCollapseHide = (e) => {
     if ( !e.target.classList.contains( "mininav-content" )) return;
 
-    if ( !isMiniNav || window.innerWidth < 1024 ) e.target.toggler.classList.add( "collapsed" );
-    else e.target.removeEventListener( "hide.bs.collapse", bsCollapseHide);ç
-    
+    if ( !isMiniNav || window.innerWidth < 992 ) e.target.toggler.classList.add( "collapsed" );
+    else e.target.removeEventListener( "hide.bs.collapse", bsCollapseHide);
 }
 
 
@@ -221,29 +201,27 @@ const bsCollapseHide = (e) => {
 const bsCollapseShow = ( e ) => {
     if ( !e.target.classList.contains( "mininav-content" )) return;
 
-    if ( !isMiniNav || window.innerWidth < 1024 ) {
+    if ( !isMiniNav || window.innerWidth < 992 ) {
         e.target.toggler.classList.remove( "collapsed" );
     } else {
         try {
             e.target.popper.update();
         } catch (err) {}
     }
-    
 }
 
 
 
 // Hide all the sub-menus.
 const hideAllMiniNavContent = (e) => {
-	if ( window.innerWidth >= 1024 && ( !mainNav.contains( e.target ) || e.target.classList.contains( "mainnav__top-content" )) ) miniNavContentsCollapse.map( ( el ) => el.hide() );
-
+	if ( window.innerWidth >= 992 && ( !mainNav.contains( e.target ) || e.target.classList.contains( "mainnav__top-content" )) ) miniNavContentsCollapse.map( ( el ) => el.hide() );
 }
 
 
 
 // Toggle the submenus
 const toggleContent = (e) => {
-	if ( e.target._mainnav.target.classList.contains( "nav-label" ) && ( !isMiniNav || window.innerWidth < 1024 ) ) return;
+	if ( e.target._mainnav.target.classList.contains( "nav-label" ) && ( !isMiniNav || window.innerWidth < 992 ) ) return;
 
 
     const _this = e.target._mainnav;
@@ -267,13 +245,22 @@ const toggleContent = (e) => {
 // Build the navigation
 const buildNav = () => {
 	isMiniNav = root.classList.contains( "mn--min" );
+    let activeSub = null;
+
+
+    // Toggle the active submenu when navigation is in a max state.
+    if ( !isMiniNav ) activeSub = mainNav.querySelector(".has-sub > .mininav-toggle.nav-link.active + .mininav-content.nav");
+    if ( activeSub ) activeSub.classList.add("show");
+
+
 	miniNavTogglers.map( ( miniNavToggler ) => {
 
 		if ( !miniNavToggler._mainnav ) addVariables( miniNavToggler );
 		miniNavToggler.classList.add( "collapsed" );
 
 
-		if ( !isMiniNav || window.innerWidth < 1024 ) {
+		if ( !isMiniNav || window.innerWidth < 992 ) {
+
 			miniNavToggler.addEventListener( "click", toggleContent );
             [ "mouseenter", "touchend"].forEach( evt => miniNavToggler.removeEventListener( evt, toggleContent ));
 
@@ -286,7 +273,6 @@ const buildNav = () => {
 			}
 
 			miniNavToggler._mainnav.target.addEventListener( "hide.bs.collapse", bsCollapseHide );
-           
 
 		} else {
 

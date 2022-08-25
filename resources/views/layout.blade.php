@@ -241,6 +241,7 @@
      @yield('scripts4')
      @yield('scripts5')
      @yield('scripts6')
+     @yield('onesignal')
 
 </body>
 

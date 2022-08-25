@@ -28,5 +28,8 @@
         height: 40px;
     }
 
+    .hd--expanded .content__header {
+    border-radius: 0 !important;
+}
 
 </style>

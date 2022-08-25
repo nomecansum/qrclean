@@ -6,15 +6,15 @@
   pointer-events: none;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 990px) {
   ._dm-btn-settings {
-    inset: 50% auto auto 0;
+    inset: 40% auto auto 0;
     position: absolute;
     transform: translateY(-50%) translateX(-100%);
     visibility: visible;
   }
   ._dm-setting-container {
-    border-left: 3px solid #2b2c2d;
+    border-left: 5px solid #373c43;
     bottom: auto;
     display: flex;
     pointer-events: unset;
@@ -39,7 +39,7 @@
     width: 1024px;
   }
   ._dm-boxbg.show {
-    box-shadow: 0 0 2rem rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 2rem rgba(55, 60, 67, 0.2);
   }
   ._dm-boxbg__img-container {
     border-radius: 0.4375rem;
@@ -55,7 +55,7 @@
     border-radius: 0.21875rem;
   }
   ._dm-boxbg__img-container ._dm-boxbg__thumb:hover:not(.active) {
-    box-shadow: 0 0 0 0.1875rem #fff, 0 0 1rem rgba(0, 0, 0, 0.75);
+    box-shadow: 0 0 0 0.1875rem #fff, 0 0 1rem rgba(55, 60, 67, 0.75);
     position: relative;
     transform: scale(1.5);
     z-index: 1;
@@ -140,7 +140,7 @@
     width: 24px;
   }
   ._dm-colorSchemesMode__colors ._dm-box-xs:hover {
-    box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 0.5rem rgba(55, 60, 67, 0.25);
     transform: scale(1.1);
   }
   ._dm-colorSchemesMode__colors ._dm-box-xs.active {

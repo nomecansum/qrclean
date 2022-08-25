@@ -68,7 +68,7 @@
 
 @endsection
 
-@section('scripts6')
+@section('onesignal')
     <script>
         // inicializacion de onesignal
         window.OneSignal = window.OneSignal || [];
@@ -82,7 +82,7 @@
         
         OneSignal.push(function() {               
             OneSignal.getUserId().then(function(userId) {
-                alert("User ID:", userId);
+                console.log("User ID:", userId);
                 $.post('{{url('/users/osid')}}', {_token: '{{csrf_token()}}', data: userId}, function(data, textStatus, xhr) {
             
                 })

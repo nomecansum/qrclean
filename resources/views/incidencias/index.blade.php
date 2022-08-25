@@ -143,7 +143,7 @@
 					
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-info btn_cerrar_incidencia">Si</button>
+					<button class="btn btn-info btn_cerrar_incidencia">Cerrar</button>
 					<button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
 				</div>
 			</div>
@@ -157,7 +157,7 @@
 		<div class="modal-dialog modal-md">
 			<div class="modal-content">
 				<div class="modal-header">
-                
+					<span class="float-right" id="spinner_acc" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
 					<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
 					<h1 class="modal-title text-nowrap">Añadir accion</h1>
 					<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
@@ -168,8 +168,8 @@
 					
 				</div>
 				<div class="modal-footer">
-					<button class="btn btn-info btn_accion_incidencia">Si</button>
-					<button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
+					<button class="btn btn-info btn_accion_incidencia">Añadir</button>
+					<button type="button" data-dismiss="modal" class="btn btn-warning close " onclick="cerrar_modal()">Cancelar</button>
 				</div>
 			</div>
 		</div>
@@ -328,6 +328,10 @@
 
 	});
 
+	$('.btn_accion_incidencia').click(function(){
+		$('#spinner_acc').show();
+	})
+
 	function post_form_ajax(data){
 		$('#cell'+data.id).removeClass('bg-pink');
 		$('#cell'+data.id).addClass('bg-success');
@@ -345,6 +349,7 @@
 
    function accion_incidencia(id){
 		$('#accion-incidencia').modal('show');
+		$('#spinner_acc').hide();
 	    $('#des_incidencia_accion').html($(this).data('desc'));
 		
 		$.get("{{ url('/incidencias/form_accion/') }}/"+id,function(data){

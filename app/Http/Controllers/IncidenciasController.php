@@ -477,6 +477,7 @@ class IncidenciasController extends Controller
 
     public function add_accion(Request $r){
         $data=[];
+        $accion_postprocesado="A";
         $incidencia=incidencias::find($r->id_incidencia);
         $tipo=incidencias_tipos::find($incidencia->id_tipo_incidencia);
         $procedencia=$r->procedencia??'web';
@@ -509,12 +510,22 @@ class IncidenciasController extends Controller
             $accion->id_usuario=$r->id_usuario??Auth::user()->id;
             $accion->img_attach1=$img1??null;
             $accion->img_attach2=$img2??null;
-            $accion->save();
+            //A ver si la accion cierra la incidencia
             if(isset($r->id_estado)){
+                $datos_estado=estados_incidencias::find($r->id_estado);
+                if($datos_estado->mca_cierre=='S'){
+                    $accion->mca_resuelve='S';
+                    $incidencia->comentario_cierre=$r->des_accion;
+                    $incidencia->fec_cierre=Carbon::now();
+                    $accion->id_usuario_cierre=$r->id_usuario??Auth::user()->id;
+                    $accion_postprocesado="F";
+                }
                 $incidencia->id_estado=$r->id_estado;
                 $incidencia->save();
+                
             }
-            $this->post_procesado_incidencia($incidencia,'A',$procedencia);
+            $accion->save();
+            $this->post_procesado_incidencia($incidencia,$accion_postprocesado,$procedencia);
             savebitacora("Añadida accion para la incidencia ".$r->id_incidencia,"Incidencias","add_accion","OK");
             return [
                 'title' => "Añadir accion a la incidencia",
@@ -591,21 +602,34 @@ class IncidenciasController extends Controller
                     case 'M':  //Mandar e-mail
                         $to_email = $p->txt_destinos;
                         Log::info("Iniciando postprocesado MAIL de incidencia ".$inc->id_incidencia);
-                        Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto) {
+                        Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto,$momento) {
                             if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
                                 $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                             } else {
                                 $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                             }
                             $message->from(config('mail.from.address'),config('mail.from.name'));
-                            if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
-                                $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
-                                $message->attachData($adj1,$inc->img_attach1);
-                            }     
-                            if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
-                                $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
-                                $message->attachData($adj2,$inc->img_attach2);
+                            if($momento=='C'){
+                                if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
+                                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+                                    $message->attachData($adj1,$inc->img_attach1);
+                                }     
+                                if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
+                                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+                                    $message->attachData($adj2,$inc->img_attach2);
+                                }
+                            } else if($momento=='A'){
+                                $accion=incidencias_acciones::where('id_incidencia',$inc->id_incidencia)->orderBy('id_accion','desc')->first();
+                                if($accion->img_attach1!==null && strlen($accion->img_attach1)>5){
+                                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$accion->img_attach1);
+                                    $message->attachData($adj1,$accion->img_attach1);
+                                }     
+                                if($accion->img_attach2!==null && strlen($accion->img_attach2)>5){
+                                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$accion->img_attach2);
+                                    $message->attachData($adj2,$accion->img_attach2);
+                                }
                             }
+                            
                         });
                         break;
                     case 'P': //HTTP Post

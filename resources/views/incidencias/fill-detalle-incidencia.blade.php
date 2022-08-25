@@ -123,6 +123,32 @@
 
                     </div>
                     @endforeach
+                    @if(isset($incidencia->fec_cierre))
+                    @php
+                        $usuario_cierre=App\Models\users::find($incidencia->id_usuario_cierre);
+                    @endphp
+                        <div class="tl-entry">
+                            <div class="tl-time">
+                                <div class="tl-date">{!! beauty_fecha($incidencia->fec_cierre) !!}</div>
+                                <div class="tl-time text-info">{!! Carbon\Carbon::parse($incidencia->fec_cierre)->format('H:i') !!}</div>
+                            </div>
+                            <div class="tl-media">
+                                @if (isset($usuario_cierre->img_usuario ) && $usuario_cierre->img_usuario!='')
+                                    <img class="img-xs rounded-circle add-tooltip" title="{{ $usuario_cierre->name }}" src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$usuario_cierre->img_usuario) }}" alt="{{ $usuario_cierre->name }}">
+                                @else
+                                {!! icono_nombre($usuario_cierre->name,32,14) !!}
+                                @endif
+                            </div>
+                            <div class="tl-content card bg-success text-white">
+                                <div class="card-body">
+                                    <span class="btn-link">{{ $usuario_cierre->name }}</span> <i>{{ $incidencia->comentario_cierre }}</i>
+                                    <br>
+                                    <i class="fa-solid fa-circle-check"></i> <b>CIERRE DE LA INCIDENCIA</b
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    
                 </div>
                 <!--===================================================-->
                 <!-- End Timeline -->

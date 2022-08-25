@@ -45,8 +45,13 @@ $func_accion = function($accion, $resultado, $campos,$id) {
 
     //A partir de aqui empieza la parte "personalizada" de la accion
     //Especial atencion a la funcion comodines_texto
+    $regla=App\Models\eventos_reglas::find($accion->cod);
+    $user=new \stdClass;
+    $user->email=valor($param_accion, "e-mail");
+    $user->id_cliente=$regla->id_cliente;
+    $user->name=valor($param_accion, "e-mail");
 
-    $result_email=enviar_email(valor($param_accion, "e-mail"), config('mail.from.address'), valor($param_accion, "e-mail"),valor($param_accion, "e-mail"), valor($param_accion, "titulo"), "emails.mail_eventos", null, comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos));
+    $result_email=notificar_usuario($user, valor($param_accion, "titulo"), "emails.mail_eventos", comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos),1,1,null,null);
 
     $this->log_evento("Enviado email a ".$datos->nombre." ".valor($param_accion, "e-mail").': '.$result_email,$accion->cod_regla);
   

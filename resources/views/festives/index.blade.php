@@ -82,12 +82,12 @@
 				<div class="col-12 formfestivo">
 					<div class="card">
 						<div class="card-body">
-							<div class="row">
-								<div class="col-md-2" style="padding-top: 10px;">
+							<div id="all_toolbar" class="ml-3 d-flex">
+								<div class="col-8 text-nowrap" style="padding-top: 10px;">
 									<div class="spinner-border text-success float-left" role="status" style="margin-right: 10px; display: none" id="spinner"><span class="sr-only">{{trans('strings.espere')}}...</span></div>
-									<h4 class="card-title">{{trans('strings.festives')}} año</h4>
+									{{trans('strings.festives')}} año
 								</div>
-								<div class="col-md-2" style="padding-top: 10px;">
+								<div class="col-6">
 									<form action="{{url('festives/calendar-filter')}}" class="row calendar-filter" method="POST" id="frm_anio">
 										{{csrf_field()}}
 										<div class="col">
@@ -103,13 +103,23 @@
 										</div>
 									</form>
 								</div>
-								<div class="col-md-8">
-								</div>
+								
 							</div>
-
 							<div class="table-responsive m-t-40">
 		
-								<table id="myTableFes" class="table table-bordered table-condensed table-striped table-hover w-100">
+								<table id="myTableFes"  data-toggle="table" data-mobile-responsive="true"
+									data-locale="es-ES"
+									data-search="true"
+									data-show-columns="true"
+									data-show-toggle="true"
+									data-show-columns-toggle-all="true"
+									data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+									data-page-size="50"
+									data-pagination="true" 
+									data-toolbar="#all_toolbar"
+									data-buttons-class="secondary"
+									data-show-button-text="true"
+									>
 									<thead>
 										<tr>
 											<th style="width: 50%">{{trans('strings._employees.festives.name')}}</th>

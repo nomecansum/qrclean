@@ -403,24 +403,6 @@ function comodines_texto($texto,$campos,$datos){
     return $texto;
 }
 
-//Mandar mail
-function enviar_email($user,$from,$to,$to_name,$subject,$plantilla,$error=null,$texto=null,$adjunto=null){
-    try{
-        \Mail::send($plantilla, ['user' => $user, 'error' => $error, 'texto'=>$texto, 'adjunto'=>$adjunto], function ($m) use ($from,$to,$to_name,$subject,$adjunto) {
-            $m->from($from, 'spotdyna');
-            $m->to($to, $to_name)->subject($subject);
-            if(!empty($adjunto))
-            {
-                $m->attach($adjunto, array(
-                    'mime' => 'application/pdf')
-                );
-            }
-        });
-        } catch(\Exception $e){
-        return $e->getMessage();
-    }
-    return true;
-}
 
 function insertar_notificacion_web($user,$tipo,$texto,$id){
     $notif=DB::table('notificaciones')->insertGetId(
@@ -452,11 +434,11 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
                 case 1: //Mail
                     if($user->mca_notif_email=='S'){
                         $cliente=clientes::find($user->id_cliente);
-                        \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'triangulo'=>$triangulo], function ($m) use ($user,$subject) {
+                        \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'id'=>$id], function ($m) use ($user,$subject) {
                             if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
-                                $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
+                                $m->to('nomecansum@gmail.com', $user->name)->subject(strip_tags($subject));
                             } else {
-                                $m->to($user->email, $user->name)->subject($subject);
+                                $m->to($user->email, $user->name)->subject(strip_tags($subject));
                             }
                             $m->from(config('mail.from.address'),config('mail.from.name'));
                         });

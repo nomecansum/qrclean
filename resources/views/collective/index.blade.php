@@ -46,7 +46,7 @@
     </div>
     <div class="card-body">
 		<div class="table-responsive">
-			<table id="tabladeps"  data-toggle="table"
+			<table id="tabladeps"  data-toggle="table" data-mobile-responsive="true"
 				data-locale="es-ES"
 				data-search="true"
 				data-show-columns="true"

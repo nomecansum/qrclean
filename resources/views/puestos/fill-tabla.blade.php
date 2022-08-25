@@ -18,14 +18,14 @@
                 <form action="{{url('/puestos/print_qr')}}" method="POST"  id="frmpuestos" enctype='multipart/form-data'>
                     @csrf
                         {{-- <div class="td"><div class="loader"></div></div> --}}
-                     {{-- <table class="table table-striped table-hover table-vcenter" id="tablapuestos"  style="width: 98%" data-toggle="table"  data-pagination="true" data-search="true"> --}}
+                     {{-- <table class="table table-striped table-hover table-vcenter" id="tablapuestos"  style="width: 98%" data-toggle="table" data-mobile-responsive="true"  data-pagination="true" data-search="true"> --}}
                         <div id="all_toolbar" class="ml-3">
                             <div class="form-check pt-2">
 								<input id="chktodos" name="chktodos" class="form-check-input" type="checkbox">
 								<label for="chktodos" class="form-check-label">Todos</label>
 							</div>
                         </div>
-                        <table id="tablapuestos"  data-toggle="table" onclick="tabla_click()"
+                        <table id="tablapuestos"  data-toggle="table" data-mobile-responsive="true" onclick="tabla_click()"
                         data-locale="es-ES"
                         data-search="true"
                         data-show-columns="true"

@@ -574,7 +574,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="tablapuestos"  data-toggle="table"
+                                        <table id="tablapuestos"  data-toggle="table" data-mobile-responsive="true"
                                             data-locale="es-ES"
                                             data-search="true"
                                             data-show-columns="true"

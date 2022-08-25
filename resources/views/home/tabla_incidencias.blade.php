@@ -28,7 +28,7 @@
     </div>
     <div class="card-body">
         <table id="tabla"  
-            data-toggle="table"
+            data-toggle="table" data-mobile-responsive="true"
             data-locale="es-ES"
             data-search="false"
             data-show-columns="false"

@@ -77,7 +77,7 @@
 					</div>
 				</div>	
 					
-				<table id="tabla"  data-toggle="table"
+				<table id="tabla"  data-toggle="table" data-mobile-responsive="true"
 					data-locale="es-ES"
 					data-search="true"
 					data-show-columns="true"

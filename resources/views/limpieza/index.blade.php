@@ -34,7 +34,7 @@
             </div>
         </div>
         <table id="tablarondas"  
-            data-toggle="table"
+            data-toggle="table" data-mobile-responsive="true"
             data-locale="es-ES"
             data-search="true"
             data-show-columns="true"

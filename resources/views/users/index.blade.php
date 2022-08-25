@@ -107,7 +107,7 @@
                             <label for="chktodos" class="form-check-label">Todos</label>
                         </div>
                     </div>
-                    <table id="tablausuarios"  data-toggle="table"
+                    <table id="tablausuarios"  data-toggle="table" data-mobile-responsive="true"
                         data-locale="es-ES"
                         data-search="true"
                         data-show-columns="true"

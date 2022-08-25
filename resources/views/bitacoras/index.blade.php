@@ -150,7 +150,7 @@ if (isset($r->fechas)){
             <div class="card-body panel-body-with-table">
                 <div class="table-responsive">
 
-                    <table id="tablapuestos"  data-toggle="table"
+                    <table id="tablapuestos"  data-toggle="table" data-mobile-responsive="true"
                         data-locale="es-ES"
                         data-search="true"
                         data-show-columns="true"

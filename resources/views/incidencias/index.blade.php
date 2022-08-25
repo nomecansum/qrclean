@@ -89,7 +89,7 @@
 						<button id="btn-toggle" class="btn btn-secondary float-right ml-3 add-tooltip" title="Cambiar vista tabla/tarjetas"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
 					</div>
 				</div> --}}
-				<table id="tabla"  data-toggle="table"
+				<table id="tabla"  data-toggle="table" data-mobile-responsive="true"
 					data-locale="es-ES"
 					data-search="true"
 					data-show-columns="true"
@@ -100,12 +100,10 @@
 					data-show-toggle="true"
 					data-show-button-text="true"
 					data-toolbar="#all_toolbar"
-					data-mobile-responsive="true"
 					>
 					<thead>
 						<tr>
 							<th data-sortable="true">Id</th>
-							<th></th>
 							<th data-sortable="true">Tipo</th>
 							<th data-sortable="true">Puesto</th>
 							<th data-sortable="true">Edificio</th>

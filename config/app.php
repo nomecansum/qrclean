@@ -207,6 +207,7 @@ return [
 
         Laravel\Passport\PassportServiceProvider::class,
         Berkayk\OneSignal\OneSignalServiceProvider::class,
+        Riverskies\Laravel\MobileDetect\MobileDetectServiceProvider::class,
 
     ],
 
@@ -268,7 +269,8 @@ return [
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'QRCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
-        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class
+        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
+        'MobileDetect' => Riverskies\Laravel\MobileDetect\Facades\MobileDetect::class
 
     ],
 

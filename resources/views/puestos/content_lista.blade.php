@@ -43,7 +43,7 @@ if(!isset($id_check))
                 document.getElementById('panel{{ $e->id_edificio }}').display='none';
             </script>
             @endif
-            <table id="tablapuestos{{ $e->id_edificio }}" class="tabla"  data-toggle="table" onclick="tabla_click()"
+            <table id="tablapuestos{{ $e->id_edificio }}" class="tabla"  data-toggle="table" data-mobile-responsive="true" onclick="tabla_click()"
                 data-locale="es-ES"
                 data-search="true"
                 data-show-columns="true"

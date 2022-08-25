@@ -1,10 +1,12 @@
 
-
+@notmobile
 <tr>
-    <td colspan="9">
+    <td colspan="8">
         <div id="chartdiv" style="width:100%; height:300px;  ml-0"></div>
     </td>
 </tr>
+@endnotmobile
+
 @foreach ($incidencias as $inc)
     @php
         $descripcion="";
@@ -17,11 +19,10 @@
     @endphp
     <tr class="hover-this" @if (checkPermissions(['Clientes'],["W"])) @endif>
         <td>{{$inc->id_incidencia}}</td>
-        <td class="text-center"><i class="{{ $inc->val_icono }} fa-2x" style="color:{{ $inc->val_color }}"></i></td>
-        <td>
-            <div class="rounded"  style="padding: 3px; width:100%: height: 100%; background-color: {{ $inc->val_color  }}; {{ txt_blanco($inc->val_color=='text-white')?'color: #fff':'color:#222' }}">
+        <td class="text-center d-flex"><i class="{{ $inc->val_icono }} fa-2x" style="color:{{ $inc->val_color }}"></i>
+            <span class="rounded ml-3"  style="padding: 3px; width:100%: height: 100%; background-color: {{ $inc->val_color  }}; {{ txt_blanco($inc->val_color=='text-white')?'color: #fff':'color:#222' }}">
                 {{$inc->des_tipo_incidencia}}
-            </div>
+            </span>
         </td>
         <td>{{ nombrepuesto($inc) }}</td>
         <td>{{ $inc->des_edificio}}</td>
@@ -61,8 +62,10 @@
     </tr>
     
 @endforeach
+
+@notmobile
 <tr>
-    <td colspan="9">
+    <td colspan="8">
         @php
         $datos=$incidencias->groupBy('des_tipo_incidencia')->map->count();
         $datos_quesito = [];
@@ -121,8 +124,9 @@
 
     </td>
 </tr>
+
 <tr>
-    <td colspan="9">
+    <td colspan="8">
         @php
             $datos=$incidencias->groupBy('des_estado')->map->count();
             $datos_quesito = [];
@@ -181,7 +185,7 @@
     </td>
 </tr>
 <tr>
-    <td colspan="9">
+    <td colspan="8">
         @php
             $datos=$incidencias->groupBy('des_causa')->map->count();
             $datos_quesito = [];
@@ -301,3 +305,4 @@
     chart.legend = new am4charts.Legend();
     chart.cursor = new am4charts.XYCursor();
 </script>
+@endnotmobile 

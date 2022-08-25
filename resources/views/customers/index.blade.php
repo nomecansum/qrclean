@@ -48,7 +48,7 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-body">
-				<table id="tabla"  data-toggle="table"
+				<table id="tabla"  data-toggle="table" data-mobile-responsive="true"
 					data-locale="es-ES"
 					data-search="true"
 					data-show-columns="true"

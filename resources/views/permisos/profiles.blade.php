@@ -49,7 +49,7 @@
 			        {{-- @include('resources.combo_clientes') --}}
 			        <div class="table-responsive mt-40">
 			            <table id="myTable"
-						data-toggle="table"
+						data-toggle="table" data-mobile-responsive="true"
 						data-locale="es-ES"
 						data-search="true"
 						data-show-columns="true"

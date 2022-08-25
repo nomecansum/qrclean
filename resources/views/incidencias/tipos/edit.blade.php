@@ -126,22 +126,22 @@
                     <div class="col-md-3">
                         <h5>Postprocesado de la incidencia<h5>
                     </div>
-                    <div class="col-md-2 ">
-                        <select class="form-control col-md-2 float-left" style="margin-top: 2px" required id="val_momento" name="val_momento">
-                                <option value="C">Creacion</option>
-                                <option value="A">Accion</option>
-                                <option value="F">Cierre</option>
-                                <option value="R">Reapertura</option>
-                        </select>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="btn-group btn-group-sm pull-right" role="group">
+                    <div class="col-md-3 ">
+
+                        <div class="input-group mt-2">
+                            <select class="form-control col-md-2 float-left" required id="val_momento" name="val_momento">
+                                    <option value="C">Creacion</option>
+                                    <option value="A">Accion</option>
+                                    <option value="F">Cierre</option>
+                                    <option value="R">Reapertura</option>
+                            </select>
                             <a href="#nueva-incidencia" id="btn_nueva" class="btn btn-success text-white" data-toggle="modal" title="Nueva accion">
-                                <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
+                                <i class="fa fa-plus-square pt-2"aria-hidden="true"></i>
                                 <span>Nueva</span>
                             </a>
-                        </div>
+                        </div>                        
                     </div>
+                    
                 </div>
                 
 

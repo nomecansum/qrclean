@@ -11,7 +11,7 @@
 <div class="row mb-4 {{ $link??'' }}" data-id="{{ $sala->id_puesto }}" data-desc="{{ $sala->des_puesto }}">
     <div class="col-md-2 text-center p-t-10">
         <span class="fs-2">{{ $sala->cod_puesto }}</span><br>
-        {{ $sala->des_puesto }}
+        {{ nombrepuesto($sala) }}
         @if(config('app.debug'))
         <br>[{{ $sala->id_puesto }}]
         @endif

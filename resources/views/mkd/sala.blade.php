@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 text-center font-bold text-3x">
-            {{ $sala->des_puesto }}
+            {{ nombrepuesto($sala) }}
         </div>
     </div>
 

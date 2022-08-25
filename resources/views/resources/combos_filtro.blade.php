@@ -135,6 +135,19 @@
             </div>
         </div>
 
+        <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['proc']) && $show['proc']==1) ? '' : 'display: none'  }}">
+            <label>Procedencia</label>
+            <div class="input-group select2-bootstrap-append">
+                <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="procedencia[]" id="multi-procedencia" >
+                    <option value="web">WEB</option>
+                    <option value="scan">SCAN</option>
+                    <option value="api">API</option>
+                    <option value="salas">SALAS</option>
+                </select>
+                <button class="btn btn-primary select-all" data-select="multi-tipomark"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+            </div>
+        </div>
+
         <div class="form-group  col-md-12 mt-3" style="{{ (isset($hide['usu']) && $hide['usu']==1) ? 'display: none' : ''  }}">
             <label>Usuario</label>
             <div class="input-group select2-bootstrap-append">

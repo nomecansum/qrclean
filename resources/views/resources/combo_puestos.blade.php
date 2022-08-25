@@ -27,7 +27,7 @@
             @php $planta=$puesto->id_planta @endphp
         @endif
         <option value="{{ $puesto->id_puesto }}" >
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $puesto->des_puesto }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ nombrepuesto($puesto) }}
         </option>
     @endforeach
 </select>

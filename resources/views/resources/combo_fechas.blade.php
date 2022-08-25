@@ -29,6 +29,12 @@ var picker = new Litepicker({
             try{
                 change_fechas(date1, date2);
             } catch(err) { console.log(err)}
+        }),
+        picker.on('show', () => {
+            $('#tabla').css('margin-top', '200px');
+        }),
+        picker.on('hide', () => {
+            $('#tabla').css('margin-top', '0px');
         });
     }
 });

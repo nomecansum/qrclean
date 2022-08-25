@@ -30,7 +30,7 @@ class APIController extends Controller
             $result=users::where('id_cliente',Auth::user()->id_cliente)
             ->where(function($q) use($r){
                 $q->where('id',$r->id_usuario_apertura)
-                ->orWhere('id_externo',$r->id_usuario_apertura);
+                ->orWhere('id_usurio_externo',$r->id_usuario_apertura);
             })->first()->id;
             return $result;
         } catch (\Exception $e) {
@@ -45,7 +45,7 @@ class APIController extends Controller
             $result=incidencias::where('id_cliente',Auth::user()->id_cliente)
                 ->where(function($q) use($r){
                     $q->where('id_incidencia',$r->id_incidencia)
-                    ->orWhere('id_externo',$r->id_incidencia);
+                    ->orWhere('id_incidencia_externo',$r->id_incidencia);
                 })
                 ->first()->id_incidencia;
             return $result;
@@ -85,7 +85,7 @@ class APIController extends Controller
             $result=causas_cierre::where('id_cliente',Auth::user()->id_cliente)
                 ->where(function($q) use($r){
                     $q->where('id_causa_cierre',$r->id_causa_cierre)
-                    ->orWhere('id_externo',$r->id_causa_cierre);
+                    ->orWhere('id_causa_externo',$r->id_causa_cierre);
                 })
                 ->first()->id_causa_cierre;
             return $result;
@@ -107,7 +107,7 @@ class APIController extends Controller
 
     public static function get_cliente_ext($r){
         try{
-            $result=clientes::where('id_externo',$r->id_cliente)
+            $result=clientes::where('id_cliente_externo',$r->id_cliente)
                 ->first()->id_cliente;
             return $result;
         } catch (\Exception $e) {
@@ -240,7 +240,7 @@ class APIController extends Controller
         }
 
         $causas_cierre=DB::table('causas_cierre')
-            ->select('id_causa_cierre','des_causa','val_icono','val_color','mca_default','id_externo')
+            ->select('id_causa_cierre','des_causa','val_icono','val_color','mca_default','id_causa_externo')
             ->where('causas_cierre.id_cliente',Auth::user()->id_cliente)
             ->get();
 
@@ -298,13 +298,13 @@ class APIController extends Controller
             //dd($respuesta);
             $incidencias = $respuesta->map(function ($item, $key) {
                 $acciones=DB::table('incidencias_acciones')
-                    ->select('id_accion','des_accion','fec_accion','id_usuario','mca_resuelve','users.id_externo as id_usuario_ext')
+                    ->select('id_accion','des_accion','fec_accion','id_usuario','mca_resuelve','users.id_usuario_externo as id_usuario_ext')
                     ->join('users','users.id','incidencias_acciones.id_usuario')
                     ->where('id_incidencia',$item->id_incidencia)
                     ->get();
                 return [
                     'id_incidencia' => $item->id_incidencia,
-                    'id_externo' => $item->id_externo,
+                    'id_incidencia_externo' => $item->id_incidencia_externo,
                     'id_incidencia_salas' => $item->id_incidencia_salas,
                     'des_incidencia' => $item->des_incidencia,
                     'txt_incidencia' => $item->txt_incidencia,
@@ -316,7 +316,7 @@ class APIController extends Controller
                     'comentario_cierre' => $item->comentario_cierre,
                     'id_estado' => $item->id_estado,
                     'id_usuario_apertura' => $item->id_usuario_apertura,
-                    'id_usuario_ext' => users::find($item->id_usuario_apertura)->id_externo,
+                    'id_usuario_ext' => users::find($item->id_usuario_apertura)->id_usuario_externo,
                     'acciones' => $acciones,
                 ];
             });
@@ -336,7 +336,7 @@ class APIController extends Controller
         try{
             $r->request->add(['id_cliente' => Auth::user()->id_cliente]);
             if(strlen($r->id_incidencia_externo)>0){
-                if($this->check_existe_incidencia($r,"id_externo",$r->id_incidencia_externo)===true){
+                if($this->check_existe_incidencia($r,"id_causa_externo",$r->id_incidencia_externo)===true){
                     throw new \ErrorException('La incidencia ID '.$r->id_incidencia_externo.' ya existe',403);
                 };
             } else {
@@ -348,7 +348,7 @@ class APIController extends Controller
             $r->request->add(['id_puesto' => $this->get_puesto($r)]);
             $r->request->add(['id_tipo_incidencia' => $this->get_tipo($r)]);
             $r->request->add(['procedencia' => "api"]);
-            $r->request->add(['id_externo' => $r->id_incidencia_externo]);
+            $r->request->add(['id_incidencia_externo' => $r->id_incidencia_externo]);
             $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
             savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
             return response()->json($respuesta);
@@ -426,7 +426,7 @@ class APIController extends Controller
                         ->first();
                 if(!isset($esta)){
                     $sala_qrclean=salas::where('id_puesto',$esta->id_puesto)->first();
-                    $sala_qrclean->id_externo=$sala->id;
+                    $sala_qrclean->id_externo_salas=$sala->id;
                     $sala_qrclean->save();
                 }
             }

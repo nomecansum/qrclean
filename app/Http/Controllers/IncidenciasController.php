@@ -32,14 +32,35 @@ class IncidenciasController extends Controller
   //////////////FUNCIONES AUXILIARES////////////////////
   //Ejemplo de JSON de respuesta
 //   {
-//     "incidencias.id_externo": "@R:id_incidencia",
+//     "incidencias.id_incidencia_externo": "@R:id_incidencia",
 //     "incidencias.url_detalle_incidencia": "@R:url_detalle",
 //     "incidencias.mca_sincronizada": "S"
 //   }
+    //Busca dentro de un array una clave definida por la variable search_path y devuelve el valor si lo encuentra, null si no
+    function find_in_ArrayRecursive($someArray,$search_path) {
+        $iterator = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($someArray), \RecursiveIteratorIterator::SELF_FIRST);
+        foreach ($iterator as $k => $v) {
+            $indent = str_repeat('&nbsp;', 10 * $iterator->getDepth());
+            // Not at end: show key only
+            if (!$iterator->hasChildren()) {
+                for ($p = array(), $i = 0, $z = $iterator->getDepth(); $i <= $z; $i++) {
+                    $p[] = $iterator->getSubIterator($i)->key();
+                }
+                $path = implode('|', $p);
+                if($path === $search_path){
+                    return $v;
+                }
+            }
+        }
+        return null;
+    }
+
     private function procesar_respuesta($reglas,$respuesta,$id_incidencia,$id_puesto){
         try{
             $reglas=json_decode($reglas,true);
-            $respuesta=json_decode($respuesta,true);
+            if(isjson($respuesta)){
+                $respuesta=json_decode($respuesta,true);
+            }
             //Cada una de las reglas de la respuesta se trata por separado
             foreach($reglas as $key=>$value){
                 $tabla=explode(".",$key)[0];
@@ -48,7 +69,7 @@ class IncidenciasController extends Controller
                 //Ahora a ver si es un valor o parte de la respuesta
                 if(strpos($value,'@R:')!==false){
                     $campo_respuesta=str_replace("@R:","",$value);
-                    $dato=$respuesta[$campo_respuesta];
+                    $dato=$this->find_in_ArrayRecursive($respuesta,$campo_respuesta);
                 } else {
                     $dato=$value;
                 }
@@ -61,13 +82,35 @@ class IncidenciasController extends Controller
     }
 
     private function reemplazar_parametros($subject,$inc){
+        $data=DB::table('incidencias')
+            ->join('users','users.id','incidencias.id_usuario_apertura')
+            ->join('puestos','puestos.id_puesto','incidencias.id_puesto')
+            ->join('plantas','plantas.id_planta','puestos.id_planta')
+            ->join('edificios','edificios.id_edificio','plantas.id_edificio')
+            ->join('estados_incidencias','estados_incidencias.id_estado','incidencias.id_estado')
+            ->join('incidencias_tipos','incidencias_tipos.id_tipo_incidencia','incidencias.id_tipo_incidencia')
+            ->where('id_incidencia',$inc->id_incidencia)
+            ->first();
+        $accion=DB::table('incidencias_acciones')
+            ->where('id_incidencia',$inc->id_incidencia)
+            ->first();
+            
+        if(isset($accion)){
+            $data=(object) array_merge((array) $data, (array) $accion);
+        }
         preg_match_all("/(?<=#).*?(?=#)/", $subject, $match);
         foreach($match[0] as $value){
-            $subject=str_replace('#'.$value.'#',$inc->$value,$subject);
+            if(isset($data->$value)){
+                $subject=str_replace('#'.$value.'#',$data->$value,$subject);
+            } else {
+                Log::debug("\$data->".$value." no existe");
+            }
+            
         }
         return $subject;
     }
-  
+        
+   
     //////////////////////////////////////////////////////
   
     //LISTADO DE INCIDENCIAS
@@ -241,6 +284,11 @@ class IncidenciasController extends Controller
                 }
             })
             ->where(function($q) use($r){
+                if ($r->procedencia) {
+                    $q->whereIn('incidencias.val_procedencia',$r->procedencia);
+                }
+            })
+            ->where(function($q) use($r){
                 if ($r->tipoinc) {
                     $q->whereIn('incidencias.id_tipo_incidencia',$r->tipoinc);
                 }
@@ -379,7 +427,7 @@ class IncidenciasController extends Controller
             $inc->id_estado_vuelta_puesto=$puesto->id_estado;
             $inc->val_procedencia=$procedencia;
             $inc->id_incidencia_salas=$r->id_incidencia_salas??null;
-            $inc->id_externo=$r->id_externo??null;
+            $inc->id_incidencia_externo=$r->id_incidencia_externo??null;
             $inc->save();
 
             //Marcamos el puesto como chungo
@@ -565,18 +613,20 @@ class IncidenciasController extends Controller
                         try{
                             $inc->mca_sincronizada='N';
                             Log::info("Iniciando postprocesado HTTP POST de incidencia ".$inc->id_incidencia);
-                            log::debug($p->val_url.'?'.$p->param_url);
+                            
                             //Ahora sustituimos las variables por sus valores
                             $p->val_url=$this->reemplazar_parametros($p->val_url,$inc);
                             $p->param_url=$this->reemplazar_parametros($p->param_url,$inc);
                             $p->val_body=$this->reemplazar_parametros($p->val_body,$inc);
-
+                            if(isset($p->param_url) && strlen($p->param_url)>0){
+                                $p->val_url.='?'.$p->param_url;
+                            }
+                            Log::debug("URL: ".$p->val_url);
                             $metodo=$p->tip_metodo=='P'?'POST':'PUT';
-                            
                             $response=Http::withOptions(['verify' => false])
                                 ->withHeaders(json_decode($p->val_header,true))
                                 ->withbody($p->val_body,'application/json')
-                                ->$metodo($p->val_url.'?'.$p->param_url);
+                                ->$metodo($p->val_url);
                             if($response->status()==200){
                                 Log::info("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." OK");
                             } else {
@@ -590,7 +640,7 @@ class IncidenciasController extends Controller
                         
                         } catch(\Throwable $e){
                             Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." "." ERROR: ".$e->getMessage());
-                            //dd($e);
+                            dd($e);
                         }
                         $inc->mca_sincronizada='S';
                         break;
@@ -598,10 +648,16 @@ class IncidenciasController extends Controller
                     case 'G': //HTTP Get
                         try{
                             Log::info("Iniciando postprocesado HTTP GET de incidencia ".$inc->id_incidencia);
-                            log::debug($p->val_url.'?'.$p->param_url);
+                            $p->val_url=$this->reemplazar_parametros($p->val_url,$inc);
+                            $p->param_url=$this->reemplazar_parametros($p->param_url,$inc);
+                            if(isset($p->param_url) && strlen($p->param_url)>0){
+                                $p->val_url.='?'.$p->param_url;
+                            }
+                            Log::debug("URL: ".$p->val_url);
                             $response=Http::withOptions(['verify' => false])
                                 ->withHeaders(json_decode($p->val_header,true))
-                                ->get($p->val_url.'?'.$p->param_url);
+                                ->get($p->val_url);
+                           
                             if($response->status()==200){
                                 Log::info("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." OK");
                             } else {
@@ -622,8 +678,7 @@ class IncidenciasController extends Controller
                     case 'W': //Web Push
                         Log::info("Iniciando postprocesado WEB Push de incidencia ".$inc->id_incidencia);
                         //Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta
-                        notificar_usuario( $usuario_abriente,null,null,'Incidencia en puesto '.$puesto->cod_puesto.' - '.$puesto->des_edificio.' - '.$puesto->des_planta,[3],9,[],$inc->id_incidencia);
-
+                        notificar_usuario( $usuario_abriente,null,null,$this->reemplazar_parametros($p->val_body,$inc)??'SIN TEXTO',[3],9,[],$inc->id_incidencia);
                         break;
 
                     case 'L': //Spotlinker

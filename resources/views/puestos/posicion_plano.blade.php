@@ -13,7 +13,7 @@
         @endphp
 
             @php
-                $title=$puesto->des_puesto;
+                $title= nombrepuesto($puesto);
                 $borde="";
 
                 $color=$puesto->val_color?$puesto->val_color:"#dff9d2";

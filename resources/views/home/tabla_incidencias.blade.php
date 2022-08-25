@@ -55,7 +55,7 @@
                     <tr class="hover-this" @if (checkPermissions(['Clientes'],["W"])) @endif>
                         <td>{{$inc->id_incidencia}}</td>
                         
-                        <td>{{ $inc->des_puesto}}</td>
+                        <td>{{ nombrepuesto($inc) }}</td>
                         <td>{{ $inc->des_edificio}}</td>
                         <td>{{ $inc->des_planta}}</td>
                         <td>{!! beauty_fecha($inc->fec_apertura)!!}</td>

@@ -24,7 +24,7 @@
     @endphp
     $("#puesto{{ $puesto->id_puesto }}").removeClass("disponible");
     $("#puesto{{ $puesto->id_puesto }}").addClass("{{  $cuadradito['clase_disp'] }}");
-    $("#puesto{{ $puesto->id_puesto }}").prop('title', "{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" );
+    $("#puesto{{ $puesto->id_puesto }}").prop('title', "{!! nombrepuesto($puesto) ." \r\n ".$cuadradito['title'] !!}" );
 
 @endforeach
 </script>

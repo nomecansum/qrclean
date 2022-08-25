@@ -5,7 +5,7 @@
             @isset($puesto->val_icono)
                 <i class="{{ $puesto->val_icono }} fa-2x" style="color:{{ $puesto->val_color }}"></i>
             @endisset
-           <span class="font-bold" style="color:{{ $puesto->val_color }}; font-size: 20px">{{ $puesto->des_puesto }}</span>
+           <span class="font-bold" style="color:{{ $puesto->val_color }}; font-size: 20px">{{ nombrepuesto($puesto) }}</span>
 
         </h3>
         <span class="float-right" id="spinner" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
@@ -73,7 +73,7 @@
 			
     $('#btn_guardar').click(function(){
         $('#spinner').show();
-        $('#btn_guardar').hide();
+        @if(config('app.env')!="local") $('#btn_guardar').hide(); @endif
         $('#incidencia_form').submit();
     });
     $('.form-ajax').submit(form_ajax_submit);

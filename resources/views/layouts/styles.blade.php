@@ -29,7 +29,11 @@
     }
 
     .hd--expanded .content__header {
-    border-radius: 0 !important;
-}
+        border-radius: 0 !important;
+    }
+
+    .litepicker{
+        
+    }
 
 </style>

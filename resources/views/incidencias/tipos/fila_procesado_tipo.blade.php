@@ -69,7 +69,15 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
+                            <div class="form-group col-md-12 {{ $errors->has('val_body') ? 'has-error' : '' }}">
+                                <div class="row">
+                                    <div class="col-md-3"><label for="des_edificio" class="control-label w-100 mt-2">Mensaje</label></div>
+                                    <div class="col-md-9 text-end mt-2"><a href="#modal-param_body"  data-toggle="modal" data-target="#modal-param_body" class="btn_modal"><i class="fa-solid fa-square-question fa-2x text-info" title="Ayuda Body"></i></a></div>
+                                </div>
+                                <input class="form-control tocado" name="val_body" type="text" id="val_body" required value="{{ old('val_body', optional($tipo)->param_url) }}" maxlength="1000" placeholder="Enter val_body here...">
+                                {!! $errors->first('val_header', '<p class="help-block">:message</p>') !!}
+                            </div>
+
 
                         </div>
                         @break
@@ -78,8 +86,8 @@
     
             </div>
             <div class="col-md-1 nowrap mt-4">
-                <a href="javascript:void(0)"  class="btn btn-xs btn-info btn_save add-tooltip"  id="btn_editar{{ $tipo->id_proceso }}" title="Editar tipo" data-id="{{ $tipo->id_proceso }}" style="display: none"> <span class="fa fa-save" aria-hidden="true" ></span> Guardar</a>
-                <a href="javascript:void(0)"  class="btn btn-xs btn-danger add-tooltip btn_borrar_accion" data-id="{{$tipo->id_proceso}}" title="Borrar tipo"  ><span class="fa fa-trash" aria-hidden="true"></span> Borrar</a>
+                <a href="javascript:void(0)"  class="btn btn-xs btn-info btn_save add-tooltip w-100"  id="btn_editar{{ $tipo->id_proceso }}" title="Editar tipo" data-id="{{ $tipo->id_proceso }}" style="display: none"> <span class="fa fa-save" aria-hidden="true" ></span> Guardar</a>
+                <a href="javascript:void(0)"  class="btn btn-xs btn-danger add-tooltip btn_borrar_accion w-100" data-id="{{$tipo->id_proceso}}" title="Borrar tipo"  ><span class="fa fa-trash" aria-hidden="true"></span> Borrar</a>
             </div>
         </div>
         <div class="row">

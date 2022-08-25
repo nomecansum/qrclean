@@ -64,7 +64,7 @@
 				@csrf
 				<input type="hidden" name="document" value="pantalla">
 				<input type="hidden" name="output" value="pantalla">
-				@include('resources.combos_filtro',[$hide=['est_mark'=>1]])
+				@include('resources.combos_filtro',[$hide=['est_mark'=>1,'tip_mark'=>1],$show=['proc'=>1]])
 				<div class="row">
 					<div class="col-md-4" style="padding-left: 15px">
 						@include('resources.combo_fechas')
@@ -97,9 +97,10 @@
 					data-page-list="[5, 10, 20, 30, 40, 50]"
 					data-page-size="50"
 					data-pagination="true" 
-					data-show-pagination-switch="true"
+					data-show-toggle="true"
 					data-show-button-text="true"
 					data-toolbar="#all_toolbar"
+					data-mobile-responsive="true"
 					>
 					<thead>
 						<tr>
@@ -206,7 +207,7 @@
 								@php $planta=$puesto->id_planta @endphp
 							@endif
 							<option value="{{ $puesto->id_puesto }}" >
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $puesto->des_puesto }}
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ nombrepuesto($puesto) }}
 							</option>
 						@endforeach
 					</select>

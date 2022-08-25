@@ -319,8 +319,8 @@
                                         <div class="col-md-3">
 											<div class="form-group">
 												<label for="name" class="control-label">ID Externo</label>
-                                                <input class="form-control" name="id_externo" type="text" id="id_externo" value="{{ old('id_externo', optional($users)->id_externo) }}" minlength="1" maxlength="255" required="true" placeholder="Enter id_externo here...">
-                                                {!! $errors->first('id_externo', '<p class="help-block">:message</p>') !!}
+                                                <input class="form-control" name="id_usuario_externo" type="text" id="id_usuario_externo" value="{{ old('id_usuario_externo', optional($users)->id_usuario_externo) }}" minlength="1" maxlength="255" required="true" placeholder="Enter id_usuario_externo here...">
+                                                {!! $errors->first('id_usuario_externo', '<p class="help-block">:message</p>') !!}
 											</div>
 										</div>
                                     </div>
@@ -449,7 +449,7 @@
                                                                                 $puestos_plantas=$puestos->where('id_planta',$key);
                                                                             @endphp
                                                                             @foreach($puestos_plantas as $t)
-                                                                                <option value="{{$t->id_puesto}}">[{{$t->cod_puesto}}] {{$t->des_puesto}}</option>
+                                                                                <option value="{{$t->id_puesto}}">{{ nombrepuesto($t) }}</option>
                                                                             @endforeach
                                                                         </optgroup>
                                                                     @endforeach

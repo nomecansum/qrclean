@@ -151,7 +151,7 @@ function ejecutar($evento,$output){
     //Construir la query
     $data=DB::table('reservas')
             ->where('fec_reserva','>=',Carbon::now()->subDays($val_dias))
-            ->select('users.id_externo as id','users.name','users.email')
+            ->select('users.id_usuario_externo as id','users.name','users.email')
             ->selectraw('count(*) as veces')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -169,7 +169,7 @@ function ejecutar($evento,$output){
                 $q->WhereIn('puestos.id_estado',$id_estado);
             })
             ->where('reservas.mca_anulada','S')
-            ->groupby(['users.id_externo','users.name','users.email'])
+            ->groupby(['users.id_usuario_externo','users.name','users.email'])
             ->get();
 
     $lista_id=$data->pluck('id')->toArray();

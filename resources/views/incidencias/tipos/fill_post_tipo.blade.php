@@ -8,7 +8,7 @@
     </div>
 @endforeach
 <div class="modal fade" id="modal-url" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
@@ -24,7 +24,7 @@
                 En la URL se pueden utilizar los siguientes comodines que serán sustituidos por el valor correspondiente en el momento de la petición:<br>
                 <div class="col-md-12 rounded mb-3 bg-yellow" style="font-size: 12px" >
                     <h3>Campos variables</h3>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <b>#id_cliente#:</b> Identificador unico del cliente<br>
                         <b>#id_incidencia#:</b> Identificador unico de la incidencia<br>
                         <b>#id_usuario_apertura#:</b> ID Usuario que ha abierto la incidencia<br>
@@ -32,15 +32,13 @@
                         <b>#id_usuario_cierre#:</b> ID  del usuario que ha cerrado la incidencia<br>
                         <b>#fec_apertura#:</b> Fecha de apertura de la incidencia<br>
                         <b>#fec_cierre#:</b> Fecha de cierre de la incidencia<br>
-                    </div>
-                    <div class="col-md-6">
                         <b>#id_tipo_incidencia#:</b> Identificador de tipo de la incidencia<br>
                         <b>#id_puesto#:</b> Identificador del puesto<br>
                         <b>#id_estado#:</b> Identificador del estado de la incidencia<br>
                         <b>#edificio#:</b> Edificio en le que esta el puesto<br>
                         <b>#planta#:</b> Planta en la que esta el puesto<br>
                         <b>#id_cliente#:</b> Identificador de cliente<br>
-                        <b>#id_externo#:</b> Identificador de la incidencia en el sistema externo<br>
+                        <b>#id_incidencia_externo#:</b> Identificador de la incidencia en el sistema externo<br>
                         <b>#id_incidencia_salas#:</b> Identificador de la incidencia en spotlinker salas<br>
                         <b>#id_causa_cierre#:</b> Identificador de la causa de cierre<br>
                     </div>
@@ -53,7 +51,7 @@
     </div>
 </div>
 <div class="modal fade" id="modal-param_url" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
@@ -69,7 +67,7 @@
                 En los parámetros se pueden utilizar los siguientes comodines que serán sustituidos por el valor correspondiente en el momento de la petición:<br>
                 <div class="col-md-12 rounded mb-3 bg-yellow" style="font-size: 12px" >
                     <h3>Campos variables</h3>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <b>#id_cliente#:</b> Identificador unico del cliente<br>
                         <b>#id_incidencia#:</b> Identificador unico de la incidencia<br>
                         <b>#id_usuario_apertura#:</b> ID Usuario que ha abierto la incidencia<br>
@@ -77,15 +75,13 @@
                         <b>#id_usuario_cierre#:</b> ID  del usuario que ha cerrado la incidencia<br>
                         <b>#fec_apertura#:</b> Fecha de apertura de la incidencia<br>
                         <b>#fec_cierre#:</b> Fecha de cierre de la incidencia<br>
-                    </div>
-                    <div class="col-md-6">
                         <b>#id_tipo_incidencia#:</b> Identificador de tipo de la incidencia<br>
                         <b>#id_puesto#:</b> Identificador del puesto<br>
                         <b>#id_estado#:</b> Identificador del estado de la incidencia<br>
                         <b>#edificio#:</b> Edificio en le que esta el puesto<br>
                         <b>#planta#:</b> Planta en la que esta el puesto<br>
                         <b>#id_cliente#:</b> Identificador de cliente<br>
-                        <b>#id_externo#:</b> Identificador de la incidencia en el sistema externo<br>
+                        <b>#id_incidencia_externo#:</b> Identificador de la incidencia en el sistema externo<br>
                         <b>#id_incidencia_salas#:</b> Identificador de la incidencia en spotlinker salas<br>
                         <b>#id_causa_cierre#:</b> Identificador de la causa de cierre<br>
                     </div>
@@ -98,7 +94,7 @@
     </div>
 </div>
 <div class="modal fade" id="modal-param_header" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
@@ -124,7 +120,7 @@
 </div>
 
 <div class="modal fade" id="modal-param_respuesta" style="display: none;">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
@@ -139,7 +135,7 @@
                 El el valor se podrá poner directamente el valor deseado o poner una expresion  con el formato <b>@R:nombre_de_campo</b> de tal forma que se cogerá el campo correspondiente de la respuesta del sistema remoto<br><br>
                 Ejemplo:<br>
 <pre>{
-"incidencias.id_externo": "@R:id_incidencia",
+"incidencias.id_incidencia_externo": "@R:id_incidencia",
 "incidencias.url_detalle_incidencia": "@R:url_detalle",
 "incidencias.mca_sincronizada": "S"
 }</pre>
@@ -151,8 +147,8 @@
     </div>
 </div>
 
-<div class="modal modal-lg fade" id="modal-param_body" style="display: none;">
-    <div class="modal-dialog">
+<div class="modal fade" id="modal-param_body" style="display: none;">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
@@ -175,7 +171,7 @@
 En las peticiones se pueden utilizar los siguientes comodines que serán sustituidos por el valor correspondiente en el momento de la petición:<br>
             <div class="col-md-12 rounded mb-3 bg-yellow" style="font-size: 12px" >
                 <h3>Campos variables</h3>
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <b>#id_cliente#:</b> Identificador unico del cliente<br>
                     <b>#id_incidencia#:</b> Identificador unico de la incidencia<br>
                     <b>#des_incidencia#:</b> Descripcion corta de la incidencia<br>
@@ -189,21 +185,21 @@ En las peticiones se pueden utilizar los siguientes comodines que serán sustitu
                     <b>#fec_cierre#:</b> Fecha de cierre de la incidencia<br>
                     <b>#url_detalle_incidencia#:</b> URL para el acceso directo a la incidencia<br>
                     <b>#vaL_procedencia#:</b> Procedencia de la apertura la incidencia<br>
-                </div>
-                <div class="col-md-6">
                     <b>#id_tipo_incidencia#:</b> Identificador de tipo de la incidencia<br>
                     <b>#des_tipo_incidencia#:</b> Tipo de la incidencia<br>
                     <b>#id_puesto#:</b> Identificador del puesto<br>
+                    <b>#cod_puesto#:</b> Codigo del puesto en el cliente<br>
                     <b>#id_estado#:</b> Identificador del estado de la incidencia<br>
                     <b>#edificio#:</b> Edificio en le que esta el puesto<br>
                     <b>#planta#:</b> Planta en la que esta el puesto<br>
                     <b>#id_cliente#:</b> Identificador de cliente<br>
                     <b>#img1#:</b> Imagen adjunta 1<br>
                     <b>#img2#:</b> Imagen adjunta 2<br>
-                    <b>#id_externo#:</b> Identificador de la incidencia en el sistema externo<br>
+                    <b>#id_incidencia_externo#:</b> Identificador de la incidencia en el sistema externo<br>
                     <b>#id_incidencia_salas#:</b> Identificador de la incidencia en spotlinker salas<br>
                     <b>#id_causa_cierre#:</b> Identificador de la causa de cierre<br>
                     <b>#comentario_cierre#:</b> Comentario de cierre de la incidencia<br>
+                    <b>#des_accion#:</b> Texto de la ultima accion añadida<br>
                 </div>
             </div>
             </div>

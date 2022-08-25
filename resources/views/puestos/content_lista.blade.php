@@ -146,7 +146,7 @@ if(!isset($id_check))
                                 }
                                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
                             @endphp
-                            <tr  id="puesto{{ $puesto->id_puesto }}" title="{!! $puesto->des_puesto." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}"  data-planta="{{ $value }}" data-fila="{{ $cuenta_fila }}">
+                            <tr  id="puesto{{ $puesto->id_puesto }}" title="{!!  nombrepuesto($puesto)." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}"  data-planta="{{ $value }}" data-fila="{{ $cuenta_fila }}">
                                 @if(isset($checks) && $checks==1)
                                 <td>
                                     {{-- Mostrar checkbox para seleccionar los puestos --}}

@@ -2165,10 +2165,10 @@
 	    return 'Cambiar';
 	  },
 	  formatToggleOn: function formatToggleOn() {
-	    return 'Mostrar vista de carta';
+	    return 'Mostrar vista de tarjeta';
 	  },
 	  formatToggleOff: function formatToggleOff() {
-	    return 'Ocultar vista de carta';
+	    return 'Ocultar vista de tarjeta';
 	  },
 	  formatColumns: function formatColumns() {
 	    return 'Columnas';

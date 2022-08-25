@@ -16,7 +16,7 @@
         <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">Parametrizacion</li>
         <li class="breadcrumb-item "><a href="{{url('/salas')}}">Estado de salas de reunion</a></li>
-        <li class="breadcrumb-item active"><a href="{{url('/sala/'.$sala->token)}}">{{ $sala->des_puesto }}</a></li>
+        <li class="breadcrumb-item active"><a href="{{url('/sala/'.$sala->token)}}">{{ nombrepuesto($sala) }}</a></li>
 @endsection
 
 @section('content')
@@ -28,7 +28,7 @@
 </div>
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">{{ $sala->des_puesto }} {!!beauty_fecha(Carbon::now(),0) !!}</h3>
+        <h3 class="card-title">@if(in_array(session('CL')['val_campo_puesto_mostrar'],['A','C'])) {{$sala->cod_puesto}}@endif - @if(in_array(session('CL')['val_campo_puesto_mostrar'],['A','C'])){{$sala->des_puesto}}@endif {!!beauty_fecha(Carbon::now(),0) !!}</h3>
     </div>
     <div class="card-body" id="detalles_reserva">
         @php

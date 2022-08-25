@@ -55,7 +55,7 @@
 	
 				<!--Tabs Content-->
 				<div class="tab-content">
-					<div id="demo-stk-lft-tab-1" class="tab-pane fade "  role="tabpanel" aria-labelledby="general-tab">
+					<div id="demo-stk-lft-tab-1" class="tab-pane fade  active show"  role="tabpanel" aria-labelledby="general-tab">
 						<div class="row">
 							<div class="col-12">
 								<div class="row">
@@ -296,7 +296,7 @@
 						</div>
 						
 					</div>
-					<div id="demo-stk-lft-tab-4" class="tab-pane fade active show"  role="tabpanel" aria-labelledby="tema-tab">
+					<div id="demo-stk-lft-tab-4" class="tab-pane fade"  role="tabpanel" aria-labelledby="tema-tab">
 						<p class="text-main text-semibold">Tema que tendrán por defecto los usuarios que no lo hayan personalizado</p>
 						<input type="hidden" name="tema" id="tema" value="{{ isset($config->theme->tema)?$config->theme->tema:'/color-schemes' }}"> 
 						<input type="hidden" name="rootClass" id="rootClass"  value="{{ isset($config->theme->rootClass)?$config->theme->rootClass:'' }}"> 

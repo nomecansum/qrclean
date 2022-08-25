@@ -477,7 +477,7 @@ class UsersController extends Controller
             'list_puestos_preferidos'=>'nullable',
             'id_departamento'=>'nullable',
             'val_colectivo'=>'nullable',
-            'id_externo'=>'nullable',
+            'id_usuario_externo'=>'nullable',
             'id_onesignal'=>'nullable',
             'mca_notif_push'=>'nullable',
             'mca_notif_email'=>'nullable',

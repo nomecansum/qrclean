@@ -39,7 +39,7 @@ class users extends Model
                   'email_verified_at',
                   'id_cliente',
                   'id_edificio',
-                  'id_externo',
+                  'id_usuario_externo',
                   'id_usuario_supervisor',
                   'img_usuario',
                   'last_login',

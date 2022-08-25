@@ -247,6 +247,7 @@
     z-index: -1;
 }
 
+/*
 .modal-dialog {
     position: absolute;
     top: 50px;
@@ -256,7 +257,7 @@
     z-index: 10040;
     overflow: auto;
     overflow-y: auto;
-}
+} */
 
 /* .select2-selection__choice {
     background-color: #cfcfcf !important;
@@ -361,10 +362,10 @@ td{
   font-size: 14px;
 }
 
-.modal-content{
+/* .modal-content{
   border: #aaa 5px dotted;
   border-radius: 8px;
-}
+} */
 
 
 /* LABEL */

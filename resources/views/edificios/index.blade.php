@@ -76,7 +76,6 @@
                 data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
                 data-page-size="50"
                 data-pagination="true" 
-                data-show-pagination-switch="true"
                 data-toolbar="#all_toolbar"
                 data-buttons-class="secondary"
                 data-show-button-text="true"

@@ -33,10 +33,10 @@
 </div>
 <table class="table " border="0" cellpadding="0" cellspacing="0">
     <thead>
-        <tr class="text-center p-0">
+        <tr class="p-0">
             <th></th>
             @for($h=0; $h<24; $h++)
-                <th data-hora={{ $h }} class="td_hora p-0" style="width: 4%;">{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}</th>
+                <th data-hora={{ $h }} class="td_hora p-0" style="width: 3%;">&nbsp;&nbsp;{{ str_pad($h, 2, '0', STR_PAD_LEFT) }}</th>
             @endfor
         </tr>
     </thead>
@@ -48,7 +48,7 @@
                     <td class="p-0 text-center">
                         <div class="p-0 m-0">
                             {{-- <input type="checkbox" class="chk_dia" name="dia{{ $d }}[]" data-dia="{{ $d }}" data-hora="{{ $h }}" id="check_{{ $d }}_{{ $h }}" value="{{ $h }}" @isset($sched){{ check_hora($d,$h,$sched) }}@endisset /> --}}
-                            <div class="form-check pt-2 ml-2 fs-4">
+                            <div class="form-check pt-2 fs-4">
                                 <input name="dia{{ $d }}[]" data-dia="{{ $d }}" data-hora="{{ $h }}" id="check_{{ $d }}_{{ $h }}" value="{{ $h }}" @isset($sched){{ check_hora($d,$h,$sched) }}@endisset class="form-check-input chk_dia" type="checkbox">
                                 <label class="form-check-label" for="check_{{ $d }}_{{ $h }}"></label>
                             </div>

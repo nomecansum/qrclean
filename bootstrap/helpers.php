@@ -467,7 +467,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
                     if($user->mca_notif_push=='S' && $user->id_onesignal!==null){
                         log::info('notificacion push');
                         $result=OneSignal::sendNotificationToExternalUser(
-                            $subject,
+                            $body,
                             [strval( $user->id )],
                             $url = url("/notif/ver",$id_notif),
                             $data = null,

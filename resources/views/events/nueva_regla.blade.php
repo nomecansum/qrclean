@@ -11,7 +11,6 @@
 	.select2-container .select2-search__field {
 		width: 100% !important;
 	}
-
  </style>
 @endsection
 

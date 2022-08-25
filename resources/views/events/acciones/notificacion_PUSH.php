@@ -9,24 +9,16 @@ if(!function_exists('mis_clientes')){
         return $clientes;
     }
 }
-$descripcion = "Escribe una notificacion en la web para el usuario";
+$descripcion = "Envia una notificacion PUSH el usuario";
 
 $campos_notificaciones=true;
 
-$icono='<i class="fa-solid fa-browser"></i>';
+$icono='<i class="fa-solid fa-message-dots"></i>';
 
 $tipo_destino='*';
 
 $params='{
     "parametros":[
-        {
-            "label": "Tipo",
-            "name": "id_tipo_notificacion",
-            "tipo": "list_db",
-            "multiple": false,
-            "sql": "select id_tipo_notificacion as id, des_tipo_notificacion as nombre from notificaciones_tipos",
-            "required": true
-        },
         {
             "label": "Texto de la notificacion",
             "name": "cuerpo",
@@ -65,7 +57,7 @@ $func_accion = function($accion, $resultado, $campos,$id) {
     $datos = $resultado->where('id', $id)->first();
 
     foreach(valor($param_accion, "usuarios") as $u){
-        insertar_notificacion_web($u,valor($param_accion, "id_tipo_notificacion"),comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos),0);
+        notificar_usuario( $u,null,null,comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos),[3],1,[],0);
     }
 
 

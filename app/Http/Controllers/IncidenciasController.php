@@ -622,27 +622,9 @@ class IncidenciasController extends Controller
                     case 'W': //Web Push
                         Log::info("Iniciando postprocesado WEB Push de incidencia ".$inc->id_incidencia);
                         //Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta
-                        notificar_usuario()
+                        notificar_usuario( $usuario_abriente,null,null,'Incidencia en puesto '.$puesto->cod_puesto.' - '.$puesto->des_edificio.' - '.$puesto->des_planta,[3],9,[],$inc->id_incidencia);
 
-                        
-
-                        Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto) {
-                            if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
-                                $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-                            } else {
-                                $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-                            }
-                            $message->from(config('mail.from.address'),config('mail.from.name'));
-                            if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
-                                $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
-                                $message->attachData($adj1,$inc->img_attach1);
-                            }     
-                            if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
-                                $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
-                                $message->attachData($adj2,$inc->img_attach2);
-                            }
-                        });
-                            break;
+                        break;
 
                     case 'L': //Spotlinker
                         Log::info("Iniciando postprocesado SALAS de incidencia ".$inc->id_incidencia);
@@ -655,7 +637,7 @@ class IncidenciasController extends Controller
                 }
             } catch(\Throwable $e){
                 Log::error("Postprocesado de incidencia ".$inc->id_incidencia." ERROR: ".$e->getMessage());
-                //dd($e);
+                dd($e);
             }
         }
         $inc->save();

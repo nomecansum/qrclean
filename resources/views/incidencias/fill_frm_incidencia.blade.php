@@ -8,6 +8,7 @@
            <span class="font-bold" style="color:{{ $puesto->val_color }}; font-size: 20px">{{ $puesto->des_puesto }}</span>
 
         </h3>
+        <span class="float-right" id="spinner" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
     </div>
     <div class="card-body">
         <form method="POST" action="{{ url('/incidencias/save') }}" id="incidencia_form" name="incidencia_form" accept-charset="UTF-8" class="form-horizontal form-ajax">
@@ -51,7 +52,7 @@
 
             <div class="form-group mt-3">
                 <div class="col-md-12 text-center">
-                    <input class="btn btn-lg btn-primary" type="submit" value="Guardar">
+                    <input class="btn btn-lg btn-primary" id="btn_guardar" type="button" value="Guardar">
                 </div>
             </div>
         </form>
@@ -70,6 +71,11 @@
 				'csrfToken' => csrf_token(),
 			]) !!};
 			
+    $('#btn_guardar').click(function(){
+        $('#spinner').show();
+        $('#btn_guardar').hide();
+        $('#incidencia_form').submit();
+    });
     $('.form-ajax').submit(form_ajax_submit);
     //Dropzone para adjuntos de acciones
     lista_ficheros=[];	

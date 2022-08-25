@@ -10,8 +10,10 @@
                 <select required class="form-control tip_metodo tocado" name="tip_metodo" data-id="{{ $tipo->id_proceso }}">
                         {{-- <option value="S" {{ $tipo->tip_metodo== 'S' ? 'selected' : '' }} >SMS</option> --}}
                         <option value="M" {{ $tipo->tip_metodo== 'M' ? 'selected' : '' }} >e-mail</option>
-                        <option value="P" {{ $tipo->tip_metodo== 'P' ? 'selected' : '' }} >HTTP Post</option>
-                        <option value="G" {{ $tipo->tip_metodo== 'G' ? 'selected' : '' }} >Http Get</option>
+                        <option value="W" {{ $tipo->tip_metodo== 'W' ? 'selected' : '' }} >Web Push</option>
+                        <option value="P" {{ $tipo->tip_metodo== 'P' ? 'selected' : '' }} >HTTP POST</option>
+                        <option value="U" {{ $tipo->tip_metodo== 'U' ? 'selected' : '' }} >HTTP PUT</option>
+                        <option value="G" {{ $tipo->tip_metodo== 'G' ? 'selected' : '' }} >Http GET</option>
                         <option value="L" {{ $tipo->tip_metodo== 'L' ? 'selected' : '' }} >Gestionar en spotlinker</option>
                         <option value="N" {{ $tipo->tip_metodo== 'N' ? 'selected' : '' }} >Solo registrar</option>
                 </select>
@@ -27,51 +29,11 @@
                             </div>
                         @break
                     @case("P")
-                            <div>
-                                <div class="form-group col-md-12 {{ $errors->has('val_url') ? 'has-error' : '' }}">
-                                    <div class="row">
-                                        <div class="col-md-3"><label for="des_edificio" class="control-label">URL</label></div>
-                                        <div class="col-md-9 text-end mt-2"><a href="#modal-url" data-toggle="modal" data-target="#modal-url" class="btn_modal"><i class="fa-solid fa-square-question fa-2x text-info" title="Ayuda  URL"></i></a></div>
-                                    </div>
-                                    <input class="form-control tocado" name="val_url" type="text" id="val_url" value="{{ old('val_url', optional($tipo)->val_url) }}" maxlength="200" placeholder="Enter URL here...">
-                                    {!! $errors->first('val_url', '<p class="help-block">:message</p>') !!}
-                                </div>
-                                <div class="form-group col-md-12 {{ $errors->has('param_url') ? 'has-error' : '' }}">
-                                    <div class="row">
-                                        <div class="col-md-3"><label for="des_edificio" class="control-label w-100 mt-2">Parametros URL</label></div>
-                                        <div class="col-md-9 text-end mt-2"><a href="#modal-param_url" data-toggle="modal" data-target="#modal-param_url" class="btn_modal"><i class="fa-solid fa-square-question fa-2x text-info" title="Ayuda parametros URL"></i></a></div>
-                                    </div>
-                                    <input class="form-control tocado" name="param_url" type="text" id="param_url" value="{{ old('param_url', optional($tipo)->param_url) }}" maxlength="1000" placeholder="Enter Param URL here...">
-                                    {!! $errors->first('param_url', '<p class="help-block">:message</p>') !!}
-                                </div>
-                                <div class="form-group col-md-12 {{ $errors->has('val_body') ? 'has-error' : '' }}">
-                                    <div class="row">
-                                        <div class="col-md-3"><label for="des_edificio" class="control-label w-100 mt-2">Header (JSON)</label></div>
-                                        <div class="col-md-9 text-end mt-2"><a href="#modal-param_header" data-toggle="modal" data-target="#modal-param_header" class="btn_modal"><i class="fa-solid fa-square-question fa-2x text-info" title="Ayuda Header"></i></a></div>
-                                    </div>
-                                    <textarea class="form-control tocado" name="val_header" type="text" id="val_header" value="" maxlength="65535" placeholder="Enter URL here..." rows="8">{{ old('val_header', optional($tipo)->val_header) }}</textarea>
-                                    {!! $errors->first('val_header', '<p class="help-block">:message</p>') !!}
-                                </div>
-                                <div class="form-group col-md-12 {{ $errors->has('val_body') ? 'has-error' : '' }}">
-                                    <div class="row">
-                                        <div class="col-md-3"><label for="des_edificio" class="control-label w-100 mt-2">Body</label></div>
-                                        <div class="col-md-9 text-end mt-2"><a href="#modal-param_body" data-toggle="modal" data-target="#modal-param_body" class="btn_modal"><i class="fa-solid fa-square-question fa-2x text-info" title="Ayuda parametros Body"></i></a></div>
-                                    </div>
-                                    <textarea class="form-control tocado" name="val_body" type="text" id="val_body" value="" maxlength="65535" placeholder="Enter URL here..." rows="8">{{ old('val_body', optional($tipo)->val_body) }}</textarea>
-                                    {!! $errors->first('val_body', '<p class="help-block">:message</p>') !!}
-                                </div>
-                                <div class="form-group col-md-12 {{ $errors->has('val_respuesta') ? 'has-error' : '' }}">
-                                    <div class="row">
-                                        <div class="col-md-3"><label for="des_edificio" class="control-label w-100 mt-2">Respuesta</label></div>
-                                        <div class="col-md-9 text-end mt-2"><a href="#modal-param_respuesta" data-toggle="modal" data-target="#modal-param_respuesta" class="btn_modal"><i class="fa-solid fa-square-question fa-2x text-info" title="Ayuda parametros Respuesta"></i></a></div>
-                                    </div>
-                                    <textarea class="form-control tocado" name="val_respuesta" type="text" id="val_respuesta" value="" maxlength="65535" placeholder="Enter URL here..." rows="8">{{ old('val_respuesta', optional($tipo)->val_respuesta) }}</textarea>
-                                    {!! $errors->first('val_respuesta', '<p class="help-block">:message</p>') !!}
-                                </div>
-                            </div>
-    
+                            @include('incidencias.tipos.formulario_post_put')
                         @break
-    
+                    @case("U")
+                        @include('incidencias.tipos.formulario_post_put')
+                    @break
                     @case("G")
                         <div class="row">
                             <div class="form-group col-md-12 {{ $errors->has('val_url') ? 'has-error' : '' }}">
@@ -97,6 +59,20 @@
                             </div>
                         </div>
                         @break
+                        @case("W")
+                        <div class="row">
+                            <div class="form-group col-md-12 {{ $errors->has('usuarios') ? 'has-error' : '' }} mt-3">
+                                <label for="des_edificio" class="control-label">Usuarios</label><br>
+                                <select class="select2 mb-2 col-md-11 select2-multiple form-control tocado" style="width: 100%" multiple="multiple" name="txt_destinos[]" id="multi-usuarios" required}>
+                                    @foreach(DB::table('users')->where('id_cliente',Auth::user()->id_cliente)->get() as $item)
+                                        <option value="{{$item->id}}" {{ isset($tipo->txt_destinos) && is_array (explode(",",$tipo->txt_destinos)) && in_array($item->id,explode(",",$tipo->txt_destinos))===true?'selected':'' }}>{{$item->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+
+                        </div>
+                        @break
                     @default
                 @endswitch
     
@@ -114,19 +90,19 @@
                     </div>
                     <div class="col-md-3 mt-1">
                         <div class="form-check pt-2">
-                            <input name="mca_web"  id="mca_web{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_web)&&$tipo->mca_web=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <input name="mca_web"  id="mca_web{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_web)&&$tipo->mca_web=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
                             <label class="form-check-label"  for="mca_web{{$tipo->id_proceso}}">WEB</label>
                         </div>
                     </div>
                     <div class="col-md-3 mt-1">
                         <div class="form-check pt-2">
-                            <input  name="mca_api"  id="mca_api{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_api)&&$tipo->mca_api=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <input  name="mca_api"  id="mca_api{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_api)&&$tipo->mca_api=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
                             <label class="form-check-label"  for="mca_api{{$tipo->id_proceso}}">API</label>
                         </div>
                     </div>
                     <div class="col-md-3 mt-1">
                         <div class="form-check pt-2">
-                            <input  name="mca_salas"  id="mca_salas{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_salas)&&$tipo->mca_salas=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                            <input  name="mca_salas"  id="mca_salas{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_salas)&&$tipo->mca_salas=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
                             <label class="form-check-label" for="mca_salas{{$tipo->id_proceso}}">SALAS</label>
                         </div>                    
                     </div>
@@ -147,6 +123,11 @@
            $('#btn_editar'+id_accion).show();
             
         }); 
+    });
+    $(".select2").select2({
+        placeholder: "Todos",
+        allowClear: true,
+        width: "90%",
     });
     $('#btn_editar{{ $tipo->id_proceso }}').click(function(){
         $.post("{{ url('/incidencias/tipos/postprocesado/save') }}", $('#form_proceso'+$(this).data('id')).serializeArray(), function(data, textStatus, xhr) {

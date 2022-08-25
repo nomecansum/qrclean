@@ -570,6 +570,8 @@
     function cerrar_modal(){
         $('.modal').modal('hide');
     }
+    
+
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 

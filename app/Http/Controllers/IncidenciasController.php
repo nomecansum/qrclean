@@ -535,95 +535,127 @@ class IncidenciasController extends Controller
                 //Esto es para no mandarla al mismo sitio del que viene;
                 continue;
             }
+            try{
+                switch ($p->tip_metodo) {
+                    case 'S':  //Mandar SMS
+                        break;
 
-            switch ($p->tip_metodo) {
-                case 'S':  //Mandar SMS
-                    break;
+                    case 'M':  //Mandar e-mail
+                        $to_email = $p->txt_destinos;
+                        Log::info("Iniciando postprocesado MAIL de incidencia ".$inc->id_incidencia);
+                        Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto) {
+                            if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
+                                $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                            } else {
+                                $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                            }
+                            $message->from(config('mail.from.address'),config('mail.from.name'));
+                            if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
+                                $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+                                $message->attachData($adj1,$inc->img_attach1);
+                            }     
+                            if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
+                                $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+                                $message->attachData($adj2,$inc->img_attach2);
+                            }
+                        });
+                        break;
+                    case 'P': //HTTP Post
+                    case 'U': //HTTP Put
+                        try{
+                            $inc->mca_sincronizada='N';
+                            Log::info("Iniciando postprocesado HTTP POST de incidencia ".$inc->id_incidencia);
+                            log::debug($p->val_url.'?'.$p->param_url);
+                            //Ahora sustituimos las variables por sus valores
+                            $p->val_url=$this->reemplazar_parametros($p->val_url,$inc);
+                            $p->param_url=$this->reemplazar_parametros($p->param_url,$inc);
+                            $p->val_body=$this->reemplazar_parametros($p->val_body,$inc);
 
-                case 'M':  //Mandar e-mail
-                    $to_email = $p->txt_destinos;
-                    Log::info("Iniciando postprocesado MAIL de incidencia ".$inc->id_incidencia);
-                    Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto) {
-                        if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
-                            $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-                        } else {
-                            $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-                        }
-                        $message->from(config('mail.from.address'),config('mail.from.name'));
-                        if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
-                            $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
-                            $message->attachData($adj1,$inc->img_attach1);
-                        }     
-                        if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
-                            $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
-                            $message->attachData($adj2,$inc->img_attach2);
-                        }
-                    });
-                    break;
-                case 'P': //HTTP Post
-                    try{
-                        $inc->mca_sincronizada='N';
-                        Log::info("Iniciando postprocesado HTTP POST de incidencia ".$inc->id_incidencia);
-                        log::debug($p->val_url.'?'.$p->param_url);
-                        //Ahora sustituimos las variables por sus valores
-                        $p->val_url=$this->reemplazar_parametros($p->val_url,$inc);
-                        $p->param_url=$this->reemplazar_parametros($p->param_url,$inc);
-                        $p->val_body=$this->reemplazar_parametros($p->val_body,$inc);
+                            $metodo=$p->tip_metodo=='P'?'POST':'PUT';
+                            
+                            $response=Http::withOptions(['verify' => false])
+                                ->withHeaders(json_decode($p->val_header,true))
+                                ->withbody($p->val_body,'application/json')
+                                ->$metodo($p->val_url.'?'.$p->param_url);
+                            if($response->status()==200){
+                                Log::info("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." OK");
+                            } else {
+                                Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ERROR: ".$response->status());
+                            }
+                            Log::debug($response->body());
+                            
+                            if($p->val_respuesta!=null){
+                                $this->procesar_respuesta($p->val_respuesta,$response->body(),$inc->id_incidencia,$puesto->id_puesto);
+                            }
                         
-                        $response=Http::withOptions(['verify' => false])
-                            ->withHeaders(json_decode($p->val_header,true))
-                            ->withbody($p->val_body,'application/json')
-                            ->post($p->val_url.'?'.$p->param_url);
-                        if($response->status()==200){
-                            Log::info("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." OK");
-                        } else {
-                            Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ERROR: ".$response->status());
+                        } catch(\Throwable $e){
+                            Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." "." ERROR: ".$e->getMessage());
+                            //dd($e);
                         }
-                        Log::debug($response->body());
+                        $inc->mca_sincronizada='S';
+                        break;
+
+                    case 'G': //HTTP Get
+                        try{
+                            Log::info("Iniciando postprocesado HTTP GET de incidencia ".$inc->id_incidencia);
+                            log::debug($p->val_url.'?'.$p->param_url);
+                            $response=Http::withOptions(['verify' => false])
+                                ->withHeaders(json_decode($p->val_header,true))
+                                ->get($p->val_url.'?'.$p->param_url);
+                            if($response->status()==200){
+                                Log::info("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." OK");
+                            } else {
+                                Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ERROR: ".$response->status());
+                            }
+                            Log::debug($response->body());
+                            if($p->val_respuesta!=null){
+                                $this->procesar_respuesta($p->val_respuesta,$response->body(),$inc->id_incidencia,$puesto->id_puesto);
+                            }
+
+                        } catch(\Throwable $e){
+                            Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ".$response->status()." ERROR: ".$e->getMessage());
+                            //dd($e);
+                        }
+                        $inc->mca_sincronizada='S';
+                        break;
+
+                    case 'W': //Web Push
+                        Log::info("Iniciando postprocesado WEB Push de incidencia ".$inc->id_incidencia);
+                        //Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta
+                        notificar_usuario()
+
                         
-                        if($p->val_respuesta!=null){
-                            $this->procesar_respuesta($p->val_respuesta,$response->body(),$inc->id_incidencia,$puesto->id_puesto);
-                        }
-                       
-                    } catch(\Throwable $e){
-                        Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." "." ERROR: ".$e->getMessage());
-                        //dd($e);
-                    }
-                    $inc->mca_sincronizada='S';
-                    break;
 
-                case 'G': //HTTP Get
-                    try{
-                        Log::info("Iniciando postprocesado HTTP GET de incidencia ".$inc->id_incidencia);
-                        log::debug($p->val_url.'?'.$p->param_url);
-                        $response=Http::withOptions(['verify' => false])
-                            ->withHeaders(json_decode($p->val_header,true))
-                            ->get($p->val_url.'?'.$p->param_url);
-                        if($response->status()==200){
-                            Log::info("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." OK");
-                        } else {
-                            Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ERROR: ".$response->status());
-                        }
-                        Log::debug($response->body());
-                        if($p->val_respuesta!=null){
-                            $this->procesar_respuesta($p->val_respuesta,$response->body(),$inc->id_incidencia,$puesto->id_puesto);
-                        }
+                        Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto) {
+                            if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
+                                $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                            } else {
+                                $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                            }
+                            $message->from(config('mail.from.address'),config('mail.from.name'));
+                            if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
+                                $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+                                $message->attachData($adj1,$inc->img_attach1);
+                            }     
+                            if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
+                                $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+                                $message->attachData($adj2,$inc->img_attach2);
+                            }
+                        });
+                            break;
 
-                    } catch(\Throwable $e){
-                        Log::error("Postprocesado HTTP POST de incidencia ".$inc->id_incidencia." ".$response->status()." ERROR: ".$e->getMessage());
-                        //dd($e);
-                    }
-                    $inc->mca_sincronizada='S';
-                    break;
+                    case 'L': //Spotlinker
+                        Log::info("Iniciando postprocesado SALAS de incidencia ".$inc->id_incidencia);
+                        $inc->mca_sincronizada='S';
+                        break;  
 
-                case 'L': //Spotlinker
-                    Log::info("Iniciando postprocesado SALAS de incidencia ".$inc->id_incidencia);
-                    $inc->mca_sincronizada='S';
-                    break;  
-
-                default:
-                    # code...
-                    break;
+                    default:
+                        # code...
+                        break;
+                }
+            } catch(\Throwable $e){
+                Log::error("Postprocesado de incidencia ".$inc->id_incidencia." ERROR: ".$e->getMessage());
+                //dd($e);
             }
         }
         $inc->save();
@@ -935,9 +967,15 @@ class IncidenciasController extends Controller
 
     public function save_postprocesado(Request $r){
 
+        if(isset($r->txt_destinos) && is_array($r->txt_destinos)){
+            $destinos=implode(",",$r->txt_destinos);
+        } else {
+            $destinos=$r->txt_destinos;
+        }
+
         $tipo=incidencias_postprocesado::findorfail($r->id);
         $tipo->tip_metodo=$r->tip_metodo;
-        $tipo->txt_destinos=$r->txt_destinos??null;
+        $tipo->txt_destinos=$destinos??null;
         $tipo->val_url=$r->val_url??null;
         $tipo->param_url=$r->param_url??null;
         $tipo->val_body=$r->val_body??null;

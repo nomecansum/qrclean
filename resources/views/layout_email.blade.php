@@ -119,7 +119,7 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
   <tr>
     <td class="v-text-align" style="padding-right: 0px;padding-left: 0px;" align="left">
       
-      <img align="left" border="0" src="{{ url('img/Mosaic_brand_300.png') }}" alt="Illustration" title="Illustration" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 25%;max-width: 160px;" width="160" class="v-src-width v-src-max-width"/>
+      <img align="left" border="0" src="{{ url('img/logo_menu.png') }}" alt="Illustration" title="Illustration" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 200px;max-width: 200px;" width="200" class="v-src-width v-src-max-width"/>
       
     </td>
     <td>
@@ -166,8 +166,7 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
       </td>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:'Rubik',sans-serif;" align="right">
         <div class="v-text-align" style="line-height: 140%; text-align: left; word-wrap: break-word;">
-            <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 20px; line-height: 28px;"><img align="left" border="0" src="{{ url('img/image-6.jpeg') }}" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 50px;max-width: 150px;" width="150" class="v-src-width v-src-max-width"/>
-                <span style="margin-top: 30px; font-weight: bold">Se ha notificado una incidencia</span></span></p>
+            @yield('titulo')
         </div>
       </td>
       
@@ -320,8 +319,8 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 40px;font-family:'Rubik',sans-serif;" align="left">
         
   <div class="v-text-align" style="color: #000000; line-height: 140%; text-align: center; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 140%;">Crambo, S.A. c/ de los Torneros, 7 </p>
-<p style="font-size: 14px; line-height: 140%;">28830 San Fernando de Henares, Madrid (España) | CIF A78198017</p>
+    <p style="font-size: 14px; line-height: 140%;">SPOTLINKER, S.L. c/ de los Torneros, 7 </p>
+<p style="font-size: 14px; line-height: 140%;">28830 San Fernando de Henares, Madrid (España) | CIF B-8630021</p>
 <p style="font-size: 14px; line-height: 140%;"> </p>
 <p style="font-size: 10px; line-height: 140%;">Recuerde que este e-mail no acepta mensajes entrantes. Para cualquier duda, por favor, acceda spotlinker y a través de un nuevo escaneo háganoslo saber.
     ¡Estaremos encantados de ayudarle!</p>

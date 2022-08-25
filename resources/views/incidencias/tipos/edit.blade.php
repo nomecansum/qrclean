@@ -152,7 +152,7 @@
 
                 <div class="form-group">
                     <div class="col-md-12 text-end">
-                        @if(checkPermissions(['Tipos de incidencia'],['D']) && ( $tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
+                        @if(checkPermissions(['Tipos de incidencia'],['D']) && ( $tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="button" id="boton_submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
             </form>
@@ -198,6 +198,15 @@
 
     $('#val_momento').change(function(){
         $('#divacciones').load("{{ url('/incidencias/tipos/postprocesado/'.$tipo->id_tipo_incidencia) }}/"+$('#val_momento').val());
+    });
+
+    $('#boton_submit').on('click',function(){
+        event.preventDefault();
+        if($(".btn_save ").is(":visible")){
+            toast_warning('Datos sin guardar','Tiene pasos de postprocesado pendientes de guardar. Utilice el boton azul al lado del paso correspondiente,  para guardar los pasos de postprocesado');
+        } else {
+            $(this).submit();
+        }
     });
 
     $('.select-all').click(function(event) {

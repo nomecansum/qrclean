@@ -68,8 +68,28 @@
 
 @endsection
 
-@php
-   
-@endphp
+@section('scripts6')
+    <script>
+        // inicializacion de onesignal
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+            OneSignal.init({
+            appId: "{{ env('ONESIGNAL_APP_ID') }}",
+            });
+            OneSignal.setExternalUserId("{{Auth::user()->id}}");
+            OneSignal.sendTags({"cliente": "{{Auth::user()->id_cliente}}"});
+        });
+        
+        OneSignal.push(function() {               
+            OneSignal.getUserId().then(function(userId) {
+                alert("User ID:", userId);
+                $.post('{{url('/users/osid')}}', {_token: '{{csrf_token()}}', data: userId}, function(data, textStatus, xhr) {
+            
+                })
+            });
+        });
+    </script>
+
+@endsection
 
 

@@ -325,6 +325,26 @@
 										</div>
                                     </div>
                                     <div class="row mt-2">
+                                        <label class="text-nowrap">Notificacion</label><br>
+                                        <div class="col-md-3  mt-1">
+                                            <div class="form-check pt-3">
+                                                <input  name="mca_notif_push"  id="mca_notif_push" value="S" {{ isset($users->mca_notif_push)&&$users->mca_notif_push=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                                <label class="form-check-label" for="mca_notif_push">Web PUSH</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3  mt-1">
+                                            <div class="form-check pt-3">
+                                                <input  name="mca_notif_email"  id="mca_notif_email" value="S" {{ isset($users->mca_notif_email)&&$users->mca_notif_email=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                                <label class="form-check-label" for="mca_notif_email">e-mail</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}">
+                                            <label for="email" class="control-label">PlayerID</label>
+                                            <input class="form-control" name="id_onesignal" disabled type="text" id="id_onesignal" value="{{ old('id_onesignal', optional($users)->id_onesignal) }}" minlength="1" maxlength="255" required="true" placeholder="Enter PlayerID here...">
+                                            {!! $errors->first('id_onesignal', '<p class="help-block">:message</p>') !!}
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
                                         <div class="col-md-12" >
                                             <div class="form-group"  style="overflow: hidden">
                                                 <label class="text-nowrap">{{trans('strings.collectives')}}</label><br>

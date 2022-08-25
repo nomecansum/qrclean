@@ -4,7 +4,7 @@
 <head>
     <meta name="generator" content="Hugo 0.87.0" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=no, shrink-to-fit=no">
     <title>{{ config('app.name') }}</title>
     <link rel="shortcut icon" type="image/jpg" href="/img/logo.png"/>
 
@@ -57,15 +57,9 @@
     @yield('styles')
     @yield('styles2')
     @include('layouts.styles')
+    {{-- Onesignal SDK --}}
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-    <script>
-      window.OneSignal = window.OneSignal || [];
-      OneSignal.push(function() {
-        OneSignal.init({
-          appId: "379eadd5-2481-4f03-88d9-da14b5ded959",
-        });
-      });
-    </script>
+    
 </head>
 
 <body class="in-out-back {{ clase_body() }}" {!! image_body() !!}>

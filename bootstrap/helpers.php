@@ -12,6 +12,7 @@ use App\Models\clientes;
 use App\Models\notif;
 use App\Models\notificaciones_tipos;
 use Jenssegers\Agent\Agent;
+use Illuminate\Support\Facades\Log;
 
 function stripAccents($str) {
     return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
@@ -432,6 +433,7 @@ function insertar_notificacion_web($user,$tipo,$texto,$id){
             'url_notificacion'=>url(notificaciones_tipos::find($tipo)->url_base??'/',$id)
         ]
     );
+    return $notif;
 
 }
 
@@ -439,7 +441,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
     try{
         
         //Añadimos notificacion en la web
-        insertar_notificacion_web($user->id,$tipo,$body,$id);
+        $id_notif=insertar_notificacion_web($user->id,$tipo,$body,$id);
 
 
         foreach($metodo as $m){
@@ -448,26 +450,38 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
                     //No hacer nada
                 break;
                 case 1: //Mail
-                    $cliente=clientes::find($user->id_cliente);
-                    \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'triangulo'=>$triangulo], function ($m) use ($user,$subject) {
-                        if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
-                            $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
-                        } else {
-                            $m->to($user->email, $user->name)->subject($subject);
-                        }
-                        $m->from(config('mail.from.address'),config('mail.from.name'));
-                    });
+                    if($user->mca_notif_email=='S'){
+                        $cliente=clientes::find($user->id_cliente);
+                        \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'triangulo'=>$triangulo], function ($m) use ($user,$subject) {
+                            if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
+                                $m->to('nomecansum@gmail.com', $user->name)->subject($subject);
+                            } else {
+                                $m->to($user->email, $user->name)->subject($subject);
+                            }
+                            $m->from(config('mail.from.address'),config('mail.from.name'));
+                        });
+                    }
                     break;
                 case 2:
-                case 3:  //Notificacion push
-                    # code...
+                case 3:  //Notificacion WEBpush
+                    if($user->mca_notif_push=='S' && $user->id_onesignal!==null){
+                        log::info('notificacion push');
+                        $result=OneSignal::sendNotificationToExternalUser(
+                            $subject,
+                            [strval( $user->id )],
+                            $url = url("/notif/ver",$id_notif),
+                            $data = null,
+                            $buttons = null,
+                            $schedule = null
+                        );
+                    }
                     break;
             }
 
         }
         
     } catch(\Exception $e){
-        //dump($e);
+        log::error($e->getMessage());
         return $e->getMessage();
     }
     return true;
@@ -1401,7 +1415,7 @@ function enviar_mail_reserva($id_reserva,$mca_ical,$sender_name=null){
     } else {
         $attach=null;
     }
-    notificar_usuario($user,$des_evento,'emails.mail_reserva',$body,1,"alerta_05",$attach);
+    notificar_usuario($user,$des_evento,'emails.mail_reserva',$body,$str_notificacion,[1,3],2,$attach,$det_reserva->id_reserva);
 }
 
 //Funcion para aplicar los colores de la pagina

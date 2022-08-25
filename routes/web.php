@@ -151,6 +151,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/turno/{id}/{turno}/{estado}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@turno_usuario'])->name('users.turno_usuario');
 
         Route::post('/tema','UsersController@tema_usuario');
+        Route::post('/osid','UsersController@osid_usuario');
+        
         
     });
 
@@ -540,6 +542,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/', 'NotifController@index')->name('notificaciones.index');
         Route::get('/list', 'NotifController@list')->name('notificaciones.list');
         Route::get('/leida', 'NotifController@leida')->name('notificaciones.leida');
+        Route::get('/ver/{id}', 'NotifController@index')->name('notificaciones.leida');
 
     });
 });

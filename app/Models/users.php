@@ -56,6 +56,9 @@ class users extends Model
                   'val_vista_puestos',
                   'id_departamento',
                   'previous_login',
+                  'id_onesignal',
+                  'mca_notif_push',
+                  'mca_notif_email',
               ];
 
     /**

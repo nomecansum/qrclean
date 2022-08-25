@@ -18,11 +18,16 @@ $usuario=users::find($inc->id_usuario_apertura);
 
 
 @section('logo_cliente')
-<img align="left" border="0" src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" alt="Illustration" title="Illustration" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 25%;max-width: 160px;" width="160" class="v-src-width v-src-max-width"/>
+<img align="left" border="0" src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" alt="Logo cliente" title="Logo cliente" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100px;max-width: 160px;" width="160" class="v-src-width v-src-max-width"/>
 @endsection
 
 @section('saludo')
     Hola {{$usuario->name}}!
+@endsection
+
+@section('titulo')
+    <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 20px; line-height: 28px;"><img align="left" border="0" src="{{ url('img/image-6.png') }}" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 50px;max-width: 50px;" width="50" class="v-src-width v-src-max-width"/>
+    <span style="padding-top: 30px; font-weight: bold">Se ha notificado una incidencia</span></span></p>
 @endsection
 
 @section('cuerpo')
@@ -38,7 +43,7 @@ $usuario=users::find($inc->id_usuario_apertura);
 @section('enlace')
     @if(isset($inc->url_detalle_incidencia))
         <div class="v-text-align" align="left">
-              <a href="{{ $inc->url_detalle_incidencia }}" target="_blank" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:'Rubik',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #805997; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:39%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
+              <a href="{{ $inc->url_detalle_incidencia }}" target="_blank" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:'Rubik',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #805997; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; 80px; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                 <span style="display:block;padding:10px 20px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px;">Ver detalle</span></strong></span>
               </a>
         </div>

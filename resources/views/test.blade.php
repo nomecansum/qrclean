@@ -41,30 +41,20 @@
            dd(json_encode(array_values($icons)));
        @endphp --}}
 
+       {{-- @php
+          OneSignal::sendNotificationToExternalUser(
+            "Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message ",
+            ["14"],
+            $url = "http://qrclean/reservas",
+            $data = json_decode('{"datos": [1,2,3,4]}'),
+            $buttons = null,
+            $schedule = null
+        );
+       @endphp --}}
        @php
-          use Sendpulse\RestApi\ApiClient;
-          use Sendpulse\RestApi\Storage\FileStorage;
-
-            $SPApiClient = new ApiClient("6e43e3c74ee1634a1df029ffe518c13a", "ef7ce241d35b94f590278b83a131e4fd", new FileStorage());
-
-            $task = array(
-                'title' => 'Hello!',
-                'body' => 'This is my first push message',
-                'website_id' => 1,
-                'ttl' => 20,
-                'stretch_time' => 0,
-            );
-
-            // This is optional
-            $additionalParams = array(
-                'link' => 'https://qrclean.techlab.mobi',
-                'filter_browsers' => 'Chrome,Safari',
-                'filter_lang' => 'en',
-                'filter' => '{"variable_name":"some","operator":"or","conditions":[{"condition":"likewith","value":"a"},{"condition":"notequal","value":"b"}]}',
-            );
-            dd($SPApiClient->createPushTask($task, $additionalParams));
-
+           notificar_usuario(App\Models\Users::find(14),"prueba",null,"prueba",[3],1,[],null);
        @endphp
+       
     </div>
 </div>
 
@@ -73,6 +63,8 @@
 
 @section('scripts')
     <script>
+        
+
         $('.SECCION_MENU').addClass('active active-sub');
         $('.ITEM_MENU').addClass('active-link');
     </script>

@@ -635,6 +635,9 @@ paths:
                 id_usuario_apertura:
                   description: 'ID de usuario que abre la incidencia'
                   type: string
+                url_detalle_incidencia:
+                  description: 'Url para acceder al detalle de la incidencia'
+                  type: string
               type: object
       responses:
         200:

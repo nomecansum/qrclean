@@ -391,6 +391,7 @@ class IncidenciasController extends Controller
             'img2'=>'nullable',
             'adjuntos'=>'nullable',
             'procedencia'=>'nullable',
+            'url_detalle_incidencia'=>'nullable',
         ];
         $data = $request->validate($rules);
         return $data;

@@ -349,6 +349,7 @@ class APIController extends Controller
             $r->request->add(['id_tipo_incidencia' => $this->get_tipo($r)]);
             $r->request->add(['procedencia' => "api"]);
             $r->request->add(['id_incidencia_externo' => $r->id_incidencia_externo]);
+            $r->request->add(['url_detalle_incidencia' => $r->url_detalle_incidencia]);
             $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
             savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
             return response()->json($respuesta);

@@ -6,7 +6,7 @@
         <input type="hidden" name="val_momento" value="{{ $momento }}"> 
         <div class="row">
             <div class="form-group col-md-2  ">
-                <label for="tip_metodo" class="control-label"><span class="text-muted " style="font-size:26px; font-weight: bold">{{ $index??'-' }}</span></label>
+                <label for="tip_metodo" class="control-label"><span class="text-muted " style="font-size:26px; font-weight: bold">{{ $index??'-' }}</span>@if(config('app.env')=='local')[{{ $tipo->id_proceso }}]@endif</label>
                 <select required class="form-control tip_metodo tocado" name="tip_metodo" data-id="{{ $tipo->id_proceso }}">
                         {{-- <option value="S" {{ $tipo->tip_metodo== 'S' ? 'selected' : '' }} >SMS</option> --}}
                         <option value="M" {{ $tipo->tip_metodo== 'M' ? 'selected' : '' }} >e-mail</option>

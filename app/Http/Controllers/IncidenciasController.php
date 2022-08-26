@@ -591,8 +591,10 @@ class IncidenciasController extends Controller
         
         
         foreach($postprocesado as $p){
-            if (($procedencia=='api' && $p->mca_api=='S') || ($procedencia=='salas' && $p->mca_salas=='S')){
+            Log::debug('Postprocesado ['.$p->id_proceso.']'.$p->tip_metodo. ' prodecencia: '.$procedencia);
+            if (($procedencia=='api' && $p->mca_api!='S') || ($procedencia=='salas' && $p->mca_salas!='S')){
                 //Esto es para no mandarla al mismo sitio del que viene;
+                Log::debug('saltamos ['.$p->id_proceso.']'.$p->tip_metodo. ' porque la procedencia de la solicitud es'.$procedencia);
                 continue;
             }
             try{
@@ -630,7 +632,6 @@ class IncidenciasController extends Controller
                                     $message->attachData($adj2,$accion->img_attach2);
                                 }
                             }
-                            
                         });
                         break;
                     case 'P': //HTTP Post
@@ -643,6 +644,7 @@ class IncidenciasController extends Controller
                             $p->val_url=$this->reemplazar_parametros($p->val_url,$inc);
                             $p->param_url=$this->reemplazar_parametros($p->param_url,$inc);
                             $p->val_body=$this->reemplazar_parametros($p->val_body,$inc);
+                            log::debug($p->val_body);
                             if(isset($p->param_url) && strlen($p->param_url)>0){
                                 $p->val_url.='?'.$p->param_url;
                             }

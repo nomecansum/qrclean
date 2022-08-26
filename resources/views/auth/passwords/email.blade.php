@@ -1,46 +1,49 @@
 
-@extends('layout')
+@extends('layout_login')
 
 @section('content')
-<div class="cls-content">
-    <div class="cls-content-sm panel">
-        <div class="card-body">
-            <div class="mar-ver pad-btm">
-                <img src="{{url('/img/Mosaic_brand_300.png')}}" style="width:300px">
+<section id="content" class="content">
+    <div class="content__boxed w-100 min-vh-100 d-flex flex-column align-items-center justify-content-center">
+        <div class="content__wrap">
+            <!-- Login card -->
+            <div class="card shadow-lg">
+                <div class="card-body">
+
+                    <div class="text-center">
+                        <h1 class="h3">Olvide mi password!</h1>
+                        <p>Indique su e-mail para recuperar su password.</p>
+                    </div>
+
+                    <form method="POST" action="{{ route('password.email') }}">
+                        @csrf
+
+                        <div class="mb-3">
+                            <input type="email" name="email" required class="form-control"  placeholder="Email" value="" autofocus>
+                        </div>
+                        @if (session('status'))
+                            <div class="mb-4 font-medium text-sm text-green-600">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                        @if ($errors )
+                            <div class="mb-4 font-medium text-sm text-red-600">
+                               {{ $errors->getBag('default')->first('email') }}
+                            </div>
+                        @endif
+                        <div class="d-grid mt-5">
+                            <button class="btn btn-warning btn-lg" type="submit">Reset Password</button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <a href="{{ url('/login') }}" class="btn-link text-decoration-none">Volver a login</a>
+                    </div>
+
+                </div>
             </div>
-            <h5>Indique su e-mail para restablecer la password</h5>
-            <br>
-            <br>
-            <form method="POST" action="{{ route('password.email') }}">
-                @csrf
-
-                <div class="form-group row">
-                    <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('e-Mail Address') }}</label>
-
-                    <div class="col-md-12">
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                        @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
-                <br>
-                <br>
-
-                <div class="form-group row mb-0">
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-primary" style="width: 100%">
-                           Enviar e-mail
-                        </button>
-                    </div>
-                </div>
-            </form>
+            <!-- END : Login card -->
         </div>
-
     </div>
-</div>
+</section>
 @endsection
 

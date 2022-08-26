@@ -44,7 +44,7 @@ class LoginController extends Controller
 
 
     public function login(Request $request)
-     {
+      {
         $this->validate($request, [
         'email' => 'required|email',
         'password' => 'required',
@@ -60,7 +60,21 @@ class LoginController extends Controller
             $user = auth()->user();
             //Vamos a ver si tiene que cambiar la password
 
+            //Vamos a ver si es un usuario que se ha registrado y hay que activarlo
+            if($user->id_cliente == null || $user->nivel_acceso == null){
+                $error_cuenta_no_activada="Su cuenta aun no ha sido activada, contacte con el administrador";
+                return view('home',compact('error_cuenta_no_activada'));
+
+            }
+
+           
+
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  
+
+             //Si el cliente requiere 2FA y el usuario aun lo lo ha configurado
+             if($config_cliente->mca_requerir_2fa=='S' && $user->two_factor_secret == null){
+                return redirect('/2fa');
+            }
             $cliente=DB::table('clientes')->where('id_cliente',$user->id_cliente)->first();  
             $nivel=DB::table('niveles_acceso')->where('cod_nivel',$user->cod_nivel)->first();
             session(['NIV'=>(array)$nivel]);

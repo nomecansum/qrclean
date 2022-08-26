@@ -125,6 +125,9 @@
                         </li>
                         @if (isset($users))
                             <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab"  data-bs-target="#demo-stk-lft-tab-6" type="button" role="tab" aria-controls="seguridad" aria-selected="false">Seguridad</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
                                 <button class="nav-link" data-bs-toggle="tab"  data-bs-target="#demo-stk-lft-tab-3" type="button" role="tab" aria-controls="reserva" aria-selected="false">Reserva automatica</button>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -385,6 +388,21 @@
                                 </div>
                             </div>
                         </div>
+
+                        
+
+                        <div id="demo-stk-lft-tab-6"  class="tab-pane fade " role="tabpanel" aria-labelledby="seguridad-tab">
+                            <div class="card">
+                                <div class="card-header">
+                                    <span class="text-main text-semibold float-left mr-5">Autenticacion de doble factor</span>
+                                    
+                                </div>
+                                <div class="card-body" id="content_2fa">
+
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="demo-stk-lft-tab-3"  class="tab-pane fade " role="tabpanel" aria-labelledby="reserva-tab">
                             <div class="card">
                                 <div class="card-header">
@@ -522,9 +540,6 @@
                                     @endif
                                 </div>
                             </div>
-                            
-                            
-                            
                         </div>
                         <div id="demo-stk-lft-tab-4"  class="tab-pane fade" role="tabpanel" aria-labelledby="puestos-tab">
                             <div class="card">

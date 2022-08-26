@@ -16,16 +16,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS [ REQUIRED ] -->
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 
     <!-- Nifty CSS [ REQUIRED ] -->
-    <link rel="stylesheet" href="./assets/css/nifty.min.css">
+    <link rel="stylesheet" href="/assets/css/nifty.min.css">
 
     <!-- Premium line icons [ OPTIONAL ] -->
-    <link rel="stylesheet" href="./assets/premium/icon-sets/icons/line-icons/premium-line-icons.min.css">
+    <link rel="stylesheet" href="/assets/premium/icon-sets/icons/line-icons/premium-line-icons.min.css">
 
     <!-- Premium solid icons [ OPTIONAL ] -->
-    <link rel="stylesheet" href="./assets/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css">
+    <link rel="stylesheet" href="/assets/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css">
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~---
 
@@ -67,5 +67,5 @@
     <!-- END - PAGE CONTAINER -->
 
 </body>
-
+@yield('scripts')
 </html>

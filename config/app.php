@@ -208,6 +208,7 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         Berkayk\OneSignal\OneSignalServiceProvider::class,
         Riverskies\Laravel\MobileDetect\MobileDetectServiceProvider::class,
+        App\Providers\FortifyServiceProvider::class,
 
     ],
 

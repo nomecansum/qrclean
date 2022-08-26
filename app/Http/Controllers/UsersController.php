@@ -1560,5 +1560,9 @@ class UsersController extends Controller
         ];
     }
 
+    public function content_2fa($id){
+        $users=users::find($id);
+        return view('users.fill_content_2fa',compact('users'));
+    }
     
 }

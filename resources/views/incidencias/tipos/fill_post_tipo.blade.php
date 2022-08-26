@@ -176,7 +176,7 @@ En las peticiones se pueden utilizar los siguientes comodines que serán sustitu
                     <b>#id_incidencia#:</b> Identificador unico de la incidencia<br>
                     <b>#des_incidencia#:</b> Descripcion corta de la incidencia<br>
                     <b>#txt_incidencia#:</b> Descripcion larga de la incidencia<br>
-                    <b>#nom_usuario#:</b> Usuario que ha abierto la incidencia<br>
+                    <b>#name#:</b> Usuario que ha abierto la incidencia<br>
                     <b>#id_usuario_apertura#:</b> ID Usuario que ha abierto la incidencia<br>
                     <b>#id_usuario_externo#:</b> ID externo del usuario que ha abierto la incidencia<br>
                     <b>#id_usuario_cierre#:</b> ID  del usuario que ha cerrado la incidencia<br>

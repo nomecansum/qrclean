@@ -581,6 +581,7 @@
     const cal_formato_fecha="{{trans("general.date_format")}}";
     const cal_meses=["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"];
     const cal_diassemana=["{{trans('general.domingo')}}","{{trans('general.lunes')}}","{{trans('general.martes')}}","{{trans('general.miercoles')}}","{{trans('general.jueves')}}","{{trans('general.viernes')}}","{{trans('general.sabado')}}"];
+    @if(session('perfil')!==null)
     const cal_dias_deshabilitados=[{{ session('perfil')->mca_reservar_sabados=='N'?'':'6,' }} {{ session('perfil')->mca_reservar_domingos=='N'?'':'0,' }}];
-    
+    @endif
 </script>

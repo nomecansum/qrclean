@@ -16,7 +16,7 @@ use App\Http\Controllers\NotificationController;
 
 
 
-Auth::routes();
+//Auth::routes();
 ////////////////////////// RUTAS PARA LA OPERACION DE USUARIOS SIN LOGIN ////////////////////////////////
 //Route::view('/', 'scan');
 //Route::post('/getsitio','HomeController@getsitio');
@@ -54,6 +54,9 @@ Route::get('/terminos','HomeController@terminos');
 
 Route::get('/send-notification', [NotificationController::class, 'sendOfferNotification']);
 
+//Mi login de toda la vida
+//Route::post('/login','Auth\LoginController@login');
+Route::view('/postlogin','scan');
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -75,7 +78,7 @@ Route::group(['prefix' => '/landing'], function() {
     Route::get('/asoc/{marca}/{persona}','LandingController@save_product2');
     Route::post('/comentario','LandingController@comentario');
 });
-
+//////////////////////////////////////////////////////////////
 
 
 
@@ -87,6 +90,7 @@ Route::group(['middleware' => 'auth'], function() {
     //mIPERFIL
     Route::get('/miperfil/{id}','UsersController@miperfil')->name('users.miperfil');
     Route::post('miperfil/update/{id}','UsersController@update_perfil')->name('users.update_perfil');
+    Route::view('/2fa','auth.2fa_enabler')->name('home.2fa');
     
     // Scan
     Route::get('/scan_usuario', 'HomeController@scan_usuario')->name('main_scan');
@@ -124,6 +128,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/edit_modificar_usuarios',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@editor_modificar_usuarios'])->name('users.users.edit_modificar');
         Route::post('/modificar_usuarios',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@modificar_usuarios'])->name('users.users.modificar_usuarios');
         Route::post('/search',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@search'])->name('users.users.search');
+        
 
         Route::get('/addplanta/{usuario}/{planta}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@addplanta'])->name('users.addplanta');
         Route::get('/delplanta/{usuario}/{planta}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@delplanta'])->name('users.delplanta');
@@ -152,6 +157,8 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::post('/tema','UsersController@tema_usuario');
         Route::post('/osid','UsersController@osid_usuario');
+
+        
         
         
     });

@@ -15,7 +15,7 @@
 {{ $line }}
 
 @endforeach  --}}
-Hemos recibido una solicitud de restablecimiento de contraseña de su cuenta de SpotDesking
+Hemos recibido una solicitud de restablecimiento de contraseña de su cuenta de {{ config('app.name') }}
 
 {{-- Action Button --}}
 @isset($actionText)
@@ -59,7 +59,7 @@ Gracias,<br>
 @slot('subcopy')
 @lang(
     "Si tiene problemas con el botón \":actionText\" copie la URL a continuacion y peguela en un navegador\n".
-    'into your web browser:',
+    ':',
     [
         'actionText' => $actionText,
     ]

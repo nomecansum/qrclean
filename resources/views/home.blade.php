@@ -41,55 +41,70 @@
 {{--  <h1 class="page-header text-overflow pad-no">Helper Classes</h1>  --}}
 @endsection
 
-
-@section('content')
-    <div id="page-head">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                @if(session('logo_cliente'))
-                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" class="rounded" style="max-width:400px; width: 30vw" alt="">
-                @else   
-                <img src="{{ url('/img/Mosaic_brand_white.png') }}" style="height: 100px">
-                @endif
-            </div>
+@if(isset($error_cuenta_no_activada))
+    {{-- El usuario aun no tiene la cuenta activada, no esta asociado a un cliente o no tiene perfil --}}
+   @section('content')
+   <div class="text-center">
+    <div class="card col-md-6">
+        <h5 class="card-header bg-warning text-white">Cuenta no activada</h5>
+        <div class="card-body">
+            <p>{{ $error_cuenta_no_activada }}</p>
         </div>
-        
-    
-        
-       
-        <div class="pad-all text-center text-primary mt-3">
-            <div class="text-primary text-3x font-bold">Bienvenido de nuevo {{ Auth::user()->name }}</div>
-            <p1>Su ultima visita fue el {!! beauty_fecha(Auth::user()->last_login) !!}<p></p>
-        </p1></div>
     </div>
-    
-    @include($contenido_home)
-    
+   </div> 
+   @endsection
 
-@endsection
-
-@section('onesignal')
-    <script>
-        // inicializacion de onesignal
-        window.OneSignal = window.OneSignal || [];
-        OneSignal.push(function() {
-            OneSignal.init({
-            appId: "{{ env('ONESIGNAL_APP_ID') }}",
-            });
-            OneSignal.setExternalUserId("{{Auth::user()->id}}");
-            OneSignal.sendTags({"cliente": "{{Auth::user()->id_cliente}}"});
-        });
-        
-        OneSignal.push(function() {               
-            OneSignal.getUserId().then(function(userId) {
-                console.log("User ID:", userId);
-                $.post('{{url('/users/osid')}}', {_token: '{{csrf_token()}}', data: userId}, function(data, textStatus, xhr) {
-            
-                })
-            });
-        });
+   @section('scripts6')
+   <script>
+        $('#mainnav-menu-wrap').hide();
     </script>
+   @endsection
+@else
 
-@endsection
+    @section('content')
+        <div id="page-head">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    @if(session('logo_cliente'))
+                    <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" class="rounded" style="max-width:400px; width: 30vw" alt="">
+                    @else   
+                    <img src="{{ url('/img/Mosaic_brand_white.png') }}" style="height: 100px">
+                    @endif
+                </div>
+            </div>
+        
+            <div class="pad-all text-center text-primary mt-3">
+                <div class="text-primary text-3x font-bold">Bienvenido de nuevo {{ Auth::user()->name }}</div>
+                <p1>Su ultima visita fue el {!! beauty_fecha(Auth::user()->last_login) !!}<p></p>
+            </p1></div>
+        </div>
+        @include($contenido_home)
+    @endsection
+
+    @section('onesignal')
+        <script>
+            // inicializacion de onesignal
+            window.OneSignal = window.OneSignal || [];
+            OneSignal.push(function() {
+                OneSignal.init({
+                appId: "{{ env('ONESIGNAL_APP_ID') }}",
+                });
+                OneSignal.setExternalUserId("{{Auth::user()->id}}");
+                OneSignal.sendTags({"cliente": "{{Auth::user()->id_cliente}}"});
+            });
+            
+            OneSignal.push(function() {               
+                OneSignal.getUserId().then(function(userId) {
+                    console.log("User ID:", userId);
+                    $.post('{{url('/users/osid')}}', {_token: '{{csrf_token()}}', data: userId}, function(data, textStatus, xhr) {
+                
+                    })
+                });
+            });
+        </script>
+
+    @endsection
+@endif
+
 
 

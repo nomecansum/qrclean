@@ -21,6 +21,8 @@ class MKDController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->wherein('users.id_cliente',clientes());
+                } else {
+                    $q->where('users.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->where(function($q){
@@ -38,6 +40,8 @@ class MKDController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('plantas.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->orderby('plantas.id_cliente')
@@ -49,6 +53,8 @@ class MKDController extends Controller
         $edificios = edificios::where(function($q){
                 if (!isAdmin()) {
                     $q->where('id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->get();
@@ -86,7 +92,7 @@ class MKDController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('reservas.id_cliente',Auth::user()->id_cliente);
-                }
+                } 
             })
             ->where('puestos.id_planta',$planta)
             ->get();

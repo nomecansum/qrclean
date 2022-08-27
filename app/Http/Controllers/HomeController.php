@@ -35,9 +35,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
-
-        
 
         if(session('CL')==null){
             return redirect('/logout');
@@ -55,7 +52,6 @@ class HomeController extends Controller
             $data=explode("/",$r->data);
             $data=end($data);
             dd($data);
-           
         }
 
     }

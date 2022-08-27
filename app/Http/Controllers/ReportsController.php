@@ -82,7 +82,9 @@ class ReportsController extends Controller
         ->join('log_cambios_estado','puestos.id_puesto','log_cambios_estado.id_puesto')
         ->join('users','log_cambios_estado.id_user','users.id')
         ->where(function($q){
-            $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            if (!isAdmin()){
+                $q->WhereIn('clientes.id_cliente',clientes());
+            }
         })
         ->where(function($q) use($r){
             if ($r->cliente) {
@@ -244,7 +246,9 @@ class ReportsController extends Controller
         ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
         ->join('clientes','puestos.id_cliente','clientes.id_cliente')
         ->where(function($q){
-            $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            if (!isAdmin()){
+                $q->WhereIn('clientes.id_cliente',clientes());
+            }
         })
         ->where(function($q) use($r){
             if ($r->cliente) {
@@ -402,7 +406,9 @@ class ReportsController extends Controller
         ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
         ->join('clientes','puestos.id_cliente','clientes.id_cliente')
         ->where(function($q){
-            $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            if (!isAdmin()){
+                $q->WhereIn('clientes.id_cliente',clientes());
+            }
         })
         ->where(function($q) use($r){
             if ($r->cliente) {
@@ -650,7 +656,9 @@ class ReportsController extends Controller
         ->join('reservas','puestos.id_puesto','reservas.id_puesto')
        
         ->where(function($q){
-            $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            if (!isAdmin()){
+                $q->WhereIn('clientes.id_cliente',clientes());
+            }
         })
         ->where(function($q) use($r){
             if ($r->cliente) {
@@ -801,8 +809,10 @@ class ReportsController extends Controller
         $informes=DB::table('informes_programados')
         ->join('clientes','clientes.id_cliente','informes_programados.cod_cliente')
         ->where(function($q){
-            if (!isAdmin()){
-                $q->WhereIn('informes_programados.cod_cliente',clientes());
+            if (!isAdmin()) {
+                $q->where('informes_programados.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('informes_programados.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->where(function($q){

@@ -7,6 +7,8 @@
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('id_cliente',session('CL')['id_cliente']);
             }
         })
         ->get();
@@ -15,20 +17,26 @@
     $puestos_si=puestos::where(function($q){
         if (!isAdmin()) {
             $q->where('id_cliente',Auth::user()->id_cliente);
-        }
+        } else {
+                $q->where('id_cliente',session('CL')['id_cliente']);
+            }
     })
     ->where('id_estado',1);
     
     $edificios=edificios::where(function($q){
         if (!isAdmin()) {
             $q->where('id_cliente',Auth::user()->id_cliente);
-        }
+        } else {
+                $q->where('id_cliente',session('CL')['id_cliente']);
+            }
     });
     
     $plantas=plantas::where(function($q){
         if (!isAdmin()) {
             $q->where('id_cliente',Auth::user()->id_cliente);
-        }
+        } else {
+                $q->where('id_cliente',session('CL')['id_cliente']);
+            }
     });
 
     

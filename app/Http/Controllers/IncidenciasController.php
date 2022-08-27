@@ -131,7 +131,11 @@ class IncidenciasController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->whereBetween('fec_apertura',[$f1,$fhasta])
             ->wherenull('incidencias.fec_cierre')
@@ -144,7 +148,11 @@ class IncidenciasController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
@@ -176,7 +184,7 @@ class IncidenciasController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                $q->wherein('puestos.id_cliente',clientes());
             })
             ->where(function($q) use($r){
                 if ($r->cliente) {
@@ -266,7 +274,9 @@ class IncidenciasController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
             })
             ->wherein('incidencias.id_puesto',$lista_puestos)
             ->whereBetween('fec_apertura',[$f1,$f2])
@@ -923,9 +933,16 @@ class IncidenciasController extends Controller
         $tipos = DB::table('incidencias_tipos')
         ->join('clientes','clientes.id_cliente','incidencias_tipos.id_cliente')
         ->where(function($q){
-            $q->where('incidencias_tipos.id_cliente',Auth::user()->id_cliente);
-            if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                $q->orwhere('incidencias_tipos.mca_fijo','S');
+            if (!isAdmin()) {
+                $q->where('incidencias_tipos.id_cliente',Auth::user()->id_cliente);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('incidencias_tipos.mca_fijo','S');
+                }
+            } else {
+                $q->where('incidencias_tipos.id_cliente',session('CL')['id_cliente']);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('incidencias_tipos.mca_fijo','S');
+                }
             }
         })
         ->get();
@@ -1062,9 +1079,16 @@ class IncidenciasController extends Controller
         $causas = DB::table('causas_cierre')
         ->join('clientes','clientes.id_cliente','causas_cierre.id_cliente')
         ->where(function($q){
-            $q->where('causas_cierre.id_cliente',Auth::user()->id_cliente);
-            if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                $q->orwhere('causas_cierre.mca_fija','S');
+            if (!isAdmin()) {
+                $q->where('causas_cierre.id_cliente',Auth::user()->id_cliente);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('causas_cierre.mca_fija','S');
+                }
+            } else {
+                $q->where('causas_cierre.id_cliente',session('CL')['id_cliente']);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('causas_cierre.mca_fija','S');
+                }
             }
         })
         ->get();
@@ -1128,9 +1152,16 @@ class IncidenciasController extends Controller
         $estados = DB::table('estados_incidencias')
         ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
         ->where(function($q){
-            $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
-            if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                $q->orwhere('estados_incidencias.mca_fijo','S');
+            if (!isAdmin()) {
+                $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('estados_incidencias.mca_fijo','S');
+                }
+            } else {
+                $q->where('estados_incidencias.id_cliente',session('CL')['id_cliente']);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('estados_incidencias.mca_fijo','S');
+                }
             }
         })
         ->get();

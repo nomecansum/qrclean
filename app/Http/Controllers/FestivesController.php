@@ -20,11 +20,12 @@ class FestivesController extends Controller
 		->join('clientes','clientes.id_cliente','festivos.id_cliente')
 		->whereraw('year(val_fecha)='.Carbon::now()->year)
 		->where(function($q){
-			if (!fullAccess()) {
-	    		$q->Wherein('festivos.id_cliente', clientes());
-			}
-            else $q->Where('festivos.id_cliente', Auth::user()->id_cliente);
-		})
+            if (!isAdmin()) {
+                $q->where('festivos.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('festivos.id_cliente',session('CL')['id_cliente']);
+            }
+        })
 		->orwhere('mca_fijo','S')
 		->orderby('clientes.id_cliente')
 		->orderby('val_fecha')
@@ -32,12 +33,13 @@ class FestivesController extends Controller
 
 		$festives_cal = DB::table('festivos')
 		->join('clientes','clientes.id_cliente','festivos.id_cliente')
-		->where(function($q) {
-			if (!fullAccess()) {
-	    		$q->Wherein('festivos.id_cliente', clientes());
-			}
-            else $q->Where('festivos.id_cliente', Auth::user()->id_cliente);
-		})
+		->where(function($q){
+            if (!isAdmin()) {
+                $q->where('festivos.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('festivos.id_cliente',session('CL')['id_cliente']);
+            }
+        })
 		->orwhere('mca_fijo','S')
 		->orderby('clientes.id_cliente')
 		->orderby('val_fecha')
@@ -87,7 +89,8 @@ class FestivesController extends Controller
 			validar_acceso_tabla($id, "festivos");
 
 		if(empty($cli))
-            $cli = Auth::user()->id_cliente;
+            $cli = session('CL')['id_cliente'];
+
 
         $fes = DB::table('festivos')->where('cod_festivo', $id)->first();
         if(isset($fes->cod_centro))

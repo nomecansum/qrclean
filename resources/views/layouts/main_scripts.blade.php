@@ -192,8 +192,8 @@
         $(this).next('.custom-file-label').html(fileName);
     })
 
-
-    //////////////////////////////LOGICA DE GESTION DE FORMS CON AJAX/////////////////////////////
+   
+        //////////////////////////////LOGICA DE GESTION DE FORMS CON AJAX/////////////////////////////
     $('.form-ajax').submit(form_ajax_submit);
 
     //Form enviado por AJAX con notificaciones mediabte TOAST
@@ -405,34 +405,6 @@
         });
     });
 
-    $('#loginform,#recoverform').submit(function(event) {
-        event.preventDefault();
-        $('#spin_login').show();
-        $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
-            if (data.expired) {
-                console.log("Enviado login")
-                toast_ok("Login", data.msg)
-
-                $('#recoverform')[0].reset();
-                setTimeout(()=>{
-                    $('#recoverform').hide();
-                    $('#loginform').show();
-                    $('#login_email').val($('#login_remember').val());
-                },3000)
-            }else{
-                localStorage.setItem('theme',data.theme);
-                window.open('{{url('/login')}}','_self');
-            }
-        }).fail(function(r){
-            console.log(r.responseJSON.message);
-            toast_error("Registro",r.responseJSON.message);
-        })
-        .always(function(){
-            $('#spin_login').hide();
-        });
-    });
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     $('.btn_print').click(function(){
         $('#myFilter').printThis({
             importCSS: true,
@@ -570,8 +542,6 @@
     function cerrar_modal(){
         $('.modal').modal('hide');
     }
-    
-
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 

@@ -25,6 +25,8 @@ class LimpiezaController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('users.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('users.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->get();
@@ -38,6 +40,8 @@ class LimpiezaController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('rondas_limpieza.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->where(function($q){
@@ -60,6 +64,8 @@ class LimpiezaController extends Controller
                 
                 if (!isAdmin()) {
                     $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('rondas_limpieza.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->whereBetween('fec_ronda',[$f1,$fhasta])
@@ -81,7 +87,7 @@ class LimpiezaController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
-                }
+                } 
             })
             ->first();
 
@@ -119,7 +125,7 @@ class LimpiezaController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
-                }
+                } 
             })
             ->where(function($q){
                 if (Auth::user()->nivel_acceso==10) {  //Personal de limpieza
@@ -137,6 +143,8 @@ class LimpiezaController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('rondas_limpieza.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->distinct()
@@ -196,7 +204,7 @@ class LimpiezaController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
-                }
+                } 
             })
             ->first();
         if($ronda->tip_ronda=='L')
@@ -257,6 +265,8 @@ class LimpiezaController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('edificios.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->get();

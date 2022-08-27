@@ -46,6 +46,9 @@
 						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-2" type="button" role="tab" aria-controls="config" aria-selected="true">Configuracion</button>
 					</li>
 					<li class="nav-item" role="presentation">
+						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-5" type="button" role="tab" aria-controls="seguridad" aria-selected="true">Seguridad</button>
+					</li>
+					<li class="nav-item" role="presentation">
 						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#demo-stk-lft-tab-3" type="button" role="tab" aria-controls="logos" aria-selected="true">Logos</button>
 					</li>
 					<li class="nav-item" role="presentation">
@@ -61,13 +64,13 @@
 								<div class="row">
 									<div class="col-sm-12">
 										<div class="row">
-											<div class="col-sm-6">
+											<div class="col-md-6">
 												<div class="form-group">
 													<label for="">Nombre</label>
 													<input type="text" name="nom_cliente" class="form-control" required value="{{isset($c) ? $c->nom_cliente : ''}}">
 												</div>
 											</div>
-											<div class="col-sm-6">
+											<div class="col-md-6">
 												<div class="form-group">
 													<label for="">Distribuidor</label>
 													<select name="id_distribuidor" id="id_distribuidor" class="form-control" style="width: 100%">
@@ -82,7 +85,7 @@
 										</div>
 										
 										<div class="row mt-2">
-											<div class="col-sm-12">
+											<div class="col-md-12">
 												<div class="form-group">
 													<label for="">Informacion de contacto</label>
 													<input type="text" name="nom_contacto" class="form-control" value="{{isset($c) ? $c->nom_contacto : ''}}">
@@ -90,7 +93,7 @@
 											</div>
 										</div>
 										<div class="row mt-2">
-											<div class="col-sm-12">
+											<div class="col-md-12">
 												<label class="control-label">Token registro</label>
 												<div class="input-group mb-3">
 													<input type="text" name="token_1uso" readonly=""  id="token_1uso"  class="form-control" value="{{isset($c) ? $c->token_1uso : ''}}">
@@ -264,6 +267,72 @@
 						</div>
 
 					</div>
+					<div id="demo-stk-lft-tab-5" class="tab-pane fade"  role="tabpanel" aria-labelledby="seguridad-tab">
+						<div class="row">
+							<div class="col-md-4 mt-1">
+								<div class="form-check pt-2">
+									<input name="mca_requerir_2fa"  id="mca_requerir_2fa" value="S" {{ isset($config->mca_requerir_2fa)&&$config->mca_requerir_2fa=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label" for="mca_requerir_2fa">Requerir autentificacion de doble factor</label>
+								</div>
+							</div>
+							<div class="col-md-4  mt-1">
+								<div class="form-check pt-2">
+									<input  name="mca_permitir_google"  id="mca_permitir_google" value="S" {{ isset($config->mca_permitir_google)&&$config->mca_permitir_google=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label" for="mca_permitir_google">Permitir autentificacion con Google</label>
+								</div>
+							</div>
+						</div>	
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3  mt-1">
+									<div class="form-check pt-2">
+										<input  name="mca_saml2"  id="mca_saml2" value="S" {{ isset($config->mca_saml2)&&$config->mca_saml2=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+										<label class="form-check-label"  for="mca_saml2">sso SAML2</label>
+									</div>
+								</div>
+							</div>
+						</div>					
+						<div class="row b-all rounded" id="row_saml2" style="{{ isset($config->mca_saml2)&&$config->mca_saml2=='S'?'':'display:none'  }}">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="">Enttity ID</label>
+									<input type="text" name="saml2_idp_entityid" class="form-control" required value="{{isset($config) ? $config->saml2_idp_entityid : ''}}">
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="">SSO URL</label>
+									<input type="text" name="saml2_idp_sso_target_url" class="form-control" required value="{{isset($config) ? $config->saml2_idp_sso_target_url : ''}}">
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="">SLO URL</label>
+									<input type="text" name="saml2_idp_slo_target_url" class="form-control" required value="{{isset($config) ? $config->saml2_idp_slo_target_url : ''}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="">X509 Fingerprint</label>
+									<input type="text" name="saml2_idp_x509_fingerprint" class="form-control" required value="{{isset($config) ? $config->saml2_idp_entityid : ''}}">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="">X509 Algorithm</label>
+									<input type="text" name="saml2_idp_x509_fingerprint_algorithm" class="form-control" required value="{{isset($config) ? $config->saml2_idp_entityid : ''}}">
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="">X509 Algorithm</label>
+									<textarea type="text" name="saml2_idp_x509_cert" class="form-control" required rows=6>
+										{{isset($config) ? $config->saml2_idp_x509_cert : ''}}
+									</textarea>
+								</div>
+							</div>
+						</div>	
+					</div>
 					<div id="demo-stk-lft-tab-3" class="tab-pane fade"  role="tabpanel" aria-labelledby="logos-tab">
 						<div class="row mb-0">
 							<div class="col-md-6 text-center bg-gray-light pad-all">
@@ -342,61 +411,10 @@
 				$('#btn_generar_token').click();
 		@endif
 		
-		$('.btn-scheme').click(function(){
-			if($(this).data('title')=='Dark'){
-				$('.light').hide();
-			} else {
-				$('.light').show();
-			}
-				
+		$('#mca_saml2').click(function(){
+			$('#row_saml2').toggle();		
 		})
 
-		if(localStorage.getItem('theme')=='theme-dark-full'){
-            $('.light').hide();
-        }
-
-		var demoSet             = $('#demo-nifty-settings'),
-            niftyContainer      = $('#container'),
-            niftyMainNav        = $('#mainnav-container'),
-            niftyAside          = $('#aside-container'),
-			demoSetBtn          = $('#demo-set-btn');
-
-
-
-        // COLOR SCHEMES
-        // =================================================================
-       
-
-        $('#demo-theme').on('click', '.demo-theme', function (e) {
-			$('#demo-theme').removeClass('active');
-			$('#demo-theme').removeClass('disabled');
-            e.preventDefault();
-            var el = $(this);
-            // if (el.hasClass('disabled') || el.hasClass('active')) {
-            //     return false;
-            // }
-			changeTheme(el.attr('data-theme'), el.attr('data-type'));
-			$('#theme_type').val(el.attr('data-type'));
-			$('#theme_name').val(el.attr('data-theme'));
-            //themeBtn.removeClass('active');
-            //el.addClass('active').tooltip('hide');
-            return false;
-        });
-
-
-        demoSet.on('click', function(e){
-            if (demoSet.hasClass('in')){
-                if ($(e.target).is(demoSet)) demoSet.removeClass('in');
-            }
-        });
-
-        demoSetBtn.on('click', function(){
-            demoSet.toggleClass('in');
-            return false;
-        });
-        $('#demo-btn-close-settings').on('click', function () {
-            demoSetBtn.trigger('click')
-        });
 
 		$('input[type="file"]').change(function(e){
 			var fileName = e.target.files[0].name;

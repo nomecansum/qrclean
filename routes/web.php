@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NotificationController;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,16 +55,24 @@ Route::get('/terminos','HomeController@terminos');
 
 Route::get('/send-notification', [NotificationController::class, 'sendOfferNotification']);
 
+
+
+/////////////////////////////COSAS DE LOGIN///////////////////////////////////////////////////////////
 //Mi login de toda la vida
 //Route::post('/login','Auth\LoginController@login');
-Route::view('/postlogin','scan');
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//Login en dos pasos
+Route::post('/prelogin', 'Auth\LoginController@prelogin')->name('prelogin');
 Route::get('/logout','Auth\LoginController@logout')->name('logout');;
-//route::view('test_zonas','plantas.zonas');
 
-//Route::view('/scan2', 'scan2');
+//Login con google
+Route::get('/login/google', 'Auth\LoginController@redirectToGoogleProvider')->name('login.google');
+Route::get('/auth/google/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+ 
+Route::get('/auth/google/callback', 'Auth\LoginController@authToGooglecallback');
+/////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////
 //// RUTAS PARA LA LANDING PAGE DE EVENTOS
@@ -114,6 +123,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/sala/{sala}','SalasController@getpuesto');
 
     
+
+    
     ////////////////////GESTION DE USUAR IOS////////////////////
     Route::group(['prefix' => 'users'], function () {
         
@@ -128,6 +139,8 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/edit_modificar_usuarios',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@editor_modificar_usuarios'])->name('users.users.edit_modificar');
         Route::post('/modificar_usuarios',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@modificar_usuarios'])->name('users.users.modificar_usuarios');
         Route::post('/search',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@search'])->name('users.users.search');
+        Route::get('/activar_2fa/{id}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@desactivar_2fa'])->name('users.usersactivar_2fa');
+        
         
 
         Route::get('/addplanta/{usuario}/{planta}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@addplanta'])->name('users.addplanta');
@@ -197,6 +210,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('update',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@update']);
         Route::get('delete/{id}',['middleware'=>'permissions:["Clientes"],["D"]', 'uses' => 'CustomersController@delete']);
         Route::get('gen_key',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@gen_key']);
+        Route::post('session_cliente',['middleware'=>'permissions:["Clientes"],["R"]', 'uses' => 'CustomersController@session_cliente'])->name('cliente.menu');
     });
 
     ////////////////////GESTION DE PUESTOS////////////////////

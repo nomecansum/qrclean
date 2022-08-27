@@ -44,7 +44,11 @@ class PuestosController extends Controller
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->where(function($q){
                 if (isSupervisor(Auth::user()->id)) {
@@ -62,13 +66,24 @@ class PuestosController extends Controller
                     if(config_cliente('mca_mostrar_datos_fijos')=='S'){
                         $q->orwhere('puestos_tipos.mca_fijo','S');
                     }
+                } else {
+                    $q->where('puestos_tipos.id_cliente',session('CL')['id_cliente']);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
                 }
             })
         ->get();
 
         $usuarios = DB::table('users')
             ->join('clientes','clientes.id_cliente','users.id_cliente')
-            ->where('users.id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('users.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('users.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->orderby('name')
         ->get();
 
@@ -94,7 +109,7 @@ class PuestosController extends Controller
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->leftjoin('puestos_asignados','puestos.id_puesto','puestos_asignados.id_puesto')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                $q->wherein('puestos.id_cliente',clientes());
             })
             ->where(function($q) use($r){
                 if ($r->cliente) {
@@ -187,7 +202,13 @@ class PuestosController extends Controller
                 ->first();
         }
         $usuarios=DB::table('users')
-            ->where('id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('users.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('users.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->orderby('name')
             ->where(function($q){
                 if (isSupervisor(Auth::user()->id)) {
@@ -198,7 +219,13 @@ class PuestosController extends Controller
             ->get();
 
         $perfiles=DB::table('niveles_acceso')
-            ->wherein('id_cliente',[1,Auth::user()->id_cliente])
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('niveles_acceso.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('niveles_acceso.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)
             ->where(function($q){
                 if (isSupervisor(Auth::user()->id)) {
@@ -216,14 +243,30 @@ class PuestosController extends Controller
             ->toarray();
         $tags=implode(",",$tags);
 
-        $tags_cliente=DB::table('tags')->where('id_cliente',Auth::user()->id_cliente)->pluck('nom_tag')->toarray();
+        $tags_cliente=DB::table('tags')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('tags.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('tags.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->pluck('nom_tag')
+            ->toarray();
 
         $tipos = DB::table('puestos_tipos')
         ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
         ->where(function($q){
-            $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-            if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                $q->orwhere('puestos_tipos.mca_fijo','S');
+            if (!isAdmin()) {
+                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
+            } else {
+                $q->where('puestos_tipos.id_cliente',session('CL')['id_cliente']);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
             }
         })
         ->get();
@@ -425,6 +468,8 @@ class PuestosController extends Controller
                 ->where(function($q){
                     if (!isAdmin()) {
                         $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                    } else {
+                        $q->where('puestos.id_cliente',session('CL')['id_cliente']);
                     }
                 })
                 ->wherein('id_puesto',$r->lista_id)
@@ -456,6 +501,8 @@ class PuestosController extends Controller
                 ->where(function($q){
                     if (!isAdmin()) {
                         $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                    } else {
+                        $q->where('puestos.id_cliente',session('CL')['id_cliente']);
                     }
                 })
                 ->wherein('id_puesto',$r->lista_id)
@@ -474,10 +521,17 @@ class PuestosController extends Controller
         $tipos = DB::table('puestos_tipos')
         ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
         ->where(function($q){
-            $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+            if (!isAdmin()) {
+                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
                 if(config_cliente('mca_mostrar_datos_fijos')=='S'){
                     $q->orwhere('puestos_tipos.mca_fijo','S');
                 }
+            } else {
+                $q->where('puestos_tipos.id_cliente',session('CL')['id_cliente']);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
+            }
         })
         ->get();
         
@@ -561,6 +615,8 @@ class PuestosController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('puestos.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->wherein('id_puesto',$r->lista_id)
@@ -591,12 +647,6 @@ class PuestosController extends Controller
         ];
     }
 
-    /**
-     * @param Request $r 
-     * @return View|Factory 
-     * @throws InvalidArgumentException 
-     * @throws BindingResolutionException 
-     */
     public function mapa(Request $r){
 
         if(isset($r->fecha)){
@@ -613,7 +663,11 @@ class PuestosController extends Controller
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->leftjoin('users','puestos.id_usuario_usando','users.id')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->where(function($q){
                 if (isSupervisor(Auth::user()->id)) {
@@ -632,7 +686,11 @@ class PuestosController extends Controller
         ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
         ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
         ->where(function($q){
-            $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            if (!isAdmin()) {
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('edificios.id_cliente',session('CL')['id_cliente']);
+            }
         })
         ->get();
 
@@ -644,7 +702,11 @@ class PuestosController extends Controller
                 $q->orwhereraw("'".$fecha_mirar->format('Y-m-d')."' between fec_reserva AND fec_fin_reserva");
             })
             ->where(function($q){
-                $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('reservas.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->get();
 
@@ -686,7 +748,11 @@ class PuestosController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
@@ -699,7 +765,11 @@ class PuestosController extends Controller
         ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
         ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
         ->where(function($q){
-            $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            if (!isAdmin()) {
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('edificios.id_cliente',session('CL')['id_cliente']);
+            }
         })
         ->get();
 
@@ -711,7 +781,11 @@ class PuestosController extends Controller
                 $q->orwhereraw("'".$fecha_mirar->format('Y-m-d')."' between fec_reserva AND fec_fin_reserva");
             })
             ->where(function($q){
-                $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('reservas.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->get();
 
@@ -750,7 +824,11 @@ class PuestosController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->where('puestos.id_planta',$cualpuesto->id_planta)
             ->orderby('edificios.des_edificio')
@@ -767,6 +845,8 @@ class PuestosController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('edificios.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->where('id_edificio',$puestos->first()->id_edificio)
@@ -782,6 +862,8 @@ class PuestosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('reservas.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->get();
@@ -828,7 +910,11 @@ class PuestosController extends Controller
                 $q->orwhereraw("'".$fecha_mirar->format('Y-m-d')."' between fec_reserva AND fec_fin_reserva");
             })
             ->where(function($q){
-                $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('reservas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('reservas.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->where(function($q){
                 $q->where('users.id_departamento',Auth::user()->id_departamento);
@@ -862,9 +948,12 @@ class PuestosController extends Controller
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
-            
             ->wherein('puestos.id_puesto',$puestos_mostrar)
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
@@ -877,7 +966,11 @@ class PuestosController extends Controller
             ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
             ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
             ->where(function($q){
-                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->wherein('id_edificio',$puestos->pluck('id_edificio')->toArray())
             ->get();
@@ -907,7 +1000,11 @@ class PuestosController extends Controller
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->orderby('puestos.id_edificio')
             ->orderby('puestos.id_planta')
@@ -919,6 +1016,8 @@ class PuestosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('users.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('users.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->get();
@@ -974,6 +1073,8 @@ class PuestosController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('puestos.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->wherein('id_puesto',$r->lista_id)
@@ -992,6 +1093,8 @@ class PuestosController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('puestos.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->wherein('id_puesto',$r->lista_id)
@@ -1132,6 +1235,5 @@ class PuestosController extends Controller
             'url' => url('puestos')
         ];
     }
-
     
 }

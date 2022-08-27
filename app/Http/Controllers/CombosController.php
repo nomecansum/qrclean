@@ -130,6 +130,8 @@ class CombosController extends Controller
                 ->where(function($q){
                     if (!isAdmin()) {
                         $q->wherein('users.id_cliente',clientes());
+                    } else {
+                        $q->where('users.id_cliente',session('CL')['id_cliente']);
                     }
                 })
                 ->orderby('clientes.nom_cliente')
@@ -243,6 +245,8 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('users.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('users.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->get();
@@ -257,6 +261,8 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('plantas.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->get();
@@ -272,6 +278,8 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('plantas.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_sala'))
@@ -287,6 +295,8 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->get();
@@ -303,6 +313,8 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->orderby('nom_pais')
@@ -321,6 +333,8 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->orderby('nom_region')
@@ -339,6 +353,8 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->orderby('nombre')

@@ -17,8 +17,17 @@ class PermissionsController extends Controller
 		  DB::table('niveles_acceso')
 			->where('val_nivel_acceso','<=',$nivel_acceso)
 			->where(function($q){
-				$q->where('id_cliente',Auth::user()->id_cliente);
-				$q->orwhere('mca_fijo','S');
+				if (!isAdmin()) {
+					$q->where('niveles_acceso.id_cliente',Auth::user()->id_cliente);
+					if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+						$q->orwhere('niveles_acceso.mca_fijo','S');
+					}
+				} else {
+					$q->where('niveles_acceso.id_cliente',session('CL')['id_cliente']);
+					if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+						$q->orwhere('niveles_acceso.mca_fijo','S');
+					}
+				}
 			})
 			->get();
 		$cuenta =
@@ -27,8 +36,12 @@ class PermissionsController extends Controller
 			->where('id_cliente',Auth::user()->id_cliente)
 			  ->where('nivel_acceso','<=',$nivel_acceso)
 			  ->where(function($q){
-				  $q->where('id_cliente',Auth::user()->id_cliente);
-			  })
+					if (!isAdmin()) {
+						$q->where('users.id_cliente',Auth::user()->id_cliente);
+					} else {
+						$q->where('users.id_cliente',session('CL')['id_cliente']);
+					}
+				})
 			  ->groupby('cod_nivel')
 			  ->get();
 		$homepages=DB::table('niveles_acceso')->pluck('home_page')->unique()->toArray();

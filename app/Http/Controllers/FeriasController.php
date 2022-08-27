@@ -34,7 +34,11 @@ class FeriasController extends Controller
         $ferias=DB::table('ferias')
             ->join('clientes','clientes.id_cliente','ferias.id_cliente')
             ->where(function($q){
-                $q->where('ferias.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('ferias.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('ferias.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->orderby('ferias.fec_feria','desc')
             ->get();
@@ -52,6 +56,8 @@ class FeriasController extends Controller
         $Clientes = clientes::where(function($q){
                 if (!isAdmin()) {
                     $q->where('id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('clientes.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->pluck('nom_cliente','id_cliente')
@@ -102,6 +108,8 @@ class FeriasController extends Controller
         $Clientes = clientes::where(function($q){
             if (!isAdmin()) {
                 $q->where('id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('clientes.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->pluck('nom_cliente','id_cliente')
@@ -189,7 +197,6 @@ class FeriasController extends Controller
         return $data;
     }
 
-
     /////////////GESTION DE MARCAS  //////////////////
 
     /**
@@ -228,6 +235,8 @@ class FeriasController extends Controller
         $clientes = clientes::where(function($q){
             if (!isAdmin()) {
                 $q->where('id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('clientes.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->pluck('nom_cliente','id_cliente')
@@ -404,6 +413,8 @@ class FeriasController extends Controller
         $clientes = clientes::where(function($q){
             if (!isAdmin()) {
                 $q->where('id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('clientes.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->pluck('nom_cliente','id_cliente')
@@ -413,44 +424,37 @@ class FeriasController extends Controller
 
     public function  asistentes_save(Request $r)
     {
-    try {    
-        
-        $data = $this->getData_asistentes($r);
-        if($r->id_contacto!=0){
-            $datos = contactos::findOrFail($r->id_contacto);
-            $datos->update($data);
-        } else {
-            $datos=new contactos;
-            $datos=contactos::create($data);
-            $datos->token=Str::random(50);
-            $datos->mca_acepto='S';
-            $datos->mca_enviar='S';
-            $datos->save();
+        try {    
             
-        }
-        
-        return [
-            'title' => "Contactos",
-            'message' => 'Contacto '.$datos->nombre. ' actualizado',
-            'url' => url('/ferias/asistentes')
-        ];
-        
-        } catch (Exception $exception) {
-
+            $data = $this->getData_asistentes($r);
+            if($r->id_contacto!=0){
+                $datos = contactos::findOrFail($r->id_contacto);
+                $datos->update($data);
+            } else {
+                $datos=new contactos;
+                $datos=contactos::create($data);
+                $datos->token=Str::random(50);
+                $datos->mca_acepto='S';
+                $datos->mca_enviar='S';
+                $datos->save();
+                
+            }
+            
             return [
-                'title' => "Ferias",
-                'error' => 'ERROR: Ocurrio un error actualizando la contacto '.$r->nombre.' '.mensaje_excepcion($exception),
+                'title' => "Contactos",
+                'message' => 'Contacto '.$datos->nombre. ' actualizado',
+                'url' => url('/ferias/asistentes')
             ];
-        }
+            
+            } catch (Exception $exception) {
+
+                return [
+                    'title' => "Ferias",
+                    'error' => 'ERROR: Ocurrio un error actualizando la contacto '.$r->nombre.' '.mensaje_excepcion($exception),
+                ];
+            }
     }
 
-/**
-     * Remove the specified plantas from the storage.
-     *
-     * @param int $id
-     *
-     * @return Illuminate\Http\RedirectResponse | Illuminate\Routing\Redirector
-     */
     public function asistentes_delete($id)
     {
         try {

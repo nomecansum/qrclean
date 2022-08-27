@@ -1104,7 +1104,12 @@ function nombrepuesto($puesto){
 function config_cliente($clave,$cliente=null){
     try{
         if (!isset($cliente)){
-            $cliente=Auth::user()->id_cliente;
+           
+            if (!isAdmin()) {
+                $cliente=Auth::user()->id_cliente;
+            } else {
+                $cliente=session('CL')['id_cliente'];
+            }
         }
         $config=config_clientes::find($cliente)->$clave;
         return $config;

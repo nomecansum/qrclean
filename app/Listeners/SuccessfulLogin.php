@@ -41,7 +41,7 @@ class SuccessfulLogin
             $distribuidor=DB::table('distribuidores')->where('id_distribuidor',$cliente->id_distribuidor)->first();
             session(['DIS'=>(array)$distribuidor]);
         }
-        session(['CL'=>(array)$config_cliente]);
+        session(['CL'=>array_merge((array)$config_cliente,(array)$cliente)]);
         session(['logo_cliente'=>$cliente->img_logo]);
         session(['logo_cliente_menu'=>$cliente->img_logo_menu]);
         Cookie::queue('qrcleanid', $user->id, 999999);

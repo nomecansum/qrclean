@@ -82,7 +82,13 @@ class ReservasController extends Controller
             ->leftjoin('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
-            ->where('puestos.id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->where('reservas.id_usuario',Auth::user()->id)
             ->wherebetween('fec_reserva',[$month,$end])
             ->get();    
@@ -131,13 +137,20 @@ class ReservasController extends Controller
             ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
             ->wherein('puestos_tipos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos))
             ->where(function($q){
-                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                if (!isAdmin()) {
+                    $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
+                } else {
+                    $q->where('puestos_tipos.id_cliente',session('CL')['id_cliente']);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
                 }
             })
             ->where(function($q){
-                if(config_cliente('mca_salas',Auth::user()->id_cliente)=='S'){
+                if(config_cliente('mca_salas',session('CL')['id_cliente'])=='S'){
                     $q->wherenotin('puestos_tipos.id_tipo_puesto',config('app.tipo_puesto_sala'));
                 }
             })
@@ -176,13 +189,20 @@ class ReservasController extends Controller
             ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
             ->wherein('puestos_tipos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos))
             ->where(function($q){
-                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                if (!isAdmin()) {
+                    $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
+                } else {
+                    $q->where('puestos_tipos.id_cliente',session('CL')['id_cliente']);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
                 }
             })
             ->where(function($q){
-                if(config_cliente('mca_salas',Auth::user()->id_cliente)=='S'){
+                if(config_cliente('mca_salas',session('CL')['id_cliente'])=='S'){
                     $q->wherenotin('puestos_tipos.id_tipo_puesto',config('app.tipo_puesto_sala'));
                 }
             })
@@ -271,7 +291,11 @@ class ReservasController extends Controller
                 ->join('users','users.id','puestos_asignados.id_usuario')    
                 // ->where('id_usuario','<>',Auth::user()->id)
                 ->where(function($q){
-                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                    if (!isAdmin()) {
+                        $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                    } else {
+                        $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                    }
                 })
                 ->where(function($q) use($r,$p){
                     $q->wherenull('fec_desde');
@@ -288,7 +312,11 @@ class ReservasController extends Controller
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
             ->where('id_perfil',Auth::user()->cod_nivel)
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->get();
         
@@ -297,7 +325,11 @@ class ReservasController extends Controller
             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
             ->where('id_perfil','<>',Auth::user()->cod_nivel)
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->get();
         if(isset($asignados_nomiperfil)){
@@ -314,7 +346,11 @@ class ReservasController extends Controller
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->where(function($q) use($plantas_usuario){
                 if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
@@ -384,6 +420,8 @@ class ReservasController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->where(function($q) use($edificios_usuario){
@@ -445,7 +483,13 @@ class ReservasController extends Controller
                     })
                     ->where('id_reserva','<>',$r->id_reserva)
                     ->where('mca_anulada','N')
-                    ->where('puestos.id_cliente',Auth::user()->id_cliente)
+                    ->where(function($q){
+                        if (!isAdmin()) {
+                            $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                        } else {
+                            $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                        }
+                    })
                     ->first();
 
                 if(isset($reservas) && !isset($r->salas)){
@@ -466,7 +510,13 @@ class ReservasController extends Controller
                         });
                         $q->orwhereraw("'".$fec_desde->format('Y-m-d')."' between fec_desde AND fec_hasta");
                     })
-                    ->where('puestos.id_cliente',Auth::user()->id_cliente)
+                    ->where(function($q){
+                        if (!isAdmin()) {
+                            $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                        } else {
+                            $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                        }
+                    })
                     ->first();
 
                 if(isset($asignado)){
@@ -495,7 +545,13 @@ class ReservasController extends Controller
                 })
                 ->where('mca_anulada','N')
                 ->where('id_reserva','<>',$r->id_reserva)
-                ->where('puestos.id_cliente',Auth::user()->id_cliente)
+                ->where(function($q){
+                    if (!isAdmin()) {
+                        $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                    } else {
+                        $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                    }
+                })
                 ->first();
 
             if($ya_esta){//Ya esta pillado
@@ -827,7 +883,13 @@ class ReservasController extends Controller
                 ->join('users','reservas.id_usuario','users.id')
                 ->wherein('puestos.id_puesto',$r->lista_id)
                 ->wherebetween('fec_reserva',[$f1,$f2])
-                ->where('puestos.id_cliente',Auth::user()->id_cliente)
+                ->where(function($q){
+                    if (!isAdmin()) {
+                        $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                    } else {
+                        $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                    }
+                })
                 ->get();
             foreach($reservas as $res){
                 DB::table('reservas')->where('id_reserva',$res->id_reserva)->delete();

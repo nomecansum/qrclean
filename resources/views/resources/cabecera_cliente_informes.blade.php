@@ -2,7 +2,12 @@
     use App\Models\clientes;
     use Carbon\Carbon;
     if(!isset($cliente)){
-        $cliente=Auth::user()->id_cliente;
+        if (!isAdmin()) {
+            $cliente=Auth::user()->id_cliente;
+        } else {
+            $$cliente=session('CL')['id_cliente'];
+        }
+
     }
     $cl = clientes::find($cliente);
 @endphp

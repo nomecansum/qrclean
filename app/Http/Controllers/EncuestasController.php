@@ -23,7 +23,11 @@ class EncuestasController extends Controller
             ->join('clientes','clientes.id_cliente','encuestas.id_cliente')
             ->join('encuestas_tipos','encuestas_tipos.id_tipo_encuesta','encuestas.id_tipo_encuesta')
             ->where(function($q){
-                $q->where('encuestas.id_cliente',Auth::user()->id_cliente);
+                if (!isAdmin()) {
+                    $q->where('encuestas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('encuestas.id_cliente',session('CL')['id_cliente']);
+                }
             })
             ->orderby('encuestas.id_cliente')
             ->orderby('encuestas.id_encuesta')
@@ -44,6 +48,8 @@ class EncuestasController extends Controller
         $clientes = clientes::where(function($q){
                 if (!isAdmin()) {
                     $q->where('id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('clientes.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->pluck('nom_cliente','id_cliente')
@@ -134,6 +140,8 @@ class EncuestasController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('encuestas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('encuestas.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->where('id_encuesta',$id)
@@ -142,6 +150,8 @@ class EncuestasController extends Controller
         $clientes = clientes::where(function($q){
             if (!isAdmin()) {
                 $q->where('id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('clientes.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->pluck('nom_cliente','id_cliente')
@@ -247,10 +257,6 @@ class EncuestasController extends Controller
                 ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.'.mensaje_excepcion($exception)]);
         }
     }
-
-
-    
-
     
     /**
      * Get the request's data from the request.

@@ -561,3 +561,107 @@ td{
   border-color: #ed417b !important;
   color: #fff !important;
 }
+
+.bg-gray-light {
+  background-color: #f8f9fa;
+}
+.bg-gray-light,
+.bg-gray-light a {
+  color: #7a878e;
+}
+.bg-gray-light a:hover,
+.bg-gray-light a:focus {
+  color: #7a878e;
+}
+.bg-gray {
+  background-color: #e9eeef;
+}
+.bg-gray,
+.bg-gray a {
+  color: #7a878e;
+}
+.bg-gray a:hover,
+.bg-gray a:focus {
+  color: #7a878e;
+}
+.bg-gray-dark {
+  background-color: #cbd7da;
+}
+.bg-gray-dark,
+.bg-gray-dark a {
+  color: #7a878e;
+}
+.bg-gray-dark a:hover,
+.bg-gray-dark a:focus {
+  color: #7a878e;
+}
+.bg-trans-light {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.bg-trans-light,
+.bg-trans-light a {
+  color: inherit;
+}
+.bg-trans-light a:hover,
+.bg-trans-light a:focus {
+  color: inherit;
+}
+.bg-trans-dark {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.bg-trans-dark,
+.bg-trans-dark a {
+  color: inherit;
+}
+.bg-trans-dark a:hover,
+.bg-trans-dark a:focus {
+  color: inherit;
+}
+.bg-mint {
+  background-color: #26a69a;
+}
+.bg-mint,
+.bg-mint a {
+  color: #fff;
+}
+.bg-mint a:hover,
+.bg-mint a:focus {
+  color: #fff;
+}
+.bg-purple {
+  background-color: #ab47bc;
+}
+.bg-purple,
+.bg-purple a {
+  color: #fff;
+}
+.bg-purple a:hover,
+.bg-purple a:focus {
+  color: #fff;
+}
+.bg-pink {
+  background-color: #f06292;
+}
+.bg-pink,
+.bg-pink a {
+  color: #fff;
+}
+.bg-pink a:hover,
+.bg-pink a:focus {
+  color: #fff;
+}
+.text-mint,
+a.text-mint:hover,
+a.text-mint:focus {
+  color: #1f897f;
+}
+.text-purple,
+a.text-purple:hover,
+a.text-purple:focus {
+  color: #953ca4;
+}
+.text-pink,
+a.text-pink:hover,
+a.text-pink:focus {
+  color: #ed417b;
+}

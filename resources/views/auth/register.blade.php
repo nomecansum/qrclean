@@ -66,7 +66,7 @@
 
                 <div class="d-flex justify-content-between mt-4">
                     Ya es usuario ?
-                    <a href="./front-pages-login.html" class="btn-link text-decoration-none">Login</a>
+                    <a href="{{ route('login') }}" class="btn-link text-decoration-none">Login</a>
                 </div>
 
                 <div class="d-flex align-items-center justify-content-between border-top pt-3 mt-3">

@@ -220,5 +220,14 @@ class CustomersController extends Controller
 	{
 		return Str::random(64);
 	}
+
+    function session_cliente(Request $r){
+        $config_cliente=DB::table('clientes')
+            ->leftjoin('config_clientes','clientes.id_cliente','config_clientes.id_cliente')
+            ->where('clientes.id_cliente',$r->id)
+            ->first();  
+        session(['CL'=>(array)$config_cliente]);
+        return redirect()->back();
+    }
 }
 

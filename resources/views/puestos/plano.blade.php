@@ -105,7 +105,7 @@
    
         @foreach ($edificios as $e)
         <div class="card">
-            <div class="card-header bg-gray-dark text-white">
+            <div class="card-header bg-gray-dark">
                 <div class="row">
                     <div class="col-md-5">
                         <span class="fs-2 ml-2 mt-2 font-bold"><i class="fad fa-building"></i> {{ $e->des_edificio }}</span>

@@ -68,6 +68,8 @@ class PlantasController extends Controller
         $Clientes = clientes::where(function($q){
                 if (!isAdmin()) {
                     $q->where('id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('clientes.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->pluck('nom_cliente','id_cliente')
@@ -131,6 +133,8 @@ class PlantasController extends Controller
         $Clientes = clientes::where(function($q){
             if (!isAdmin()) {
                 $q->where('id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('clientes.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->pluck('nom_cliente','id_cliente')

@@ -14,6 +14,8 @@
     ->where(function($q){
         if (!isAdmin()) {
             $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
+        } else {
+            $q->where('rondas_limpieza.id_cliente',session('CL')['id_cliente']);
         }
     })
     ->where(function($q){
@@ -33,6 +35,8 @@
         ->where(function($q){
             if (!isAdmin()) {
                 $q->where('rondas_limpieza.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('rondas_limpieza.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->where('tip_ronda',$tipo_ronda)

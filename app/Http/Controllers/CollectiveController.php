@@ -18,9 +18,13 @@ class CollectiveController extends Controller
         ->select('colectivos.*','clientes.nom_cliente')
         ->leftjoin('colectivos_usuarios', 'colectivos.cod_colectivo', '=', 'colectivos_usuarios.cod_colectivo')
 		->selectraw("count(id_usuario) as cuenta")
-        ->where(function($q){
-			$q->Where('colectivos.id_cliente',Auth::user()->id_cliente);
-		})
+		->where(function($q){
+            if (!isAdmin()) {
+                $q->where('colectivos.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('colectivos.id_cliente',session('CL')['id_cliente']);
+            }
+        })
 		->where(function($q) use ($r){
 			if (session('id_cliente'))
 				$q->where('colectivos.id_cliente',session('id_cliente'));

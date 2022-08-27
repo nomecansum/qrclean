@@ -22,6 +22,13 @@ class BitacorasController extends Controller
         $bitacoras = DB::table('bitacora')
         ->join('users','bitacora.id_usuario','users.id')
         ->join('clientes','clientes.id_cliente','users.id_cliente')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->wherein('bitacora.id_cliente',clientes());
+            } else {
+                $q->where('bitacora.id_cliente',session('CL')['id_cliente']);
+            }
+        })
         ->orderby('fecha','desc')
         ->get();
 

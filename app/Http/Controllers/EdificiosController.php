@@ -24,7 +24,11 @@ class EdificiosController extends Controller
         ->join('clientes','clientes.id_cliente','edificios.id_cliente')
         ->leftjoin('provincias','provincias.id_prov','edificios.id_provincia')
         ->where(function($q){
-            $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            if (!isAdmin()) {
+                $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('edificios.id_cliente',session('CL')['id_cliente']);
+            }
         })
         ->get();
 

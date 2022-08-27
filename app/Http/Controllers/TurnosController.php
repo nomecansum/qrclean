@@ -17,7 +17,11 @@ class TurnosController extends Controller
         $turnos=DB::table('turnos')
         ->join('clientes','turnos.id_cliente','clientes.id_cliente')
         ->where(function($q){
-            $q->where('turnos.id_cliente',Auth::user()->id_cliente);
+            if (!isAdmin()) {
+                $q->where('turnos.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('turnos.id_cliente',session('CL')['id_cliente']);
+            }
         })
         ->get();
         
@@ -29,7 +33,7 @@ class TurnosController extends Controller
         
         if ($id==0){
             $dato=new turnos();
-            $dato->id_cliente=Auth::user()->id_cliente;
+            $dato->id_cliente=session('CL')['id_cliente'];
             $dato->fec_inicio=Carbon::now()->startOfMonth();
             $dato->fec_fin=Carbon::now()->endOfMonth();
             
@@ -37,8 +41,10 @@ class TurnosController extends Controller
             $dato = DB::table('turnos')
             ->where('id_turno',$id)
             ->where(function($q){
-                if (!isAdmin()){
-                    $q->WhereIn('clientes.id_cliente',clientes());
+                if (!isAdmin()) {
+                    $q->where('turnos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('turnos.id_cliente',session('CL')['id_cliente']);
                 }
             })
             ->first();
@@ -64,7 +70,7 @@ class TurnosController extends Controller
             $datos_dias=$datos_dias;
 
             $r->request->add(['datos_dias'=>$datos_dias]);
-            $r->request->add(['id_cliente'=>Auth::user()->id_cliente]);
+            $r->request->add(['id_cliente'=>session('CL')['id_cliente']]);
 
             if($r->id==0){
                 $turno=turnos::create($r->all());

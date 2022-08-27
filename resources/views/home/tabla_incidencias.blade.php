@@ -9,6 +9,8 @@
     ->where(function($q){
         if (!isAdmin()) {
             $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+        } else {
+            $q->where('puestos.id_cliente',session('CL')['id_cliente']);
         }
     })
     ->wherenull('fec_cierre')

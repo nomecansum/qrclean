@@ -5,7 +5,7 @@
 
 @foreach ($edificios as $e)
 <div class="card">
-    <div class="card-header bg-gray-dark text-white">
+    <div class="card-header bg-gray-dark">
         <div class="row">
             <div class="col-md-5">
                 <div class="form-check pt-2 float-left">

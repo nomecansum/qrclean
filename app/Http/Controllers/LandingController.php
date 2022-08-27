@@ -16,29 +16,29 @@ class LandingController extends Controller
     //
     public function save(Request $r){
 
-    try{    //Vamos a guardar
-        $contacto=new contactos;
-        $contacto->nombre=$r->name;
-        $contacto->email=$r->email;
-        $contacto->empresa=$r->empresa;
-        $contacto->mensaje=$r->message;
-        $contacto->mca_acepto=$r->chk_acepto??'N';
-        $contacto->mca_enviar=$r->chk_mandar??'N';
-        $contacto->token=Str::random(50);
-        $contacto->save();
-        Cookie::queue('landing', $contacto->id_contacto, 999999);
-        return [
-                'title' => "OK",
-                'message' => 'Registro completado!',
-                'id' => $contacto->id_contacto
-            ];
-        } catch (\Exception $exception) {
+        try{    //Vamos a guardar
+            $contacto=new contactos;
+            $contacto->nombre=$r->name;
+            $contacto->email=$r->email;
+            $contacto->empresa=$r->empresa;
+            $contacto->mensaje=$r->message;
+            $contacto->mca_acepto=$r->chk_acepto??'N';
+            $contacto->mca_enviar=$r->chk_mandar??'N';
+            $contacto->token=Str::random(50);
+            $contacto->save();
+            Cookie::queue('landing', $contacto->id_contacto, 999999);
             return [
-                'title' => "Estado de puesto",
-                'error' => 'ERROR: Ocurrio un error guardando contacto '.mensaje_excepcion($exception),
-                //'url' => url('sections')
-            ];
-        }
+                    'title' => "OK",
+                    'message' => 'Registro completado!',
+                    'id' => $contacto->id_contacto
+                ];
+            } catch (\Exception $exception) {
+                return [
+                    'title' => "Estado de puesto",
+                    'error' => 'ERROR: Ocurrio un error guardando contacto '.mensaje_excepcion($exception),
+                    //'url' => url('sections')
+                ];
+            }
     }
 
     public function products(){

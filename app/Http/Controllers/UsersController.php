@@ -41,6 +41,8 @@ class UsersController extends Controller
         ->where(function($q){
             if (!isAdmin()) {
                 $q->wherein('users.id_cliente',clientes());
+            } else {
+                $q->where('users.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->where(function($q){
@@ -62,9 +64,7 @@ class UsersController extends Controller
         ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
         ->leftjoin('users AS sup','users.id_usuario_supervisor', 'sup.id')
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->wherein('users.id_cliente',clientes());
-            }
+            $q->wherein('users.id_cliente',clientes());
         })
         ->where(function($q){
             if (isSupervisor(Auth::user()->id)) {
@@ -146,21 +146,13 @@ class UsersController extends Controller
                 $q->wherein('cod_nivel',$supervisores_perfil);
                 $q->orwherein('id',$supervisores_usuario);
             })
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->wherein('users.id_cliente',clientes());
-                }
-            })
+            ->where('id_cliente',$users->id_cliente)
             ->orderby('name')
             ->get();
 
         $usuarios_supervisables = DB::table('users')
             ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->wherein('users.id_cliente',clientes());
-                }
-            })
+            ->where('id_cliente',$users->id_cliente)
             ->where('users.id','<>',Auth::user()->id)
             ->get();
 
@@ -314,6 +306,9 @@ class UsersController extends Controller
             $data["id_usuario_supervisor"]=$request->id_usuario_supervisor??null;
             $data["mca_notif_push"] = isset($data["mca_notif_push"]) ? 'S' : 'N';
             $data["mca_notif_email"] = isset($data["mca_notif_email"]) ? 'S' : 'N';
+            if(isset($data['tipos_puesto_admitidos']) && is_array($data['tipos_puesto_admitidos'])){
+                $data['tipos_puesto_admitidos']=implode(",",$data['tipos_puesto_admitidos']);
+            }
 
             $users->update($data);
 
@@ -481,6 +476,7 @@ class UsersController extends Controller
             'id_onesignal'=>'nullable',
             'mca_notif_push'=>'nullable',
             'mca_notif_email'=>'nullable',
+            'tipos_puesto_admitidos'=>'nullable',
         ];
 
 
@@ -586,26 +582,74 @@ class UsersController extends Controller
     public function editor_modificar_usuarios(Request $r){
         $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)->wherein('id_cliente',[Auth::user()->id_cliente,1])->get();
         $turnos=DB::table('turnos')
-            ->where('id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('turnos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('turnos.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->get();
         $edificios=DB::table('edificios')
-            ->where('id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('edificios.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->get();
         $tipos_puestos=DB::table('puestos_tipos')
-            ->where('id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
+                } else {
+                    $q->where('puestos_tipos.id_cliente',session('CL')['id_cliente']);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
+                }
+            })
             ->get();
         $colectivos_cliente=DB::table('colectivos')
-            ->where('id_cliente',Auth::user()->id_cliente)
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('colectivos.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('colectivos.id_cliente',session('CL')['id_cliente']);
+            }
+        })
             ->get();
         $clientes=DB::table('clientes')
-            ->wherein('id_cliente',clientes())
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('clientes.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('clientes.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->get();
         $usuarios=DB::table('users')
-            ->where('id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('users.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('users.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->orderby('name')
             ->get();
         $plantas=DB::table('plantas')
-            ->where('id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('plantas.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->get();
         return view('users.fill_modificar_datos_usuario', compact('Perfiles','turnos','edificios','tipos_puestos','colectivos_cliente','clientes','usuarios','plantas','r'));
     }
@@ -848,13 +892,13 @@ class UsersController extends Controller
             $distribuidor=DB::table('distribuidores')->where('id_distribuidor',$cliente->id_distribuidor)->first();
             session(['DIS'=>(array)$distribuidor]);
         }
-        session(['CL'=>(array)$config_cliente]);
+        session(['CL'=>array_merge((array)$config_cliente,(array)$cliente)]);
         session(['logo_cliente'=>$cliente->img_logo]);
         session(['logo_cliente_menu'=>$cliente->img_logo_menu]);
         session(['id_cliente'=>$cliente->id_cliente]);
 
         if(!empty($cliente->fec_borrado))
-           return response()->json(["Tu empresa se encuentra dada de baja en el sistema, para cualquier pregunta contacte al 917 373 295 "],422);
+           return response()->json(["Tu empresa se encuentra dada de baja en el sistema, para cualquier pregunta contacte  "],422);
 
         // if($cliente && $cliente->img_logo!=''){
         //     session(['logo_cliente' => $cliente->img_logo]);
@@ -868,12 +912,24 @@ class UsersController extends Controller
 
     public function plantas_usuarios(){
         $plantas=DB::table('plantas')
-            ->where('id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('plantas.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->orderby('des_planta')
             ->get();
 
         $usuarios=DB::table('users')
-            ->where('users.id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('users.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('users.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->join('niveles_acceso','niveles_acceso.cod_nivel', 'users.cod_nivel')
             ->orderby('name')
             ->get();
@@ -881,7 +937,13 @@ class UsersController extends Controller
         $plantas_users=DB::table('plantas_usuario')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->select('plantas_usuario.*')
-            ->where('id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('plantas.id_cliente',session('CL')['id_cliente']);
+                }
+            })
             ->get();
 
         return view('users.gestor_plantas_usuarios',compact('plantas','usuarios','plantas_users'));
@@ -1563,6 +1625,23 @@ class UsersController extends Controller
     public function content_2fa($id){
         $users=users::find($id);
         return view('users.fill_content_2fa',compact('users'));
+    }
+
+    public function activar_2fa($id,$accion){
+        
+        
+        if($accion=='D'){
+            $users=users::find($id);
+            $users->two_factor_secret=null;
+            $users->two_factor_recovery_codes=null;
+            $users->two_factor_confirmed_at=null;
+            $users->save();
+            return [
+                'result' => "OK",
+                'data' => $id
+            ];
+        }
+        
     }
     
 }

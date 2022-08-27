@@ -54,7 +54,16 @@
        {{-- @php
            notificar_usuario(App\Models\Users::find(14),"prueba",null,"prueba",[3],1,[],null);
        @endphp --}}
-       
+       {{-- @php
+           use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
+           use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
+           use Laravel\Fortify\RecoveryCode;
+           use Illuminate\Support\Collection;
+
+           dd(encrypt(json_encode(Collection::times(8, function () {
+                return RecoveryCode::generate(); --}}
+            })->all())));
+       @endphp
     </div>
 </div>
 

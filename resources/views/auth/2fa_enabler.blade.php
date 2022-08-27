@@ -46,7 +46,8 @@
                                             <h4>Escanee este codigo con la aplicacion descargada para activar su cuenta</h4>
                                         </div>
                                         <div class="pb-3">
-                                            {!! auth()->user()->twoFactorQrCodeSvg() !!}                                
+                                            {!! auth()->user()->twoFactorQrCodeSvg() !!}   <br>
+                                            {{ decrypt(auth()->user()->two_factor_secret)}}                             
                                         </div>
                                         @if (session('status') == 'two-factor-authentication-confirmed')
                                             <div class="mb-4 font-medium text-sm alert alert-success">

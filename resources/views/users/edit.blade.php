@@ -84,6 +84,10 @@
         font-weight: 600;
     }
 
+    .ui-sortable{
+        width: 414px;
+    }
+
     
 </style>
 
@@ -388,21 +392,42 @@
                                 </div>
                             </div>
                         </div>
-
-                        
-
                         <div id="demo-stk-lft-tab-6"  class="tab-pane fade " role="tabpanel" aria-labelledby="seguridad-tab">
                             <div class="card">
                                 <div class="card-header">
-                                    <span class="text-main text-semibold float-left mr-5">Autenticacion de doble factor</span>
-                                    
+                                    <span class="text-main text-semibold float-left mr-5">@if ($users->two_factor_secret!=null) <i class="fa-solid fa-circle-check text-success check_2fa"></i>@endif  Autenticacion de doble factor</span>
+                                    @if ($users->two_factor_secret!=null)
+                                    <a href="#" class="btn btn-danger btn_desactivar_2fa">
+                                        Desactivar
+                                    </a>
+                                    @else
+                                    <a href="#" class="badge bg-warning">
+                                        No activada
+                                    </a>
+                                    @endif
                                 </div>
                                 <div class="card-body" id="content_2fa">
-
+                                    @if ($users->two_factor_secret!=null)
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label>QR de activacion</label><br>
+                                            {!! App\user::find($users->id)->twoFactorQrCodeSvg()!!}<br>
+                                           {{ decrypt(App\user::find($users->id)->two_factor_secret)}}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label>Codigos de emergencia</label>
+                                            <ul class="list-group mb-2" style="columns: 2; -webkit-columns: 2; -moz-columns: 2;">
+                                            @foreach (json_decode(decrypt(App\user::find($users->id)->two_factor_recovery_codes)) as $code)
+                                                <li class="list-group-item">{{ $code }}</li>
+                                            @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    
                                 </div>
                             </div>
                         </div>
-
                         <div id="demo-stk-lft-tab-3"  class="tab-pane fade " role="tabpanel" aria-labelledby="reserva-tab">
                             <div class="card">
                                 <div class="card-header">
@@ -553,7 +578,7 @@
                                             @foreach($tipos_puestos as $t)
                                                 <div class="form-group col-md-4">
                                                     <div class="form-check pt-2">
-                                                        <input name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" {{ in_array($t->id_tipo_puesto,$tipos_puesto_usuario)?'checked':'' }} class="form-check-input chkdia" type="checkbox">
+                                                        <input name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" {{ in_array($t->id_tipo_puesto,$tipos_puesto_usuario)?'checked':'' }} class="form-check-input" type="checkbox">
                                                         <label class="form-check-label" for="tipo_puesto{{$t->id_tipo_puesto}}"> {{$t->des_tipo_puesto}}</label>
                                                     </div>
                                                 </div>
@@ -806,6 +831,20 @@
             console.log("papelera");
            $(this).parents(':eq(1)').remove();
         });
+
+        $('.btn_desactivar_2fa').click(function(){
+            $.get("{{ url('users/activar_2fa/'.$users->id) }}/D")
+            .done(function( data, textStatus, jqXHR ) {
+                $('.btn_activar_2fa').html('Activar 2FA');
+                $('.btn_desactivar_2fa').hide();
+                $('.btn_activar_2fa').show();
+                $('.check_2fa').hide();
+                $('#content_2fa').empty();
+            })
+            .fail(function( jqXHR, textStatus, errorThrown ) {
+                    console.log(errorThrown);
+            });	
+        })
       
     // Initialize the calendar
     // -----------------------------------------------------------------

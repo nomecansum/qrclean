@@ -85,7 +85,7 @@
                             <th>ID</th>
                             <th></th>
                             <th>Nombre</th>
-                            <th>Metodo</th>
+                            <th>Tipos</th>
                             <th>Cliente</th>
                             <th></th>
                         </tr>
@@ -97,32 +97,12 @@
                             <td class="text-center"><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
                             <td>{{ $tipo->des_tipo_incidencia }}</td>
                             <td>
-                                {{-- @switch($tipo->tip_metodo)
-                                    @case("S")
-                                        <i class="fad fa-sms"></i> SMS
-                                        @break
-                                    @case("M")
-                                        <i class="fad fa-envelope-square"></i> e-mail
-                                        @break
-                                    @case("P")
-                                        <i class="fad fa-browser"></i> HTTP POST
-                                        @break
-                                    @case("G")
-                                        <i class="fad fa-browser"></i> HTTP GET
-                                        @break
-                                    @case("L")
-                                        <i class="fad fa-chair-office"></i> Spotlinker
-                                        @break
-                                    @case("N")
-                                            --
-                                        @break
-                                    @default
-                                        
-                                @endswitch --}}
+                               {{ $tipo->list_tipo_puesto }}
                             </td>
                             <td>{{ $tipo->nom_cliente }}</td>
 
                             <td style="position: relative">
+                                {{ $tipo->val_responsable }}
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
                                     <div class="btn-group btn-group pull-right ml-1" role="group">
                                         {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tipo->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}

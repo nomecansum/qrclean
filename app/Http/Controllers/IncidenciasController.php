@@ -966,7 +966,23 @@ class IncidenciasController extends Controller
                 }
             })
         ->get();
-        return view('incidencias.tipos.edit', compact('tipo','Clientes','id','estados'));
+        $tipos = DB::table('puestos_tipos')
+        ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
+            } else {
+                $q->where('puestos_tipos.id_cliente',session('CL')['id_cliente']);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('puestos_tipos.mca_fijo','S');
+                }
+            }
+        })
+        ->get();
+        return view('incidencias.tipos.edit', compact('tipo','Clientes','id','estados','tipos'));
     }
 
     public function tipos_save(Request $r){

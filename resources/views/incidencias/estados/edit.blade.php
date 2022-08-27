@@ -42,7 +42,7 @@
                             <label for="id_cliente" class="control-label">Cliente</label>
                             <select class="form-control" required id="id_cliente" name="id_cliente">
                                 @foreach ($Clientes as $key => $Cliente)
-                                    <option value="{{ $key }}" {{ old('id_cliente', optional($estado)->id_cliente) == $key ? 'selected' : '' }}>
+                                    <option value="{{ $key }}" {{ old('id_cliente', optional($estado)->id_cliente) == $key||$id==0 && $key==session('CL')['id_cliente'] ? 'selected' : '' }}>
                                         {{ $Cliente }}
                                     </option>
                                 @endforeach

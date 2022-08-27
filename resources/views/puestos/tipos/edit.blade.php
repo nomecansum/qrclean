@@ -42,7 +42,7 @@
                             <input class="form-control" required name="des_tipo_puesto" type="text" id="dedes_tipo_puestos_edificio" value="{{ old('des_tipo_puesto', optional($tipo)->des_tipo_puesto) }}" maxlength="200" placeholder="Enter nombre here...">
                             {!! $errors->first('des_tipo_puesto', '<p class="help-block">:message</p>') !!}
                         </div>
-                        <div class="form-group col-md-1 {{ $errors->has('abreviatura') ? 'has-error' : '' }}">
+                        <div class="form-group col-md-2 {{ $errors->has('abreviatura') ? 'has-error' : '' }}">
                             <label for="abreviatura" class="control-label">Alias</label>
                             <input class="form-control" name="abreviatura" type="text" id="abreviatura_edificio" value="{{ old('abreviatura', optional($tipo)->abreviatura) }}" maxlength="200" placeholder="Enter abreviatura here...">
                             {!! $errors->first('abreviatura', '<p class="help-block">:message</p>') !!}
@@ -54,7 +54,7 @@
                             <label for="id_cliente" class="control-label">Cliente</label>
                             <select class="form-control" required id="id_cliente" name="id_cliente">
                                 @foreach ($Clientes as $key => $Cliente)
-                                    <option value="{{ $key }}" {{ old('id_cliente', optional($tipo)->id_cliente) == $key ? 'selected' : '' }}>
+                                    <option value="{{ $key }}" {{ old('id_cliente', optional($tipo)->id_cliente) == $key||$id==0 && $key==session('CL')['id_cliente'] ? 'selected' : '' }}>
                                         {{ $Cliente }}
                                     </option>
                                 @endforeach
@@ -99,7 +99,7 @@
                         <label for="max_usos">Tiempo limpieza (min)</label><br>
                         <input type="number" autocomplete="off" name="val_tiempo_limpieza" id="val_tiempo_limpieza" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->val_tiempo_limpieza}}" />
                     </div>
-                    <div class="form-group col-md-2" style="margin-top: 7px">
+                    <div class="form-group col-md-2" >
                         <label for="max_usos">Usos simultaneo</label><br>
                         <input type="number" autocomplete="off" min="1" max="20" style="width: 100px"  name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
                     </div>

@@ -98,6 +98,7 @@
                             <td>{{ $edificios->nom_cliente }}</td>
 
                             <td style="position: relative">
+                                {{ $edificios->abreviatura }}
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
                                     <div class="btn-group btn-group pull-right ml-1" role="group">
                                         {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $edificios->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}

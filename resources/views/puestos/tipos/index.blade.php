@@ -76,7 +76,7 @@
                     data-page-list="[5, 10, 20, 30, 40, 50]"
                     data-page-size="50"
                     data-pagination="true" 
-                    data-show-pagination-switch="true"
+                    data-show-toggle="true"
                     data-toolbar="#all_toolbar"
                     data-buttons-class="secondary"
                     data-show-button-text="true"
@@ -100,6 +100,7 @@
                             <td>{{ $tipo->nom_cliente }}</td>
 
                             <td style="position: relative;">
+                                {{ $tipo->abreviatura }}
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
                                     <div class="btn-group btn-group pull-right ml-1" role="group">
                                         @if(checkPermissions(['Tipos de puesto'],['W'])) <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_tipo_puesto }})" title="Editar tipo" data-id="{{ $tipo->id_tipo_puesto }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif

@@ -46,7 +46,7 @@
                             <label for="id_cliente" class="control-label">Cliente</label>
                             <select class="form-control" required id="id_cliente" name="id_cliente">
                                 @foreach ($Clientes as $key => $Cliente)
-                                    <option value="{{ $key }}" {{ old('id_cliente', optional($tipo)->id_cliente) == $key ? 'selected' : '' }}>
+                                    <option value="{{ $key }}" {{ (old('id_cliente', optional($tipo)->id_cliente) == $key)||$id==0 && $key==session('CL')['id_cliente'] ? 'selected' : '' }}>
                                         {{ $Cliente }}
                                     </option>
                                 @endforeach
@@ -107,12 +107,7 @@
                                 @php
                                     $tipos_puesto=explode(",",$tipo->list_tipo_puesto);
                                 @endphp
-                                @foreach(puestos_tipos::where(function($q) {
-                                    $q->where('id_cliente',Auth::user()->id_cliente);
-                                    $q->orwhere('mca_fijo','S');
-                                    })
-                                    ->where('id_tipo_puesto','>',0)
-                                    ->get() as $tp)
+                                @foreach($tipos as $tp)
                                     <option value="{{ $tp->id_tipo_puesto }}" {{ in_array($tp->id_tipo_puesto,$tipos_puesto)?'selected':'' }}>{{ $tp->des_tipo_puesto }}</option>
                                 @endforeach
                             </select>

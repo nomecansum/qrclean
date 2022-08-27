@@ -43,7 +43,7 @@
 											$q->WhereIn('id_cliente',clientes());
 										}
 										})->get() as $cl)
-										<option {{ (isset($d) && $d->id_cliente == $cl->id_cliente) || (!isset($d) && $cl->id_cliente==session('cod_cliente')) ? 'selected' : ''}} value="{{$cl->id_cliente}}">{{$cl->nom_cliente}}</option>
+										<option {{ (isset($d) && $d->id_cliente == $cl->id_cliente) || (!isset($d) && $cl->id_cliente==session('CL')['id_cliente']) ? 'selected' : ''}} value="{{$cl->id_cliente}}">{{$cl->nom_cliente}}</option>
 									@endforeach
 								</select>
 							</div>

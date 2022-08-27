@@ -551,8 +551,9 @@ class PuestosController extends Controller
 
     public function tipos_save(Request $r){
         try {
+            
             if($r->id==0){
-                puestos_tipos::create($r->all());
+                $tipo=puestos_tipos::create($r->all());
             } else {
                 $tipo=puestos_tipos::find($r->id);
                 $tipo->update($r->all());
@@ -595,7 +596,7 @@ class PuestosController extends Controller
             //Vamos a comprobar si tiene puestos el tipo
             $hay_puestos=DB::table('puestos')->where('id_tipo_puesto',$id)->count();
             if($hay_puestos>0){
-                flash('ERROR: Ocurrio un error borrando Tipo de puesto '.$tipo->des_tipo_puesto.' Existen puestos de este tioo. Borrelos primero desde Parametrizacion > Puestos')->error();
+                flash('ERROR: Ocurrio un error borrando Tipo de puesto '.$tipo->des_tipo_puesto.' Existen puestos de este tipo. Borrelos primero desde Parametrizacion > Puestos')->error();
                 return back()->withInput();
             }
 

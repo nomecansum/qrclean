@@ -108,16 +108,13 @@ class LoginController extends Controller
 
             if($config_cliente->mca_saml2=='S'){
                 //Redirigir al usuario a la pagina de login del proveedor SAML2
-                dd('SAML2');
+                return redirect()->route('saml.login',['uuid'=>$config_cliente->saml2_idp_entityid]);
             }  else if($config_cliente->locked==1){
                 return redirect('login')->withErrors(["email"=>"ERROR: Cliente inactivo"]);
             }  else {
                 return view('auth.login',compact('email','logo'));
             }
         }
-        
-
-
     }
 
     public function firstlogin(){
@@ -194,5 +191,25 @@ class LoginController extends Controller
     public function user(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    public function saml_logout(Request $r){
+        //dump("SAML LOGOUT Logincontroller");
+        Auth::logout();
+        return redirect('/login');
+    }
+
+    public function saml_login(Request $r,$uuid=null){
+        
+        dump("SAML LOGIN");
+        dump($uuid);
+        dd($r);
+        return redirect('/login');
+    }
+
+    public function saml_error(Request $r){
+        dump("SAML ERROR");
+        dd($r);
+
     }
 }

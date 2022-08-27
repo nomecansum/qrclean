@@ -209,6 +209,7 @@ return [
         Berkayk\OneSignal\OneSignalServiceProvider::class,
         Riverskies\Laravel\MobileDetect\MobileDetectServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
+        Slides\Saml2\ServiceProvider::class,
 
     ],
 
@@ -271,7 +272,8 @@ return [
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'QRCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
         'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
-        'MobileDetect' => Riverskies\Laravel\MobileDetect\Facades\MobileDetect::class
+        'MobileDetect' => Riverskies\Laravel\MobileDetect\Facades\MobileDetect::class,
+        'Saml2' => Slides\Saml2\Facades\Auth::class,
 
     ],
 

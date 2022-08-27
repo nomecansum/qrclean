@@ -67,7 +67,11 @@ class CustomersController extends Controller
             $config->save();
         }
 
-    	return view('customers.create',compact('c','config'));
+        if(isset($config->saml2_idp_entityid)){
+            $config_saml2=DB::table('saml2_tenants')->where('uuid',$config->saml2_idp_entityid)->first();
+        } 
+
+    	return view('customers.create',compact('c','config','config_saml2'));
     }
     public function create()
     {
@@ -80,13 +84,14 @@ class CustomersController extends Controller
         $clsvc = new ClienteService;
         //Validarlos datos
         $clsvc->validar_request($r,'toast');
+        $cliente=clientes::find($c);
 
         DB::beginTransaction();
         try {
             //Insertar el cliente
             $c = $clsvc->insertar($r);
             $config= new config_clientes;
-            $config->id_cliente=$c;
+            $config->id_cliente=$r->id;
             
             $r['min_hora_reservas']=time_to_dec($r->min_hora_reservas.':00','m');
             $r['max_hora_reservas']=time_to_dec($r->max_hora_reservas.':00','m');
@@ -101,7 +106,7 @@ class CustomersController extends Controller
             
             $config->save();
 
-            Session::put('CL',$config->toArray());
+            session(['CL'=>array_merge((array)$config,(array)$cliente)]);
 
             savebitacora("Creado cliente ".$r->nom_cliente,'CustomerController','Save');
 

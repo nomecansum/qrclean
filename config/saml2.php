@@ -41,7 +41,7 @@ return [
     |
     */
 
-    'routesMiddleware' => [],
+    'routesMiddleware' => ['saml'],
 
     /*
     |--------------------------------------------------------------------------
@@ -111,7 +111,7 @@ return [
     |
     */
 
-    'debug' => env('SAML2_DEBUG', env('APP_DEBUG', false)),
+    'debug' => env('SAML2_DEBUG', env('APP_DEBUG', true)),
 
     /*
     |--------------------------------------------------------------------------

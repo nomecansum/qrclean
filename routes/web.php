@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NotificationController;
 use Laravel\Socialite\Facades\Socialite;
 
 /*
@@ -53,8 +52,6 @@ Route::post('/encuestas/save_data','EncuestasController@save_data');
 Route::get('/politica','HomeController@politica');
 Route::get('/terminos','HomeController@terminos');
 
-Route::get('/send-notification', [NotificationController::class, 'sendOfferNotification']);
-
 
 
 /////////////////////////////COSAS DE LOGIN///////////////////////////////////////////////////////////
@@ -70,8 +67,19 @@ Route::get('/login/google', 'Auth\LoginController@redirectToGoogleProvider')->na
 Route::get('/auth/google/redirect', function () {
     return Socialite::driver('google')->redirect();
 });
+
+//Login con SAML2
+// //Login con SAML2
+// Route::get('/auth/saml_login','Auth\LoginController@saml_login');
+// Route::post('/auth/saml_login','Auth\LoginController@saml_login');
+// Route::get('/saml2/{uuid}/login','Auth\LoginController@saml_login');
+
+// Route::post('/auth/{uuid}/acs','Auth\LoginController@saml_acs');
+Route::get('/auth/saml_error','Auth\LoginController@saml_error');
+
+Route::get('/auth/saml_logout','Auth\LoginController@saml_logout');
+Route::post('/auth/saml_logout','Auth\LoginController@saml_logout');
  
-Route::get('/auth/google/callback', 'Auth\LoginController@authToGooglecallback');
 /////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////
@@ -89,7 +97,7 @@ Route::group(['prefix' => '/landing'], function() {
 });
 //////////////////////////////////////////////////////////////
 
-
+Route::get('/index', 'HomeController@index');
 
 //Tareas programadas
 Route::get('/runTask2/{id}/', 'TareasController@ejecutar_tarea_web');

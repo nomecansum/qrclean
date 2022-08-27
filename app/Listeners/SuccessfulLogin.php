@@ -30,7 +30,9 @@ class SuccessfulLogin
     public function handle($event)
     {
         //
+        
         $user=\Auth::user();
+
         //dump("aqui en el listener");
         $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  
 

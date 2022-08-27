@@ -57,11 +57,6 @@ class config_clientes extends Model
                   'mca_permitir_google',
                   'mca_saml2',
                   'saml2_idp_entityid',
-                  'saml2_idp_sso_target_url',
-                  'saml2_idp_slo_target_url',
-                  'saml2_idp_x509_cert',
-                  'saml2_idp_x509_fingerprint',
-                  'saml2_idp_x509_fingerprint_algorithm',
               ];
 
     /**

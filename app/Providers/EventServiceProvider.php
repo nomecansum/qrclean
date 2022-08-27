@@ -25,6 +25,10 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Auth\Events\Login' => [
             'App\Listeners\SuccessfulLogin',
         ],
+        'Slides\Saml2\Events\SignedIn' => [
+            'App\Listeners\saml2SuccessfulLogin',
+        ],
+
     ];
 
     /**
@@ -38,4 +42,5 @@ class EventServiceProvider extends ServiceProvider
 
         //
     }
+
 }

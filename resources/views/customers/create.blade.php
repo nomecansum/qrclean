@@ -301,34 +301,20 @@
 							</div>
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="">SSO URL</label>
-									<input type="text" name="saml2_idp_sso_target_url" class="form-control" required value="{{isset($config) ? $config->saml2_idp_sso_target_url : ''}}">
+									<label for="">Login URL</label>
+									<input type="text" name="saml2_idp_sso_target_url" class="form-control" value="{{isset($config_saml2) ? $config_saml2->idp_login_url : ''}}">
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="">SLO URL</label>
-									<input type="text" name="saml2_idp_slo_target_url" class="form-control" required value="{{isset($config) ? $config->saml2_idp_slo_target_url : ''}}">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="">X509 Fingerprint</label>
-									<input type="text" name="saml2_idp_x509_fingerprint" class="form-control" required value="{{isset($config) ? $config->saml2_idp_entityid : ''}}">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									<label for="">X509 Algorithm</label>
-									<input type="text" name="saml2_idp_x509_fingerprint_algorithm" class="form-control" required value="{{isset($config) ? $config->saml2_idp_entityid : ''}}">
+									<label for="">Logout URL</label>
+									<input type="text" name="saml2_idp_slo_target_url" class="form-control" value="{{isset($config_saml2) ? $config_saml2->idp_logout_url : ''}}">
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="form-group">
-									<label for="">X509 Algorithm</label>
-									<textarea type="text" name="saml2_idp_x509_cert" class="form-control" required rows=6>
-										{{isset($config) ? $config->saml2_idp_x509_cert : ''}}
-									</textarea>
+									<label for="">X509 Certificate</label>
+									<textarea type="text" name="saml2_idp_x509_cert" class="form-control" rows=26>{{isset($config_saml2) ? $config_saml2->idp_x509_cert : ''}}</textarea>
 								</div>
 							</div>
 						</div>	

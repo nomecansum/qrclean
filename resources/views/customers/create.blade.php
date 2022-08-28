@@ -281,6 +281,12 @@
 									<label class="form-check-label" for="mca_permitir_google">Permitir autentificacion con Google</label>
 								</div>
 							</div>
+							<div class="col-md-4  mt-1">
+								<div class="form-check pt-2">
+									<input  name="mca_permitir_microsoft"  id="mca_permitir_microsoft" value="S" {{ isset($config->mca_permitir_microsoft)&&$config->mca_permitir_microsoft=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label" for="mca_permitir_microsoft">Permitir autentificacion con Microsoft</label>
+								</div>
+							</div>
 						</div>	
 						<div class="row">
 							<div class="col-md-12">

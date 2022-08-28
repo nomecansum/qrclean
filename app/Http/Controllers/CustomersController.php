@@ -106,7 +106,7 @@ class CustomersController extends Controller
             
             $config->save();
 
-            session(['CL'=>array_merge((array)$config,(array)$cliente)]);
+            session(['CL'=>array_merge((array)$config->toArray(),(array)$cliente->toArray())]);
 
             savebitacora("Creado cliente ".$r->nom_cliente,'CustomerController','Save');
 
@@ -142,6 +142,7 @@ class CustomersController extends Controller
             $clsvc->validar_request($r,'toast');
             //Actualizar el cliente
             $c = $clsvc->actualizar($r);
+            $cliente=clientes::find($c);
             //Config de cliente
             $config=config_clientes::findorfail($r->id);
             $r['min_hora_reservas']=time_to_dec($r->min_hora_reservas.':00','m');
@@ -160,7 +161,8 @@ class CustomersController extends Controller
             $config->theme_name=$this->esquema_colores($r);
             $config->save();
             
-            Session::put('CL',$config->toArray());
+           
+            session(['CL'=>array_merge((array)$config->toArray(),(array)$cliente->toArray())]);
 
             savebitacora("Actualizados datos de cliente ".$r->nom_cliente,$r->id_cliente);
 

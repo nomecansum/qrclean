@@ -13,6 +13,7 @@ use App\User;
 use Laravel\Socialite\Facades\Socialite;
 use Auth;
 
+
 class LoginController extends Controller
 {
     /*
@@ -49,6 +50,49 @@ class LoginController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
+    public function redirectToMicrosoftProvider(){
+        return Socialite::driver('microsoft')->redirect();
+    }
+
+    public function authToMicrosoftcallback(Request $r){
+
+        if($r->query->has('error')){
+            return redirect('login')->withErrors(["email"=>"ERROR en la autentificacion con microsoft: "]);
+        }
+
+        try{
+            $user = Socialite::driver('microsoft')->user();
+            $u=User::where(['email' => $user->email])->first();
+            if(!isset($u)){
+                //Usuario nuevo
+                return redirect('login')->withErrors(["email"=>"ERROR: Usuario no registrado, debe darse de alta primero"]);
+            } else {
+                if($u->id_cliente==null || $u->cod_nivel==null){
+                    Auth::login($u);
+                    return redirect('/');
+                } else{
+                    $config_cliente=DB::table('clientes')
+                        ->join('config_clientes','clientes.id_cliente','config_clientes.id_cliente')
+                        ->where(['clientes.id_cliente' => $u->id_cliente])
+                        ->first();
+                    $logo=$config_cliente->img_logo;
+        
+                    if($config_cliente->mca_permitir_microsoft=='N'){
+                        return redirect('login')->withErrors(["email"=>"ERROR: Su empresa no permite la autenticación con Google"]);
+                    }  else if($config_cliente->locked==1){
+                        return redirect('login')->withErrors(["email"=>"ERROR: Cliente inactivo"]);
+                    }  else {
+                        Auth::login($u);
+                        return redirect('/');
+                    }
+                }
+            } 
+        } catch(\Throwable $e){
+            return redirect('/login')->withErrors(["email"=>"ERROR: ".$e->getMessage()]);
+        }
+        
+        
+    }
 
     public function authToGooglecallback(Request $r){
         try{

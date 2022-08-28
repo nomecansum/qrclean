@@ -28,6 +28,10 @@ class EventServiceProvider extends ServiceProvider
         'Slides\Saml2\Events\SignedIn' => [
             'App\Listeners\saml2SuccessfulLogin',
         ],
+        \SocialiteProviders\Manager\SocialiteWasCalled::class => [
+            // ... other providers
+            \SocialiteProviders\Microsoft\MicrosoftExtendSocialite::class.'@handle',
+        ],
 
     ];
 

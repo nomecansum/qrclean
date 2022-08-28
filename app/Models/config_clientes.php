@@ -55,6 +55,7 @@ class config_clientes extends Model
                   'mca_mostrar_datos_fijos',
                   'mca_requerir_2fa',
                   'mca_permitir_google',
+                  'mca_permitir_microsoft',
                   'mca_saml2',
                   'saml2_idp_entityid',
               ];

@@ -68,10 +68,10 @@
                             <a href="{{ route('login.google') }}" class="btn btn-icon bg-transparent btn-underlined text-muted">
                                <img src="{{ url('/img/google.png') }}" style="width:30px">
                             </a>
-                            {{-- <a href="#" class="btn btn-icon bg-transparent btn-underlined text-muted">
-                                <i class="psi-twitter fs-4"></i>
+                            <a href="{{ route('login.microsoft') }}" class="btn btn-icon bg-transparent btn-underlined text-muted">
+                                <img src="{{ url('/img/microsoft.png') }}" style="width:30px">
                             </a>
-                            <a href="#" class="btn btn-icon bg-transparent btn-underlined text-muted">
+                            {{-- <a href="#" class="btn btn-icon bg-transparent btn-underlined text-muted">
                                 <i class="psi-google-plus fs-4"></i>
                             </a>
                             <a href="#" class="btn btn-icon bg-transparent btn-underlined text-muted">

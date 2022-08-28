@@ -68,6 +68,10 @@ Route::get('/auth/google/redirect', function () {
     return Socialite::driver('google')->redirect();
 });
 
+//Login con Microsofr
+Route::get('/login/microsoft', 'Auth\LoginController@redirectToMicrosoftProvider')->name('login.microsoft');
+Route::get('/auth/microsoft/callback','Auth\LoginController@authToMicrosoftcallback')->name('login.microsoft.callback');
+
 //Login con SAML2
 // //Login con SAML2
 // Route::get('/auth/saml_login','Auth\LoginController@saml_login');

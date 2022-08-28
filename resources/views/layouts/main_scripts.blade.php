@@ -518,12 +518,11 @@
         $('.container').each(function(){
             plano=$(this);
             //console.log(plano.data('posiciones'));
-            
             $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
                 puesto=$('#puesto'+item.id);
-                console.log('#puesto'+item.id);
+                //console.log('#puesto'+item.id);
                 puesto.css('top',plano.height()*item.offsettop/100);
-                puesto.css('left',(plano.width()*item.offsetleft/100)-10);
+                puesto.css('left',(plano.width()*item.offsetleft/100));
             });
 
         }) 
@@ -544,6 +543,12 @@
     }
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
+
+    //Si tenemos el menu pequeño, para poner pequeño el icono de usuario
+    if(root.classList.contains( "mn--min" )){
+        document.getElementById( "main_user_image" ).classList.remove('img-md');
+        document.getElementById( "main_user_image" ).classList.add('img-xs');
+    }
 
     const tooltipTriggerList = [...document.querySelectorAll( '.add-tooltip' )];
     const tooltipList = tooltipTriggerList.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl ));

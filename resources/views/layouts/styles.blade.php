@@ -32,8 +32,8 @@
         border-radius: 0 !important;
     }
 
-    .litepicker{
-        
+    .litepicker .container__main{
+        background-color: #fff !important;   
     }
 
 </style>

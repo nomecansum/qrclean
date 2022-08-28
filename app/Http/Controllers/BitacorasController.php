@@ -24,9 +24,9 @@ class BitacorasController extends Controller
         ->join('clientes','clientes.id_cliente','users.id_cliente')
         ->where(function($q){
             if (!isAdmin()) {
-                $q->wherein('bitacora.id_cliente',clientes());
+                $q->wherein('clientes.id_cliente',clientes());
             } else {
-                $q->where('bitacora.id_cliente',session('CL')['id_cliente']);
+                $q->where('clientes.id_cliente',session('CL')['id_cliente']);
             }
         })
         ->orderby('fecha','desc')

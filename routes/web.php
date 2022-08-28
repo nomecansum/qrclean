@@ -333,6 +333,8 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'import'], function () {
         Route::view('/', ['middleware'=>'permissions:["Importar datos"],["R"]', 'uses' => 'import/index'])->name('import.index');
         Route::post('/process_import',['middleware'=>'permissions:["Importar datos"],["W"]', 'uses' => 'ImportController@process_import'])->name('import.process_import');
+        Route::get('/import_from_db', ['middleware'=>'permissions:["Importar datos"],["R"]', 'uses' => 'ImportController@import_from_db'])->name('import.import_from_db');
+        
     });
 
     ////////////////////RESERVAS////////////////////

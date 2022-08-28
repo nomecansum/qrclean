@@ -138,7 +138,7 @@
             recolocar_puestos(posiciones);
         })
 
-        $('.mainnav-toggle').click(function(){
+        $('.nav-toggler').click(function(){
             recolocar_puestos(posiciones);
         })
 

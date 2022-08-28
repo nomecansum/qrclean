@@ -51,7 +51,7 @@ class UsersController extends Controller
                 $q->wherein('users.id',$usuarios_supervisados);
             }
         })
-        ->get();            
+        ->paginate(50);            
 
         //$usersObjects = users::with('grupo','perfile')->paginate(25);
 
@@ -152,7 +152,7 @@ class UsersController extends Controller
 
         $usuarios_supervisables = DB::table('users')
             ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
-            ->where('id_cliente',$users->id_cliente)
+            ->where('niveles_acceso.id_cliente',$users->id_cliente)
             ->where('users.id','<>',Auth::user()->id)
             ->get();
 

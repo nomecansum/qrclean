@@ -152,7 +152,8 @@
                             </div>
                             <div class="col-md-2">
                                 <label for="val_color">Color</label><br>
-                                <input type="color" autocomplete="off" name="val_color" id="modif_val_color"  class="form-control" value="" />
+                                <input type="hidden" name="val_color" id="val_color" class="form-control" >
+                                <input type="color" autocomplete="off" id="modif_val_color" id="modif_val_color"  class="form-control" value="#ffffff" />
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
@@ -788,6 +789,10 @@
         dropdownParent: $("#modal-reservas  .modal-body"),
     }      
     );
+
+    $('#modif_val_color').change(function(){
+        $('#val_color').val($(this).val());
+    });
 
     @if(session('CL')['mca_reserva_horas']=='S')
 

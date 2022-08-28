@@ -25,15 +25,18 @@
 								<label for="chktodos" class="form-check-label">Todos</label>
 							</div>
                         </div>
-                        <table id="tablapuestos"  data-toggle="table" data-mobile-responsive="true" onclick="tabla_click()"
+                        <table id="tablapuestos"  
+                        data-toggle="table" 
+                        data-mobile-responsive="true" 
+                        onclick="tabla_click()"
                         data-locale="es-ES"
                         data-search="true"
                         data-show-columns="true"
                         data-show-toggle="true"
                         data-show-columns-toggle-all="true"
-                        data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
-                        data-page-size="50"
-                        data-pagination="true" 
+                        {{-- data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]" --}}
+                        {{-- data-page-size="20" --}}
+                        {{-- data-pagination="true"  --}}
                         data-toolbar="#all_toolbar"
                         data-buttons-class="secondary"
                         data-show-button-text="true"
@@ -46,8 +49,9 @@
                                 <th data-sortable="true" @if(isMobile()) data-visible="false" @endif>Edificio</th>
                                 <th data-sortable="true" @if(isMobile()) data-visible="false" @endif>Planta</th>
                                 <th data-sortable="true">Puesto</th>
-                                <th data-sortable="true" title="Acceso anonimo permitido en el puesto" style="width: 20px"  @if(isMobile()) data-visible="false" @endif>Anonimo</th>
-                                <th data-sortable="true" title="Reserva permitida en el puesto" @if(isMobile()) data-visible="false" @endif>Reserva</th>
+                                <th data-sortable="true">Alias</th>
+                                {{-- <th data-sortable="true" title="Acceso anonimo permitido en el puesto" style="width: 20px"  @if(isMobile()) data-visible="false" @endif>Anonimo</th> --}}
+                                {{-- <th data-sortable="true" title="Reserva permitida en el puesto" @if(isMobile()) data-visible="false" @endif>Reserva</th> --}}
                                 <th data-sortable="true" title="Puesto con asignacion fija" @if(isMobile()) data-visible="false" @endif>Fijo</th>
                                 <th data-sortable="true"class="text-center" style="width: 100px">Estado</th>
                                 <th  data-switchable="false"></th>
@@ -73,11 +77,16 @@
                                 <td class="td" data-id="">{{$puesto->des_planta}}</td>
                                 <td class="td" data-id="">
                                     <div class="m-0 rounded pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
+                                        {{ $puesto->cod_puesto }}
+                                    </div>
+                                </td>
+                                <td class="td" data-id="">
+                                    <div class="m-0 rounded pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
                                         {{ nombrepuesto($puesto) }}
                                     </div>
                                 </td>
-                                <td class="text-center text-muted" >@if($puesto->mca_acceso_anonimo=='S') <i class="fas fa-circle"></i> @endif</td>
-                                <td class="text-center text-muted" >@if($puesto->mca_reservar=='S') <i class="fas fa-circle"  style="color: #70c2b4"></i> @endif</td>
+                                {{-- <td class="text-center text-muted" >@if($puesto->mca_acceso_anonimo=='S') <i class="fas fa-circle"></i> @endif</td> --}}
+                                {{-- <td class="text-center text-muted" >@if($puesto->mca_reservar=='S') <i class="fas fa-circle"  style="color: #70c2b4"></i> @endif</td> --}}
                                 <td class="text-center text-muted" >@if(isset($puesto->id_usuario))<i class="fad fa-user" title="Puesto asignado al usuario {{ \App\Models\users::find($puesto->id_usuario)->name }}" style="color: #f4a462"></i> @endif @if(isset($puesto->id_perfil))<i class="fad fa-users" title="Puesto asignado a perfil {{ \App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso }}" style="color: #f4a462"></i> @endif</td>
                                 <td class="td text-center" data-id="">
                                     @if($puesto->mca_incidencia=='N')
@@ -111,10 +120,10 @@
                                     </div>
                                 </td>
                                 <td class="text-center opts" style="position: relative">
-                                    {{-- <a href="javascript:void(0)" onclick="hoverdiv($(this),event,'toolbutton',{{ $puesto->id_puesto }},'{{ $puesto->cod_puesto }}','{{ $puesto->token }}');"><i class="fa fa-bars add-tooltip opts" title="Acciones"></i></a> --}}
+                                    
                                     <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
                                         <div class="btn-group btn-group pull-right ml-1" role="group">
-                                            @if(isAdmin() || config('app.env')=='local')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan('{{ $puesto->token }}')"  data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-qrcode" aria-hidden="true"></span> Scan</a>  @endif
+                                            @if(isAdmin() || config('app.env')=='local')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan('{{ $puesto->token }}')"  data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-qrcode" aria-hidden="true"></span> </a>  @endif
                                             @if(checkPermissions(['Puestos'],['W']))<a href="#"  class="btn btn-info btn_editar add-tooltip toolbutton ml-2" onclick="editar({{ $puesto->id_puesto }})" title="Editar puesto" data-id=""> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                                             {{-- @if(checkPermissions(['Puestos'],['D']))<a href="#" data-target="#eliminar-puesto" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del toolbutton"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif --}}
                                             @if(checkPermissions(['Reservas'],['D']))<a href="#"  title="Cancelar Reserva" class="btn btn-pink add-tooltip btn_del toolbutton" onclick="cancelar('{{ $puesto->token }}')"><span class="fad fa-calendar-times" aria-hidden="true"></span> Res</a>@endif
@@ -133,32 +142,8 @@
                         </tbody>
                     </table> 
                 </form>
-                {{-- <div id="toolbutton"  style="display: none;position: absolute; ">
-                    <div style="display: flex; flex-direction: row;">
-                        <div class="pad-all rounded bg-white" style="border: 3px solid navy; background-color: #fff; ">
-                            <label>Acciones<span class="font-bold ml-2" id="nombrepuesto"></span></label><br>
-                            <div class="btn-group btn-group pull-right ml-1" role="group">
-                                @if(isAdmin() || config('app.env')=='local')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan()"  data-id=""> <span class="fa fa-qrcode" aria-hidden="true"></span> Scan</a>@endif
-                                @if(checkPermissions(['Puestos'],['W']))<a href="#"  class="btn btn-info btn_editar add-tooltip toolbutton ml-2" onclick="editar()" title="Editar puesto" data-id=""> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
-                                @if(checkPermissions(['Puestos'],['D']))<a href="#" data-target="#eliminar-puesto" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del toolbutton"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif
-                                @if(checkPermissions(['Reservas'],['D']))<a href="#"  title="Cancelar Reserva" class="btn btn-pink add-tooltip btn_del toolbutton" onclick="cancelar()"><span class="fad fa-calendar-times" aria-hidden="true"></span> Res</a>@endif
-                            </div>
-                            <br> <br> <br>
-                            <div class="btn-group btn-group pull-right" role="group">
-                                @if(checkPermissions(['Puestos'],['W']))
-                                    <a href="#"  class="btn btn-success btn_estado add-tooltip toolbutton"  onclick="estado(1)" title="Disponible" data-token=""  data-estado="1" data-id=""> <span class="fad fa-thumbs-up" aria-hidden="true"></span></a>
-                                    <a href="#"  class="btn btn-danger btn_estado add-tooltip toolbutton"  onclick="estado(2)" title="Usado"  data-token=""  data-estado="2" data-id=""> <span class="fad fa-lock-alt" aria-hidden="true"></span></a>
-                                    <a href="#"  class="btn btn-info btn_estado add-tooltip toolbutton"  onclick="estado(3)" title="Limpiar"  data-token=""  data-estado="3" data-id=""> <span class="fad fa-broom" aria-hidden="true"></span></a>
-                                    
-                                @endif
-                            </div>
-                        </div>
-                        <div style="color: navy; padding-top:30px">
-                            <i class="fas fa-caret-right fa-3x"></i>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
+            {{ $puestos->links() }}
         </div>
     </div>
 </div>

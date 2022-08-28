@@ -62,7 +62,8 @@
 
            dd(encrypt(json_encode(Collection::times(8, function () {
                 return RecoveryCode::generate(); --}}
-            })->all())));
+       @php
+            
        @endphp
     </div>
 </div>

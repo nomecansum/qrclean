@@ -36,7 +36,7 @@ try{
         width: {{ $width }}px; 
         height: {{ $height }}px;
         background-image: url('{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}');
-        /* zoom: 40%; */
+        zoom: 80%;
     }
     .grid-stack {
         background: {{ $bg_gridstack  }};
@@ -121,13 +121,21 @@ try{
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-3" style="display: none" id="editor_nombre">
+                                <div class="form-group col-md-5" style="display: none" id="editor_nombre">
                                     <label for="">Nombre</label>
                                     <div class="input-group float-right" id="div_fechas">
                                         <input type="text" class="form-control pull-left" id="nombre" name="nombre" style="width: 120px">
                                         <span class="btn input-group-text btn-success" style="height: 40px" id="add-widget"><i class="fa-solid fa-square-arrow-down"></i> Añadir</span>
                                     </div>
                                 </div>
+
+                                <div class="col-md-2" class="row b-all"  style="margin-top: 30px">
+                                    <label class="control-label float-left mr-2">zoom</label>
+                                    <i class="fa fa-minus-square float-left mt-1 mr-1" onclick="zoom(-1)"></i>
+                                    <span id="zoom_level" class="float-left">80%</span>
+                                    <i class="fa fa-plus-square float-left mt-1 ml-1"  onclick="zoom(+1)"></i>
+                                </div>
+
                                 
                                 <div class="col-md-9"></div>
                             </div>
@@ -231,7 +239,8 @@ try{
             })
         });
 
-
+        items=[];
+        count = 0;
 
         saveGrid = function() {
             delete serializedFull;
@@ -243,13 +252,18 @@ try{
             grid.load(serializedData, true); // update things
         }
 
-        @if(isset($plantas->zonas) )
+        @if($plantas->zonas!==null && !is_array($plantas->zonas) )
             serializedData ={!! json_decode(json_encode($plantas->zonas)) !!};
             loadGrid();
         @endif
 
-        items=[];
-        count = 0;
+        function zoom(direccion){
+            zoom_actual=100*$('.layout').css('zoom');
+            zoom_actual=(zoom_actual+(10*direccion));
+            $('.layout').css('zoom',zoom_actual+'%');
+            $('#zoom_level').text(zoom_actual+'%');
+        }
+       
     
         $('#btn_guardar').click(function(){
             event.preventDefault();

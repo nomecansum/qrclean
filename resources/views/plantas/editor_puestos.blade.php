@@ -62,7 +62,7 @@
                         @if(isset($plantas->img_plano))
                         {{--  style="background-image: url('{{ url('img/plantas/'.$plantas->img_plano) }}'); background-repeat: no-repeat; background-size: contain;"  --}}
                             <div class="row container" id="plano" >
-                                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="width: 100%" id="img_fondo" class="container">
+                                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="width: 100%" id="img_fondo">
                                 @php
                                     $left=0;
                                     $top=0;
@@ -76,9 +76,12 @@
                                  $reserva=null;
                                  $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
                                  //$borde="border: 5px solid ".$puesto->val_color??"#fff".";";   
+                                 if($puesto->top==null && $puesto->left==null){
+                                    $puesto->color_estado="secondary";
+                                 }
                                 @endphp
                                     <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable add-tooltip" title="{{ nombrepuesto($puesto) }}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="height: {{ $puesto->factor_puestoh }}vw ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }}">
-                                        <span class="h-100 align-middle texto_puesto" style="font-size: 0.8vw;">{{ $puesto->cod_puesto }}</span>
+                                        <span class="h-100 align-middle texto_puesto" style="font-size: {{ $puesto->factor_letra }}vw;">{{ nombrepuesto($puesto) }}</span>
                                     </div>
                                 @php
                                     $left+=50;
@@ -139,12 +142,14 @@
 
     try{
         posiciones={!! json_encode($plantas->posiciones)??'[]' !!};
+        document.getElementById('plano').setAttribute('data-posiciones',posiciones);
         posiciones=$.parseJSON(posiciones); 
+       
     } catch($err){
         posiciones=[];
     }
     //console.log(posiciones);
-    function recolocar_puestos(){
+    function colocar_puestos(){
         console.log("recolocar");
         $.each(posiciones, function(i, item) {//console.log(item);
             puesto=$('#puesto'+item.id);
@@ -166,7 +171,7 @@
                 });
             }
         });
-        setTimeout(recolocar_puestos, 800);
+        setTimeout(colocar_puestos, 800);
 
         pw_def.noUiSlider.on('update', function( values, handle ) {
             pw_def_value.innerHTML = values[handle];
@@ -223,7 +228,7 @@
         recolocar_puestos();
     })
 
-    $('.mainnav-toggle').click(function(){
+    $('.nav-toggler').click(function(){
         recolocar_puestos();
     })
 
@@ -250,7 +255,7 @@
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
-            'max': [ 6 ]
+            'max': [ 10 ]
         },
         format: wNumb({
             decimals: 2
@@ -262,7 +267,7 @@
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
-            'max': [ 6 ]
+            'max': [ 10 ]
         },
         format: wNumb({
             decimals: 2
@@ -310,7 +315,7 @@
         connect : 'lower',
         range   : {
             'min': [  0.1 ],
-            'max': [ 1.5 ]
+            'max': [ 4 ]
         },
         format: wNumb({
             decimals: 2

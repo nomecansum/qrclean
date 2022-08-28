@@ -112,10 +112,6 @@
                         data-search="true"
                         data-show-columns="true"
                         data-show-columns-toggle-all="true"
-                        data-page-list="[5, 10, 20, 30, 40, 50]"
-                        data-page-size="50"
-                        data-pagination="true" 
-                        data-show-pagination-switch="true"
                         data-buttons-class="secondary"
                         data-show-button-text="true"
                         data-toolbar="#all_toolbar"
@@ -135,6 +131,7 @@
                         </tbody>
                     </table>
                 </div>
+                {{ $usersObjects->links() }}
             </div>
             @endif
         </div>

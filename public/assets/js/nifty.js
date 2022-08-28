@@ -106,7 +106,7 @@ let miniNavContentsCollapse     = null;
     isMiniNav                   = root.classList.contains( "mn--min" );
     miniNavTogglers             = [...mainNav.querySelectorAll( ".mininav-toggle" )];
     miniNavContents             = [...mainNav.querySelectorAll( ".mininav-content" )];
-
+    
 
 
     // Refresh the navigation when the transition ends.
@@ -251,7 +251,7 @@ const buildNav = () => {
     // Toggle the active submenu when navigation is in a max state.
     if ( !isMiniNav ) activeSub = mainNav.querySelector(".has-sub > .mininav-toggle.nav-link.active + .mininav-content.nav");
     if ( activeSub ) activeSub.classList.add("show");
-
+    
 
 	miniNavTogglers.map( ( miniNavToggler ) => {
 

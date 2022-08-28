@@ -407,4 +407,33 @@ class ImportController extends Controller
             return \Response::json(array('error' => false));
         }
     }
+
+    public function import_from_db(){
+        $id_cliente=5;
+            $original=DB::table('tmp_carga_puestos')->get();
+            foreach($original as $item){
+                $tipo=DB::table('puestos_tipos')->where(function($q) use($item){$q->whereraw("UPPER(abreviatura)='".strtoupper($item->tipo)."'");$q->orwhereraw("UPPER(des_tipo_puesto)='".strtoupper($item->tipo)."'");})->where('id_cliente',$id_cliente)->first();
+                $edificio=DB::table('edificios')->where(function($q) use($item){$q->whereraw("UPPER(abreviatura)='".strtoupper($item->edificio)."'");$q->orwhereraw("UPPER(des_edificio)='".strtoupper($item->edificio)."'");})->where('id_cliente',$id_cliente)->first();
+                $planta=DB::table('plantas')->where(function($q) use($item){$q->whereraw("UPPER(abreviatura)='".strtoupper($item->planta)."'");$q->orwhereraw("UPPER(des_planta)='".strtoupper($item->planta)."'");})->where('id_cliente',$id_cliente)->first();
+                $esta=DB::table('puestos')->where('cod_puesto',$item->cod_puesto)->where('id_cliente',$id_cliente)->first();
+                $arr_nombre=explode("-",$item->cod_puesto);
+                if($tipo!=null && $edificio!=null && $planta!=null and $esta==null){
+                    DB::table('puestos')->insert([
+                        'id_tipo_puesto'=>$tipo->id_tipo_puesto,
+                        'id_edificio'=>$edificio->id_edificio,
+                        'id_planta'=>$planta->id_planta,
+                        'id_cliente'=>$id_cliente,
+                        'id_estado'=>1,
+                        'cod_puesto'=>$item->cod_puesto,
+                        'des_puesto'=>$arr_nombre[2].' '.$arr_nombre[3],
+                    ]);
+                } else {
+                    if (!$esta){
+                        dump('Error con el puesto '.$item->cod_puesto);
+                    }
+                    
+                }
+            }
+
+    }
 }

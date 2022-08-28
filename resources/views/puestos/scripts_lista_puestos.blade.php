@@ -1,34 +1,6 @@
 <script>
-    let id_fila=0;
-    let token_fila=0;
-// function hoverdiv(obj,e,divid,id,txt,token){
-//     event.stopPropagation();
-//     if(id==id_fila){
-//         $('#'+divid).hide();
-//         id_fila=0;
-//         return;
-//     }
-//     id_fila=id;
-//     token_fila=token;
-//     console.log(obj.position());
-    
-//     console.log(e);
-//     var left  =obj.position().left-left_toolbar;
-//     var top  = obj.position().top+top_toolbar;
-
-
-//     $('#nombrepuesto').html(txt);
-//     $('#txt_borrar').html(txt);
-//     $('#toolbutton').data('id',id);
-//     $('#toolbutton').data('token',token);
-//     $('#link_borrar').attr('href','{{url('/puestos/delete')}}/'+id)
-//     $('#'+divid).css('left',left);
-//     $('#'+divid).css('top',top);
-//     console.log(left+','+top);
-//     $('#'+divid).show();
-//     animateCSS('#'+divid,'fadeIn');
-//     return false;
-// }
+    id_fila=0;
+    token_fila=0;
 
 function editar(id){
     $('#editorCAM').load("{{ url('/puestos/edit/') }}"+"/"+id, function(){

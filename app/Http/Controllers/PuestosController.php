@@ -56,7 +56,8 @@ class PuestosController extends Controller
                     $q->wherein('puestos.id_puesto',$puestos_usuario);
                 }
             })
-            ->get();
+            ->paginate(50);
+
 
         $tipos = DB::table('puestos_tipos')
             ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')

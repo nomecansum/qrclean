@@ -49,6 +49,7 @@
 
 .litepicker .container__main {
   display: flex;
+  background-color:#ffffff;
 }
 
 .litepicker .container__months {

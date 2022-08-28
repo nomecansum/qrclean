@@ -31,7 +31,7 @@
             @if(isset(session('CL')['modo_visualizacion_puestos']) && session('CL')['modo_visualizacion_puestos']=='C')
             <div class="text-center rounded add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif {!! strip_tags(nombrepuesto($puesto)." \r\n ".$cuadradito['title']) !!}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestoh }}vh ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }}">
                 <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ">
-                        {{ $puesto->cod_puesto }}
+                        {{ nombrepuesto($puesto) }}
                         @include('resources.adornos_iconos_puesto')
                 </span>
             </div>
@@ -39,7 +39,7 @@
             <div class="text-center rounded add-tooltip align-middle flpuesto draggable {{ isset($cualpuesto)&&$cualpuesto->id_puesto==$puesto->id_puesto?'glow':'' }} " id="puesto{{ $puesto->id_puesto }}" title="{!! strip_tags( nombrepuesto($puesto)." \r\n ".$cuadradito['title']) !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestoh }}vh ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px;color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
                 <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#FFF">
                     <i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i><br>
-                    {{ $puesto->cod_puesto }}</span>
+                    {{ nombrepuesto($puesto) }}</span>
                 {{--  @include('resources.adornos_iconos_puesto')  --}}
             </div>
             @endif

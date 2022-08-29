@@ -54,74 +54,74 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        ///////////////////////////////////////
-        // TAREAS PROGRAMADAS         /////////
-        //////////////////////////////////////
-        // $tasks = tareas::where('mca_activa', 'S')->get();
-        // foreach ($tasks as $task) 
-        // {
-        // 	// Use the scheduler to add the task at its desired frequency
-        // 	//log_tarea('Creada tarea '.$task->nom_tarea,$task->cod_tarea);
-        //     $comando = $task->signature." ".$task->cod_tarea;  //." --queue=".$task->queue
-        //     $sch = $schedule->command($comando)->runInBackground()->withoutOverlapping(60);  // $sch=$schedule->call($comando); -->Esto es para cuando se llama a una funcion de un controller
-        //     //$sch=$schedule->command($comando);
-        //     $frequency = $task->val_intervalo;
-        //     //Opciones para el intervalo
-        //     switch ($frequency) {
-        //         case 'hourlyAt':
-        //             $sch->hourlyAt($task->det_minuto);
-        //             break;
-        //         case 'dailyAt':
-        //             $sch->dailyAt(Carbon::parse($task->det_horaminuto)->format('H:i'));
-        //             break;
-        //         case 'weeklyOn':
-        //             $sch->weeklyOn($task->det_diasemana, Carbon::parse($task->det_horaminuto)->format('H:i') );
-        //             break;
-        //         case 'monthlyOn':
-        //             $sch->monthlyOn($task->det_diames, Carbon::parse($task->det_horaminuto)->format('H:i') );
-        //             break;
-        //         case 'lastDayOfMonth':
-        //             $sch->dailyAt( Carbon::parse($task->det_horaminuto)->format('H:i') )->when(function () {
-        //                 return \Carbon\Carbon::now()->endOfMonth()->isToday();
-        //             });
-        //             break;
-        //         default:
-        //             $sch->$frequency();
-        //             break;
-        //     }
-		// 	/*
-        //     if(isset($task->dias_semana) && strlen($task->dias_semana)>0){
-        //         $constraints = explode(",", $task->dias_semana);
-        //         foreach($constraints as $cns){
-        //             $sch->$cns();
-        //         }
-        //     }
-        //   	*/
-        //   	//Vemos si tiene algun dia de la semana o todos
-        //   	if(isset($task->dias_semana) && ($task->dias_semana != "alldays") && ($task->dias_semana != ""))
-		// 		$sch->{$task->dias_semana}();
+        /////////////////////////////////////
+        TAREAS PROGRAMADAS         /////////
+        ////////////////////////////////////
+        $tasks = tareas::where('mca_activa', 'S')->get();
+        foreach ($tasks as $task) 
+        {
+        	// Use the scheduler to add the task at its desired frequency
+        	//log_tarea('Creada tarea '.$task->nom_tarea,$task->cod_tarea);
+            $comando = $task->signature." ".$task->cod_tarea;  //." --queue=".$task->queue
+            $sch = $schedule->command($comando)->runInBackground()->withoutOverlapping(60);  // $sch=$schedule->call($comando); -->Esto es para cuando se llama a una funcion de un controller
+            //$sch=$schedule->command($comando);
+            $frequency = $task->val_intervalo;
+            //Opciones para el intervalo
+            switch ($frequency) {
+                case 'hourlyAt':
+                    $sch->hourlyAt($task->det_minuto);
+                    break;
+                case 'dailyAt':
+                    $sch->dailyAt(Carbon::parse($task->det_horaminuto)->format('H:i'));
+                    break;
+                case 'weeklyOn':
+                    $sch->weeklyOn($task->det_diasemana, Carbon::parse($task->det_horaminuto)->format('H:i') );
+                    break;
+                case 'monthlyOn':
+                    $sch->monthlyOn($task->det_diames, Carbon::parse($task->det_horaminuto)->format('H:i') );
+                    break;
+                case 'lastDayOfMonth':
+                    $sch->dailyAt( Carbon::parse($task->det_horaminuto)->format('H:i') )->when(function () {
+                        return \Carbon\Carbon::now()->endOfMonth()->isToday();
+                    });
+                    break;
+                default:
+                    $sch->$frequency();
+                    break;
+            }
+			/*
+            if(isset($task->dias_semana) && strlen($task->dias_semana)>0){
+                $constraints = explode(",", $task->dias_semana);
+                foreach($constraints as $cns){
+                    $sch->$cns();
+                }
+            }
+          	*/
+          	//Vemos si tiene algun dia de la semana o todos
+          	if(isset($task->dias_semana) && ($task->dias_semana != "alldays") && ($task->dias_semana != ""))
+				$sch->{$task->dias_semana}();
 			
-        //     $sch
-        //     	->before(function() use ($task) {
-	    //             //log_tarea("Inicio de la tarea [".$task->cod_tarea."] " . $task->des_tarea, $task->cod_tarea);
-	    //         })
-		// 		->between(Carbon::parse($task->hora_inicio)->format('H:i'), Carbon::parse($task->hora_fin)->format('H:i'))
-		// 		->after(function() use ($task) {
-	    //         	//log_tarea("Fin de la tarea php [".$task->cod_tarea."] " . $task->des_tarea, $task->cod_tarea);
-	    //         })
-		// 		->onSuccess(function (Stringable $output) use ($task) {
-		//              log_tarea("Tarea [".$task->cod_tarea."] " . $task->des_tarea . " se ha ejecutado correctamente. Resp: " . json_encode($output), $task->cod_tarea);
-		// 		})
-		//         ->onFailure(function (Stringable $output) use ($task) {
-		// 			 log_tarea("Se ha producido un error al ejecutar la tarea [".$task->cod_tarea."] " . $task->des_tarea . " Error: " . json_encode($output), $task->cod_tarea);
-		//         })
-	    //         ->sendOutputTo(storage_path()."/tareas/".$task->cod_tarea.'.txt')
-		// 		->timezone('Europe/Madrid');
+            $sch
+            	->before(function() use ($task) {
+	                //log_tarea("Inicio de la tarea [".$task->cod_tarea."] " . $task->des_tarea, $task->cod_tarea);
+	            })
+				->between(Carbon::parse($task->hora_inicio)->format('H:i'), Carbon::parse($task->hora_fin)->format('H:i'))
+				->after(function() use ($task) {
+	            	//log_tarea("Fin de la tarea php [".$task->cod_tarea."] " . $task->des_tarea, $task->cod_tarea);
+	            })
+				->onSuccess(function (Stringable $output) use ($task) {
+		             log_tarea("Tarea [".$task->cod_tarea."] " . $task->des_tarea . " se ha ejecutado correctamente. Resp: " . json_encode($output), $task->cod_tarea);
+				})
+		        ->onFailure(function (Stringable $output) use ($task) {
+					 log_tarea("Se ha producido un error al ejecutar la tarea [".$task->cod_tarea."] " . $task->des_tarea . " Error: " . json_encode($output), $task->cod_tarea);
+		        })
+	            ->sendOutputTo(storage_path()."/tareas/".$task->cod_tarea.'.txt')
+				->timezone('Europe/Madrid');
 				
-        //     //log_tarea("Config de tarea [".$task->cod_tarea."] " . $task->des_tarea . " Config: " . json_encode($sch), $task->cod_tarea);
+            //log_tarea("Config de tarea [".$task->cod_tarea."] " . $task->des_tarea . " Config: " . json_encode($sch), $task->cod_tarea);
 
             
-        // }
+        }
 
         
         $colas_informes = ['InformesL', 'InformesM', 'InformesS'];

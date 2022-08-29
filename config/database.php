@@ -63,6 +63,7 @@ return [
             ]) : [],
         ],
 
+
         'mysql_local' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),

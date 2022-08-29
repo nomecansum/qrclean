@@ -13,6 +13,7 @@ use App\Models\notif;
 use App\Models\notificaciones_tipos;
 use Jenssegers\Agent\Agent;
 use Illuminate\Support\Facades\Log;
+use Carbon\CarbonPeriod;
 
 function stripAccents($str) {
     return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
@@ -1461,4 +1462,61 @@ function cuenta_notificaciones(){
 
     return $notificaciones;
     
+}
+
+function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
+    if($fecha_fin==null){
+        $fecha_fin=$fecha_inicio;
+    }
+    //Devolverá un array con los dias indicados y si esta de fiesta o no, en funcion de los festivos del cliente y de la configuracion de sabados/domingos
+    // primero buscamos todas las pertenencias del usuario
+
+    $pertenencias=DB::table('users')
+        ->select('provincias.id_prov as id_provincia','provincias.cod_pais','provincias.cod_region','edificios.id_edificio','users.id_cliente','niveles_acceso.mca_reservar_sabados','niveles_acceso.mca_reservar_domingos','niveles_acceso.mca_reservar_festivos')
+        ->join('edificios','users.id_edificio','edificios.id_edificio')
+        ->join('niveles_acceso','users.cod_nivel','niveles_acceso.cod_nivel')
+        ->join('provincias','edificios.id_provincia','provincias.id_prov')
+        ->where('users.id',$id)
+        ->first();
+      
+
+    $festivos=DB::table('festivos')
+        ->select('val_fecha','des_festivo')
+        ->selectraw("IFNULL(MAX(cod_festivo), 0) as idfestivo")
+        ->where(function($q) use($pertenencias){
+            $q->whereraw("FIND_IN_SET(CONVERT(IFNULL(".$pertenencias->id_provincia.",-1),char), cod_provincia) <> 0");
+            $q->orwhereraw("FIND_IN_SET(CONVERT(IFNULL(".$pertenencias->cod_pais.",-1),char), cod_pais) <> 0");
+            $q->orwhereraw("FIND_IN_SET(CONVERT(IFNULL(".$pertenencias->cod_region.",-1),char), cod_region) <> 0");
+            $q->orwhereraw("(FIND_IN_SET(CONVERT(IFNULL(".$pertenencias->id_edificio.",-1),char), cod_centro) <> 0  OR (IFNULL(".$pertenencias->id_edificio.",0) = 0))");
+        })
+        ->wheredate('val_fecha','>=',$fecha_inicio)
+        ->wheredate('val_fecha','<=',$fecha_fin)
+        ->where('festivos.id_cliente',$pertenencias->id_cliente)
+        ->groupby(['val_fecha','des_festivo'])
+        ->get();
+    
+    $resultado=[];
+    $periodo=CarbonPeriod::create($fecha_inicio,$fecha_fin);
+    foreach($periodo as $fecha){
+        $desc=null;
+        $es_festivo=0;
+        if($festivos->where('val_fecha',$fecha)->first() && $pertenencias->mca_reservar_festivos=='S'){
+            $es_festivo=1;
+            $desc=$festivos->where('val_fecha',$fecha)->first()->des_festivo;
+        }
+        if($fecha->dayOfWeek==0 && $pertenencias->mca_reservar_sabados=='S'){
+            $es_festivo=1;
+        }
+        if($fecha->dayOfWeek==6 && $pertenencias->mca_reservar_domingos=='S'){
+            $es_festivo=1;
+        }
+        
+        $item=new \stdClass();
+        $item->date=$fecha->format('Y-m-d');
+        $item->festivo=$es_festivo;
+        $item->desc=$desc;
+        $resultado[]=$item;
+    }
+
+    return $resultado;
 }

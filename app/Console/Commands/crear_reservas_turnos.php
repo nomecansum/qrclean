@@ -244,7 +244,8 @@ class crear_reservas_turnos extends Command
                 foreach($periodo as $fecha){
                     $this->escribelog_comando('debug','Procesando fecha '.$fecha->format('Y-m-d'));
                     //A ver si es festivo o fin de semana y no puede reservar
-                    $estadefiesta=collect(DB::select(DB::raw("select estadefiesta(".$user->id.",'".$fecha->format('Y-m-d')."') as estadefiesta ")))->first()->estadefiesta;
+                    $estadefiesta=collect(estadefiesta($user->id),$fecha)->first()->festivo;
+                    //$estadefiesta=collect(DB::select(DB::raw("select estadefiesta(".$user->id.",'".$fecha->format('Y-m-d')."') as estadefiesta ")))->first()->estadefiesta;
                     if($estadefiesta==1){
                         $this->escribelog_comando('info','El usuario '.$user->name.' no puede reservar en la fecha '.$fecha->format('Y-m-d').' porque es festivo');
                         continue;

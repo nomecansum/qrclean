@@ -66,14 +66,17 @@ class ReservasController extends Controller
         $end=$month->copy()->endOfMonth();
 
         //Los dias del mes correspondiente y si cada uno de ellos es festivo o no
-        $festivos_mes = DB::select( DB::raw("
-            WITH RECURSIVE t as (
-                select date('".$month."') as date,
-                estadefiesta(".Auth::user()->id.",'".$month."') as festivo
-            UNION
-                SELECT DATE_ADD(t.date, INTERVAL 1 DAY), estadefiesta(".Auth::user()->id.",DATE_ADD(t.date, INTERVAL 1 DAY)) as festivo FROM t WHERE DATE_ADD(t.date, INTERVAL 1 DAY) <= '".$end."'
-            )select * FROM t;"));
-        $festivos_mes=collect($festivos_mes);
+        // $festivos_mes = DB::select( DB::raw("
+        //     WITH RECURSIVE t as (
+        //         select date('".$month."') as date,
+        //         estadefiesta(".Auth::user()->id.",'".$month."') as festivo
+        //     UNION
+        //         SELECT DATE_ADD(t.date, INTERVAL 1 DAY), estadefiesta(".Auth::user()->id.",DATE_ADD(t.date, INTERVAL 1 DAY)) as festivo FROM t WHERE DATE_ADD(t.date, INTERVAL 1 DAY) <= '".$end."'
+        //     )select * FROM t;"));
+            
+        // $festivos_mes=collect($festivos_mes);
+
+        $festivos_mes=collect(estadefiesta(Auth::user()->id,$month,$end));
 
         
         $reservas=DB::table('reservas')
@@ -780,15 +783,16 @@ class ReservasController extends Controller
         $usuario=users::find($r->id_usuario[0]);
         $puesto=puestos::find($r->puesto);
         $period = CarbonPeriod::create(Carbon::parse($r->desde), Carbon::parse($r->hasta));
-        $festivos_periodo = DB::select( DB::raw("
-            WITH RECURSIVE t as (
-                select date('".Carbon::parse($r->desde)->format('Y-m-d')."') as date,
-                estadefiesta(".$usuario->id.",'".Carbon::parse($r->desde)->format('Y-m-d')."') as festivo
-            UNION
-                SELECT DATE_ADD(t.date, INTERVAL 1 DAY), estadefiesta(".$usuario->id.",DATE_ADD(t.date, INTERVAL 1 DAY)) as festivo FROM t WHERE DATE_ADD(t.date, INTERVAL 1 DAY) <= '".Carbon::parse($r->hasta)->format('Y-m-d')."'
-            )select * FROM t;"));
+        $festivos_periodo=collect(estadefiesta($usuario->id,Carbon::parse($r->desde),Carbon::parse($r->hasta)));
+        // $festivos_periodo = DB::select( DB::raw("
+        //     WITH RECURSIVE t as (
+        //         select date('".Carbon::parse($r->desde)->format('Y-m-d')."') as date,
+        //         estadefiesta(".$usuario->id.",'".Carbon::parse($r->desde)->format('Y-m-d')."') as festivo
+        //     UNION
+        //         SELECT DATE_ADD(t.date, INTERVAL 1 DAY), estadefiesta(".$usuario->id.",DATE_ADD(t.date, INTERVAL 1 DAY)) as festivo FROM t WHERE DATE_ADD(t.date, INTERVAL 1 DAY) <= '".Carbon::parse($r->hasta)->format('Y-m-d')."'
+        //     )select * FROM t;"));
 
-        $festivos_periodo=collect($festivos_periodo);
+        // $festivos_periodo=collect($festivos_periodo);
         $cuenta=0;
         foreach($period as $fecha){
             if($festivos_periodo->where('date',$fecha->format('Y-m-d'))->first()->festivo==0){

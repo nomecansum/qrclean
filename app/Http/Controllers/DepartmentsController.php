@@ -9,7 +9,6 @@ use Auth;
 use Carbon\Carbon;
 use App\Services\DepartamentoService;
 use App\Models\departamentos;
-use Carbon\CarbonPeriod;
 
 class DepartmentsController extends Controller
 {
@@ -25,7 +24,6 @@ class DepartmentsController extends Controller
     public function edit($id)
     {
         $month = Carbon::now()->startOfMonth();
-        $period = CarbonPeriod::create($month->startOfMonth()->format('Y-m-d  H:i:s'), $month->endOfMonth()->format('Y-m-d H:i:s'));
 
         validar_acceso_tabla($id,"departamentos");
 

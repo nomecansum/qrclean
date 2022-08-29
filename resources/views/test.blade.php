@@ -41,29 +41,9 @@
            dd(json_encode(array_values($icons)));
        @endphp --}}
 
-       {{-- @php
-          OneSignal::sendNotificationToExternalUser(
-            "Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message Some Message ",
-            ["14"],
-            $url = "http://qrclean/reservas",
-            $data = json_decode('{"datos": [1,2,3,4]}'),
-            $buttons = null,
-            $schedule = null
-        );
-       @endphp --}}
-       {{-- @php
-           notificar_usuario(App\Models\Users::find(14),"prueba",null,"prueba",[3],1,[],null);
-       @endphp --}}
-       {{-- @php
-           use Laravel\Fortify\Actions\EnableTwoFactorAuthentication;
-           use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
-           use Laravel\Fortify\RecoveryCode;
-           use Illuminate\Support\Collection;
 
-           dd(encrypt(json_encode(Collection::times(8, function () {
-                return RecoveryCode::generate(); --}}
        @php
-            
+            estadefiesta(1,Carbon\Carbon::now()->startofMonth(),Carbon\Carbon::now()->endofMonth());     
        @endphp
     </div>
 </div>

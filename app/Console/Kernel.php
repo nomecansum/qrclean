@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         /////////////////////////////////////
-        TAREAS PROGRAMADAS         /////////
+        //TAREAS PROGRAMADAS         /////////
         ////////////////////////////////////
         $tasks = tareas::where('mca_activa', 'S')->get();
         foreach ($tasks as $task) 

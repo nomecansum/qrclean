@@ -66,7 +66,7 @@
 				<input type="hidden" name="output" value="pantalla">
 				@include('resources.combos_filtro',[$hide=['est_mark'=>1,'tip_mark'=>1],$show=['proc'=>1]])
 				<div class="row">
-					<div class="col-md-4" style="padding-left: 15px">
+					<div class=" col-md-4 text-nowrap">
 						@include('resources.combo_fechas')
 					</div>
 					<div class="col-md-3" style="padding-left: 15px">

@@ -33,7 +33,19 @@
     }
 
     .litepicker .container__main{
-        background-color: #fff !important;   
+        background-color: #fff !important;
+    }
+
+    .litepicker .container__days .day-item.is-start-date{
+        background-color: #26547d !important;
+    }
+
+    .litepicker .container__days .day-item.is-in-range{
+        background-color: #c4e0e4 !important;
+    }
+
+    .litepicker .container__days .day-item.is-end-date{
+        background-color: #26547d !important;
     }
 
 </style>

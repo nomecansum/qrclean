@@ -34,17 +34,19 @@
             </div>
         </div>
         <table id="tablarondas"  
-            data-toggle="table" data-mobile-responsive="true"
-            data-locale="es-ES"
-            data-search="true"
-            data-show-columns="true"
-            data-show-columns-toggle-all="true"
-            data-page-list="[5, 10, 20, 30, 40, 50]"
-            data-page-size="50"
-            data-pagination="true" 
-            data-show-pagination-switch="true"
-            data-toolbar="#all_toolbar"
-            data-show-button-text="true"
+        data-toggle="table" 
+        data-mobile-responsive="true"
+        data-locale="es-ES"
+        data-search="true"
+        data-show-columns="true"
+        data-show-toggle="true"
+        data-show-columns-toggle-all="true"
+        data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+        data-page-size="50"
+        data-pagination="true" 
+        data-toolbar="#all_toolbar"
+        data-buttons-class="secondary"
+        data-show-button-text="true"
             >
             <thead>
                 <tr>
@@ -70,7 +72,7 @@
                     $tiempo=$detalles->where('id_ronda',$r->id_ronda)->sum('val_tiempo_limpieza')/60;
                     try{
                         $pct_completado=(100*$puestos_si/$cnt_puestos);
-                    } catch(\Exception $e){
+                    } catch(\Throwable $e){
                         $pct_completado=0;
                     }
                     
@@ -93,7 +95,7 @@
                     </td>
                     @if($entidades['tipo']=='limpieza')<td class="td text-center fs-2" data-id="">{{ decimal_to_time($tiempo) }}</td>@endif
                     <td class="text-center " >
-                        <span class="text-{{ color_porcentaje($pct_completado) }} font-bold " style="font-size: 3.5vw ">{{ round($pct_completado) }} %</span>
+                        <span class="text-{{ color_porcentaje($pct_completado) }} font-bold " style="font-size: 2em ">{{ round($pct_completado) }} %</span>
                     </td>
                 </tr>
 
@@ -164,8 +166,8 @@
         var picker = new Litepicker({
             element: document.getElementById( "fechas" ),
             singleMode: false,
-            numberOfMonths: 2,
-            numberOfColumns: 2,
+            @desktop numberOfMonths: 2, @elsedesktop numberOfMonths: 1, @enddesktop
+            @desktop numberOfColumns: 2, @elsedesktop numberOfColumns: 1, @enddesktop
             autoApply: true,
             format: 'DD/MM/YYYY',
             lang: "es-ES",

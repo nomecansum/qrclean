@@ -63,7 +63,7 @@ try{
     .nombre_zona{
         font-size: 3em;
         color: #fff; 
-        -webkit-text-stroke: 1px #999;
+        -webkit-text-stroke: 1px #f00;
         opacity: 1 !important;
     }
 

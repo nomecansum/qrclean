@@ -40,7 +40,7 @@
                     <select required name="cod_cliente" class="form-control" id="cod_cliente">
                         {{-- <option value="" selected></option> --}}
                         @foreach ($clientes as $cl)
-                            <option  {{ (isset($dato) && $dato->id_cliente == $cl->id_cliente) ||$id==0 && $key==session('CL')['id_cliente']) ? 'selected' : ''}}  value="{{$cl->id_cliente}}">{{$cl->nom_cliente}}</option>
+                            <option  {{ (isset($dato) && $dato->id_cliente == $cl->id_cliente) ||($id==0 && $key==session('CL')['id_cliente']) ? 'selected' : ''}}  value="{{$cl->id_cliente}}">{{$cl->nom_cliente}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -112,8 +112,8 @@
     var rangepicker = new Litepicker({
         element: document.getElementById( "fechas" ),
         singleMode: false,
-        numberOfMonths: 2,
-        numberOfColumns: 2,
+        @desktop numberOfMonths: 2, @elsedesktop numberOfMonths: 1, @enddesktop
+        @desktop numberOfColumns: 2, @elsedesktop numberOfColumns: 1, @enddesktop
         autoApply: true,
         format: 'DD/MM/YYYY',
         lang: "es-ES",

@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <div class="form-group  col-md-12 mt-3" style="{{ (isset($hide['edi']) && $hide['edi']==1) ? 'display: none' : ''  }}">
+        <div class="form-group  col-md-12 mt-3  text-nowrap" style="{{ (isset($hide['edi']) && $hide['edi']==1) ? 'display: none' : ''  }}">
             <label>Edificio</label>
             <div class="input-group select2-bootstrap-append">
                 <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="edificio[]" id="multi-edificio"></select>
@@ -264,7 +264,7 @@
     $(".select2-filtro").select2({
         placeholder: "Todos",
         allowClear: true,
-        width: "90%",
+        @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
     });
 
     $('#multi-cliente').change(function(event) {

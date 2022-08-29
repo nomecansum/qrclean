@@ -169,7 +169,7 @@ class ReportsController extends Controller
         $rango_safe=str_replace(" - ","_",$r->fechas);
         $rango_safe=str_replace("/","",$rango_safe);
         $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
-        $usuario = users::find($r->cod_usuario);
+        $usuario = users::find($r->cod_usuario)??Auth::user()->id;;
         $view='reports.users.filter';
 
 
@@ -327,7 +327,7 @@ class ReportsController extends Controller
         $rango_safe=str_replace(" - ","_",$r->fechas);
         $rango_safe=str_replace("/","",$rango_safe);
         $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
-        $usuario = users::find($r->cod_usuario);
+        $usuario = users::find($r->cod_usuario)??Auth::user()->id;;
         $view='reports.puestos.filter';
 
 
@@ -475,7 +475,7 @@ class ReportsController extends Controller
         $rango_safe=str_replace(" - ","_",$r->fechas);
         $rango_safe=str_replace("/","",$rango_safe);
         $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
-        $usuario = users::find($r->cod_usuario);
+        $usuario = users::find($r->cod_usuario)??Auth::user()->id;;
         $view='reports.canceladas.filter';
 
 
@@ -573,7 +573,7 @@ class ReportsController extends Controller
         $rango_safe=str_replace(" - ","_",$r->fechas);
         $rango_safe=str_replace("/","",$rango_safe);
         $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
-        $usuario = users::find($r->cod_usuario);
+        $usuario = users::find($r->cod_usuario)??Auth::user()->id;;
         $view='reports.ferias.filter';
 
 
@@ -724,7 +724,7 @@ class ReportsController extends Controller
         $rango_safe=str_replace(" - ","_",$r->fechas);
         $rango_safe=str_replace("/","",$rango_safe);
         $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
-        $usuario = users::find($r->cod_usuario);
+        $usuario = users::find($r->cod_usuario)??Auth::user()->id;
         $view='reports.heatmap.filter';
 
 

@@ -1473,9 +1473,9 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
 
     $pertenencias=DB::table('users')
         ->select('provincias.id_prov as id_provincia','provincias.cod_pais','provincias.cod_region','edificios.id_edificio','users.id_cliente','niveles_acceso.mca_reservar_sabados','niveles_acceso.mca_reservar_domingos','niveles_acceso.mca_reservar_festivos')
-        ->join('edificios','users.id_edificio','edificios.id_edificio')
-        ->join('niveles_acceso','users.cod_nivel','niveles_acceso.cod_nivel')
-        ->join('provincias','edificios.id_provincia','provincias.id_prov')
+        ->leftjoin('edificios','users.id_edificio','edificios.id_edificio')
+        ->leftjoin('niveles_acceso','users.cod_nivel','niveles_acceso.cod_nivel')
+        ->leftjoin('provincias','edificios.id_provincia','provincias.id_prov')
         ->where('users.id',$id)
         ->first();
       

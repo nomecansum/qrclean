@@ -30,7 +30,7 @@ class crear_reservas_turnos extends Command
      *
      * @var string
      */
-    protected $description = 'Esta tarea crea las reservas para los usuarios seleccionados en base al turno que tengan configurado. En cada ejecucion se ocupará de que los usuarios tengan creadas, para cada tipo de puesto seleccionado, tantas reservas en el futuro como dias indique el parámetro "Mantener reservas para dias".';
+    protected $description = 'Esta tarea crea las reservas para los usuarios seleccionados en base al turno que tengan configurado. En cada ejecucion se ocupará de que los usuarios tengan creadas, para cada tipo de puesto seleccionado, tantas reservas en el futuro como dias indique el parámetro dias reserva.';
 
     /**
      * Create a new command instance.
@@ -181,7 +181,7 @@ class crear_reservas_turnos extends Command
 
     static function definicion(){
 
-        return 'Esta tarea crea las reservas para los usuarios seleccionados en base al turno que tengan configurado. En cada ejecucion se ocupará de que los usuarios tengan creadas tantas reservas en el futuro como dias indique el parámetro "dias_reserva".';
+        return 'Esta tarea crea las reservas para los usuarios seleccionados en base al turno que tengan configurado. En cada ejecucion se ocupará de que los usuarios tengan creadas tantas reservas en el futuro como dias indique el parámetro <b>dias_reserva</b>.';
      }
 
      static function grupo(){

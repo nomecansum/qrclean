@@ -141,7 +141,7 @@ return [
     'AWS_URL'=>env('AWS_URL','/'),
     'url_asset_mail'=>'https://spotdesking.spotlinker.com/',
     'tipo_puesto_parking'=>[2,221,271,131],
-    'tipo_puesto_sala'=>[4,281,191],
+    'tipo_puesto_sala'=>[4,281,191,397,398,399,401],
     'id_usuario_spotlinker_salas'=>1832,
     'id_usuario_tareas'=>1860,
     'url_base_api_salas'=>env('URL_BASE_API_SALAS','https://salas-test.spotlinker.com/puestos_api/'),

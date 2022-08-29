@@ -198,8 +198,8 @@
     var rangepicker = new Litepicker({
         element: document.getElementById( "rango_fechas" ),
         singleMode: false,
-        numberOfMonths: 2,
-        numberOfColumns: 2,
+        @desktop numberOfMonths: 2, @elsedesktop numberOfMonths: 1, @enddesktop
+        @desktop numberOfColumns: 2, @elsedesktop numberOfColumns: 1, @enddesktop
         autoApply: true,
         format: 'DD/MM/YYYY',
         lang: "es-ES",

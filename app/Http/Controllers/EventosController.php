@@ -21,10 +21,11 @@ class EventosController extends Controller
         ->selectraw("(select count(distinct(val_iteracion)) from eventos_acciones where cod_regla=eventos_reglas.cod_regla) as iteraciones")
         //->selectraw("(select group_concat(nombre_cliente order by nombre_cliente separator '#') from clientes where id_cliente in (eventos_reglas.clientes)) as list_clientes")
         ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('eventos_reglas.cod_cliente',Auth::user()->id_cliente);
-            } else {
-                $q->where('eventos_reglas.cod_cliente',session('CL')['id_cliente']);
+            if (!fullAccess()) {
+                $q->wherein('eventos_reglas.cod_cliente',clientes());
+            }
+            if (session('cod_cliente')) {
+                $q->orWhere('eventos_reglas.cod_cliente',session('CL')['id_cliente']);
             }
         })
         ->groupby('eventos_reglas.cod_regla')

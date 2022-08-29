@@ -36,7 +36,7 @@
 			<form action="{{url('/reports/puestos/filter')}}" method="POST" class="ajax-filter">
 				{{csrf_field()}}
 				<input type="hidden" value="{{Auth::user()->id_cliente}}" name="id_cliente">
-				@include('resources.combos_filtro',[$hide=['cli'=>1,'est'=>1,'head'=>1,'btn'=>1,'usu'=>1,'est_inc'=>1,'est_mark'=>1]])
+				@include('resources.combos_filtro',[$hide=['cli'=>1,'est'=>1,'head'=>1,'btn'=>1,'usu'=>1,'est_inc'=>1,'tip_mark'=>1,'tip_inc'=>1]])
 				<div class="col-md-4 mb-3">
 					@include('resources.combo_fechas')
 				</div>

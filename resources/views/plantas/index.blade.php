@@ -70,7 +70,8 @@
             <div class="table-responsive w-100">
 
                 <table id="tablaplantas"  
-                data-toggle="table" data-mobile-responsive="true"
+                data-toggle="table" 
+                data-mobile-responsive="true"
                 data-locale="es-ES"
                 data-search="true"
                 data-show-columns="true"

@@ -5,7 +5,7 @@
         if (!isAdmin()) {
             $cliente=Auth::user()->id_cliente;
         } else {
-            $$cliente=session('CL')['id_cliente'];
+            $cliente=session('CL')['id_cliente'];
         }
 
     }

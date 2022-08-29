@@ -70,12 +70,13 @@
 			
 			@php
 				$inf=$informe->where('id_cliente',$cliente);
+				
 				$plantas=$inf->pluck('id_planta')->unique();
-
 			@endphp	
 			@if($plantas->count()>0)
 				<tr>
 					<td colspan="3" >
+						
 						@include('resources.cabecera_cliente_informes')
 					</td>
 				</tr>

@@ -54,18 +54,18 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 	</table>
 </div> --}}
 
-<div class="card-body">
+<div class="card-body p-0">
 	<table class="table table-calendar mb0 rounded w-100 table_calendar" style="border: 1px solid #f2f7f8" >
 		<thead>
 			<tr class="">
 				<th>
-					<a data-month="{{ $month }}" data-action="sub" class="changeMonth" style="float:left; font-size: 18px; cursor: pointer;"> <i class="fas fa-arrow-left"></i> </a>
+					<a data-month="{{ $month }}" data-action="sub" class="changeMonth mt-1" style="float:left; font-size: 2em; cursor: pointer;"> <i class="fas fa-arrow-left"></i> </a>
 				</th>
-				<th class="text-center" colspan="5" width="80%" style="font-size: 32px; font-weight: 1000">
+				<th class="text-center" colspan="5" width="80%" style="font-size: 2em; font-weight: 1000">
 					{{trans('strings.'.$meses[$carbon->parse($month)->format('n')-1]).' '. ucwords($carbon->parse($month)->format('Y')) }}
 				</th>
 				<th>
-					<a data-month="{{ $month }}" data-action="add" class="changeMonth" style="float:right; font-size: 18px; cursor: pointer;"> <i class="fas fa-arrow-right"></i> </a>
+					<a data-month="{{ $month }}" data-action="add" class="changeMonth mt-1" style="float:right; font-size: 2em; cursor: pointer;"> <i class="fas fa-arrow-right"></i> </a>
 				</th>
 			</tr>
 			<tr style="background-color: #ffad76; color: #737887; border: 1px solid #f2f7f8; border-radius: 3px 3px 0 0; text-align: center; font-size: 12px">
@@ -126,19 +126,18 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 							@endphp
 							{{--  data-tooltip-content="#tooltip_content{{$carbon->parse($actual->fecha)->format('d-m-Y')}}"  --}}
 							
-							<td style="background-color: {{$color}}; height: 10vw;  width: 10vw;  color: #999; border-radius: 12px; {{ $borde }}; "  class="add-tooltip dia text-center  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" data-past="{{ $noclickable }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
-								
-                                <span class="font-bold" style="font-size: 4vw; font-weigth: 400;position relative; color: #fff; -webkit-text-stroke: 1px #999;" >{{ isset($days[$i]) ? $days[$i] : '' }}</span><br>
+							<td style="background-color: {{$color}};  color: #999; border-radius: 12px; {{ $borde }}; "  class="dia text-center  pt-3 @if(!$dia_pasado)td_calendar @endif {{ $estado }}" data-past="{{ $noclickable }}" data-fecha="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Y-m-d') }}" data-fechaID="{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" id="TD{{ Carbon\Carbon::parse($month.'-'.$days[$i])->format('Ymd') }}" data-toggle="tooltip" data-container="body" data-placement="top" data-original-title="{!!$title!!}" >
+                                <div class="font-bold" style="font-size: @desktop  2em; @elsedesktop  1em; @enddesktop; font-weigth: 400;position absolute; color: #fff; -webkit-text-stroke: 1px #999; z-index: 1" >{{ isset($days[$i]) ? $days[$i] : '' }}</div>
 								<div style="color: #fff; cursor: pointer;" class="text-start">
 									@foreach($dias as $dia)
 										@php
 											$icono=$dia->val_icono;
 											$ic_color=$dia->val_color;
-											$descrip=$dia->cod_puesto;
+											$descrip=nombrepuesto($dia);
 											//$title=Carbon\Carbon::parse($dia->fec_reserva)->format('d/m/Y').chr(13)." Puesto: ".$descrip." - Edificio: ".$dia->des_edificio." - Planta: ".$dia->des_planta;	
 										@endphp
 									@if($dia)
-									<b class="des_evento" style="font-size: 1rem; color:#555">@if($icono!="") <i class="{{ $icono }}" style="color: {{ $ic_color }}"></i> @endif{!! $descrip !!}</b><br>
+									<div class="des_evento mb-1 text-nowrap" style="font-size:@desktop  1.2vw; @elsedesktop  8px; @enddesktop color:#555;">@if($icono!="") <i class="{{ $icono }}" style="color: {{ $ic_color }}"></i> @endif @desktop  {!! $descrip !!} @enddesktop</div>
 									@endif
 									@endforeach
 								</div>
@@ -151,15 +150,6 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 			@endforeach
 		</tbody>
 	</table>
-	<div id="detalle_horario" style="position: absolute; width: 250px; height: 442px;display: flex; flex-direction: row; ">
-		<div class="text-dark" style="padding-top:5px; margin-right: 0px">
-			<i class="fas fa-caret-left fa-3x"></i>
-		</div>
-		<div  class="bg-light w-100" id="contenido_detalle_horario" style="border: 2px solid #333; margin-left: 0px; border-radius: 6px">
-			
-		</div>
-		
-	</div>
 </div>
 
 <script>
@@ -168,8 +158,6 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 		$('#detalle_horario').hide();
 	})
 
-	var tooltip = $('.add-tooltip');
-    if (tooltip.length)tooltip.tooltip();
 
 	fechacal="{{ $month }}";
 

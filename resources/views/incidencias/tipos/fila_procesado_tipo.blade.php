@@ -135,7 +135,7 @@
     $(".select2").select2({
         placeholder: "Todos",
         allowClear: true,
-        width: "90%",
+        @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
     });
     $('#btn_editar{{ $tipo->id_proceso }}').click(function(){
         $.post("{{ url('/incidencias/tipos/postprocesado/save') }}", $('#form_proceso'+$(this).data('id')).serializeArray(), function(data, textStatus, xhr) {

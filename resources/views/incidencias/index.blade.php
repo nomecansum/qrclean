@@ -60,11 +60,13 @@
 			<div class="card-header">
 				<h3 class="card-title">Incidencias</h3>
 			</div>
-			<form method="post" name="form_puestos" id="formbuscador" action="{{ url('/incidencias') }}" class="form-horizontal ajax-filter">
+			<form method="post" name="form_puestos" id="formbuscador" action="{{ url('/incidencias') }}" class="form-horizontal ajax-filter ml-3 mt-2">
 				@csrf
 				<input type="hidden" name="document" value="pantalla">
 				<input type="hidden" name="output" value="pantalla">
+				@if($mostrar_filtros==1)
 				@include('resources.combos_filtro',[$hide=['est_mark'=>1,'tip_mark'=>1],$show=['proc'=>1]])
+				@endif
 				<div class="row">
 					<div class=" col-md-4 text-nowrap">
 						@include('resources.combo_fechas')

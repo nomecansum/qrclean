@@ -250,7 +250,7 @@
         $(this).parent().parent().find('select').select2({
             placeholder: "Todos",
             allowClear: true,
-            width: "90%",
+            @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
         });
         $(this).parent().parent().find('select').change();
     });
@@ -264,7 +264,7 @@
     $(".select2-filtro").select2({
         placeholder: "Todos",
         allowClear: true,
-        @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
+        @desktop width: "90%", @elsedesktop width: "65%", @enddesktop 
     });
 
     $('#multi-cliente').change(function(event) {

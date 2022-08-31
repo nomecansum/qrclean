@@ -64,6 +64,7 @@ Route::get('/logout','Auth\LoginController@logout')->name('logout');;
 
 //Login con google
 Route::get('/login/google', 'Auth\LoginController@redirectToGoogleProvider')->name('login.google');
+Route::get('/auth/google/callback','Auth\LoginController@authToGooglecallback')->name('login.google.callback');
 Route::get('/auth/google/redirect', function () {
     return Socialite::driver('google')->redirect();
 });
@@ -359,6 +360,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'incidencias'], function () {
         Route::get('/',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@index'])->name('incidencias.index');
         Route::post('/',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@search'])->name('incidencias.search');
+        Route::get('/mis_incidencias',['middleware'=>'permissions:["Incidencias > Mis incidencias"],["R"]','uses'=>'IncidenciasController@mis_incidencias'])->name('incidencias.mis_incidencias');
         Route::post('/upload_imagen',['middleware'=>'permissions:["Incidencias"],["C"]', 'uses' => 'IncidenciasController@subir_adjuntos']);
         Route::get('/create/{puesto}/{embed?}','IncidenciasController@nueva_incidencia')->name('incidencias.nueva');
         Route::get('/edit/{id}',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@edit']);

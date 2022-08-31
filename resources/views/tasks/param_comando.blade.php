@@ -38,7 +38,7 @@
     $(".select2-multiple").select2({
         placeholder: "Todos",
         allowClear: true,
-        width: "90%",
+        @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
     });
     $('.select-all').click(function(event) {
         $(this).parent().parent().find('select option').prop('selected', true)

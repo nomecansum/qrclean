@@ -11,7 +11,7 @@
 
 @section('breadcrumb')
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}"><i class="fa fa-home"></i> </a></li>
+        <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
         <li class="breadcrumb-item">parametrizacion</li>
 	    <li class="breadcrumb-item">espacios</li>
         <li class="breadcrumb-item">plantas</li>

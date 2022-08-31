@@ -23,8 +23,8 @@
 		</div>
 		<div class="col-md-2 text-end">
 			<div class="btn-group btn-group-sm pull-right" role="group">
-					<a href="#" id="btn_nueva_seccion" class="btn btn-success" title="Nueva seccion">
-					<i class="fa fa-plus-square pt-2" onclick="nueva()" style="font-size: 20px" aria-hidden="true"></i>
+					<a href="#" id="btn_nueva_seccion" onclick="nueva()" class="btn btn-success" title="Nueva seccion">
+					<i class="fa fa-plus-square pt-2"  style="font-size: 20px" aria-hidden="true"></i>
 					<span>Nueva</span>
 				</a>
 			</div>

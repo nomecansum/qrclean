@@ -1,6 +1,25 @@
 @php
 
 @endphp
+<style>
+      @keyframes glowing {
+        0% {
+          color: #2ba805;
+        }
+        25% {
+          color: #f0be1a;
+        }
+        50% {
+          color: #ffee02;
+        }
+        75% {
+          color: #ff3b38;
+        }
+      }
+      .glow {
+        animation: glowing 1300ms infinite;
+      }
+</style>
 @if(isset($puesto->img_plano))
 
 
@@ -19,11 +38,7 @@
                 $color=$puesto->val_color?$puesto->val_color:"#dff9d2";
                 $font_color="#fff";
             @endphp
-            <div class="text-center font-bold rounded add-tooltip align-middle flpuesto draggable" title="{{ $title }}" id="puesto{{ $puesto->id_puesto }}" title="{{ $title }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $puesto->id_planta }}" style="background-color: {{ $puesto->hex_color }}; height: 1.8vw ; width: 1.8vw; border: 2px solid {{$puesto->val_color}}">
-                <span class="h-100 align-middle text-center" style="font-size: 0.4vw;">
-                        {{ $puesto->cod_puesto }}
-                </span>
-            </div>
+            <i class="fa-solid fa-location-dot fa-3x text-danger glow" style="top: {{ $top }}px; left: {{ $left }}px; position: absolute"></i>
     </div>
     @php
         $posiciones=json_decode($puesto->posiciones);

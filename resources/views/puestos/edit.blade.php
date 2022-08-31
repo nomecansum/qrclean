@@ -3,6 +3,17 @@
   max-height: 150px;
   overflow-y: auto;
 }
+ .fc .fc-toolbar-title{
+    font-size: 0.8em !important;
+  }
+
+  .fc-list-event td{
+    font-size: 0.8em !important;
+  }
+  .fc-list-day-cushion{
+    font-size: 0.8em !important;
+  }
+
 </style>
 <div class="card editor mb-5" id="editor">
     <div class="card">
@@ -262,6 +273,7 @@
     $('#frm_contador').submit(form_ajax_submit);
 
     
+    
 
     //$('#frm_contador').on('submit',form_ajax_submit);
     
@@ -378,7 +390,10 @@
 
     $('.fc-event-title').css('font-size','10px');
     $('.fc-event-title').css('font-weight','normal');
-    
+    $('.fc-toolbar-chunk').find(".btn").addClass("btn-xs");
+    @mobile 
+        $('.fc-today-button').hide(); 
+    @endmobile
 
     Inputmask({regex:"^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$"}).mask('.hourMask');
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );

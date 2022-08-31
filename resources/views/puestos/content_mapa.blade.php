@@ -92,7 +92,7 @@
                                         <label class="custom-control-label"   for="chkp{{ $puesto->id_puesto }}"></label>
                                     </div>
                                 @endif
-                                <div class="h-100 mb-0 mt-1" style="font-size: {{ $puesto->factor_letra }}vw; color: {{ $cuadradito['font_color'] }}; line-height: 12px">{{ strlen($puesto->cod_puesto)>15?substr($puesto->cod_puesto,0,15)."...":$puesto->cod_puesto }}
+                                <div class="h-100 mb-0 mt-1 " style="font-size: {{ $puesto->factor_letra }}vw; color: {{ $cuadradito['font_color'] }}; @desktop  line-height:{{ $puesto->factor_puestow }}@enddesktop">{{ nombrepuesto($puesto) }}
                                 @include('resources.adornos_iconos_puesto')
                                 </div>
                             </div>

@@ -27,16 +27,16 @@
             @endphp
             <div class="row filamipuesto hover-this" data-token="{{ $puesto->token }}" >
                 <div class="col-md-1">
-                    <div class="text-center rounded mt-2 add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif {!! nombrepuesto($puesto)." \r\n ".$cuadradito['title'] !!}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $puesto->id_planta }}" style="height: {{ $puesto->factor_puesto }}vw ; width: {{ $puesto->factor_puesto }}vw; {{ $cuadradito['borde'] }}">
-                        <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ">
-                                {{ $puesto->cod_puesto }}
+                    <div class="text-center rounded mt-2 add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif {!! nombrepuesto($puesto)." \r\n ".$cuadradito['title'] !!}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $puesto->id_planta }}" style="height: 3vw ; width: 3vw; {{ $cuadradito['borde'] }}">
+                        <span class="h-100 align-middle text-center" style="font-size: 0.7vw; ">
+                                {{ nombrepuesto($puesto) }}
                                 @include('resources.adornos_iconos_puesto')
                         </span>
                     </div>
                 </div>
                 
                 <div class="col-md-11 text-primary mt-3">
-                    <h4 style=""><span style="color: {{ $puesto->color_tipo }}">[<i class="{{ $puesto->icono_tipo }} }}"></i> {!! $puesto->des_tipo_puesto !!}]</span> <i class="fa fa-arrow-right"></i> Tiene el puesto <b>{{ nombrepuesto($puesto) }}</b> {!! $cuadradito['title'] !!}</h4>
+                    <h4 style=""><span style="color: {{ $puesto->color_tipo }}">[<i class="{{ $puesto->icono_tipo }} }}"></i> {!! $puesto->des_tipo_puesto !!}]</span> <i class="fa fa-arrow-right"></i> Tiene el puesto <b>{{ $puesto->cod_puesto }}</b> {!! $cuadradito['title'] !!}</h4>
                 </div>
             </div>
             

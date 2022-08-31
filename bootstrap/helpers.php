@@ -137,9 +137,9 @@ function isxml($xmlstr){
 }
 
 //Añadir ceros por la izquierda\
-function lz($num)
+function lz($num,$cantidad=2)
 {
-    return (strlen($num) < 2) ? "0{$num}" : $num;
+    return (strlen($num) < $cantidad) ? "0{$num}" : $num;
 }
 
 //Devuelve el valor de cualquiera de los elementos del array de parametros de un comando para tareas/Eventos

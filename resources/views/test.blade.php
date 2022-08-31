@@ -43,7 +43,23 @@
 
 
        @php
-            estadefiesta(1,Carbon\Carbon::now()->startofMonth(),Carbon\Carbon::now()->endofMonth());     
+            //estadefiesta(1,Carbon\Carbon::now()->startofMonth(),Carbon\Carbon::now()->endofMonth());     
+           $puestos=DB::table('puestos')->where('id_cliente',5)->get();
+           foreach($puestos as $p){
+                $puesto=App\Models\puestos::find($p->id_puesto);
+                $dato=explode("-",$p->cod_puesto);
+                $dato[3]=lz($dato[3],3);
+                $dato=implode("-",$dato);
+                $puesto->cod_puesto=$dato;
+
+
+                $dato=explode(" ",$p->des_puesto);
+                $dato[1]=lz($dato[1],3);
+                $dato=implode(" ",$dato);
+                $puesto->des_puesto=$dato;
+                $puesto->save();
+           }
+
        @endphp
     </div>
 </div>
@@ -53,8 +69,6 @@
 
 @section('scripts')
     <script>
-        
-
         $('.SECCION_MENU').addClass('active active-sub');
         $('.ITEM_MENU').addClass('active-link');
     </script>

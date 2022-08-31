@@ -159,9 +159,61 @@ class IncidenciasController extends Controller
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
             ->get();
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos'));
+        $mostrar_graficos=1;
+        $mostrar_filtros=1;
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros'));
     }
 
+    public function mis_incidencias($f1=0,$f2=0){
+        $f1=$f1==0?Carbon::now()->startOfMonth()->subMonth():Carbon::parse($f1);
+        $f2=$f2==0?Carbon::now()->endOfMonth():Carbon::parse($f2);
+        $fhasta=clone($f2);
+        $fhasta=$fhasta->addDay();
+        $incidencias=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa')
+            ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
+            ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+            ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->whereBetween('fec_apertura',[$f1,$fhasta])
+            ->where('incidencias.id_usuario_apertura',Auth::user()->id)
+            ->wherenull('incidencias.fec_cierre')
+            ->orderby('fec_apertura','desc')
+            ->get();
+        
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+        $mostrar_graficos=0;
+        $mostrar_filtros=0;
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros'));
+    }
     
     //BUSCAR INCIDENCIAS
     public function search(Request $r){
@@ -307,11 +359,13 @@ class IncidenciasController extends Controller
             ->get();
         $f1=Carbon::parse($f1);
         $f2=Carbon::parse($f2);
+        $mostrar_graficos=1;
+        $mostrar_filtros=1;
 
         if ($r->wantsJson()) {
             return $incidencias;
         } else {
-            return view('incidencias.fill_tabla_incidencias',compact('incidencias','f1','f2','puestos','r'));
+            return view('incidencias.fill_tabla_incidencias',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros'));
         }
         
     }

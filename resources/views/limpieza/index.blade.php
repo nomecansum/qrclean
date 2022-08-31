@@ -30,7 +30,7 @@
             <div class="input-group">
                 <input type="text" class="form-control pull-left" id="fechas"  autocomplete="off" name="fechas" style="width: 200px"  value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
                 <span class="btn input-group-text btn-secondary btn_calendario"   style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
-                <button id="btn-toggle" class="btn btn-secondary float-right ml-3 "><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
+                {{-- <button id="btn-toggle" class="btn btn-secondary float-right ml-3 "><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button> --}}
             </div>
         </div>
         <table id="tablarondas"  

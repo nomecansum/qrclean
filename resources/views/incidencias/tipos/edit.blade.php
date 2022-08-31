@@ -209,7 +209,7 @@
         $(this).parent().parent().find('select').select2({
             placeholder: "Todos",
             allowClear: true,
-            width: "90%",
+            @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
         });
         $(this).parent().parent().find('select').change();
     });
@@ -217,7 +217,7 @@
     $(".select2-filtro").select2({
         placeholder: "Todos",
         allowClear: true,
-        width: "90%",
+        @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
     });
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );

@@ -48,7 +48,12 @@
 <br><br>
     <div class="row" style="background-color: #fff" id="printarea" style="margin-left: 100px: margin-top:30px;">
         @foreach($puestos as $puesto)
-            <div class="text-center pb-4 pr-4 mr-0 ml-1  cont_qr" style="width: {{ $r->tam_qr }}px; display: inline-block; border: 1px solid #ccc;padding: 5px 5px 5px 5px">
+            <div class="text-center pb-4 mr-0 ml-1  cont_qr" style="width: {{ $r->tam_qr+20 }}px; display: inline-block; border: 1px solid #ccc;padding: 5px 5px 5px 5px">
+                @if(nombrepuesto($puesto)!=$puesto->cod_puesto)
+                <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr" style="color: {{$puesto->val_color}}; background-color: #fff; font-size: {{ $tam_fuente }}px">
+                    {{ $puesto->cod_puesto }}
+                </div>
+                @endif
                 <div class="mb-0 pb-0" style="">
                     <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size($r->tam_qr)->generate(config('app.url_base_scan').$puesto->token)) !!} ">
                     {{--  {{config('app.url_base_scan').$puesto->token}}  --}}

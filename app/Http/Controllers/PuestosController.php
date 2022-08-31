@@ -223,8 +223,14 @@ class PuestosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('niveles_acceso.id_cliente',Auth::user()->id_cliente);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('niveles_acceso.mca_fijo','S');
+                    }
                 } else {
                     $q->where('niveles_acceso.id_cliente',session('CL')['id_cliente']);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('niveles_acceso.mca_fijo','S');
+                    }
                 }
             })
             ->where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)
@@ -342,13 +348,12 @@ class PuestosController extends Controller
     public function update(Request $r){
         try{
             
-            
+            $r['max_horas_reservar']=time_to_dec($r->max_horas_reservar.':00','h');
             if($r->id_puesto==0){
                 $puesto=puestos::create($r->all());
             } else {
                 validar_acceso_tabla($r->id_puesto,"puestos");
-                $puesto=puestos::find($r->id_puesto);
-                $r['max_horas_reservar']=time_to_dec($r->max_horas_reservar.':00','h');
+                $puesto=puestos::find($r->id_puesto);  
                 $puesto->update($r->all());
 
             }

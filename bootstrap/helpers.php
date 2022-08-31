@@ -436,7 +436,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
                     if($user->mca_notif_email=='S'){
                         $cliente=clientes::find($user->id_cliente);
                         \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'id'=>$id], function ($m) use ($user,$subject) {
-                            if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
+                            if(config('app.env')=='local' || config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
                                 $m->to('nomecansum@gmail.com', $user->name)->subject(strip_tags($subject));
                             } else {
                                 $m->to($user->email, $user->name)->subject(strip_tags($subject));

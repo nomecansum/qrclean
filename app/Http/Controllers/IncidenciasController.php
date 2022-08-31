@@ -670,7 +670,7 @@ class IncidenciasController extends Controller
                         $to_email = $p->txt_destinos;
                         Log::info("Iniciando postprocesado MAIL de incidencia ".$inc->id_incidencia);
                         Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto,$momento) {
-                            if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
+                            if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
                                 $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
                             } else {
                                 $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
@@ -790,7 +790,7 @@ class IncidenciasController extends Controller
         //Enviamos mail al uusario abriente
         $to_email = $usuario_abriente->email;
         Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
-            if(config('app.env')=='local'){//Para que en desarrollo solo me mande los mail a mi
+            if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
                 $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
             } else {
                 $message->to(explode(';',$usuario_abriente->email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);

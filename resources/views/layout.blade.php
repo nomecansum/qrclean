@@ -51,7 +51,7 @@
     {{--  CSS Loaders  --}}
     <link href="{{ asset('/plugins/css-loaders/css/css-loaders.css') }}" rel="stylesheet">
     {{--  Datepicker  --}}
-    <link href="{{ asset('/plugins/litepicker/dist/litepicker.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/litepicker-master/dist/litepicker.min.css') }}" rel="stylesheet">
     <link href="{{ asset('/plugins/MCDatepicker/mc-calendar.min.css') }}" rel="stylesheet">
 
     @yield('styles')
@@ -228,7 +228,7 @@
     {{-- Datepickers --}}
     <script src="{{ asset('/plugins/momentjs/moment.js') }}"></script>
     <script src="{{ asset('/plugins/MCDatepicker/mc-calendar.min.js') }}"></script>
-    <script src="{{ asset('/plugins/litepicker/dist/bundle.min.js') }}"></script>
+    <script src="{{ asset('/plugins/litepicker-master/dist/bundle.min.js') }}"></script>
 
     {{-- switchery switchs deslizable --}}
     <script src="{{ asset('/plugins/switchery/switchery.min.js') }}"></script>

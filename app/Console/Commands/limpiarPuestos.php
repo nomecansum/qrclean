@@ -190,7 +190,9 @@ class limpiarPuestos extends Command
         $id_usuario_asignado=valor($parametros,"id_usuario_asignado");
         try{
             $timezone=users::find($tarea->usu_audit)->val_timezone;
-        } c
+        } catch(\Throwable $e){
+            $timezone='Europe/Madrid';
+        }
         
         if($tarea->clientes!=null){
             $cliente=explode(",",$tarea->clientes)[0];

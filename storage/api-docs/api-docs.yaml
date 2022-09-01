@@ -635,7 +635,7 @@ paths:
                 id_usuario_apertura:
                   description: 'ID de usuario que abre la incidencia'
                   type: string
-                url_detalle_incidencia:
+                url:
                   description: 'Url para acceder al detalle de la incidencia'
                   type: string
               type: object
@@ -661,6 +661,9 @@ paths:
                   id:
                     description: 'Identificador de la incidencia creada'
                     type: number
+                  url:
+                    description: 'URL de seguimiento de la incidencia'
+                    type: string
                 type: object
         400:
           description: 'Error en la peticion'

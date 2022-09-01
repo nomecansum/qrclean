@@ -50,7 +50,21 @@
 							<h2 class="card-title float-left col">{{ __('general.eventos') }}</h2>
 						</div>
                         <div class="table-responsive">
-                            <table id="tabledeps" class="table table-bordered table-striped table-condensed table-hover">
+                            <table id="tabledeps"
+                            data-toggle="table" 
+                            data-mobile-responsive="true"
+                            data-locale="es-ES"
+                            data-search="true"
+                            data-show-columns="true"
+                            data-show-toggle="true"
+                            data-show-columns-toggle-all="true"
+                            data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+                            data-page-size="50"
+                            data-pagination="true" 
+                            data-toolbar="#all_toolbar"
+                            data-buttons-class="secondary"
+                            data-show-button-text="true"
+                            >
                                 <thead>
                                     <tr>
                                         <th style="width: 1%">Id</th>

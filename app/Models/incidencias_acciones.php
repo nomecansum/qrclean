@@ -40,7 +40,8 @@ class incidencias_acciones extends Model
                   'mca_resuelve',
                   'img_attach1',
                   'img_attach2',
-                  'num_accion'
+                  'num_accion',
+                  'id_estado',
               ];
 
     /**

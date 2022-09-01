@@ -32,6 +32,7 @@ class SuccessfulLogin
         //
         
         $user=\Auth::user();
+        //dd($user);
 
         //dump("aqui en el listener");
         $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  

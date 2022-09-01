@@ -161,6 +161,11 @@
                                 <a href="{{url('/logout')}}" class="nav-link">
                                     <i class="demo-pli-unlock fs-5 me-3"></i> Logout
                                 </a>
+                                @if(session('back_id') && session('back_id')!=Auth::user()->id)
+                                    <a href="#" onclick="document.location='{{url('reback')}}'" class="nav-link text-warning">
+                                        <i class="fa-regular fa-delete-left"></i> Volver a mi sesion
+                                    </a>
+                                @endif
                             </div>
 
                         </div>

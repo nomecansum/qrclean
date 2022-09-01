@@ -1,6 +1,11 @@
 @php
     $dias=['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO','DOMINGO'];
-    $dias_semana=json_decode($dato->dias_semana);
+    try{
+        $dias_semana=json_decode($dato->dias_semana);
+    } catch(\Throwable $e){
+        $dias_semana=null;
+    }
+    
 @endphp
 <div class="card editor mb-5">
     <div class="card-header toolbar">
@@ -54,23 +59,23 @@
                 @for ($i = 1; $i < 8; $i++)
                     <div class="form-group rounded b-all text-center p-10 " style="width: 14%; margin-right: 2px" >
                         <div class="form-check pt-2">
-                            <input  name="dia[]" id="dia{{$i}}" value="{{$i}}" {{ in_array($i,$dias_semana->dia)?'checked':'' }} class="form-check-input" type="checkbox">
+                            <input  name="dia[]" id="dia{{$i}}" value="{{$i}}" {{ isset($dias_semana)&&in_array($i,$dias_semana->dia)?'checked':'' }} class="form-check-input" type="checkbox">
                             <label class="form-check-label"  for="dia{{$i}}"><b>{{$dias[$i-1]}}</b></label><br>
                         </div>
                         <div class="form-group">
                             <label for="">Inicio</label>
-                            <input type="time" name="hora_inicio[]" id="hora_inicio{{ $i }}" {{ in_array($i,$dias_semana->dia)?'':'disabled' }} class="form-control control{{ $i }}" value="{{ in_array($i,$dias_semana->dia)?$dias_semana->hora_inicio[array_search($i,$dias_semana->dia)]:'' }}">
+                            <input type="time" name="hora_inicio[]" id="hora_inicio{{ $i }}" {{ isset($dias_semana)&&in_array($i,$dias_semana->dia)?'':'disabled' }} class="form-control control{{ $i }}" value="{{ isset($dias_semana)&&in_array($i,$dias_semana->dia)?$dias_semana->hora_inicio[array_search($i,$dias_semana->dia)]:'' }}">
                         </div>
                         <div class="form-group">
                             <label for="">Fin</label>
-                            <input type="time" name="hora_fin[]" id="hora_fin{{ $i }}" {{ in_array($i,$dias_semana->dia)?'':'disabled' }} class="form-control control{{ $i }}" value="{{ in_array($i,$dias_semana->dia)?$dias_semana->hora_fin[array_search($i,$dias_semana->dia)]:'' }}">
+                            <input type="time" name="hora_fin[]" id="hora_fin{{ $i }}" {{ isset($dias_semana)&&in_array($i,$dias_semana->dia)?'':'disabled' }} class="form-control control{{ $i }}" value="{{ isset($dias_semana)&&in_array($i,$dias_semana->dia)?$dias_semana->hora_fin[array_search($i,$dias_semana->dia)]:'' }}">
                         </div>
                         <div class="form-group">
                             <label for="">Semanas</label>
-                            <select name="mod_semana[]" id="mod_semana" id="mod_semana{{ $i }}" {{ in_array($i,$dias_semana->dia)?'':'disabled' }} class="form-control control{{ $i }}">
-                                <option value="-1" {{ in_array($i,$dias_semana->dia)&&$dias_semana->mod_semana[array_search($i,$dias_semana->dia)]==-1?'selected':'' }}>Todas</option>
-                                <option value="0" {{ in_array($i,$dias_semana->dia)&&$dias_semana->mod_semana[array_search($i,$dias_semana->dia)]==0?'selected':'' }}>Pares</option>
-                                <option value="1" {{ in_array($i,$dias_semana->dia)&&$dias_semana->mod_semana[array_search($i,$dias_semana->dia)]==1?'selected':'' }}>Impares</option>
+                            <select name="mod_semana[]" id="mod_semana" id="mod_semana{{ $i }}" {{isset($dias_semana)&& in_array($i,$dias_semana->dia)?'':'disabled' }} class="form-control control{{ $i }}">
+                                <option value="-1" {{ isset($dias_semana)&&in_array($i,$dias_semana->dia)&&$dias_semana->mod_semana[array_search($i,$dias_semana->dia)]==-1?'selected':'' }}>Todas</option>
+                                <option value="0" {{ isset($dias_semana)&&in_array($i,$dias_semana->dia)&&$dias_semana->mod_semana[array_search($i,$dias_semana->dia)]==0?'selected':'' }}>Pares</option>
+                                <option value="1" {{ isset($dias_semana)&&in_array($i,$dias_semana->dia)&&$dias_semana->mod_semana[array_search($i,$dias_semana->dia)]==1?'selected':'' }}>Impares</option>
                             </select>
 
                         </div>

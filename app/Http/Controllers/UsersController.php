@@ -416,7 +416,7 @@ class UsersController extends Controller
             return redirect()->route('users.index');
         } catch (Exception $exception) {
             flash('ERROR: Ocurrio un error al eliminar el usuario '.$id.' '.$exception->getMessage())->error();
-            savebitacora('ERROR: Ocurrio un error borrando el usuario '.$users->name.' '.$exception->getMessage() ,"Usuarios","destroy","ERROR");
+            savebitacora('ERROR: Ocurrio un error borrando el usuario '.$id.' '.$exception->getMessage() ,"Usuarios","destroy","ERROR");
             return back()->withInput();
                 //->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
         }
@@ -831,12 +831,15 @@ class UsersController extends Controller
         $back_id=Auth::user()->id;
         //validar_acceso_tabla($id,"cug_usuarios");
         savebitacora("Relogin al usuario [".$id."]");
-        Auth::logout();
+        
+        //Auth::logout();
         Auth::loginUsingId($id);
         Session::forget('P');
+        Session::forget('CL');
         Session::forget('logo_cliente');
         Session::forget('logo_cliente_menu');
         Session::forget('id_cliente');
+        Session::forget('template');
 
         //session(['lang' => Auth::user()->lang]);
         session(['back_id'=>$back_id]);
@@ -900,10 +903,15 @@ class UsersController extends Controller
         if(!empty($cliente->fec_borrado))
            return response()->json(["Tu empresa se encuentra dada de baja en el sistema, para cualquier pregunta contacte  "],422);
 
-        // if($cliente && $cliente->img_logo!=''){
-        //     session(['logo_cliente' => $cliente->img_logo]);
-        // }
-        // else Session::forget('logo_cliente');
+       //Temas del usuario
+       try{
+            if($user->theme===null){
+                session()->put('template',json_decode($config_cliente->theme_name));
+            } else {
+                session()->put('template',json_decode($user->theme));
+            }
+        } catch (\Exception $e) {}
+
     
 
         savebitacora("Cambio de sesion del usuario",null);

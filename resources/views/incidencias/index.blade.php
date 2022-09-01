@@ -8,14 +8,14 @@
 @endsection
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Gestión de incidencias</h1>
+    <h1 class="page-header text-overflow pad-no">{{ $titulo_pagina }}</h1>
 @endsection
 
 @section('breadcrumb')
 <ol class="breadcrumb">
 	<li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
 	<li class="breadcrumb-item">mantenimiento</li>
-	<li class="breadcrumb-item">incidencias</li>
+	<li class="breadcrumb-item">{{ $titulo_pagina }}</li>
 	{{--  <li class="breadcrumb-item active">Editar usuario {{ !empty($users->name) ? $users->name : '' }}</li>  --}}
 </ol>
 @endsection
@@ -65,23 +65,25 @@
 				<input type="hidden" name="document" value="pantalla">
 				<input type="hidden" name="output" value="pantalla">
 				@if($mostrar_filtros==1)
-				@include('resources.combos_filtro',[$hide=['est_mark'=>1,'tip_mark'=>1],$show=['proc'=>1]])
+					@include('resources.combos_filtro',[$hide=['est_mark'=>1,'tip_mark'=>1],$show=['proc'=>1]])
 				@endif
-				<div class="row">
-					<div class=" col-md-4 text-nowrap">
-						@include('resources.combo_fechas')
-					</div>
-					<div class="col-md-3" style="padding-left: 15px">
-						<div class="form-group">
-							<label>Situacion</label>
-							<select class="form-control" id="ac" name="ac">
-									<option value="A" >Abiertas</option>
-									<option value="C" >Cerradas</option>
-									<option value="B" >Todas</option>
-							</select>
+				@if(!isset($open))
+					<div class="row">
+						<div class=" col-md-4 text-nowrap">
+							@include('resources.combo_fechas')
+						</div>
+						<div class="col-md-3" style="padding-left: 15px">
+							<div class="form-group">
+								<label>Situacion</label>
+								<select class="form-control" id="ac" name="ac">
+										<option value="A" >Abiertas</option>
+										<option value="C" >Cerradas</option>
+										<option value="B" >Todas</option>
+								</select>
+							</div>
 						</div>
 					</div>
-				</div>
+				@endif
 			</form>
 			<div class="card-body">
 				{{-- <div id="all_toolbar">
@@ -408,6 +410,9 @@
 		});
 	})
 	
+	@if(isset($open))
+		edit({{ $open }})
+	@endif
 
 	</script>
 

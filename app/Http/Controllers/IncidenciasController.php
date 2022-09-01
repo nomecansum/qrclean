@@ -161,7 +161,8 @@ class IncidenciasController extends Controller
             ->get();
         $mostrar_graficos=1;
         $mostrar_filtros=1;
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros'));
+        $titulo_pagina="Gestión de incidencias";
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina'));
     }
 
     public function mis_incidencias($f1=0,$f2=0){
@@ -212,7 +213,8 @@ class IncidenciasController extends Controller
             ->get();
         $mostrar_graficos=0;
         $mostrar_filtros=0;
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros'));
+        $titulo_pagina="Mis incidencias";
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina'));
     }
     
     //BUSCAR INCIDENCIAS
@@ -361,13 +363,59 @@ class IncidenciasController extends Controller
         $f2=Carbon::parse($f2);
         $mostrar_graficos=1;
         $mostrar_filtros=1;
+        $titulo_pagina="Ver incidencias";
 
         if ($r->wantsJson()) {
             return $incidencias;
         } else {
-            return view('incidencias.fill_tabla_incidencias',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros'));
+            return view('incidencias.fill_tabla_incidencias',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina'));
         }
         
+    }
+
+    public function show(Request $r,$id){
+        $incidencias=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','estados_incidencias.id_estado_salas as id_estado_salas','causas_cierre.des_causa')
+            ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+            ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
+            ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->where('incidencias.id_incidencia',$id)
+            ->get();
+
+        $puestos=DB::table('puestos')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where('puestos.id_puesto',$incidencias->first()->id_puesto)
+            ->orderby('edificios.des_edificio')
+            ->orderby('plantas.num_orden')
+            ->orderby('plantas.des_planta')
+            ->orderby('puestos.des_puesto')
+            ->get();
+
+        $lista_puestos=$puestos->pluck('id_puesto')->toArray();
+
+        
+        $f1=Carbon::now()->startOfmonth();
+        $f2=Carbon::now()->endOfmonth();
+        $mostrar_graficos=0;
+        $mostrar_filtros=0;
+        $open=$id;
+        $titulo_pagina=$incidencias->first()->des_incidencia;
+
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','open'));
     }
 
     //USUARIOS ABRIR INCIDENCIAS
@@ -410,6 +458,7 @@ class IncidenciasController extends Controller
             })
             ->orderby('mca_fijo')
             ->orderby('nom_cliente')
+            ->orderby('incidencias_tipos.des_tipo_incidencia')
             ->get();
         if($tipo=='embed'){
             return view('incidencias.fill_frm_incidencia',compact('puesto','tipos','referer','config'));
@@ -578,11 +627,14 @@ class IncidenciasController extends Controller
             //A ver si la accion cierra la incidencia
             if(isset($r->id_estado)){
                 $datos_estado=estados_incidencias::find($r->id_estado);
+                if($r->id_estado!=$incidencia->id_estado){
+                    $accion->id_estado=$r->id_estado;
+                }
                 if($datos_estado->mca_cierre=='S'){
                     $accion->mca_resuelve='S';
                     $incidencia->comentario_cierre=$r->des_accion;
                     $incidencia->fec_cierre=Carbon::now();
-                    $accion->id_usuario_cierre=$r->id_usuario??Auth::user()->id;
+                    $incidencia->id_usuario_cierre=$r->id_usuario??Auth::user()->id;
                     $accion_postprocesado="F";
                 }
                 $incidencia->id_estado=$r->id_estado;
@@ -634,7 +686,6 @@ class IncidenciasController extends Controller
 		}
 
 	}
-
 
     //PROCESADO DE INCIDENCIAS->ENVIARLA A TERCEROS SISTEMAS
 
@@ -833,10 +884,10 @@ class IncidenciasController extends Controller
             ->orderby('des_estado')
         ->get();
 
-        return view('incidencias.fill-form-accion',compact('id','estados'));
+        return view('incidencias.fill-form-accion',compact('id','estados','incidencia'));
     }
 
-    public function detalle_incidencia($id){
+    public function detalle_incidencia(Request $r,$id){
         validar_acceso_tabla($id,"incidencias");
         $incidencia=DB::table('incidencias')
             ->select('incidencias.*','edificios.des_edificio','plantas.des_planta','users.name','users.img_usuario','puestos.cod_puesto','puestos.des_puesto','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia')
@@ -858,7 +909,12 @@ class IncidenciasController extends Controller
             ->join('users','incidencias_acciones.id_usuario','users.id')
             ->where('id_incidencia',$id)
             ->get();
-        return view('incidencias.fill-detalle-incidencia',compact('incidencia','acciones'));
+        if(strpos($_SERVER['REQUEST_URI'],'/show/')){
+            return view('incidencias.show',compact('incidencia','acciones'));
+        } else {
+            return view('incidencias.fill-detalle-incidencia',compact('incidencia','acciones'));
+        }
+        
     }
 
 
@@ -999,6 +1055,7 @@ class IncidenciasController extends Controller
                 }
             }
         })
+        ->orderby('incidencias_tipos.des_tipo_incidencia')
         ->get();
         
         return view('incidencias.tipos.index', compact('tipos'));

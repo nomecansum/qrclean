@@ -60,6 +60,9 @@ Route::get('/terminos','HomeController@terminos');
 
 //Login en dos pasos
 Route::post('/prelogin', 'Auth\LoginController@prelogin')->name('prelogin');
+Route::get('/prelogin',function(){
+    return redirect('/login')->withErrors(['email'=>'El usuario no existe o la contraseña no es valida']);
+});
 Route::get('/logout','Auth\LoginController@logout')->name('logout');;
 
 //Login con google
@@ -154,8 +157,6 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/search',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@search'])->name('users.users.search');
         Route::get('/activar_2fa/{id}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@desactivar_2fa'])->name('users.usersactivar_2fa');
         
-        
-
         Route::get('/addplanta/{usuario}/{planta}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@addplanta'])->name('users.addplanta');
         Route::get('/delplanta/{usuario}/{planta}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@delplanta'])->name('users.delplanta');
 
@@ -183,9 +184,6 @@ Route::group(['middleware' => 'auth'], function() {
 
         Route::post('/tema','UsersController@tema_usuario');
         Route::post('/osid','UsersController@osid_usuario');
-
-        
-        
         
     });
 
@@ -375,6 +373,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/accion',['middleware'=>'permissions:["Incidencias"],["W"]','uses' => 'IncidenciasController@add_accion']);
         Route::get('/create/{puesto}','IncidenciasController@nueva_incidencia')->name('incidencias.nueva');
         Route::get('/nueva_incidencia',['middleware'=>'permissions:["Incidencias"],["C"]','uses'=>'IncidenciasController@selector_puestos'])->name('incidencias.nueva_incidencia_blanco');
+        Route::get('/show/{id}',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@show'])->name('incidencias.show');
         //Tipos de incidencia
         Route::get('/tipos',['middleware'=>'permissions:["Tipos de incidencia"],["R"]', 'uses' => 'IncidenciasController@index_tipos'])->name('incidencias_tipos.index');
         Route::post('/tipos/save',['middleware'=>'permissions:["Tipos de incidencia"],["W"]', 'uses' => 'IncidenciasController@tipos_save']);

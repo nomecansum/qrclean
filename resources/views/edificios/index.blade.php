@@ -67,7 +67,9 @@
         <div class="card-body panel-body-with-table">
             <div class="table-responsive w-100" >
 
-                <table id="tablaedificios"  data-toggle="table" data-mobile-responsive="true"
+                <table id="tablaedificios"  
+                data-toggle="table" 
+                data-mobile-responsive="true"
                 data-locale="es-ES"
                 data-search="true"
                 data-show-columns="true"

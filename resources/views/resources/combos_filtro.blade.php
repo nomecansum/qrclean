@@ -26,7 +26,8 @@
     </div>
     <div class="card-body" id="divfiltro" style="display: none" >
 @endif
-
+        
+     
         <div class="form-group col-md-12 mt-3" style="{{ ((!fullAccess() && count(clientes())==1) || (isset($hide['cli']) && $hide['cli']===1)) ? 'display: none' : ''}}">
             <label>Cliente</label>
             <div class="input-group select2-bootstrap-append">

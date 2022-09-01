@@ -5,10 +5,10 @@
 @section('breadcrumb')
 <!-- Content Header (Page header) -->
 <ol class="breadcrumb">
-    <li><a href="{{url('/')}}"><i class="demo-pli-home"></i> </a></li>
-    <li class="">Configuracion</li>
-	<li class="breadcrumb-item">Permisos</li>
-    <li class="active">secciones</li>
+    <li class="breadcrumb-item"><a href="{{url('/')}}">home </a></li>
+    <li class="breadcrumb-item">Configuracion</li>
+    <li class="breadcrumb-item">Permisos</li>
+    <li class="breadcrumb-item active">secciones</li>
 </ol>
 
 @endsection

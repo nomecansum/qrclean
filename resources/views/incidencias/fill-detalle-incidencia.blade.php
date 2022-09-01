@@ -119,6 +119,12 @@
                                     @if(isset($accion->img_attach2)  && $accion->img_attach2!='')<a class="link_imagen" href="#modal_img_accion" data-toggle="modal" data-src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" style="height: 100px"></a>@endif
                                 </div>
                             </div>
+                            @if(isset($accion->id_estado))
+                                @php
+                                    $estado = App\Models\estados_incidencias::find($accion->id_estado);
+                                @endphp
+                                <span class="ml-1" style="font-size:10px">Cambio de estado a <span style="color:{{ $estado->val_color }}"><i class="{{ $estado->val_icono }}"></i>  {{ $estado->des_estado }} </span></span>
+                            @endif
                         </div>
 
                     </div>

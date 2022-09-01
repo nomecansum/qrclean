@@ -810,9 +810,9 @@ class ReportsController extends Controller
         ->join('clientes','clientes.id_cliente','informes_programados.cod_cliente')
         ->where(function($q){
             if (!isAdmin()) {
-                $q->where('informes_programados.id_cliente',Auth::user()->id_cliente);
+                $q->where('informes_programados.cod_cliente',Auth::user()->id_cliente);
             } else {
-                $q->where('informes_programados.id_cliente',session('CL')['id_cliente']);
+                $q->where('informes_programados.cod_cliente',session('CL')['id_cliente']);
             }
         })
         ->where(function($q){

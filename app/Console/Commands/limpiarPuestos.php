@@ -188,7 +188,10 @@ class limpiarPuestos extends Command
         $id_tipo_puesto=valor($parametros,"id_tipo_puesto");
         $mca_crear_ronda_limpieza=valor($parametros,"mca_crear_ronda_limpieza");
         $id_usuario_asignado=valor($parametros,"id_usuario_asignado");
-        $timezone=users::find($tarea->usu_audit)->val_timezone;
+        try{
+            $timezone=users::find($tarea->usu_audit)->val_timezone;
+        } c
+        
         if($tarea->clientes!=null){
             $cliente=explode(",",$tarea->clientes)[0];
         } else {

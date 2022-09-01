@@ -19,7 +19,7 @@
         <label for="id_estado" class="control-label" style="text-align: left">Poner la incidencia en estado</label>
         <select class="form-control" required id="id_estado" name="id_estado">
             @foreach ($estados as $estado)
-                <option value="{{ $estado->id_estado }}" {{ $estado->mca_defecto=='S'?'selected':'' }}>
+                <option value="{{ $estado->id_estado }}" {{ $estado->id_estado==$incidencia->id_estado?'selected':'' }}>
                     {{ $estado->des_estado }}
                 </option>
             @endforeach

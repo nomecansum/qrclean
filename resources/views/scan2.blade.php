@@ -43,7 +43,7 @@
 
 @section('breadcrumb')
 <ol class="breadcrumb">
-    <li><a href="{{url('/')}}"><i class="demo-pli-home"></i> Home</a></li>
+    <li><a href="{{url('/')}}">home Home</a></li>
     {{--  <li class="active">Helper Classes</li>  --}}
 </ol>
 @endsection

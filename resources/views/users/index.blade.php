@@ -107,14 +107,20 @@
                             <label for="chktodos" class="form-check-label">Todos</label>
                         </div>
                     </div>
-                    <table id="tablausuarios"  data-toggle="table" data-mobile-responsive="true"
-                        data-locale="es-ES"
-                        data-search="true"
-                        data-show-columns="true"
-                        data-show-columns-toggle-all="true"
-                        data-buttons-class="secondary"
-                        data-show-button-text="true"
-                        data-toolbar="#all_toolbar"
+                    <table id="tablausuarios"  
+                    data-toggle="table" 
+                    data-mobile-responsive="true"
+                    data-locale="es-ES"
+                    data-search="true"
+                    data-show-columns="true"
+                    data-show-toggle="true"
+                    data-show-columns-toggle-all="true"
+                    data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+                    data-page-size="50"
+                    data-pagination="true" 
+                    data-toolbar="#all_toolbar"
+                    data-buttons-class="secondary"
+                    data-show-button-text="true"
                         >
                         <thead>
                             <tr>
@@ -315,6 +321,7 @@
 
 @section('scripts')
     <script>
+        var id_usuario_borrar;
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
         $('.menu_usuarios').addClass('active active-sub');
@@ -325,6 +332,7 @@
 
         
         function del(id){
+            id_usuario_borrar = id;
             $('#eliminar-usuario').modal('show');
         }
 
@@ -335,8 +343,8 @@
         }
 
         $('#link_borrar').click(function(){
-            console.log("{{ url('users/delete/') }}/"+$('#id_usuario_borrar').val());
-            window.open("{{ url('users/delete/') }}/"+$('#id_usuario_borrar').val(),'_self');
+            console.log("{{ url('users/delete/') }}/"+id_usuario_borrar);
+            window.open("{{ url('users/delete/') }}/"+id_usuario_borrar,'_self');
         })
 
         $('.btn_eliminar').click(function(){

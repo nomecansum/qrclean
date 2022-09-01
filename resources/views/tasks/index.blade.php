@@ -43,7 +43,21 @@
     </div>
     <div class="card-body">
 		<div class="table-responsive m-t-40">
-			<table id="myTable" class="table table-bordered table-condensed table-hover" style="width: 100%">
+			<table id="myTable"
+				data-toggle="table" 
+                data-mobile-responsive="true"
+                data-locale="es-ES"
+                data-search="true"
+                data-show-columns="true"
+                data-show-toggle="true"
+                data-show-columns-toggle-all="true"
+                data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+                data-page-size="50"
+                data-pagination="true" 
+                data-toolbar="#all_toolbar"
+                data-buttons-class="secondary"
+                data-show-button-text="true"
+				>
 				<thead>
 					<tr>
 						<th></th>
@@ -112,9 +126,9 @@
 								{!! beauty_fecha($t->fec_ult_ejecucion)!!}
 								<div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
 									<div class="btn-group btn-group pull-right ml-1" role="group">
-										<a href="javascript:void(0)" class="btn btn-xs btn-warning btn_run" data-id="{{ $t->cod_tarea }}"><i class="fas fa-play"></i> {{__('tareas.ejecutar')}}</a>
+										<a href="javascript:void(0)" class="btn btn-xs btn-warning btn_run" onclick="run({{$t->cod_tarea}},'{{$t->des_tarea}}')" data-id="{{ $t->cod_tarea }}"><i class="fas fa-play"></i> {{__('tareas.ejecutar')}}</a>
 										<a href="{{url('tasks/edit',$t->cod_tarea)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>
-										<a href="#eliminar-tarea-{{$t->cod_tarea}}" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>
+										<a href="#eliminar-tarea-{{$t->cod_tarea}}" onclick="del({{$t->cod_tarea}})" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>
 									</div>
 								</div>
 								<div class="modal fade" id="eliminar-tarea-{{$t->cod_tarea}}">
@@ -242,13 +256,15 @@
 <div class="modal fade" id="run_tarea">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<div class="modal-header"  style="justify-content: left">
-				{{-- borrar ciclo --}}
-				<h3><div class="spinner-border text-info float-left" role="status" style="margin-right: 10px; display: none" id="spin_tarea"><span class="sr-only">{{trans('strings.espere')}}...</span></div>
-					<b>Ejecutar tarea <span id="des_tarea_run"></span></b></h3>
-				
-			</div>
-			<div class="modal-body text-start" id="log_fichero" style="height: 350px; overflow: Auto">
+			<div class="modal-header">
+				<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+				<div class="spinner-border text-info float-left" role="status" style="margin-right: 10px; display: none" id="spin_tarea"><span class="sr-only">{{trans('strings.espere')}}...</span></div>
+				<h1 class="modal-title text-nowrap">Ejecutar tarea <span id="des_tarea_run"></span> </h1>
+				<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+					<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+				</button>
+			</div> 
+			<div class="modal-body text-start" id="log_fichero" style="height: 350px; overflow: Auto; font-size: 10px">
 
 			</div>
 			<div class="modal-footer">
@@ -284,23 +300,23 @@
 	
 		});
 	
-		$('.btn_run').click(function(){
+		function run(id,desc){
 			event.preventDefault();
 			event.stopPropagation();
 			$('#log_fichero').html('');
-			$('#des_tarea_run').html($(this).data('desc'));
+			$('#des_tarea_run').html(desc);
 			$('#log_fichero').html();
 			fecha_consulta=moment().utc().format('YYYY-MM-DD HH:mm:ss');
 			$('#run_tarea').modal('show');
 			$('#spin_tarea').show();
-			id_tarea=$(this).data('id');
+			id_tarea=id;
 			var lt=setInterval(() => {
 				$.get("{{url('/tasks/log_tarea') }}/"+id_tarea+"/"+fecha_consulta,function(data, textStatus, xhr){
 					$('#log_fichero').html(data);
 					$("#log_fichero").animate({ scrollTop: $('#log_fichero').prop("scrollHeight")}, 1000);
 				});
 			}, 2000);
-			$.get("{{ url('tasks/runTask') }}/"+$(this).data('id'), function(data){
+			$.get("{{ url('tasks/runTask') }}/"+id_tarea, function(data){
 				$('#spin_tarea').hide();
 				console.log('hecho, data:')
 				console.log(data);
@@ -322,10 +338,7 @@
 			$('#log_fichero').click(function(){
 				clearTimeout(ocultar);
 			});
-	
-			
-			//$('#modal_xml_actualidad').modal('show');
-		})
+		}
 	</script>
 
 @endsection

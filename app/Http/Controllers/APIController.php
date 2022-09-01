@@ -352,6 +352,8 @@ class APIController extends Controller
             $r->request->add(['url_detalle_incidencia' => $r->url_detalle_incidencia]);
             $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
             savebitacora('Crear de incidencia '.json_encode($r->all()),"API","crear_incidencia","OK"); 
+            //Le cambiamos la URL que devuelve el controller para usar en la web por la buena para la API
+            $respuesta['url']=route('incidencias.show',$respuesta['id']);
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR Creacion de incidencia '.json_encode($r->all()).' '.$e->getMessage(),"API","crear_incidencia","ERROR");

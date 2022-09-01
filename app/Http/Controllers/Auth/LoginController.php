@@ -140,8 +140,8 @@ class LoginController extends Controller
         $u=User::where(['email' => $request->email])->first();
         $email=$request->email;
         $logo=null;
-        //A ver si esta validado
-        if($u->id_cliente==null || $u->cod_nivel==null){
+        //A ver si existe y si esta validado
+        if((!isset($u))||(isset($u) && ($u->id_cliente==null || $u->cod_nivel==null))){
             return view('auth.login',compact('email'));
         } else{
             $config_cliente=DB::table('clientes')

@@ -326,7 +326,7 @@
                                         <div class="col-md-3">
 											<div class="form-group">
 												<label for="name" class="control-label">ID Externo</label>
-                                                <input class="form-control" name="id_usuario_externo" type="text" id="id_usuario_externo" value="{{ old('id_usuario_externo', optional($users)->id_usuario_externo) }}" minlength="1" maxlength="255" required="true" placeholder="Enter id_usuario_externo here...">
+                                                <input class="form-control" name="id_usuario_externo" type="text" id="id_usuario_externo" value="{{ old('id_usuario_externo', optional($users)->id_usuario_externo) }}" minlength="1" maxlength="255"  placeholder="Enter id_usuario_externo here...">
                                                 {!! $errors->first('id_usuario_externo', '<p class="help-block">:message</p>') !!}
 											</div>
 										</div>
@@ -347,7 +347,7 @@
                                         </div>
                                         <div class="form-group col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}">
                                             <label for="email" class="control-label">PlayerID</label>
-                                            <input class="form-control" name="id_onesignal" disabled type="text" id="id_onesignal" value="{{ old('id_onesignal', optional($users)->id_onesignal) }}" minlength="1" maxlength="255" required="true" placeholder="Enter PlayerID here...">
+                                            <input class="form-control" name="id_onesignal" disabled type="text" id="id_onesignal" value="{{ old('id_onesignal', optional($users)->id_onesignal) }}" minlength="1" maxlength="255" placeholder="Enter PlayerID here...">
                                             {!! $errors->first('id_onesignal', '<p class="help-block">:message</p>') !!}
                                         </div>
                                     </div>
@@ -667,9 +667,11 @@
                     </div>
                 </div>
                 <div class="form-group mt-2">
+                    @if(checkPermissions(['Usuarios'],['W']))
                     <div class="col-md-12 text-end">
                         <input class="btn btn-primary btn-lg btn_guardar" type="submit" value="Guardar">
                     </div>
+                    @endif
                 </div>
             </form>
 

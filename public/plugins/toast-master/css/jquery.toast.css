@@ -1,7 +1,7 @@
 /**
  * jQuery toast plugin created by Kamran Ahmed copyright MIT license 2014
  */
-.jq-toast-wrap { display: block; position: fixed; width: 450px;  pointer-events: none !important; margin: 0; padding: 0; padding-top: 40px; letter-spacing: normal; z-index: 19000 !important; }
+.jq-toast-wrap { display: block; position: fixed; width: 300px;  pointer-events: none !important; margin: 0; padding: 0; padding-top: 40px; letter-spacing: normal; z-index: 19000 !important; }
 .jq-toast-wrap * { margin: 0; padding: 0; }
 
 .jq-toast-wrap.bottom-left { bottom: 20px; left: 20px; }

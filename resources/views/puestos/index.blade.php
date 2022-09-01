@@ -43,7 +43,7 @@
         <div class="col-md-4 text-end">
             <div class="btn-group mr-3">
                 <div class="dropdown">
-                    <button type="button" class="btn btn-secondary dropdown-toggle p-2" data-bs-toggle="dropdown" aria-expanded="false"><i class="fad fa-poll-people pt-2" aria-hidden="true"></i> Acciones</button>
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fad fa-poll-people pt-2" aria-hidden="true"></i> Acciones</button>
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="" id="dropdown-acciones">
                         @if(checkPermissions(['Puestos'],['W']))
                             <li class="dropdown-header">Cambiar estado</li>

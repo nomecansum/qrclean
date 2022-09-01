@@ -106,8 +106,13 @@
             
         @endforeach
     </div>
+    @endforeach
+    @if($edificios->isempty())    
+
+            <i class="fas fa-exclamation-triangle"></i> El usuario no tiene asignado ningun edificio/planta en donde reservar, debe asignarle plantas en los detalles de usuario o utilizando la acción de "Asignar planta"
+    @endif
 </div>
-@endforeach
+
 @include('resources.leyenda_puestos')
 <script>
     

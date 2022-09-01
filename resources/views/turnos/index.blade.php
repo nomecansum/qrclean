@@ -51,16 +51,20 @@
 				<h3 class="card-title">Turnos</h3>
 			</div>
 			<div class="card-body">
-				<table id="tabla"  data-toggle="table" data-mobile-responsive="true"
-                    data-locale="es-ES"
-                    data-search="true"
-                    data-show-columns="true"
-                    data-show-columns-toggle-all="true"
-                    data-page-list="[5, 10, 20, 30, 40, 50]"
-                    data-page-size="50"
-                    data-pagination="true" 
-                    data-toolbar="#all_toolbar"
-					data-show-button-text="true"
+				<table id="tabla"  
+				data-toggle="table" 
+				data-mobile-responsive="true"
+				data-locale="es-ES"
+				data-search="true"
+				data-show-columns="true"
+				data-show-toggle="true"
+				data-show-columns-toggle-all="true"
+				data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+				data-page-size="50"
+				data-pagination="true" 
+				data-toolbar="#all_toolbar"
+				data-buttons-class="secondary"
+				data-show-button-text="true"
                     >
 					<thead>
 						<tr>

@@ -50,10 +50,10 @@
         </div>
         <div class="col-md-4 text-end">
             <div class="btn-group">
-                <button type="button" class="btn btn-secondary dropdown-toggle add-tooltip" data-bs-toggle="dropdown" aria-expanded="false" >
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" >
                     <i class="fad fa-poll-people pt-2" style="font-size: 20px" aria-hidden="true"></i> Acciones <i class="dropdown-caret"></i>
                 </button>
-                <ul class="dropdown-menu" id="dropdown-acciones">
+                <ul class="dropdown-menu" id="dropdown-menu-acciones">
                     <li class="dropdown-header">Atributos</li>
                     @if(checkPermissions(['Usuarios'],['W']))<li><a href="#modificar-usuario" class="btn_plantas btn_toggle_dropdown btn_search btn_modif dropdown-item" data-toggle="modal" data-tipo="M"><i class="fa-solid fa-user-pen"></i> Modificar datos de usuario</a> </li>@endif
                     @if(checkPermissions(['Usuarios'],['W']))<li><a href="#asignar-planta" class="btn_plantas btn_toggle_dropdown btn_search dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-layer-plus"></i> Asignar planta</a> </li>@endif
@@ -230,7 +230,7 @@
                     </button>
                 </div>
                 
-                <div class="modal-body" id="">
+                <div class="modal-body">
 
                     <label><span class="badge badge-primary">1</span> Seleccione fechas </label>
                     <div class="col-md-5">
@@ -416,7 +416,7 @@
                     fecdesde=moment(fecres[0],"DD/MM/YYYY").format('YYYY-MM-DD');
                     fechasta=moment(fecres[1],"DD/MM/YYYY").format('YYYY-MM-DD');
                     $('#puestos_usuario_reserva').load("{{ url('reservas/puestos_usuario') }}/"+searchIDs+'/'+fecdesde+'/'+fechasta, function(data, textStatus, xhr){
-                        console.log(data);
+                        console.log("reserva");
                         $('#comprobar_puesto_reserva').html('');
                         $('#puestos_usuario_reserva').empty();
                         $('#puestos_usuario_reserva').html(data);
@@ -570,10 +570,11 @@
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
                 return $(this).val();
             }).get(); // 
+            $('.dropdown-menu').removeClass('show');
             if(searchIDs.length==0){
                 $('.modal').modal('hide');  
                 toast_error('Error','Debe seleccionar algún usuario');
-                exit();
+                return;
             }
         })
 

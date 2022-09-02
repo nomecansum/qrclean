@@ -74,8 +74,8 @@
                                     <div class="col-md-3"><label for="des_edificio" class="control-label w-100 mt-2">Mensaje</label></div>
                                     <div class="col-md-9 text-end mt-2"><a href="#modal-param_body"  data-toggle="modal" data-target="#modal-param_body" class="btn_modal"><i class="fa-solid fa-square-question fa-2x text-info" title="Ayuda Body"></i></a></div>
                                 </div>
-                                <input class="form-control tocado" name="val_body" type="text" id="val_body" required value="{{ old('val_body', optional($tipo)->param_url) }}" maxlength="1000" placeholder="Enter val_body here...">
-                                {!! $errors->first('val_header', '<p class="help-block">:message</p>') !!}
+                                <input class="form-control tocado" name="val_body" type="text" id="val_body" required value="{{ old('val_body', optional($tipo)->val_body) }}" maxlength="1000" placeholder="Enter val_body here...">
+                                {!! $errors->first('val_body', '<p class="help-block">:message</p>') !!}
                             </div>
 
 

@@ -1076,24 +1076,41 @@ class IncidenciasController extends Controller
                     $q->orwhere('estados_incidencias.mca_fijo','S');
                 }
             })
-        ->get();
+            ->get();
         $tipos = DB::table('puestos_tipos')
-        ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
-        ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
-                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                    $q->orwhere('puestos_tipos.mca_fijo','S');
+            ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
+                } else {
+                    $q->where('puestos_tipos.id_cliente',session('CL')['id_cliente']);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('puestos_tipos.mca_fijo','S');
+                    }
                 }
-            } else {
-                $q->where('puestos_tipos.id_cliente',session('CL')['id_cliente']);
-                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-                    $q->orwhere('puestos_tipos.mca_fijo','S');
+            })
+            ->get();
+        $tipos_incidencia = DB::table('incidencias_tipos')
+            ->join('clientes','clientes.id_cliente','incidencias_tipos.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('incidencias_tipos.id_cliente',Auth::user()->id_cliente);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('incidencias_tipos.mca_fijo','S');
+                    }
+                } else {
+                    $q->where('incidencias_tipos.id_cliente',session('CL')['id_cliente']);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('incidencias_tipos.mca_fijo','S');
+                    }
                 }
-            }
-        })
-        ->get();
-        return view('incidencias.tipos.edit', compact('tipo','Clientes','id','estados','tipos'));
+            })
+            ->orderby('des_tipo_incidencia')
+            ->get();
+        return view('incidencias.tipos.edit', compact('tipo','Clientes','id','estados','tipos','tipos_incidencia'));
     }
 
     public function tipos_save(Request $r){
@@ -1154,6 +1171,7 @@ class IncidenciasController extends Controller
         $accion->tip_metodo='N';
         $accion->val_momento=$momento;
         $accion->save();
+        savebitacora('Añadida accion de postprocesado para el tipo de incidencia ['.$id.'] momento '.$momento,"Incidencias","add_postprocesado","OK");
         return;
     }
 
@@ -1168,6 +1186,7 @@ class IncidenciasController extends Controller
     public function del_fila_postprocesado($id){
         $tipo=incidencias_postprocesado::findorfail($id);
         $tipo->delete();
+        savebitacora('Borrada accion de postprocesado para el tipo de incidencia ['.$tipo->id_tipo_incidencia.'] momento '.$tipo->val_momento,"Incidencias","add_postprocesado","OK");
         return [
             'id' => $id,
         ];
@@ -1193,10 +1212,35 @@ class IncidenciasController extends Controller
         $tipo->mca_web=isset($r->mca_web)?'S':'N';
         $tipo->mca_salas=isset($r->mca_salas)?'S':'N';
         $tipo->save();
+        savebitacora('Modificada accion de postprocesado para el tipo de incidencia ['.$tipo->id_tipo_incidencia.'] momento '.$tipo->val_momento,"Incidencias","add_postprocesado","OK");
         return [
             'result'=>'OK',
             'mensaje'=>'Accion guardada con exito',
             'id' => $r->id,
+        ];
+    }
+
+    public function copiar_postprocesado(Request $r){
+        if($r->data_importar==='T'){
+            incidencias_postprocesado::where('id_tipo_incidencia',$r->tipo_destino)->delete();
+            $datos=incidencias_postprocesado::where('id_tipo_incidencia',$r->tipo_origen)->get();
+            $detalles=' TODO el postprocesado';
+        } else {
+            incidencias_postprocesado::where('id_tipo_incidencia',$r->tipo_destino)->where('val_momento',$r->momento)->delete();
+            $datos=incidencias_postprocesado::where('id_tipo_incidencia',$r->tipo_origen)->where('val_momento',$r->momento)->get();
+            savebitacora('Copiada informacion de postprocesado para la incidencia ['.$tipo->id_tipo_incidencia.'] momento '.$tipo->val_momento,"Incidencias","add_postprocesado","OK");
+            $detalles=' momento '.$r->momento;
+        }
+        foreach($datos as $dato){
+            $nuevo=$dato->replicate();
+            $nuevo->id_tipo_incidencia=$r->tipo_destino;
+            $nuevo->save();
+        }
+        savebitacora('Copiada informacion de postprocesado para el tipo de incidencia ['.$r->tipo_destino.'] desde el tipo ['.$r->tipo_origen.']: '.$detalles.' '.count($datos).' acciones copiadas',"Incidencias","copiar_postprocesado","OK");
+        return [
+            'result'=>'OK',
+            'message'=>'Postprocesado copiado '.count($datos).' acciones copiadas',
+            'id' => $r->tipo_destino,
         ];
     }
 

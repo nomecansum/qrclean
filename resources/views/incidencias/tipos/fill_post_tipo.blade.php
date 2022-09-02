@@ -132,7 +132,7 @@
             <div class="modal-body">
                 El formato de las reglas de evaluacion de la respuesta de la peticion deberá ser un unico objeto JSON con los valores requeridos<br>
                 En la etiqueta se deberá poner el nombre del campo que se actualizará en la BDD en formato <b>"tabla.campo"</b> Las tablas que se pueden actualizar son <b>puestos</b> e <b>incidencias</b><br><br>
-                El el valor se podrá poner directamente el valor deseado o poner una expresion  con el formato <b>@R:nombre_de_campo</b> de tal forma que se cogerá el campo correspondiente de la respuesta del sistema remoto<br><br>
+                El el valor se podrá poner directamente el valor deseado o poner una expresion  con el formato <b>@R:nombre_de_campo</b> de tal forma que se cogerá el campo correspondiente de la respuesta del sistema remoto. En el caso de necesitar recoger el dato de distintos niveles, debe seaprarlos por el caracter | (EJ: raiz|nivel1|nivel2|nivel3|dato)<br><br>
                 Ejemplo:<br>
 <pre>{
 "incidencias.id_incidencia_externo": "@R:id_incidencia",

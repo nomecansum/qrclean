@@ -180,7 +180,7 @@ class PuestosController extends Controller
                     $q->wherein('puestos.id_puesto',$puestos_usuario);
                 }
             })
-            ->get();
+            ->paginate(200);
         return view('puestos.fill-tabla',compact('puestos','r'));
     }
 

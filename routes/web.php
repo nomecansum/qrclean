@@ -384,6 +384,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/tipos/fila_postprocesado/delete/{id}',['middleware'=>'permissions:["Tipos de incidencia"],["W"]', 'uses' => 'IncidenciasController@del_fila_postprocesado']);
         Route::get('/tipos/fila_postprocesado/{id}/{metodo}/{momento}',['middleware'=>'permissions:["Tipos de incidencia"],["W"]', 'uses' => 'IncidenciasController@fila_postprocesado']);
         Route::post('/tipos/postprocesado/save',['middleware'=>'permissions:["Tipos de incidencia"],["W"]', 'uses' => 'IncidenciasController@save_postprocesado']);
+        Route::post('/tipos/postprocesado/copiar',['middleware'=>'permissions:["Tipos de incidencia"],["W"]', 'uses' => 'IncidenciasController@copiar_postprocesado']);
         //Causas de cierre
         Route::get('/causas',['middleware'=>'permissions:["Causas de cierre"],["R"]', 'uses' => 'IncidenciasController@index_causas'])->name('incidencias_causas.index');
         Route::post('/causas/save',['middleware'=>'permissions:["Causas de cierre"],["W"]', 'uses' => 'IncidenciasController@causas_save']);

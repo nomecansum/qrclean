@@ -10,7 +10,7 @@
                     @if($id==0)
                         Nuevo tipo de incidencia
                     @else
-                        Editar tipo de incidencia
+                        Editar tipo de incidencia @if(config('app.env')=='local') #{{$tipo->id_tipo_incidencia}} @endif
                     @endif
                 </h5>
             </div>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
                 <div class="row bg-gray mt-4">
-                    <div class="col-md-3">
+                    <div class="col-md-3 pt-3">
                         <h5>Postprocesado de la incidencia<h5>
                     </div>
                     <div class="col-md-3 ">
@@ -130,11 +130,29 @@
                                     <option value="F">Cierre</option>
                                     <option value="R">Reapertura</option>
                             </select>
-                            <a href="#nueva-incidencia" id="btn_nueva" class="btn btn-success text-white" data-toggle="modal" title="Nueva accion">
+                            <a href="#nueva-incidencia" id="btn_nueva" class="btn btn-success text-white" data-toggle="modal" title="Nueva accion" style="padding-top: 0.25rem">
                                 <i class="fa fa-plus-square pt-2"aria-hidden="true"></i>
                                 <span>Nueva</span>
                             </a>
                         </div>                        
+                    </div>
+                    <div class="col-md-2">
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group mt-2">
+                            <select class="form-control col-md-2 float-left" required id="id_incidencia_import" name="id_incidencia_import">
+                                <option value=""></option>
+                                @foreach($tipos_incidencia as $tp)
+                                    <option value="{{ $tp->id_tipo_incidencia }}">{{ $tp->des_tipo_incidencia }}</option>
+                                @endforeach
+                            </select>
+                            <a href="#nueva-incidencia" id="btn_importar" class="btn btn-secondary text-white" data-toggle="modal" title="Nueva accion" style="padding-top: 0.5rem">
+                                <i class="fa-solid fa-cloud-arrow-down"></i>
+                                <span>Importar</span>
+                            </a>
+                        </div>  
+                        
                     </div>
                     
                 </div>
@@ -153,6 +171,46 @@
             </form>
 
         </div>
+    </div>
+
+    <div class="modal fade" id="importar-post-incidencia" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form method="POST" action="{{ url('/incidencias/tipos/postprocesado/copiar') }}" accept-charset="UTF-8" class="form-horizontal form-ajax" id="frm_import_tipo">	
+            @csrf
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <input type="hidden" name="tipo_origen" id="tipo_origen">
+                        <input type="hidden" name="tipo_destino" id="tipo_destino" value="{{ $tipo->id_tipo_incidencia }}">
+                        <input type="hidden" name="momento" value="C" id="import_momento">
+                        <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                        <h1 class="modal-title text-nowrap">Importar postprocesado de incidencia</h1>
+                        <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-start">
+                        <h4>¿Que configuracion de postprocesado quiere importar?</h4>
+                        <div class="form-check mb-2">
+                            <input type="radio" name="data_importar" id="tip_importar_1" value="1" checked><label id="lbl_import_1">
+                            <label for="data_importar" class="form-check-label">
+                                Solo creacion
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input type="radio" name="data_importar" id="tip_importar_todo" value="T"><label id="lbl_import_T">
+                            <label for="tip_importar_todo" class="form-check-label">
+                                Todo el postprocesado
+                            </label>
+                        </div>
+                        <div class="alert alert-warning"><i class="fa-solid fa-triangle-exclamation"></i> Atencion! El postprocesado actual del tipo de incidencia se borrará</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-info btn_importar_post_incidencia">Importar</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 
     <script>
@@ -193,6 +251,7 @@
 
     $('#val_momento').change(function(){
         $('#divacciones').load("{{ url('/incidencias/tipos/postprocesado/'.$tipo->id_tipo_incidencia) }}/"+$('#val_momento').val());
+        $('#import_momento').val($('#val_momento').val());
     });
 
     $('#boton_submit').on('click',function(){
@@ -218,6 +277,17 @@
         placeholder: "Todos",
         allowClear: true,
         @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
+    });
+
+    $('#btn_importar').click(function(){
+        if($('#id_incidencia_import').val()==''){
+            toast_warning('No hay tipos de incidencia','Seleccione un tipo de incidencia para importar');
+        } else {
+            $('#tipo_origen').val($('#id_incidencia_import').val());
+            $('#import_momento').val($('#val_momento').val());
+            $('#importar-post-incidencia').modal('show');
+        }
+
     });
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );

@@ -68,7 +68,7 @@
                     
                     <div class="form-group col-md-2 {{ $errors->has('id_causa_externo') ? 'has-error' : '' }}">
                         <label for="id_causa_externo" class="control-label">ID Externo</label>
-                        <input class="form-control" required name="id_causa_externo" type="text" id="id_causa_externo" value="{{ old('id_causa_externo', optional($causa)->id_causa_externo) }}" maxlength="200" placeholder="Enter id_causa_externo here...">
+                        <input class="form-control" name="id_causa_externo" type="text" id="id_causa_externo" value="{{ old('id_causa_externo', optional($causa)->id_causa_externo) }}" maxlength="200" placeholder="Enter id_causa_externo here...">
                         {!! $errors->first('id_causa_externo', '<p class="help-block">:message</p>') !!}
                     </div>
                     @if(isAdmin())

@@ -47,27 +47,27 @@
                     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="" id="dropdown-acciones">
                         @if(checkPermissions(['Puestos'],['W']))
                             <li class="dropdown-header">Cambiar estado</li>
-                            <li class="dropdown-item"><a href="#" data-estado="1" class="btn_estado_check dropdown-item"><i class="fas fa-square text-success"></i> Disponible</a></li>
-                            <li class="dropdown-item"><a href="#" data-estado="2" class="btn_estado_check dropdown-item"><i class="fas fa-square text-danger"></i> Usado</a></li>
-                            @if(session('CL')['mca_limpieza']=='S')<li class="dropdown-item"><a href="#" data-estado="3" class="btn_estado_check dropdown-item"><i class="fas fa-square text-info"></i> Limpieza</a></li>@endif
-                            <li class="dropdown-item"><a href="#" data-estado="6" class="btn_estado_check dropdown-item"><i class="fas fa-square text-warning"></i> Incidencia</a></li>
-                            <li class="dropdown-item"><a href="#" data-estado="5" class="btn_estado_check dropdown-item"><i class="fas fa-square text-secondary"></i> Bloqueado</a></li>
-                            <li class="dropdown-item"><a href="#" data-estado="7" class="btn_estado_check dropdown-item"><i class="fas fa-square text-secondary"></i> No usable (encuesta)</a></li>
+                            <li><a href="#" data-estado="1" class="btn_estado_check dropdown-item"><i class="fas fa-square text-success"></i> Disponible</a></li>
+                            <li><a href="#" data-estado="2" class="btn_estado_check dropdown-item"><i class="fas fa-square text-danger"></i> Usado</a></li>
+                            @if(session('CL')['mca_limpieza']=='S')<li><a href="#" data-estado="3" class="btn_estado_check dropdown-item"><i class="fas fa-square text-info"></i> Limpieza</a></li>@endif
+                            <li><a href="#" data-estado="6" class="btn_estado_check dropdown-item"><i class="fas fa-square text-warning"></i> Incidencia</a></li>
+                            <li><a href="#" data-estado="5" class="btn_estado_check dropdown-item"><i class="fas fa-square text-secondary"></i> Bloqueado</a></li>
+                            <li><a href="#" data-estado="7" class="btn_estado_check dropdown-item"><i class="fas fa-square text-secondary"></i> No usable (encuesta)</a></li>
                         @endif
                         <li class="divider"></li>
                         <li class="dropdown-header">Atributos</li>
-                        @if(checkPermissions(['Puestos'],['W']))<li class="dropdown-item"><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
-                        @if(checkPermissions(['Puestos'],['W']))<li class="dropdown-item"><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
-                        @if(checkPermissions(['Puestos'],['W']))<li class="dropdown-item"><a href="#modificar-puesto" class="btn_modificar_puestos btn_toggle_dropdown dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-pencil"></i> Modificar puestos</a></li>@endif
-                        @if(checkPermissions(['Reservas'],['C']) && checkPermissions(['Reservas global'],['C']))<li class="dropdown-item"><a href="#modal-reservas" class="btn_crear_reservas btn_toggle_dropdown btn_modal_reserva dropdown-item" data-toggle="modal" data-tipo="C" data-accion="Crear"><i class="fad fa-calendar-alt"></i> Crear reserva</a></li>@endif
-                        @if(checkPermissions(['Reservas'],['D']) && checkPermissions(['Reservas global'],['D']))<li class="dropdown-item"><a href="#modal-reservas" class="btn_cancelar_reservas btn_toggle_dropdown btn_modal_reserva dropdown-item" data-toggle="modal" data-tipo="D" data-accion="Cancelar"><i class="fad fa-calendar-times"></i> Cancelar reservas</a></li>@endif
+                        @if(checkPermissions(['Puestos'],['W']))<li><a href="#anonimo-puesto" class="btn_anonimo btn_toggle_dropdown dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-user-secret"></i></i> Habilitar acceso anonimo</a> </li>@endif
+                        @if(checkPermissions(['Puestos'],['W']))<li><a href="#reserva-puesto" class="btn_reserva btn_toggle_dropdown dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-calendar-alt"></i> Habilitar reserva</a></li>@endif
+                        @if(checkPermissions(['Puestos'],['W']))<li><a href="#modificar-puesto" class="btn_modificar_puestos btn_toggle_dropdown dropdown-item" data-toggle="modal" data-tipo="M"><i class="fad fa-pencil"></i> Modificar puestos</a></li>@endif
+                        @if(checkPermissions(['Reservas'],['C']) && checkPermissions(['Reservas global'],['C']))<li><a href="#modal-reservas" class="btn_crear_reservas btn_toggle_dropdown btn_modal_reserva dropdown-item" data-toggle="modal" data-tipo="C" data-accion="Crear"><i class="fad fa-calendar-alt"></i> Crear reserva</a></li>@endif
+                        @if(checkPermissions(['Reservas'],['D']) && checkPermissions(['Reservas global'],['D']))<li><a href="#modal-reservas" class="btn_cancelar_reservas btn_toggle_dropdown btn_modal_reserva dropdown-item" data-toggle="modal" data-tipo="D" data-accion="Cancelar"><i class="fad fa-calendar-times"></i> Cancelar reservas</a></li>@endif
                         <li class="divider"></li>
                         <li class="dropdown-header">Acciones</li>
-                        <li class="dropdown-item"><a href="#" class="btn_qr dropdown-item"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
-                        <li class="dropdown-item"><a href="#" class="btn_export_qr dropdown-item"><i class="fad fa-file-export"></i></i> Exportar QR</a></li>
-                        @if(checkPermissions(['Rondas de limpieza'],['C']) && session('CL')['mca_limpieza']=='S')<li class="dropdown-item"><a href="#" class="btn_asignar dropdown-item" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
-                        @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li class="dropdown-item"><a href="#" class="btn_asignar dropdown-item" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
-                        @if(checkPermissions(['Puestos'],['D']))<li class="dropdown-item"><a href="#" class="btn_borrar_puestos btn_toggle_dropdown dropdown-item"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar puestos</a> </li>@endif
+                        <li><a href="#" class="btn_qr dropdown-item"><i class="fad fa-qrcode"></i> Imprimir QR</a></li>
+                        <li><a href="#" class="btn_export_qr dropdown-item"><i class="fad fa-file-export"></i></i> Exportar QR</a></li>
+                        @if(checkPermissions(['Rondas de limpieza'],['C']) && session('CL')['mca_limpieza']=='S')<li><a href="#" class="btn_asignar dropdown-item" data-tipo="L" ><i class="fad fa-broom"></i >Ronda de limpieza</a></li>@endif
+                        @if(checkPermissions(['Rondas de mantenimiento'],['C']))<li><a href="#" class="btn_asignar dropdown-item" data-tipo="M"><i class="fad fa-tools"></i> Ronda de mantenimiento</a></li>@endif
+                        @if(checkPermissions(['Puestos'],['D']))<li><a href="#" class="btn_borrar_puestos btn_toggle_dropdown dropdown-item"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar puestos</a> </li>@endif
                     </ul>
                 </div>
             </div>
@@ -846,6 +846,11 @@
         $('#hora_fin').val(values[1]);
         $('#horas_rango').html(values[0]+' - '+values[1]);
     @endif
+
+    $('.dropdown-item').click(function(){
+        console.log('show');
+        $('.dropdown-menu').show();
+    })
 
 </script>
 @endsection

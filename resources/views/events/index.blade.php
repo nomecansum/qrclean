@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Gestión de cámaras</h1>
+    <h1 class="page-header text-overflow pad-no">Eventos</h1>
 @endsection
 
 @section('styles')
@@ -89,10 +89,11 @@
                                                     <label class="custom-control-label"></label>
                                                 </div> --}}
                                                 @if($ev->mca_activa == "S")
-                                                <div class="form-check pt-2 ">
+                                                <i class="fa-solid fa-circle-check text-success fa-2x"></i>
+                                                {{-- <div class="form-check pt-2 ">
                                                     <input readonly class="form-check-input fs-4" type="checkbox" checked>
                                                     <label class="form-check-label" for="chktodos"></label>
-                                                </div>
+                                                </div> --}}
 											@endif
                                             </td>
                                             <td nowrap="nowrap">

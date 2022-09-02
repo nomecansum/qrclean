@@ -134,6 +134,8 @@
 				$('#spinner').hide();
 			});
 		});
+
+		$('#cod_cliente').trigger('change');
 	});
 
 

@@ -384,6 +384,7 @@ function randomPassword( $len = 16, $ucfirst = true, $spchar = true ){
 //Rellena en el texto pasado los comodines indicados por los corchetes con su correspondiente valor de la lista de datos. Esto es para las notificaciones de evebntos
 function comodines_texto($texto,$campos,$datos){
     preg_match_all("/\[([^\]]*)\]/", $texto, $matches);
+    
     foreach($matches[0] as $match){
         foreach($campos as $campo){
             if($match==$campo->label){

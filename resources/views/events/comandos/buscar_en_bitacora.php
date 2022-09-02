@@ -139,7 +139,7 @@ function ejecutar($evento,$output){
 
     //Construir la query
     $data=DB::table('bitacora')
-            ->select('bitacora.id_bitacora as id','bitacora.accion as texto','bitacora.id_modulo','bitacora.id_seccion','bitacora.status','clientes.nom_cliente')
+            ->select('bitacora.id_bitacora as id','bitacora.accion as texto','bitacora.id_modulo','bitacora.id_seccion','bitacora.status','clientes.nom_cliente','users.id as id_usuario','users.name')
             ->join('users','bitacora.id_usuario','users.id')
             ->join('clientes','clientes.id_cliente','users.id_cliente')
             ->where(function($q) use($evento){
@@ -164,7 +164,7 @@ function ejecutar($evento,$output){
             ->when($val_texto, function($q) use ($val_texto){
                 $q->Where('bitacora.accion', 'LIKE', "%{$val_texto}%");
             })
-            ->where('bitacora.fecha','>=',Carbon::parse($evento->fec_ult_ejecucion)->subdays(10))
+            ->where('bitacora.fecha','>=',Carbon::parse($evento->fec_ult_ejecucion))
             ->get();
     
     $lista_id=$data->pluck('id')->toArray();

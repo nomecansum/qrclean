@@ -54,7 +54,7 @@
 						</div>
 						<div class="form-grou col-md-2">
 							<label for="">Tipo</label>
-							<select class="form-control" id="val_tipo" data-placeholder="Seleccione tipo" style="width: 100%; color #000;" tabindex="-1" aria-hidden="true" name="val_tipo">
+							<select class="form-control" required id="val_tipo" data-placeholder="Seleccione tipo" style="width: 100%; color #000;" tabindex="-1" aria-hidden="true" name="val_tipo">
 								@foreach($tipos as $nivel)
 								<option {{ isset($s->val_tipo) && $nivel==$s->val_tipo ? 'selected' : '' }}  value="{{ $nivel }}">{{ $nivel }}</option>
 								@endforeach
@@ -63,7 +63,7 @@
 
 						<div class="form-group col-md-4">
 							<label for="">Grupo</label>
-							<select  name="des_grupo" class="form-control" id="des_grupo" data-placeholder="Seleccione grupo" style="width: 100%; color #000;" tabindex="-1" aria-hidden="true">
+							<select  name="des_grupo" required class="form-control" id="des_grupo" data-placeholder="Seleccione grupo" style="width: 100%; color #000;" tabindex="-1" aria-hidden="true">
 								@foreach($grupos as $nivel)
 								<option {{ isset($s->des_grupo) && $nivel->des_grupo==$s->des_grupo ? 'selected' : '' }} data-icon="{{ $nivel->icono }}"  value="{{ $nivel->des_grupo }}">{{ $nivel->des_grupo }}</option>
 								@endforeach

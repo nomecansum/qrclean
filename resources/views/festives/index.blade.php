@@ -88,20 +88,17 @@
 									{{trans('strings.festives')}} año
 								</div>
 								<div class="col-6">
-									<form action="{{url('festives/calendar-filter')}}" class="row calendar-filter" method="POST" id="frm_anio">
-										{{csrf_field()}}
-										<div class="col">
-											<select name="year" class="form-control form-control" id="cmb_anio">
-												@if(empty($minimo) && empty($maximo))
-													<option selected value="{{ Carbon\Carbon::now()->format('Y') }}">{{ Carbon\Carbon::now()->format('Y') }}</option>
-												@else
-													@for ($i = $minimo; $i <= $maximo; $i++)
-														<option {{ $i==Carbon\Carbon::now()->format('Y') ? 'selected' : '' }} value="{{$i}}">{{$i}}</option>
-													@endfor
-												@endif
-											</select>
-										</div>
-									</form>
+									<div class="col">
+										<select name="year" class="form-control form-control" id="cmb_anio">
+											@if(empty($minimo) && empty($maximo))
+												<option selected value="{{ Carbon\Carbon::now()->format('Y') }}">{{ Carbon\Carbon::now()->format('Y') }}</option>
+											@else
+												@for ($i = $minimo; $i <= $maximo; $i++)
+													<option {{ $i==Carbon\Carbon::now()->format('Y') ? 'selected' : '' }} value="{{$i}}">{{$i}}</option>
+												@endfor
+											@endif
+										</select>
+									</div>
 								</div>
 								
 							</div>
@@ -301,12 +298,10 @@ var anio = {{ Carbon\Carbon::now()->year }};
         ]
 	});
     calendar.setStyle('background');
-	$(function(){
-		$('#cmb_anio').change(function(event){
-			$('#spinner').show();
-			$('#frm_anio').submit();
-		})
-	})
+
+	$('#cmb_anio').change(function(event){
+		calendar.setYear($(this).val());
+	});
 
 
 	var checkNewCalendar = ()=>

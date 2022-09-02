@@ -45,6 +45,7 @@
                             <a href="{{url('/logout')}}" class="nav-link">
                                 <i class="demo-pli-unlock fs-5 me-3"></i> Logout
                             </a>
+                            <div class='onesignal-customlink-container'></div>
                             <div>
                                 @include('resources.combo_clientes')
                             </div>

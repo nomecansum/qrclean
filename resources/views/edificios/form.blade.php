@@ -17,7 +17,7 @@
     @endphp
     <div class="form-group col-md-3 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
         <label for="id_provincia" class="control-label">Ubicación</label>
-        <select class="form-control" id="id_provincia" name="id_provincia">
+        <select class="form-control" required id="id_provincia" name="id_provincia">
             @include('resources.combo_provincias_jerarquico')
         </select>
         {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}

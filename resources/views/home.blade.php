@@ -87,7 +87,25 @@
             window.OneSignal = window.OneSignal || [];
             OneSignal.push(function() {
                 OneSignal.init({
-                appId: "{{ env('ONESIGNAL_APP_ID') }}",
+                    appId: "{{ env('ONESIGNAL_APP_ID') }}",
+                    // Bonton de suscripcion de onesignal
+                    promptOptions: {
+                        customlink: {
+                                enabled: true, /* Required to use the Custom Link */
+                                style: "link", /* Has value of 'button' or 'link' */
+                                size: "small", /* One of 'small', 'medium', or 'large' */
+                                color: {
+                                button: '#E12D30', /* Color of the button background if style = "button" */
+                                text: '#FFFFFF', /* Color of the prompt's text */
+                            },
+                                text: {
+                                subscribe: "Subscribe to push", /* Prompt's text when not subscribed */
+                                unsubscribe: "Unsubscribe push", /* Prompt's text when subscribed */
+                                explanation: "Get updates from all sorts of things that matter to you", /* Optional text appearing before the prompt button */
+                            },
+                            unsubscribeEnabled: true, /* Controls whether the prompt is visible after subscription */
+                        }
+                    }
                 });
                 OneSignal.setExternalUserId("{{Auth::user()->id}}");
                 OneSignal.sendTags({"cliente": "{{Auth::user()->id_cliente}}"});

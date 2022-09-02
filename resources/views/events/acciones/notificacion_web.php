@@ -64,6 +64,7 @@ $func_accion = function($accion, $resultado, $campos,$id) {
 
     $datos = $resultado->where('id', $id)->first();
 
+
     foreach(valor($param_accion, "usuarios") as $u){
         insertar_notificacion_web($u,valor($param_accion, "id_tipo_notificacion"),comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos),0);
     }

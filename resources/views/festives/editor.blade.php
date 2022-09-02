@@ -10,7 +10,6 @@
         </div>
     </div>
     <div class="card-body collapse show">
-
         <form  @if($fes->cod_festivo!=0) action="{{url('festives/update',$fes->cod_festivo)}}" @else action="{{url('festives/save')}}"  @endif method="POST" class="form-ajax formfestivo">
             <div class="row">
                 <input type="hidden" name="id" value="{{$fes->cod_festivo}}">
@@ -173,7 +172,12 @@
     $(".select2").select2();
 
     $(function(){
-        $('#cod_cliente').trigger('change');
+        $('#cod_cliente').trigger('change', function(){
+            $('#cod_region').val({!!  js_array($regiones_festivo)  !!}).trigger('change');
+            $('#cod_provincia').val({!! js_array($prov_festivo) !!}).trigger('change');
+            $('#cod_centro').val({!! js_array($centros_festivo) !!}).trigger('change');
+        });
+        
     })
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );

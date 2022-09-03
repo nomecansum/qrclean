@@ -35,6 +35,7 @@
                     <input type="hidden" name="tags" value="" id="tags">
                     <input type="hidden" name="id_cliente" value="{{ Auth::user()->id_cliente }}">
                     <input type="hidden" name="token" value="{{ $puesto->id_puesto!=0?$puesto->token:Illuminate\Support\Str::random(50) }}">
+                    <input type="hidden" name="val_color" value="{{ $puesto->val_color }}" id="ed_val_color">
 
                     {{csrf_field()}}
                     <div class="form-group col-md-2">
@@ -56,12 +57,12 @@
                     </div>
                     <div class="col-md-1">
                         <label for="val_color">Color</label><br>
-                        <input type="color" autocomplete="off" name="val_color" id="val_color"  class="form-control" value="{{$puesto->id_puesto==0?App\Classes\RandomColor::one(['luminosity' => 'bright']):$puesto->val_color??''}}" />
+                        <input type="color" autocomplete="off" name="sel_color" id="sel_color"  class="form-control" value="{{$puesto->id_puesto==0?App\Classes\RandomColor::one(['luminosity' => 'bright']):$puesto->val_color??''}}" />
                     </div>
                     <div class="col-md-1">
                         <div class="form-group">
                             <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
+                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" @desktop data-cols="20" @elsedesktop data-cols="20" @enddesktop data-search-text="Buscar..."></button>
                         </div>
                     </div>
                     @if(session('CL')['mca_reserva_horas']=='S')
@@ -281,7 +282,11 @@
      document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
     $('#val_icono').iconpicker({
+        @if(isset($puesto->val_icono))
         icon:'{{$puesto->val_icono??''}}'
+        @else
+        icon: 'none'
+        @endif
     });
 
     $('#id_edificio').change(function(){
@@ -356,6 +361,10 @@
         var fileName = e.target.files[0].name;
         $(this).next('label').html(fileName);
         //$('.custom-file-label').html(fileName);
+    });
+
+    $('#sel_color').change(function(){
+        $('#ed_val_color').val($(this).val());
     });
 
 

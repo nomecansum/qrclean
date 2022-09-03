@@ -45,10 +45,10 @@
                             <tr>
                                 <th style="width: 10px" class="no-sort"  data-switchable="false"></th>
                                 <th style="width: 20px" class="no-sort"  data-switchable="false"></th>
-                                
+                                <th data-sortable="true">Puesto</th>
                                 <th data-sortable="true" @if(isMobile()) data-visible="false" @endif>Edificio</th>
                                 <th data-sortable="true" @if(isMobile()) data-visible="false" @endif>Planta</th>
-                                <th data-sortable="true">Puesto</th>
+                                
                                 <th data-sortable="true">Alias</th>
                                 {{-- <th data-sortable="true" title="Acceso anonimo permitido en el puesto" style="width: 20px"  @if(isMobile()) data-visible="false" @endif>Anonimo</th> --}}
                                 {{-- <th data-sortable="true" title="Reserva permitida en el puesto" @if(isMobile()) data-visible="false" @endif>Reserva</th> --}}
@@ -68,20 +68,22 @@
                                 </td>
                                 
                                 <td class="thumb text-center" data-id="">
-                                    @isset($puesto->icono_tipo)
-                                        <i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i>
+                                    @if(isset($puesto->val_icono))
+                                        <i class="{{ $puesto->val_icono }} fa-2x"  @if(isset($puesto->val_color))style="color: {{ $puesto->val_color }}" @else style="color: {{ $puesto->color_tipo }}"  @endif></i>
+                                    @else
+                                        <i class="{{ $puesto->icono_tipo }} fa-2x" @if(isset($puesto->val_color))style="color: {{ $puesto->val_color }}" @else style="color: {{ $puesto->color_tipo }}"  @endif></i>
                                     @endisset
                                 </td>
-                                
-                                <td class="td" data-id="">{{ $puesto->des_edificio }}</td>
-                                <td class="td" data-id="">{{$puesto->des_planta}}</td>
                                 <td class="td" data-id="">
-                                    <div class="m-0 rounded pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
+                                    <div class="m-0 badge pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
                                         {{ $puesto->cod_puesto }}
                                     </div>
                                 </td>
+                                <td class="td" data-id="">{{ $puesto->des_edificio }}</td>
+                                <td class="td" data-id="">{{$puesto->des_planta}}</td>
+                                
                                 <td class="td" data-id="">
-                                    <div class="m-0 rounded pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
+                                    <div class="m-0 badge pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
                                         {{ nombrepuesto($puesto) }}
                                     </div>
                                 </td>
@@ -92,28 +94,28 @@
                                     @if($puesto->mca_incidencia=='N')
                                         @switch($puesto->id_estado)
                                             @case(1)
-                                                <div class="bg-success rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="badge bg-success rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @case(2)
-                                                <div class="bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="badge bg-danger rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @case(3)
-                                                <div class="bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="badge bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break     
                                             @case(4)
-                                                <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="badge bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @case(5)
-                                                <div class="bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="badge bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @case(7)
-                                                <div class="bg-white rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
+                                                <div class="badge bg-white rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
                                             @default
                                         @endswitch
                                         {{ $puesto->des_estado }}
                                     @else
-                                        <div class="bg-warning rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;"><i class="fad fa-exclamation-triangle"></i>
+                                        <div class="badge bg-warning rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;"><i class="fad fa-exclamation-triangle"></i>
                                         Incidencia
                                     @endif
                                     

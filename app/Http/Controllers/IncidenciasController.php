@@ -514,6 +514,9 @@ class IncidenciasController extends Controller
         $data=$this->getDataincidencia($r);
         $puesto=puestos::find($r->id_puesto);
         $procedencia=$data['procedencia']??'web';
+        if(isset($r->referer) && $r->referer=='scan'){
+            $procedencia=$r->referer;
+        }
         $tipo=incidencias_tipos::find($r->id_tipo_incidencia);
         try{     
             if(isset($r->adjuntos) and is_array($r->adjuntos)){
@@ -1211,6 +1214,7 @@ class IncidenciasController extends Controller
         $tipo->mca_api=isset($r->mca_api)?'S':'N';
         $tipo->mca_web=isset($r->mca_web)?'S':'N';
         $tipo->mca_salas=isset($r->mca_salas)?'S':'N';
+        $tipo->mca_scan=isset($r->mca_scan)?'S':'N';
         $tipo->save();
         savebitacora('Modificada accion de postprocesado para el tipo de incidencia ['.$tipo->id_tipo_incidencia.'] momento '.$tipo->val_momento,"Incidencias","add_postprocesado","OK");
         return [

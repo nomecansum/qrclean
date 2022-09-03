@@ -86,10 +86,7 @@
     <div id="editorCAM" class="mt-2">
 
     </div>
-    <script>
-        left_toolbar=300;
-        top_toolbar=16;
-    </script>
+
     
     
     <div id="myFilter">
@@ -322,6 +319,7 @@
                 
                 <div class="modal-body" style="height: 250px">
                     <input type="hidden" id="listaID">
+                    <input type="hidden" id="tip_ronda">
                     Crear ronda de <span class="tipo_ronda"></span> para <span id="cuenta_puestos_limpieza"></span> puestos.
                     <br><br>
                     <div class="form-group">

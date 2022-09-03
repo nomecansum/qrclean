@@ -44,6 +44,7 @@ class incidencias_postprocesado extends Model
                   'mca_api',
                   'mca_web',
                   'mca_salas',
+                  'mca_scan',
                   'val_momento'
               ];
 

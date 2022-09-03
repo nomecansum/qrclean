@@ -15,38 +15,23 @@
 @endsection
 
 @section('content')
-@php
 
-@endphp
-    nueva
-    {{-- <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4 text-center">
-            @if(isset($puesto))
-            <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" style="width: 13vw" alt="" onerror="this.src='{{ url('/img/logo.png') }}';">
-            <h2>{{ $puesto->nom_cliente }}</h2>
-            @endif
-        </div>
-        <div class="col-md-4"></div>
-    </div> --}}
-    <div class="row" id="div_respuesta">
-        <div class="col-md-3"></div>
-        <div class="col-md-6 text-3x text-center rounded">
-            
-        </div>
-        <div class="col-md-3"></div>
+<div class="row" id="div_respuesta">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-3x text-center rounded">
+        
     </div>
-    
-    @include('incidencias.fill_frm_incidencia')
+    <div class="col-md-3"></div>
+</div>
+<script type="text/javascript"  src="{{url('/plugins/dropzone/dropzone.js')}}"></script>
+@include('incidencias.fill_frm_incidencia')
 
-    
-   
 
 @endsection
 
 
-@section('scripts')
-    <script type="text/javascript"  src="{{url('/plugins/dropzone/dropzone.js')}}"></script>
+@section('scripts2')
+    
     <script>
 
         $('input[type="file"]').change(function(e){
@@ -61,6 +46,12 @@
         window.Laravel = {!! json_encode([
             'csrfToken' => csrf_token(),
         ]) !!};
+
+        $('#btn_guardar').click(function(){
+            $('#spinner').show();
+            @if(config('app.env')!="local") $('#btn_guardar').hide(); @endif
+            $('#incidencia_form').submit();
+        });
 
         Dropzone.options.dZUpload= {
             url: '{{ url('/incidencias/upload_imagen/') }}',

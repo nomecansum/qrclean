@@ -21,9 +21,6 @@
 @endsection
 
 @section('content')
-@php
-    //dd($incidencias);
-@endphp
 <script type="text/javascript"  src="{{url('/plugins/dropzone/dropzone.js')}}"></script>
 <script src="{{url('plugins')}}/amcharts4/core.js"></script>
 <script src="{{url('plugins')}}/amcharts4/charts.js"></script>
@@ -93,7 +90,9 @@
 						<button id="btn-toggle" class="btn btn-secondary float-right ml-3 add-tooltip" title="Cambiar vista tabla/tarjetas"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
 					</div>
 				</div> --}}
-				<table id="tabla"  data-toggle="table" data-mobile-responsive="true"
+				<table id="tabla"  
+					data-toggle="table" 
+					data-mobile-responsive="true"
 					data-locale="es-ES"
 					data-search="true"
 					data-show-columns="true"
@@ -114,7 +113,6 @@
 							<th data-sortable="true">Planta</th>
 							<th data-sortable="true">Fecha</th>
 							<th data-sortable="true">Situacion</th>
-							
 							<th style="width: 30%" data-sortable="true">Incidencia</th>
 						</tr>
 					</thead>
@@ -403,7 +401,6 @@
 	})
 
 	$('#id_puesto').change(function(e){
-		//window.open("{{ url('incidencias/create') }}/"+$('#id_puesto').val(),'_self');
 		$('#editorCAM').load("{{ url('incidencias/create') }}/"+$('#id_puesto').val()+'/embed', function(){
 			animateCSS('#editorCAM','bounceInRight');
 			$('.modal').modal('hide');

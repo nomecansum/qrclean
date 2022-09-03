@@ -56,6 +56,9 @@ class PuestosController extends Controller
                     $q->wherein('puestos.id_puesto',$puestos_usuario);
                 }
             })
+            ->orderby('edificios.id_edificio')
+            ->orderby('plantas.id_planta')
+            ->orderby('puestos.cod_puesto')
             ->paginate(50);
 
 
@@ -180,6 +183,9 @@ class PuestosController extends Controller
                     $q->wherein('puestos.id_puesto',$puestos_usuario);
                 }
             })
+            ->orderby('edificios.id_edificio')
+            ->orderby('plantas.id_planta')
+            ->orderby('puestos.cod_puesto')
             ->paginate(200);
         return view('puestos.fill-tabla',compact('puestos','r'));
     }
@@ -685,7 +691,7 @@ class PuestosController extends Controller
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
-            ->orderby('puestos.des_puesto')
+            ->orderby('puestos.cod_puesto')
             ->get();
 
         $edificios=DB::table('edificios')

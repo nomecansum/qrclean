@@ -96,19 +96,25 @@
                     <div class="col-md-2 mt-2">
                         <b>Procedencia<br> (aplica en)</b>
                     </div>
-                    <div class="col-md-3 mt-1">
+                    <div class="col-md-2 mt-1">
                         <div class="form-check pt-2">
                             <input name="mca_web"  id="mca_web{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_web)&&$tipo->mca_web=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
                             <label class="form-check-label"  for="mca_web{{$tipo->id_proceso}}">WEB</label>
                         </div>
                     </div>
-                    <div class="col-md-3 mt-1">
+                    <div class="col-md-2 mt-1">
                         <div class="form-check pt-2">
                             <input  name="mca_api"  id="mca_api{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_api)&&$tipo->mca_api=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
                             <label class="form-check-label"  for="mca_api{{$tipo->id_proceso}}">API</label>
                         </div>
                     </div>
-                    <div class="col-md-3 mt-1">
+                    <div class="col-md-2 mt-1">
+                        <div class="form-check pt-2">
+                            <input  name="mca_scan"  id="mca_scan{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_scan)&&$tipo->mca_scan=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
+                            <label class="form-check-label"  for="mca_scan{{$tipo->id_proceso}}">SCAN</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mt-1">
                         <div class="form-check pt-2">
                             <input  name="mca_salas"  id="mca_salas{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_salas)&&$tipo->mca_salas=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
                             <label class="form-check-label" for="mca_salas{{$tipo->id_proceso}}">SALAS</label>

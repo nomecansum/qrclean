@@ -89,7 +89,7 @@
                 <li class="nav-item has-sub parametrizacion">
                     <a href="#" class="mininav-toggle nav-link">
                         <i class="fa-light fa-browser fs-5 me-2"></i>
-                        @if(checkPermissions(['Parametrizacion'],['R']))<span class="nav-label">Mi oficina</span> @endif
+                        <span class="nav-label">Mi oficina</span>
                     </a>
                     
                     <!--Submenu-->

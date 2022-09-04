@@ -1154,7 +1154,7 @@ function lista_departamentos($tipo, $id, $r = null){
         foreach($dep as $d){
             if($d->cod_departamento_padre==$padre){
                 $nodo= new \StdClass();
-                $nodo=(object) ["cod_departamento"=>$d->cod_departamento,"nom_departamento"=>$d->nom_departamento,"num_nivel"=>$d->num_nivel,"cod_padre"=>$d->cod_departamento_padre,"des_centro"=>"","empleados"=>$d->empleados,"nom_cliente"=>$d->nom_cliente,"cod_cliente"=>$d->cod_cliente,"img_logo"=>$d->img_logo];
+                $nodo=(object) ["cod_departamento"=>$d->cod_departamento,"nom_departamento"=>$d->nom_departamento,"num_nivel"=>$d->num_nivel,"cod_padre"=>$d->cod_departamento_padre,"des_centro"=>"","empleados"=>$d->empleados,"nom_cliente"=>$d->nom_cliente,"cod_cliente"=>$d->cod_cliente];
                 $arr_dep[]=$nodo;
                 pintarhijos($dep,$d->cod_departamento);
             }

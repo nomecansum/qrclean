@@ -763,7 +763,11 @@ class UsersController extends Controller
                 case 'add':
                     foreach($r->id_usuario as $user){
                         $u=users::find($user);
-                        $tipos=explode(",",$u->tipos_puesto_admitidos??[]);
+                        try{
+                            $tipos=explode(",",$u->tipos_puesto_admitidos??[]);
+                        } catch(\Throwable $e){
+                            $tipos=[];
+                        }
                         $tipos=array_unique(array_merge($tipos,$r->tipos_puesto_admitidos));
                         $u->tipos_puesto_admitidos=implode(",",$tipos);
                         $u->save();
@@ -772,7 +776,11 @@ class UsersController extends Controller
                 case 'del':
                     foreach($r->id_usuario as $user){
                         $u=users::find($user);
-                        $tipos=explode(",",$u->tipos_puesto_admitidos??[]);
+                        try{
+                            $tipos=explode(",",$u->tipos_puesto_admitidos??[]);
+                        } catch(\Throwable $e){
+                            $tipos=[];
+                        }
                         foreach($r->tipos_puesto_admitidos as $t){
                             foreach (array_keys($tipos, $t) as $key) {
                                 unset($tipos[$key]);

@@ -43,7 +43,7 @@ if(!isset($id_check))
                 document.getElementById('panel{{ $e->id_edificio }}').display='none';
             </script>
             @endif
-            <table id="tablapuestos{{ $e->id_edificio }}" class="tabla"  
+            <table id="tablapuestos{{ $e->id_edificio }}" class="tabla w-100 table-responsive"  
                 {{-- data-toggle="table" 
                 data-mobile-responsive="true" 
                 onclick="tabla_click()"
@@ -100,11 +100,10 @@ if(!isset($id_check))
                     @endphp
                     {{-- <table id="tabla" class="table table-condensed table-hover  table-responsive-lg table-vcenter"> --}}
                         <tr class="font-bold ocultable" data-fila="{{ $cuenta_fila }}" data-tabla="tablapuestos{{ $e->id_edificio }}">
-                            @if(isset($checks) && $checks==1)<td></td>@endif
-                            <td>{{ $cuenta_fila }}</td>
+                            <td></td>
                             <td>Puesto</td>
                             <td>Tipo</td>
-                            <td>Estado</td>
+                            <td class="text-center">Estado</td>
                             <td>Ocupado por</td>
                             <td>Fecha</td>
                             <td>Reservado por</td>
@@ -150,19 +149,19 @@ if(!isset($id_check))
                                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
                             @endphp
                             <tr  id="puesto{{ $puesto->id_puesto }}" title="{!!  nombrepuesto($puesto)." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}"  data-planta="{{ $value }}" data-fila="{{ $cuenta_fila }}">
-                                @if(isset($checks) && $checks==1)
-                                <td>
-                                    {{-- Mostrar checkbox para seleccionar los puestos --}}
-                                        <div>
-                                            <input type="checkbox" class="form-control chkpuesto magic-checkbox float-right" name="lista_id[]" data-id="{{ $puesto->id_puesto }}" id="chkp{{ $puesto->id_puesto }}" data-idedificio="{{ $puesto->id_edificio }}" data-idplanta="{{$puesto->id_planta}}" value="{{ $puesto->id_puesto }}" {{ isset($puestos_check) && array_search($puesto->id_puesto,$puestos_check)?'checked':'' }}>
-                                            <label class="custom-control-label"   for="chkp{{ $puesto->id_puesto }}"></label>
-                                        </div>
-                                </td>
-                                @endif
+
                                 <td   style="color: {{ $cuadradito['font_color'] }};">
-                                    @include('resources.adornos_iconos_puesto')
+                                    @if(isset($puesto->val_icono))
+                                        <i class="{{ $puesto->val_icono }} fa-2x"  @if(isset($puesto->val_color))style="color: {{ $puesto->val_color }}" @else style="color: {{ $puesto->color_tipo }}"  @endif></i>
+                                    @else
+                                        <i class="{{ $puesto->icono_tipo }} fa-2x" @if(isset($puesto->val_color))style="color: {{ $puesto->val_color }}" @else style="color: {{ $puesto->color_tipo }}"  @endif></i>
+                                    @endisset
                                 </td>
-                                <td>@if(config('app.env')=='local')[#{{ $puesto->id_puesto }}]@endif {{ $puesto->cod_puesto }}</td>
+                                <td>
+                                    <div class="m-0 badge pl-1e text-start"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
+                                        {{ $puesto->cod_puesto }}
+                                    </div>
+                                </td>
                                 <td>{{ $puesto->des_tipo_puesto }}</td>
                                 <td>
                                     @if($puesto->mca_incidencia=='N')

@@ -76,3 +76,4 @@
         No hay plano de la planta
     </div>
 @endif
+

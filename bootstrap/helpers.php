@@ -1170,7 +1170,9 @@ function lista_departamentos($tipo, $id, $r = null){
     'departamentos.nom_departamento',
     'clientes.nom_cliente',
     'departamentos.cod_departamento_padre',
-    'departamentos.num_nivel')
+    'departamentos.num_nivel',
+    'clientes.img_logo',
+    'clientes.id_cliente')
     ->orderby('clientes.id_cliente')
     ->orderby('departamentos.nom_departamento');
 

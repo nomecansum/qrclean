@@ -98,7 +98,11 @@
             </div>
             
         </div>
-   
+        @if(isset($puestos_mostrar) && count($puestos_mostrar)==0)
+            <div class="col-md-12 alert alert-warning">
+                No hay informacion para mostrar
+            </div>
+        @endif
         @foreach ($edificios as $e)
         <div class="card">
             <div class="card-header bg-gray-dark">

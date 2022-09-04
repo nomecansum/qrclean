@@ -8,7 +8,7 @@
 @endphp
 
 
-<div class="card">
+<div class="card mt-3">
     <div class="card-header">
         <h3 class="card-title">Estado {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
     </div>
@@ -33,7 +33,7 @@
         am4core.ready(function() {
         // Themes begin
         am4core.useTheme(am4themes_animated);
-        //am4core.useTheme(am4themes_kelly);
+        am4core.useTheme(am4themes_kelly);
 
         // Themes end
         // Create chart instance

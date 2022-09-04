@@ -8,7 +8,7 @@
     $asignado_otroperfil= $puestos_usu['asignado_otroperfil'];
 @endphp
 @if(isset($mispuestos))
-<div class="card">
+<div class="card mt-3">
     <div class="card-header">
         <div class="card-title"><h2>{{ Carbon\Carbon::now()->locale('es')->isoformat('LLLL') }}</h2></div>
         {{--  ('% %d de %B %Y')  --}}

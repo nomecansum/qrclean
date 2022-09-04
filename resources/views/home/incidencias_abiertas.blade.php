@@ -23,7 +23,7 @@
         ->get();
         
 @endphp
-<div class="card">
+<div class="card mt-3">
     <div class="card-header">
         <h3 class="card-title"><span class="font-bold fs-2">{{ $incidencias->count() }}</span> Incidencias abiertas a {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
     </div>

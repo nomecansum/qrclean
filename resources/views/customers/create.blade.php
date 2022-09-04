@@ -161,7 +161,18 @@
 									<label class="form-check-label"  for="mca_mostrar_datos_fijos">Mostrar datos fijos</label>
 								</div>
 							</div>
-							
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input name="mca_incidencia_reserva"  id="mca_incidencia_reserva" value="S" {{ isset($config->mca_incidencia_reserva)&&$config->mca_incidencia_reserva=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label"  for="mca_incidencia_reserva">Reserva con incidencia</label>
+								</div>
+							</div>
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input name="mca_incidencia_scan"  id="mca_incidencia_scan" value="S" {{ isset($config->mca_incidencia_scan)&&$config->mca_incidencia_scan=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label"  for="mca_incidencia_scan">Mostrar incidencia al escanear</label>
+								</div>
+							</div>
 							
 						</div>
 

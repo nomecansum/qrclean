@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row mt-3">
     @if(checkPermissions(['Scan acceso'],['R']))
     <div class="col-md-6 text-center mb-2">
         <a class="btn btn-lg btn-primary fs-2 rounded" href="{{ url('/scan_usuario/') }} "><i class="fad fa-qrcode "></i> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Scan &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>

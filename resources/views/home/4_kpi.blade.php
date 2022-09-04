@@ -49,56 +49,56 @@
     //Datos de donut chart   
 
 @endphp
-<div class="row">
-    <div class="col-md-3">
-        <div class="card panel-purple panel-colorful media middle pad-all">
-            <div class="media-left">
-                <div class="pad-hor">
+<div class="row mt-3">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card bg-purple text-white mb-3 mb-xl-3">
+            <div class="card-body py-3 d-flex align-items-stretch">
+                <div class="d-flex align-items-center justify-content-center flex-shrink-0 rounded-start">
                     <i class="fad fa-building fa-2x"></i>
                 </div>
-            </div>
-            <div class="media-body">
-                <p class="text-3x mar-no text-semibold">{{ $edificios->count() }}</p>
-                <p class="mar-no  fs-2">Edificios</p>
+                <div class="flex-grow-1 ms-3">
+                    <h5 class="h2 mb-0">{{ $edificios->count() }}</h5>
+                    <p class="mb-0">Edificios</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card panel-info panel-colorful media middle pad-all">
-            <div class="media-left">
-                <div class="pad-hor">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card bg-cyan text-white mb-3 mb-xl-3">
+            <div class="card-body py-3 d-flex align-items-stretch">
+                <div class="d-flex align-items-center justify-content-center flex-shrink-0 rounded-start">
                     <i class="fad fa-layer-group fa-2x"></i>
                 </div>
-            </div>
-            <div class="media-body">
-                <p class="text-3x mar-no text-semibold">{{ $plantas->count() }}</p>
-                <p class="mar-no  fs-2">Plantas</p>
+                <div class="flex-grow-1 ms-3">
+                    <h5 class="h2 mb-0">{{ $plantas->count() }}</h5>
+                    <p class="mb-0">Plantas</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card panel-secondary panel-colorful media middle pad-all">
-            <div class="media-left">
-                <div class="pad-hor">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card bg-pink text-white mb-3 mb-xl-3">
+            <div class="card-body py-3 d-flex align-items-stretch">
+                <div class="d-flex align-items-center justify-content-center flex-shrink-0 rounded-start">
                     <i class="fad fa-desktop-alt fa-2x"></i>
                 </div>
-            </div>
-            <div class="media-body">
-                <p class="text-3x mar-no text-semibold">{{ $puestos->count() }}</p>
-                <p class="mar-no  fs-2">Puestos</p>
+                <div class="flex-grow-1 ms-3">
+                    <h5 class="h2 mb-0">{{ $puestos->count() }}</h5>
+                    <p class="mb-0">Puestos</p>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card panel-{{ color_porcentaje($pct_completado) }} panel-colorful media middle pad-all">
-            <div class="media-left">
-                <div class="pad-hor">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card bg-{{ color_porcentaje($pct_completado) }} text-white mb-3 mb-xl-3">
+            <div class="card-body py-3 d-flex align-items-stretch">
+                <div class="d-flex align-items-center justify-content-center flex-shrink-0 rounded-start">
                     <i class="fad fa-check fa-2x"></i>
                 </div>
-            </div>
-            <div class="media-body">
-                <p class="text-3x mar-no text-semibold ">{{ round($pct_completado) }}%   </p>
-                <p class="mar-no fs-2">Operativos</p>
+                <div class="flex-grow-1 ms-3">
+                    <h5 class="h2 mb-0">{{ round($pct_completado) }}%</h5>
+                    <p class="mb-0">Operativos</p>
+                </div>
             </div>
         </div>
     </div>

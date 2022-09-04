@@ -262,6 +262,7 @@ class PlantasController extends Controller
         $planta->factor_puestoh=$r->factor_puestoh;
         $planta->factor_puestor=$r->factor_puestor;
         $planta->factor_puestob=$r->factor_puestob;
+        $planta->factor_grid=$r->factor_grid;
         $planta->factor_letra=$r->factor_letra;
         $planta->save();
         savebitacora('Distribucion de puestos en  '.$planta->des_planta. ' actualizada',"Plantas","puestos_save","OK");
@@ -298,6 +299,7 @@ class PlantasController extends Controller
         $planta->zonas=$r->json_zonas;
         $planta->width=$r->width;
         $planta->height=$r->height;
+        $planta->factor_zoom=$r->factor_zoom;
         $planta->save();
 
         $zonas=json_decode($planta->zonas,true);

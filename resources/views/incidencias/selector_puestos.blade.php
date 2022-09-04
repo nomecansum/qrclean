@@ -42,7 +42,7 @@
                             @php $planta=$puesto->id_planta @endphp
                         @endif
                         <option value="{{ $puesto->id_puesto }}" >
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ nombrepuesto($puesto) }}
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $puesto->cod_puesto }}
                         </option>
                     @endforeach
                 </select>

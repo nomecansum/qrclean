@@ -36,7 +36,7 @@ try{
         width: {{ $width }}px; 
         height: {{ $height }}px;
         background-image: url('{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}');
-        zoom: 80%;
+        zoom: {{ $plantas->factor_zoom }}%;
     }
     .grid-stack {
         background: {{ $bg_gridstack  }};
@@ -111,6 +111,7 @@ try{
                             <input type="hidden" name="id_planta" value="{{ $plantas->id_planta }}">
                             <input type="hidden" name="width" value="{{ $width }}">
                             <input type="hidden" name="height" value="{{ $height }}">
+                            <input type="hidden" name="factor_zoom" id="factor_zoom" value="{{ $plantas->factor_zoom }}">
                             <div class="row">
                                 <div class="col-md-1 text-end">
                                     <div>
@@ -132,7 +133,7 @@ try{
                                 <div class="col-md-2" class="row b-all"  style="margin-top: 30px">
                                     <label class="control-label float-left mr-2">zoom</label>
                                     <i class="fa fa-minus-square float-left mt-1 mr-1" onclick="zoom(-1)"></i>
-                                    <span id="zoom_level" class="float-left">80%</span>
+                                    <span id="zoom_level" class="float-left">{{ $plantas->factor_zoom }}%</span>
                                     <i class="fa fa-plus-square float-left mt-1 ml-1"  onclick="zoom(+1)"></i>
                                 </div>
 
@@ -262,6 +263,7 @@ try{
             zoom_actual=(zoom_actual+(10*direccion));
             $('.layout').css('zoom',zoom_actual+'%');
             $('#zoom_level').text(zoom_actual+'%');
+            $('#factor_zoom').val(zoom_actual);
         }
        
     

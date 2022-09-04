@@ -62,7 +62,7 @@
                     <div class="form-group col-md-1" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
+                            <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" @desktop data-cols="20" @elsedesktop data-cols="8" @enddesktop data-search-text="Buscar..."></button>
                         </div>
                     </div>
                     

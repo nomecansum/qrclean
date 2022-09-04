@@ -4,7 +4,7 @@
     }
 </style>
 
-<div class="card">
+<div class="card mt-3">
     <div class="card-header">
         <h3 class="card-title">Mis reservas</h3>
         <span class="float-right" id="spin" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>

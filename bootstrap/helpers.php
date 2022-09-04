@@ -1361,7 +1361,12 @@ function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fi
         ->where('id_tipo_puesto',$tipo)
         ->whereNotIn('id_puesto',$no_disponibles)
         ->where('id_cliente',$cliente)
-        ->where('mca_incidencia','N')
+        ->where(function($q){
+            if(session('CL')['mca_incidencia_reserva']=='N'){
+                $q->where('mca_incidencia','N');
+            }
+            
+        })
         ->where('mca_reservar','S')
         ->get();
     return $puestos_disponibles;

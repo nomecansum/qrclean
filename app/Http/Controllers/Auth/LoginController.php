@@ -65,6 +65,7 @@ class LoginController extends Controller
             $u=User::where(['email' => $user->email])->first();
             if(!isset($u)){
                 //Usuario nuevo
+                savebitacora("Login con microsoft de usuario no encontrado: ".$user->email,"Auth","authToMicrosoftcallback","ERROR");
                 return redirect('login')->withErrors(["email"=>"ERROR: Usuario no registrado, debe darse de alta primero"]);
             } else {
                 if($u->id_cliente==null || $u->cod_nivel==null){
@@ -101,6 +102,7 @@ class LoginController extends Controller
             $u=User::where(['email' => $user->email])->first();
             if(!isset($u)){
                 //Usuario nuevo
+                savebitacora("Login con google de usuario no encontrado: ".$user->email,"Auth","authToGooglecallback","ERROR");
                 return redirect('login')->withErrors(["email"=>"ERROR: Usuario no registrado, debe darse de alta primero"]);
             } else {
                 if($u->id_cliente==null || $u->cod_nivel==null){
@@ -141,6 +143,9 @@ class LoginController extends Controller
         $email=$request->email;
         $logo=null;
         //A ver si existe y si esta validado
+        if(!isset($u)){
+            savebitacora("Login de usuario no encontrado: ".$request->email,"Auth","prelogin","ERROR");
+        }
         if((!isset($u))||(isset($u) && ($u->id_cliente==null || $u->cod_nivel==null))){
             return view('auth.login',compact('email'));
         } else{

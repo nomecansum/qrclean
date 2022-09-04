@@ -24,7 +24,7 @@
 
         </div>
     @else
-        <div class="row" id="selector">
+        <div class="row" id="selector" style="margin-top: 200px">
             <div class="col-md-12 text-center">
                 <h3>{!! $encuesta->pregunta !!}</h3>
                 @if($encuesta->mca_anonima=='S')

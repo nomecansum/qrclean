@@ -315,7 +315,26 @@ class HomeController extends Controller
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
-            
+            //Ahora veamos si tiene incidencia
+            if($p->mca_incidencia=='S'){
+                $inc=DB::table('incidencias')
+                    ->join('incidencias_tipos','incidencias_tipos.id_tipo_incidencia','incidencias.id_tipo_incidencia')
+                    ->where('id_puesto',$p->id_puesto)
+                    ->wherenull('fec_cierre')
+                    ->first();
+                $respuesta=[
+                    'mensaje'=>"Puesto con incidencia",
+                    'icono' => '<i class="fad fa-exclamation-triangle"></i>',
+                    'color'=>'warning',
+                    'puesto'=>$p,
+                    'disponibles'=>$disponibles,
+                    'operativo' => 0,
+                    'encuesta'=>0,
+                    'incidencia'=>['id'=>$inc->id_incidencia,'tipo'=>$inc->des_tipo_incidencia,'texto'=>$inc->des_incidencia]
+                ];
+                return view('scan.result',compact('respuesta','reserva','config_cliente'));
+            }
+
             //dd($encuesta);
             switch ($p->id_estado) {
                 case 7:  //Solo encuesta
@@ -667,6 +686,21 @@ class HomeController extends Controller
         return base64_encode(QRCode::format('png')->size(500)->generate($r->url));
     }
 
+    public function reset_perfil_admin(){
+        $secciones=DB::table('secciones')->get();
+        DB::table('secciones_perfiles')->where('id_perfil',5)->delete();
+        foreach($secciones as $seccion){
+            DB::table('secciones_perfiles')->insert([
+                'id_perfil'=>5,
+                'id_seccion'=>$seccion->cod_seccion,
+                'mca_read'=>1,
+                'mca_write'=>1,
+                'mca_create'=>1,
+                'mca_delete'=>1
+            ]);
+        }
+    }
+
     public function politica(){
         $response=Http::withOptions(['verify' => false])->get(config('app.link_politica'));
         
@@ -676,7 +710,11 @@ class HomeController extends Controller
     }
 
     public function terminos(){
-        return "";
+        return view('layouts.terminos');
+    }
+
+    public function cookies(){
+        return view('layouts.cookies');
     }
 
     public function check_notificaciones(){

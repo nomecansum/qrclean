@@ -158,6 +158,9 @@ class CustomersController extends Controller
             $config->hora_liberar_puestos=$r->hora_liberar_puestos;
             $config->mca_mostrar_puestos_reservas=$r->mca_mostrar_puestos_reservas??'D';
             $config->mca_mostrar_datos_fijos=$r->mca_mostrar_datos_fijos??'N';
+            $config->mca_incidencia_scan=$r->mca_incidencia_scan??'N';
+            $config->mca_incidencia_reserva=$r->mca_incidencia_reserva??'N';
+            
             $config->theme_name=$this->esquema_colores($r);
             $config->save();
             

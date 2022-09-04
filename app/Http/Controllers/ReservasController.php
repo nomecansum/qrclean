@@ -409,6 +409,12 @@ class ReservasController extends Controller
                     $q->wherenotin('puestos.id_puesto',$puestos_reservados);
                 }
             })
+            ->where(function($q){
+                if(session('CL')['mca_incidencia_reserva']=='N'){
+                    $q->where('mca_incidencia','N');
+                }
+                
+            })
            
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
@@ -745,6 +751,12 @@ class ReservasController extends Controller
                 if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
                     $q->wherein('puestos.id_planta',$plantas_usuario??[]);
                 }
+            })
+            ->where(function($q){
+                if(session('CL')['mca_incidencia_reserva']=='N'){
+                    $q->where('mca_incidencia','N');
+                }
+                
             })
             ->wherenotin('puestos.id_estado',[4,5,6])
             ->where(function($q) use($r){

@@ -85,14 +85,14 @@
                 <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
                     <div class="form-group">
                         <label>Icono</label><br>
-                        <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" data-cols="20" data-search-text="Buscar..."></button>
+                        <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" @desktop data-cols="20" @elsedesktop data-cols="8" @enddesktop data-search-text="Buscar..."></button>
                     </div>
                 </div>
                 
                
             </div>
             <div class="row mt-2">
-                <div class="form-group col-md-4" style="padding-top: 7px">
+                <div class="form-group col-md-4" >
                     <label>Fechas </label>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" value="{{  Carbon\Carbon::parse($encuesta->fec_inicio)->format('d/m/Y').' - '.Carbon\Carbon::parse($encuesta->fec_fin)->format('d/m/Y') }}">
@@ -152,7 +152,7 @@
                 </div>
                 <div class="form-group col-md-1 text-end mt-3">
                     <a href="#modal_img"  class="btn  btn-warning add-tooltip  btn_url text-nowrap" id="btn_gen_qr" data-toggle="modal" title="Generar QR" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <span class="fad fa-qrcode pt-1" aria-hidden="true"></span> Ver QR</a>
-                    <a href="#"  class="btn  btn-info  add-tooltip btn_url" id="boton_url" title="Copiar URL" data-id="{{ $encuesta->id_encuesta }}" data-clipboard-text="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <span class="fa fa-copy pt-1" aria-hidden="true"></span> Copiar</a>
+                    <a href="#"  class="btn  btn-info  add-tooltip btn_url text-nowrap" id="boton_url" title="Copiar URL" data-id="{{ $encuesta->id_encuesta }}" data-clipboard-text="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <span class="fa fa-copy" aria-hidden="true"></span> Copiar</a>
                     <a href="{{ url('encuestas/get',$encuesta->token) }}" target="_blank"  class="btn  btn-success  add-tooltip btn_url" id="boton_abrir" title="Abrir URL" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <i class="fad fa-external-link-square-alt"></i> Abrir</a>
                 </div>
             </div>
@@ -169,7 +169,7 @@
                 
             </div>
             <div class="row">
-                @include('resources.combos_filtro',[$hide=['cli'=>1,'est'=>1,'head'=>1,'btn'=>1,'usu'=>1,'est_inc'=>1,'est_mark'=>1]])
+                @include('resources.combos_filtro',[$hide=['cli'=>1,'est'=>1,'head'=>1,'btn'=>1,'usu'=>1,'est_inc'=>1,'tip_mark'=>1, 'tip_inc'=>1]])
             </div>
            
             <div class="row">
@@ -184,13 +184,20 @@
 </div>
 <div class="modal fade" id="modal_img">
     <div class="modal-dialog modal-md">
-        <div class="modal-content"><div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                <h1 class="modal-title text-nowrap">QR </h1>
+                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                </button>
+            </div> 
             <div class="modal-body">
                 <img style="width:100%" id="img_accion">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" id="btn_download"><i class="fad fa-download"></i> Descargar</button>
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Cerrar</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning close"  onclick="cerrar_modal()">Cerrar</button>
             </div>
         </div>
     </div>
@@ -209,6 +216,10 @@
 
     $('.btn_fechas').click(function(){
         rangepicker.show();
+    })
+
+    $('#btn_gen_qr').click(function(){
+        $('#modal_img').modal('show');
     })
 
     //Ponemos los valores seleccionados que tengan los select2

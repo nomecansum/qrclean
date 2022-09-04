@@ -57,6 +57,7 @@
                 <input type="hidden" name="factor_puestob" id="factor_puestob" value="{{ $plantas->factor_puestob }}">
                 <input type="hidden" name="factor_puestor" id="factor_puestor" value="{{ $plantas->factor_puestor }}">
                 <input type="hidden" name="factor_letra" id="factor_letra"  value="{{ $plantas->factor_letra }}">
+                <input type="hidden" name="factor_grid" id="factor_grid"  value="{{ $plantas->factor_grid }}">
                 <div class="card">
                     <div class="card-body">
                         @if(isset($plantas->img_plano))
@@ -203,7 +204,7 @@
             console.log(values[handle]);
             $('.draggable').draggable("option", "grid", [values[handle],values[handle]]);
             // $('.texto_puesto').css('font-size',values[handle]+'vw');
-            // $('#factor_letra').val(values[handle]);
+            $('#factor_grid').val(values[handle]);
         });
     } );
 
@@ -279,7 +280,7 @@
         connect : 'lower',
         range   : {
             'min': [  0 ],
-            'max': [ 10 ]
+            'max': [ 50 ]
         },
         format: wNumb({
             decimals: 2
@@ -299,7 +300,7 @@
     });
 
     noUiSlider.create(g_def,{
-        start   : [ 5 ],
+        start   : [  {{ $plantas->factor_grid }} ],
         connect : 'lower',
         range   : {
             'min': [  0.1 ],

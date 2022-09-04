@@ -49,10 +49,10 @@ class SuccessfulLogin
         session(['logo_cliente_menu'=>$cliente->img_logo_menu]);
         Cookie::queue('qrcleanid', $user->id, 999999);
 
-        auth()->user()->previous_login = $user->last_login;
-        auth()->user()->last_login = Carbon::now();
-        auth()->user()->save();
-        session(['lang' => auth()->user()->lang]);
+        $user->previous_login = $user->last_login;
+        $user->last_login = Carbon::now();
+        $user->save();
+        session(['lang' => $user->lang]);
         //Permisos del usuario
         $permisos = DB::select(DB::raw("
         SELECT
@@ -73,7 +73,7 @@ class SuccessfulLogin
                 `permisos_usuarios`
                 INNER JOIN `secciones` ON (`permisos_usuarios`.`id_seccion` = `secciones`.`cod_seccion`)
             WHERE
-                `cod_usuario` = ".auth()->user()->id."
+                `cod_usuario` = ".$user->id."
             UNION
             SELECT
                 `secciones_perfiles`.`id_seccion`,
@@ -86,7 +86,7 @@ class SuccessfulLogin
                 `secciones_perfiles`
                 INNER JOIN `secciones` ON (`secciones_perfiles`.`id_seccion` = `secciones`.`cod_seccion`)
             WHERE
-                id_perfil=".auth()->user()->cod_nivel.") sq
+                id_perfil=".$user->cod_nivel.") sq
         GROUP BY sq.des_seccion"));
         session(['P' => $permisos]);
         if(isset($request->intended)&&$request->intended!=''){

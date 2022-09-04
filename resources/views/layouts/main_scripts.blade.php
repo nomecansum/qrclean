@@ -538,6 +538,11 @@
         $('.body_politica').load("{{ url('/terminos') }}");
     });
 
+    $('#boton_cookies').click(function() {
+        $('.offcanvas-title').html('Política de cookies');
+        $('.body_politica').load("{{ url('/cookies') }}");
+    });
+
     function cerrar_modal(){
         $('.modal').modal('hide');
     }

@@ -51,7 +51,7 @@ Route::post('/encuestas/save_data','EncuestasController@save_data');
  //Links del footer
 Route::get('/politica','HomeController@politica');
 Route::get('/terminos','HomeController@terminos');
-
+Route::get('/cookies','HomeController@cookies');
 
 
 /////////////////////////////COSAS DE LOGIN///////////////////////////////////////////////////////////
@@ -138,6 +138,8 @@ Route::group(['middleware' => 'auth'], function() {
     //Escaneo de sala
     Route::get('/sala/{sala}','SalasController@getpuesto');
 
+    //Resetear los permisos del superadmin
+    Route::get('/reset_admin','HomeController@reset_perfil_admin');
     
 
     

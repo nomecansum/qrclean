@@ -40,6 +40,8 @@ class plantas extends Model
                   'factor_puestoh',
                   'factor_puestor',
                   'factor_puestow',
+                  'factor_grid',
+                  'factor_zoom',
                   'height',
                   'id_cliente',
                   'id_edificio',

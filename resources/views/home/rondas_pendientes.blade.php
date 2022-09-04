@@ -68,7 +68,7 @@
 }
 </style>
 
-<div class="card">
+<div class="card mt-3">
     <div class="card-header">
         <h3 class="card-title"><span class="font-bold fs-2" id="cuenta">{{ $rondas->count() }}</span> Rondas de {{ $tipo_ronda=='M'?'mantenimiento':'limpieza' }} con algun puesto pendiente {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
     </div>

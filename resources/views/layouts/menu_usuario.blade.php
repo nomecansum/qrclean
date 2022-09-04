@@ -1,130 +1,145 @@
+<nav id="mainnav-container" class="mainnav">
+    <div class="mainnav__inner">
 
+        <!-- Navigation menu -->
+        <div class="mainnav__top-content scrollable-content pb-5">
 
+            <!-- Profile Widget -->
+            <div class="mainnav__profile mt-3">
 
-<!--OPTIONAL : ADD YOUR LOGO TO THE NAVIGATION-->
-<!--It will only appear on small screen devices.-->
-<!--================================
-<div class="mainnav-brand">
-    <a href="index.html" class="brand">
-        <img src="img/logo.png" alt="Nifty Logo" class="brand-icon">
-        <span class="brand-text">Nifty</span>
-    </a>
-    <a href="#" class="mainnav-toggle"><i class="pci-cross pci-circle icon-lg"></i></a>
-</div>
--->
-
-
-
-<!--Menu-->
-<!--================================-->
-<div id="mainnav-menu-wrap">
-    <div class="nano">
-        <div class="nano-content">
-
-            <!--Profile Widget-->
-            <!--================================-->
-            <div id="mainnav-profile" class="mainnav-profile">
-                <div class="profile-wrap text-center">
-                    <div class="pad-btm">
-                        @if(Auth::user()->img_usuario!="" && file_exists( public_path().'/img/users/'.Auth::user()->img_usuario))
-                        <img class="img-circle img-md" src="{{url('/img/users/'.Auth::user()->img_usuario)}}" alt="Profile Picture">
-                        @else
-                        {!! icono_nombre(Auth::user()->name) !!}
-                        @endif
-                    </div>
-                    <a href="#profile-nav" class="box-block" data-toggle="collapse" aria-expanded="false">
-                        <span class="pull-right dropdown-toggle">
-                            <i class="dropdown-caret"></i>
-                        </span>
-                        <p class="mnp-name">{{ Auth::user()->name }}</p>
-                        <span class="mnp-desc">{{Auth::user()->email}}</span>
-                    </a>
+                <!-- Profile picture  -->
+                <div class="mininav-toggle text-center py-2">
+                    @if (isset(Auth::user()->img_usuario ) && Auth::user()->img_usuario!='')
+                        <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.Auth::user()->img_usuario) }}" id="main_user_image" class="img-md rounded-circle">
+                    @else
+                        {!! icono_nombre(Auth::user()->name,40,16) !!}
+                    @endif
                 </div>
-                <div id="profile-nav" class="collapse list-group bg-trans">
-                    <a href="{{ url('/miperfil/'.Auth::user()->id.'') }}" class="list-group-item"><i class="fad fa-user"></i> Mi Perfil</a>
-                    {{-- @if(checkPermissions(['Configuracion'],['R']))<a href="{{ url('/config') }}" class="list-group-item"><i class="fad fa-cogs"></i> Configuración @endif --}}
-                    <a href="{{url('/logout')}}" class="list-group-item"><i class="fad fa-sign-out-alt"></i> Logout</a>
-                    
-                    {{-- <a href="#" class="list-group-item">
-                        <a href="{{ url('/users/'.Auth::user()->id.'/edit') }}"><i class="fad fa-user"></i> Mi Perfil</a>
-                    </a>
-                    
-                        
-                    </a>
-                    <a href="{{url('/logout')}}" class="list-group-item">
-                        
-                    </a> --}}
+        
+                <div class="mininav-content collapse d-mn-max">
+                    <div class="d-grid">
+        
+                        <!-- User name and position -->
+                        <button class="d-block btn shadow-none p-2" data-bs-toggle="collapse" data-bs-target="#usernav" aria-expanded="false" aria-controls="usernav">
+                            <span class="dropdown-toggle d-flex justify-content-center align-items-center">
+                                <h6 class="mb-0 me-2">{{ Auth::user()->name }}</h6>
+                            </span>
+                            <small class="text-muted">{{Auth::user()->email}}</small>
+                        </button>
+        
+                        <!-- Collapsed user menu -->
+                        <div id="usernav" class="nav flex-column collapse">
+                            <a href="#" class="nav-link d-flex justify-content-between align-items-center">
+                                <span><i class="fa-light fa-bell fs-5 me-3"></i> Notificaciones</span>
+                                <span class="badge bg-danger rounded-pill cuenta_notificaciones">0</span>
+                            </a>
+                            <a href="{{ url('/miperfil/'.Auth::user()->id) }}" class="nav-link">
+                                <i class="demo-pli-male fs-5 me-3"></i> Perfil
+                            </a>
+                            <a href="{{ url('/user_settings/'.Auth::user()->id) }}" class="nav-link " data-bs-toggle="offcanvas" data-bs-target="#_dm-settingsContainer" aria-controls="_dm-settingsContainer">
+                                <i class="demo-pli-gear fs-5 me-3"></i> Ajustes
+                            </a>
+                            <a href="{{ url('/lockscreen') }}" class="nav-link">
+                                <i class="demo-pli-computer-secure fs-5 me-3"></i> Bloquear pantalla
+                            </a>
+                            <a href="{{url('/logout')}}" class="nav-link">
+                                <i class="demo-pli-unlock fs-5 me-3"></i> Logout
+                            </a>
+                            <div class='onesignal-customlink-container'></div>
+                            <div>
+                                @include('resources.combo_clientes')
+                            </div>
+                        </div>
+        
+                    </div>
                 </div>
             </div>
+            <!-- End - Profile widget -->
+
+            <h6 class="mainnav__caption mt-5 px-3 fw-bold">Mi espacio</h6>
+            <ul class="mainnav__menu nav flex-column">
+
+                <li class="nav-item">
+                    <a href="{{ url('/') }}" class="nav-link mininav-toggle collapsed"><i class="fa-light fa-house fs-5 me-2"></i>
+                        <span class="nav-label mininav-content">Home</span>
+                    </a>
+                </li>
+                @if(checkPermissions(['Scan acceso'],['R']))
+                <li class="nav-item main_scan">
+                    <a href="/scan_usuario" class="nav-link mininav-toggle collapsed"><i class="fa-light fa-qrcode fs-5 me-2"></i>
+                        <span class="nav-label mininav-content"> Scan</span>
+                    </a>
+                </li>
+                @endif
+                @if(checkPermissions(['Reservas'],['R']))
+                <li class="nav-item has-sub reservas">
+                    <a href="#" class="mininav-toggle nav-link "><i class="fa-light fa-calendar-day fs-5 me-2"></i>{{-- active --}}
+                        <span class="nav-label">Reservas</span>
+                    </a>
+                    <!-- Dashboard submenu list -->
+                    <ul class="mininav-content nav">
+                        @if(checkPermissions(['Reservas puestos'],['R']))<li class="reservas_puestos nav-item"><a href="/reservas" class="text-nowrap nav-link"><i class="fad fa-chair-office"></i> Puestos</a></li> @endif
+                        @if(checkPermissions(['Reservas salas'],['R']) && session('CL')['mca_salas']=='S')<li class="reservas_salas nav-item"><a href="/salas/reservas" class="text-nowrap nav-link"><i class="fad fa-users-class"></i> Salas</a></li> @endif
+                    </ul>
+                    <!-- END : Dashboard submenu list -->
+                </li>
+                @endif
+
+                @if(checkPermissions(['Mi oficina'],['R']))
+                <li class="nav-item has-sub parametrizacion">
+                    <a href="#" class="mininav-toggle nav-link">
+                        <i class="fa-light fa-browser fs-5 me-2"></i>
+                        @if(checkPermissions(['Parametrizacion'],['R']))<span class="nav-label">Mi oficina</span> @endif
+                    </a>
+                    
+                    <!--Submenu-->
+                    <ul class="mininav-content nav">
+                        @if(checkPermissions(['Mapa puestos'],['R']))<li class="mapa  nav-item"><a href="/puestos/mapa"  class="text-nowrap nav-link"><i class="fad fa-th"></i> Mapa</a></li> @endif
+                        @if(checkPermissions(['Compañeros'],['R']))<li class="compas  nav-item"><a href="/puestos/compas"  class="text-nowrap nav-link"><i class="fa-duotone fa-users"></i> Mis compañeros</a></li> @endif
+                        @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas text-nowrap nav-item"><a href="/salas" class="text-nowrap nav-link"><i class="fa-light fa-users-class"></i> Salas reunion</a></li> @endif
+                        @if(checkPermissions(['Incidencias > Mis incidencias'],['R']))<li class="incidencias  nav-item"><a href="/incidencias/mis_incidencias" class="text-nowrap nav-link"><i class="fa-light fa-exclamation-triangle"></i> Mis incidencias</a></li> @endif
+                    </ul>
+                </li>
+                @endif
+            </ul>
+            
+            
 
 
             
-                <ul id="mainnav-menu" class="list-group">
-
-                    <!--Category name-->
-                    <li class="list-header">Navegación</li>
-
-                    <!--Menu list item-->
-                    {{-- <li class="active-sub">
+            @if(session('DIS') && isset(session('DIS')['img_logo']))
+                <div class="text-center mt-5">
+                    <img src="{{ url('/img/distribuidores/'.session('DIS')['img_logo']) }}" title="{{ session('DIS')['nom_distribuidor'] }}" style="width:50%">
+                </div> 
+            @endif
 
 
-                        <!--Submenu-->
-                        <ul class="collapse in">
-                            <li class="active-link"><a href="index.html">Dashboard 1</a></li>
-                            <li><a href="dashboard-2.html">Dashboard 2</a></li>
-                            <li><a href="dashboard-3.html">Dashboard 3</a></li>
-
-                        </ul>
-                    </li> --}}
-
-                    <!--Menu list item-->
-                    <a href="{{ url('/') }}">
-                        <i class="fa fa-home"></i>
-                        <span class="menu-title">Home</span>
-                        <i class="arrow"></i>
-                    </a>
-                    @if(checkPermissions(['Scan acceso'],['R']))<li class="main_scan"><a href="/scan_usuario" class="text-nowrap"><i class="fad fa-qrcode"></i> <span class="menu-title">Scan</span></a></li> @endif
-                    @if(checkPermissions(['Reservas puestos'],['R']) || checkPermissions(['Reservas salas'],['R']))
-                        <li class="reservas">
-                            <a href="#">
-                                <i class="fad fa-calendar-alt"></i>
-                                @if(checkPermissions(['Reservas'],['R']))<span class="menu-title">Reservas</span> @endif
-                                <i class="arrow"></i>
-                            </a>
-                            
-                            <!--Submenu-->
-                            <ul class="collapse">
-                                @if(checkPermissions(['Reservas puestos'],['R']))<li class="reservas_puestos" class="reservas_puestos"><a href="/reservas" class="text-nowrap"><i class="fad fa-chair-office"></i> Puestos</a></li> @endif
-                                @if(checkPermissions(['Reservas salas'],['R']) && session('CL')['mca_salas']=='S')<li class="reservas_salas"><a href="/salas/reservas" class="text-nowrap"><i class="fad fa-users-class"></i> Salas</a></li> @endif
-                            </ul>
-                        </li>
-                    @endif
-                    {{-- <a href="{{ url('/puestos') }}">
-                        <i class="fad fa-browser"></i>
-                        <span class="menu-title">Puestos</span>
-                        <i class="arrow"></i>
-                    </a> --}}
-                    
-                </ul>
-
-                @if(session('DIS') && isset(session('DIS')['img_logo']))
-                    <div class="text-center">
-                        <img src="{{ url('/img/distribuidores/'.session('DIS')['img_logo']) }}" title="{{ session('DIS')['nom_distribuidor'] }}" style="width:50%">
-                    </div> 
-                @endif
-                <!--Widget-->
-                <!--================================-->
-                {{-- <div class="mainnav-widget">
-                    <!-- Show the button on collapsed navigation -->
-                    <div class="show-small">
-                        <a href="#" data-toggle="menu-widget" data-target="#demo-wg-server">
-                            <i class="demo-pli-monitor-2"></i>
-                        </a>
-                    </div>
-                </div> --}}
-                <!--================================-->
-                <!--End widget-->
-            </div>
         </div>
-</div>
+        <!-- End - Navigation menu -->
 
+        <!-- Bottom navigation menu -->
+        <div class="mainnav__bottom-content border-top pb-2">
+            <ul id="mainnav" class="mainnav__menu nav flex-column">
+                <li class="nav-item has-sub">
+                    <a href="#" class="nav-link mininav-toggle collapsed" aria-expanded="false">
+                        <i class="pli-unlock fs-5 me-2"></i>
+                        <span class="nav-label">Logout</span>
+                    </a>
+                    <ul class="mininav-content nav flex-column collapse">
+                        <li class="nav-item">
+                            <a href="{{url('/logout')}}" class="nav-link">Este dispositivo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url('/logout')}}" class="nav-link">Todos mis dispositivos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/lockscreen') }}" tabindex="-1" aria-disabled="true">Bloquear pantalla</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- End - Bottom navigation menu -->
+
+    </div>
+</nav>

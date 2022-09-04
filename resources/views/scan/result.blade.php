@@ -51,14 +51,15 @@
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4 text-center">
-            @if(isset($puesto))
+            @if(isset($puesto) && (session('logo_cliente')!=null))
             <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" style="width: 13vw" alt="" onerror="this.src='{{ url('/img/logo.png') }}';">
+            @else
             <h2>{{ $puesto->nom_cliente }}</h2>
             @endif
         </div>
         <div class="col-md-4"></div>
     </div>
-    <div class="row">
+    <div class="row" style="margin-top: 70px">
         <div class="col-md-12 text-center">
             @if(isset($puesto))
             <div class="pad-all text-center font-bold" style="color: {{ $puesto->val_color }}; font-size: 22px">
@@ -69,11 +70,22 @@
     </div>
     <div class="row" id="div_respuesta">
         <div class="col-md-3"></div>
-        <div class="col-md-6 text-3x text-center bg-{{$respuesta['color']}} rounded">
+        <div class="col-md-6 fs-{{ round(strlen($respuesta['mensaje'])/20) }} text-center bg-{{$respuesta['color']}} badge">
             {!!$respuesta['icono']!!} {!!$respuesta['mensaje']!!}
         </div>
         <div class="col-md-3"></div>
     </div>
+    @if(isset($respuesta['incidencia']) && session('CL')['mca_incidencia_scan']=='S')
+        <div>
+            <div class="row" id="div_respuesta">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center  text-danger">
+                    {!!'['.$respuesta['incidencia']['tipo'].'] '.$respuesta['incidencia']['texto']!!}
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    @endif
 
     @if($respuesta['encuesta']!=0 && (!isset($cookie) || (isset($cookie) && $cookie!=$respuesta['encuesta'])))
         @php

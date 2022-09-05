@@ -24,7 +24,7 @@
     <tr class="hover-this @if($f->mca_fijo=='S') bg-light @endif" style="height: 40px">
         <td>{{$f->des_festivo}}</td>
         <td>{!!beauty_fecha($f->val_fecha,0)!!}</td>
-        <td>@if($f->mca_fijo!='S'){{$f->nom_cliente}}@else ---- @endif</td>
+        @admin @desktop<td>@if($f->mca_fijo!='S'){{$f->nom_cliente}}@else ---- @endif</td>@enddesktop @endadmin
         <td style="position: relative;">
             @if($f->mca_nacional=='N')
                 {{--Provincial--}}

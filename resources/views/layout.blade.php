@@ -48,6 +48,9 @@
 
     {{--  Toast  --}}
     <link href="{{asset('/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet" media="all">
+
+    {{--  Iconpicker  --}}
+    <link href="{{asset('/plugins/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')}}" rel="stylesheet" media="all">
     {{--  CSS Loaders  --}}
     <link href="{{ asset('/plugins/css-loaders/css/css-loaders.css') }}" rel="stylesheet">
     {{--  Datepicker  --}}

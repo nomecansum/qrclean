@@ -14,7 +14,7 @@ for ( $i=1;$i<=date( 't', strtotime( $month ) );$i++ ) {
 $leyenda = [];
 $color = "silver";
 $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
-
+$rand=\Str::random(10);
 @endphp
 <style>
 	.calendar-badge {
@@ -42,9 +42,18 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 		border-collapse: separate !important;
 		}
 
+
 	.celda{
 		max-height: 114px !important;
 		overflow-y: hidden !important;
+	}
+
+	.Cal-tooltip .tooltip-inner {
+		white-space:pre-wrap;
+	}
+
+	.table>:not(caption)>*>*{
+		padding: 0;
 	}
 </style>
 {{-- <div class="card-header">
@@ -68,14 +77,14 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 					<a data-month="{{ $month }}" data-action="add" class="changeMonth mt-1" style="float:right; font-size: 2em; cursor: pointer;"> <i class="fas fa-arrow-right"></i> </a>
 				</th>
 			</tr>
-			<tr style="background-color: #ffad76; color: #737887; border: 1px solid #f2f7f8; border-radius: 3px 3px 0 0; text-align: center; font-size: 12px">
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.lunes') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.martes') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.miercoles') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.jueves') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.viernes') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.sabado') }}</th>
-				<th style="width: 14.28%" class="text-center">{{ trans('strings.domingo') }}</th>
+			<tr style="background-color: #ced1cc; color: #737887; border: 1px solid #f2f7f8; border-radius: 3px 3px 0 0; text-align: center; font-size: 12px; border-spacing: 1px;">
+				<th style="width: 14.28%" class="text-center table_head">{{ trans('strings.lunes') }}</th>
+				<th style="width: 14.28%" class="text-center table_head">{{ trans('strings.martes') }}</th>
+				<th style="width: 14.28%" class="text-center table_head">{{ trans('strings.miercoles') }}</th>
+				<th style="width: 14.28%" class="text-center table_head">{{ trans('strings.jueves') }}</th>
+				<th style="width: 14.28%" class="text-center table_head">{{ trans('strings.viernes') }}</th>
+				<th style="width: 14.28%" class="text-center table_head">{{ trans('strings.sabado') }}</th>
+				<th style="width: 14.28%" class="text-center table_head">{{ trans('strings.domingo') }}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -137,7 +146,7 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 											//$title=Carbon\Carbon::parse($dia->fec_reserva)->format('d/m/Y').chr(13)." Puesto: ".$descrip." - Edificio: ".$dia->des_edificio." - Planta: ".$dia->des_planta;	
 										@endphp
 									@if($dia)
-									<div class="des_evento mb-1 text-nowrap  text-center add-tooltip" style="font-size:@desktop  1.2vw; @elsedesktop  8px; @enddesktop color:#555;" title="{!! $descrip !!}">@if($icono!="") <i class="{{ $icono }}" style="color: {{ $ic_color }};"></i> @endif @desktop   @enddesktop</div>
+									<div class="des_evento mb-1 text-nowrap  text-center cal-tooltip" style="font-size:@desktop  1.2vw; @elsedesktop  8px; @enddesktop color:#555;" title="{!! $dia->cod_puesto !!}<br> @if(isset($dia->name))<i class='fa-regular fa-user'></i> {{$dia->name}} @else <i class='fa-regular fa-clock'></i>  {{Carbon\Carbon::parse($dia->fec_reserva)->format('H:i')}} -> {{Carbon\Carbon::parse($dia->fec_fin_reserva)->format('H:i')}} @endif">@if($icono!="") <i class="{{ $icono }}" style="color: {{ $ic_color }};"></i> @endif @desktop   @enddesktop</div>
 									@endif
 									@endforeach
 								</div>
@@ -158,7 +167,9 @@ $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","sep
 		$('#detalle_horario').hide();
 	})
 
-
+	const calTriggerList{{ $rand }} = [...document.querySelectorAll( '.cal-tooltip' )];
+    const caltipList = calTriggerList{{ $rand }}.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl,{html: true} ));
+	
 	fechacal="{{ $month }}";
 
 	$('.td_calendar').click(function(){

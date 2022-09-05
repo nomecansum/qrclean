@@ -86,7 +86,8 @@
                             <th></th>
                             <th>Nombre</th>
                             <th>Tipos</th>
-                            <th>Cliente</th>
+                            @admin<th> Procesado </th>@endadmin
+                            @admin @desktop<th>Cliente</th>@enddesktop @endadmin
                             <th></th>
                         </tr>
                     </thead>
@@ -97,10 +98,77 @@
                             <td class="text-center"><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
                             <td>{{ $tipo->des_tipo_incidencia }}</td>
                             <td>
-                               {{ $tipo->list_tipo_puesto }}
+                                @php
+                                    $tipos_puesto = DB::table('puestos_tipos')->wherein('id_tipo_puesto',explode(',',$tipo->list_tipo_puesto))->get();
+                                @endphp
+                                @foreach ($tipos_puesto as $tp)
+                                <ul  style="font-size: 10px;list-style:none;">
+                                    <li><i class="{{ $tp->val_icono }}" style="color: {{ $tp->val_color }}"></i> {{ $tp->des_tipo_puesto }}</li>
+                                </ul>
+                                @endforeach
+                                
                             </td>
-                            <td>{{ $tipo->nom_cliente }}</td>
-
+                            
+                            @admin
+                            <td style="font-size: 10px">
+                                    @php
+                                        $procesados=DB::table('incidencias_postprocesado')->where('id_tipo_incidencia',$tipo->id_tipo_incidencia)->get();
+                                        $momentos=$procesados->pluck('val_momento')->unique();
+                                    @endphp
+                                    @foreach ($momentos as $momento)
+                                        @switch($momento)
+                                            @case('C')
+                                                Creacion:
+                                                @break
+                                            @case('A')
+                                                Accion:
+                                                @break
+                                            @case('F')
+                                                Cierre:
+                                                @break
+                                            @default
+                                        @endswitch
+                                        {{-- S: SMS
+                                        M: EMAIL
+                                        P: HTTP Post
+                                        U: HTTP Put
+                                        G: HTTP Get
+                                        L: Spotlinker
+                                        W: Web Push
+                                        N: Nada (solo web) --}}
+                                        <ul style="list-style:none;">
+                                            @foreach ($procesados->where('val_momento',$momento) as $procesado)
+                                            <li>
+                                                @switch($procesado->tip_metodo)
+                                                    @case('S')
+                                                        <i class="fa-solid fa-message-sms" style="color: {{ genColorCodeFromText("SMS") }}"></i>SMS
+                                                        @break
+                                                    @case('M')
+                                                        <i class="fa-solid fa-envelope" style="color: {{ genColorCodeFromText("SMS") }}"></i>Mail
+                                                        @break
+                                                    @case('P')
+                                                    @case('U')
+                                                    @case('G')
+                                                        <i class="fa-solid fa-browser" style="color: {{ genColorCodeFromText("WEB ") }}"></i> HTTP ({{ $procesado->tip_metodo }})
+                                                        @break
+                                                    @case('L')
+                                                        <i src="{{ asset('/img/logo.png') }}" style="height:12px"></i>
+                                                        @break
+                                                    @case('W')
+                                                        <i class="fa-solid fa-laptop-mobile" style="color: {{ genColorCodeFromText("WPUSH") }}"></i> Push
+                                                        @break
+                                                    @case('N')
+                                                        <i class="fa-solid fa-square" style="color: {{ genColorCodeFromText("NADA") }}"></i>
+                                                        @break
+                                                    @default
+                                                @endswitch
+                                            </li> 
+                                            @endforeach
+                                        </ul>
+                                    @endforeach
+                                </td>
+                            @endadmin
+                            @admin @desktop<td>{{ $tipo->nom_cliente }}</td>@enddesktop @endadmin
                             <td style="position: relative">
                                 {{ $tipo->val_responsable }}
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">

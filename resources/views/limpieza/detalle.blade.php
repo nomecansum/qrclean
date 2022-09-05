@@ -9,10 +9,10 @@ $puestos_si=$detalles->wherenotnull('fec_fin')->count();
 $puestos_no=$detalles->wherenull('fec_fin')->count();
 try{
     $pct_completado=(100*$puestos_si/$cnt_puestos);
-} catch(\Exception $e){
+} catch(\Throwable $e){
     $pct_completado=0;
 }
-
+$rand=\Str::random(10);
 @endphp
 <style type="text/css">
     .lista_emp {
@@ -48,18 +48,24 @@ try{
         <label  class="font-bold">Descripcion</label>
         <div>{{ $ronda->des_ronda }}</div>
     </div>
-    <div class="col-md-2 form-group">
+    <div class="col-md-4 form-group">
         <label  class="font-bold">Creada</label>
         <div>{{ $ronda->name }}</div>
     </div>
+</div>
+<div class="row mt-2">
     @if($ronda->tip_ronda=='L')
-    <div class="col-md-2 form-group">
-        <label  class="font-bold">Tiempo estimado</label>
+    <div class="col-md-6 d-flex">
+        <label  class="font-bold mr-2">Tiempo estimado</label>
         <div>{{ decimal_to_time($detalles->sum('val_tiempo_limpieza')/60) }}</div>
     </div>
     @endif
+    <div class="col-md-6 d-flex">
+        <label  class="font-bold mr-2">Tiempo empleado</label>
+        <div>{{ $tiempo_empleado }}</div>
+    </div>
 </div>
-<div class="row">
+<div class="row mt-2">
     <div class="col-md-3 form-group ">
         <div class="fs-2 text-center add-tooltip" title="{{ $cnt_edificios }} Edificios"> <i class="fad fa-building"></i> {{ $cnt_edificios }} </div>
     </div>
@@ -100,8 +106,8 @@ try{
                 $puestos=$detalles->where('id_planta',$key_planta);
             @endphp
             @foreach($puestos as $p)
-                <div class="col-md-2 rounded add-tooltip divpuesto_ronda mb-2 mr-1 mt-3" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->cod_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto prendiente de completar @else Completado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer;  @else border: 1px solid #ccc; background-color:#98fb98 @endif">
-                    <i class="{{ $p->val_icono }}" style="color: {{ $p->color_puesto }}"> &nbsp;</i>{{ $p->cod_puesto }} ({{ $p->val_tiempo_limpieza }}')<br>
+                <div class="col-md-2 rounded ronda-tooltip divpuesto_ronda mb-2 mr-1 mt-3" id="divpuesto{{ $p->key_id }}" data-user="{{ $p->user_audit }}" data-id="{{ $p->key_id }}" data-puesto="{{ $p->cod_puesto }}" data-container="body" title="@if(!isset($p->user_audit)) Puesto prendiente de completar @else Completado por {{ $p->name }} el {!! Carbon\Carbon::parse($p->fec_fin)->isoFormat('LLLL') !!} @endif" style="height: 45px; padding: 3px; @if(!isset($p->user_audit)) border: 2px dashed salmon; cursor: pointer;  @else border: 1px solid #ccc; background-color:#98fb98 @endif">
+                    <i class="{{ $p->val_icono }}" style="color: {{ $p->color_puesto }}"> &nbsp;</i>{{ $p->des_puesto }} ({{ $p->val_tiempo_limpieza }}')<br>
                     @if(isset($p->user_audit))<i class="fas fa-male" style="color: {{ genColorCodeFromText("EMPLEADO".$p->user_audit,2) }}"></i> <span style="font-size: 12px">{!! beauty_fecha($p->fec_fin) !!}</span> @else --- @endif
                 </div>
             @endforeach
@@ -109,7 +115,8 @@ try{
     @endforeach
 </div>
 <script>
-    
+    const calTriggerList{{$rand}} = [...document.querySelectorAll( '.ronda-tooltip' )];
+    const caltipList{{$rand}} = calTriggerList{{$rand}}.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl,{html: true} ));
     id_user={{ Auth::user()->id }};
 
     $('.divpuesto_ronda').click(function(){

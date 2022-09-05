@@ -69,7 +69,7 @@
 					<thead>
 						<tr>
 							<th>Id</th>
-							<th>Cliente</th>
+							@admin @desktop<th>Cliente</th>@enddesktop @endadmin
 							<th>Nombre</th>
 							<th>F.inicio</th>
 							<th>F.fin</th>
@@ -81,7 +81,7 @@
 						@foreach ($turnos as $dato)
 							<tr class="hover-this" @if (checkPermissions(['Clientes'],["W"])) @endif>
 								<td>{{$dato->id_turno}}</td>
-								<td>{{$dato->nom_cliente}}</td>
+								@admin @desktop<td>{{ $dato->nom_cliente }}</td>@enddesktop @endadmin
 								<td>{{ $dato->des_turno}}</td>
 								<td>{!! beauty_fecha($dato->fec_inicio,"2")!!}</td>
                                 <td>{!! beauty_fecha($dato->fec_fin,"2")!!}</td>

@@ -62,7 +62,7 @@
                     <div class="col-md-1">
                         <div class="form-group">
                             <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"   data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" @desktop data-cols="20" @elsedesktop data-cols="8" @enddesktop data-search-text="Buscar..."></button>
+                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"   data-iconset-version="5.3.1_pro"   class="btn btn-light iconpicker" data-search="true" data-rows="10" @desktop data-cols="20" @elsedesktop data-cols="8" @enddesktop data-search-text="Buscar..."></button>
                         </div>
                     </div>
                     @if(session('CL')['mca_reserva_horas']=='S')
@@ -285,7 +285,7 @@
         @if(isset($puesto->val_icono))
         icon:'{{$puesto->val_icono??''}}'
         @else
-        icon: 'none'
+        icon: ''
         @endif
     });
 

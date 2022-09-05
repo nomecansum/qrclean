@@ -545,6 +545,7 @@ class IncidenciasController extends Controller
             $inc->val_procedencia=$procedencia;
             $inc->id_incidencia_salas=$r->id_incidencia_salas??null;
             $inc->id_incidencia_externo=$r->id_incidencia_externo??null;
+            $inc->url_detalle_incidencia=$data['url_detalle_incidencia']??null;
             $inc->save();
 
             //Marcamos el puesto como chungo

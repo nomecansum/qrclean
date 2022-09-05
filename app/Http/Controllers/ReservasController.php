@@ -65,22 +65,11 @@ class ReservasController extends Controller
         else $backMonth = $month->format('Y-n');
         $end=$month->copy()->endOfMonth();
 
-        //Los dias del mes correspondiente y si cada uno de ellos es festivo o no
-        // $festivos_mes = DB::select( DB::raw("
-        //     WITH RECURSIVE t as (
-        //         select date('".$month."') as date,
-        //         estadefiesta(".Auth::user()->id.",'".$month."') as festivo
-        //     UNION
-        //         SELECT DATE_ADD(t.date, INTERVAL 1 DAY), estadefiesta(".Auth::user()->id.",DATE_ADD(t.date, INTERVAL 1 DAY)) as festivo FROM t WHERE DATE_ADD(t.date, INTERVAL 1 DAY) <= '".$end."'
-        //     )select * FROM t;"));
-            
-        // $festivos_mes=collect($festivos_mes);
-
         $festivos_mes=collect(estadefiesta(Auth::user()->id,$month,$end));
 
         
         $reservas=DB::table('reservas')
-            ->selectraw('date(reservas.fec_reserva) as fec_reserva,reservas.fec_fin_reserva,puestos.cod_puesto,puestos.des_puesto,edificios.des_edificio,plantas.des_planta,puestos_tipos.val_icono,puestos_tipos.val_color')
+            ->selectraw('date(reservas.fec_reserva) as fec_reserva,reservas.fec_fin_reserva,puestos.cod_puesto,puestos.des_puesto,puestos.mca_incidencia,puestos.id_estado,edificios.des_edificio,plantas.des_planta,puestos_tipos.val_icono,puestos_tipos.val_color,plantas.factor_puestob,plantas.factor_puestoh,plantas.factor_puestow,plantas.factor_puestor,plantas.factor_letra')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->leftjoin('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -93,12 +82,13 @@ class ReservasController extends Controller
                 }
             })
             ->where('reservas.id_usuario',Auth::user()->id)
+            ->where('mca_anulada','N')
             ->wherebetween('fec_reserva',[$month,$end])
             ->get();    
 
 
         $asignados=DB::table('puestos_asignados')
-            ->selectraw("ifnull(date(puestos_asignados.fec_desde),'".$month."') as fec_desde,ifnull(date(puestos_asignados.fec_hasta),'".$end."') as fec_hasta,puestos.cod_puesto,puestos.des_puesto,edificios.des_edificio,plantas.des_planta,puestos_tipos.val_icono,puestos_tipos.val_color")
+            ->selectraw("ifnull(date(puestos_asignados.fec_desde),'".$month."') as fec_desde,ifnull(date(puestos_asignados.fec_hasta),'".$end."') as fec_hasta,puestos.cod_puesto,puestos.des_puesto,puestos.mca_incidencia,puestos.id_estado,edificios.des_edificio,plantas.des_planta,puestos_tipos.val_icono,puestos_tipos.val_color,plantas.factor_puestob,plantas.factor_puestoh,plantas.factor_puestow,plantas.factor_puestor,plantas.factor_letra")
             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
             ->leftjoin('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -125,6 +115,14 @@ class ReservasController extends Controller
                     $item->des_planta=$as->des_planta;
                     $item->val_icono=$as->val_icono;
                     $item->val_color=$as->val_color;
+                    $item->factor_puestob=$as->factor_puestob;
+                    $item->factor_puestoh=$as->factor_puestoh;
+                    $item->factor_puestow=$as->factor_puestow;
+                    $item->factor_puestor=$as->factor_puestor;
+                    $item->factor_letra=$as->factor_letra;
+                    $item->mca_incidencia=$as->mca_incidencia;
+                    $item->id_estado=$as->id_estado;
+                    $item->name=Auth::user()->name;
                     $reservas->push($item);
                 }
                 
@@ -602,7 +600,9 @@ class ReservasController extends Controller
             $id_reserva[]=$res->id_reserva;
         }
         enviar_mail_reserva($res->id_reserva,$r->mca_ical);
-        
+        $reservas=\App\Http\Controllers\UsersController::mis_puestos(auth()->user()->id)['mispuestos'];
+        session(['reservas'=>$reservas]);
+
         return [
             'title' => "Reservas",
             'mensaje' => 'Puesto '.$r->des_puesto.' reservado. Identificadores de reserva: '.implode(",",$id_reserva),
@@ -620,6 +620,8 @@ class ReservasController extends Controller
             $reserva->delete();
             savebitacora('Reserva del puesto '.$r->des_puesto.' reservado para el dia '.$r->fecha.' Cancelada',"Reservas","delete","OK");
             insertar_notificacion_web($reserva->id_usuario,2,'Reserva del puesto '.$r->des_puesto.' reservado para el dia '.$r->fecha.' Cancelada',$reserva->id_reserva);
+            $reservas=\App\Http\Controllers\UsersController::mis_puestos(auth()->user()->id)['mispuestos'];
+            session(['reservas'=>$reservas]);
             return [
                 'title' => "Reservas",
                 'mensaje' => 'Reserva del puesto '.$r->des_puesto.' reservado para el dia '.$r->fecha.' Cancelada',

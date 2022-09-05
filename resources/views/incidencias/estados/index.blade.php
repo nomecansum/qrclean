@@ -86,7 +86,7 @@
                             <th>ID</th>
                             <th></th>
                             <th>Nombre</th>
-                            <th>Cliente</th>
+                            @admin @desktop<th>Cliente</th>@enddesktop @endadmin
                             <th></th>
                         </tr>
                     </thead>
@@ -96,7 +96,7 @@
                             <td>{{ $tipo->des_estado }}</td>
                             <td class="text-center"><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
                             <td>{{ $tipo->des_estado }}</td>
-                            <td>{{ $tipo->nom_cliente }}</td>
+                            @admin @desktop<td>{{ $tipo->nom_cliente }}</td>@enddesktop @endadmin
                             <td style="position: relative">
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
                                     <div class="btn-group btn-group pull-right ml-1" role="group">

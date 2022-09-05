@@ -14,12 +14,14 @@
     </div>
 </div>
 
-
+@php
+    $rand=\Str::random(10);
+@endphp
 @section('scripts5')
     <script>
         function loadMonth(month = null,type = null)
         {
-            $('#spinner').show();
+            $('#spin').show();
             $.post('{{url('reservas/loadMonthSchedule')}}', {_token:'{{csrf_token()}}',month: month,type:type,emp:'{{Auth::user()->id}}'}, function(data, textStatus, xhr) {
                 $('#calendario').html(data);
                 $('.des_evento').css('font-size','0.6vw');
@@ -30,17 +32,18 @@
                 $('.changeMonth').click(function(event) {
                     loadMonth($(this).data('month'),$(this).data('action'));
                 });
-                $('#spinner').hide();
+                $('#spin').hide();
+                const calTriggerList{{$rand}} = [...document.querySelectorAll( '.cal-tooltip' )];
+                const caltipList = calTriggerList{{$rand}}.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl,{html: true} ));
             });
         }
 
         $(function(){
-            loadMonth();
+            loadMonth(function(){
+                $('.td_calendar').off('click');
+            });
         })
-
-        $('#calendario').click(function(){
-            window.location.replace("{{ url('/reservas') }}");
-        })
+        
 
         
 

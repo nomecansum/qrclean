@@ -121,7 +121,7 @@
 										<tr>
 											<th style="width: 50%">{{trans('strings._employees.festives.name')}}</th>
 											<th style="width: 8%">{{trans('strings._employees.festives.date')}}</th>
-											<th>{{trans('strings._employees.bussiness')}}</th>
+											@admin @desktop<th>Cliente</th>@enddesktop @endadmin
 											<th class="noExport">{{trans('strings.type')}}</th>
 										</tr>
 									</thead>

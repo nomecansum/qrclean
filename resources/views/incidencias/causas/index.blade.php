@@ -96,7 +96,7 @@
                             <td>{{ $tipo->id_causa_cierre }}</td>
                             <td class="text-center"><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
                             <td>{{ $tipo->des_causa }}</td>
-                            <td>{{ $tipo->nom_cliente }}</td>
+                            @admin @desktop<td>{{ $tipo->nom_cliente }}</td>@enddesktop @endadmin
 
                             <td style="position: relative">
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">

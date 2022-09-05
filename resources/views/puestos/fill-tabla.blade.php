@@ -1,13 +1,4 @@
-<div class="row">
-    <div id="div_filtro">
-        <form method="post" name="form_puestos" id="formbuscador" action="{{ url('puestos/') }}">
-            @csrf
-            <input type="hidden" name="document" value="pantalla">
-            @include('resources.combos_filtro',[$hide=['usu'=>1,'est_inc'=>1,'tip_mark'=>1,'tip_inc'=>1]])
-            @include('puestos.scripts_lista_puestos')
-        </form>
-    </div>
-</div>
+
 <div class="row">
     <div class="card" style="width: 100%">
         <div class="card-header">
@@ -34,9 +25,6 @@
                         data-show-columns="true"
                         data-show-toggle="true"
                         data-show-columns-toggle-all="true"
-                        {{-- data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]" --}}
-                        {{-- data-page-size="20" --}}
-                        {{-- data-pagination="true"  --}}
                         data-toolbar="#all_toolbar"
                         data-buttons-class="secondary"
                         data-show-button-text="true"

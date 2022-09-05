@@ -95,9 +95,13 @@ class LimpiezaController extends Controller
             ->join('users','limpiadores_ronda.id_limpiador','users.id')
             ->where('id_ronda',$ronda->id_ronda)
             ->get();
+            
+        $datos_tiempo=DB::select(DB::raw("select max(fec_fin) as maximo, min(fec_fin) as minimo from puestos_ronda where id_ronda=".$id));
+        $tiempo_empleado=Carbon::parse($datos_tiempo[0]->maximo)->diffAsCarbonInterval (Carbon::parse($datos_tiempo[0]->minimo));
+        $tiempo_empleado=$tiempo_empleado->forHumans();
 
         $detalles=DB::table('puestos_ronda')
-            ->select('puestos_ronda.*','puestos.cod_puesto','puestos.id_edificio','puestos.id_planta','puestos.id_estado','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado','estados_puestos.val_color','users.name','puestos_tipos.val_tiempo_limpieza','puestos_tipos.val_icono','puestos_tipos.val_color as color_puesto')
+            ->select('puestos_ronda.*','puestos.cod_puesto','puestos.des_puesto','puestos.id_edificio','puestos.id_planta','puestos.id_estado','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado','estados_puestos.val_color','users.name','puestos_tipos.val_tiempo_limpieza','puestos_tipos.val_icono','puestos_tipos.val_color as color_puesto')
             ->join('puestos','puestos_ronda.id_puesto','puestos.id_puesto')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -108,10 +112,10 @@ class LimpiezaController extends Controller
             ->get();
 
         if($print==0){
-            return view('limpieza.detalle',compact('ronda','limpiadores','detalles','print'));
+            return view('limpieza.detalle',compact('ronda','limpiadores','detalles','print','tiempo_empleado'));
         } else{
             $filename='Ronda de limpieza #'.$id.'.pdf';
-            $pdf = PDF::loadView('limpieza.detalle',compact('ronda','limpiadores','detalles','print'));
+            $pdf = PDF::loadView('limpieza.detalle',compact('ronda','limpiadores','detalles','print','tiempo_empleado'));
             return $pdf->download($filename);
         }
     }
@@ -152,7 +156,7 @@ class LimpiezaController extends Controller
             ->get();
 
         $puestos=DB::table('puestos_ronda')
-            ->select('puestos_ronda.*','puestos.cod_puesto','puestos.id_edificio','puestos.id_planta','puestos.id_estado','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado','estados_puestos.val_color','users.name')
+            ->select('puestos_ronda.*','puestos.cod_puesto','puestos.des_puesto','puestos.id_edificio','puestos.id_planta','puestos.id_estado','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado','estados_puestos.val_color','users.name')
             ->join('puestos','puestos_ronda.id_puesto','puestos.id_puesto')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')

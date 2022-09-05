@@ -140,7 +140,8 @@ Route::group(['middleware' => 'auth'], function() {
 
     //Resetear los permisos del superadmin
     Route::get('/reset_admin','HomeController@reset_perfil_admin');
-    
+    //Lista todos los iconos del fontawesome para añadirlos en el iconpicker
+    Route::get('/regenera_fontawesome','HomeController@regenera_fontawesome');
 
     
     ////////////////////GESTION DE USUAR IOS////////////////////

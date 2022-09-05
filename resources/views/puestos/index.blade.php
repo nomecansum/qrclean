@@ -88,7 +88,16 @@
     </div>
 
     
-    
+    <div class="row">
+        <div id="div_filtro">
+            <form method="post" name="form_puestos" id="formbuscador" action="{{ url('puestos/') }}" class="form-filter no-toast">
+                @csrf
+                <input type="hidden" name="document" value="pantalla">
+                @include('resources.combos_filtro',[$hide=['usu'=>1,'est_inc'=>1,'tip_mark'=>1,'tip_inc'=>1]])
+                @include('puestos.scripts_lista_puestos')
+            </form>
+        </div>
+    </div>
     <div id="myFilter">
         @if(!isset($r))
             @include('puestos.fill-tabla')

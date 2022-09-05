@@ -701,6 +701,22 @@ class HomeController extends Controller
         }
     }
 
+    public function regenera_fontawesome(){
+        $icons=[Null];
+           $json=file_get_contents(public_path('/plugins/fontawesome6/metadata/categories.json'));
+           $json=json_decode($json);
+           foreach($json as $cat){
+                foreach($cat->icons as $icon){
+                    $icons[]='fa-solid fa-'.$icon;
+                    $icons[]='fa-regular fa-'.$icon;
+                    $icons[]='fa-duotone fa-'.$icon;
+                    $icons[]='fa-light fa-'.$icon;
+                }
+           }
+           $icons=array_unique($icons);
+           return (str_replace(",",",\r\n",str_replace('"',"'",json_encode(array_values($icons)))));
+    }
+
     public function politica(){
         $response=Http::withOptions(['verify' => false])->get(config('app.link_politica'));
         

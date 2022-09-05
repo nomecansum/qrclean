@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,5 +25,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        //Directiva para mostrar cosas solo si se es superadmin
+        Blade::if('admin', function () {
+            if (isAdmin()) {
+                return true;
+            } 
+            return false;
+        });
     }
 }

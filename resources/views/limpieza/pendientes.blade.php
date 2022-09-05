@@ -12,7 +12,7 @@
 @section('breadcrumb')
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
-        <li class="breadcrumb-item"><a href="{{url('/puestos')}}">Limpieza</a></li>
+        <li class="breadcrumb-item"><a href="{{url('/limpieza')}}">Limpieza</a></li>
         <li class="breadcrumb-item active">Puestos pendientes de limpieza</li>
     </ol>
 @endsection

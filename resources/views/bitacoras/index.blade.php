@@ -165,7 +165,7 @@ if (isset($r->fechas)){
                         <thead>
                             <tr>
                                 <th>Usuario</th>
-                                <th>Cliente</th>
+                                @admin @desktop<th>Cliente</th>@enddesktop @endadmin
                                 <th>Modulo</th>
                                 <th>Seccion</th>
                                 <th style="width:30%">Accion</th>
@@ -177,7 +177,7 @@ if (isset($r->fechas)){
                         @foreach($bitacoras as $bitacora)
                             <tr >
                                 <td>{{ $bitacora->name }}</td>
-                                <td>{{ $bitacora->nom_cliente }}</td>
+                                @admin @desktop<td>{{ $bitacora->nom_cliente }}</td>@enddesktop @endadmin
                                 <td>{{ $bitacora->id_modulo }}</td>
                                 <td>{{ $bitacora->id_seccion }}</td>
                                 <td style="word-break: break-all;">{{ $bitacora->accion }}</td>

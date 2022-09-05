@@ -87,7 +87,7 @@
                             <th  data-sortable="true" >ID</th>
                             <th  data-sortable="true" >Nombre</th>
                             <th  data-sortable="true" >Ubicación</th>
-                            <th  data-sortable="true" >Cliente</th>
+                            @admin @desktop<th  data-sortable="true" >Cliente</th>@enddesktop @endadmin
                             <th></th>
                         </tr>
                     </thead>
@@ -97,7 +97,7 @@
                             <td>{{ $edificios->id_edificio }}</td>
                             <td>{{ $edificios->des_edificio }}</td>
                             <td>{{ $edificios->nombre }}</td>
-                            <td>{{ $edificios->nom_cliente }}</td>
+                            @admin @desktop<td>{{ $edificios->nom_cliente }}</td>@enddesktop @endadmin
 
                             <td style="position: relative">
                                 {{ $edificios->abreviatura }}

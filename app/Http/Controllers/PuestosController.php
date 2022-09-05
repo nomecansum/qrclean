@@ -365,7 +365,7 @@ class PuestosController extends Controller
             }
             $puesto->mca_acceso_anonimo=$r->mca_acceso_anonimo??'N';
             $puesto->mca_reservar=$r->mca_reservar??'N';
-
+            $r->val_icono=='undefined'?$puesto->val_icono=null:$puesto->val_icono=$r->val_icono;
             if ($r->hasFile('img_puesto')) {
                 $file = $r->file('img_puesto');
                 $path = '/img/puestos/';

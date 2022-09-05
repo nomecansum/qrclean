@@ -44,21 +44,6 @@
 
        @php
            
-           $secciones=DB::table('secciones')->get();
-           DB::table('secciones_perfiles')->where('id_perfil',5)->delete();
-           foreach($secciones as $seccion){
-               DB::table('secciones_perfiles')->insert([
-                   'id_perfil'=>5,
-                   'id_seccion'=>$seccion->cod_seccion,
-                   'mca_read'=>1,
-                   'mca_write'=>1,
-                   'mca_create'=>1,
-                   'mca_delete'=>1
-               ]);
-           }
-
-
-
        @endphp
     </div>
 </div>

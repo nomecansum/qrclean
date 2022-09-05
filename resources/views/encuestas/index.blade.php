@@ -104,7 +104,7 @@
                             <th data-sortable="true">Titulo</th>
                             <th data-sortable="true" data-width="200">Tipo</th>
                             
-                            <th data-sortable="true"data-width="5%" >Cliente</th>
+                            @admin @desktop<th  data-sortable="true" data-width="5%" >Cliente</th>@enddesktop @endadmin
                             <th data-width="1%">Act</th>
                             <th data-width="1%">Anon</th>
                             <th data-width="200px" data-sortable="true" data-width="10%">Fechas</th>
@@ -119,7 +119,7 @@
                             <td><img src="{{ url('/img',$enc->img_tipo) }}" id="img_tipo" class="imagen_tipo">  <span id="des_tipo" class="ml-3">{{ $enc->des_tipo_encuesta }}</span></td>
                             
                             
-                            <td>{{ $enc->nom_cliente }}</td>
+                            @admin @desktop<td>{{ $enc->nom_cliente }}</td>@enddesktop @endadmin
                             <td class="text-center">@if($enc->mca_activa=='S') <i class="fas fa-circle text-success"></i> @endif</td>
                             <td class="text-center">@if($enc->mca_anonima=='S') <i class="fas fa-circle text-info"></i> @endif</td>
                             

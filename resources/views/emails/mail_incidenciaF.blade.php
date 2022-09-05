@@ -42,7 +42,7 @@ $puesto=DB::table('puestos')
     <p style="font-size: 14px; line-height: 160%;"> </p>
     <p style="font-size: 14px; line-height: 160%;">{{ $nombre_usuario }} ha cerrado la incidencia [{{ $inc->id_incidencia }}] {{ $inc->des_incidencia }}</p></p>
     <br>
-    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:18px"><strong>{{ $inc->comentario_cierre }}</strong></p>
+    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:18px"><strong>{!! $inc->comentario_cierre !!}</strong></p>
     <p><br></p>
     <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong>Fecha:</strong> {!! beauty_fecha($inc->fec_cierre)!!}</p>
 @endsection

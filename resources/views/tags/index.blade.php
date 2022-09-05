@@ -80,7 +80,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Tag</th>
-                            <th>Cliente</th>
+                            @admin @desktop<th>Cliente</th>@enddesktop @endadmin
                             <th></th>
                         </tr>
                     </thead>
@@ -89,7 +89,7 @@
                         <tr class="hover-this">
                             <td>{{ $tag->id_tag }}</td>
                             <td>{{ $tag->nom_tag }}</td>
-                            <td>{{ $tag->nom_cliente }}</td>
+                            @admin @desktop<td>{{ $tag->nom_cliente }}</td>@enddesktop @endadmin
 
                             <td style="position: relative;">
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">

@@ -1486,7 +1486,7 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
         ->leftjoin('provincias','edificios.id_provincia','provincias.id_prov')
         ->where('users.id',$id)
         ->first();
-      
+
 
     $festivos=DB::table('festivos')
         ->select('val_fecha','des_festivo')
@@ -1508,14 +1508,14 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
     foreach($periodo as $fecha){
         $desc=null;
         $es_festivo=0;
-        if($festivos->where('val_fecha',$fecha)->first() && $pertenencias->mca_reservar_festivos=='S'){
+        if($festivos->where('val_fecha',$fecha)->first() && $pertenencias->mca_reservar_festivos=='N'){
             $es_festivo=1;
             $desc=$festivos->where('val_fecha',$fecha)->first()->des_festivo;
         }
-        if($fecha->dayOfWeek==0 && $pertenencias->mca_reservar_sabados=='S'){
+        if($fecha->dayOfWeek==0 && $pertenencias->mca_reservar_sabados=='N'){
             $es_festivo=1;
         }
-        if($fecha->dayOfWeek==6 && $pertenencias->mca_reservar_domingos=='S'){
+        if($fecha->dayOfWeek==6 && $pertenencias->mca_reservar_domingos=='N'){
             $es_festivo=1;
         }
         

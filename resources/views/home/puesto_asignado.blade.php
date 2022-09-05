@@ -17,22 +17,39 @@
     <div class="card-body">
         @foreach($mispuestos as $puesto)
             @php
-                $puesto->factor_puesto=5;
-                $puesto->factor_letra=1.5/(strlen($puesto->cod_puesto)*0.25);
-                if(strlen($puesto->cod_puesto)<4){
-                    $puesto->factor_letra=1.8;
+                if(isMobile()){
+                    if($puesto->factor_puestow<3.5){
+                        $puesto->factor_puestow=15;
+                        $puesto->factor_puestoh=15;
+                        $puesto->factor_letra=2.8;
+                    } else {
+                        //En  mosaico los queremos curadrados siempre
+                        $puesto->factor_puestow=$puesto->factor_puestow*4;
+                        $puesto->factor_puestoh=$puesto->factor_puestow*4;
+                        $puesto->factor_letra=$puesto->factor_letra*4;
+                    }
+                } else if($puesto->factor_puestow<3.5){
+                    $puesto->factor_puestow=3.7;
+                    $puesto->factor_puestoh=3.7;
+                    $puesto->factor_letra=0.8;
                 }
                 $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();   
                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
             @endphp
             <div class="row filamipuesto hover-this" data-token="{{ $puesto->token }}" >
-                <div class="col-md-1">
-                    <div class="text-center rounded mt-2 add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif {!! nombrepuesto($puesto)." \r\n ".$cuadradito['title'] !!}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $puesto->id_planta }}" style="height: 3vw ; width: 3vw; {{ $cuadradito['borde'] }}">
-                        <span class="h-100 align-middle text-center" style="font-size: 0.7vw; ">
+                {{-- <div class="col-md-1">
+                    <div class="text-center rounded mt-2 add-tooltip puesto_parent bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif {!! nombrepuesto($puesto)." \r\n ".$cuadradito['title'] !!}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $puesto->id_planta }}" style="height: 3.5vw ; width: 3.5vw; {{ $cuadradito['borde'] }}">
+                        <span class="h-100 align-middle text-center puesto_child" style="font-size: 1vw; ">
                                 {{ nombrepuesto($puesto) }}
                                 @include('resources.adornos_iconos_puesto')
                         </span>
                     </div>
+                </div> --}}
+                <div class="text-center rounded add-tooltip flpuesto puesto_parent  p-2 mr-2 mb-2 " id="puesto{{ $puesto->id_puesto }}" title="{!! strip_tags( nombrepuesto($puesto)." \r\n ".$cuadradito['title']) !!}  @if(config('app.env')=='local')[#{{ $puesto->id_puesto }}]@endif" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="height: {{ $puesto->factor_puestoh }}vw ; width: {{ $puesto->factor_puestow }}vw; background-color: {{ $cuadradito['color'] }}; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}">
+                    <div class="puesto_child " style="font-size: {{ $puesto->factor_letra }}vw; color: {{ $cuadradito['font_color'] }};">{{ nombrepuesto($puesto) }}
+                        
+                    </div>
+                    @include('resources.adornos_iconos_puesto')
                 </div>
                 
                 <div class="col-md-11 text-primary mt-3">
@@ -44,6 +61,15 @@
     </div>
 </div>
 @endif
+
+<div class="parent">
+    <div class="child">
+        WS 003
+    </div>
+    <div class="icono">
+        R
+    </div>
+</div>
 
 @section('scripts4')
 <script>

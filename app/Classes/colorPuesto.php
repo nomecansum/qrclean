@@ -48,15 +48,57 @@ class colorPuesto
                     'clase_disp'=>"",
                     'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
                     'borde'=>"border: 3px solid #f00; border-radius: ".$puesto->factor_puestor."px",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
-            } else if($puesto->id_estado==5){  //Inoperativo
+            } else if($puesto->id_estado==5){  //Bloqueado
+                return [
+                    'color'=>"#3a444e",
+                    'font_color'=>"#fff",
+                    'clase_disp'=>"",
+                    'title'=>"Puesto bloqueado",
+                    'borde'=>"",
+                    'border-radius'=>$puesto->factor_puestor."px",
+                    "transp"=>0.4
+                ];
+            } else if($puesto->id_estado==4){  //Inoperativo
                 return [
                     'color'=>"#3a444e",
                     'font_color'=>"#fff",
                     'clase_disp'=>"",
                     'title'=>"Puesto inoperativo",
                     'borde'=>"",
+                    'border-radius'=>$puesto->factor_puestor."px",
+                    "transp"=>0.4
+                ];
+            } else if($puesto->id_estado==3 && session('CL')['mca_limpieza']=='S'){  //Limpieza
+                return [
+                    'color'=>"#00a4e6",
+                    'font_color'=>"#fff",
+                    'clase_disp'=>"",
+                    'title'=>"Puesto pendiente de limpieza",
+                    'borde'=>"",
+                    'border-radius'=>$puesto->factor_puestor."px",
+                    "transp"=>0.4
+                ];
+            } else if($puesto->id_estado==2){  //En uso
+                return [
+                    'color'=>"#ef253c",
+                    'font_color'=>"#fff",
+                    'clase_disp'=>"",
+                    'title'=>"Puesto en uso",
+                    'borde'=>"",
+                    'border-radius'=>$puesto->factor_puestor."px",
+                    "transp"=>0.4
+                ];
+            } else if($puesto->id_estado==7){  //No usabble
+                return [
+                    'color'=>"#9bb3bf",
+                    'font_color'=>"#000",
+                    'clase_disp'=>"",
+                    'title'=>"No usable (encuesta)",
+                    'borde'=>"",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if(isset($reserva)){
@@ -77,6 +119,7 @@ class colorPuesto
                     'clase_disp'=>"",
                     'title'=>"Reservado por ".$reserva->name." para hoy ".$horas_reserva,
                     'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if(isset($asignado_usuario)){
@@ -86,6 +129,7 @@ class colorPuesto
                     'clase_disp'=>"",
                     'title'=>"Puesto permanentemente asignado a ".$asignado_usuario->name,
                     'borde'=>"border: 3px solid #ff9f1a; border-radius: ".$puesto->factor_puestor."px",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if(isset($asignado_otroperfil)){
@@ -95,6 +139,7 @@ class colorPuesto
                     'clase_disp'=>"",
                     'title'=>"Puesto reservado para  ".$asignado_otroperfil->des_nivel_acceso,
                     'borde'=>"",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if(isset($asignado_miperfil)){
@@ -104,16 +149,8 @@ class colorPuesto
                     'clase_disp'=>"disponible",
                     'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso,
                     'borde'=>"border: 3px solid #05688f; border-radius: ".$puesto->factor_puestor."px",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>1
-                ];
-            } else if($puesto->id_estado==5){  //Bloqueado
-                return [
-                    'color'=>"#3a444e",
-                    'font_color'=>"#fff",
-                    'clase_disp'=>"",
-                    'title'=>"Puesto bloquedo",
-                    'borde'=>"",
-                    "transp"=>0.4
                 ];
             }   else {
                 if($origen=="P"){
@@ -129,6 +166,7 @@ class colorPuesto
                     'clase_disp'=>"disponible",
                     'title'=>$origen=="P"?$puesto->des_estado:"Disponible",
                     'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>1
                 ];
             } 
@@ -141,6 +179,7 @@ class colorPuesto
                     'clase_disp'=>"",
                     'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
                     'borde'=>"",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if($puesto->id_estado==5){  //Inoperativo
@@ -170,6 +209,7 @@ class colorPuesto
                     'clase_disp'=>"",
                     'title'=>"Reservado por ".$reserva->name." para hoy ".$horas_reserva,
                     'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if(isset($asignado_usuario)){
@@ -179,6 +219,7 @@ class colorPuesto
                     'clase_disp'=>"",
                     'title'=>"Puesto permanentemente asignado a ".$asignado_usuario->name,
                     'borde'=>"border: 3px solid #ff9f1a; border-radius: ".$puesto->factor_puestor."px",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if(isset($asignado_otroperfil)){
@@ -188,6 +229,7 @@ class colorPuesto
                     'clase_disp'=>"",
                     'title'=>"Puesto reservado para  ".$asignado_otroperfil->des_nivel_acceso,
                     'borde'=>"",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             } else if(isset($asignado_miperfil)){
@@ -197,6 +239,7 @@ class colorPuesto
                     'clase_disp'=>"disponible",
                     'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso,
                     'borde'=>"border: 3px solid #05688f; border-radius: ".$puesto->factor_puestor."px",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>1
                 ];
             } else if($puesto->id_estado==5){  //Bloqueado
@@ -206,6 +249,7 @@ class colorPuesto
                     'clase_disp'=>"",
                     'title'=>"Puesto bloquedo",
                     'borde'=>"",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
             }   else {
@@ -222,6 +266,7 @@ class colorPuesto
                     'clase_disp'=>"disponible",
                     'title'=>$origen=="P"?$puesto->des_estado:"Disponible",
                     'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
+                    'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>1
                 ];
             } 

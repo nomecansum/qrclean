@@ -18,7 +18,6 @@
             float: left;
             position: absolute;
             z-index: 1000;
-            color: #FFFFFF;
             font-size: 9px;
             width: 40px;
             height: 40px;

@@ -47,5 +47,34 @@
     .litepicker .container__days .day-item.is-end-date{
         background-color: #26547d !important;
     }
+    
+
+    
+    .puesto_parent {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .puesto_child {
+        width: 90%;
+        height: 90%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        word-wrap: break-word; 
+        max-width: 5ch;
+        text-align: center
+    }
+    .puesto_icono {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        opacity: 0.5;
+        font-weight: bold;
+        font-size: 2.5em;
+    }
+    
 
 </style>

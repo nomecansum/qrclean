@@ -39,8 +39,8 @@
             $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();  
             $usuario=$reservas->where('id_puesto',$puesto->id_puesto)->union($asignados_usuarios->where('id_puesto',$puesto->id_puesto))->first();
         @endphp
-        <div class="text-center  add-tooltip align-middle flpuesto"  id="puesto{{ $puesto->id_puesto }}"  data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestow }}vw ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; ">
-            <span class="h-100 align-middle text-center" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">
+        <div class="text-center  add-tooltip align-middle flpuesto puesto_parent"  id="puesto{{ $puesto->id_puesto }}"  data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestow }}vw ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; ">
+            <span class="h-100 align-middle text-center puesto_child" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">
                 @if (isset($usuario->img_usuario ) && $usuario->img_usuario!='')
                     <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$usuario->img_usuario) }}" title="{{ $usuario->name }}" class="rounded-circle add-tooltip" style="height:{{ $puesto->factor_puestow*1.3 }}em; width:{{ $puesto->factor_puestow*1.3 }}em;">
                     <div class=" letras_imagen" style="font-size: {{ $puesto->factor_letra*2 }}vw">{{ iniciales($usuario->name,2) }}</div>

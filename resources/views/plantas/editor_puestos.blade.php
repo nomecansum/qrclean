@@ -300,7 +300,7 @@
     });
 
     noUiSlider.create(g_def,{
-        start   : [  {{ $plantas->factor_grid }} ],
+        start   : [  {{ $plantas->factor_grid??5 }} ],
         connect : 'lower',
         range   : {
             'min': [  0.1 ],

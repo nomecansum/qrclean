@@ -110,7 +110,7 @@ class Kernel extends ConsoleKernel
 	            	//log_tarea("Fin de la tarea php [".$task->cod_tarea."] " . $task->des_tarea, $task->cod_tarea);
 	            })
 				->onSuccess(function (Stringable $output) use ($task) {
-		             log_tarea("Tarea [".$task->cod_tarea."] " . $task->des_tarea . " se ha ejecutado correctamente. Resp: " . json_encode($output), $task->cod_tarea);
+		             //log_tarea("Tarea [".$task->cod_tarea."] " . $task->des_tarea . " se ha ejecutado correctamente. Resp: ", $task->cod_tarea);
 				})
 		        ->onFailure(function (Stringable $output) use ($task) {
 					 log_tarea("Se ha producido un error al ejecutar la tarea [".$task->cod_tarea."] " . $task->des_tarea . " Error: " . json_encode($output), $task->cod_tarea);

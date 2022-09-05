@@ -62,14 +62,6 @@
 </div>
 @endif
 
-<div class="parent">
-    <div class="child">
-        WS 003
-    </div>
-    <div class="icono">
-        R
-    </div>
-</div>
 
 @section('scripts4')
 <script>

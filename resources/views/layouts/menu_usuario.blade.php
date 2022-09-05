@@ -71,38 +71,20 @@
                     </a>
                 </li>
                 @endif
-                @if(checkPermissions(['Reservas'],['R']))
-                <li class="nav-item has-sub reservas">
-                    <a href="#" class="mininav-toggle nav-link "><i class="fa-light fa-calendar-day fs-5 me-2"></i>{{-- active --}}
-                        <span class="nav-label">Reservas</span>
-                    </a>
-                    <!-- Dashboard submenu list -->
-                    <ul class="mininav-content nav">
-                        @if(checkPermissions(['Reservas puestos'],['R']))<li class="reservas_puestos nav-item"><a href="/reservas" class="text-nowrap nav-link"><i class="fad fa-chair-office"></i> Puestos</a></li> @endif
-                        @if(checkPermissions(['Reservas salas'],['R']) && session('CL')['mca_salas']=='S')<li class="reservas_salas nav-item"><a href="/salas/reservas" class="text-nowrap nav-link"><i class="fad fa-users-class"></i> Salas</a></li> @endif
-                    </ul>
-                    <!-- END : Dashboard submenu list -->
-                </li>
-                @endif
+                @if(checkPermissions(['Incidencias > Mis incidencias'],['R']))<li class="incidencias  nav-item"><a href="/incidencias/mis_incidencias" class="nav-link mininav-toggle collapsed"><i class="fa-light fa-exclamation-triangle fs-5 me-2"></i> <span class="nav-label mininav-content"> Mis incidencias</span></a></li> @endif
 
-                @if(checkPermissions(['Mi oficina'],['R']))
-                <li class="nav-item has-sub parametrizacion">
-                    <a href="#" class="mininav-toggle nav-link">
-                        <i class="fa-light fa-browser fs-5 me-2"></i>
-                        <span class="nav-label">Mi oficina</span>
-                    </a>
-                    
-                    <!--Submenu-->
-                    <ul class="mininav-content nav">
-                        @if(checkPermissions(['Mapa puestos'],['R']))<li class="mapa  nav-item"><a href="/puestos/mapa"  class="text-nowrap nav-link"><i class="fad fa-th"></i> Mapa</a></li> @endif
-                        @if(checkPermissions(['Compañeros'],['R']))<li class="compas  nav-item"><a href="/puestos/compas"  class="text-nowrap nav-link"><i class="fa-duotone fa-users"></i> Mis compañeros</a></li> @endif
-                        @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas text-nowrap nav-item"><a href="/salas" class="text-nowrap nav-link"><i class="fa-light fa-users-class"></i> Salas reunion</a></li> @endif
-                        @if(checkPermissions(['Incidencias > Mis incidencias'],['R']))<li class="incidencias  nav-item"><a href="/incidencias/mis_incidencias" class="text-nowrap nav-link"><i class="fa-light fa-exclamation-triangle"></i> Mis incidencias</a></li> @endif
-                    </ul>
-                </li>
-                @endif
-            </ul>
+                @if(checkPermissions(['Reservas puestos'],['R']))<li class="reservas_puestos nav-item"><a href="/reservas" class="nav-link mininav-toggle collapsed"><i class="fa-light fa-calendar-day fs-5 me-2"></i><span class="nav-label mininav-content">  Reservas</span></a></li> @endif
+                @if(checkPermissions(['Reservas salas'],['R']) && session('CL')['mca_salas']=='S')<li class="reservas_salas nav-item"><a href="/salas/reservas" class="nav-link mininav-toggle collapsed"><i class="fad fa-users-class fs-5 me-2"></i><span class="nav-label mininav-content">  Salas</span></a></li> @endif
+
             
+                <h6 class="mainnav__caption mt-5 px-3 fw-bold">Mi oficina</h6>
+
+                @if(checkPermissions(['Mapa puestos'],['R']))<li class="mapa  nav-item"><a href="/puestos/mapa"  class="nav-link mininav-toggle collapsed"><i class="fad fa-th fs-5 me-2"></i><span class="nav-label mininav-content">  Mapa</span></a></li> @endif
+                @if(checkPermissions(['Compañeros'],['R']))<li class="compas  nav-item"><a href="/puestos/compas"  class="nav-link mininav-toggle collapsed"><i class="fa-duotone fa-users fs-5 me-2"></i><span class="nav-label mininav-content">  Mis compañeros</span></a></li> @endif
+                @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas text-nowrap nav-item"><a href="/salas" class="nav-link mininav-toggle collapsed"><i class="fa-light fa-users-class fs-5 me-2"></i><span class="nav-label mininav-content">  Salas reunion</span></a></li> @endif
+
+            
+            </ul>
             
 
 

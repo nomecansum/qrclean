@@ -37,7 +37,7 @@
                 
             </div>
             <div class="col-md-2 text-end pt-4">
-                <a href="#modal-leyenda " class="link-light" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
+                <a href="#modal-leyenda " class="link-secondary btn_leyenda" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
             </div>
             <div class="col-md-3 text-end pt-4">
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
@@ -53,7 +53,10 @@
             </div>
             
         </div>
+        @include('resources.leyenda_reservas')
         @include('puestos.content_mapa')
+       
+
 @endsection
 
 
@@ -69,6 +72,7 @@
             console.log("click");
             picker.open('#fecha_ver');
         })
+
 
         const picker = MCDatepicker.create({
             el: "#fecha_ver",

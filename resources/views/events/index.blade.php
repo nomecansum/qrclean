@@ -79,7 +79,7 @@
                                 <tbody>
                                     @foreach ($eventos as $ev)
 
-                                        <tr class="hover-this" @if((checkPermissions(['Eventos'],['W'])) || fullAccess()) data-href="{{url(config('app.carpeta_asset').'/edit/'.$ev->cod_regla)}}"@endif>
+                                        <tr  @if((checkPermissions(['Eventos'],['W'])) || fullAccess()) data-href="{{url(config('app.carpeta_asset').'/edit/'.$ev->cod_regla)}}"@endif>
                                             <td>{{$ev->cod_regla}}</td>
                                             <td>{{$ev->nom_regla}}</td>
                                             <td>{{ str_replace(".php","",str_replace("_"," ",basename($ev->nom_comando))) }}</td>
@@ -107,15 +107,21 @@
                                                 $clientes=DB::table('clientes')->select('nom_cliente')->whereIn('id_cliente',$clientes)->pluck('nom_cliente')->toArray();
                                                 @endphp
                                                 @foreach ($clientes as $c)
-                                                        <li>{{$c}}</li>
+                                                        <li class="text-nowrap" style="font-size: 12px">{{$c}}</li>
                                                 @endforeach
                                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
-                                                    <div class="btn-group btn-group pull-right ml-1" role="group">
-                                                        <a href="javascript:void(0);" data-cod_regla="{{$ev->cod_regla}}"  class="btn btn-xs btn-secondary log_regla"><i class="fa-solid fa-magnifying-glass"></i> {{__('general.detalles')}}</a>
+                                                    {{-- <div class="btn-group btn-group pull-right ml-1" role="group">
+                                                        <a href="javascript:void(0);" data-cod_regla="{{$ev->cod_regla}}" onclick="detalle($ev->cod_regla)"  class="btn btn-xs btn-secondary log_regla"><i class="fa-solid fa-magnifying-glass"></i> {{__('general.detalles')}}</a>
                                                         @if(checkPermissions(['Eventos'],['W']))<a href="{{url(config('app.carpeta_asset').'/edit',$ev->cod_regla)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>@endif
-                                                        @if(checkPermissions(['Eventos'],['D']))<a href="#eliminar-regla-{{$ev->cod_regla}}" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>@endif
+                                                        @if(checkPermissions(['Eventos'],['D']))<a href="javascript:void(0);" onclick="del($ev->cod_regla)" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>@endif
+                                                    </div> --}}
+                                                    <div class="btn-group btn-group pull-right ml-1" role="group">
+                                                        <a href="javascript:void(0)" class="btn btn-xs btn-secondary btn_run" onclick="detalle({{$ev->cod_regla}},'{{$ev->nom_regla}}')" data-id="{{ $ev->cod_regla }}"><i class="fa-solid fa-magnifying-glass"></i> {{__('general.detalles')}}</a>
+                                                        @if(checkPermissions(['Eventos'],['W']))<a href="{{url('tasks/edit',$ev->cod_regla)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>@endif
+                                                        @if(checkPermissions(['Eventos'],['D']))<a href="#eliminar-regla-{{$ev->cod_regla}}" onclick="del({{$ev->cod_regla}})" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>@endif
                                                     </div>
                                                 </div>
+                                                
                                                 <div class="modal fade" id="eliminar-regla-{{$ev->cod_regla}}">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
@@ -130,8 +136,8 @@
                                                                 {{ __('eventos.eliminar_la_regla') }} {{ $ev->nom_regla }}?
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <a class="btn btn-warning" href="{{url(config('app.carpeta_asset').'/delete',$ev->cod_regla)}}">{{trans('general.yes')}}</a>
-                                                                <button type="button" data-dismiss="modal" class="btn btn-info">{{trans('general.cancelar')}}</button>
+                                                                <a class="btn btn-info" href="{{url(config('app.carpeta_asset').'/delete',$ev->cod_regla)}}">{{trans('general.yes')}}</a>
+                                                                <button type="button" data-dismiss="modal" class="btn btn-warning" onclick="cerrar_modal()">{{trans('general.cancelar')}}</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -152,24 +158,29 @@
     </div>
 </div>
 
+
 @endsection
 
 
-@section('scripts')
+@section('scripts2')
     <script src="{{url('/plugins/jQuery-slimScroll-1.3.8/jquery.slimscroll.min.js')}}"></script>
     <script>
         $('.configuracion').addClass('active active-sub');
         $('.menu_utilidades').addClass('active active-sub');
         $('.eventos').addClass('active-link');
 
-        $('.log_regla').click(function(){
+        function del(id){
+            $('#eliminar-regla-'+id).modal('show');
+        }
+
+        function detalle(id){
             event.stopPropagation();
-            $("#log_evento_"+$(this).data('cod_regla')).show();
-            $("#detail_evento_"+$(this).data('cod_regla')).load("{{url(config('app.carpeta_asset').'/detalle_evento')}}/"+$(this).data('cod_regla'), function(){
+            $("#log_evento_"+id).show();
+            $("#detail_evento_"+id).load("{{url(config('app.carpeta_asset').'/detalle_evento')}}/"+id, function(){
                 //animateCSS("#log_evento_"+$(this).data('cod_regla'),"fadeIn");
             });
             //console.log("Log "+$(this).data('cod_regla'));
-        });
+        }
     </script>
     
 @endsection

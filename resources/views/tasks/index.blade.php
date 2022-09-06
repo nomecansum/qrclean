@@ -148,9 +148,6 @@
 												<a class="btn btn-info" href="{{url('tasks/delete',$t->cod_tarea)}}">{{__('general.yes')}}</a>
 												<button type="button" data-dismiss="modal" class="btn btn-warning" onclick="cerrar_modal()" >{{__('general.cancelar')}}</button>
 											</div>
-											<div class="modal-footer">
-												<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-											</div>
 										</div>
 									</div>
 								</div>
@@ -299,6 +296,10 @@
 			}
 	
 		});
+
+		function del(id){
+            $('#eliminar-tarea-'+id).modal('show');
+        }
 	
 		function run(id,desc){
 			event.preventDefault();

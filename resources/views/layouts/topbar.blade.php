@@ -123,14 +123,23 @@
                         <div class="col-md-7">
 
                             <!-- Simple widget and reports -->
-                            <div class="list-group list-group-borderless mb-3">
-                                <div class="list-group-item text-center border-bottom mb-3">
+                            <div class="list-group list-group-borderless ">
+                                <div class="list-group-item text-center border-bottom mb-2">
                                     <p class="display-1 text-warning cuenta_reservas">{{ session('reservas')!==null?count(session('reservas')):0 }}</p>
                                     <p class="h6 mb-0"><i class="fa-light fa-calendar-circle-user"></i> Reservas</p>
                                     <small class="text-muted">Reservas para hoy {!! beauty_fecha(Carbon\Carbon::now(),0) !!}</small>
                                 </div>
                             </div>
-
+    
+                                @if(session('reservas')!==null)
+                                    @foreach(session('reservas') as $reserva)
+                                        <div class="py-0">
+                                            <i class="{{ $reserva->icono_tipo }}" style="color: {{ $reserva->color_tipo }}"></i> {{ $reserva->des_tipo_puesto }} 
+                                            <small class="fw-bolder"> {{ $reserva->cod_puesto }}</small>
+                                        </div>
+                                    @endforeach
+                                @endif
+     
                         </div>
                         <div class="col-md-5">
 
@@ -162,7 +171,7 @@
 
                         </div>
                     </div>
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-12">
                             @if(session('reservas')!==null)
                                 @foreach(session('reservas') as $reserva)
@@ -173,7 +182,7 @@
                                 @endforeach
                             @endif
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>

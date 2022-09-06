@@ -111,9 +111,9 @@
 
             <i class="fas fa-exclamation-triangle"></i> El usuario no tiene asignado ningun edificio/planta en donde reservar, debe asignarle plantas en los detalles de usuario o utilizando la acción de "Asignar planta"
     @endif
+    
 </div>
 
-@include('resources.leyenda_puestos')
 <script>
     
     document.querySelectorAll(".chkpuesto").forEach(item => 

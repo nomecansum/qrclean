@@ -138,7 +138,7 @@
             </div>
         </div>
         @endforeach
-        @include('resources.leyenda_puestos')
+        @include('resources.leyenda_reservas')
 
 @endsection
 

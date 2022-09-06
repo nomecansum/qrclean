@@ -336,7 +336,7 @@
 
             if (tipo == 'pantalla') {
                 //$('body').scrollTo('#myFilter');
-                $('#divfiltro').toggle();
+                //$('#divfiltro').toggle();
                 $('#myFilter').html(data);
             }
             fin_espere();
@@ -387,7 +387,7 @@
 
             if (tipo == 'pantalla') {
                 $('#myFilter').html(data);
-                $('#divfiltro').toggle();
+                //$('#divfiltro').toggle();
             }
             fin_espere();
 

@@ -2,11 +2,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true"><i class="demo-psi-cross"></i></span></button>
-                <h4 class="modal-title">Leyenda de puestos para reservas</h4><br>
-               
-            </div>
+                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                <h1 class="modal-title text-nowrap">Leyenda de puestos </h1>
+                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                </button>
+            </div>    
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-1 text-end"><img src="{{ url('img/res_flecha1.png') }}"></div>
@@ -36,7 +37,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-warning">Cerrar</button>
+                <button type="button" data-dismiss="modal" class="btn btn-warning" onclick="cerrar_modal()">Cerrar</button>
             </div>
         </div>
         <div class="modal-footer">

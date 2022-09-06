@@ -255,7 +255,7 @@ if(!isset($id_check))
     @include('puestos.scripts_lista_puestos')
 @endsection
 @section('scripts2')
-@include('resources.leyenda_puestos')
+@include('resources.leyenda_reservas')
 <script>
     
 $('.tabla').on('sort.bs.table', function(){

@@ -43,7 +43,7 @@
             @if(isset($incidencia->fec_cierre))
             <div class="row  mt-3 bg-gray">
                 <div class="col-md-3">
-                    <span class="font-bold">Resuelta por: </span><span>{{ App\Models\users::find($incidencia->id_usuario_cierre)->name }}</span>
+                    <span class="font-bold">Resuelta por: </span><span>{{ isset($incidencia->id_usuario_cierre)?App\Models\users::find($incidencia->id_usuario_cierre)->name:'' }}</span>
                 </div>
                 <div class="col-md-3">
                     <span class="font-bold">Fecha: </span><span>{!! beauty_fecha($incidencia->fec_cierre) !!}</span>
@@ -59,12 +59,12 @@
             <div class="row mt-3">
                 <div class="col-md-6">
                     @if($incidencia->img_attach1)
-                        <img src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}" style="width: 100%">
+                        <img onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}')" src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}" style="width: 100%">
                     @endif
                 </div>
                 <div class="col-md-6">
                     @if($incidencia->img_attach2)
-                        <img src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach2) }}" style="width: 100%">
+                        <img onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}')" src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach2) }}" style="width: 100%">
                     @endif
                 </div>
             </div>
@@ -105,7 +105,7 @@
                         </div>
                         <div class="tl-media">
                             @if (isset($accion->img_usuario ) && $accion->img_usuario!='')
-                                <img class="img-xs img-circle" src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$accion->img_usuario) }}" alt="{{ $accion->name }}">
+                                <img class="img-xs rounded-circle add-tooltip" src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$accion->img_usuario) }}" alt="{{ $accion->name }}">
                             @else
                             {!! icono_nombre($accion->name,32,14) !!}
                             @endif
@@ -115,8 +115,8 @@
                                 <span class="btn-link">{{ $accion->name }}</span> <i>{{ $accion->des_accion }}</i>
                                 <br>
                                 <div class="float-right">
-                                    @if(isset($accion->img_attach1)  && $accion->img_attach1!='')<a class="link_imagen" href="#modal_img_accion" data-toggle="modal" data-src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" style="height: 100px"></a>@endif
-                                    @if(isset($accion->img_attach2)  && $accion->img_attach2!='')<a class="link_imagen" href="#modal_img_accion" data-toggle="modal" data-src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" style="height: 100px"></a>@endif
+                                    @if(isset($accion->img_attach1)  && $accion->img_attach1!='')<a class="link_imagen" onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}')" href="#modal_img_accion" data-toggle="modal" data-src="" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" style="height: 100px"></a>@endif
+                                    @if(isset($accion->img_attach2)  && $accion->img_attach2!='')<a class="link_imagen" onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}')" href="#modal_img_accion" data-toggle="modal" data-src="" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" style="height: 100px"></a>@endif
                                 </div>
                             </div>
                             @if(isset($accion->id_estado))
@@ -131,7 +131,7 @@
                     @endforeach
                     @if(isset($incidencia->fec_cierre))
                     @php
-                        $usuario_cierre=App\Models\users::find($incidencia->id_usuario_cierre);
+                        $usuario_cierre=App\Models\users::find($incidencia->id_usuario_cierre??config('app.id_usuario_tareas'));
                     @endphp
                         <div class="tl-entry">
                             <div class="tl-time">
@@ -169,7 +169,7 @@
                         <img style="width:100%" id="img_accion">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" data-dismiss="modal" class="btn btn-warning">Cerrar</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-warning" onclick="cerrar_modal()">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -177,9 +177,11 @@
     </div>
     <script>
         $('.round').css('line-height','33px');
-        $('.link_imagen').click(function(){
-            $('#img_accion').attr('src',$(this).data('src'));
-        })
+
+        function ampliar(src){
+            $('#modal_img_accion').modal('show');
+            $('#img_accion').attr('src',src);
+        }
         var tooltip = $('.add-tooltip');
         if (tooltip.length)tooltip.tooltip();
 

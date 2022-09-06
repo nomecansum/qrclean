@@ -63,7 +63,7 @@
         justify-content: center;
         word-wrap: break-word; 
         max-width: 5ch;
-        text-align: center
+        text-align: center;
     }
     .puesto_icono {
         position: absolute;
@@ -71,7 +71,7 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        opacity: 0.5;
+        opacity: 0.4;
         font-weight: bold;
         font-size: 2.5em;
     }

@@ -103,6 +103,9 @@ class UsersController extends Controller
             $q->join('turnos_usuarios','users.id', 'turnos_usuarios.id_usuario');
             $q->wherein('turnos_usuarios.id_turno',$r->id_turno);
         })
+        ->when($r->cod_colectivo, function($q) use($r){
+            $q->whereRaw('users.id in (select id_usuario from colectivos_usuarios where cod_colectivo in ('.implode(",",$r->cod_colectivo).'))');
+        })
         ->when($r->supervisor, function($q) use($r){
             $q->wherein('users.id_usuario_supervisor',$r->supervisor);
         })

@@ -136,11 +136,16 @@ class LoginController extends Controller
     {
 
         $request->validate([
-            'email' => 'required|string|email'
+            'email' => 'required|string'
         ]);
 
-        $u=User::where(['email' => $request->email])->first();
-        $email=$request->email;
+        $u=User::where(['email' => $request->email])
+            ->orwhere(function($q) use($request){
+                $q->wherenotnull('id_usuario_externo');
+                $q->whereraw('UCASE(id_usuario_externo)=UCASE("'.$request->email.'")');
+            })
+            ->first();
+        $email=$u->email;
         $logo=null;
         //A ver si existe y si esta validado
         if(!isset($u)){

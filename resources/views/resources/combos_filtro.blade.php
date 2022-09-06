@@ -201,6 +201,16 @@
     </div>
 </div>
 
+<div class="form-group  col-md-12 mt-3" style="{{ (isset($show['col']) && $show['col']==1) ? '' : 'display: none'  }}">
+    <label>Colectivo</label>
+    <div class="input-group select2-bootstrap-append">
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="cod_colectivo[]" id="multi-colectivos" >
+            
+        </select>
+        <button class="btn btn-primary select-all" data-select="multi-colectivos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+    </div>
+</div>
+
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['tur']) && $show['tur']==1) ? '' : 'display: none'  }}">
     <label>Turno</label>
     <div class="input-group select2-bootstrap-append">
@@ -382,6 +392,16 @@
                     tipo_s=val.id_cliente;
                 }
                 $('#multi-supervisor').append('<option value="'+val.id+'">'+val.name+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            colectivo_c="";
+            $.each(data.colectivos, function(index, val) {
+                if(colectivo_c!=val.id_cliente){
+                    $('#multi-colectivos').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    colectivo_c=val.id_cliente;
+                }
+                $('#multi-colectivos').append('<option value="'+val.cod_colectivo+'">'+val.des_colectivo+'</option>');
             });
             $('#loadfilter').hide();
             //try{ end_update_filtros('cliente') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado

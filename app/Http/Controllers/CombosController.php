@@ -145,6 +145,14 @@ class CombosController extends Controller
                 ->orderby('clientes.nom_cliente')
                 ->orderby('des_turno')
                 ->get(),
+            
+            "colectivos" => DB::table('colectivos')
+                ->select('clientes.id_cliente','clientes.nom_cliente','colectivos.cod_colectivo','colectivos.des_colectivo')
+                ->join('clientes','clientes.id_cliente','colectivos.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
+                ->orderby('des_colectivo')
+                ->get(),
         ];
     }
 

@@ -167,7 +167,6 @@
                             <i class="fa-light fa-sensor-on fs-5 me-2"></i>
                             @if(checkPermissions(['Parametrizacion'],['R']))<span class="nav-label">Ferias</span> @endif
                         </a>
-                        
                         <!--Submenu-->
                         <ul class="mininav-content nav collapse">
                             @if(checkPermissions(['Ferias'],['R']))<li class="ferias_asistentes nav-item"><a href="/ferias/asistentes" class="text-nowrap nav-link"><i class="fa-light fa-user-tie"></i> Asistentes</a></li> @endif

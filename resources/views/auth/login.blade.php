@@ -24,7 +24,7 @@
                     <form method="POST" class="mt-4" action="{{ isset($email)?route('login'):route('prelogin') }}">
                         @csrf
 
-                        <input id="email" type="email" class="mb-3 form-control @error('email') is-invalid @enderror" placeholder="Username" name="email" value="{{ isset($email)?$email:old('email') }}" required autocomplete="email" autofocus>
+                        <input id="email" type="text" class="mb-3 form-control @error('email') is-invalid @enderror" placeholder="Username" name="email" value="{{ isset($email)?$email:old('email') }}" required autocomplete="email" autofocus>
                         @error('email')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

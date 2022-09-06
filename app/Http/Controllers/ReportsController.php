@@ -117,6 +117,14 @@ class ReportsController extends Controller
             }
         })
         ->where(function($q) use($r){
+            if ($r->id_departamento) {
+                $q->whereIn('users.id_departamento',$r->id_departamento);
+            }
+        })
+        ->when($r->cod_colectivo, function($q) use($r){
+            $q->whereRaw('users.id in (select id_usuario from colectivos_usuarios where cod_colectivo in ('.implode(",",$r->cod_colectivo).'))');
+        })
+        ->where(function($q) use($r){
             if ($r->tags) {
                 if($r->andor){//Busqueda con AND
                     $puestos_tags=DB::table('tags_puestos')

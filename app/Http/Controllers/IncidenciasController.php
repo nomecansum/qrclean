@@ -91,6 +91,7 @@ class IncidenciasController extends Controller
             ->join('incidencias_tipos','incidencias_tipos.id_tipo_incidencia','incidencias.id_tipo_incidencia')
             ->where('id_incidencia',$inc->id_incidencia)
             ->first();
+        $data->url_base=env('APP_URL');
         $accion=DB::table('incidencias_acciones')
             ->where('id_incidencia',$inc->id_incidencia)
             ->first();

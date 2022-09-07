@@ -22,7 +22,7 @@ Route::get('/unauthenticated', function () {
     return response()->json(['result'=>'error','timestamp'=>Carbon\Carbon::now(),'message' => 'Unauthenticated.'], 401);
 });
 
-Route::post('/test_request', 'APIController@process_test');
+Route::post('/test_request', 'APIController@echo_test');
 Route::get('/test_request', 'APIController@echo_test');
 
 //Funciones para login y registro

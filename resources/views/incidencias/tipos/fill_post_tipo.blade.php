@@ -41,6 +41,7 @@
                         <b>#id_incidencia_externo#:</b> Identificador de la incidencia en el sistema externo<br>
                         <b>#id_incidencia_salas#:</b> Identificador de la incidencia en spotlinker salas<br>
                         <b>#id_causa_cierre#:</b> Identificador de la causa de cierre<br>
+                        <b>#url_base#:</b> URL base de la aplicacion<br>
                     </div>
                 </div>
             </div>
@@ -84,6 +85,7 @@
                         <b>#id_incidencia_externo#:</b> Identificador de la incidencia en el sistema externo<br>
                         <b>#id_incidencia_salas#:</b> Identificador de la incidencia en spotlinker salas<br>
                         <b>#id_causa_cierre#:</b> Identificador de la causa de cierre<br>
+                        <b>#url_base#:</b> URL base de la aplicacion<br>
                     </div>
                 </div>
             </div>
@@ -200,6 +202,7 @@ En las peticiones se pueden utilizar los siguientes comodines que serán sustitu
                     <b>#id_causa_cierre#:</b> Identificador de la causa de cierre<br>
                     <b>#comentario_cierre#:</b> Comentario de cierre de la incidencia<br>
                     <b>#des_accion#:</b> Texto de la ultima accion añadida<br>
+                    <b>#url_base#:</b> URL base de la aplicacion<br>
                 </div>
             </div>
             </div>

@@ -38,6 +38,8 @@
         @php
             $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();  
             $usuario=$reservas->where('id_puesto',$puesto->id_puesto)->union($asignados_usuarios->where('id_puesto',$puesto->id_puesto))->first();
+            // $puesto->factor_puestow=$puesto->factor_puestow+1;
+            // $puesto->factor_puestoh=$puesto->factor_puestoh+1;
         @endphp
         <div class="text-center  add-tooltip align-middle flpuesto puesto_parent"  id="puesto{{ $puesto->id_puesto }}"  data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestow }}vw ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; ">
             <span class="h-100 align-middle text-center puesto_child" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">

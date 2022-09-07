@@ -53,7 +53,7 @@
                                         <td class="text-center">{{ $res->cod_puesto }}</td>
                                         <td style="position:relative">
                                             @if($res->mca_anulada=='N')
-                                                <div class="pull-right floating-like-gmail mt-3" style="width: 300px;">
+                                                <div class="pull-right floating-like-gmail" style="width: 300px;">
                                                     <a href="javascript:void(0)" class="btn btn-info btn-xs btn_edit  add-tooltip mr-1" title="Modificar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-pencil-alt"></i> Modificar</a>
                                                     <a href="#planta{{ $res->id_planta }}" class="btn btn-secondary btn-xs btn_ver  add-tooltip mr-1" title="Ver puesto en plano/mapa" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-puesto="{{ $res->id_puesto }}"><i class="fad fa-search-location"></i> Ver puesto</a>
                                                     <a href="javascript:void(0)" class="btn btn-danger btn-xs btn_del  add-tooltip mr-1" title="Cancelar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-trash-alt"></i> Borrar</a> 

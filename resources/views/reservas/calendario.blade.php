@@ -168,7 +168,7 @@ $rand=\Str::random(10);
 	})
 
 	const calTriggerList{{ $rand }} = [...document.querySelectorAll( '.cal-tooltip' )];
-    const caltipList = calTriggerList{{ $rand }}.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl,{html: true} ));
+    const caltipList{{ $rand }} = calTriggerList{{ $rand }}.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl,{html: true} ));
 	
 	fechacal="{{ $month }}";
 

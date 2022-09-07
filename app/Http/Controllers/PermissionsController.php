@@ -19,14 +19,10 @@ class PermissionsController extends Controller
 			->where(function($q){
 				if (!isAdmin()) {
 					$q->where('niveles_acceso.id_cliente',Auth::user()->id_cliente);
-					if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-						$q->orwhere('niveles_acceso.mca_fijo','S');
-					}
+					$q->orwhere('niveles_acceso.mca_fijo','S');
 				} else {
 					$q->where('niveles_acceso.id_cliente',session('CL')['id_cliente']);
-					if(config_cliente('mca_mostrar_datos_fijos')=='S'){
-						$q->orwhere('niveles_acceso.mca_fijo','S');
-					}
+					$q->orwhere('niveles_acceso.mca_fijo','S');
 				}
 			})
 			->get();

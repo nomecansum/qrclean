@@ -91,7 +91,7 @@
                                         <label class="custom-control-label"   for="chkp{{ $puesto->id_puesto }}"></label>
                                     </div>
                                 @endif
-                                <div class="puesto_child " style="font-size: {{ $puesto->factor_letra }}vw; color: {{ $cuadradito['font_color'] }};">{{ nombrepuesto($puesto) }}
+                                <div class="puesto_child " style="font-size: {{ $puesto->factor_letra }}vw; color: {{ $cuadradito['font_color'] }};">{{ $puesto->des_puesto }}
                                     
                                 </div>
                                 @include('resources.adornos_iconos_puesto')

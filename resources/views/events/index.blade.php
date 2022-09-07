@@ -117,7 +117,7 @@
                                                     </div> --}}
                                                     <div class="btn-group btn-group pull-right ml-1" role="group">
                                                         <a href="javascript:void(0)" class="btn btn-xs btn-secondary btn_run" onclick="detalle({{$ev->cod_regla}},'{{$ev->nom_regla}}')" data-id="{{ $ev->cod_regla }}"><i class="fa-solid fa-magnifying-glass"></i> {{__('general.detalles')}}</a>
-                                                        @if(checkPermissions(['Eventos'],['W']))<a href="{{url('tasks/edit',$ev->cod_regla)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>@endif
+                                                        @if(checkPermissions(['Eventos'],['W']))<a href="{{url('events/edit',$ev->cod_regla)}}" class="btn btn-xs btn-info"><i class="fas fa-pencil"></i> {{__('general.edit')}}</a>@endif
                                                         @if(checkPermissions(['Eventos'],['D']))<a href="#eliminar-regla-{{$ev->cod_regla}}" onclick="del({{$ev->cod_regla}})" data-toggle="modal" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i> {{__('general.delete')}}</a>@endif
                                                     </div>
                                                 </div>

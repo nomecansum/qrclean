@@ -36,7 +36,7 @@
                 $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();   
                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
             @endphp
-            <div class="row filamipuesto hover-this" data-token="{{ $puesto->token }}" >
+            <div class="d-flex filamipuesto hover-this flex-row" data-token="{{ $puesto->token }}" >
                 {{-- <div class="col-md-1">
                     <div class="text-center rounded mt-2 add-tooltip puesto_parent bg-{{ $puesto->color_estado }} align-middle flpuesto draggable" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif {!! nombrepuesto($puesto)." \r\n ".$cuadradito['title'] !!}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $puesto->id_planta }}" style="height: 3.5vw ; width: 3.5vw; {{ $cuadradito['borde'] }}">
                         <span class="h-100 align-middle text-center puesto_child" style="font-size: 1vw; ">
@@ -52,7 +52,7 @@
                     @include('resources.adornos_iconos_puesto')
                 </div>
                 
-                <div class="col-md-11 text-primary mt-3">
+                <div class="text-primary mt-3">
                     <h4 style=""><span style="color: {{ $puesto->color_tipo }}">[<i class="{{ $puesto->icono_tipo }} }}"></i> {!! $puesto->des_tipo_puesto !!}]</span> <i class="fa fa-arrow-right"></i> Tiene el puesto <b>{{ $puesto->cod_puesto }}</b> {!! $cuadradito['title'] !!}</h4>
                 </div>
             </div>

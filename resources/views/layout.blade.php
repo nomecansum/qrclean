@@ -4,7 +4,7 @@
 <head>
     <meta name="generator" content="Hugo 0.87.0" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=no, shrink-to-fit=yes">
     <title>{{ config('app.name') }}</title>
     <link rel="shortcut icon" type="image/jpg" href="/img/logo.png"/>
 

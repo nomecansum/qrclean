@@ -2,6 +2,10 @@
 @php
 // dd($pl);   
 @endphp
+<div class="form-group col-md-4 mb-3">
+    <label>Zoom: </label> <span id="puesto-zoom-def-val-{{ $pl->id_planta }}"></span>
+    <div id="puesto-zoom-def-{{ $pl->id_planta }}"></div>	
+</div>
 @if(isset($pl->img_plano))
 {{--  {!! json_encode($pl->posiciones) !!}  --}}
 
@@ -72,6 +76,8 @@
      @endphp
     @endforeach
 </div>
+<script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
+<script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
 <script>
     var tooltip = $('.add-tooltip');
     if (tooltip.length)tooltip.tooltip();
@@ -87,6 +93,42 @@
     } catch($err){
        
     }
+
+    zoom_actual{{ $pl->id_planta }}=100;
+    var hacer_zoom{{ $pl->id_planta }};
+
+    function zoom{{ $pl->id_planta }}(){
+
+        $('#plano{{ $pl->id_planta }}').animate({ 'zoom': zoom_actual{{ $pl->id_planta }}/100 }, 400);
+        $('#plano{{ $pl->id_planta }}').animate({ 'width': zoom_actual{{ $pl->id_planta }}+'%' }, 400);
+        recolocar_puestos();
+    }
+    
+
+    var z_def{{ $pl->id_planta }} = document.getElementById('puesto-zoom-def-{{ $pl->id_planta }}');
+    var z_def_value{{ $pl->id_planta }} = document.getElementById('puesto-zoom-def-val-{{ $pl->id_planta }}');
+
+    noUiSlider.create(z_def{{ $pl->id_planta }},{
+        start   : [ 100 ],
+        connect : 'lower',
+        step: 10,
+        range   : {
+            'min': [  20 ],
+            'max': [ 500 ]
+        },
+        format: wNumb({
+            decimals: 0
+        }),
+    });
+
+    z_def{{ $pl->id_planta }}.noUiSlider.on('update', function( values, handle ) {
+        z_def_value{{ $pl->id_planta }}.innerHTML = values[handle]+' %';
+        zoom_actual{{ $pl->id_planta }}=values[handle];
+        clearTimeout(hacer_zoom{{ $pl->id_planta }});
+        hacer_zoom{{ $pl->id_planta }}=setTimeout(() => {
+            zoom{{ $pl->id_planta }}();
+        }, 500);
+    });
 
     //document.getElementById('plano{{ $pl->id_planta }}').setAttribute("data-posiciones", posiciones);
     //$('#plano{{ $pl->id_plano }}').data('posiciones',posiciones);

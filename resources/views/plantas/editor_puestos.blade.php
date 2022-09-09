@@ -47,7 +47,16 @@
             @endif
             
             
-
+            {{-- <div class="col-md-2" class="row b-all"  style="margin-top: 30px">
+                <label class="control-label float-left mr-2">zoom</label>
+                <i class="fa fa-minus-square float-left mt-1 mr-1" onclick="zoom(-1)"></i>
+                <span id="zoom_level" class="float-left">100%</span>
+                <i class="fa fa-plus-square float-left mt-1 ml-1"  onclick="zoom(+1)"></i>
+            </div> --}}
+            <div class="form-group col-md-4">
+                <label>Zoom: </label> <span id="puesto-zoom-def-val"></span>
+                <div id="puesto-zoom-def"></div>	
+            </div>
             <form method="POST" action="{{ url('/plantas/puestos/') }}" id="edit_plantas_form" name="edit_plantas_form" accept-charset="UTF-8" class="form-horizontal form-ajax"  enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="json" id="json">
@@ -58,7 +67,7 @@
                 <input type="hidden" name="factor_puestor" id="factor_puestor" value="{{ $plantas->factor_puestor }}">
                 <input type="hidden" name="factor_letra" id="factor_letra"  value="{{ $plantas->factor_letra }}">
                 <input type="hidden" name="factor_grid" id="factor_grid"  value="{{ $plantas->factor_grid }}">
-                <div class="card">
+                <div class="card overflow-auto">
                     <div class="card-body">
                         @if(isset($plantas->img_plano))
                         {{--  style="background-image: url('{{ url('img/plantas/'.$plantas->img_plano) }}'); background-repeat: no-repeat; background-size: contain;"  --}}
@@ -80,8 +89,9 @@
                                  if($puesto->top==null && $puesto->left==null){
                                     $puesto->color_estado="secondary";
                                  }
+
                                 @endphp
-                                    <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto puesto_parent draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="height: {{ $puesto->factor_puestoh }}vw ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }}">
+                                    <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto puesto_parent draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="height: {{ $puesto->factor_puestoh }}vh ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }}">
                                         <span class="h-100 align-middle texto_puesto puesto_child" style="font-size: {{ $puesto->factor_letra }}vw;">{{ nombrepuesto($puesto) }}</span>
                                     </div>
                                 @php
@@ -137,6 +147,15 @@
 
 <script>
     $('.form-ajax').submit(form_ajax_submit);
+    zoom_actual=100;
+    var hacer_zoom;
+
+    function zoom(){
+
+        $('.container').animate({ 'zoom': zoom_actual/100 }, 400);
+        $('.container').animate({ 'width': zoom_actual+'%' }, 400);
+        recolocar_puestos();
+    }
 
     var tooltip = $('.add-tooltip');
     if (tooltip.length)tooltip.tooltip();
@@ -149,15 +168,7 @@
     } catch($err){
         posiciones=[];
     }
-    //console.log(posiciones);
-    function colocar_puestos(){
-        console.log("recolocar");
-        $.each(posiciones, function(i, item) {//console.log(item);
-            puesto=$('#puesto'+item.id);
-            puesto.css('top',$('#plano').height()*item.offsettop/100);
-            puesto.css('left',$('#plano').width()*item.offsetleft/100);
-        });
-    }
+
 
     $( function() {
         $( ".draggable" ).draggable({
@@ -172,7 +183,7 @@
                 });
             }
         });
-        setTimeout(colocar_puestos, 800);
+        setTimeout(recolocar_puestos, 800);
 
         pw_def.noUiSlider.on('update', function( values, handle ) {
             pw_def_value.innerHTML = values[handle];
@@ -187,12 +198,12 @@
         pr_def.noUiSlider.on('update', function( values, handle ) {
             pr_def_value.innerHTML = values[handle];
             $('.flpuesto').css('border-radius',values[handle]+'px');
-            $('#factor_puestob').val(values[handle]);
+            $('#factor_puestor').val(values[handle]);
         });
         pb_def.noUiSlider.on('update', function( values, handle ) {
             pb_def_value.innerHTML = values[handle];
              $('.flpuesto').css('border-width',values[handle]+'px');
-            $('#factor_puestor').val(values[handle]);
+            $('#factor_puestob').val(values[handle]);
         });
         l_def.noUiSlider.on('update', function( values, handle ) {
             l_def_value.innerHTML = values[handle];
@@ -203,8 +214,15 @@
             g_def_value.innerHTML = values[handle];
             console.log(values[handle]);
             $('.draggable').draggable("option", "grid", [values[handle],values[handle]]);
-            // $('.texto_puesto').css('font-size',values[handle]+'vw');
             $('#factor_grid').val(values[handle]);
+        });
+        z_def.noUiSlider.on('update', function( values, handle ) {
+            z_def_value.innerHTML = values[handle]+' %';
+            zoom_actual=values[handle];
+            clearTimeout(hacer_zoom);
+            hacer_zoom=setTimeout(() => {
+                zoom();
+            }, 500);
         });
     } );
 
@@ -251,8 +269,11 @@
     var g_def = document.getElementById('grid-range-def');
     var g_def_value = document.getElementById('grid-range-def-val');
 
+    var z_def = document.getElementById('puesto-zoom-def');
+    var z_def_value = document.getElementById('puesto-zoom-def-val');
+
     noUiSlider.create(pw_def,{
-        start   : [ {{ $plantas->factor_puestow }} ],
+        start   : [ {{ !isMobile()?$plantas->factor_puestow:$plantas->factor_puestow*0.6 }} ],
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
@@ -264,7 +285,7 @@
     });
 
     noUiSlider.create(ph_def,{
-        start   : [ {{ $plantas->factor_puestoh }} ],
+        start   : [ {{ !isMobile()?$plantas->factor_puestoh:$plantas->factor_puestoh*0.6 }} ],
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
@@ -276,7 +297,7 @@
     });
 
     noUiSlider.create(pr_def,{
-        start   : [ {{ $plantas->factor_puestor }} ],
+        start   : [ {{ !isMobile()?$plantas->factor_puestor:$plantas->factor_puestor*0.3 }} ],
         connect : 'lower',
         range   : {
             'min': [  0 ],
@@ -288,7 +309,7 @@
     });
 
     noUiSlider.create(pb_def,{
-        start   : [ {{ $plantas->factor_puestob }} ],
+        start   : [ {{ !isMobile()?$plantas->factor_puestob:$plantas->factor_puestob*0.6 }} ],
         connect : 'lower',
         range   : {
             'min': [  0 ],
@@ -320,6 +341,19 @@
         },
         format: wNumb({
             decimals: 2
+        }),
+    });
+
+    noUiSlider.create(z_def,{
+        start   : [ 100 ],
+        connect : 'lower',
+        step: 10,
+        range   : {
+            'min': [  20 ],
+            'max': [ 500 ]
+        },
+        format: wNumb({
+            decimals: 0
         }),
     });
 

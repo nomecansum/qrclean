@@ -7,6 +7,7 @@
 
 <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
 <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+<link href="{{ asset('/plugins/noUiSlider/nouislider.min.css') }}" rel="stylesheet">
 <style type="text/css">
     .container {
         border: 1px solid #DDDDDD;
@@ -115,7 +116,7 @@
         @endphp
         @foreach($plantas as $pl)
             <a id="planta{{ $pl->id_planta }}">
-                <div class="card border-dark mb-3">
+                <div class="card border-dark mb-3 overflow-auto">
                     <div class="card-header bg-gray">
                         <h3 >{{ $pl->des_planta }}</h3>
                     </div>
@@ -131,7 +132,10 @@
 </div>
 @endforeach
 @include('resources.leyenda_reservas')
+
 <script>
+
+    
 
     $('.sitio').click(function(){
         $('#des_puesto').html('');

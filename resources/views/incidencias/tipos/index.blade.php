@@ -152,7 +152,7 @@
                                                         <i class="fa-solid fa-browser" style="color: {{ genColorCodeFromText("WEB ") }}"></i> HTTP ({{ $procesado->tip_metodo }})
                                                         @break
                                                     @case('L')
-                                                        <i src="{{ asset('/img/logo.png') }}" style="height:12px"></i>
+                                                        <img src="{{ url('/img/logo.png') }}" style="height:14px"/>Salas
                                                         @break
                                                     @case('W')
                                                         <i class="fa-solid fa-laptop-mobile" style="color: {{ genColorCodeFromText("WPUSH") }}"></i> Push

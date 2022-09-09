@@ -142,7 +142,7 @@
                     </div>
                     
                 </div>
-                <div class="row mt-2 mt-4 mb-4">
+                <div class="row mt-4 mb-4">
                     <div class="col-md-12   text-end ">
                         @if(checkPermissions(['Puestos'],["W"]))<button type="submit" class="btn btn-primary mr-2 btn_submit">GUARDAR</button>@endif  
                     </div>
@@ -157,52 +157,59 @@
                         <label for="val_capacidad">Capacidad</label>
                         <input type="number" min="1" max="40" name="val_capacidad" id="val_capacidad" class="form-control" value="{{$puesto->val_capacidad??1}}">
                     </div>
-                    <div class="form-group col-md-10">
+                    <div class="form-group col-md-8">
                         <label for="val_capacidad">Observaciones</label>
                         <input type="text" name="obs_sala" id="obs_sala" class="form-control" value="{{$puesto->obs_sala??''}}">
                     </div>
-                    <div class="col-md-2">
-                        <i class="fad fa-projector fa-2x"></i>
-                        <div class="form-check pt-2">
-                            <input name="mca_proyector"  id="mca_proyector" value="S" {{ isset($puesto->mca_proyector)&&$puesto->mca_proyector=='S'?'checked':'' }} class="form-check-input" type="checkbox">
-                            <label for="mca_proyector" class="form-check-label">Proyector</label>
+                    <div class="form-group col-md-2">
+                        <label for="val_capacidad">ID Externo salas</label>
+                        <input type="text" name="id_externo_salas" id="id_externo_salas" class="form-control" value="{{$puesto->id_externo_salas??''}}">
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-2 text-center">
+                            <i class="fad fa-projector fa-2x"></i>
+                            <div class="form-check pt-2">
+                                <input name="mca_proyector"  id="mca_proyector" value="S" {{ isset($puesto->mca_proyector)&&$puesto->mca_proyector=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                <label for="mca_proyector" class="form-check-label">Proyector</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <i class="fad fa-tv-alt fa-2x"></i>
+                            <div class="form-check pt-2">
+                                <input name="mca_pantalla"  id="mca_pantalla" value="S" {{ isset($puesto->mca_pantalla)&&$puesto->mca_pantalla=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                <label for="mca_pantalla" class="form-check-label">Pantalla</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <i class="fad fa-webcam fa-2x"></i>
+                            <div class="form-check pt-2">
+                                <input name="mca_videoconferencia"  id="mca_videoconferencia" value="S" {{ isset($puesto->mca_videoconferencia)&&$puesto->mca_videoconferencia=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                <label for="mca_videoconferencia" class="form-check-label">Videoconferencia</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <i class="fad fa-volume-up fa-2x"></i>
+                            <div class="form-check pt-2">
+                                <input name="mca_manos_libres"  id="mca_manos_libres" value="S" {{ isset($puesto->mca_manos_libres)&&$puesto->mca_manos_libres=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                <label for="mca_manos_libres" class="form-check-label">Manos Libres</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <i class="fad fa-chalkboard fa-2x"></i>
+                            <div class="form-check pt-2">
+                                <input  name="mca_pizarra"  id="mca_pizarra" value="S" {{ isset($puesto->mca_pizarra)&&$puesto->mca_pizarra=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                <label for="mca_pizarra" class="form-check-label">Pizarra</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <i class="fad fa-chalkboard-teacher fa-2x"></i>
+                            <div class="form-check pt-2">
+                                <input  name="mca_pizarra_digital"  id="mca_pizarra_digital" value="S" {{ isset($puesto->mca_pizarra_digital)&&$puesto->mca_pizarra_digital=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                <label for="mca_pizarra_digital" class="form-check-label">Pizarra digital</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <i class="fad fa-tv-alt fa-2x"></i>
-                        <div class="form-check pt-2">
-                            <input name="mca_pantalla"  id="mca_pantalla" value="S" {{ isset($puesto->mca_pantalla)&&$puesto->mca_pantalla=='S'?'checked':'' }} class="form-check-input" type="checkbox">
-                            <label for="mca_pantalla" class="form-check-label">Pantalla</label>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <i class="fad fa-webcam fa-2x"></i>
-                        <div class="form-check pt-2">
-                            <input name="mca_videoconferencia"  id="mca_videoconferencia" value="S" {{ isset($puesto->mca_videoconferencia)&&$puesto->mca_videoconferencia=='S'?'checked':'' }} class="form-check-input" type="checkbox">
-                            <label for="mca_videoconferencia" class="form-check-label">Videoconferencia</label>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <i class="fad fa-volume-up fa-2x"></i>
-                        <div class="form-check pt-2">
-                            <input name="mca_manos_libres"  id="mca_manos_libres" value="S" {{ isset($puesto->mca_manos_libres)&&$puesto->mca_manos_libres=='S'?'checked':'' }} class="form-check-input" type="checkbox">
-                            <label for="mca_manos_libres" class="form-check-label">Manos Libres</label>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <i class="fad fa-chalkboard fa-2x"></i>
-                        <div class="form-check pt-2">
-                            <input  name="mca_pizarra"  id="mca_pizarra" value="S" {{ isset($puesto->mca_pizarra)&&$puesto->mca_pizarra=='S'?'checked':'' }} class="form-check-input" type="checkbox">
-                            <label for="mca_pizarra" class="form-check-label">Pizarra</label>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <i class="fad fa-chalkboard-teacher fa-2x"></i>
-                        <div class="form-check pt-2">
-                            <input  name="mca_pizarra_digital"  id="mca_pizarra_digital" value="S" {{ isset($puesto->mca_pizarra_digital)&&$puesto->mca_pizarra_digital=='S'?'checked':'' }} class="form-check-input" type="checkbox">
-                            <label for="mca_pizarra_digital" class="form-check-label">Pizarra digital</label>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="row mb-0">
                     <div class="col-md-6 mb-0 p-0" style="padding-left: 18px">

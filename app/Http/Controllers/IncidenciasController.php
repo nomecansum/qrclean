@@ -8,12 +8,14 @@ use App\Models\puestos;
 use App\Models\logpuestos;
 use App\Models\rondas;
 use App\Models\users;
+use App\Models\salas;
 use App\Models\incidencias_tipos;
 use App\Models\incidencias;
 use App\Models\causas_cierre;
 use App\Models\incidencias_acciones;
 use App\Models\estados_incidencias;
 use App\Models\incidencias_postprocesado;
+use App\Http\Controllers\APIController;
 
 use Image;
 use Illuminate\Support\Facades\DB;
@@ -830,7 +832,63 @@ class IncidenciasController extends Controller
 
                     case 'L': //Spotlinker
                         Log::info("Iniciando postprocesado SALAS de incidencia ".$inc->id_incidencia);
-                        $inc->mca_sincronizada='S';
+                        try{
+                            switch ($momento) {
+                                case 'C': //Creacion
+                                case 'A':  //Accion/Modificacion
+                                    //Averuiguar si el puesto tiene sala
+                                    $sala=salas::where('id_puesto',$inc->id_puesto)->first();
+                                    $estado=estados_incidencias::find($inc->id_estado);
+                                    $tipo=incidencias_tipos::find($inc->id_tipo_incidencia);
+                                    $notas_admin=$inc->txt_incidencia;
+                                    $endpoint="add_or_set_incidencia_empresa";
+                                    if($momento=='A'){
+                                        $acciones=incidencias_acciones::where('id_incidencia',$inc->id_incidencia)->orderBy('id_accion','asc');
+                                        foreach($acciones as $accion){
+                                            $notas_admin.=$accion->txt_accion.'\r\n';
+                                        }
+                                    } 
+                                    if($sala!=null && $sala->id_externo_salas!=null){
+                                        $body=new \stdClass;
+                                        $body->sala_id=$sala->id_externo_salas;
+                                        $body->fecha=Carbon::parse($inc->fec_apertura)->toISOString();
+                                        $body->tipo_incidencia_id=$tipo->id_tipo_salas;
+                                        $body->estado=$estado->id_estado_salas;
+                                        $body->descripcion=$inc->des_incidencia;
+                                        $body->notas_admin=$notas_admin;
+                                        $body->incidencia_id_puestos=$inc->id_incidencia;
+                                        $body=json_encode($body);
+                                        log::debug($body);
+                                        $response=APIController::enviar_request_salas('post',$endpoint,"",$body,$inc->id_cliente);
+                                        if(isset($response['status']) && $response['status']==200){
+                                            $resp=json_decode($response['body']);
+                                            $inc->id_externo_salas=$resp->incidencia_sala_id;
+                                            Log::info("Respuesta OK de salas: ".$response['body']);
+                                        } else {
+                                            Log::error("Error en el request a spotlinker salas");
+                                        }
+                                    } else { //El puesto no tiene sala asociada
+                                        Log::error("No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas".$inc->id_puesto);
+                                    }
+                                    
+                                    break;
+                                case 'F':  //Cierre
+                                    # code...
+                                    break;
+                                case 'R':  //Reapertura
+                                    # code...
+                                    break;
+                                default:
+                                    # code...
+                                    break;
+                            }
+    
+                            $inc->mca_sincronizada='S';
+                        } catch(\Throwable $e){
+                            Log::error("Postprocesado SALAS de incidencia ".$inc->id_incidencia."  ERROR: ".$e->getMessage());
+                            //dump($e);
+                        }
+                        
                         break;  
 
                     default:
@@ -839,7 +897,7 @@ class IncidenciasController extends Controller
                 }
             } catch(\Throwable $e){
                 Log::error("Postprocesado de incidencia ".$inc->id_incidencia." ERROR: ".$e->getMessage());
-                dd($e);
+                //dump($e);
             }
         }
         $inc->save();

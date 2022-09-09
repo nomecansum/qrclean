@@ -70,7 +70,7 @@
 													<input type="text" name="nom_cliente" class="form-control" required value="{{isset($c) ? $c->nom_cliente : ''}}">
 												</div>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<div class="form-group">
 													<label for="">Distribuidor</label>
 													<select name="id_distribuidor" id="id_distribuidor" class="form-control" style="width: 100%">
@@ -79,7 +79,12 @@
 															<option {{isset($c) && $c->id_distribuidor == $d->id_distribuidor ? 'selected' : ''}} value="{{$d->id_distribuidor}}">{{$d->nom_distribuidor}}</option>
 														@endforeach
 													</select>
-													
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="form-group">
+													<label for="">ID externo</label>
+													<input type="text" name="id_cliente_externo" class="form-control" value="{{isset($c) ? $c->id_cliente_externo : ''}}">
 												</div>
 											</div>
 										</div>
@@ -335,6 +340,30 @@
 								</div>
 							</div>
 						</div>	
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-md-3  mt-1">
+									<div class="form-check pt-2">
+										<input  name="mca_spotlinker_salas"  id="mca_spotlinker_salas" value="S" {{ isset($config->mca_spotlinker_salas)&&$config->mca_spotlinker_salas=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+										<label class="form-check-label"  for="mca_saml2">Integracion con Spotlinker salas</label>
+									</div>
+								</div>
+							</div>
+						</div>					
+						<div class="row b-all rounded" id="row_salas" style="{{ isset($config->mca_spotlinker_salas)&&$config->mca_spotlinker_salas=='S'?'':'display:none'  }}">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="">ID cliente salas</label>
+									<input type="text" name="id_cliente_salas" class="form-control" required value="{{isset($c) ? $c->id_cliente_salas : ''}}">
+								</div>
+							</div>
+							<div class="col-md-12 mb-3">
+								<div class="form-group">
+									<label for="">Token en salas</label>
+									<input type="text" name="token_acceso_salas" class="form-control" value="{{isset($c) ? $c->token_acceso_salas : ''}}">
+								</div>
+							</div>
+						</div>
 					</div>
 					<div id="demo-stk-lft-tab-3" class="tab-pane fade"  role="tabpanel" aria-labelledby="logos-tab">
 						<div class="row mb-0">
@@ -416,6 +445,10 @@
 		
 		$('#mca_saml2').click(function(){
 			$('#row_saml2').toggle();		
+		})
+
+		$('#mca_spotlinker_salas').click(function(){
+			$('#row_salas').toggle();		
 		})
 
 

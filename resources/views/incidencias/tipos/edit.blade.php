@@ -117,6 +117,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-md-12 text-end">
+                        @if(checkPermissions(['Tipos de incidencia'],['D']) && ( $tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="button" id="boton_submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
+                    </div>
+                </div>
+                <hr class="mt-5 mb-5">
                 <div class="row bg-gray mt-4">
                     <div class="col-md-3 pt-3">
                         <h5>Postprocesado de la incidencia<h5>
@@ -163,11 +169,7 @@
                 </div>
                 
 
-                <div class="form-group">
-                    <div class="col-md-12 text-end">
-                        @if(checkPermissions(['Tipos de incidencia'],['D']) && ( $tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="button" id="boton_submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
-                    </div>
-                </div>
+                
             </form>
 
         </div>

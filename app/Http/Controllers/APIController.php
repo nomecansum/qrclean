@@ -115,6 +115,16 @@ class APIController extends Controller
         }
     }
 
+    public static function get_cliente_salas($r){
+        try{
+            $result=clientes::where('id_cliente_salas',$r->id_cliente)
+                ->first()->id_cliente;
+            return $result;
+        } catch (\Exception $e) {
+            throw new \ErrorException('El cliente '.$r->id_cliente.' no existe',406);
+        }
+    }
+
     public static function get_estado_salas($r){
         try{
 
@@ -162,9 +172,11 @@ class APIController extends Controller
         ])->setStatusCode($codigo);
     }
 
-    public static function enviar_request_salas($metodo,$accion,$param,$body){
+    public static function enviar_request_salas($metodo,$accion,$param,$body,$id_cliente){
+        $cliente=clientes::find($id_cliente);
+        Log::debug($metodo.' '.config('app.url_base_api_salas').$accion);
         $response=Http::withOptions(['verify' => false])
-            ->withHeaders(['Accept' => 'application/json', 'Content-Type' => 'application/json','Authorization'=>config('app.token_api_salas')])
+            ->withHeaders(['Accept' => 'application/json', 'Content-Type' => 'application/json','Authorization'=>$cliente->token_acceso_salas])
             ->withbody($body,'application/json')
             ->$metodo(config('app.url_base_api_salas').$accion);
         
@@ -181,7 +193,7 @@ class APIController extends Controller
     ////////////////////////////////////////////////////////////////////
 
 
-////////////////////FUNCIONES GENERALES//////////////////////////
+    ////////////////////FUNCIONES GENERALES//////////////////////////
 
     public function test(){
          
@@ -416,7 +428,7 @@ class APIController extends Controller
             $r->request->add(['procedencia' => "salas"]);
             //Codigo para la resincronizacion de incidencias
             $url="get_estructura_incidencias_empresa_desde_fecha/".$fecha;
-            $respuesta=$this->enviar_request_salas("GET",$url,"","");
+            $respuesta=$this->enviar_request_salas("GET",$url,"","",$r->id_cliente);
             $respuesta=json_decode($respuesta['body']);
 
             //Sincronizamos las salas
@@ -509,7 +521,7 @@ class APIController extends Controller
             $r->request->add(['procedencia' => "salas"]);
             //Codigo para la resincronizacion de incidencias
             $url="get_incidencias_desde_fecha/".$fecha;
-            $respuesta=$this->enviar_request_salas("GET",$url,"","");
+            $respuesta=$this->enviar_request_salas("GET",$url,"","",$r->id_cliente);
             $respuesta=json_decode($respuesta['body']);
 
             //Sincronizamos las salas

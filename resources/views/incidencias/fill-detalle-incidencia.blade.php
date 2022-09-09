@@ -32,7 +32,7 @@
                     <span class="font-bold">Planta: </span><span>{{ $incidencia->des_planta }}</span>
                 </div>
                 <div class="col-md-3">
-                    <span class="font-bold">Puesto: </span><span>{{ nombrepuesto($incidencia) }}</span>
+                    <span class="font-bold">Puesto: </span><span>{{ $incidencia->cod_puesto }}</span>
                 </div>
             </div>
             <div class="row mt-3">

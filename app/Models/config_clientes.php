@@ -59,7 +59,8 @@ class config_clientes extends Model
                   'mca_saml2',
                   'saml2_idp_entityid',
                   'mca_incidencia_scan',
-                  'mca_incidencia_reserva'
+                  'mca_incidencia_reserva',
+                  'mca_spotlinker_salas',
               ];
 
     /**

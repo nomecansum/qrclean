@@ -102,6 +102,7 @@ class CustomersController extends Controller
             $config->mca_mostrar_nombre_usando=$r->mca_mostrar_nombre_usando??'N';
             $config->mca_mostrar_puestos_reservas=$r->mca_mostrar_puestos_reservas??'D';
             $config->mca_mostrar_datos_fijos=$r->mca_mostrar_datos_fijos??'N';
+            $config->mca_spotlinker_salas=$r->mca_spotlinker_salas??'N';
             $config->theme_name=$this->esquema_colores($r);
             
             $config->save();

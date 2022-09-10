@@ -5,7 +5,10 @@
     border: 1px solid #DDDDDD;
     width: 100%;
     position: relative;
-    padding: 0px;
+    padding: 0px 0px 0px 0px !important;
+    margin: 0px 0px 0px 0px !important;
+    --bs-gutter-x: 0 !important;
+    --bs-gutter-y: 0 !important;
 }
 .flpuesto {
     float: left;
@@ -17,6 +20,14 @@
     width: 40px;
     height: 40px;
     overflow: hidden;
+    cursor: move;
+}
+
+.card_plano{
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
 }
 
 </style>
@@ -53,7 +64,7 @@
                 <span id="zoom_level" class="float-left">100%</span>
                 <i class="fa fa-plus-square float-left mt-1 ml-1"  onclick="zoom(+1)"></i>
             </div> --}}
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-4 mb-3">
                 <label>Zoom: </label> <span id="puesto-zoom-def-val"></span>
                 <div id="puesto-zoom-def"></div>	
             </div>
@@ -67,12 +78,12 @@
                 <input type="hidden" name="factor_puestor" id="factor_puestor" value="{{ $plantas->factor_puestor }}">
                 <input type="hidden" name="factor_letra" id="factor_letra"  value="{{ $plantas->factor_letra }}">
                 <input type="hidden" name="factor_grid" id="factor_grid"  value="{{ $plantas->factor_grid }}">
-                <div class="card overflow-auto">
-                    <div class="card-body">
+                <div class="card ">
+                    <div class="card-body overflow-auto card_plano">
                         @if(isset($plantas->img_plano))
                         {{--  style="background-image: url('{{ url('img/plantas/'.$plantas->img_plano) }}'); background-repeat: no-repeat; background-size: contain;"  --}}
-                            <div class="row container" id="plano" >
-                                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="width: 100%" id="img_fondo">
+                            <div class="container" id="plano" >
+                                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="width: 100%;" id="img_fondo">
                                 @php
                                     $left=0;
                                     $top=0;
@@ -91,7 +102,7 @@
                                  }
 
                                 @endphp
-                                    <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto puesto_parent draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" style="height: {{ $puesto->factor_puestoh }}vh ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }}">
+                                    <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto puesto_parent draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-factorh="{{ $puesto->factor_puestoh }}" data-factorw="{{$puesto->factor_puestow}}" data-factorr="{{ $puesto->factor_puestor }}" style="height: {{ $puesto->factor_puestoh }}% ; width: {{ $puesto->factor_puestow }}%;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }};  opacity: {{ $cuadradito['transp']}}; border-radius: {{ $cuadradito['border-radius'] }}">
                                         <span class="h-100 align-middle texto_puesto puesto_child" style="font-size: {{ $puesto->factor_letra }}vw;">{{ nombrepuesto($puesto) }}</span>
                                     </div>
                                 @php
@@ -183,16 +194,20 @@
                 });
             }
         });
-        setTimeout(recolocar_puestos, 800);
+        //setTimeout(recolocar_puestos, 800);
 
         pw_def.noUiSlider.on('update', function( values, handle ) {
             pw_def_value.innerHTML = values[handle];
-            $('.flpuesto').css('width',values[handle]+'vw');
+            //$('.flpuesto').css('width',values[handle]+'vw');
+            console.log('w: '+parseInt($('#plano').css('width')));
+            $('.flpuesto').css('width',parseInt($('#plano').css('width'))*(values[handle]/100)+'px');
             $('#factor_puestow').val(values[handle]);
         });
         ph_def.noUiSlider.on('update', function( values, handle ) {
             ph_def_value.innerHTML = values[handle];
-            $('.flpuesto').css('height',values[handle]+'vh');
+            //$('.flpuesto').css('height',values[handle]+'vh');
+            console.log('h: '+$('#plano').css('height'));
+            $('.flpuesto').css('height',parseInt($('#plano').css('height'))*(values[handle]/100)+'px');
             $('#factor_puestoh').val(values[handle]);
         });
         pr_def.noUiSlider.on('update', function( values, handle ) {
@@ -273,7 +288,7 @@
     var z_def_value = document.getElementById('puesto-zoom-def-val');
 
     noUiSlider.create(pw_def,{
-        start   : [ {{ !isMobile()?$plantas->factor_puestow:$plantas->factor_puestow*0.6 }} ],
+        start   : [ {{ $plantas->factor_puestow }} ],
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
@@ -285,7 +300,7 @@
     });
 
     noUiSlider.create(ph_def,{
-        start   : [ {{ !isMobile()?$plantas->factor_puestoh:$plantas->factor_puestoh*0.6 }} ],
+        start   : [ {{ $plantas->factor_puestoh }} ],
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
@@ -297,7 +312,7 @@
     });
 
     noUiSlider.create(pr_def,{
-        start   : [ {{ !isMobile()?$plantas->factor_puestor:$plantas->factor_puestor*0.3 }} ],
+        start   : [ {{ $plantas->factor_puestor }} ],
         connect : 'lower',
         range   : {
             'min': [  0 ],
@@ -309,7 +324,7 @@
     });
 
     noUiSlider.create(pb_def,{
-        start   : [ {{ !isMobile()?$plantas->factor_puestob:$plantas->factor_puestob*0.6 }} ],
+        start   : [ {{ $plantas->factor_puestob }} ],
         connect : 'lower',
         range   : {
             'min': [  0 ],

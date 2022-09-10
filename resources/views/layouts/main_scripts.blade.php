@@ -517,12 +517,18 @@
     function recolocar_puestos(posiciones){
         $('.container').each(function(){
             plano=$(this);
-            //console.log(plano.data('posiciones'));
+            console.log('plano: '+plano.height()+' '+plano.width());
             $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
                 puesto=$('#puesto'+item.id);
-                //console.log('#puesto'+item.id);
                 puesto.css('top',plano.height()*item.offsettop/100);
                 puesto.css('left',(plano.width()*item.offsetleft/100));
+                //las dimensiones del cuadradito
+                puesto.css('width',plano.width()*(puesto.data('factorw')/100)+'px');
+                puesto.css('height',plano.height()*(puesto.data('factorh')/100)+'px');
+                @mobile()
+                    puesto.css('border-radius',puesto.data('factorr')*0.2+'px');
+                @endmobile()
+                //$('.viewport').html('w:'+plano.width()+' h:'+plano.height())+' vw:'+Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)+' vh:'+Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
             });
 
         }) 

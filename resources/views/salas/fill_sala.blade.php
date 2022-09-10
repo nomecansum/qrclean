@@ -10,7 +10,7 @@
 
 <div class="row mb-4 {{ $link??'' }}" data-id="{{ $sala->id_puesto }}" data-desc="{{ $sala->des_puesto }}">
     <div class="col-md-2 text-center p-t-10">
-        <span class="fs-2">{{ $sala->cod_puesto }}</span><br>
+        <span class="fs-4">{{ $sala->cod_puesto }}</span><br>
         {{ nombrepuesto($sala) }}
         @if(config('app.debug'))
         <br>[{{ $sala->id_puesto }}]
@@ -22,7 +22,7 @@
     <div class="col-md-8">
         <div class="mt-2 mb-2 d-flex flex-row " style="margin-left: {{ $margin}};">
             <div class="add-tooltip" title="Capacidad {{$sala->val_capacidad}} personas" style="margin-right: {{ $margin}}"><i class="fad fa-user" style="font-size: {{ $tamano_iconos}};"></i><span class="font-bold" style="font-size: {{ $tamano_letra}}; margin-top: -10px">{{$sala->val_capacidad}}</span></div>
-            <div class="add-tooltip" title="Maximo tiempo de reserva: {{$sala->max_horas_reservar}}h" style="margin-right: {{ $margin}}"><i class="fad fa-clock" style="font-size: {{ $tamano_iconos}}"></i><span class="font-bold" style="font-size: {{ $tamano_letra}}; margin-top: -10px">{{$sala->max_horas_reservar}}h</span></div>
+            <div class="add-tooltip" title="Maximo tiempo de reserva: {{round($sala->max_horas_reservar,1)}}h" style="margin-right: {{ $margin}}"><i class="fad fa-clock" style="font-size: {{ $tamano_iconos}}"></i><span class="font-bold" style="font-size: {{ $tamano_letra}}; margin-top: -10px">{{round($sala->max_horas_reservar,1)}}h</span></div>
             <div class="add-tooltip solo_icono" title="Proyector" style="margin-right: {{ $margin}}"><i class="fad fa-projector text-info" style="font-size: {{ $tamano_iconos}};{{ $sala->mca_proyector=='N'?'color:#eee':'' }}"></i></div>
             <div class="add-tooltip  solo_icono" title="Pantalla" style="margin-right: {{ $margin}}"><i class="fad fa-tv-alt  text-info"  style="font-size: {{ $tamano_iconos}};{{ $sala->mca_pantalla=='N'?'color:#eee':'' }}"></i></div>
             <div class="add-tooltip  solo_icono" title="Videoconferencia" style="margin-right: {{ $margin}}"><i class="fad fa-webcam  text-info" style="font-size: {{ $tamano_iconos}};{{ $sala->mca_videoconferencia=='N'?'color:#eee':'' }}"></i></div>

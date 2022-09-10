@@ -1,7 +1,11 @@
+<div class="form-group col-md-4 mb-3">
+    <label>Zoom: </label> <span id="puesto-zoom-def-val-{{ $pl->id_planta }}"></span>
+    <div id="puesto-zoom-def-{{ $pl->id_planta }}"></div>	
+</div>
 @if(isset($pl->img_plano))
 {{--  {!! json_encode($pl->posiciones) !!}  --}}
 
-    <div class="row container" id="plano{{ $pl->id_planta }}" data-posiciones="" data-id="{{ $pl->id_planta }}">
+    <div class="container" id="plano{{ $pl->id_planta }}" data-posiciones="" data-id="{{ $pl->id_planta }}">
         <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$pl->img_plano) }}" style="width: 100%" id="img_fondo{{ $pl->id_planta }}">
         @php
             $left=0;
@@ -29,14 +33,14 @@
             @endphp
             
             @if(isset(session('CL')['modo_visualizacion_puestos']) && session('CL')['modo_visualizacion_puestos']=='C')
-            <div class="text-center rounded add-tooltip  align-middle flpuesto puesto_parent draggable  {{ isset($cualpuesto)&&$cualpuesto->id_puesto==$puesto->id_puesto?'glow':'' }} " title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif {!! strip_tags($puesto->des_puesto." \r\n ".$cuadradito['title']) !!}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestoh }}vh ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $cuadradito['color'] }}; {{ $cuadradito['borde'] }}">
+            <div class="text-center add-tooltip  align-middle flpuesto puesto_parent draggable  {{ isset($cualpuesto)&&$cualpuesto->id_puesto==$puesto->id_puesto?'glow':'' }} " title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif {!! strip_tags($puesto->des_puesto." \r\n ".$cuadradito['title']) !!}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestoh }}% ; width: {{ $puesto->factor_puestow }}%;top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $cuadradito['color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']}}; border-radius: {{ $cuadradito['border-radius'] }}">
                 <span class="h-100 align-middle text-center puesto_child" style="font-size: {{ $puesto->factor_letra }}vw; ">
                         {{ nombrepuesto($puesto) }}
                         @include('resources.adornos_iconos_puesto')
                 </span>
             </div>
             @else
-            <div class="text-center rounded add-tooltip align-middle flpuesto draggable puesto_parent {{ isset($cualpuesto)&&$cualpuesto->id_puesto==$puesto->id_puesto?'glow':'' }} " id="puesto{{ $puesto->id_puesto }}" title="{!! strip_tags( $puesto->cod_puesto." \r\n ".$cuadradito['title']) !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestoh }}vh ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px;color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
+            <div class="text-center add-tooltip align-middle flpuesto draggable puesto_parent {{ isset($cualpuesto)&&$cualpuesto->id_puesto==$puesto->id_puesto?'glow':'' }} " id="puesto{{ $puesto->id_puesto }}" title="{!! strip_tags( $puesto->cod_puesto." \r\n ".$cuadradito['title']) !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestoh }}vh ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px;color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
                 <span class="h-100 align-middle text-center puesto_child" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#FFF">
                     <i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i><br>
                     {{ nombrepuesto($puesto) }}</span>
@@ -52,6 +56,8 @@
          @endphp
         @endforeach
     </div>
+    <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
+    <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
     <script>
 
         try{
@@ -61,7 +67,42 @@
             posiciones=[];
         }
         document.getElementById('plano{{ $pl->id_planta }}').setAttribute("data-posiciones", posiciones);
-        //$('#plano{{ $pl->id_plano }}').data('posiciones',posiciones);
+       
+        zoom_actual{{ $pl->id_planta }}=100;
+        var hacer_zoom{{ $pl->id_planta }};
+
+        function zoom{{ $pl->id_planta }}(){
+
+            $('#plano{{ $pl->id_planta }}').animate({ 'zoom': zoom_actual{{ $pl->id_planta }}/100 }, 400);
+            $('#plano{{ $pl->id_planta }}').animate({ 'width': zoom_actual{{ $pl->id_planta }}+'%' }, 400);
+            recolocar_puestos();
+        }
+        
+
+        var z_def{{ $pl->id_planta }} = document.getElementById('puesto-zoom-def-{{ $pl->id_planta }}');
+        var z_def_value{{ $pl->id_planta }} = document.getElementById('puesto-zoom-def-val-{{ $pl->id_planta }}');
+
+        noUiSlider.create(z_def{{ $pl->id_planta }},{
+            start   : [ 100 ],
+            connect : 'lower',
+            step: 10,
+            range   : {
+                'min': [  20 ],
+                'max': [ 500 ]
+            },
+            format: wNumb({
+                decimals: 0
+            }),
+        });
+
+        z_def{{ $pl->id_planta }}.noUiSlider.on('update', function( values, handle ) {
+            z_def_value{{ $pl->id_planta }}.innerHTML = values[handle]+' %';
+            zoom_actual{{ $pl->id_planta }}=values[handle];
+            clearTimeout(hacer_zoom{{ $pl->id_planta }});
+            hacer_zoom{{ $pl->id_planta }}=setTimeout(() => {
+                zoom{{ $pl->id_planta }}();
+            }, 500);
+        });
     </script>
 @else
     <div id="plano{{ $pl->id_planta }}" data-posiciones="" data-id="{{ $pl->id_planta }}">

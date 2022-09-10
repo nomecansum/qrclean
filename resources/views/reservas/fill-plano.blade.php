@@ -6,6 +6,7 @@
     <label>Zoom: </label> <span id="puesto-zoom-def-val-{{ $pl->id_planta }}"></span>
     <div id="puesto-zoom-def-{{ $pl->id_planta }}"></div>	
 </div>
+{{-- <div class="viewport"></div> --}}
 @if(isset($pl->img_plano))
 {{--  {!! json_encode($pl->posiciones) !!}  --}}
 
@@ -39,7 +40,7 @@
     
     @if($puestos->count()>0)
    
-    <div class="row container" id="plano{{ $pl->id_planta }}" data-posiciones="" data-id="{{ $pl->id_planta }}">
+    <div class="container" id="plano{{ $pl->id_planta }}" data-posiciones="" data-id="{{ $pl->id_planta }}">
         <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$pl->img_plano) }}" style="width: 100%" id="img_fondo{{ $pl->id_planta }}">
         @else
         {{-- <div class="row">
@@ -57,8 +58,10 @@
             $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
             $es_reserva="P";
             $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$es_reserva);
+
         @endphp
-        <div class="text-center  add-tooltip align-middle flpuesto draggable puesto_parent {{ $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }}" id="puesto{{ $puesto->id_puesto }}" title="{{ strip_tags( $puesto->cod_puesto." \r\n ".$cuadradito['title']) }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" style="height: {{ $puesto->factor_puestoh }}vh ; width: {{ $puesto->factor_puestow }}vw;top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $cuadradito['color'] }}; @if(session('CL')['modo_visualizacion_puestos']=='C') color: {{ $cuadradito['font_color'] }} @endif; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
+        {{--  --}}
+        <div class="text-center  add-tooltip align-middle flpuesto draggable puesto_parent {{ $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }}" id="puesto{{ $puesto->id_puesto }}" title="{{ strip_tags( $puesto->cod_puesto." \r\n ".$cuadradito['title']) }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" data-factorh="{{ $puesto->factor_puestoh }}" data-factorw="{{$puesto->factor_puestow}}" data-factorr="{{ $puesto->factor_puestor }}" style="height: {{ $puesto->factor_puestoh }}% ; width: {{ $puesto->factor_puestow }}%; top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $cuadradito['color'] }}; @if(session('CL')['modo_visualizacion_puestos']=='C') color: {{ $cuadradito['font_color'] }} @endif; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']}}; border-radius: {{ $cuadradito['border-radius'] }}  ">
             @if(session('CL')['modo_visualizacion_puestos']=='C')
                 <span class="h-100 align-middle text-center puesto_child" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">{{ $puesto->des_puesto }}</span>
                 @include('resources.adornos_iconos_puesto')
@@ -76,6 +79,7 @@
      @endphp
     @endforeach
 </div>
+{{-- <div>fh: {{ $pl->factor_puestoh }} fw: {{ $pl->factor_puestow }}</div> --}}
 <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
 <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
 <script>
@@ -129,6 +133,8 @@
             zoom{{ $pl->id_planta }}();
         }, 500);
     });
+
+    
 
     //document.getElementById('plano{{ $pl->id_planta }}').setAttribute("data-posiciones", posiciones);
     //$('#plano{{ $pl->id_plano }}').data('posiciones',posiciones);

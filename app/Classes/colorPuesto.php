@@ -47,7 +47,7 @@ class colorPuesto
                     'font_color'=>"#fff",
                     'clase_disp'=>"",
                     'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
-                    'borde'=>"border: 3px solid #f00; border-radius: ".$puesto->factor_puestor."px",
+                    'borde'=>"border: 3px solid #f00;",
                     'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
@@ -128,7 +128,7 @@ class colorPuesto
                     'font_color'=>"#fff",
                     'clase_disp'=>"",
                     'title'=>"Puesto permanentemente asignado a ".$asignado_usuario->name,
-                    'borde'=>"border: 3px solid #ff9f1a; border-radius: ".$puesto->factor_puestor."px",
+                    'borde'=>"border: ".$tam_borde." solid #ff9f1a;",
                     'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
@@ -148,7 +148,7 @@ class colorPuesto
                     'font_color'=>"#05688f",
                     'clase_disp'=>"disponible",
                     'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso,
-                    'borde'=>"border: 3px solid #05688f; border-radius: ".$puesto->factor_puestor."px",
+                    'borde'=>"border: ".$tam_borde." solid #05688f;",
                     'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>1
                 ];
@@ -218,7 +218,7 @@ class colorPuesto
                     'font_color'=>"#fff",
                     'clase_disp'=>"",
                     'title'=>"Puesto permanentemente asignado a ".$asignado_usuario->name,
-                    'borde'=>"border: 3px solid #ff9f1a; border-radius: ".$puesto->factor_puestor."px",
+                    'borde'=>"border: ".$tam_borde." solid #ff9f1a;",
                     'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>0.4
                 ];
@@ -238,7 +238,7 @@ class colorPuesto
                     'font_color'=>"#05688f",
                     'clase_disp'=>"disponible",
                     'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso,
-                    'borde'=>"border: 3px solid #05688f; border-radius: ".$puesto->factor_puestor."px",
+                    'borde'=>"border: ".$tam_borde." solid #05688f;",
                     'border-radius'=>$puesto->factor_puestor."px",
                     "transp"=>1
                 ];

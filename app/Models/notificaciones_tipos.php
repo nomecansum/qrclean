@@ -36,7 +36,8 @@ class notificaciones_tipos extends Model
                   'des_tipo_notificacion',
                   'img_notificacion',
                   'url_base',
-                  'val_prioridad'
+                  'val_prioridad',
+                  'val_color'
               ];
 
     /**

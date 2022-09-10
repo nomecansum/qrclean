@@ -862,7 +862,7 @@ class IncidenciasController extends Controller
                                         $response=APIController::enviar_request_salas('post',$endpoint,"",$body,$inc->id_cliente);
                                         if(isset($response['status']) && $response['status']==200){
                                             $resp=json_decode($response['body']);
-                                            $inc->id_externo_salas=$resp->incidencia_sala_id;
+                                            $inc->id_incidencia_salas=$resp->incidencia_sala_id;
                                             Log::info("Respuesta OK de salas: ".$response['body']);
                                         } else {
                                             Log::error("Error en el request a spotlinker salas");

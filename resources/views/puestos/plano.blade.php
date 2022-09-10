@@ -6,13 +6,16 @@
 
 @section('styles')
     <!--Bootstrap FLEX Stylesheet [ REQUIRED ]-->
-    <link href="{{ url('/css/bootstrap-grid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('/plugins/noUiSlider/nouislider.min.css') }}" rel="stylesheet">
     <style type="text/css">
         .container {
             border: 1px solid #DDDDDD;
             width: 100%;
             position: relative;
-            padding: 0px;
+            padding: 0px 0px 0px 0px !important;
+            margin: 0px 0px 0px 0px !important;
+            --bs-gutter-x: 0 !important;
+            --bs-gutter-y: 0 !important;
         }
         .flpuesto {
             float: left;
@@ -22,6 +25,7 @@
             width: 40px;
             height: 40px;
             overflow: hidden;
+            cursor: default;
         }
         .glow {
             background-color: #1c87c9;
@@ -52,6 +56,13 @@
         }
         .glow {
             animation: glowing 1300ms infinite;
+        }
+
+        .card_plano{
+            --bs-gutter-x: 0;
+            --bs-gutter-y: 0;
+            padding: 0px 0px 0px 0px;
+            margin: 0px 0px 0px 0px;
         }
         
     </style>
@@ -130,7 +141,7 @@
                         <div class="card-header bg-gray">
                             <h3 >{{ $pl->des_planta }}</h3>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body overflow-auto card_plano">
                             @include('puestos.fill-plano')
                         </div>
                     </div>

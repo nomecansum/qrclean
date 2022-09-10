@@ -37,7 +37,7 @@
         <div class="btn-group btn-group pull-right" role="group">
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nueva reserva">
                 <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
-                <span>Nueva reserva</span>
+                <span>Nueva</span>
             </a>
         </div>
     </div>

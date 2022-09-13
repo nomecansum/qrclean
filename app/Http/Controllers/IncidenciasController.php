@@ -854,7 +854,7 @@ class IncidenciasController extends Controller
                                         $body->fecha=Carbon::parse($inc->fec_apertura)->toISOString();
                                         $body->tipo_incidencia_id=$tipo->id_tipo_salas;
                                         $body->estado=$estado->id_estado_salas;
-                                        $body->descripcion=$inc->des_incidencia;
+                                        $body->descripcion_adicional=$inc->des_incidencia;
                                         $body->notas_admin=$notas_admin;
                                         $body->incidencia_id_puestos=$inc->id_incidencia;
                                         $body=json_encode($body);

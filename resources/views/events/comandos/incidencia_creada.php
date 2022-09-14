@@ -163,7 +163,7 @@ $campos='{
     ]
 }';
 
-function ejecutar($evento,$output){
+$func_comando = function($evento,$output){
     //aqui va el codigo que queramos ejecutar, puede ser una simple consulta a BDD o cualquier logica compleja que se necesite
 
     $parametros = json_decode(json_decode($evento->param_comando));

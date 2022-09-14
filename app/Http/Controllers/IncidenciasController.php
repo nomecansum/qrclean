@@ -843,10 +843,8 @@ class IncidenciasController extends Controller
                                     $notas_admin=$inc->txt_incidencia;
                                     $endpoint="add_or_set_incidencia_empresa";
                                     if($momento=='A'){
-                                        $acciones=incidencias_acciones::where('id_incidencia',$inc->id_incidencia)->orderBy('id_accion','asc');
-                                        foreach($acciones as $accion){
-                                            $notas_admin.=$accion->txt_accion.'\r\n';
-                                        }
+                                        $accion=incidencias_acciones::where('id_incidencia',$inc->id_incidencia)->orderBy('id_accion','desc')->first();
+                                        $notas_admin.=$accion->txt_accion;
                                     } 
                                     if($sala!=null && $sala->id_externo_salas!=null){
                                         $body=new \stdClass;

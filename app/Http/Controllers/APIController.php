@@ -552,6 +552,8 @@ class APIController extends Controller
 
     public function get_incidencias_desde_fecha(Request $r,$fecha,$cliente){
 
+
+        //OJO este solo debe daro las incidencias que esten pendientes de sincornizazion
         try{
             //Fechas
             $f1=(isset($fecha))?Carbon::parse($fecha):Carbon::now()->startOfMonth();
@@ -600,6 +602,17 @@ class APIController extends Controller
             $pendientes=[];
             //Primero vemos las que tengan id_incidencia_salas y el id_incidencia_puestos a null o algo distinto de lo que debe ser y las guardamos para sincronizar
             
+            //Recibo mis ID de incidenicci y los tengo que buscar para completar con el id_externo_salas que me mande
+
+            foreach($lista_incidencias as $i){
+                $incidencia=incidencias::where('id_incidencia',$i->incidencia_id_puestos)->first();
+                if(isset($incidencia)){
+                    $incidencia->id_incidencia_salas=$i->incidencia_id_salas;
+                    $incidencia->save();
+                }else{
+                    $pendientes[]=$i;
+                }
+            }
 
             savebitacora('Solicitud de actualizacion de id de incidencias en salas '.json_encode($r->all()),"API","add_incidencia_id_puestos_pendientes","OK"); 
             return response()->json([

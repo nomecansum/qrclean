@@ -110,7 +110,7 @@ class eventos extends Command
         $grupo=valor($parametros,"cod_grupo_ejecucion");
         $this->escribelog_comando('debug','Grupo '.$grupo);
         //Primero vamos a obtener los eventos que tenemos que evaluar
-        $evento=DB::table('eventos_reglas')
+        $eventos=DB::table('eventos_reglas')
             ->where(function($qr) use($grupo){
                 if($grupo!='*'){
                     $qr->where('cod_grupo',$grupo);
@@ -123,9 +123,9 @@ class eventos extends Command
                 $q->where('fec_prox_ejecucion','<',Carbon::now());
                 $q->orWhereNull('fec_prox_ejecucion');
             })
-            ->first();
+            ->get();
 
-        if(isset($evento)){
+        foreach($eventos as $evento){
             $this->log_evento('['.$evento->cod_regla.'] -> Regla: '.$evento->nom_regla,$evento->cod_regla,'notice');
             $this->escribelog_comando('notice','['.$evento->cod_regla.'] -> Regla: '.$evento->nom_regla);
             
@@ -155,8 +155,8 @@ class eventos extends Command
             $this->log_evento('Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando,$evento->cod_regla);
             $output=$this->output;
             try{
-                include_once(resource_path('views/events/comandos').'/'.$evento->nom_comando);
-                $resultado_json=ejecutar($evento,$output);
+                include(resource_path('views/events/comandos').'/'.$evento->nom_comando);
+                $resultado_json=$func_comando($evento,$output);
                 $resultado=json_decode($resultado_json);
                 try{
                     $campos=json_decode($campos);
@@ -169,7 +169,7 @@ class eventos extends Command
                 } else{
                     $this->log_evento('Comando ejecutado, no hay ID para procesar',$evento->cod_regla,'notice');
                 }
-    
+                unset($func_comando);
                 Log::notice("Resultado del comando: ".$resultado->respuesta);
             } catch(\Throwable $e){
                 if(config('app.env')=="local"){
@@ -267,7 +267,8 @@ class eventos extends Command
                 'fec_prox_ejecucion'=>Carbon::now()->addMinutes($evento->intervalo)
                 ]);
             $this->log_evento('Proxima ejecucion establecida para  '.Carbon::now()->addMinutes($evento->intervalo)->toString(),$evento->cod_regla,'notice');
-        } else {
+        } 
+        if($eventos->count()==0){
             $this->escribelog_comando('info','No hay eventos para evaluar');
         }
         $this->escribelog_comando('info','Fin de la tarea '.__CLASS__);

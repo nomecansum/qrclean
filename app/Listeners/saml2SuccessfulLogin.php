@@ -27,7 +27,6 @@ class saml2SuccessfulLogin
      */
     public function handle($event)
     {
-        
 
         $messageId = $event->getAuth()->getLastMessageId();
     

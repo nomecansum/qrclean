@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
-
+use Slides\Saml2\Http\Controllers\Saml2Controller;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -79,7 +79,7 @@ Route::get('/auth/microsoft/callback','Auth\LoginController@authToMicrosoftcallb
 //Login con SAML2
 // //Login con SAML2
 // Route::get('/auth/saml_login','Auth\LoginController@saml_login');
-// Route::post('/auth/saml_login','Auth\LoginController@saml_login');
+Route::post('/auth/acs','Saml2Controller@acs');
 // Route::get('/saml2/{uuid}/login','Auth\LoginController@saml_login');
 
 // Route::post('/auth/{uuid}/acs','Auth\LoginController@saml_acs');

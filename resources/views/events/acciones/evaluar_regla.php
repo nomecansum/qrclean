@@ -30,9 +30,10 @@ $func_accion = function($accion, &$resultado, $campos,$id) {
         ->first();
     Log::debug('Reevaluando Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando);
     $this->log_evento('Reevaluando Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando,$accion->cod_regla);
-    include_once(resource_path('views/events/comandos').'/'.$evento->nom_comando);
-    $resultado_json=ejecutar($evento,null);
+    include(resource_path('views/events/comandos').'/'.$evento->nom_comando);
+    $resultado_json=$func_comando($evento);
     $resultado=json_decode($resultado_json);
+    unset($func_comando);
     $this->log_evento(count($resultado->lista_id).' ID detectados',$accion->cod_regla);
     try{
         $campos=json_decode($campos);

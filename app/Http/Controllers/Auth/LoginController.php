@@ -145,15 +145,17 @@ class LoginController extends Controller
                 $q->whereraw('UCASE(id_usuario_externo)=UCASE("'.$request->email.'")');
             })
             ->first();
-        $email=$u->email;
-        $logo=null;
+       
         //A ver si existe y si esta validado
         if(!isset($u)){
             savebitacora("Login de usuario no encontrado: ".$request->email,"Auth","prelogin","ERROR");
         }
         if((!isset($u))||(isset($u) && ($u->id_cliente==null || $u->cod_nivel==null))){
+            $email=$request->email;
             return view('auth.login',compact('email'));
         } else{
+            $email=$u->email;
+            $logo=null;
             $config_cliente=DB::table('clientes')
                 ->join('config_clientes','clientes.id_cliente','config_clientes.id_cliente')
                 ->where(['clientes.id_cliente' => $u->id_cliente])

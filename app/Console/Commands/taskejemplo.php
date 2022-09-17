@@ -133,7 +133,7 @@ class taskejemplo extends Command
         return "A";
      }
 
-     function escribelog_comando_comando($tipo,$mensaje){
+     function escribelog_comando($tipo,$mensaje){
         Log::$tipo($mensaje);
         log_tarea($mensaje,$this->argument('id'),$tipo);
         if($this->argument('origen')=='W')
@@ -148,16 +148,20 @@ class taskejemplo extends Command
         //Aqui es donde hay que poner el meollo de la tarea, es decir, el codigo a ejecutar.
         //La funcion Log registrará lo que se quiera en el log de laravel, el log de la tarea que se guarda en /storage/tareas
         //Las posibilidaddes de log son:  error    warning  debug    info   critical   notice    alert
-        $this->escribelog_comando_comando('info','Inicio de la tarea programada ['.$this->argument('id').']'.__CLASS__); //__CLASS__ pone el nombre de la tarea
+        $this->escribelog_comando('info','Inicio de la tarea programada ['.$this->argument('id').']'.__CLASS__);
         //Sacamos los parametros de la tarea
+        $tarea=tareas::find($this->argument('id'));
+        $parametros=json_decode($tarea->val_parametros);
         
         /////////////////////////////////////////////////////
         //          CODIGO PRINCIPAL DE LA TAREA           //
         ////////////////////////////////////////////////////7
         //Actualiza la fechad de ultima ejecucion de la tarea
-        $this->escribelog_comando_comando('info','YO estuve aqui');
+        $this->escribelog_comando('info','YO estuve aqui');
         // $tarea->fec_ult_ejecucion=Carbon::now();
         // $tarea->save();
-        $this->escribelog_comando_comando('info','Fin de la tarea '.__CLASS__);
+        $tarea->fec_ult_ejecucion=Carbon::now();
+        $tarea->save();
+        $this->escribelog_comando('info','Fin de la tarea '.__CLASS__);
     }
 }

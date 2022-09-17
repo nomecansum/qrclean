@@ -179,10 +179,12 @@ class APIController extends Controller
             ->withHeaders(['Accept' => 'application/json', 'Content-Type' => 'application/json','Authorization'=>$cliente->token_acceso_salas])
             ->withbody($body,'application/json')
             ->$metodo(config('app.url_base_api_salas').$accion);
-        
         if($response->status()!=200){
-            Log::error('Error en la respuesta de la API de salas: '.$response->body());
-            return APIController::respuesta_error('Error en la respuesta de la API de salas: '.$response->body(),$response->status());
+            Log::error('Error en la respuesta de la API de salas: '.$metodo.' '.$accion.' '.$param);
+            return [
+                "error"=>'Error en la respuesta de la API de salas: '.$metodo.' '.$accion.' '.$param,
+                "status"=>$response->status()
+               ];
         } 
         return [
             "body"=>$response->body(),
@@ -424,30 +426,37 @@ class APIController extends Controller
 
     public function solicitud_sincro_datos(Request $r,$fecha,$cliente){
         try{
-            $r->request->add(['id_cliente' => $this->get_cliente_ext($r)]);
+            $cliente_salas=clientes::where('id_cliente_salas',$cliente)->first()->id_cliente;
+            $r->request->add(['id_cliente' => $cliente_salas]);
             $r->request->add(['procedencia' => "salas"]);
+
             //Codigo para la resincronizacion de incidencias
             $url="get_estructura_incidencias_empresa_desde_fecha/".$fecha;
-            $respuesta=$this->enviar_request_salas("GET",$url,"","",$r->id_cliente);
+            $respuesta=$this->enviar_request_salas("GET",$url,"","",$cliente_salas);
             $respuesta=json_decode($respuesta['body']);
 
             //Sincronizamos las salas
             $salas_spotlinker=json_decode($respuesta->a_salas);
-            foreach($salas_spotlinker->salas as $sala){
-                $esta=puestos::where('id_cliente',$cliente)
+            $cuenta=0;
+            foreach($salas_spotlinker as $sala){
+                $esta=puestos::where('salas.id_cliente',$cliente_salas)
                         ->join('salas','salas.id_puesto','puestos.id_puesto')
                         ->where('des_puesto',$sala->nombre)
                         ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_sala'))
                         ->first();
-                if(!isset($esta)){
+                if(isset($esta)){
                     $sala_qrclean=salas::where('id_puesto',$esta->id_puesto)->first();
                     $sala_qrclean->id_externo_salas=$sala->id;
                     $sala_qrclean->save();
+                    $cuenta++;
                 }
             }
             
             savebitacora('Solicitud de resincronizacion de estructuras salas'.json_encode($r->all()),"API","solicitud_sincro","OK"); 
-            return response()->json($respuesta);
+            return response()->json([
+                'result'=>'ok',
+                'timestamp'=>Carbon::now(),
+                'message' => 'Proceso de sincronizacion completado '.$cuenta. ' actualizaciones']);
         }catch (\Throwable $e) {
             savebitacora('Error en sincronizacion  de estructuras salas '.json_encode($r->all()),"API","reabrir_ticket","ERROR");
             return $this->respuesta_error('ERROR: Ocurrio un error en el proceso '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
@@ -515,36 +524,70 @@ class APIController extends Controller
         } 
     }
 
-    public function request_sincro(Request $r,$fecha,$cliente){
+    public function request_sincro($fecha,$cliente){
         try{
-            $r->request->add(['id_cliente' => $this->get_cliente_ext($r)]);
+            $r = new \Illuminate\Http\Request();
+            $r->setMethod('POST');
+            $cliente_salas=clientes::where('id_cliente_salas',$cliente)->first()->id_cliente;
+            $r->request->add(['id_cliente' => $cliente_salas]);
             $r->request->add(['procedencia' => "salas"]);
             //Codigo para la resincronizacion de incidencias
+            $fecha=Carbon::parse($fecha);
             $url="get_incidencias_desde_fecha/".$fecha;
-            $respuesta=$this->enviar_request_salas("GET",$url,"","",$r->id_cliente);
+            $respuesta=$this->enviar_request_salas("GET",$url,"","",$cliente_salas);
+            if ($respuesta['status'] != 200) {
+                throw new \ErrorException($respuesta['error'].' | statusCode: '.$respuesta['status'], $respuesta['status']);
+            }
             $respuesta=json_decode($respuesta['body']);
-
+            
             //Sincronizamos las salas
-            $pendientes=json_decode($respuesta->a_incidencias_pendientes);
+            $pendientes=$respuesta->a_incidencias_pendientes;
             $reenviar=[];
-            foreach($pendientes->salas as $p){
+            $errores=[];
+            foreach($pendientes as $p){
+                $obj=new \stdClass();
                 $esta=incidencias::where('id_incidencia_salas',$p->incidencia_sala_id)->first();
                 if(!isset($esta)){
-                    $esta=salas::where('id_puesto',$esta->id_puesto)->first();
-                    $esta->id_estado=estados_incidencias::where('id_cliente',$r->id_cliente)->where('id_estado_salas',$p->estado)->first()->id_estado;
-                    $esta->id_tipo_incidencia=incidencias_tipos::where('id_cliente',$r->id_cliente)->where('id_tipo_salas',$p->tipo_incidencia_id)->first()->id_tipo_incidencia;
-                    $esta->txt_incidencia=$r->notas_admin;
-                    $esta->save();
-                    $reenviar[]=[$p->incidencia_sala_id,$esta->id_incidencia];
+                    try{
+                        $r->request->add(['id_puesto' => salas::where('id_cliente',$cliente_salas)->where('id_externo_salas',$p->sala_id)->first()->id_puesto]);
+                        $r->request->add(['fec_apertura' => Carbon::parse($r->fecha)]);
+                        $r->request->add(['id_usuario_apertura'=>config('app.id_usuario_spotlinker_salas')]);
+                        $r->request->add(['id_estado' => estados_incidencias::where('id_cliente',$cliente_salas)->where('id_estado_salas',$p->estado)->first()->id_estado]);
+                        $r->request->add(['id_tipo_incidencia' => incidencias_tipos::where('id_cliente',$cliente_salas)->where('id_tipo_salas',$p->tipo_incidencia_id)->first()->id_tipo_incidencia]);
+                        $r->request->add(['procedencia' => "salas"]);
+                        $r->request->add(['id_incidencia_salas' => $p->incidencia_sala_id]);
+                        $r->request->add(['txt_incidencia' => $p->notas_admin]);
+                        $r->request->add(['des_incidencia' => $p->descripcion_adicional]);
+                        $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
+                        $obj->incidencia_sala_id=$p->incidencia_sala_id;
+                        $obj->incidencia_puestos_id=$respuesta['id'];
+                        $reenviar[]=$obj;
+                    } catch (\Throwable $e) {
+                        //dd($e);
+                        $obj->incidencia_sala_id=$p->incidencia_sala_id;
+                        $obj->sala_id=$p->sala_id;
+                        $obj->estado=$p->estado;
+                        $obj->tipo_incidencia_id=$p->tipo_incidencia_id;
+                        $obj->error=$e->getMessage();
+                        $errores[]=$obj;
+                    }
                 }
             }
-
-            //Ahora reenviamos los datos de las incidencias que no se han sincronizado
-            
-            savebitacora('Solicitud de resincronizacion de estructuras salas'.json_encode($r->all()),"API","solicitud_sincro","OK"); 
-            return response()->json($respuesta);
+            //Ahora mandamos la lista de parejas de ID para que las sincronice
+            $url="add_incidencias_id_puestos_pendientes";
+            $body=json_encode($reenviar);
+            $respuesta=$this->enviar_request_salas("POST",$url,"",$body,$cliente_salas);
+            if ($respuesta['status'] != 200) {
+                throw new \ErrorException($respuesta['error'].' | statusCode: '.$respuesta['status'], $respuesta['status']);
+            }
+            savebitacora('Solicitud de resincronizacion de incidencias salas'.json_encode($r->all()),"API","solicitud_sincro","OK"); 
+            return response()->json([
+                'result'=>'ok',
+                'timestamp'=>Carbon::now(),
+                'message' => 'Solicitud de resincronizacion de incidencias salas completado. creadas: '.count($reenviar).' incidencias ',
+                'errores' => $errores]);
         }catch (\Throwable $e) {
-            savebitacora('Error en sincronizacion  de estructuras salas '.json_encode($r->all()),"API","reabrir_ticket","ERROR");
+            savebitacora('Error en sincronizacion  de incidencias salas '.json_encode($r->all()),"API","reabrir_ticket","ERROR");
             return $this->respuesta_error('ERROR: Ocurrio un error en el proceso '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
             
         } 
@@ -569,7 +612,7 @@ class APIController extends Controller
             //dd($respuesta);
             //{:a_incidencias_pendientes =>[{sala_id, fecha, descripcion_adicional, tipo_incidencia_id, estado, notas_admin, incidencia_id_puestos}]}
             $incidencias = $respuesta->map(function ($item, $key) {
-                return [
+                return
                     [
                         "sala_id"=>salas::where('id_puesto',$item->id_puesto)->first()->id_externo_salas??0,
                         "fecha"=>$item->fec_apertura,
@@ -578,8 +621,7 @@ class APIController extends Controller
                         "estado"=>$item->id_estado_salas,
                         "notas_admin"=>$item->txt_incidencia,
                         "incidencia_id_puestos"=>$item->id_incidencia
-                    ]
-                ];
+                    ];
             });
             savebitacora('Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","OK"); 
             return response()->json([
@@ -600,10 +642,8 @@ class APIController extends Controller
             $lista_incidencias=$r->incidencias;
             $lista_incidencias=json_decode($lista_incidencias);
             $pendientes=[];
-            //Primero vemos las que tengan id_incidencia_salas y el id_incidencia_puestos a null o algo distinto de lo que debe ser y las guardamos para sincronizar
             
             //Recibo mis ID de incidenicci y los tengo que buscar para completar con el id_externo_salas que me mande
-
             foreach($lista_incidencias as $i){
                 $incidencia=incidencias::where('id_incidencia',$i->incidencia_id_puestos)->first();
                 if(isset($incidencia)){
@@ -613,7 +653,6 @@ class APIController extends Controller
                     $pendientes[]=$i;
                 }
             }
-
             savebitacora('Solicitud de actualizacion de id de incidencias en salas '.json_encode($r->all()),"API","add_incidencia_id_puestos_pendientes","OK"); 
             return response()->json([
                 'result'=>'ok',

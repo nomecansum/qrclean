@@ -29,8 +29,9 @@ class APIController extends Controller
         try{
             $result=users::where('id_cliente',Auth::user()->id_cliente)
             ->where(function($q) use($r){
-                $q->where('id',$r->id_usuario_apertura)
-                ->orWhere('id_usuario_externo',$r->id_usuario_apertura);
+                $q->where('id',$r->id_usuario_apertura);
+                $q->orWhere('id_usuario_externo',$r->id_usuario_apertura);
+                $q->orWhere('email',$r->id_usuario_apertura);
             })->first()->id;
             return $result;
         } catch (\Exception $e) {

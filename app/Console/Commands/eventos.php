@@ -246,11 +246,13 @@ class eventos extends Command
                         } else if($evento->tip_nomolestar=='Y'){
                             $fecha_noactuar=Carbon::now()->addYears($evento->nomolestar);
                         }
-                        DB::table('eventos_noactuar')->insert([
-                            "cod_regla"=>$evento->cod_regla,
-                            "id"=>$id,
-                            "fecha"=>$fecha_noactuar,
-                        ]);
+                        if($evento->nomolestar>0){
+                            DB::table('eventos_noactuar')->insert([
+                                "cod_regla"=>$evento->cod_regla,
+                                "id"=>$id,
+                                "fecha"=>$fecha_noactuar,
+                            ]);
+                        }
                     }
                 } else { //Estamos a mitad del fregao, aumentamos el numero de iteracion y listo
                     DB::table('eventos_evolucion_id')->where('cod_regla',$evento->cod_regla)->where('id',$id)->update([

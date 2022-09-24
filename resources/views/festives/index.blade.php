@@ -324,6 +324,10 @@ var anio = {{ Carbon\Carbon::now()->year }};
 		}
 	}
 
+	function del(id){
+		$('#eliminar-festivo-'+id).modal('show');
+	}
+
 	function editar_festivo(id){
 
 		if(id!=0){

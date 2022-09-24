@@ -103,16 +103,12 @@ class TurnosController extends Controller
             $dato = turnos::findOrFail($id);
             $dato->delete();
             savebitacora('Turno '.$dato->des_turno. ' borrado',"Turnos","delete","OK");
-            return [
-				'message' =>"Turno ".$dato->des_turno." borrado",
-				'url' => url('turnos')
-			];
+            flash("Turno ".$dato->des_turno." borrado")->success();
+		    return redirect('turnos');
         } catch (\Throwable $exception) {
-            return [
-                'title' => "Error borrando turno",
-                'error' => 'Ocurrio un error borrando el turno. '.mensaje_excepcion($exception),
-                'url' => url('turnos')
-            ];
+            flash('Ocurrio un error borrando el turno. '.mensaje_excepcion($exception))->error();
+            return redirect('turnos');
+            
         
         }
     }

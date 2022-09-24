@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f5cf6607c92da80fd393a3ce2736a7f",
+    "content-hash": "600ce830ab9341f58bc334abba9a3863",
     "packages": [
         {
             "name": "24slides/laravel-saml2",
@@ -12197,7 +12197,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.3|^8.0"
+        "php": "^7.3|^8.0",
+        "ext-imagick": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"

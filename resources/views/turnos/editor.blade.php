@@ -59,7 +59,7 @@
                 @for ($i = 1; $i < 8; $i++)
                     <div class="form-group rounded b-all text-center p-10 " style="width: 14%; margin-right: 2px" >
                         <div class="form-check pt-2">
-                            <input  name="dia[]" id="dia{{$i}}" value="{{$i}}" {{ isset($dias_semana)&&in_array($i,$dias_semana->dia)?'checked':'' }} class="form-check-input" type="checkbox">
+                            <input  name="dia[]" id="dia{{$i}}" value="{{$i}}" {{ isset($dias_semana)&&in_array($i,$dias_semana->dia)?'checked':'' }} class="form-check-input chkdia" type="checkbox">
                             <label class="form-check-label"  for="dia{{$i}}"><b>{{$dias[$i-1]}}</b></label><br>
                         </div>
                         <div class="form-group">

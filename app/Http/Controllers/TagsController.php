@@ -50,7 +50,7 @@ class TagsController extends Controller
                 'message' => 'Tag '.$r->nom_tag. ' actualizado con exito',
                 'url' => url('/tags')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             // flash('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage())->error();
             // return back()->withInput();
             savebitacora('ERROR: Ocurrio un error creando Tag '.$r->nom_tag.' '.$exception->getMessage() ,"Tags","save","ERROR");
@@ -71,7 +71,7 @@ class TagsController extends Controller
             savebitacora('Tag borrada '.$tag->nom_tag,"Tags","delete","OK");
             flash('Tag '.$tag->nom_tag.' borrado')->success();
             return back()->withInput();
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error borrando Tag '.$tag->nom_tag.' '.$exception->getMessage())->error();
             return back()->withInput();
         }

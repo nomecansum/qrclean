@@ -186,7 +186,7 @@ class EventosController extends Controller
             //Ahora lo convertimos en JSON para guardarlo
             $parametros=json_encode($parametros);
 
-        } catch(Exception $e){
+        } catch(\Throwable $e){
             return response()->json([
                 "response" => "ERROR",
                 "error" => "Error al procesar los datos de la accion ".$r->accion." ".mensaje_excepcion($e),
@@ -212,7 +212,7 @@ class EventosController extends Controller
                 "TS" => Carbon::now()->format('Y-m-d h:i:s'),
                 "url"=> "reload_acciones()",
                 ],200)->throwResponse();
-        } catch(Exception $e){
+        } catch(\Throwable $e){
             return response()->json([
                 "response" => "ERROR",
                 "error" => "Error al guardar la regla en BDD [".$operacion."]".str_replace(".php","",str_replace("_"," ",$r->accion))." ".mensaje_excepcion($e),
@@ -333,7 +333,7 @@ class EventosController extends Controller
                 } else {
                     $valor="";
                 }
-                try{  $salida.=$param->label."(".$param->tipo.")=>".$valor."\r\n"; } catch(Exception $e){};
+                try{  $salida.=$param->label."(".$param->tipo.")=>".$valor."\r\n"; } catch(\Throwable $e){};
             }
         }
         return $salida;
@@ -387,7 +387,7 @@ class EventosController extends Controller
                 $r->clientes="0";
             }
 
-        } catch(Exception $e){
+        } catch(\Throwable $e){
             return response()->json([
                 "response" => "ERROR",
                 "error" => "Error al procesar los datos de la regla ".$r->nom_regla." ".mensaje_excepcion($e),
@@ -443,7 +443,7 @@ class EventosController extends Controller
                 "TS" => Carbon::now()->format('Y-m-d h:i:s'),
                 "url"=> config('app.carpeta_asset')."/edit/".$reglas->cod_regla,
                 ],200)->throwResponse();
-        } catch(Exception $e){
+        } catch(\Throwable $e){
             return response()->json([
                 "response" => "ERROR",
                 "error" => "Error al guardar la regla en BDD [".$operacion."]".$r->nom_regla." ".mensaje_excepcion($e),

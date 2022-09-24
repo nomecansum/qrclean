@@ -14,6 +14,7 @@ use App\Models\tags_puestos;
 use App\Models\users;
 use App\Models\puestos_tipos;
 use App\Models\salas;
+use App\Models\config_clientes;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -447,7 +448,7 @@ class PuestosController extends Controller
                 'message' => 'puesto '.$r->etiqueta. ' actualizado',
                 //'url' => url('puestos')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'title' => "puestos",
                 'error' => 'ERROR: Ocurrio un error actualizando el puesto '.$r->name.' '.mensaje_excepcion($exception),
@@ -465,14 +466,33 @@ class PuestosController extends Controller
         if(!is_array($r->lista_id)){
             $r->lista_id=explode(",",$r->lista_id);
         }
+
+        //{"_token":"rN1muyOiPDlZbNQiHjUxfweJFzSijjFRwuRnRdQA","formato":"preview","lista_id":"17557,17558,17559,17560,17561,17562,17563,17564,17565,17566","id_cliente":"5","col":"4","tam_qr":"174","sel_color":"#000000","color_texto":"1","mca_icono":"1","footer":"1","margen_left":"4","margen_top":"4","espacio_h":"4","espacio_v":"4","padding_qr":"3","padding_cont":"2","font_size":"14"}
         if(!isset($r->tam_qr)){
-            $r->request->add(['tam_qr' => session('CL')['tam_qr']]); //add request
+            //$r->request->add(['tam_qr' => session('CL')['tam_qr']]); //add request
+            $config_print=config_clientes::where('id_cliente',session('CL')['id_cliente'])->first()->config_print_qr;
+            if (isset($config_print) && isJson($config_print)){
+                $config_print=json_decode($config_print,true);
+                $r->request->add(['tam_qr' => $config_print['tam_qr']]); //add request
+                $r->request->add(['col' => $config_print['col']]); //add request
+                $r->request->add(['sel_color' => $config_print['sel_color']]); //add request
+                $r->request->add(['color_texto' => $config_print['color_texto']]); //add request
+                $r->request->add(['mca_icono' => $config_print['mca_icono']]); //add request
+                $r->request->add(['footer' => $config_print['footer']]); //add request
+                $r->request->add(['margen_left' => $config_print['margen_left']]); //add request
+                $r->request->add(['margen_top' => $config_print['margen_top']]); //add request
+                $r->request->add(['espacio_h' => $config_print['espacio_h']]); //add request
+                $r->request->add(['espacio_v' => $config_print['espacio_v']]); //add request
+                $r->request->add(['padding_qr' => $config_print['padding_qr']]); //add request
+                $r->request->add(['padding_cont' => $config_print['padding_cont']]); //add request
+                $r->request->add(['font_size' => $config_print['font_size']]); //add request
+            } 
         }
         $layout="layout";
-        
             $puestos=DB::table('puestos')
+            ->select('puestos.*','puestos_tipos.val_color as color_tipo','puestos_tipos.val_icono as icono_tipo','clientes.nom_cliente','clientes.img_logo')
                 ->join('edificios','puestos.id_edificio','edificios.id_edificio')
-                ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+                ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
                 ->join('clientes','puestos.id_cliente','clientes.id_cliente')
                 ->where(function($q){
                     if (!isAdmin()) {
@@ -488,6 +508,8 @@ class PuestosController extends Controller
                 $filename='Codigos_QR Puestos_'.Auth::user()->id_cliente.'_.pdf';
                 $pdf = PDF::loadView('puestos.print_qr',compact('puestos','r','layout'));
                 return $pdf->download($filename);
+            } else if($r->formato && $r->formato=='preview'){
+                return view('puestos.fill_printarea',compact('puestos','r','layout'));
             } else {
                 return view('puestos.print_qr',compact('puestos','r','layout'));
             }
@@ -548,6 +570,12 @@ class PuestosController extends Controller
         return view('puestos.tipos.index', compact('tipos'));
     }
 
+    public function save_config_print(Request $r){
+        $config=config_clientes::find($r->id_cliente);
+        $config->config_print_qr=json_encode($r->all());
+        $config->save();
+    }
+
     public function tipos_edit($id=0){
         if($id==0){
             $tipo=new puestos_tipos();
@@ -589,7 +617,7 @@ class PuestosController extends Controller
                 'message' => 'Tipo de puesto '.$r->des_tipo_puesto. ' actualizado con exito',
                 'url' => url('/puestos/tipos')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             savebitacora('ERROR: Ocurrio un error creando tipo de puesto '.$r->des_tipo_puesto.' '.$exception->getMessage() ,"Puestos","tipos_save","ERROR");
             return [
                 'title' => "Tipos de puesto",
@@ -614,7 +642,7 @@ class PuestosController extends Controller
             savebitacora('Tipo de puesto borrado '.$tipo->des_tipo_puesto,"Puestos","tipos_delete","OK");
             flash('Tipo de puesto '.$tipo->des_tipo_puesto.' borrado')->success();
             return back()->withInput();
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error borrando Tipo de puesto '.$tipo->des_tipo_puesto.' '.$exception->getMessage())->error();
             return back()->withInput();
         }

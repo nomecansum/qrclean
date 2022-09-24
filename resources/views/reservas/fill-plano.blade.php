@@ -83,6 +83,35 @@
 <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
 <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
 <script>
+    $.fn.scale = function(x) {
+        if(!$(this).filter(':visible').length && x!=1)return $(this);
+        if(!$(this).parent().hasClass('scaleContainer')){
+            $(this).wrap($('<div class="scaleContainer">').css('position','relative'));
+            $(this).data({
+                'originalWidth':$(this).width(),
+                'originalHeight':$(this).height()});
+        }
+        $(this).css({
+            'transform': 'scale('+x+')',
+            '-ms-transform': 'scale('+x+')',
+            '-moz-transform': 'scale('+x+')',
+            '-webkit-transform': 'scale('+x+')',
+            'transform-origin': 'right bottom',
+            '-ms-transform-origin': 'right bottom',
+            '-moz-transform-origin': 'right bottom',
+            '-webkit-transform-origin': 'right bottom',
+            'position': 'absolute',
+            'bottom': '0',
+            'right': '0',
+        });
+        if(x==1)
+            $(this).unwrap().css('position','static');else
+                $(this).parent()
+                    .width($(this).data('originalWidth')*x)
+                    .height($(this).data('originalHeight')*x);
+        return $(this);
+    };
+
     var tooltip = $('.add-tooltip');
     if (tooltip.length)tooltip.tooltip();
     
@@ -102,10 +131,13 @@
     var hacer_zoom{{ $pl->id_planta }};
 
     function zoom{{ $pl->id_planta }}(){
-
-        $('#plano{{ $pl->id_planta }}').animate({ 'zoom': zoom_actual{{ $pl->id_planta }}/100 }, 400);
+        //$('#plano{{ $pl->id_planta }}').animate({ 'zoom': zoom_actual{{ $pl->id_planta }}/100 }, 400);
         $('#plano{{ $pl->id_planta }}').animate({ 'width': zoom_actual{{ $pl->id_planta }}+'%' }, 400);
-        recolocar_puestos();
+        $('#plano{{ $pl->id_planta }}').scale(zoom_actual{{ $pl->id_planta }}/100);
+        setTimeout(() => {
+            recolocar_puestos();;
+        }, 1500);
+       
     }
     
 

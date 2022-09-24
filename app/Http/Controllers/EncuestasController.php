@@ -115,7 +115,7 @@ class EncuestasController extends Controller
                 'message' => 'Encuesta '.$r->titulo. ' creada',
                 'url' => url('encuestas')
             ];
-            try {} catch (Exception $exception) {
+            try {} catch (\Throwable $exception) {
 
             return [
                 'title' => "Encuestas",
@@ -225,7 +225,7 @@ class EncuestasController extends Controller
                 'url' => url('encuestas')
             ];
            
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return [
                 'title' => "Encuestas",
@@ -251,7 +251,7 @@ class EncuestasController extends Controller
             savebitacora('Planta '.$encuesta->des_planta. ' borrada',"Encuestas","destroy","OK");
             return redirect()->route('encuestas.index')
                 ->with('success_message', 'Encuesta borrada.');
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return back()->withInput()
                 ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.'.mensaje_excepcion($exception)]);

@@ -349,7 +349,7 @@ class UsersController extends Controller
             ];
             // flash('Usuario '.$request->name. 'actualizado con exito')->success();
             // return redirect()->route('users.users.index');
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             // flash('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage())->error();
             // return back()->withInput();
             savebitacora('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage() ,"Usuarios","Update","ERROR");
@@ -397,7 +397,7 @@ class UsersController extends Controller
                 'message' => 'Perfil de usuario '.$request->name. ' actualizado con exito',
                 'url' => url('/')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             savebitacora('ERROR: Ocurrio un error actualizando el perfil de usuario '.$request->name.' '.$exception->getMessage() ,"Usuarios","update_perfil","ERROR");
             return [
                 'title' => "Usuarios",
@@ -417,7 +417,7 @@ class UsersController extends Controller
             savebitacora('Usuario '.$users->email. ' borrado',"Usuarios","Destroy","OK");
             flash('Usuario '.$id. ' eliminado con exito')->success();
             return redirect()->route('users.index');
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error al eliminar el usuario '.$id.' '.$exception->getMessage())->error();
             savebitacora('ERROR: Ocurrio un error borrando el usuario '.$id.' '.$exception->getMessage() ,"Usuarios","destroy","ERROR");
             return back()->withInput();
@@ -444,7 +444,7 @@ class UsersController extends Controller
                     'url' => url('users')
                 ];
             }
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'title' => "Usuarios",
                 'error' => 'ERROR: Ocurrio un error borrando los usuarios el usuario '.$exception->getMessage(),
@@ -991,7 +991,7 @@ class UsersController extends Controller
                 //'url' => url('users')
             ];
 
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'title' => "Usuarios",
                 'error' => 'ERROR: Ocurrio un error asignando permisos de planta a los usuarios '.$exception->getMessage(),
@@ -1016,7 +1016,7 @@ class UsersController extends Controller
                 //'url' => url('users')
             ];
 
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'title' => "Usuarios",
                 'error' => 'ERROR: Ocurrio un error asignando permisos de planta a los usuarios '.$exception->getMessage(),
@@ -1195,7 +1195,7 @@ class UsersController extends Controller
             return [
                 'result' => "OK"
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'result' => "ERROR",
                 'error' => 'ERROR: Ocurrio un error asignando puestos al usuarios '.$exception->getMessage(),
@@ -1214,7 +1214,7 @@ class UsersController extends Controller
                             "id_puesto"=>$p,
                             "id_usuario"=>$id
                         ]);
-                    } catch (Exception $exception) {}
+                    } catch (\Throwable $exception) {}
                 }
                 $estado=true;
             } else if($accion="D") {
@@ -1227,7 +1227,7 @@ class UsersController extends Controller
                 "planta" => $planta,
                 "usuario" => $id
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'result' => "ERROR",
                 'error' => 'ERROR: Ocurrio un error asignando puestos al usuarios '.$exception->getMessage(),
@@ -1248,7 +1248,7 @@ class UsersController extends Controller
                             "id_puesto"=>$p,
                             "id_usuario"=>$id
                         ]);
-                    } catch (Exception $exception) {}
+                    } catch (\Throwable $exception) {}
                 }
                 $estado=true;
             } else if($accion="D") {
@@ -1261,7 +1261,7 @@ class UsersController extends Controller
                 "edificio" => $edificio,
                 "usuario" => $id
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'result' => "ERROR",
                 'error' => 'ERROR: Ocurrio un error asignando puestos al usuarios '.$exception->getMessage(),
@@ -1481,7 +1481,7 @@ class UsersController extends Controller
                 ];
             }
             
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'result' => "ERROR",
                 'error' => 'ERROR: Ocurrio un error asignando temporalmente puestos al usuarios '.$exception->getMessage(),

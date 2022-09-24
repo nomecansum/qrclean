@@ -106,6 +106,14 @@ class eventos extends Command
             exit();
         }
 
+        //Aumentamos el tiempo maximo de timeout, porque los informes pueden tardar
+        ini_set('max_execution_time', 500);
+        set_time_limit(500);
+
+        //Y la memoria disponibie para ejecucion
+        ini_set('memory_limit', '4095M');
+        
+
         $parametros=json_decode($tarea->val_parametros);
         $grupo=valor($parametros,"cod_grupo_ejecucion");
         $this->escribelog_comando('debug','Grupo '.$grupo);

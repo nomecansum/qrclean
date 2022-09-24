@@ -67,6 +67,7 @@
         --bs-gutter-y: 0;
         padding: 0px 0px 0px 0px;
         margin: 0px 0px 0px 0px;
+        overflow: auto !important;
     }
 </style>
 
@@ -131,7 +132,7 @@
                     <div class="card-header bg-gray">
                         <h3 >{{ $pl->des_planta }}</h3>
                     </div>
-                    <div class="card-body  overflow-auto card_plano">
+                    <div class="card-body  card_plano">
                         @include('reservas.fill-plano')
                     </div>
                 </div>

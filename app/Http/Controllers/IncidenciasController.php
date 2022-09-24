@@ -583,7 +583,7 @@ class IncidenciasController extends Controller
                 ];
             }
             
-            } catch (Exception $exception) {
+            } catch (\Throwable $exception) {
 
             savebitacora('ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","save","ERROR");
             return [
@@ -1021,7 +1021,7 @@ class IncidenciasController extends Controller
             $puesto->save();
             savebitacora('Incidencia ['.$incidencia->id_incidencia.'] '.$incidencia->des_incidencia.' borrada',"Incidencias","delete","OK");
             return redirect()->route('incidencias.index')->with('success_message', 'Incidencia ['.$id.'] '.$incidencia->des_incidencia.' borrada.');
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             savebitacora('ERROR: Ocurrio un error borrando la incidencia ['.$incidencia->id_incidencia.'] '.$exception->getMessage() ,"Incidencias","delete","ERROR");
             return back()->withInput()
                 ->withErrors(['unexpected_error' => 'Ocurrio un error al borrar la incidencia ['.$id.'] '.mensaje_excepcion($exception)]);
@@ -1051,7 +1051,7 @@ class IncidenciasController extends Controller
                 'id'=> $inc->id_incidencia
                 //'url' => url('/incidencias')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             savebitacora('ERROR: Ocurrio un error cerrando la incidencia ['.$r->id_incidencia.'] '.$exception->getMessage() ,"Incidencias","cerrar","ERROR");
             return [
                 'title' => "Cerrar incidencia",
@@ -1088,7 +1088,7 @@ class IncidenciasController extends Controller
                 'id'=> $inc->id_incidencia
                 //'url' => url('/incidencias')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             savebitacora('ERROR: Ocurrio un error reabriendo la incidencia ['.$r->id_incidencia.'] '.$exception->getMessage() ,"Incidencias","reabrir","ERROR");
             return [
                 'title' => "Reabrir incidencia",
@@ -1191,7 +1191,7 @@ class IncidenciasController extends Controller
                 'message' => 'Tipo de incidencia '.$r->des_tipo_incidencia. ' actualizado con exito',
                 'url' => url('/incidencias/tipos')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             // flash('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage())->error();
             // return back()->withInput();
             savebitacora('ERROR: Ocurrio un error creando tipo de incidencia '.$r->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","tipos_save","ERROR");
@@ -1212,7 +1212,7 @@ class IncidenciasController extends Controller
             savebitacora('Tipo de incidencia borrado '.$tipo->des_tipo_incidencia,"Incidencias","tipos_delete","OK");
             flash('Tipo de incidencia '.$tipo->des_tipo_incidencia.' borrado')->success();
             return back()->withInput();
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error borrando Tipo de incidencia '.$tipo->des_tipo_incidencia.' '.$exception->getMessage())->error();
             return back()->withInput();
         }
@@ -1353,7 +1353,7 @@ class IncidenciasController extends Controller
                 'message' => 'Causa de cierre '.$r->des_causa. ' actualizada',
                 'url' => url('/incidencias/causas')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             // flash('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage())->error();
             // return back()->withInput();
             savebitacora('ERROR: Ocurrio un error actualizando causa de cierre '.$r->des_causa.' '.$exception->getMessage() ,"Incidencias","causas_save","ERROR");
@@ -1374,7 +1374,7 @@ class IncidenciasController extends Controller
             savebitacora('Causa de cierre borrada '.$causa->des_causa,"Incidencias","causas_save","OK");
             flash('Causa de cierre '.$causa->des_causa.' borrada')->success();
             return back()->withInput();
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error borrando causa de cierre '.$causa->des_causa.' '.$exception->getMessage())->error();
             return back()->withInput();
         }
@@ -1425,7 +1425,7 @@ class IncidenciasController extends Controller
                 'message' => 'Estado de incidencia '.$r->des_estado. ' actualizado',
                 'url' => url('/incidencias/estados')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             // flash('ERROR: Ocurrio un error actualizando el usuario '.$request->name.' '.$exception->getMessage())->error();
             // return back()->withInput();
             savebitacora('ERROR: Ocurrio un error actualizando estado de incidencia '.$r->des_estado.' '.$exception->getMessage() ,"Incidencias","estados_save","ERROR");
@@ -1446,7 +1446,7 @@ class IncidenciasController extends Controller
             savebitacora('Estado de incidencia borrado '.$estado->des_estado,"Incidencias","causas_save","OK");
             flash('Estado de incidencia '.$estado->des_estado.' borrada')->success();
             return back()->withInput();
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error borrando causa de cierre '.$estado->des_estado.' '.$exception->getMessage())->error();
             return back()->withInput();
         }

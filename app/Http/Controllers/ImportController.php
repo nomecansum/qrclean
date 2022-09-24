@@ -391,7 +391,7 @@ class ImportController extends Controller
                         'message' => $cuenta_usuarios . " usuarios importados correctamente:<br>" . $nombres_usuarios . "<br>" .'<br>'. $cuenta_puestos . " puestos importados correctamente:<br>" . $nombres_puestos . "<br>" . $mensajes_adicionales. "<br> Errores no criticos encontrados[".$errores."]",
                         'tipo' => 'ok'
                     ];
-                } catch (Exception $e){
+                } catch (\Throwable $e){
                     DB::rollback();
                     savebitacora("Error en el proceso de importacion ". $e->getMessage(), null);
                     return [
@@ -403,7 +403,7 @@ class ImportController extends Controller
             }
             else return \Response::json(array('success' => true));
         } 
-        catch(Exception $e){
+        catch(\Throwable $e){
             return \Response::json(array('error' => false));
         }
     }

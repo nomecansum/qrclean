@@ -240,6 +240,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::Post('/print_qr','PuestosController@print_qr');
         Route::Post('/export_qr','PuestosController@export_qr');
         Route::Post('/preview_qr','PuestosController@preview_qr');
+        Route::Post('/save_config_print','PuestosController@save_config_print');
        
         Route::post('/ronda_limpieza',['middleware'=>'permissions:["Rondas de limpieza"],["R"]', 'uses' => 'PuestosController@ronda_limpieza']);
         Route::get('/mapa',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@mapa']);

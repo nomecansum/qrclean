@@ -110,7 +110,7 @@ class PlantasController extends Controller
                 'message' => 'Planta '.$request->des_planta. ' creada',
                 'url' => url('plantas')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return [
                 'title' => "Plantas",
@@ -177,7 +177,7 @@ class PlantasController extends Controller
                 'message' => 'Planta '.$request->des_planta. ' actualizada',
                 'url' => url('plantas')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return [
                 'title' => "Plantas",
@@ -203,7 +203,7 @@ class PlantasController extends Controller
             savebitacora('Planta '.$plantas->des_planta. ' borrada',"Plantas","destroy","OK");
             return redirect()->route('plantas.plantas.index')
                 ->with('success_message', 'Planta borrada.');
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return back()->withInput()
                 ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.'.mensaje_excepcion($exception)]);

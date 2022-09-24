@@ -86,7 +86,7 @@ class TurnosController extends Controller
                 'message' =>"Turno ".$turno->des_turno." creado",
                 'url' => url('turnos')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'title' => "Error creando turno",
                 'error' => 'Ocurrio un error creando el turno. '.mensaje_excepcion($exception),
@@ -107,7 +107,7 @@ class TurnosController extends Controller
 				'message' =>"Turno ".$dato->des_turno." borrado",
 				'url' => url('turnos')
 			];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'title' => "Error borrando turno",
                 'error' => 'Ocurrio un error borrando el turno. '.mensaje_excepcion($exception),

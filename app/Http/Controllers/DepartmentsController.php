@@ -58,7 +58,7 @@ class DepartmentsController extends Controller
 				'url' => url('departments')
 
 			];
-		} catch (Exception $e) {
+		} catch (\Throwable $e) {
             savebitacora("Error al crear departamento ".$r->nom_departamento. $e->getMessage(),null);
             return [
                 'title' => trans('strings.departments'),
@@ -85,7 +85,7 @@ class DepartmentsController extends Controller
 				'message' => "Actualizado departamento ".$r->nom_departamento,$r->cod_cliente,
 				'url' => url('departments')
 			];
-		} catch (Exception $e) {
+		} catch (\Throwable $e) {
             savebitacora("Error al actualizar departamento ".$r->nom_departamento. $e->getMessage(),null);
             return [
                 'error' => trans('strings.departments'),

@@ -258,12 +258,12 @@
 
 
     function form_pdf_submit(event){
-        block_espere("Generando PDF...");
+        https://qrclean.ddns.net:444/puestos/print_qrblock_espere("Generando ...");
 
         $.post($(this).attr('action'), $(this).serializeArray(), function(data, textStatus, xhr) {
-            block_espere("Generando PDF...");
+            //block_espere("Generando PDF...");
             fin_espere();
-            toast_ok('Generacion de PDF','PDF Generado');
+            //toast_ok('Generacion de PDF','PDF Generado');
         })
         .fail(function(err) {
             let error = JSON.parse(err.responseText);

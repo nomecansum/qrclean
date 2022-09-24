@@ -61,6 +61,7 @@ class config_clientes extends Model
                   'mca_incidencia_scan',
                   'mca_incidencia_reserva',
                   'mca_spotlinker_salas',
+                  'config_print_qr',
               ];
 
     /**

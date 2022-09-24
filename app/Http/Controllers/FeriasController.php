@@ -85,7 +85,7 @@ class FeriasController extends Controller
                 'message' => 'Feria '.$request->des_feria. ' creada',
                 'url' => url('ferias')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return [
                 'title' => "Ferias",
@@ -143,7 +143,7 @@ class FeriasController extends Controller
                 'message' => 'Feria '.$request->des_feria. ' actualizada',
                 'url' => url('ferias')
             ];
-            } catch (Exception $exception) {
+            } catch (\Throwable $exception) {
 
             return [
                 'title' => "Ferias",
@@ -169,7 +169,7 @@ class FeriasController extends Controller
             savebitacora('Planta '.$plantas->des_planta. ' borrada',"Plantas","destroy","OK");
             return redirect()->route('plantas.plantas.index')
                 ->with('success_message', 'Planta borrada.');
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return back()->withInput()
                 ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.'.mensaje_excepcion($exception)]);
@@ -274,7 +274,7 @@ class FeriasController extends Controller
             'url' => url('/ferias/marcas')
         ];
         
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return [
                 'title' => "Ferias",
@@ -299,7 +299,7 @@ class FeriasController extends Controller
             savebitacora('Marca '.$dato->des_marca. ' borrada',"Ferias","marcas_delete","OK");
             return redirect()->route('marcas.index')
                 ->with('success_message', 'Marca borrada.');
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return back()->withInput()
                 ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.'.mensaje_excepcion($exception)]);
@@ -446,7 +446,7 @@ class FeriasController extends Controller
                 'url' => url('/ferias/asistentes')
             ];
             
-            } catch (Exception $exception) {
+            } catch (\Throwable $exception) {
 
                 return [
                     'title' => "Ferias",
@@ -464,7 +464,7 @@ class FeriasController extends Controller
             savebitacora('Contacto '.$dato->nombre. ' borrado',"Ferias","asistentes_delete","OK");
             return redirect()->route('asistentes.index')
                 ->with('success_message', 'Contacto borrado.');
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return back()->withInput()
                 ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.'.mensaje_excepcion($exception)]);

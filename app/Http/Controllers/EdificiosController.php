@@ -77,7 +77,7 @@ class EdificiosController extends Controller
                 'message' => 'Edificio '.$request->des_edificio. ' creado',
                 'url' => url('edificios')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
             return [
                 'title' => "Edificios",
                 'error' => 'ERROR: Ocurrio un error creando el edificio '.$request->des_edificio.' '.mensaje_excepcion($exception),
@@ -133,7 +133,7 @@ class EdificiosController extends Controller
                 'message' => 'Edificio '.$request->des_edificio. ' guardado',
                 'url' => url('edificios')
             ];
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return [
                 'title' => "Edificios",
@@ -160,7 +160,7 @@ class EdificiosController extends Controller
 
             return redirect()->route('edificios.edificios.index')
                 ->with('success_message', 'Edificio borrado');
-        } catch (Exception $exception) {
+        } catch (\Throwable $exception) {
 
             return back()->withInput()
                 ->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);

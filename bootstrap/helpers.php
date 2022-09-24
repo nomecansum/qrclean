@@ -471,8 +471,6 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
     return true;
 }
 
-
-
 function tags($string, $encoding = 'UTF-8'){
     $string = trim(strip_tags(html_entity_decode(urldecode($string))));
     if(empty($string)){ return false; }
@@ -1472,6 +1470,7 @@ function cuenta_notificaciones(){
     
 }
 
+//Devuelve para cada dia indicado si el usuario tiene fiesta o no
 function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
     if($fecha_fin==null){
         $fecha_fin=$fecha_inicio;
@@ -1528,3 +1527,16 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
 
     return $resultado;
 }
+
+//Convierte un color de hexadecumal RGB a decimal RGB
+function hexToRgb($hex, $alpha = false) {
+    $hex      = str_replace('#', '', $hex);
+    $length   = strlen($hex);
+    $rgb['r'] = hexdec($length == 6 ? substr($hex, 0, 2) : ($length == 3 ? str_repeat(substr($hex, 0, 1), 2) : 0));
+    $rgb['g'] = hexdec($length == 6 ? substr($hex, 2, 2) : ($length == 3 ? str_repeat(substr($hex, 1, 1), 2) : 0));
+    $rgb['b'] = hexdec($length == 6 ? substr($hex, 4, 2) : ($length == 3 ? str_repeat(substr($hex, 2, 1), 2) : 0));
+    if ( $alpha ) {
+       $rgb['a'] = $alpha;
+    }
+    return $rgb;
+ }

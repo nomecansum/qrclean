@@ -85,7 +85,7 @@ class BitacorasController extends Controller
             ->orderby('fecha','desc')
             ->get();
             return view('bitacoras.index', compact('bitacoras'), compact('r','usuarios','modulos'));
-            try {     } catch (Exception $exception) {
+            try {     } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error al hacer la busqueda '.$exception->getMessage())->error();
             return back()->withInput();
         }        

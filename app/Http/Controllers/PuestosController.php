@@ -467,9 +467,7 @@ class PuestosController extends Controller
             $r->lista_id=explode(",",$r->lista_id);
         }
 
-        //{"_token":"rN1muyOiPDlZbNQiHjUxfweJFzSijjFRwuRnRdQA","formato":"preview","lista_id":"17557,17558,17559,17560,17561,17562,17563,17564,17565,17566","id_cliente":"5","col":"4","tam_qr":"174","sel_color":"#000000","color_texto":"1","mca_icono":"1","footer":"1","margen_left":"4","margen_top":"4","espacio_h":"4","espacio_v":"4","padding_qr":"3","padding_cont":"2","font_size":"14"}
         if(!isset($r->tam_qr)){
-            //$r->request->add(['tam_qr' => session('CL')['tam_qr']]); //add request
             $config_print=config_clientes::where('id_cliente',session('CL')['id_cliente'])->first()->config_print_qr;
             if (isset($config_print) && isJson($config_print)){
                 $config_print=json_decode($config_print,true);

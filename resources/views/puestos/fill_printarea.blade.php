@@ -40,7 +40,7 @@
         <div class="d-flex flex-row prim">
            
     @endif
-    <div class="text-center cont_qr" style="display: inline-block; border: 1px solid #ccc; margin: {{ $r->espacio_h }}px {{ $r->espacio_v }}px {{ $r->espacio_h }}px {{ $r->espacio_v }}px">
+    <div class="text-center cont_qr" style="display: inline-block;  margin: {{ $r->espacio_h }}px {{ $r->espacio_v }}px {{ $r->espacio_h }}px {{ $r->espacio_v }}px">
         @if(nombrepuesto($puesto)!=$puesto->cod_puesto)
         <div class="w-100 bg-white text-center font-bold mt-0 pb-2 texto_qr" style="color: {{ $color_texto}}; background-color: #fff; font-size: {{ $r->font_size??14 }}px;">
             {{ $puesto->cod_puesto }}

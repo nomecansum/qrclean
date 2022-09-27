@@ -139,13 +139,15 @@ class LoginController extends Controller
             'email' => 'required|string'
         ]);
 
-        $u=User::where(['email' => $request->email])
-            ->orwhere(function($q) use($request){
-                $q->wherenotnull('id_usuario_externo');
-                $q->whereraw('UCASE(id_usuario_externo)=UCASE("'.$request->email.'")');
+        $u=User::wherenull('deleted_at')
+            ->where(function($q) use ($request){
+                $q->where(['email' => $request->email]);
+                $q->orwhere(function($q) use($request){
+                    $q->wherenotnull('id_usuario_externo');
+                    $q->whereraw("UCASE(id_usuario_externo)=UCASE('".$request->email."')");
+                });
             })
             ->first();
-       
         //A ver si existe y si esta validado
         if(!isset($u)){
             savebitacora("Login de usuario no encontrado: ".$request->email,"Auth","prelogin","ERROR");
@@ -162,7 +164,7 @@ class LoginController extends Controller
                 ->first();
             $logo=$config_cliente->img_logo;
 
-            if($config_cliente->mca_saml2=='S'){
+            if($config_cliente->mca_saml2=='S' && $u->sso_override=='N'){
                 //Redirigir al usuario a la pagina de login del proveedor SAML2
                 return redirect()->route('saml.login',['uuid'=>$config_cliente->saml2_idp_entityid]);
             }  else if($config_cliente->locked==1){

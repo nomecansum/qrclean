@@ -424,6 +424,26 @@
                                         </div>
                                     </div>
                                     @endif
+                                    <div class="row">
+                                        <div class="col-md-3  mt-1">
+                                            <div class="form-check pt-3">
+                                                <input  name="sso_override"  id="sso_override" value="S" {{ isset($users->sso_override)&&$users->sso_override=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                                <label class="form-check-label" for="sso_override">Bypass SSO</label>
+                                            </div>
+                                        </div>
+                                        @if(isset($users) && $users->deleted_at!=null)
+                                        <div class="col-md-5">
+                                            <label class="control-label">Borrado logico</label>
+                                            <div class="input-group mb-3">
+                                                <input type="text" name="deleted_at" readonly=""  id="deleted_at"  class="form-control" value="{{isset($users) ? $users->deleted_at : ''}}">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-success" type="button"  id="btn_restablecer">Restablecer</button>
+                                                    <button class="btn btn-danger" type="button"  id="btn_definitivo">Eliminar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    </div>
                                     
                                 </div>
                             </div>
@@ -911,6 +931,16 @@
             events: {!! $eventos !!}
         });
         calendar.render();
+
+        $('#btn_restablecer').click(function(){
+            console.log("{{ url('users/restablecer/') }}/{{ $users->id??0 }}");
+            window.open("{{ url('users/restablecer/') }}/{{ $users->id??0 }}",'_self');
+        })
+
+        $('#btn_definitivo').click(function(){
+            console.log("{{ url('users/destroy/') }}/{{ $users->id??0 }}");
+            window.open("{{ url('users/destroy/') }}/{{ $users->id??0 }}",'_self');
+        })
 
 
         $('.form-ajax').submit(form_ajax_submit);

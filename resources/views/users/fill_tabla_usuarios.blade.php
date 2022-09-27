@@ -1,7 +1,7 @@
 
 
 @foreach($usersObjects as $users)
-    <tr class="hover-this p-0" data-id="{{ $users->id }}" data-href="{{ route('users.users.edit', $users->id ) }}">
+    <tr class="hover-this p-0 {{ $users->deleted_at!=null?'bg-gray':'' }}" data-id="{{ $users->id }}" data-href="{{ route('users.users.edit', $users->id ) }}">
         <td class="text-center">
             <div class="form-check pt-2">
                 <input  name="lista_id[]" data-id="{{ $users->id }}" id="chku{{ $users->id }}" value="{{ $users->id }}" class="form-check-input chkuser" type="checkbox">
@@ -26,7 +26,7 @@
             @endif
         </td>
 
-        <td>{!! beauty_fecha($users->last_login,0) !!}</td>
+        <td>{!! beauty_fecha($users->last_login,0) !!} {!! $users->deleted_at!=null?'<br> <i class="fa-solid fa-user-slash"></i> Disabled':'' !!}</td>
         <td style="vertical-align: middle; font-size:12px; position: relative">
             {{ $users->email }}
             <form method="POST" action="{!! route('users.users.destroy', $users->id) !!}" accept-charset="UTF-8">

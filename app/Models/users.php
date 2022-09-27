@@ -59,6 +59,8 @@ class users extends Model
                   'id_onesignal',
                   'mca_notif_push',
                   'mca_notif_email',
+                  'sso_override',
+                  'deleted_at'
               ];
 
     /**
@@ -67,7 +69,7 @@ class users extends Model
      * @var array
      */
     protected $dates = ['email_expire_at',
-    'email_verified_at','last_login','previous_login'];
+    'email_verified_at','last_login','previous_login','deleted_at'];
     
     /**
      * The attributes that should be cast to native types.

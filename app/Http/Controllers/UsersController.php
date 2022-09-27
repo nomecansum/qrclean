@@ -125,12 +125,15 @@ class UsersController extends Controller
             $users->password="";
             $users->id_cliente=Auth::user()->id_cliente;
             $users->save();
-            $id=$users->id;
+            $id=$users::latest()->first()->id;
             $users->email="";
+        } else {
+            validar_acceso_tabla($id,"users");
+            $users = users::findOrFail($id);
         }
         
-        validar_acceso_tabla($id,"users");
-        $users = users::findOrFail($id);
+
+       
         $Perfiles = niveles_acceso::where('val_nivel_acceso','<=',Auth::user()->nivel_acceso)
             ->where(function($q){
                 $q->where('id_cliente',Auth::user()->id_cliente);
@@ -405,6 +408,24 @@ class UsersController extends Controller
                 //'url' => url('sections')
             ];
 
+        }
+    }
+
+    public function soft_delete($id)
+    {
+        validar_acceso_tabla($id,"users");
+        try {
+            $users = users::findOrFail($id);
+            $users->deleted_at=Carbon::now();
+            $users->save();
+            savebitacora('Usuario '.$users->email. ' marcado como borrado',"Usuarios","soft_delete","OK");
+            flash('Usuario '.$id. ' marcado como borrado con exito')->success();
+            return redirect()->route('users.index');
+        } catch (\Throwable $exception) {
+            flash('ERROR: Ocurrio un error al marcar como borrado el usuario '.$id.' '.$exception->getMessage())->error();
+            savebitacora('ERROR: Ocurrio un error marcando como borrado el usuario '.$id.' '.$exception->getMessage() ,"Usuarios","soft_delete","ERROR");
+            return back()->withInput();
+                //->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
         }
     }
 

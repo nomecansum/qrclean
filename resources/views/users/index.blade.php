@@ -337,7 +337,7 @@
         }
 
         function editar(id){
-            $('#editorCAM').load("{{ url('/users') }}"+"/"+id+"/edit", function(){
+            $('#editorCAM').load("{{ url('/users/edit') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
             });
         }

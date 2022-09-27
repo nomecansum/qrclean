@@ -159,14 +159,14 @@
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="form-group col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}">
-                                                    <label for="email" class="control-label">e-mail</label>
+                                                    <label for="email" class="control-label" autocomplete="off">e-mail</label>
                                                     <input class="form-control" name="email" type="text" id="email" value="{{ old('email', optional($users)->email) }}" minlength="1" maxlength="255" required="true" placeholder="Enter email here...">
                                                     {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
                                                 </div>
                                                 <div class="form-group col-md-6 {{ $errors->has('password') ? 'has-error' : '' }}">
                                                     <label for="password" class="control-label">Password</label>
                                                     <div class="input-group mb-4">
-                                                        <input class="form-control" name="password" type="password" id="password"  minlength="4" maxlength="255" placeholder="Enter password here...">
+                                                        <input class="form-control" name="password" type="password" id="password" autocomplete="off"  minlength="4" maxlength="255" placeholder="Enter password here...">
                                                         {!! $errors->first('password', '<p class="help-block">:message</p>') !!}
                                                         <button class="btn btn-secondary" type="button"  id="btn_generar_password">Generar</button>
                                                     </div>
@@ -326,7 +326,7 @@
                                         <div class="col-md-3">
 											<div class="form-group">
 												<label for="name" class="control-label">ID Externo</label>
-                                                <input class="form-control" name="id_usuario_externo" type="text" id="id_usuario_externo" value="{{ old('id_usuario_externo', optional($users)->id_usuario_externo) }}" minlength="1" maxlength="255"  placeholder="Enter id_usuario_externo here...">
+                                                <input class="form-control" name="id_usuario_externo" type="text" id="id_usuario_externo" value="{{ old('id_usuario_externo', optional($users)->id_usuario_externo) }}" autocomplete="off" minlength="1" maxlength="255"  placeholder="Enter id_usuario_externo here...">
                                                 {!! $errors->first('id_usuario_externo', '<p class="help-block">:message</p>') !!}
 											</div>
 										</div>
@@ -345,7 +345,7 @@
                                                 <label class="form-check-label" for="mca_notif_email">e-mail</label>
                                             </div>
                                         </div>
-                                        <div class="form-group col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}">
+                                        <div class="form-group col-md-6 {{ $errors->has('id_onesignal') ? 'has-error' : '' }}">
                                             <label for="email" class="control-label">PlayerID</label>
                                             <input class="form-control" name="id_onesignal" disabled type="text" id="id_onesignal" value="{{ old('id_onesignal', optional($users)->id_onesignal) }}" minlength="1" maxlength="255" placeholder="Enter PlayerID here...">
                                             {!! $errors->first('id_onesignal', '<p class="help-block">:message</p>') !!}
@@ -499,7 +499,7 @@
                                                 <div>
                                                     <div id="puesto_pref" class="draggable" style="background-color:#efc3e6 ">
                                                         <h4 class="text-white"><i class="fa-solid fa-chair-office"></i> Puesto</h4>
-                                                        <select class="puesto_pref identificador form-control">
+                                                        <select class="puesto_pref identificador form-control select2">
                                                             <option value=""></option>
                                                             @foreach($edificios as $e)
                                                                 @php
@@ -512,7 +512,7 @@
                                                                                 $puestos_plantas=$puestos->where('id_planta',$key);
                                                                             @endphp
                                                                             @foreach($puestos_plantas as $t)
-                                                                                <option value="{{$t->id_puesto}}">{{ nombrepuesto($t) }}</option>
+                                                                                <option value="{{$t->id_puesto}}">{{ $t->cod_puesto }}</option>
                                                                             @endforeach
                                                                         </optgroup>
                                                                     @endforeach
@@ -529,15 +529,16 @@
                                                         @php
                                                             $edificios=$plantas_usuario->unique('id_edificio')->pluck('des_edificio','id_edificio')->all();
                                                         @endphp
-                                                        <select class="puesto_pref identificador form-control">
+                                                        <select class="puesto_pref identificador form-control select2">
                                                             <option value=""></option>
                                                             @foreach($edificios as $key=>$value)
                                                                 @php
                                                                     $ple=$plantas_usuario->where('id_edificio',$key)->pluck('des_planta','id_planta')->unique()->all();
+                                                                    $des_edificio=$value;
                                                                 @endphp
                                                                 <optgroup label="{{$value}}">
                                                                     @foreach($ple as $key=>$value)
-                                                                        <option value="{{$key}}">{{ $value }}</option>
+                                                                        <option value="{{$key}}">{{ $des_edificio }} > {{ $value }}</option>
                                                                     @endforeach
                                                                 </optgroup>
                                                             @endforeach
@@ -552,20 +553,22 @@
                                                         @php
                                                             $edificios=$plantas_usuario->unique('id_edificio')->pluck('des_edificio','id_edificio')->all();
                                                         @endphp
-                                                        <select class="puesto_pref identificador form-control">
+                                                        <select class="puesto_pref identificador form-control select2">
                                                             <option value=""></option>
                                                             @foreach($edificios as $key=>$value)
                                                                 @php
                                                                     $ple=$plantas_usuario->where('id_edificio',$key)->pluck('des_planta','id_planta')->unique()->all();
+                                                                    $des_edificio=$value;
                                                                 @endphp
                                                                 <optgroup label="{{$value}}">
                                                                     @foreach($ple as $key=>$value)
                                                                         <optgroup label="{{$value}}">
                                                                             @php
                                                                                 $z=$plantas_usuario->where('id_planta',$key)->pluck('des_zona','key_id')->unique()->all();
+                                                                                $des_planta=$value;
                                                                             @endphp
                                                                             @foreach($z as $key=>$value)
-                                                                                <option value="{{$key}}">{{ $value }}</option>
+                                                                                <option value="{{$key}}">{{ $des_edificio }} > {{ $des_planta  }} > {{ $value }}</option>
                                                                             @endforeach
                                                                         </optgroup>
                                                                     @endforeach
@@ -729,12 +732,15 @@
             }
         }
 
-        $(".select2").select2();
+        $(".select2").select2({
+            width: "100%",
+        });
     
         $(".select2-filtro").select2({
             placeholder: "Todos",
             allowClear: true,
             @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
+            
         });
     
         $('.select-all').click(function(event) {
@@ -796,8 +802,8 @@
                 dropOnEmpty: true,
                 connectWith : ".draggable",
                 stop: function( event, ui ) {
-    
-                    ui.item.find('.puesto_pref').css('display','none');
+                    console.log(ui.item.find('.puesto_pref'));
+                    ui.item.parent().find('.select2').css('display','none');
                     ui.item.find('.detalle').css('display','block');
                     ui.item.find('.papelera').css('display','block');
                     ui.item.attr('id',ui.item.find('.puesto_pref').val());
@@ -824,9 +830,9 @@
             $( "ul, li" ).disableSelection();
         });
             
-        $('.puesto_pref').on('change',function(){
-            $(this).next('.detalle').attr('data-id', $(this).val());
-            $(this).next('.detalle').html($(this).find('option:selected').text());
+        $('.puesto_pref').on('change', function (e) {
+            $(this).parent().find('.detalle').attr('data-id', $(this).val());
+            $(this).parent().find('.detalle').html($(this).find('option:selected').text());
         })
     
         $('.btn_guardar').click(function(){

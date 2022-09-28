@@ -49,7 +49,8 @@ class plantas extends Model
                   'num_orden',
                   'posiciones',
                   'width',
-                  'zonas'
+                  'zonas',
+                  'factor_transp'
               ];
 
     /**

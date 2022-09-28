@@ -49,7 +49,7 @@ class colorPuesto
                     'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
                     'borde'=>"border: 3px solid #f00;",
                     'border-radius'=>$puesto->factor_puestor."px",
-                    "transp"=>0.4
+                    "transp"=>0.8
                 ];
             } else if($puesto->id_estado==5){  //Bloqueado
                 return [
@@ -59,7 +59,7 @@ class colorPuesto
                     'title'=>"Puesto bloqueado",
                     'borde'=>"",
                     'border-radius'=>$puesto->factor_puestor."px",
-                    "transp"=>0.4
+                    "transp"=>0.8
                 ];
             } else if($puesto->id_estado==4){  //Inoperativo
                 return [
@@ -69,7 +69,7 @@ class colorPuesto
                     'title'=>"Puesto inoperativo",
                     'borde'=>"",
                     'border-radius'=>$puesto->factor_puestor."px",
-                    "transp"=>0.4
+                    "transp"=>0.8
                 ];
             } else if($puesto->id_estado==3 && session('CL')['mca_limpieza']=='S'){  //Limpieza
                 return [
@@ -79,7 +79,7 @@ class colorPuesto
                     'title'=>"Puesto pendiente de limpieza",
                     'borde'=>"",
                     'border-radius'=>$puesto->factor_puestor."px",
-                    "transp"=>0.4
+                    "transp"=>0.8
                 ];
             } else if($puesto->id_estado==2){  //En uso
                 return [
@@ -89,7 +89,7 @@ class colorPuesto
                     'title'=>"Puesto en uso",
                     'borde'=>"",
                     'border-radius'=>$puesto->factor_puestor."px",
-                    "transp"=>0.4
+                    "transp"=>0.8
                 ];
             } else if($puesto->id_estado==7){  //No usabble
                 return [
@@ -99,7 +99,7 @@ class colorPuesto
                     'title'=>"No usable (encuesta)",
                     'borde'=>"",
                     'border-radius'=>$puesto->factor_puestor."px",
-                    "transp"=>0.4
+                    "transp"=>0.8
                 ];
             } else if(isset($reserva)){
                 if($origen=="P"){
@@ -120,7 +120,7 @@ class colorPuesto
                     'title'=>"Reservado por ".$reserva->name." para hoy ".$horas_reserva,
                     'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
                     'border-radius'=>$puesto->factor_puestor."px",
-                    "transp"=>0.4
+                    "transp"=>0.8
                 ];
             } else if(isset($asignado_usuario)){
                 return [
@@ -130,7 +130,7 @@ class colorPuesto
                     'title'=>"Puesto permanentemente asignado a ".$asignado_usuario->name,
                     'borde'=>"border: ".$tam_borde." solid #ff9f1a;",
                     'border-radius'=>$puesto->factor_puestor."px",
-                    "transp"=>0.4
+                    "transp"=>0.8
                 ];
             } else if(isset($asignado_otroperfil)){
                 return [
@@ -140,7 +140,7 @@ class colorPuesto
                     'title'=>"Puesto reservado para  ".$asignado_otroperfil->des_nivel_acceso,
                     'borde'=>"",
                     'border-radius'=>$puesto->factor_puestor."px",
-                    "transp"=>0.4
+                    "transp"=>0.8
                 ];
             } else if(isset($asignado_miperfil)){
                 return [

@@ -64,17 +64,10 @@
                                 $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();  
                                 $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
                                 if(isMobile()){
-                                    if($puesto->factor_puestow<3.5){
-                                        $puesto->factor_puestow=15;
-                                        $puesto->factor_puestoh=15;
-                                        $puesto->factor_letra=2.8;
-                                    } else {
-                                        //En  mosaico los queremos curadrados siempre
-                                        $puesto->factor_puestow=$puesto->factor_puestow*4;
-                                        $puesto->factor_puestoh=$puesto->factor_puestow*4;
-                                        $puesto->factor_letra=$puesto->factor_letra*4;
-                                    }
-                                } else if($puesto->factor_puestow<3.5){
+                                    $puesto->factor_puestow=15;
+                                    $puesto->factor_puestoh=15;
+                                    $puesto->factor_letra=2.8;
+                                } else {
                                     $puesto->factor_puestow=3.7;
                                     $puesto->factor_puestoh=3.7;
                                     $puesto->factor_letra=0.8;

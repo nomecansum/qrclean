@@ -88,6 +88,15 @@
         width: 414px;
     }
 
+    .chk_naranja{
+        background-color:#fd7e14;
+        border-color:#fd7e14;
+    }
+    .chk_gris{
+        background-color:#aaa;
+        border-color:#aaa;
+    }
+
     
 </style>
 
@@ -139,6 +148,9 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" data-bs-toggle="tab"  data-bs-target="#demo-stk-lft-tab-5"  id="actividad" type="button" role="tab" aria-controls="actividad" aria-selected="false">Actividad</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="tab"  data-bs-target="#demo-stk-lft-tab-7"  id="permisos" type="button" role="tab" aria-controls="permisos" aria-selected="false">Permisos</button>
                             </li>
                         @endif
                     </ul>
@@ -687,6 +699,165 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="demo-stk-lft-tab-7"  class="tab-pane fade" role="tabpanel" aria-labelledby="permisos-tab">
+                            @php
+                                function checkChecked($n,$s,$t,$permisos,$campo)
+                                {
+                                    $type = "";
+                                    if ($t == "R") {$type = "mca_read";}
+                                    if ($t == "W") {$type = "mca_write";}
+                                    if ($t == "C") {$type = "mca_create";}
+                                    if ($t == "D") {$type = "mca_delete";}
+                                    foreach ($permisos as $permiso)
+                                    {
+                                        if ($n==$permiso->$campo && $s==$permiso->id_seccion){
+                                            return $permiso->$type;
+                                            break;
+                                        }
+                                    }
+                            
+                                }
+                            
+                            
+                                $permisos=DB::table('secciones')
+                                        ->select('secciones_perfiles.id_seccion',
+                                                'secciones_perfiles.id_perfil',
+                                                'secciones_perfiles.mca_read',
+                                                'secciones_perfiles.mca_write',
+                                                'secciones_perfiles.mca_create',
+                                                'secciones_perfiles.mca_delete')
+                                        ->join('secciones_perfiles', 'secciones.cod_seccion', '=', 'secciones_perfiles.id_seccion')
+                                        ->where('secciones_perfiles.id_perfil',$users->cod_nivel)
+                                        ->where(function($q){
+                                            if (!fullAccess()) {
+                                                $q->wherein('des_seccion',array_column(session('P'), 'des_seccion'));
+                                            }
+                                        })
+                                        ->get();
+                                $permisos_usu=DB::table('secciones')
+                                        ->select('permisos_usuarios.id_seccion',
+                                                'permisos_usuarios.cod_usuario',
+                                                'permisos_usuarios.mca_read',
+                                                'permisos_usuarios.mca_write',
+                                                'permisos_usuarios.mca_create',
+                                                'permisos_usuarios.mca_delete')
+                                        ->join('permisos_usuarios', 'secciones.cod_seccion', '=', 'permisos_usuarios.id_seccion')
+                                        ->where('permisos_usuarios.cod_usuario',$users->id)
+                                        ->where(function($q){
+                                            if (!fullAccess()) {
+                                                $q->wherein('des_seccion',array_column(session('P'), 'des_seccion'));
+                                            }
+                                        })
+                                        ->get();
+                            
+                                $secciones=DB::table('secciones')
+                                          ->orderby('des_grupo')
+                                          ->orderby('des_seccion')
+                                          ->get();
+                            
+                                $niveles=DB::table('niveles_acceso')
+                                        ->where('cod_nivel',$users->cod_nivel)
+                                        ->get();
+                            
+                                $grupos=DB::table('secciones')
+                                    ->selectraw('distinct(des_grupo) as des_grupo, icono')
+                                    ->orderby('des_grupo')
+                                    ->get();
+                            
+                                $primero=true;
+                            
+                            @endphp
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="tab-base tab-vertical">
+                                                <!-- Nav tabs -->
+                                                <ul class="nav flex-column  nav-pills me-2" role="tablist">
+                                                    {{-- @php $primero=true;	@endphp
+                                                        @foreach($grupos as $grupo)
+                                                        <li class="nav-item" role="presentation"> 
+                                                            <a class="nav-link  {{ ($primero===true) ? "active" :"" }}" data-toggle="tab" data-bs-target="#{{ $grupo->des_grupo }}"  type="button" role="tab" aria-controls="{{ $grupo->des_grupo }}" aria-selected="{{ ($primero===true) ? "true" :"false" }}"><span><i class="{{ $grupo->icono }}"></i></span>&nbsp;&nbsp;{{ $grupo->des_grupo }}</a>
+                                                        </li>
+                                                        @php $primero=false;	@endphp
+                                                    @endforeach --}}
+                                                    @php $primero=true;	@endphp
+                                                    @foreach($grupos as $grupo)	
+                                                        @php
+                                                            $cuenta_secciones=$secciones->where('des_grupo',$grupo->des_grupo)->count();	
+                                                        @endphp		
+                                                        <li class="nav-item {{ ($primero===true) ? "active" :"" }}"  role="presentation">
+                                                            <a class="nav-link {{ ($primero===true) ? "active" :"" }}" data-bs-toggle="tab" data-bs-target="#{{  str_replace(" ","_",$grupo->des_grupo) }}" type="button" role="tab" aria-controls="{{ $grupo->des_grupo }}" aria-selected="{{ ($primero===true) ? "true" :"false" }}"><i class="{{ $grupo->icono }}"></i></span>&nbsp;&nbsp;{{ $grupo->des_grupo }} <span class="badge bg-primary ml-2 float-md-end">{{ $cuenta_secciones }}</span></a>
+                                                        </li>
+                                                        @php $primero=false;	@endphp
+                                                    @endforeach
+                                                </ul>
+                                                <!-- Tab panes -->
+                                                <div class="tab-content">
+                                                    @php $primero=true;	@endphp
+                                                    @foreach($grupos as $grupo)
+                                                        @if($grupo->des_grupo != "")
+                                                            <div id="{{ $grupo->des_grupo }}" class="tab-pane fade {{ ($primero===true) ? "active show" :"" }}" role="tabpanel" aria-labelledby="{{ $grupo->des_grupo }}-tab">    
+                                                                @php $primero = false; @endphp
+                                                                <!--h3>{{ $grupo->des_grupo }}</h3-->
+                                                                <table class="table table-responsive table-hover" style="font-size:12px">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            @foreach ($niveles as $n)
+                                                                                <td class="text-center celda_{{ $n->cod_nivel }}" style="font-size: 14px; font-weight: bold">
+                                                                                    <span style="color: #fd7e14" class="tooltipster" data-toggle="tooltip"  title="Los permisos en naranja corresponden a permisos especificos para el usuario">{{ $users->nom_usuario }}</span>
+                                                                                    <span class="tooltipster" data-toggle="tooltip"  title="Los permisos en gris corresponden a permisos heredados del perfil {{ $n->des_nivel_acceso }}" style="color: #aaa">({{$n->des_nivel_acceso}})</span>
+                                                                                </td>
+                                                                            @endforeach
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @foreach ($secciones as $sec)
+                                                                            @if($sec->des_grupo == $grupo->des_grupo)
+                                                                                <tr>
+                                                                                    <td style="font-size: 14px">{{$sec->des_seccion}}</td>
+                                                                                    @foreach ($niveles as $n)
+                                                                                        <td style="vertical-align: middle" class="celda_{{ $n->cod_nivel }}" nowrap>
+                                                                                            <div class="custom-control custom-checkbox "  style="display: inline-block; @if($sec->val_tipo!='Seccion')  margin-left: 60px @else  margin-right: 6px  @endif">
+                                                                                                <input @if((!checkPermissions(['Permisos'],["C"]) || !checkPermissions([$sec->des_seccion],["R"]))) disabled @endif {{checkChecked($users->id,$sec->cod_seccion,'R',$permisos_usu,'cod_usuario') ? 'checked' : ''}} type="checkbox" data-type="R" data-section="{{$sec->cod_seccion}}" data-level="{{ $users->id}}" class="check-permission form-check-input" id="read{{$sec->cod_seccion}}">
+                                                                                                <label class="form-check-label" for="read{{$sec->cod_seccion}}" style="padding-top: 4px">@if($sec->val_tipo=='Seccion')R @endif</label>
+                                                                                            </div>
+                                                                                            @if($sec->val_tipo == 'Seccion')
+                                                                                            <div class="custom-control custom-checkbox " style="display: inline-block; margin-right: 6px">
+                                                                                                <input @if((!checkPermissions(['Permisos'],["C"]) || !checkPermissions([$sec->des_seccion],["W"]))) disabled @endif {{checkChecked($users->id,$sec->cod_seccion,'W',$permisos_usu,'cod_usuario') ? 'checked' : ''}} type="checkbox" data-type="W" data-section="{{$sec->cod_seccion}}" data-level="{{ $users->id}}" class="check-permission form-check-input " id="write{{$sec->cod_seccion}}">
+                                                                                                <label class="form-check-label" for="write{{$sec->cod_seccion}}" style="padding-top: 4px">W</label>
+                                                                                            </div>
+                            
+                                                                                            <div class="custom-control custom-checkbox " style="display: inline-block; margin-right: 6px">
+                                                                                                <input @if((!checkPermissions(['Permisos'],["C"]) || !checkPermissions([$sec->des_seccion],["C"]))) disabled @endif {{checkChecked($users->id,$sec->cod_seccion,'C',$permisos_usu,'cod_usuario') ? 'checked' : ''}} type="checkbox" data-type="C" data-section="{{$sec->cod_seccion}}" data-level="{{ $users->id}}" class="check-permission form-check-input " id="create{{$sec->cod_seccion}}">
+                                                                                                <label class="form-check-label" for="create{{$sec->cod_seccion}}" style="padding-top: 4px">C</label>
+                                                                                            </div>
+                            
+                                                                                            <div class="custom-control custom-checkbox " style="display: inline-block; margin-right: 6px">
+                                                                                                <input @if((!checkPermissions(['Permisos'],["C"]) || !checkPermissions([$sec->des_seccion],["D"]))) disabled @endif {{checkChecked($users->id,$sec->cod_seccion,'D',$permisos_usu,'cod_usuario') ? 'checked' : ''}} type="checkbox" data-type="D" data-section="{{$sec->cod_seccion}}" data-level="{{ $users->id}}" class="check-permission form-check-input " id="delete{{$sec->cod_seccion}}">
+                                                                                                <label class="form-check-label" for="delete{{$sec->cod_seccion}}" style="padding-top: 4px">D</label>
+                                                                                            </div>
+                                                                                            @endif
+                                                                                        </td>
+                                                                                    @endforeach
+                                                                                </tr>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                                
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group mt-2">
@@ -953,5 +1124,49 @@
 
         document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
     
+
+        //PErmisos del usuario
+        $('.check-permission').click(function(event) {
+            $(this).data('_token','{{csrf_token()}}');
+            if ($(this).is(':checked')) {
+                $.post('{{url('addPermissions_user')}}', $(this).data(), function(data, textStatus, xhr) {
+                });
+            }else{
+                $.post('{{url('removePermissions_user')}}', $(this).data(), function(data, textStatus, xhr) {
+                });
+            }
+        });
+    
+        $('#niveles').on('select2:select', function (e) {
+            var data = e.params.data;
+            $(".celda_"+data.id).fadeToggle();
+            //console.log(data.id);
+        });
+        $('#niveles').on('select2:unselect', function (e) {
+            var data = e.params.data;
+            $(".celda_"+data.id).fadeToggle();
+            //console.log(data.id);
+        });
+        @foreach ($secciones as $s)
+    
+            @if(checkChecked($users->cod_nivel,$s->cod_seccion,'R',$permisos,'id_perfil'))
+                $('#read{{$s->cod_seccion}}').prop("disabled", true);
+                $('#read{{$s->cod_seccion}}').prop("checked", 'checked');
+            @endif
+            @if(checkChecked($users->cod_nivel,$s->cod_seccion,'W',$permisos,'id_perfil'))
+                $('#write{{$s->cod_seccion}}').prop("disabled", true);
+                $('#write{{$s->cod_seccion}}').prop("checked", 'checked');
+            @endif
+            @if(checkChecked($users->cod_nivel,$s->cod_seccion,'C',$permisos,'id_perfil'))
+                $('#create{{$s->cod_seccion}}').prop("disabled", true);
+                $('#create{{$s->cod_seccion}}').prop("checked", 'checked');
+            @endif
+            @if(checkChecked($users->cod_nivel,$s->cod_seccion,'D',$permisos,'id_perfil'))
+                $('#delete{{$s->cod_seccion}}').prop("disabled", true);
+                $('#delete{{$s->cod_seccion}}').prop("checked", 'checked');
+            @endif
+        @endforeach
+    
+        $('#cnt_permisos').html("{{$permisos_usu->count()}}")
 </script>
 

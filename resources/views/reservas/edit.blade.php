@@ -54,7 +54,7 @@
                                         <td style="position:relative">
                                             @if($res->mca_anulada=='N')
                                             <td style="position: relative">
-                                                <div class="pull-right floating-like-gmail" style="width: 400px;">
+                                                <div class="pull-right floating-like-gmail" style="width: 400px; bottom: 0px">
                                                     <div class="btn-group btn-group pull-right" role="group">
                                                         <a href="javascript:void(0)" class="btn btn-info btn-xs btn_edit  add-tooltip" title="Modificar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-pencil-alt"></i> Modificar</a>
                                                         <a href="#planta{{ $res->id_planta }}" class="btn btn-secondary btn-xs btn_ver  add-tooltip" title="Ver puesto en plano/mapa" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-puesto="{{ $res->id_puesto }}"><i class="fad fa-search-location"></i> Ver puesto</a>

@@ -264,6 +264,7 @@ class PlantasController extends Controller
         $planta->factor_puestob=$r->factor_puestob;
         $planta->factor_grid=$r->factor_grid;
         $planta->factor_letra=$r->factor_letra;
+        $planta->factor_transp=$r->factor_transp;
         $planta->save();
         savebitacora('Distribucion de puestos en  '.$planta->des_planta. ' actualizada',"Plantas","puestos_save","OK");
         return [

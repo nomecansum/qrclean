@@ -64,10 +64,20 @@
                 <span id="zoom_level" class="float-left">100%</span>
                 <i class="fa fa-plus-square float-left mt-1 ml-1"  onclick="zoom(+1)"></i>
             </div> --}}
-            <div class="form-group col-md-4 mb-3">
-                <label>Zoom: </label> <span id="puesto-zoom-def-val"></span>
-                <div id="puesto-zoom-def"></div>	
+            <div class="row">
+                <div class="form-group col-md-4 mb-3">
+                    <label>Zoom: </label> <span id="puesto-zoom-def-val"></span>
+                    <div id="puesto-zoom-def"></div>	
+                </div>
+                <div class="col-md-5">
+    
+                </div>
+                <div class="form-group col-md-2 mb-3">
+                    <label>Alpha fondo: </label> <span id="puesto-transp-def-val"></span>
+                    <div id="puesto-transp-def"></div>	
+                </div>
             </div>
+            
             <form method="POST" action="{{ url('/plantas/puestos/') }}" id="edit_plantas_form" name="edit_plantas_form" accept-charset="UTF-8" class="form-horizontal form-ajax"  enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="json" id="json">
@@ -78,6 +88,7 @@
                 <input type="hidden" name="factor_puestor" id="factor_puestor" value="{{ $plantas->factor_puestor }}">
                 <input type="hidden" name="factor_letra" id="factor_letra"  value="{{ $plantas->factor_letra }}">
                 <input type="hidden" name="factor_grid" id="factor_grid"  value="{{ $plantas->factor_grid }}">
+                <input type="hidden" name="factor_transp" id="factor_transp"  value="{{ $plantas->factor_transp }}">
                 <div class="card ">
                     <div class="card-body overflow-auto card_plano">
                         @if(isset($plantas->img_plano))
@@ -239,6 +250,11 @@
                 zoom();
             }, 500);
         });
+        t_def.noUiSlider.on('update', function( values, handle ) {
+            t_def_value.innerHTML = values[handle]+' %';
+            $('#factor_transp').val(values[handle]);
+            $('#img_fondo').css('opacity',values[handle]/100);
+        });
     } );
 
     $('#btn_guardar').click(function(){
@@ -286,6 +302,9 @@
 
     var z_def = document.getElementById('puesto-zoom-def');
     var z_def_value = document.getElementById('puesto-zoom-def-val');
+
+    var t_def = document.getElementById('puesto-transp-def');
+    var t_def_value = document.getElementById('puesto-transp-def-val');
 
     noUiSlider.create(pw_def,{
         start   : [ {{ $plantas->factor_puestow }} ],
@@ -366,6 +385,19 @@
         range   : {
             'min': [  20 ],
             'max': [ 500 ]
+        },
+        format: wNumb({
+            decimals: 0
+        }),
+    });
+
+    noUiSlider.create(t_def,{
+        start   : [ {{ $plantas->factor_transp??100 }} ],
+        connect : 'lower',
+        step: 1,
+        range   : {
+            'min': [  0 ],
+            'max': [ 100 ]
         },
         format: wNumb({
             decimals: 0

@@ -20,7 +20,7 @@ class CustomersController extends Controller
     //
     private function esquema_colores($r){
         $colores=new \stdClass;
-        $colores->tema=$r->tema;
+        $colores->tema=$r->tema==="/color-schemes/"?"":$r->tema;
         $colores->rootClass=$r->rootClass;
         $colores->menu=$r->menu;
         $colores->esquema=$r->esquema;

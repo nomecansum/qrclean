@@ -398,11 +398,19 @@
 						
 					</div>
 					<div id="demo-stk-lft-tab-4" class="tab-pane fade"  role="tabpanel" aria-labelledby="tema-tab">
+						@php
+							try{
+								$tema=json_decode($config->theme_name);
+							} catch(\Throwable $e){
+								$tema=null;
+							}
+							//dump($tema);
+						@endphp
 						<p class="text-main text-semibold">Tema que tendrán por defecto los usuarios que no lo hayan personalizado</p>
-						<input type="hidden" name="tema" id="tema" value="{{ isset($config->theme->tema)?$config->theme->tema:'/color-schemes' }}"> 
-						<input type="hidden" name="rootClass" id="rootClass"  value="{{ isset($config->theme->rootClass)?$config->theme->rootClass:'' }}"> 
-						<input type="hidden" name="esquema" id="esquema"  value="{{ isset($config->theme->esquema)?$config->theme->esquema:'' }}"> 
-						<input type="hidden" name="menu" id="menu"  value="{{ isset($config->theme->menu)?$config->theme->menu:'mn--max' }}"> 
+						<input type="hidden" name="tema" id="tema" value="{{ isset($tema)?$tema->tema:'' }}"> 
+						<input type="hidden" name="rootClass" id="rootClass"  value="{{ isset($tema->rootClass)?$tema->rootClass:'' }}"> 
+						<input type="hidden" name="esquema" id="esquema"  value="{{ isset($tema->esquema)?$ctema->esquema:'' }}"> 
+						<input type="hidden" name="menu" id="menu"  value="{{ isset($tema->menu)?$tema->menu:'mn--max' }}"> 
 						@include('customers.setting_include')
 					</div>
 				</div>

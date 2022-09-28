@@ -41,7 +41,7 @@
     @if($puestos->count()>0)
    
     <div class="container" id="plano{{ $pl->id_planta }}" data-posiciones="" data-id="{{ $pl->id_planta }}">
-        <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$pl->img_plano) }}" style="width: 100%" id="img_fondo{{ $pl->id_planta }}">
+        <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$pl->img_plano) }}" style="width: 100%; opacity: {{ ($pl->factor_transp??100)/100 }}" id="img_fondo{{ $pl->id_planta }}">
         @else
         {{-- <div class="row">
             <div class="col-md-1"></div><div class="col-md-4 bg-warning pad-all rounded font-20 font-bold v-middle"><i class="fad fa-info-square fa-2x"></i> No hay puestos disponibles</div> --}}

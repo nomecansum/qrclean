@@ -79,3 +79,17 @@ Route::group(['prefix' => 'salas','middleware' => 'auth:api'], function() {
     Route::post('/add_incidencia_id_puestos_pendientes', ['middleware'=>'permissions:["API Salas"],["R"]','uses'=>'APIController@add_incidencia_id_puestos_pendientes']);
     
 });
+
+////USUARIOS/////
+Route::group(['prefix' => 'users','middleware' => 'auth:api'], function() {
+    //Listado de incidencias
+    Route::post('list', ['middleware'=>'permissions:["API Usuarios"],["R"]','uses'=>'APIController@get_users']);
+    //Crear usuario
+    Route::put('/', ['middleware'=>'permissions:["API Usuarios"],["C"]','uses'=>'APIController@update_user']);
+    //Modificar usuario
+    Route::post('/', ['middleware'=>'permissions:["API Usuarios"],["W"]','uses'=>'APIController@update_user']);
+    //Borrado logico usuario
+    Route::delete('/soft', ['middleware'=>'permissions:["API Usuarios"],["D"]','uses'=>'APIController@delete_user']);
+     //Borrado hard usuario
+    Route::delete('/hard', ['middleware'=>'permissions:["API Usuarios"],["D"]','uses'=>'APIController@delete_user']);
+});

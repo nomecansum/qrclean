@@ -109,10 +109,13 @@ class UsersController extends Controller
         ->when($r->supervisor, function($q) use($r){
             $q->wherein('users.id_usuario_supervisor',$r->supervisor);
         })
-
         ->get();
-
-        return view('users.fill_tabla_usuarios', compact('usersObjects'));
+        
+        if ($r->wantsJson()) {
+            return $usersObjects;
+        } else {
+            return view('users.fill_tabla_usuarios', compact('usersObjects'));
+        }
     }
 
     //////////////////////////FUNCIONES DEL EDITOR DE USUARIO//////////////////////////////
@@ -308,7 +311,7 @@ class UsersController extends Controller
             }
             $users = users::findOrFail($id);
             $data["email_verified_at"]=Carbon::now();
-            $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel'])->first()->val_nivel_acceso;
+            $data["nivel_acceso"]=DB::table('niveles_acceso')->where('cod_nivel',$data['cod_nivel']??1)->first()->val_nivel_acceso;
             $data["id_usuario_supervisor"]=$request->id_usuario_supervisor??null;
             $data["mca_notif_push"] = isset($data["mca_notif_push"]) ? 'S' : 'N';
             $data["mca_notif_email"] = isset($data["mca_notif_email"]) ? 'S' : 'N';
@@ -348,7 +351,8 @@ class UsersController extends Controller
             return [
                 'title' => "Usuarios",
                 'message' => 'Usuario '.$request->name. ' actualizado con exito',
-                'url' => url('users/')
+                'url' => url('users/'),
+                'id' => $id
             ];
             // flash('Usuario '.$request->name. 'actualizado con exito')->success();
             // return redirect()->route('users.users.index');
@@ -411,7 +415,7 @@ class UsersController extends Controller
         }
     }
 
-    public function soft_delete($id)
+    public function soft_delete(Request $r,$id)
     {
         validar_acceso_tabla($id,"users");
         try {
@@ -420,16 +424,35 @@ class UsersController extends Controller
             $users->save();
             savebitacora('Usuario '.$users->email. ' marcado como borrado',"Usuarios","soft_delete","OK");
             flash('Usuario '.$id. ' marcado como borrado con exito')->success();
-            return redirect()->route('users.index');
+            if ($r->wantsJson()) {
+                return [
+                    'title' => "Usuarios",
+                    'message' => 'Usuario '.$id. ' marcado como borrado con exito',
+                    'id' => $id
+                ];
+            } else {
+                return redirect()->route('users.index');
+            }
+            
+            
         } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error al marcar como borrado el usuario '.$id.' '.$exception->getMessage())->error();
             savebitacora('ERROR: Ocurrio un error marcando como borrado el usuario '.$id.' '.$exception->getMessage() ,"Usuarios","soft_delete","ERROR");
-            return back()->withInput();
+            if ($r->wantsJson()) {
+                return [
+                    'title' => "Usuarios",
+                    'error' => 'ERROR: Ocurrio un error borrando el usuario '.$id.' '.$exception->getMessage(),
+                    //'url' => url('sections')
+                ];
+            } else {
+                return back()->withInput();
+            }
+            
                 //->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $r,$id)
     {
         validar_acceso_tabla($id,"users");
         try {
@@ -437,11 +460,28 @@ class UsersController extends Controller
             $users->delete();
             savebitacora('Usuario '.$users->email. ' borrado',"Usuarios","Destroy","OK");
             flash('Usuario '.$id. ' eliminado con exito')->success();
-            return redirect()->route('users.index');
+            if ($r->wantsJson()) {
+                return [
+                    'title' => "Usuarios",
+                    'message' => 'Usuario '.$id. ' borrado con exito',
+                    'id' => $id
+                ];
+            } else {
+                return redirect()->route('users.index');
+            }
+            
         } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error al eliminar el usuario '.$id.' '.$exception->getMessage())->error();
             savebitacora('ERROR: Ocurrio un error borrando el usuario '.$id.' '.$exception->getMessage() ,"Usuarios","destroy","ERROR");
-            return back()->withInput();
+            if ($r->wantsJson()) {
+                return [
+                    'title' => "Usuarios",
+                    'error' => 'ERROR: Ocurrio un error borrando el usuario '.$id.' '.$exception->getMessage(),
+                    //'url' => url('sections')
+                ];
+            } else {
+                return back()->withInput();
+            }
                 //->withErrors(['unexpected_error' => 'Unexpected error occurred while trying to process your request.']);
         }
     }

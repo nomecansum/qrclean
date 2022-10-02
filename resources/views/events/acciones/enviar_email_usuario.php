@@ -30,6 +30,13 @@ $params='{
             "tipo": "html5",
             "def": "",
             "required": false
+        },
+        {
+            "label": "Enviar solo uno por iteracion",
+            "name": "solouno",
+            "tipo": "bool",
+            "def": "true",
+            "required": true
         }
     ]
 }';
@@ -42,6 +49,23 @@ $func_accion = function($accion, $resultado, $campos,$id) {
 
     $resultado = collect($resultado->data); //Cogemos el bloque da datos del resultado que es donde estan los datos de los elementos afectadso
     $datos = $resultado->where('id', $id)->first();
+    //DAtos para las notificaciones comunes de la iteracion
+    $campo= new stdClass();
+    $campo->label='[cuenta_id]';
+    $campo->desc='Cuenta de ID afectados';
+    $campos[]=$campo;
+    $campo= new stdClass();
+    $campo->label='[lista_id]';
+    $campo->desc='Lista de ID afectados';
+    $campos[]=$campo;
+    $campo= new stdClass();
+    $campo->label='[lista_nombres]';
+    $campo->desc='Lista de entidades afectadas';
+    $campos[]=$campo;
+
+    $datos->cuenta_id=$resultado->count();
+    $datos->lista_id=$resultado->pluck('id')->implode(', ');
+    $datos->lista_nombres=$resultado->pluck('nombre')->implode(', ');
 
     //A partir de aqui empieza la parte "personalizada" de la accion
     //Especial atencion a la funcion comodines_texto
@@ -54,6 +78,9 @@ $func_accion = function($accion, $resultado, $campos,$id) {
     $result_email=notificar_usuario($user, valor($param_accion, "titulo"), "emails.mail_eventos", comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos),1,1,null,null);
 
     $this->log_evento("Enviado email a ".$datos->nombre." ".valor($param_accion, "e-mail").': '.$result_email,$accion->cod_regla);
-  
+    
+    if(isset($solouno) && $solouno==1){
+        return ['no_ejecutar_mas'=>true];
+    }
 }
 ?>

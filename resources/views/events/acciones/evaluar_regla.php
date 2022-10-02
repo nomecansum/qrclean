@@ -1,13 +1,7 @@
 <?php
 
 $descripcion = "Envia un email a un usuario concreto";
-
 $campos_notificaciones=false;
-
-$icono='<i class="fa-solid fa-gears"></i>';
-
-$tipo_destino='*';
-
 $params='{
     "parametros":[
         {
@@ -19,7 +13,10 @@ $params='{
     ]
 }';
 
-$func_accion = function($accion, &$resultado, $campos,$id) {
+$tipo_destino='*';
+$icono="<i class='fa-solid fa-folder-magnifying-glass'></i>";
+
+$func_accion = function($accion, $resultado, $campos, $id,$output) {
 
     //Parte comun de todas las acciones
     $param_accion = $accion->param_accion;
@@ -29,18 +26,21 @@ $func_accion = function($accion, &$resultado, $campos,$id) {
         ->where('cod_regla',$accion->cod_regla)
         ->first();
     Log::debug('Reevaluando Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando);
-    $this->log_evento('Reevaluando Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando,$accion->cod_regla);
     include(resource_path('views/events/comandos').'/'.$evento->nom_comando);
-    $resultado_json=$func_comando($evento);
+    $resultado_json=$func_comando($evento,$output);
     $resultado=json_decode($resultado_json);
     unset($func_comando);
-    $this->log_evento(count($resultado->lista_id).' ID detectados',$accion->cod_regla);
     try{
         $campos=json_decode($campos);
         $campos=$campos->campos;
-    } catch(\Throwable $e){
+    } catch(\Exception $e){
         $campos=[];
     }
 
+    return ['lista_ids'=>$resultado->lista_id,
+            'no_ejecutar_mas'=>true,
+            'resultado'=>$resultado,
+            'campos'=>$campos,
+        ];
 }
 ?>

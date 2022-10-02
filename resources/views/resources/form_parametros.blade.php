@@ -32,7 +32,7 @@
         @if($p->tipo=="bool" || $p->tipo=="bol")
             <div class="col-md-3 pt-3 mb-4 mt-2">
                 <div class="custom-control custom-switch" {{ $margin }}>
-                    <input type="checkbox" name="{{ $p->name }}" class="custom-control-input" id="{{ $p->name }}" {{ isset($p->value)&&!is_array($p->value)? 'checked':'' }} value="true">
+                    <input type="checkbox" name="{{ $p->name }}" class="custom-control-input" id="{{ $p->name }}" value="1" {{(isset($p->value)&&!is_array($p->value))?'checked':'' }}>
                     <label class="custom-control-label pt-1" for="{{ $p->name }}">{{ $p->label }}</label>
                 </div>
             </div>

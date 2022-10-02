@@ -15,7 +15,7 @@
 <input type="hidden" name="cod_accion" value="{{ $accion->cod_accion }}">
 <input type="hidden" name="val_iteracion" value="{{ $accion->val_iteracion }}">
 
-@if(isset($tipo_destino_comando) && isset($tipo_destino_accion) && $tipo_destino_comando!=$tipo_destino_accion && $tipo_destino_accion!='*')
+@if(isset($tipo_destino_comando)  && $tipo_destino_comando!='*' && isset($tipo_destino_accion) && $tipo_destino_comando!=$tipo_destino_accion && $tipo_destino_accion!='*')
     <div class="alert alert-danger">
         <strong>Error!</strong> El comando seleccionado esta preparado para devolver <b>{{ $tipo_destino_comando }}</b> y esta accion esta preparada para recibir <b>{{ $tipo_destino_accion }}</b>. No coinciden los tipos.
     </div> 
@@ -70,6 +70,16 @@
     </div>
 </div>
 @if($accion->nom_accion!=null && $campos_notificaciones)
+@php
+    foreach($parametros as $p)
+    {
+        //Esto es para que en las acciones que solo deben ejecutarse una vez, muestre los comodines ed los totales
+        if($p->name=="solouno" && (isset($p->value) && $p->value==1)){
+            $solouno=true;
+        }
+    }
+    
+@endphp
 <br><br>
 <div class="row campos_notificaciones">
     <div class="col-md-12">
@@ -81,6 +91,11 @@
                         @foreach($campos as $campo)
                             <li><b>{{ $campo->label }}: </b>{{ $campo->desc }}</li>
                         @endforeach
+                        @if(isset($solouno))
+                            <li><b>[cuenta_id]: </b>{{ __('eventos.cuenta_id_afectados') }}</li>
+                            <li><b>[lista_id]: </b>{{ __('eventos.lista_id_afectados') }}</li>
+                            <li><b>[lista_nombres]: </b>{{ __('eventos.lista_nombres_afectados') }}</li>
+                        @endif
                     @endif
                 </ul>
             </div>

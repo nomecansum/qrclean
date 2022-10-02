@@ -50,6 +50,13 @@ $params='{
                     ORDER BY 2", 
             "required": true,
             "buscar": true
+        },
+        {
+            "label": "Enviar solo uno por iteracion",
+            "name": "solouno",
+            "tipo": "bool",
+            "def": "true",
+            "required": true
         }
     ]
 }';
@@ -63,12 +70,30 @@ $func_accion = function($accion, $resultado, $campos,$id) {
     $resultado = collect($resultado->data); //Cogemos el bloque da datos del resultado que es donde estan los datos de los elementos afectadso
 
     $datos = $resultado->where('id', $id)->first();
+    //DAtos para las notificaciones comunes de la iteracion
+    $campo= new stdClass();
+    $campo->label='[cuenta_id]';
+    $campo->desc='Cuenta de ID afectados';
+    $campos[]=$campo;
+    $campo= new stdClass();
+    $campo->label='[lista_id]';
+    $campo->desc='Lista de ID afectados';
+    $campos[]=$campo;
+    $campo= new stdClass();
+    $campo->label='[lista_nombres]';
+    $campo->desc='Lista de entidades afectadas';
+    $campos[]=$campo;
 
+    $datos->cuenta_id=$resultado->count();
+    $datos->lista_id=$resultado->pluck('id')->implode(', ');
+    $datos->lista_nombres=$resultado->pluck('nombre')->implode(', ');
 
     foreach(valor($param_accion, "usuarios") as $u){
         insertar_notificacion_web($u,valor($param_accion, "id_tipo_notificacion"),comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos),0);
     }
 
-
+    if(isset($solouno) && $solouno==1){
+        return ['no_ejecutar_mas'=>true];
+    }
 }
 ?>

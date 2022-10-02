@@ -318,7 +318,7 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									<label for="">Enttity ID</label>
-									<input type="text" name="saml2_idp_entityid" class="form-control" required value="{{isset($config) ? $config->saml2_idp_entityid : ''}}">
+									<input type="text" name="saml2_idp_entityid" class="form-control" value="{{isset($config) ? $config->saml2_idp_entityid : ''}}">
 								</div>
 							</div>
 							<div class="col-md-12">
@@ -354,7 +354,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="">ID cliente salas</label>
-									<input type="text" name="id_cliente_salas" class="form-control" required value="{{isset($c) ? $c->id_cliente_salas : ''}}">
+									<input type="text" name="id_cliente_salas" class="form-control" value="{{isset($c) ? $c->id_cliente_salas : ''}}">
 								</div>
 							</div>
 							<div class="col-md-12 mb-3">

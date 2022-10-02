@@ -69,7 +69,9 @@ class CustomersController extends Controller
 
         if(isset($config->saml2_idp_entityid)){
             $config_saml2=DB::table('saml2_tenants')->where('uuid',$config->saml2_idp_entityid)->first();
-        } 
+        } else {
+            $config_saml2=null;
+        }
 
     	return view('customers.create',compact('c','config','config_saml2'));
     }

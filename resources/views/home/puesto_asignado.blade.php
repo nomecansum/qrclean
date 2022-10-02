@@ -18,20 +18,13 @@
         @foreach($mispuestos as $puesto)
             @php
                 if(isMobile()){
-                    if($puesto->factor_puestow<3.5){
-                        $puesto->factor_puestow=15;
-                        $puesto->factor_puestoh=15;
-                        $puesto->factor_letra=2.8;
-                    } else {
-                        //En  mosaico los queremos curadrados siempre
-                        $puesto->factor_puestow=$puesto->factor_puestow*4;
-                        $puesto->factor_puestoh=$puesto->factor_puestow*4;
-                        $puesto->factor_letra=$puesto->factor_letra*4;
-                    }
-                } else if($puesto->factor_puestow<3.5){
+                    $puesto->factor_puestow=15;
+                    $puesto->factor_puestoh=15;
+                    $puesto->factor_letra=2.8;
+                } else {
                     $puesto->factor_puestow=3.7;
                     $puesto->factor_puestoh=3.7;
-                    $puesto->factor_letra=0.8;
+                    $puesto->factor_letra=1;
                 }
                 $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();   
                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);

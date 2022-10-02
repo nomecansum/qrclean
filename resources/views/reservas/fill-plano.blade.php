@@ -78,6 +78,7 @@
         }
      @endphp
     @endforeach
+
 </div>
 {{-- <div>fh: {{ $pl->factor_puestoh }} fw: {{ $pl->factor_puestow }}</div> --}}
 <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>
@@ -131,12 +132,12 @@
     var hacer_zoom{{ $pl->id_planta }};
 
     function zoom{{ $pl->id_planta }}(){
-        //$('#plano{{ $pl->id_planta }}').animate({ 'zoom': zoom_actual{{ $pl->id_planta }}/100 }, 400);
-        $('#plano{{ $pl->id_planta }}').animate({ 'width': zoom_actual{{ $pl->id_planta }}+'%' }, 400);
-        $('#plano{{ $pl->id_planta }}').scale(zoom_actual{{ $pl->id_planta }}/100);
+        $('#plano{{ $pl->id_planta }}').animate({ 'zoom': zoom_actual{{ $pl->id_planta }}/100 }, 0);
+        $('#plano{{ $pl->id_planta }}').animate({ 'width': zoom_actual{{ $pl->id_planta }}+'%' }, 0);
+        //$('#plano{{ $pl->id_planta }}').scale(zoom_actual{{ $pl->id_planta }}/100);
         setTimeout(() => {
             recolocar_puestos();;
-        }, 1500);
+        }, 1000);
        
     }
     
@@ -145,7 +146,7 @@
     var z_def_value{{ $pl->id_planta }} = document.getElementById('puesto-zoom-def-val-{{ $pl->id_planta }}');
 
     noUiSlider.create(z_def{{ $pl->id_planta }},{
-        start   : [ 100 ],
+        start   : [ @mobile {{ Auth::user()->zoom_mobile??100 }} @else {{ Auth::user()->zoom_desktop??100 }} @endmobile ],
         connect : 'lower',
         step: 10,
         range   : {
@@ -161,9 +162,11 @@
         z_def_value{{ $pl->id_planta }}.innerHTML = values[handle]+' %';
         zoom_actual{{ $pl->id_planta }}=values[handle];
         clearTimeout(hacer_zoom{{ $pl->id_planta }});
+        fetch('{{ url('/users/setzoom') }}/'+{{ Auth::user()->id }}+'/'+values[handle]+'/'+{{ isMobile()?1:0 }})
+            .then(data=>console.log(data));
         hacer_zoom{{ $pl->id_planta }}=setTimeout(() => {
             zoom{{ $pl->id_planta }}();
-        }, 500);
+        }, 200);
     });
 
     

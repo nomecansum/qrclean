@@ -15,7 +15,7 @@
                         {!! icono_nombre(Auth::user()->name,40,16) !!}
                     @endif
                 </div>
-        
+                
                 <div class="mininav-content collapse d-mn-max">
                     <div class="d-grid">
         
@@ -26,7 +26,7 @@
                             </span>
                             <small class="text-muted">{{Auth::user()->email}}</small>
                         </button>
-        
+                       
                         <!-- Collapsed user menu -->
                         <div id="usernav" class="nav flex-column collapse">
                             <a href="#" class="nav-link d-flex justify-content-between align-items-center">
@@ -47,6 +47,7 @@
                             </a>
                             <div class='onesignal-customlink-container'></div>
                             <div>
+                                
                                 @admin
                                     @include('resources.combo_clientes')
                                 @endadmin

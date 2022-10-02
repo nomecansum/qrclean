@@ -1,13 +1,13 @@
 <style>
     .des_evento{
-        font-size: 16px !important;
+        font-size: 12px !important;
     }
 </style>
 
 <div class="card mt-3">
     <div class="card-header">
         <h3 class="card-title">Mis reservas</h3>
-        <span class="float-right" id="spin" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
+        {{-- <span class="float-right" id="spin" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span> --}}
     </div>
     <div class="card-body">
         <div id="calendario"></div>
@@ -24,7 +24,7 @@
             $('#spin').show();
             $.post('{{url('reservas/loadMonthSchedule')}}', {_token:'{{csrf_token()}}',month: month,type:type,emp:'{{Auth::user()->id}}'}, function(data, textStatus, xhr) {
                 $('#calendario').html(data);
-                $('.des_evento').css('font-size','0.6vw');
+                $('.des_evento').css('font-size','0.4vw');
                 $('.des_evento').css('font-weight','normal');
                 $('.des_evento').css("overflow","hidden");
                 $('.dia').css('height','50px')

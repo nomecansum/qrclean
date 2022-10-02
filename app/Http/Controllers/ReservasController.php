@@ -40,8 +40,12 @@ class ReservasController extends Controller
         $festivos_usuario=array_map(function($item){
             return $item->fecha;
         },$festivos_usuario);
-
-        return js_array($festivos_usuario);
+        if (count($festivos_usuario)==0){
+            $festivos_usuario=-1;
+        } else {
+            return js_array($festivos_usuario);
+        }
+       
     }
 
 

@@ -330,7 +330,7 @@ class HomeController extends Controller
                     'disponibles'=>$disponibles,
                     'operativo' => 0,
                     'encuesta'=>0,
-                    'incidencia'=>['id'=>$inc->id_incidencia,'tipo'=>$inc->des_tipo_incidencia,'texto'=>$inc->des_incidencia]
+                    'incidencia'=>['id'=>$inc->id_incidencia??0,'tipo'=>$inc->des_tipo_incidencia??'','texto'=>$inc->des_incidencia??'']
                 ];
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }

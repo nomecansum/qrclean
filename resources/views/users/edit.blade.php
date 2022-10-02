@@ -494,7 +494,38 @@
                                                         @if($pf->tipo !='ul')
                                                             <div id="puesto_pref" class="draggable" style="background-color:{{ $pf->color }} ">
                                                                 <h4 class="text-white">{!! $pf->icono !!} </h4>
-                                                                <div class="detalle" data-id="{{ $pf->id }}" data-tipo="{{ $pf->tipo }}">{{ $pf->text }}</div>
+                                                                <div class="detalle" data-id="{{ $pf->id }}" data-tipo="{{ $pf->tipo }}">
+                                                                    @switch($pf->tipo)
+                                                                        @case('pu')
+                                                                            {{ App\Models\puestos::find($pf->id)->cod_puesto }}
+                                                                            @break
+
+                                                                        @case('pl')
+                                                                            @php
+                                                                                $pl = App\Models\plantas::find($pf->id);
+                                                                                $ed = App\Models\edificios::find($pl->id_edificio);
+                                                                            @endphp
+                                                                            [{{ $ed->des_edificio }}] {{ $pl->des_planta }}
+                                                                            @break
+                                                                        @case('zo')
+                                                                            @php
+                                                                                try{
+                                                                                    $zo=  App\Models\plantas_zonas::find($pf->id);
+                                                                                    $pl = App\Models\plantas::find($zo->id_planta);
+                                                                                    $ed = App\Models\edificios::find($pl->id_edificio);
+                                                                                    $salida= "[{$ed->des_edificio}] {$pl->des_planta} - {$zo->des_zona}";
+                                                                                } catch(\Throwable $e){
+                                                                                    $salida=$pf->text;
+                                                                                }
+                                                                                
+                                                                            @endphp
+                                                                            {{ $salida }}
+                                                                            @break
+                                                                        @default
+                                                                            
+                                                                    @endswitch
+                                                                    
+                                                                </div>
                                                                 <div class="bottom-right text-end papelera text-danger">
                                                                     <a href="#" class="btn_borrar"><i class="fa-solid fa-trash-can"></i></a>
                                                                 </div>

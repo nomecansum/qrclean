@@ -166,6 +166,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/delplanta/{usuario}/{planta}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@delplanta'])->name('users.delplanta');
 
         Route::get('/setdefcamera/{id}','UsersController@setdefcamera');
+        Route::get('/setzoom/{id}/{zoom}/{mobile}','UsersController@setzoom');
 
         Route::post('/borrar_usuarios',['middleware'=>'permissions:["Usuarios"],["D"]','uses'=>'UsersController@borrar_usuarios'])->name('users.users.delete_muchos');
         Route::post('/asignar_plantas',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@asignar_plantas'])->name('users.users.asignar_plantas');

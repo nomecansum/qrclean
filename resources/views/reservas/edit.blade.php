@@ -14,65 +14,79 @@
     
 
 </style>
+@if(count($misreservas)>0)
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row b-all rounded mb-2">
+                <div class="col-md-12">
+                    <label for="fechas">Reservas activas para el día {{ $f1->format('d/m/Y')}}</label>
+                    <div class="table-responsive">
+                        @mobile
+                        <table id="tablares" class="table table-hover " 
+                        data-toggle="table" 
+                        data-mobile-responsive="true" 
+                        data-locale="es-ES">
+                        @elsemobile
+                        <table id="tablares" class="table table-hover">
+                        @endmobile
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Periodo</th>
+                                    <th>Tipo</th>
+                                    <th class="text-center">Puesto</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                @foreach($misreservas as $res)
+                                <tr class="p-2 {{ $res->mca_anulada=='S'?'bg-gray':'' }}">
+                                    <td>{{ $res->id_reserva }}</td>
+                                    <td>{{ Carbon\Carbon::parse($res->fec_reserva)->format('H:i') }} @if($res->fec_fin_reserva!=null)<i class="fas fa-arrow-right"></i> {{ Carbon\Carbon::parse($res->fec_fin_reserva)->format('H:i') }}@endif {{ $res->mca_anulada=='S'?'[ANULADA]':'' }}</td>
+                                    <td style="color: {{ $res->val_color }}"><i class="{{ $res->val_icono }}"></i>{{ $res->des_tipo_puesto }}</td>
+                                    <td class="text-center">{{ $res->cod_puesto }}</td>
 
-<div class="card" id="editor">
-    <div class="card">
-        <div class="card-header toolbar">
-            <div class="toolbar-start">
-                <h5 class="m-0">Reserva de puesto</h5>
-            </div>
-            <div class="toolbar-end">
-                <button type="button" class="btn-close btn-close-card">
-                    <span class="visually-hidden">Close the card</span>
-                </button>
+                                    @if($res->mca_anulada=='N')
+                                    <td class="text-end">
+                                        <div class="pull-right" style="bottom: 0px">
+                                            <div class="btn-group btn-group pull-right" role="group">
+                                                <a href="javascript:void(0)" class="btn btn-info btn-xs btn_edit  add-tooltip" title="Modificar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-pencil-alt"></i> Editar</a>
+                                                <a href="#planta{{ $res->id_planta }}" class="btn btn-secondary btn-xs btn_ver  add-tooltip" title="Ver puesto en plano/mapa" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-puesto="{{ $res->id_puesto }}"><i class="fad fa-search-location"></i> Ver</a>
+                                                <a href="javascript:void(0)" class="btn btn-danger btn-xs btn_del  add-tooltip" title="Cancelar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-trash-alt"></i> Cancelar</a> 
+                                            </div>
+                                        </div>
+                                    </td>
+                                    @else
+                                    <td></td>
+                                    @endif
+
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
             </div>
         </div>
-        <div class="card-body">
-            @if(count($misreservas)>0)
-                <div class="row b-all rounded mb-2">
-                    <div class="col-md-12">
-                        <label for="fechas">Reservas activas para el día {{ $f1->format('d/m/Y')}}</label>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-responsive table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Periodo</th>
-                                        <th>Tipo</th>
-                                        <th class="text-center">Puesto</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    @foreach($misreservas as $res)
-                                    <tr class="{{ $res->mca_anulada=='S'?'bg-gray':'' }}">
-                                        <td>{{ $res->id_reserva }}</td>
-                                        <td>{{ Carbon\Carbon::parse($res->fec_reserva)->format('H:i') }} @if($res->fec_fin_reserva!=null)<i class="fas fa-arrow-right"></i> {{ Carbon\Carbon::parse($res->fec_fin_reserva)->format('H:i') }}@endif {{ $res->mca_anulada=='S'?'[ANULADA]':'' }}</td>
-                                        <td style="color: {{ $res->val_color }}"><i class="{{ $res->val_icono }}"></i>{{ $res->des_tipo_puesto }}</td>
-                                        <td class="text-center">{{ $res->cod_puesto }}</td>
-                                        <td style="position:relative">
-                                            @if($res->mca_anulada=='N')
-                                            <td style="position: relative">
-                                                <div class="pull-right floating-like-gmail" style="width: 400px; bottom: 0px">
-                                                    <div class="btn-group btn-group pull-right" role="group">
-                                                        <a href="javascript:void(0)" class="btn btn-info btn-xs btn_edit  add-tooltip" title="Modificar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-pencil-alt"></i> Modificar</a>
-                                                        <a href="#planta{{ $res->id_planta }}" class="btn btn-secondary btn-xs btn_ver  add-tooltip" title="Ver puesto en plano/mapa" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-puesto="{{ $res->id_puesto }}"><i class="fad fa-search-location"></i> Ver puesto</a>
-                                                        <a href="javascript:void(0)" class="btn btn-danger btn-xs btn_del  add-tooltip" title="Cancelar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-trash-alt"></i> Borrar</a> 
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        
-                    </div>
-                </div>
-            @endif
+    </div>
+@endif
 
+<div class="card" id="editor">
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="card-header toolbar">
+                <div class="toolbar-start">
+                    <h5 class="m-0">Reserva de puesto</h5>
+                </div>
+                <div class="toolbar-end">
+                    <button type="button" class="btn-close btn-close-card">
+                        <span class="visually-hidden">Close the card</span>
+                    </button>
+                </div>
+            </div>
             <form  action="{{url('reservas/save')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax">
                 <div class="row">
                     <input type="hidden" name="id_reserva" value="{{ $reserva->id_reserva }}">
@@ -108,7 +122,7 @@
                         <select name="id_planta" id="id_planta" class="form-control">
                             <option value="0">Cualquiera</option>
                             @foreach($plantas_usuario as $p)
-                                <option value="{{ $p->id_planta}}" {{ $reserva->id_planta==$p->id_planta?'selected':'' }}>{{ $p->des_planta }}</option>
+                                <option value="{{ $p->id_planta}}" {{ $reserva->id_planta!=0?($reserva->id_planta==$p->id_planta?'selected':''):($p->id_planta==session('planta_pref')?'selected':'') }}>{{ $p->des_planta }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -185,6 +199,7 @@
         //$('#andor').val(changeField.innerHTML);
         //comprobar_puestos();
     };
+    
     changeCheckbox.onclick = function() {
         comprobar_puestos();
     };
@@ -227,7 +242,7 @@
 
     $(function(){
         $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$('#id_edificio').val(), function(){
-            $('#id_planta').val({{ $reserva->id_planta }});
+            $('#id_planta').val({{ $reserva->id_planta==0?session('planta_pref'):$reserva->id_planta }});
             $('#id_planta option[value={{ $reserva->id_planta }}]').attr('selected','selected');
             $('#id_planta').prepend("<option value='0'>Cualquiera</option>")
         });
@@ -421,6 +436,10 @@
             r_def.noUiSlider.set(["{{ isset($reserva->fec_reserva)?time_to_dec(Carbon\Carbon::parse($reserva->fec_reserva)->format('H:i:s'))/60:config_cliente('min_hora_reservas') }}", "{{ isset($reserva->fec_fin_reserva)&&$reserva->fec_fin_reserva!=''?time_to_dec(Carbon\Carbon::parse($reserva->fec_fin_reserva)->format('H:i:s'))/60:config_cliente('min_hora_reservas') }}"])
         })
     @endif
+
+    @mobile
+    $('#tablares').bootstrapTable();
+    @endmobile
 
 
  </script>

@@ -47,7 +47,9 @@
                             </a>
                             <div class='onesignal-customlink-container'></div>
                             <div>
-                                @include('resources.combo_clientes')
+                                @admin
+                                    @include('resources.combo_clientes')
+                                @endadmin
                             </div>
                         </div>
         

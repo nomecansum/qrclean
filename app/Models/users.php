@@ -60,7 +60,9 @@ class users extends Model
                   'mca_notif_push',
                   'mca_notif_email',
                   'sso_override',
-                  'deleted_at'
+                  'deleted_at',
+                  'zoom_mobile',
+                  'zoom_desktop',
               ];
 
     /**

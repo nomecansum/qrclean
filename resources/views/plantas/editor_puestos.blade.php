@@ -311,7 +311,7 @@
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
-            'max': [ 10 ]
+            'max': [ 20 ]
         },
         format: wNumb({
             decimals: 2
@@ -323,7 +323,7 @@
         connect : 'lower',
         range   : {
             'min': [  0.5 ],
-            'max': [ 10 ]
+            'max': [ 20 ]
         },
         format: wNumb({
             decimals: 2

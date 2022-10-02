@@ -52,9 +52,9 @@ $rand=\Str::random(10);
 		white-space:pre-wrap;
 	}
 
-	.table>:not(caption)>*>*{
+	/* .table>:not(caption)>*>*{
 		padding: 0;
-	}
+	} */
 </style>
 {{-- <div class="card-header">
 	<table class="table table-calendar mb0">
@@ -146,7 +146,10 @@ $rand=\Str::random(10);
 											//$title=Carbon\Carbon::parse($dia->fec_reserva)->format('d/m/Y').chr(13)." Puesto: ".$descrip." - Edificio: ".$dia->des_edificio." - Planta: ".$dia->des_planta;	
 										@endphp
 									@if($dia)
-									<div class="des_evento mb-1 text-nowrap  text-center cal-tooltip" style="font-size:@desktop  1.2vw; @elsedesktop  8px; @enddesktop color:#555;" title="{!! $dia->cod_puesto !!}<br> @if(isset($dia->name))<i class='fa-regular fa-user'></i> {{$dia->name}} @else <i class='fa-regular fa-clock'></i>  {{Carbon\Carbon::parse($dia->fec_reserva)->format('H:i')}} -> {{Carbon\Carbon::parse($dia->fec_fin_reserva)->format('H:i')}} @endif">@if($icono!="") <i class="{{ $icono }}" style="color: {{ $ic_color }};"></i> @endif @desktop   @enddesktop</div>
+									<div class="des_evento mb-1 text-nowrap  text-center cal-tooltip" style="font-size:@desktop  1.2vw; @elsedesktop  12px; @enddesktop color:#555;" title="{!! $dia->cod_puesto !!}<br> @if(isset($dia->name))<i class='fa-regular fa-user'></i> {{$dia->name}} @else <i class='fa-regular fa-clock'></i>  {{Carbon\Carbon::parse($dia->fec_reserva)->format('H:i')}} -> {{Carbon\Carbon::parse($dia->fec_fin_reserva)->format('H:i')}} @endif">
+										@if($icono!="") <i class="{{ $icono }}" style="color: {{ $ic_color }};"></i> @endif 
+										@desktop {{ str_replace(' ','',$dia->des_puesto) }}  @enddesktop
+									</div>
 									@endif
 									@endforeach
 								</div>

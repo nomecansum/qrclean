@@ -1553,6 +1553,8 @@ class UsersController extends Controller
 
     }
 
+
+    //FUNCIONES ESPECIALES USUARIOS
     public function miperfil($id){
         validar_acceso_tabla($id,"users");
         if($id!=Auth::user()->id){
@@ -1722,6 +1724,20 @@ class UsersController extends Controller
             ];
         }
         
+    }
+
+    public function setzoom($id,$zoom,$mobile){
+        $users=users::find($id);
+        if($mobile==1){
+            $users->zoom_mobile=$zoom;
+        }else{
+            $users->zoom_desktop=$zoom;
+        }
+        $users->save();
+        return [
+            'result' => "OK",
+            'data' => $id
+        ];
     }
     
 }

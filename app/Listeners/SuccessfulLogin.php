@@ -97,6 +97,14 @@ class SuccessfulLogin
         $reservas=\App\Http\Controllers\UsersController::mis_puestos(auth()->user()->id)['mispuestos'];
         session(['reservas'=>$reservas]);
 
+        //Planta por defecto del usuario
+        $planta=DB::table('reservas')->select('puestos.id_planta')->selectraw("count(reservas.id_reserva) as cuenta")->join('puestos','puestos.id_puesto','reservas.id_puesto')->where('id_usuario',auth()->user()->id)->where('fec_reserva','>',Carbon::now()->subdays(30))->orderby('cuenta','desc')->take(20)->groupby('id_planta')->first();
+        if(isset($planta->id_planta)){
+            session(['planta_pref'=>$planta->id_planta]);
+        } else {
+            session(['planta_pref'=>DB::table('plantas_usuario')->where('id_usuario',auth()->user()->id)->first()->id_planta]);
+        }
+
         ///Perfil del usuario en session
         session(['perfil'=>$nivel]);
 

@@ -1511,10 +1511,10 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
             $es_festivo=1;
             $desc=$festivos->where('val_fecha',$fecha)->first()->des_festivo;
         }
-        if($fecha->dayOfWeek==0 && $pertenencias->mca_reservar_sabados=='N'){
+        if($fecha->dayOfWeek==0 && $pertenencias->mca_reservar_domingos=='N'){
             $es_festivo=1;
         }
-        if($fecha->dayOfWeek==6 && $pertenencias->mca_reservar_domingos=='N'){
+        if($fecha->dayOfWeek==6 && $pertenencias->mca_reservar_sabados=='N'){
             $es_festivo=1;
         }
         

@@ -473,6 +473,7 @@ class PuestosController extends Controller
                 $config_print=json_decode($config_print,true);
                 $r->request->add(['tam_qr' => $config_print['tam_qr']]); //add request
                 $r->request->add(['col' => $config_print['col']]); //add request
+                $r->request->add(['row' => $config_print['row']??4]); //add request
                 $r->request->add(['sel_color' => $config_print['sel_color']]); //add request
                 $r->request->add(['color_texto' => $config_print['color_texto']]); //add request
                 $r->request->add(['mca_icono' => $config_print['mca_icono']]); //add request
@@ -484,6 +485,7 @@ class PuestosController extends Controller
                 $r->request->add(['padding_qr' => $config_print['padding_qr']]); //add request
                 $r->request->add(['padding_cont' => $config_print['padding_cont']]); //add request
                 $r->request->add(['font_size' => $config_print['font_size']]); //add request
+                $r->request->add(['page_break' => $config_print['page_break']]); //add request
             } 
         }
         $layout="layout";

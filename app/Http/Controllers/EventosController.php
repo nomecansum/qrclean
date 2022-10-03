@@ -40,7 +40,7 @@ class EventosController extends Controller
     }
 
     public function param_comando(Request $r){
-        
+        try{
             //Leemos los datos genericos del comadno
             $path = resource_path('views/events/comandos');
             $fic_comando=$path.'/'.$r->comando;
@@ -58,29 +58,29 @@ class EventosController extends Controller
                 if (file_exists($fic_comando)){
                     if (!$parametros)
                     {
-                        return response()->json([
+                        return [
                             "response" => "ERROR",
                             "error" => "JSON de parametros de comando invalido: ".$r->comando,
                             "TS" => Carbon::now()->format('Y-m-d h:i:s')
-                            ],400)->throwResponse();
+                            ];
                     }
                     return view('events.param_comando',compact('parametros','descripcion'));
                 } else{
 
-                    return response()->json([
+                    return [
                         "response" => "ERROR",
                         "error" => "No existe el comando ".$r->comando,
                         "TS" => Carbon::now()->format('Y-m-d h:i:s')
-                        ],400)->throwResponse();
+                        ];
                 }
             }
 
-            try{} catch(\Exception $e){
-            return response()->json([
+            } catch(\Exception $e){
+            return [
                 "response" => "ERROR",
                 "error" => "El formato del comando no es correcto ".$r->comando." ".mensaje_excepcion($e),
                 "TS" => Carbon::now()->format('Y-m-d h:i:s')
-                ],400)->throwResponse();
+                ];
         }
     }
 
@@ -120,11 +120,11 @@ class EventosController extends Controller
             return view('events.param_accion',compact('regla','accion','parametros','descripcion','campos','campos_notificaciones'));
         } else{
 
-            return response()->json([
+            return [
                 "response" => "ERROR",
                 "error" => "No existe el comando ".$r->comando,
                 "TS" => Carbon::now()->format('Y-m-d h:i:s')
-                ],400)->throwResponse();
+                ];
         }
 
     }
@@ -187,11 +187,11 @@ class EventosController extends Controller
             $parametros=json_encode($parametros);
 
         } catch(\Throwable $e){
-            return response()->json([
+            return [
                 "response" => "ERROR",
                 "error" => "Error al procesar los datos de la accion ".$r->accion." ".mensaje_excepcion($e),
                 "TS" => Carbon::now()->format('Y-m-d h:i:s')
-                ])->throwResponse();
+                ];
         }
 
         //Paso 2, a guardar en la BDD
@@ -205,19 +205,19 @@ class EventosController extends Controller
                 $accion->val_icono=$icono??null;
                 $accion->save();
 
-            return response()->json([
+            return [
                 "response" => "Accion creada",
                 "id"=>$accion->cod_regla,
                 "message" => "Accion ".str_replace(".php","",str_replace("_"," ",$r->accion))." guardada",
                 "TS" => Carbon::now()->format('Y-m-d h:i:s'),
                 "url"=> "reload_acciones()",
-                ],200)->throwResponse();
+                ];
         } catch(\Throwable $e){
-            return response()->json([
+            return [
                 "response" => "ERROR",
                 "error" => "Error al guardar la regla en BDD [".$operacion."]".str_replace(".php","",str_replace("_"," ",$r->accion))." ".mensaje_excepcion($e),
                 "TS" => Carbon::now()->format('Y-m-d h:i:s')
-                ])->throwResponse();
+                ];
         }
     }
 
@@ -388,11 +388,11 @@ class EventosController extends Controller
             }
 
         } catch(\Throwable $e){
-            return response()->json([
+            return [
                 "response" => "ERROR",
                 "error" => "Error al procesar los datos de la regla ".$r->nom_regla." ".mensaje_excepcion($e),
                 "TS" => Carbon::now()->format('Y-m-d h:i:s')
-                ])->throwResponse();
+                ];
         }
 
         //Paso 3, a guardar en la BDD
@@ -436,19 +436,19 @@ class EventosController extends Controller
                 }
             }
 
-            return response()->json([
+            return [
                 "response" => "Regla creada",
                 "id"=>$reglas->cod_regla,
                 "message" => "Regla ".$r->nom_regla." creada. <br>Ahora asocie las acciones a ejecutar",
                 "TS" => Carbon::now()->format('Y-m-d h:i:s'),
                 "url"=> config('app.carpeta_asset')."/edit/".$reglas->cod_regla,
-                ],200)->throwResponse();
+                ];
         } catch(\Throwable $e){
-            return response()->json([
+            return [
                 "response" => "ERROR",
                 "error" => "Error al guardar la regla en BDD [".$operacion."]".$r->nom_regla." ".mensaje_excepcion($e),
                 "TS" => Carbon::now()->format('Y-m-d h:i:s')
-                ])->throwResponse();
+                ];
         }
     }
 

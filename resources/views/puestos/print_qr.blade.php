@@ -21,7 +21,7 @@ try{
     page[size="A4"] {
     background: white;
     width: 21cm;
-    height: 29.7cm;
+    height: 59.4cm;
     display: block;
     margin: 0 auto;
     margin-bottom: 0.5cm;
@@ -32,6 +32,24 @@ try{
         margin: 0;
         box-shadow: 0;
     }
+    .page-break { display: block; page-break-before: always; }
+    }
+    @media print {
+    .noprint {display:none;}
+    .enable-print { display: block; }
+    }
+
+    .break-line{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 3px;
+        background-color: yellowgreen;
+    }
+
+    hr {
+        border: none;
+        border-top: 3px dashed black;
     }
 </style>
 @endsection
@@ -46,10 +64,16 @@ try{
             <input type="hidden" name="lista_id" value="{{ implode(",",$r->lista_id) }}" id="formato">
             <input type="hidden" name="id_cliente" value="{{ Auth::user()->id_cliente }}">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <div class="form-group">
-                        <label for="">Columnas <i class="fa-solid fa-columns-3"></i></label>  
+                        <label for="">Cols <i class="fa-solid fa-columns-3"></i></label>  
                         <input type="number" class="form-control refrescar_form" min="0" max="12"  required name="col" id="col" value="{{ $r->col??0 }}">
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label for="">Filas <i class="fa-solid fa-table-rows"></i></label>  
+                        <input type="number" class="form-control refrescar_form" min="0" max="12"  required name="row" id="row" value="{{ $r->row??0 }}">
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -139,6 +163,13 @@ try{
                     </div>
                     <input type="range" class="form-range val_font_size bind_value resize" min="0" max="40" step="1" data-clase="val_font_size"  id="range_font_size">
                 </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label for="">Salto p. <i class="fa-solid fa-file-dashed-line"></i></label>
+                        <input type="number" class="form-control resize val_page_break bind_value" min="0" max="200" data-clase="val_page_break"  required name="page_break" id="page_break" value="{{ $r->page_break??40 }}" value="{{ $r->page_break??40 }}">
+                    </div>
+                    <input type="range" class="form-range val_page_break bind_value resize" min="0" max="200" step="1" data-clase="val_page_break"  id="range_page_break">
+                </div>
                 <div class="col-md-1 text-right pt-2">
                     @include('resources.loading',['id_spin'=>'spinner','clase'=>'spinner'])
                 </div>
@@ -204,6 +235,7 @@ $columna=1;
         $('.img_qr').css('margin',$('#padding_qr').val()+'px');
         $('.cont_qr').css('padding',$('#padding_cont').val()+'px');
         $('.texto_qr').css('font-size',$('#font_size').val()+'px');
+        $('.page_breaker').css('height',$('#page_break').val()+'px');
         save_config_print();
     }
 

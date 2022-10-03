@@ -43,6 +43,9 @@ return [
     'clonar_accion' => 'Clonar acción',
     'info_accion' => 'Información de la acción',
     'clonado_de_accion' => 'Clonado de acción',
+    'cuenta_id_afectados' => 'Cuenta de ID afectados',
+    'lista_id_afectados' => 'Lista de ID afectados',
+    'lista_nombres_afectados' => 'Lista de entidades afectadas',
 ];
 
 

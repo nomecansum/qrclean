@@ -35,8 +35,16 @@ return [
     'parametrizacion_de_accion' => 'Action parametrization',
     'nueva_regla' => 'New rule',
     'seleccione_un_comando' => 'Select command',
-    '0' => '0',
-    '0' => '0',
+    'eliminar_la_regla' => 'Delete rule',
+    'hint_tiempo_espera' => 'Time to wait before executing the event again on an entity detected in the previous execution',
+    'editar_accion' => 'Edit action',
+    'borrar_accion' => 'Delete action',
+    'clonar_accion' => 'Clone action',
+    'info_accion' => 'About action',
+    'clonado_de_accion' => 'Clonado de acción',
+    'cuenta_id_afectados' => 'Affected ID count',
+    'lista_id_afectados' => 'Affected ID list',
+    'lista_nombres_afectados' => 'Affected entities list',
 
 ];
 

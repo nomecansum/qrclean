@@ -28,7 +28,7 @@
         <h3 class="card-title"><span class="font-bold fs-2">{{ $incidencias->count() }}</span> Incidencias abiertas a {!! beauty_fecha(Carbon\Carbon::now()->Settimezone(Auth::user()->val_timezone)) !!}</h3>
     </div>
     <div class="card-body">
-        <div id="chartdiv_incidencias" style="width:100%; height:300px;  ml-0"></div>
+        <div id="chartdiv_incidencias" style="width:100%; height:400px;  ml-0"></div>
 
     </div>
 </div>
@@ -56,6 +56,8 @@
     var chart_inci = am4core.create("chartdiv_incidencias", am4charts.PieChart);
 
     chart_inci.legend = new am4charts.Legend();
+    chart_inci.legend.maxHeight = 150;
+    chart_inci.legend.scrollable = true;
     
     // Add data
     chart_inci.data = {!! json_encode($datos_quesito) !!};

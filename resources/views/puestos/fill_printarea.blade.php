@@ -11,9 +11,12 @@
     //Y la memoria disponibie para ejecucion
     ini_set('memory_limit', '4095M');
 
+    $elementos_pagina=$columnas_mostrar*$r->row??0;
+    $cuenta_elementos=1;
 @endphp
 
 <div class="contenedor" style="margin-top: {{ $r->margen_top??4 }}px; margin-left: {{ $r->margen_left??4 }}px">
+{{-- <div class="break-line"><div style="width: 100%; height:3px; background-color: #f00; z-index: 1000"><hr></div></div> --}}
 @foreach($puestos as $puesto)
     @php
         if(isset($r->color_texto)){
@@ -38,7 +41,6 @@
 
     @if($columnas_mostrar>0 && $primera_vuelta)
         <div class="d-flex flex-row prim">
-           
     @endif
     <div class="text-center cont_qr" style="display: inline-block;  margin: {{ $r->espacio_h }}px {{ $r->espacio_v }}px {{ $r->espacio_h }}px {{ $r->espacio_v }}px">
         @if(nombrepuesto($puesto)!=$puesto->cod_puesto)
@@ -67,6 +69,7 @@
     @php
         $col++;
         $primera_vuelta=false;
+        $cuenta_elementos++;
     @endphp
     @if($columnas_mostrar>0 && $col>$columnas_mostrar)
         </div>
@@ -75,5 +78,14 @@
             $col=1;
         @endphp
     @endif
+    @if($elementos_pagina>0 && $cuenta_elementos>$elementos_pagina)
+        </div>
+        <div class="page_breaker " style="width:100%; height: {{ $r->page_break??40 }}; background-color: #fff"><div class="noprint" style="width: 100%; height:100%; background-color: #888; z-index: 1000"><hr></div></div>
+        <div class="d-flex flex-row otra">
+        @php
+            $cuenta_elementos=1;
+        @endphp
+    @endif
 @endforeach
+
 </div>

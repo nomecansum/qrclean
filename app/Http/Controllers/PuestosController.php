@@ -187,7 +187,7 @@ class PuestosController extends Controller
             ->orderby('edificios.id_edificio')
             ->orderby('plantas.id_planta')
             ->orderby('puestos.cod_puesto')
-            ->paginate(200);
+            ->paginate(250);
         return view('puestos.fill-tabla',compact('puestos','r'));
     }
 

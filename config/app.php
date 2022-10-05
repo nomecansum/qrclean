@@ -150,6 +150,8 @@ return [
 
     'link_politica'=>env('LINK_POLITICA','http://www.spotlinker.com/lopd/spotlinker/politica_privacidad_tratamiento_datos_y_asistencia'),
     'link_contacto'=>env('LINK_CONTACTO','https://www.crambo.eu/es/contacta/'),
+
+    'debug_eventos' => env('APP_DEBUG_EVENTOS',false),
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

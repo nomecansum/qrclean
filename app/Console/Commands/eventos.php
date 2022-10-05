@@ -179,7 +179,7 @@ class eventos extends Command
                     $this->log_evento('Comando ejecutado, no hay ID para procesar',$evento->cod_regla,'notice');
                 }
                 unset($func_comando);
-                $this->log_evento("Resultado del comando: ".$resultado->respuesta,'notice');
+                $this->log_evento("Resultado del comando: ".$resultado->respuesta,$evento->cod_regla,'notice');
             } catch(\Throwable $e){
                 if(config('app.env')=="local"){
                     dump($e);
@@ -226,7 +226,7 @@ class eventos extends Command
                 
                 foreach($acciones_iteracion as $accion){
                     $acciones_no_ejecutar=[];
-                    $lista_ids_procesar=$ids_para_la_iteracion;
+                    $lista_ids_procesar=array_values($ids_para_la_iteracion);
                     if(count($lista_ids_procesar)>0){
                         do{
                             $id=$lista_ids_procesar[0];
@@ -257,48 +257,49 @@ class eventos extends Command
                                 }
                                 $this->log_evento('Error al ejecutar la accion :'.$accion->nom_accion.', '.mensaje_excepcion($e),$evento->cod_regla,'error');
                             }
-                            if($iteracion==1){ //Estamos en la primera ya hay que insertar en la tabla de evolucion para ir progresandola
-                                DB::table('eventos_evolucion_id')->insert([
-                                    "cod_regla"=>$evento->cod_regla,
-                                    "val_iteracion"=>$iteracion,
-                                    "id"=>$id,
-                                    "fecha"=>Carbon::now()
-                                ]);
-                            } else if($iteracion>=$max_iteracion){ //Ha llegado al tope, la borramos de la tabla para en la siguiente volver a empezar
-                                $this->log_evento("Superado el maximo de iteraciones, borrando evolucion",$evento->cod_regla,'debug');
-                                DB::table('eventos_evolucion_id')->where('cod_regla',$evento->cod_regla)->where('id',(string) $id)->delete();
-                                //Ahora si la regla tiene un no molestar en X horas lo ponemos
-                                if(isset($evento->nomolestar)){
-                                    $this->log_evento('Añadido no molestar para '.$id.' hasta dentro de '.$evento->nomolestar.' '.$evento->tip_nomolestar,$evento->cod_regla,'debug');
-                                    DB::table('eventos_noactuar')->where('cod_regla',$evento->cod_regla)->where('id',(string) $id)->delete();
-                                    //Dependiendo de la unidad de tiempo de nomolestar
-                                    if($evento->tip_nomolestar=='H'){
-                                        $fecha_noactuar=Carbon::now()->addHours($evento->nomolestar);
-                                    } else if($evento->tip_nomolestar=='D'){
-                                        $fecha_noactuar=Carbon::now()->addDays($evento->nomolestar);
-                                    } else if($evento->tip_nomolestar=='M'){
-                                        $fecha_noactuar=Carbon::now()->addMonths($evento->nomolestar);
-                                    } else if($evento->tip_nomolestar=='Y'){
-                                        $fecha_noactuar=Carbon::now()->addYears($evento->nomolestar);
-                                    }
-                                    if($evento->nomolestar>0 && config('app.debug_eventos')==false){
-                                        DB::table('eventos_noactuar')->insert([
-                                            "cod_regla"=>$evento->cod_regla,
-                                            "id"=>$id,
-                                            "fecha"=>$fecha_noactuar,
-                                        ]);
-                                    }
-                                }
-                            } else { //Estamos a mitad del fregao, aumentamos el numero de iteracion y listo
-                                DB::table('eventos_evolucion_id')->where('cod_regla',$evento->cod_regla)->where('id',$id)->update([
-                                    "val_iteracion"=>$iteracion,
-                                ]);
-                            }
                             array_shift($lista_ids_procesar);
                         } while(count($lista_ids_procesar)>0);
-                    
                     } else {
                         $this->log_evento('No hay ID para la accion '.$accion->num_orden.' de la iteracion '.$iteracion,$evento->cod_regla,'warning');
+                    }
+                }
+                foreach(array_values($ids_para_la_iteracion) as $id){
+                    if($iteracion==1){ //Estamos en la primera ya hay que insertar en la tabla de evolucion para ir progresandola
+                        DB::table('eventos_evolucion_id')->insert([
+                            "cod_regla"=>$evento->cod_regla,
+                            "val_iteracion"=>$iteracion,
+                            "id"=>$id,
+                            "fecha"=>Carbon::now()
+                        ]);
+                    } else if($iteracion>=$max_iteracion){ //Ha llegado al tope, la borramos de la tabla para en la siguiente volver a empezar
+                        $this->log_evento("Superado el maximo de iteraciones, borrando evolucion",$evento->cod_regla,'debug');
+                        DB::table('eventos_evolucion_id')->where('cod_regla',$evento->cod_regla)->where('id',(string) $id)->delete();
+                        //Ahora si la regla tiene un no molestar en X horas lo ponemos
+                        if(isset($evento->nomolestar)){
+                            $this->log_evento('Añadido no molestar para '.$id.' hasta dentro de '.$evento->nomolestar.' '.$evento->tip_nomolestar,$evento->cod_regla,'debug');
+                            DB::table('eventos_noactuar')->where('cod_regla',$evento->cod_regla)->where('id',(string) $id)->delete();
+                            //Dependiendo de la unidad de tiempo de nomolestar
+                            if($evento->tip_nomolestar=='H'){
+                                $fecha_noactuar=Carbon::now()->addHours($evento->nomolestar);
+                            } else if($evento->tip_nomolestar=='D'){
+                                $fecha_noactuar=Carbon::now()->addDays($evento->nomolestar);
+                            } else if($evento->tip_nomolestar=='M'){
+                                $fecha_noactuar=Carbon::now()->addMonths($evento->nomolestar);
+                            } else if($evento->tip_nomolestar=='Y'){
+                                $fecha_noactuar=Carbon::now()->addYears($evento->nomolestar);
+                            }
+                            if($evento->nomolestar>0 && config('app.debug_eventos')==false){
+                                DB::table('eventos_noactuar')->insert([
+                                    "cod_regla"=>$evento->cod_regla,
+                                    "id"=>$id,
+                                    "fecha"=>$fecha_noactuar,
+                                ]);
+                            }
+                        }
+                    } else { //Estamos a mitad del fregao, aumentamos el numero de iteracion y listo
+                        DB::table('eventos_evolucion_id')->where('cod_regla',$evento->cod_regla)->where('id',$id)->update([
+                            "val_iteracion"=>$iteracion,
+                        ]);
                     }
                 }
             }

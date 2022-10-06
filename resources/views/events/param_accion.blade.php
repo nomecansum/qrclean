@@ -14,7 +14,7 @@
 <input type="hidden" name="cod_regla" value="{{ $accion->cod_regla }}">
 <input type="hidden" name="cod_accion" value="{{ $accion->cod_accion }}">
 <input type="hidden" name="val_iteracion" value="{{ $accion->val_iteracion }}">
-
+{{csrf_field()}}
 @if(isset($tipo_destino_comando)  && $tipo_destino_comando!='*' && isset($tipo_destino_accion) && $tipo_destino_comando!=$tipo_destino_accion && $tipo_destino_accion!='*')
     <div class="alert alert-danger">
         <strong>Error!</strong> El comando seleccionado esta preparado para devolver <b>{{ $tipo_destino_comando }}</b> y esta accion esta preparada para recibir <b>{{ $tipo_destino_accion }}</b>. No coinciden los tipos.

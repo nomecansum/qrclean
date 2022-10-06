@@ -517,7 +517,8 @@ class EventosController extends Controller
 
 		$log=DB::table('eventos_log')
 			->where('cod_regla',$id)
-			->where('fec_log','>',Carbon::parse($fecha))
+			// ->where('fec_log','>',Carbon::parse($fecha))
+            ->whereraw("date(fec_log)='".$fecha."'")
 			->whereraw("date_format(fec_log,'%H')=".$hora)
 			->get();
 		return view('events.log_evento',compact('log'));

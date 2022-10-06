@@ -168,7 +168,7 @@
             </div>
         </form>
         <form action="{{url(config('app.carpeta_asset').'/acciones/param_acciones/save')}}" method="POST" class="form-ajax" id="formaccion">
-            {{csrf_field()}}
+           
             <div class="row" id="div_acc" style="display:none">
                 <div class="col-md-12">
                     <div class="card" >

@@ -33,7 +33,7 @@ class saml2SuccessfulLogin
     
         // your own code preventing reuse of a $messageId to stop replay attacks
         $samlUser = $event->getSaml2User();
-        dd($samlUser); 
+        //dd($samlUser); 
 
         $email=$samlUser->getUserId();
         

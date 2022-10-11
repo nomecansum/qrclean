@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "600ce830ab9341f58bc334abba9a3863",
+    "content-hash": "f9f86d600f04de2c9397ff07d0dd88ca",
     "packages": [
         {
             "name": "24slides/laravel-saml2",
@@ -6421,6 +6421,47 @@
                 "source": "https://github.com/robrichards/xmlseclibs/tree/3.1.1"
             },
             "time": "2020-09-05T13:00:25+00:00"
+        },
+        {
+            "name": "shahonseven/php-color-hash",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shahonseven/php-color-hash.git",
+                "reference": "01f42d4aacd8527a9d9266daf6c61b024b95be2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shahonseven/php-color-hash/zipball/01f42d4aacd8527a9d9266daf6c61b024b95be2c",
+                "reference": "01f42d4aacd8527a9d9266daf6c61b024b95be2c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Shahonseven": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shahril Abdullah",
+                    "email": "shahonseven@gmail.com"
+                }
+            ],
+            "description": "Generate color based on the given string. Backported from the Javascript library color-hash",
+            "support": {
+                "issues": "https://github.com/shahonseven/php-color-hash/issues",
+                "source": "https://github.com/shahonseven/php-color-hash/tree/master"
+            },
+            "abandoned": true,
+            "time": "2019-01-22T01:07:49+00:00"
         },
         {
             "name": "simplesoftwareio/simple-qrcode",

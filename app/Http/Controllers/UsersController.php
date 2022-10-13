@@ -160,12 +160,13 @@ class UsersController extends Controller
             ->get();
 
         $usuarios_supervisables = DB::table('users')
-            ->leftjoin('niveles_acceso','users.cod_nivel', 'niveles_acceso.cod_nivel')
-            ->where('niveles_acceso.id_cliente',$users->id_cliente)
+            ->where('users.id_cliente',$users->id_cliente)
             ->where('users.id','<>',Auth::user()->id)
+            ->orderby('name')
             ->get();
 
         $usuarios_supervisados=DB::table('users')->where('id_usuario_supervisor',$id)->pluck('id')->toarray();
+
 
         $reservas=DB::table('reservas')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')

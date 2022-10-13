@@ -19,7 +19,7 @@
         {{-- Etiqueta --}}
         @if($p->tipo=="lbl")
             <div class="w-100"></div>
-            <div class="col-md-3 pt-3">
+            <div class="col-md-{{ $p->width??3 }} pt-3">
                 <div class="form-group">
                     <h3 class="font-weight-bold">{{ ucfirst(str_replace("_"," ",$p->label)) }}</h3>
                 </div>
@@ -30,7 +30,7 @@
 
         {{-- Boolean Checkbox --}}
         @if($p->tipo=="bool" || $p->tipo=="bol")
-            <div class="col-md-3 pt-3 mb-4 mt-2">
+            <div class="col-md-{{ $p->width??3 }} pt-3 mb-4 mt-2">
                 <div class="custom-control custom-switch" {{ $margin }}>
                     <input type="checkbox" name="{{ $p->name }}" class="custom-control-input" id="{{ $p->name }}" value="1" {{(isset($p->value)&&!is_array($p->value))?'checked':'' }}>
                     <label class="custom-control-label pt-1" for="{{ $p->name }}">{{ $p->label }}</label>
@@ -40,7 +40,7 @@
 
         {{-- Campo de texto --}}
         @if($p->tipo=="txt")
-            <div class="col-md-6"  {{ $margin }}>
+            <div class="col-md-{{ $p->width??6 }}"  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
                     <input type="text" name="{{ $p->name }}" id="{{ $p->name }}" class="form-control" value="{{ isset($p->value)&&!is_array($p->value)? $p->value : $p->def }}" {{ $p->required==true?'required':'' }}>
@@ -50,7 +50,7 @@
 
         {{-- Campo de texto --}}
         @if($p->tipo=="img")
-            <div class="col-md-6"  {{ $margin }}>
+            <div class="col-md-{{ $p->width??6 }}"  {{ $margin }}>
                 <div class="form-group">
                     <label for="{{ $p->name }}">{{ $p->label }}</label>
                     <div class="custom-file">
@@ -63,7 +63,7 @@
 
         {{-- Campo de texto enriquecido --}}
         @if($p->tipo=="html5" || $p->tipo=="htm")
-            <div class="col-md-12"  {{ $margin }}>
+            <div class="col-md-{{ $p->width??12 }}"  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
                     <textarea  class="textarea_editor form-control" name="{{ $p->name }}" id="{{ $p->name }}" rows="6" placeholder="Enter text ..." {{ $p->required==true?'required':'' }}>{!! isset($p->value)&&!is_array($p->value)? $p->value : $p->def !!}</textarea>
@@ -74,7 +74,7 @@
 
         {{-- Campo numerico --}}
         @if($p->tipo=="num")
-            <div class="col-md-3"  {{ $margin }}>
+            <div class="col-md-{{ $p->width??3 }}"  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
                     <input type="number" name="{{ $p->name }}" id="{{ $p->name }}" class="form-control col-10" value="{{ isset($p->value)&&!is_array($p->value)? $p->value : $p->def }}" {{ $p->required==true?'required':'' }}>
@@ -84,12 +84,22 @@
 
         {{-- Campo fecha --}}
         @if($p->tipo=="fec")
-            <div class="col-md-5"  {{ $margin }}>
+            <div class="col-md-{{ $p->width??5 }}"  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
                     <input type="date" name="{{ $p->name }}" id="{{ $p->name }}" class="form-control col-10 " value="{{ isset($p->value)&&!is_array($p->value)? $p->value : $p->def }}" {{ $p->required==true?'required':'' }}>
                 </div>
             </div>
+        @endif
+
+         {{-- Campo hora --}}
+         @if($p->tipo=="hor")
+            <div class="col-md-{{ $p->width??4 }}"  {!! $margin !!}>
+                <div class="form-group">
+                    <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
+                    <input type="time" name="{{ $p->name }}" id="{{ $p->name }}" class="form-control  " value="{{ isset($valor)? $valor : $p->def }}" {{ $enabled}}>
+                </div>
+            </div> <br>
         @endif
 
         {{-- Combo proveniente de consulta de BDD --}}
@@ -106,10 +116,10 @@
                 }
             @endphp
 
-            <div @if($p->multiple) class="col-md-12" @else class="col-md-4" @endif  {{ $margin }}>
+            <div @if($p->multiple) class="col-md-{{ $p->width??12 }}" @else class="col-md-{{ $p->width??4 }}" @endif  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
-                    <select @if($p->multiple) class="select2f mb-2 col-md-11 select2f-multiple form-control" style="width: 100%" multiple="multiple" name="{{ $p->name }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2f':'' }}"  name="{{ $p->name }}"  @endif id="multi-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
+                    <select @if($p->multiple) class="select2f mb-2 col-md-11 select2f-multiple form-control" multiple="multiple" name="{{ $p->name }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2f':'' }}"  name="{{ $p->name }}"  @endif  style="width: 100%"  id="multi-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
                         @foreach($qr as $item)
 
                             @if($p->multiple)
@@ -126,7 +136,7 @@
 
         {{-- Color picker --}}
         @if($p->tipo=="color" || $p->tipo=="col")
-            <div class="col-md-2 mr-4"  {{ $margin }}>
+            <div class="col-md-{{ $p->width??2 }} mr-4"  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
                     <input type="text" autocomplete="off"  name="{{ $p->name }}" id="{{ $p->name }}" class="colorpicker form-control" value="{{ isset($p->value)? $p->value : App\Classes\RandomColor::one(['luminosity' => 'bright']) }}" {{ $p->required==true?'required':'' }} />
@@ -136,7 +146,7 @@
 
         {{-- Lista de elementos con pares lista/valor --}}
         @if($p->tipo=="list" || $p->tipo=="lis")
-            <div @if($p->multiple) class="col-md-12" @else class="col-md-4" @endif  {{ $margin }}>
+            <div @if($p->multiple) class="col-md-{{ $p->width??12 }}" @else class="col-md-{{ $p->width??4 }}" @endif  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
                     <select @if($p->multiple) class="select2f mb-2 col-md-11 select2f-multiple form-control" multiple="multiple" style="width: 100%" name="{{ $p->name }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2f':'' }}"  name="{{ $p->name }}"  @endif id="multi-{{ $p->name }}" {{ $p->required==true?'required':'' }}>
@@ -164,6 +174,11 @@
                     //$('#multi-clientes').select2f({placeholder:"Debe seleccionar al menos un cliente"});
                 </script>
             @endif
+        @endif
+
+        {{-- Salto de linea --}}
+        @if(isset($p->br) && $p->br==true)
+            <div class="row"><br></div>
         @endif
 
     @endforeach

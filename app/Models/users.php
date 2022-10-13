@@ -63,6 +63,7 @@ class users extends Model
                   'deleted_at',
                   'zoom_mobile',
                   'zoom_desktop',
+                  'sync_at',
               ];
 
     /**

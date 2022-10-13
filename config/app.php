@@ -145,13 +145,18 @@ return [
     'id_usuario_spotlinker_salas'=>1832,
     'id_usuario_tareas'=>1860,
     'url_base_api_salas'=>env('URL_BASE_API_SALAS','https://salas-test.spotlinker.com/puestos_api/'),
-    'token_api_salas'=>env('TOKEN_API_SALAS','SP.JlYzRknsAClwUuYZZkMxRwPHJYbHhEdRakcDAPdjkJFwjcIEoD.6e09d8332dffd653f994'),
+    'token_api_salas'=>env('TOKEN_API_SALAS',''),
     'carpeta_asset'=>env('CARPETA_ASSET','/events'),
 
     'link_politica'=>env('LINK_POLITICA','http://www.spotlinker.com/lopd/spotlinker/politica_privacidad_tratamiento_datos_y_asistencia'),
     'link_contacto'=>env('LINK_CONTACTO','https://www.crambo.eu/es/contacta/'),
 
-    'debug_eventos' => env('APP_DEBUG_EVENTOS',false),
+    'debug_eventos' => env('APP_DEBUG_EVENTOS',''),
+
+    'user_workday' => env('WORKDAY_USERNAME',''),
+    'pass_workday' => env('WORKDAY_PASSWORD',''),
+    'workday_url' => env('WORKDAY_URL',''),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

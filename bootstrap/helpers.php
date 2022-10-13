@@ -1238,6 +1238,39 @@ function departamentos_padres($id,$salida='collect'){
       }
 }
 
+function departamentos_centro_hijos($id,$centro,$depth=10,$salida='collect'){
+    $data = DB::select( DB::raw("
+    with recursive dep (cod_departamento, nom_departamento, num_nivel, cod_centro, cod_departamento_padre,depth) as (
+        select     departamentos.cod_departamento,
+                   departamentos.nom_departamento,
+                   departamentos.num_nivel,
+                   ".$centro." as cod_centro,
+                   departamentos.cod_departamento_padre,
+                   1 as depth
+        from       departamentos
+        where      cod_departamento_padre = ".$id." and
+                   cod_departamento in (select distinct id_departamento from users where id_edificio =".$centro.")
+        union all
+        select     p.cod_departamento,
+                   p.nom_departamento,
+                   p.num_nivel,
+                   p.cod_centro,
+                   p.cod_departamento_padre,
+                   dep.depth + 1 as depth
+        from       departamentos p
+        inner join dep
+                on p.cod_departamento_padre = dep.cod_departamento
+      )
+      select * from dep
+      where dep.depth<".$depth." order by cod_departamento_padre"));
+
+      if($salida!='simple'){
+        return $data;
+      } else {
+          return Collect($data)->pluck('cod_departamento')->toarray();
+      }
+}
+
 //Comprobar si un usuario tiene reserva para un dia y un tipo
 function comprobar_reserva_usuario($id_user,$fecha,$tipo,$hora_inicio="00:00",$hora_fin="23:59"){
     $usuario=users::find($id_user);

@@ -142,10 +142,10 @@ class LoginController extends Controller
         $u=User::wherenull('deleted_at')
             ->where(function($q) use ($request){
                 $q->where(['email' => $request->email]);
-                $q->orwhere(function($q) use($request){
-                    $q->wherenotnull('id_usuario_externo');
-                    $q->whereraw("UCASE(id_usuario_externo)=UCASE('".$request->email."')");
-                });
+                // $q->orwhere(function($q) use($request){
+                //     $q->wherenotnull('id_usuario_externo');
+                //     $q->whereraw("UCASE(id_usuario_externo)=UCASE('".$request->email."')");
+                // });
             })
             ->first();
         //A ver si existe y si esta validado

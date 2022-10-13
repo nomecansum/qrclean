@@ -37,7 +37,9 @@ class departamentos extends Model
                   'id_cliente',
                   'cod_departamento_padre',
                   'nom_departamento',
-                  'num_nivel'
+                  'num_nivel',
+                  'sync_at',
+                  'id_externo',
               ];
 
     /**

@@ -463,6 +463,7 @@ class IncidenciasController extends Controller
             ->orderby('nom_cliente')
             ->orderby('incidencias_tipos.des_tipo_incidencia')
             ->get();
+
         if($tipo=='embed'){
             return view('incidencias.fill_frm_incidencia',compact('puesto','tipos','referer','config'));
         } else {

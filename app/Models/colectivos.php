@@ -35,7 +35,9 @@ class colectivos extends Model
     protected $fillable = [
                   'des_colectivo',
                   'id_cliente',
-                  'mca_noinformes'
+                  'mca_noinformes',
+                  'sync_at',
+                  'id_externo'
               ];
 
     /**

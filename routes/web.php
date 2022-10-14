@@ -309,7 +309,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('edit/{id}',['middleware'=>'permissions:["Departamentos"],["C"]', 'uses' => 'DepartmentsController@edit']);
 		Route::post('update',['middleware'=>'permissions:["Departamentos"],["C"]', 'uses' => 'DepartmentsController@update']);
 		Route::get('delete/{id}',['middleware'=>'permissions:["Departamentos"],["D"]', 'uses' => 'DepartmentsController@delete']);
-        Route::view('estructura',['middleware'=>'permissions:["Departamentos"],["R"]', 'uses' => 'departments.estructura']);
+        Route::get('estructura/{id?}',['middleware'=>'permissions:["Departamentos"],["R"]', 'uses' => 'DepartmentsController@estructura']);
 	});
 
     ////////////////////////////   COLECTIVOS   ////////////////////////////////

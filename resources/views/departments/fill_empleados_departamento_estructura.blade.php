@@ -1,15 +1,20 @@
 <ul class="sortable">
-    @foreach (DB::table('users')->where('id_departamento',$dep->cod_departamento)
-        ->select('users.id','users.name','users.id_departamento','users.img_usuario as img_empleado','users.id_edificio')
+    @php
+        $usuarios=DB::table('users')->where('id_departamento',$dep->cod_departamento)
+        ->select('users.id','users.name','users.id_departamento','users.img_usuario as img_empleado','users.id_edificio','users.id_usuario_supervisor','users.cod_nivel')
         ->where('users.id_edificio',$dep->id_edificio??0)
         ->wherenull('deleted_at')
+        ->orderby('cod_nivel','desc')
         ->orderBy('name','asc')
-        ->get() as $_emp)
-        <li data-emp="{{$_emp->id}}" style="font-size:14px">
-            <label style="font-size: 18px;">
+        ->get();
+    @endphp
+    {{-- {{ $dep->cod_departamento }} - {{ $dep->id_edificio }} --}}
+    @foreach ($usuarios as $_emp)
+        <li data-emp="{{$_emp->id}}" style="font-size:14px" @if($_emp->cod_nivel=1) class="ml-3" @endif>
+            <label style="text-transform: capitalize; font-weight: normal">
                 {{-- <i class="mdi mdi-account icon-box"  style="color:darkorange"></i> --}}
-                @if(isset($_emp->img_empleado))<img class="mb-0" src="{{ url('/uploads/employees/images/'.$_emp->img_empleado) }}" style="width: 20px;">@else {!! icono_nombre($_emp->name,20,10,'ic_planner') !!} @endif
-                <input type="checkbox" name="cod_empleados[]" class="checkboxRep @foreach(departamentos_padres($_emp->id_departamento,'simple') as $dp)dpto{{ $dp }} @endforeach cen{{ $_emp->id_edificio }}" value="{{$_emp->id}}" style="font-size:14px"  >  {{$_emp->name}} 
+                @if(isset($_emp->img_empleado))<img class="mb-0" src="{{ url('/uploads/employees/images/'.$_emp->img_empleado) }}" style="width: 30px;">@else {!! icono_nombre($_emp->name,30,13,'ic_planner') !!} @endif
+                 {{strtolower($_emp->name)}} 
             </label>
         </li>
     @endforeach

@@ -1240,21 +1240,20 @@ function departamentos_padres($id,$salida='collect'){
 
 function departamentos_centro_hijos($id,$centro,$depth=10,$salida='collect'){
     $data = DB::select( DB::raw("
-    with recursive dep (cod_departamento, nom_departamento, num_nivel, cod_centro, cod_departamento_padre,depth) as (
+    with recursive dep (cod_departamento, nom_departamento, num_nivel, id_edificio, cod_departamento_padre,depth) as (
         select     departamentos.cod_departamento,
                    departamentos.nom_departamento,
                    departamentos.num_nivel,
-                   ".$centro." as cod_centro,
+                   ".$centro." as id_edificio,
                    departamentos.cod_departamento_padre,
                    1 as depth
         from       departamentos
-        where      cod_departamento_padre = ".$id." and
-                   cod_departamento in (select distinct id_departamento from users where id_edificio =".$centro.")
+        where      cod_departamento_padre = ".$id." 
         union all
         select     p.cod_departamento,
                    p.nom_departamento,
                    p.num_nivel,
-                   p.cod_centro,
+                   ".$centro." as id_edificio,
                    p.cod_departamento_padre,
                    dep.depth + 1 as depth
         from       departamentos p

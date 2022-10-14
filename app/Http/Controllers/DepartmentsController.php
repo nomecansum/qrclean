@@ -123,5 +123,13 @@ class DepartmentsController extends Controller
 		return back();
     }
 
+    public function estructura($id=0){
+        $edificios=DB::table('edificios')->where('id_cliente',Auth::user()->id_cliente)->get();
+	    $seleccionado=$id==0?$edificios->first()->id_edificio:$id;
+        $cli = DB::table('clientes')->where('id_cliente', Auth::user()->id_cliente)->first();
+
+        return view('departments.estructura',compact('edificios','seleccionado','cli'));
+    }
+
     
 }

@@ -42,7 +42,23 @@
 </div>
 <div class="card">
     <div class="card-header">
-
+		<div class="row botones_accion">
+			<div class="col-md-8">
+				<span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
+			</div>
+			<div class="col-md-2 text-end">
+				
+			</div>
+			<div class="col-md-2 text-end">
+				<div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+					<input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
+					<label class="btn btn-outline-primary btn-xs boton_modo" data-href="departments" for="btnradio1"><i class="fa-light fa-list-timeline"></i> Listado</label>
+					
+					<input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+					<label class="btn btn-outline-primary btn-xs boton_modo" data-href="departments/estructura" for="btnradio2"><i class="fa-regular fa-list-tree"></i> Estructura</label>
+				</div>
+			</div>
+		</div>
     </div>
     <div class="card-body">
 		<div class="table-responsive">
@@ -146,5 +162,9 @@
             // window.scrollTo(0, 0);
             //stopPropagation()
         });
+
+		$('.boton_modo').click(function(){
+			window.location.href="{{ url('/') }}/"+$(this).attr('data-href');
+		});
     </script>
 @endsection

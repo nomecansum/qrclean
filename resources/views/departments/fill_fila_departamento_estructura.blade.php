@@ -1,9 +1,10 @@
-<li class="clickable" style="font-size:16px; font-weight:bold">
+<li class="clickable" style="font-size:16px; ">
     <label style="font-size: 20px;">
         <i class="mdi mdi-minus-box"></i>
         <i class="mdi mdi-sitemap icon-box" style="color:darkgreen"></i>
-        <input type="checkbox" class="chkdep @foreach(departamentos_padres($dep->cod_departamento,'simple') as $dp)dpto{{ $dp }} @endforeach cen{{ $dep->id_edificio??0 }}" data-name="cod_departamento[]" data-departamento="{{$dep->cod_departamento}}" data-centro="{{$dep->id_edificio??0}}" value="{{$dep->cod_departamento}}"> {{$dep->nom_departamento}}
+         {{$dep->nom_departamento}}
     </label>
+    {{-- {{ $dep->cod_departamento }} - {{ $dep->id_edificio }} --}}
     @include('departments.fill_empleados_departamento_estructura')
 </li>
 @php

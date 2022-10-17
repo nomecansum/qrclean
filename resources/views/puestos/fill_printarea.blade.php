@@ -53,15 +53,16 @@
         </div>
         <div class="w-100 bg-white text-center font-bold texto_qr" style="color: {{$color_texto}}; background-color: #fff; font-size: {{ $r->font_size??14 }}px">
             @if(isset($r->mca_icono)&&(int)$r->mca_icono==2)<i class="{{$puesto->icono_tipo}}"></i>@endif  {{ nombrepuesto($puesto) }}
+            @if(isset($r->footer) && (int)$r->footer==4 ) <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$puesto->img_logo) }}" style="width: 30px;" alt="" class="ml-3"> @endif
         </div>
-        @if(isset($r->footer) && (int)$r->footer>1)
+        @if(isset($r->footer) && (int)$r->footer>1 && (int)$r->footer<4) 
     
         <div class="w-100 d-flex flex-row ">
             <div class="bg-white font-bold texto_qr col-md-10 text-start" style="color: {{$color_texto}}; background-color: #fff; font-size: {{ $r->font_size??14 }}px;">
                 @if($r->footer==3) {{ $puesto->nom_cliente }} @endif 
             </div>
             <div class="col-md-2 text-end mr-1">
-                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$puesto->img_logo) }}" style="width: 30px;" alt="" class="logo rounded">
+                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.$puesto->img_logo) }}" style="width: 30px;" alt="" >
             </div>
         </div>
         @endif

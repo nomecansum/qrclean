@@ -105,9 +105,10 @@ try{
                 <div class="col-md-2">
                     <label for="val_color">Footer <i class="fa-regular fa-diagram-successor"></i></label><br>
                     <select name="footer" id="footer" class="form-control refrescar_form">
-                            <option value="1" {{ $r->footer??1==1?'selected':'' }}>Ninguno</option>
-                            <option value="2" {{ $r->mca_icono??1==2?'selected':'' }}>Logo</option>
-                            <option value="3" {{ $r->mca_icono??1==3?'selected':'' }}>Logo y nombre</option>
+                            <option value="1" {{ $r->footer==1?'selected':'' }}>Ninguno</option>
+                            <option value="2" {{ $r->footer==2?'selected':'' }}>Logo</option>
+                            <option value="3" {{ $r->footer==3?'selected':'' }}>Logo y nombre</option>
+                            <option value="4" {{ $r->footer==4?'selected':'' }}>Logo junto a puesto</option>
                     </select>
                 </div>
             </div>

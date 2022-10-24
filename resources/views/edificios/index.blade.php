@@ -149,7 +149,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
 	    $('.espacios').addClass('active active-sub');
-        $('.edificios').addClass('active-link');
+        $('.edificios').addClass('active');
         
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/edificios/create') }}", function(){

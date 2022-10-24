@@ -163,7 +163,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
 	    $('.espacios').addClass('active active-sub');
-        $('.plantas').addClass('active-link');
+        $('.plantas').addClass('active');
 
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/plantas/create') }}", function(){

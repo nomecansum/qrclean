@@ -139,7 +139,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
 	    $('.espacios').addClass('active active-sub');
-        $('.tags').addClass('active-link');
+        $('.tags').addClass('active');
         
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/tags/edit/0') }}", function(){

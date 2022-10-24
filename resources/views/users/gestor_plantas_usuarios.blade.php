@@ -100,7 +100,7 @@
 	$('.configuracion').addClass('active active-sub');
     $('.menu_parametrizacion').addClass('active active-sub');
     $('.menu_usuarios').addClass('active active-sub');
-	$('.plantas_usuarios').addClass('active-link');
+	$('.plantas_usuarios').addClass('active');
     
     $('.chkplanta').click(function(){
         if($(this).is(':checked')){

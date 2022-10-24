@@ -60,7 +60,7 @@ Route::get('/cookies','HomeController@cookies');
 
 //Login en dos pasos
 Route::post('/prelogin', 'Auth\LoginController@prelogin')->name('prelogin');
-Route::get('/prelogin',function(){
+Route::get('/prelogin',function () {
     return redirect('/login')->withErrors(['email'=>'El usuario no existe o la contraseña no es valida']);
 });
 Route::get('/logout','Auth\LoginController@logout')->name('logout');;
@@ -82,7 +82,7 @@ Route::get('/auth/microsoft/callback','Auth\LoginController@authToMicrosoftcallb
 // Route::post('/auth/saml_login','Auth\LoginController@saml_login');
 // Route::get('/saml2/{uuid}/login','Auth\LoginController@saml_login');
 
-// Route::post('/auth/{uuid}/acs','Auth\LoginController@saml_acs');
+
 Route::get('/auth/saml_error','Auth\LoginController@saml_error');
 
 Route::get('/auth/saml_logout','Auth\LoginController@saml_logout');
@@ -94,7 +94,7 @@ Route::post('/auth/saml_logout','Auth\LoginController@saml_logout');
 //// RUTAS PARA LA LANDING PAGE DE EVENTOS
 ////
 route::view('/welcome','landing.welcome');
-Route::group(['prefix' => '/landing'], function() {
+Route::group(['prefix' => '/landing'], function () {
     Route::post('save', 'LandingController@save');
     Route::get('products','LandingController@products');
     Route::post('products/save','LandingController@save_product');
@@ -110,7 +110,7 @@ Route::get('/index', 'HomeController@index');
 //Tareas programadas
 Route::get('/runTask2/{id}/', 'TareasController@ejecutar_tarea_web');
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
 
     //mIPERFIL
     Route::get('/miperfil/{id}','UsersController@miperfil')->name('users.miperfil');
@@ -219,7 +219,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     ////////////////////GESTION DE CLIENTES////////////////////
-    Route::group(['prefix' => 'clientes'], function() {
+    Route::group(['prefix' => 'clientes'], function () {
         Route::get('/',['middleware'=>'permissions:["Clientes"],["R"]', 'uses' => 'CustomersController@index'])->name('clientes.index');
         Route::get('create',['middleware'=>'permissions:["Clientes"],["C"]', 'uses' => 'CustomersController@create']);
         Route::post('save',['middleware'=>'permissions:["Clientes"],["W"]', 'uses' => 'CustomersController@save']);
@@ -231,7 +231,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     ////////////////////GESTION DE PUESTOS////////////////////
-    Route::group(['prefix' => 'puestos'], function() {
+    Route::group(['prefix' => 'puestos'], function () {
         Route::get('/',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@index'])->name('puestos.index');
         Route::post('/',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@search']);
 	    Route::get('/edit/{id}',['middleware'=>'permissions:["Puestos"],["W"]', 'uses' => 'PuestosController@edit']);
@@ -302,7 +302,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     ////////////////////////////   DEPARTAMENTOS   ////////////////////////////////
-	Route::group(['prefix' => 'departments'], function() {
+	Route::group(['prefix' => 'departments'], function () {
 	    Route::get('/',['middleware'=>'permissions:["Departamentos"],["R"]', 'uses' => 'DepartmentsController@index'])->name('departamentos.index');
 		Route::get('create',['middleware'=>'permissions:["Departamentos"],["W"]', 'uses' => 'DepartmentsController@create']);
 		Route::post('save',['middleware'=>'permissions:["Departamentos"],["W"]', 'uses' => 'DepartmentsController@save']);
@@ -313,7 +313,7 @@ Route::group(['middleware' => 'auth'], function() {
 	});
 
     ////////////////////////////   COLECTIVOS   ////////////////////////////////
-    Route::group(['prefix' => 'collective'], function() {
+    Route::group(['prefix' => 'collective'], function () {
         Route::get('/',['middleware'=>'permissions:["Colectivos"],["R"]', 'uses' => 'CollectiveController@index'])->name('departamentos.index');
         Route::get('create',['middleware'=>'permissions:["Colectivos"],["W"]', 'uses' => 'CollectiveController@edit']);
         Route::post('save',['middleware'=>'permissions:["Colectivos"],["W"]', 'uses' => 'CollectiveController@save']);
@@ -408,7 +408,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     ////////////////////ENCUESTAS PARA PUESTOS////////////////////
-    Route::group(['prefix' => 'encuestas'], function() {
+    Route::group(['prefix' => 'encuestas'], function () {
         Route::get('/',['middleware'=>'permissions:["Encuestas"],["R"]', 'uses' => 'EncuestasController@index'])->name('encuestas.index');
         Route::get('create',['middleware'=>'permissions:["Encuestas"],["C"]', 'uses' => 'EncuestasController@create']);
         Route::post('save',['middleware'=>'permissions:["Encuestas"],["W"]', 'uses' => 'EncuestasController@store']);
@@ -420,7 +420,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     ////////////////////GESTION DE CONTACTOS EN FERIAs////////////////////
-    Route::group(['prefix' => 'ferias'], function() {
+    Route::group(['prefix' => 'ferias'], function () {
         Route::get('/',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@index'])->name('ferias.index');
         Route::get('create',['middleware'=>'permissions:["Ferias"],["C"]', 'uses' => 'FeriasController@create']);
         Route::post('save',['middleware'=>'permissions:["Ferias"],["W"]', 'uses' => 'FeriasController@store']);
@@ -444,7 +444,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     ////////////////////TAREAS////////////////////
-	Route::group(['prefix' => 'tasks'], function() {
+	Route::group(['prefix' => 'tasks'], function () {
 	    Route::get('/',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@index']);
 	    Route::get('/create',['middleware' => 'permissions:["Tareas programadas"],["R"]', 'uses' => 'TareasController@create']);
 	    Route::post('/save',['middleware' => 'permissions:["Tareas programadas"],["C"]', 'uses' => 'TareasController@save']);
@@ -461,7 +461,7 @@ Route::group(['middleware' => 'auth'], function() {
 	});
 
     ////////////////////INFORMES////////////////////
-	Route::group(['prefix' => 'reports'], function() {
+	Route::group(['prefix' => 'reports'], function () {
 	    Route::get('/users',['middleware' => 'permissions:["Informes > Puestos por usuario"],["R"]', 'uses' => 'ReportsController@users_index']);
 	    Route::post('/users/filter',['middleware' => 'permissions:["Informes > Puestos por usuario"],["R"]', 'uses' => 'ReportsController@users']);
 
@@ -513,7 +513,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::group(['prefix' => 'MKD'], function () {
         Route::get('/','MKDController@index');
         Route::post('/gen_config','MKDController@gen_config');
-    });  
+    });
 
     ////////////////////////////   GESTION DE TURNOS DE ASISTENCIA  ////////////////////////////////
     Route::group(['prefix' => 'turnos'], function () {
@@ -521,7 +521,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/edit/{id}',['middleware'=>'permissions:["Turnos"],["R"]', 'uses' =>   'TurnosController@edit']);
         Route::post('/save',['middleware'=>'permissions:["Turnos"],["W"]', 'uses' =>   'TurnosController@save']);
         Route::get('delete/{id}',['middleware'=>'permissions:["Turnos"],["D"]', 'uses' => 'TurnosController@delete']);
-    });  
+    });
 
     ////////////////////////////   FESTIVOS   ////////////////////////////////
 	Route::group(['prefix' => 'festives'], function() {
@@ -559,8 +559,32 @@ Route::group(['middleware' => 'auth'], function() {
         Route::post('/acciones/reindex/{regla}',['middleware' => 'permissions:["Eventos"],["W"]', 'uses' => 'EventosController@acciones_reindex']);
         Route::get('/detalle_evento/{id}',['middleware' => 'permissions:["Eventos"],["R"]', 'uses' => 'EventosController@detalle_evento']);
         Route::get('/log_evento/{id}/{fecha}/{hora}',['middleware' => 'permissions:["Eventos"],["R"]', 'uses' => 'EventosController@ver_log_evento']);
-        
         Route::get('/log_tarea/{id}/{fecha}','EventosController@log_tarea_web');
+    });
+
+     ////////////////////GESTION DE TRABAJOS////////////////////
+     Route::group(['prefix' => 'trabajos'], function () {
+        Route::get('/tipos', ['middleware'=>'permissions:["Trabajos tipos"],["R"]','uses'=>'TrabajosController@tipos_index'])->name('trabajos.index');
+        Route::get('/tipos/edit/{id?}',['middleware'=>'permissions:["Trabajos tipos"],["W"]','uses'=>'TrabajosController@edit_tipo'])->where('id', '[0-9]+');
+        Route::post('/tipos/save',['middleware'=>'permissions:["Trabajos tipos"],["W"]','uses'=>'TrabajosController@update_tipo']);
+        Route::get('/tipos/delete/{id}',['middleware'=>'permissions:["Trabajos tipos"],["D"]','uses'=>'TrabajosController@delete_tipo'])->where('id', '[0-9]+');
+        Route::get('/grupos',['middleware'=>'permissions:["Trabajos"],["R"]','uses'=>'TrabajosController@grupos_index'])->name('trabajos_grupos.index');
+        Route::get('/grupos/edit/{id}',['middleware'=>'permissions:["Trabajos"],["W"]','uses'=>'TrabajosController@edit_grupo'])->where('id', '[0-9]+');
+        Route::post('/grupos/save',['middleware'=>'permissions:["Trabajos"],["W"]','uses'=>'TrabajosController@update_grupo']);
+        Route::get('/grupos/delete/{id}',['middleware'=>'permissions:["Trabajos"],["D"]','uses'=>'TrabajosController@delete_tipo'])->where('id', '[0-9]+');
+        Route::get('/contratas',['middleware'=>'permissions:["Trabajos contratas"],["R"]','uses'=>'TrabajosController@contratas_index'])->name('trabajos_contratas.index');
+        Route::get('/contratas/edit/{id}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@edit_contrata'])->where('id', '[0-9]+');
+        Route::post('/contratas/save',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@update_contrata']);
+        Route::get('/contratas/delete/{id}',['middleware'=>'permissions:["Trabajos contratas"],["D"]','uses'=>'TrabajosController@delete_contrata'])->where('id', '[0-9]+');
+        Route::get('/contratas/usuarios_internos/{id}/{id_perfil?}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@usuarios_internos'])->where('id', '[0-9]+');
+        Route::get('/contratas/usuarios_genericos/{id}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@usuarios_genericos'])->where('id', '[0-9]+');
+        Route::post('/contratas/crear_usuarios',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@crear_usuarios_genericos']);
+        Route::get('/contratas/set_usuarios_contrata/{accion}/{id_contrata}/{id_operario}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@set_usuarios_contrata']);
+        Route::get('/planes',['middleware'=>'permissions:["Trabajos planificacion"],["R"]','uses'=>'TrabajosController@planes_index'])->name('trabajos_planes.index');
+        Route::get('/planes/edit/{id}',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@edit_plan'])->where('id', '[0-9]+');
+        Route::post('/planes/save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@update_plan']);
+        Route::get('/planes/delete/{id}',['middleware'=>'permissions:["Trabajos planificacion"],["D"]','uses'=>'TrabajosController@delete_plan'])->where('id', '[0-9]+');
+        Route::post('/planes/detalle',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@get_plan']);
     });
 
      ///////////////////COMBOS AJAX///////////////////
@@ -589,7 +613,6 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/list', 'NotifController@list')->name('notificaciones.list');
         Route::get('/leida', 'NotifController@leida')->name('notificaciones.leida');
         Route::get('/ver/{id}', 'NotifController@index')->name('notificaciones.leida');
-
     });
 });
 

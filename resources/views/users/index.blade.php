@@ -310,7 +310,7 @@
                     
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-info" id="btn_si_modificar">Modificar</button> 
+                    <button class="btn btn-info" id="btn_si_modificar">Modificar</button>
                     <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
                 </div>
             </div>
@@ -325,7 +325,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
         $('.menu_usuarios').addClass('active active-sub');
-        $('.usuarios').addClass('active-link');
+        $('.usuarios').addClass('active');
         
         var searchIDs;
         $('#formbuscador').submit(ajax_filter);
@@ -386,7 +386,7 @@
             $.post('{{url('/users/edit_modificar_usuarios')}}', {_token: '{{csrf_token()}}',id_usuario: searchIDs}, function(data, textStatus, xhr) {
                 $('#modificar-usuario .modal-body').html(data);
                     //fin_espere();
-                });       
+                });
         });
 
 

@@ -146,7 +146,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
         $('.tipos_incidencia').addClass('active active-sub');
-        $('.incidencias_causas').addClass('active-link');
+        $('.incidencias_causas').addClass('active');
         
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/incidencias/causas/edit/0') }}", function(){

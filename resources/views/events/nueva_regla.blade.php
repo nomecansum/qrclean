@@ -173,11 +173,11 @@
                 <div class="col-md-12">
                     <div class="card" >
                         <div class="card-header bg-white">
-                            <h4 class="mt-2 ml-2" >Acciones</h4>                          
+                            <h4 class="mt-2 ml-2" >Acciones</h4>
                                 <div class="dropdown text-end">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-plus-circle"></i> Añadir 
+                                            <i class="fas fa-plus-circle"></i> Añadir
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item nueva_accion p-1"  id="nueva_iteracion" data-tipo="iteracion" href="javascript:void(0)"><i class="fad fa-recycle" style="width:20px"></i> {{ __('eventos.iteracion') }}</a></li>
@@ -204,7 +204,7 @@
     <script>
         $('.configuracion').addClass('active active-sub');
         $('.menu_utilidades').addClass('active active-sub');
-        $('.eventos').addClass('active-link');
+        $('.eventos').addClass('active');
     </script>
 
 <script>

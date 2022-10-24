@@ -77,10 +77,10 @@
             <div class="d-flex flex-wrap">
                 @foreach($puestos_planta as $puesto)
                 @php
-                    $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();  
-                    $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();  
-                    $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();  
-                    $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
+                    $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();
+                    $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();
+                    $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();
+                    $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();
                     $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"P");
                     $es_reserva="P";
                     if(isMobile()){

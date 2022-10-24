@@ -228,7 +228,7 @@
 	var lista_ficheros=new Array(0);
 
 	$('.mantenimiento').addClass('active active-sub');
-	$('.incidencias').addClass('active-link');
+	$('.incidencias').addClass('active');
 
 	$('#btn-toggle').click(function(){
          $('#tabla').bootstrapTable('toggleView')

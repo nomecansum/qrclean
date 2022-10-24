@@ -806,18 +806,12 @@
                                             <div class="tab-base tab-vertical">
                                                 <!-- Nav tabs -->
                                                 <ul class="nav flex-column  nav-pills me-2" role="tablist">
-                                                    {{-- @php $primero=true;	@endphp
-                                                        @foreach($grupos as $grupo)
-                                                        <li class="nav-item" role="presentation"> 
-                                                            <a class="nav-link  {{ ($primero===true) ? "active" :"" }}" data-toggle="tab" data-bs-target="#{{ $grupo->des_grupo }}"  type="button" role="tab" aria-controls="{{ $grupo->des_grupo }}" aria-selected="{{ ($primero===true) ? "true" :"false" }}"><span><i class="{{ $grupo->icono }}"></i></span>&nbsp;&nbsp;{{ $grupo->des_grupo }}</a>
-                                                        </li>
-                                                        @php $primero=false;	@endphp
-                                                    @endforeach --}}
+
                                                     @php $primero=true;	@endphp
-                                                    @foreach($grupos as $grupo)	
+                                                    @foreach($grupos as $grupo)
                                                         @php
-                                                            $cuenta_secciones=$secciones->where('des_grupo',$grupo->des_grupo)->count();	
-                                                        @endphp		
+                                                            $cuenta_secciones=$secciones->where('des_grupo',$grupo->des_grupo)->count();
+                                                        @endphp
                                                         <li class="nav-item {{ ($primero===true) ? "active" :"" }}"  role="presentation">
                                                             <a class="nav-link {{ ($primero===true) ? "active" :"" }}" data-bs-toggle="tab" data-bs-target="#{{  str_replace(" ","_",$grupo->des_grupo) }}" type="button" role="tab" aria-controls="{{ $grupo->des_grupo }}" aria-selected="{{ ($primero===true) ? "true" :"false" }}"><i class="{{ $grupo->icono }}"></i></span>&nbsp;&nbsp;{{ $grupo->des_grupo }} <span class="badge bg-primary ml-2 float-md-end">{{ $cuenta_secciones }}</span></a>
                                                         </li>
@@ -829,17 +823,17 @@
                                                     @php $primero=true;	@endphp
                                                     @foreach($grupos as $grupo)
                                                         @if($grupo->des_grupo != "")
-                                                            <div id="{{ $grupo->des_grupo }}" class="tab-pane fade {{ ($primero===true) ? "active show" :"" }}" role="tabpanel" aria-labelledby="{{ $grupo->des_grupo }}-tab">    
+                                                            <div id="{{ $grupo->des_grupo }}" class="tab-pane fade {{ ($primero===true) ? "active show" :"" }}" role="tabpanel" aria-labelledby="{{ $grupo->des_grupo }}-tab">
                                                                 @php $primero = false; @endphp
-                                                                <!--h3>{{ $grupo->des_grupo }}</h3-->
+                                                                {{ $grupo->des_grupo }}
                                                                 <table class="table table-responsive table-hover" style="font-size:12px">
                                                                     <thead>
                                                                         <tr>
                                                                             @foreach ($niveles as $n)
-                                                                                <td class="text-center celda_{{ $n->cod_nivel }}" style="font-size: 14px; font-weight: bold">
+                                                                                <th class="text-center celda_{{ $n->cod_nivel }}" style="font-size: 14px; font-weight: bold">
                                                                                     <span style="color: #fd7e14" class="tooltipster" data-toggle="tooltip"  title="Los permisos en naranja corresponden a permisos especificos para el usuario">{{ $users->nom_usuario }}</span>
                                                                                     <span class="tooltipster" data-toggle="tooltip"  title="Los permisos en gris corresponden a permisos heredados del perfil {{ $n->des_nivel_acceso }}" style="color: #aaa">({{$n->des_nivel_acceso}})</span>
-                                                                                </td>
+                                                                                </th>
                                                                             @endforeach
                                                                         </tr>
                                                                     </thead>
@@ -913,7 +907,7 @@
         });
 
         $('.configuracion').addClass('active active-sub');
-	    $('.usuarios').addClass('active-link');
+	    $('.usuarios').addClass('active');
         @if(isSupervisor($users->id))
             $(function(){
                 $('#puestos_usuario').load("{{ url('users/puestos_supervisor/'.$users->id) }}")
@@ -941,7 +935,7 @@
         $(".select2-filtro").select2({
             placeholder: "Todos",
             allowClear: true,
-            @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
+            @desktop width: "90%", @elsedesktop width: "75%", @enddesktop
             
         });
     
@@ -967,7 +961,7 @@
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {
                     console.log(errorThrown);
-            });	
+            });
         })
         
         $('#btn_generar_password').click(function(event){
@@ -979,7 +973,7 @@
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {
                     console.log(errorThrown);
-            });	
+            });
         })
     
         $('.notsearch').select2({
@@ -1073,7 +1067,7 @@
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {
                     console.log(errorThrown);
-            });	
+            });
         })
       
     // Initialize the calendar

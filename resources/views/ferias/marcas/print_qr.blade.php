@@ -106,7 +106,7 @@
 @section('scripts')
 <script>
     $('.ferias').addClass('active active-sub');
-	$('.ferias_marcas').addClass('active-link');
+	$('.ferias_marcas').addClass('active');
 
     $('#btn_print').click(function(){
         $('#printarea:visible').printThis({

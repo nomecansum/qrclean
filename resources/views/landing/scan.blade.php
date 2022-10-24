@@ -136,10 +136,10 @@
 
         @if($tipo_scan=="limpieza")
             $('.limpieza').addClass('active active-sub');
-            $('.scan_ronda').addClass('active-link');
+            $('.scan_ronda').addClass('active');
         @else
             //$('.limpieza').addClass('active active-sub');
-            $('.main_scan').addClass('active-link');
+            $('.main_scan').addClass('active');
         @endif
        
 

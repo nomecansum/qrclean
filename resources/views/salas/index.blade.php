@@ -56,7 +56,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
 	    $('.espacios').addClass('active active-sub');
-        $('.salas').addClass('active-link');
+        $('.salas').addClass('active');
 
         $('.btn_fecha').click(function(){
             picker.open('#fecha_ver');

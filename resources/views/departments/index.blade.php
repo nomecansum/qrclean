@@ -143,7 +143,7 @@
         $('.configuracion').addClass('active active-sub');
 		$('.menu_parametrizacion').addClass('active active-sub');
 		$('.menu_usuarios').addClass('active active-sub');
-        $('.departamentos').addClass('active-link');
+        $('.departamentos').addClass('active');
 
 		function editar(id){
 			$('#editorCAM').load("{{ url('/departments/edit/') }}"+"/"+id, function(){

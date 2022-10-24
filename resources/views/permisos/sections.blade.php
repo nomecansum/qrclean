@@ -94,7 +94,7 @@
 						data-show-columns-toggle-all="true"
 						data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
 						data-page-size="50"
-						data-pagination="true" 
+						data-pagination="true"
 						data-toolbar="#all_toolbar"
 						data-buttons-class="secondary"
 						data-show-button-text="true">
@@ -116,7 +116,7 @@
 			                			<td style="position: relative;"><i class="{{ $secc->icono }}" style="font-size: 24px"></i> {{$secc->des_grupo}}
 			                				<div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
 												<div class="btn-group btn-group pull-right ml-1" role="group">
-													<a href="#"  class="btn btn-info btn-xs btn_editar add-tooltip" title="Editar seccion" data-seccion="{{ $secc->cod_seccion }}" onclick="editar({{ $secc->cod_seccion,$secc->des_seccion,$secc->des_grupo,$secc->val_tipo }})" data-nombre="{{$secc->des_seccion}}" data-tipo="{{ $secc->val_tipo}}" data-grupo="{{$secc->des_grupo}}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
+													<a href="#"  class="btn btn-info btn-xs btn_editar add-tooltip" title="Editar seccion" data-seccion="{{ $secc->cod_seccion }}" onclick="editar({{ $secc->cod_seccion}},'{{$secc->des_seccion }}','{{ $secc->des_grupo }}' ,'{{ $secc->val_tipo }}')" data-nombre="{{$secc->des_seccion}}" data-tipo="{{ $secc->val_tipo}}" data-grupo="{{$secc->des_grupo}}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
 													<a href="#eliminar-usuario-{{$secc->cod_seccion}}" data-target="#eliminar-usuario-{{$secc->cod_seccion}}" title="Borrar seccion" onclick="del({{ $secc->cod_seccion }})" data-toggle="modal" class="btn btn-danger btn-xs add-tooltip"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>
 												</div>
 			                				</div>
@@ -129,7 +129,7 @@
 															<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
 																<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
 															</button>
-														</div>    
+														</div>
 														<div class="modal-body">
 															¿Borrar seccion {{$secc->des_seccion}}?
 														</div>
@@ -182,14 +182,8 @@
 	
 	$('.configuracion').addClass('active active-sub');
 	$('.menu_permisos').addClass('active active-sub');
-	$('.secciones').addClass('active-link');
-	
-	$('.icons_select2').select2({
-		width: "100%",
-		templateSelection: iformat,
-		templateResult: iformat,
-		allowHtml: true
-	});
+	$('.secciones').addClass('active');
+
 
 	function nueva(){
 		$('#editor').show();
@@ -209,9 +203,7 @@
 		$('#des_seccion').val(des);
 		$('#val_tipo').val(tipo);
 		$('#des_grupo').val(grupo);
-		$('#des_grupo').select2('data', { a_key: grupo});
 		$('#formseccion').attr("action","{{url('sections/update')}}")
-		$("#des_grupo").select2("val", grupo);
 	}
 
 	function del(id){

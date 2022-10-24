@@ -56,7 +56,7 @@
 					data-show-columns-toggle-all="true"
 					data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
 					data-page-size="50"
-					data-pagination="true" 
+					data-pagination="true"
 					data-toolbar="#all_toolbar"
 					data-buttons-class="secondary"
 					data-show-button-text="true"
@@ -99,12 +99,12 @@
 											<div class="modal-dialog modal-md">
 												<div class="modal-content">
 													<div class="modal-header">
-														<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+														<div><img src="/img/Mosaic_brand_20.png" alt="qrclean" class="float-right"></div>
 														<h1 class="modal-title text-nowrap">Borrar cliente </h1>
 														<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
 															<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
 														</button>
-													</div>    
+													</div>
 
 													<div class="modal-body text-start">
 														<div class="alert alert-danger"><b>Esta opción no se podrá deshacer! Seguro que quiere seguir?</b></div><br>
@@ -141,7 +141,7 @@
 	$('.configuracion').addClass('active active-sub');
 	$('.menu_parametrizacion').addClass('active active-sub');
 	$('.espacios').addClass('active active-sub');
-	$('.clientes').addClass('active-link');
+	$('.clientes').addClass('active');
 
 	$('#btn_nueva_puesto').click(function(){
        $('#editorCAM').load("{{ url('/clientes/edit/0') }}", function(){

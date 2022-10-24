@@ -639,21 +639,27 @@ function iniciales ($nombre,$cantidad){
     return $acronym;
 }
 
-function icono_nombre($nombre,$height=50,$font=18){
+function icono_nombre($nombre,$height=50,$font=18,$top=-1){
 
     $padding=intdiv($height,11);
     $rand=Str::random(9);
     $acronym = iniciales($nombre,2);
-    if($height<50){
-        $top_letras=-10;
-        $left_letras=0;
-    } else {
-        $top_letras=0;
-        $left_letras=2;
-    }
+    // if($height<30){
+    //     $top_letras=-1;
+    //     $left_letras=0;
+    // } elseif($height<50){
+    //     $top_letras=-10;
+    //     $left_letras=0;
+    // } else {
+    //     $top_letras=0;
+    //     $left_letras=2;
+    // }
+    $top_letras=$top*($height/10);
+    $left_letras=2;
+
    
     //return '<span class="round" id="'.$rand.'" style="text-transform: uppercase; background-color: '.App\Classes\RandomColor::one().'">'.$acronym.'</span>';
-    return '<div class="round add-tooltip" id="'.$rand.'" style="line-height: 50px; padding: 0px; font-weight: bold; font-size: '.$font.'px; width: '.$height.'px;height: '.$height.'px; text-transform: uppercase; background-color: '.genColorCodeFromText($nombre).'" data-toggle="tooltip" data-placement="bottom" title="'.$nombre.'"><span style="position: relative; top: '.$top_letras.'%; left:'.$left_letras.'%;">'.$acronym.'</span></div>';
+    return '<div class="round add-tooltip" id="'.$rand.'" style="line-height: 50px; padding: 0px; font-weight: bold; font-size: '.$font.'px; width: '.$height.'px;height: '.$height.'px; text-transform: uppercase; background-color: '.genColorCodeFromText($nombre).'" data-toggle="tooltip" data-placement="bottom" title="'.$nombre.'"><span style="position: relative; top: '.$top_letras.'px; left:'.$left_letras.'%;">'.$acronym.'</span></div>';
 }
 
 function randomcolor(){
@@ -710,7 +716,7 @@ function checkPermissions($secciones = [],$permisos = [])
             }
         }
     }
-    if ($encontrado && $b >= (count($permisos)*count($secciones))) {
+    if ($encontrado && $b > 0) {
         return true;
     }
     return false;
@@ -901,6 +907,27 @@ function validar_acceso_tabla($id,$tabla){
             $campo="cod_colectivo";
             $ruta="colectivos.index";
             break;
+        case "trabajos":
+            $descriptivo="trabajo";
+            $campo="id_trabajo";
+            $ruta="trabajos.index";
+            break;
+        case "grupos_trabajos":
+            $descriptivo="grupo de trabajos";
+            $campo="id_grupo";
+            $ruta="trabajos_grupos.index";
+            break;
+        case "contratas":
+            $descriptivo="contrata";
+            $campo="id_contrata";
+            $ruta="contratas.index";
+            break;
+        case "trabajos_planes":
+            $descriptivo="plan";
+            $campo="id_plan";
+            $ruta="trabajos_planes.index";
+            break;
+            
         default:
             $descriptivo=$tabla;
     }

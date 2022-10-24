@@ -132,7 +132,7 @@
 	$('.configuracion').addClass('active active-sub');
     $('.menu_parametrizacion').addClass('active active-sub');
     $('.menu_usuarios').addClass('active active-sub');
-	$('.puestos_supervisores').addClass('active-link');
+	$('.puestos_supervisores').addClass('active');
     
     $('.chkpuesto').click(function(){
         if($(this).is(':checked'))

@@ -169,7 +169,7 @@
 	var lista_ficheros=new Array(0);
 
 	$('.ferias').addClass('active active-sub');
-	$('.ferias_marcas').addClass('active-link');
+	$('.ferias_marcas').addClass('active');
 
 	$('#btn-toggle').click(function(){
          $('#tabla').bootstrapTable('toggleView')

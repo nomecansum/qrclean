@@ -157,7 +157,7 @@
 @section('scripts')
     <script>
         $('.parametrizacion').addClass('active active-sub');
-        $('.mapa').addClass('active-link');
+        $('.mapa').addClass('active');
         
         $('.btn_fecha').click(function(){
             console.log("click");

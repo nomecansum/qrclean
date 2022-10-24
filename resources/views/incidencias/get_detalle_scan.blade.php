@@ -72,7 +72,7 @@
 @section('scripts')
     <script>
         $('.mantenimiento').addClass('active active-sub');
-        $('.scan').addClass('active-link');
+        $('.scan').addClass('active');
 
         function cierre_incidencia(id){
             $('#body_cierre').load("{{ url('/incidencias/form_cierre/') }}/"+id);

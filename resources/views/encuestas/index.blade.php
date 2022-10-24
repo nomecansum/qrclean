@@ -194,7 +194,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
 	    $('.espacios').addClass('active active-sub');
-        $('.encuestas').addClass('active-link');
+        $('.encuestas').addClass('active');
 
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/encuestas/create') }}", function(){

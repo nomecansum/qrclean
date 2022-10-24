@@ -147,7 +147,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
 	    $('.espacios').addClass('active active-sub');
-        $('.puestostipos').addClass('active-link');
+        $('.puestostipos').addClass('active');
         
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/puestos/tipos/edit/0') }}", function(){

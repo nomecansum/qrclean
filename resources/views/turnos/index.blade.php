@@ -143,7 +143,7 @@
 	$('.configuracion').addClass('active active-sub');
     $('.menu_parametrizacion').addClass('active active-sub');
 	$('.menu_usuarios').addClass('active active-sub');
-	$('.turnos').addClass('active-link');
+	$('.turnos').addClass('active');
 
 
 

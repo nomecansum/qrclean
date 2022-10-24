@@ -243,5 +243,50 @@
         "model-name": "notif",
         "resource-file": "notifs.json",
         "table-name": "notificaciones"
+    },
+    {
+        "model-name": "trabajos",
+        "resource-file": "trabajos.json",
+        "table-name": "trabajos"
+    },
+    {
+        "model-name": "trabajos_tipos",
+        "resource-file": "trabajos_tipos.json",
+        "table-name": "trabajos_tipos"
+    },
+    {
+        "model-name": "trabajos_grupos",
+        "resource-file": "trabajos_grupos.json",
+        "table-name": "trabajos_grupos"
+    },
+    {
+        "model-name": "grupos_trabajos",
+        "resource-file": "grupos_trabajos.json",
+        "table-name": "grupos"
+    },
+    {
+        "model-name": "grupos",
+        "resource-file": "grupos.json",
+        "table-name": "grupos_trabajos"
+    },
+    {
+        "model-name": "operarios",
+        "resource-file": "operarios.json",
+        "table-name": "contratas_operarios"
+    },
+    {
+        "model-name": "contratas",
+        "resource-file": "contratas.json",
+        "table-name": "contratas"
+    },
+    {
+        "model-name": "planes_detalle",
+        "resource-file": "planes_detalles.json",
+        "table-name": "trabajos_planes_detalle"
+    },
+    {
+        "model-name": "planes",
+        "resource-file": "planes.json",
+        "table-name": "trabajos_planes"
     }
 ]

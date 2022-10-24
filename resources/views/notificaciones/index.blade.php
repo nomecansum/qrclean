@@ -48,6 +48,6 @@
 @section('scripts')
     <script>
         $('.SECCION_MENU').addClass('active active-sub');
-        $('.ITEM_MENU').addClass('active-link');
+        $('.ITEM_MENU').addClass('active');
     </script>
 @endsection

@@ -167,7 +167,7 @@
     <script>
         $('.configuracion').addClass('active active-sub');
         $('.menu_utilidades').addClass('active active-sub');
-        $('.eventos').addClass('active-link');
+        $('.eventos').addClass('active');
 
         function del(id){
             $('#eliminar-regla-'+id).modal('show');

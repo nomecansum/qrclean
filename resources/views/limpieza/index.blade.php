@@ -136,7 +136,7 @@
 
 
         $('{{ $entidades['menu1'] }}').addClass('active active-sub');
-        $('{{ $entidades['menu2'] }}').addClass('active-link');
+        $('{{ $entidades['menu2'] }}').addClass('active');
        
        $('#btn-toggle').click(function(){
          $('#tablarondas').bootstrapTable('toggleView')

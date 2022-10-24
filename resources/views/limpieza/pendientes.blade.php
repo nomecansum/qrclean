@@ -40,7 +40,7 @@
         if (tooltip.length)tooltip.tooltip();
 
         $('.limpieza').addClass('active active-sub');
-        $('.pendientes').addClass('active-link');
+        $('.pendientes').addClass('active');
 
         function post_procesado(puesto){
             $('puesto'+puesto).hide();

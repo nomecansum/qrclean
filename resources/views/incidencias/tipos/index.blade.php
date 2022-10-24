@@ -219,7 +219,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
         $('.tipos_incidencia').addClass('active active-sub');
-        $('.incidencias_tipos').addClass('active-link');
+        $('.incidencias_tipos').addClass('active');
         
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/incidencias/tipos/edit/0') }}", function(){

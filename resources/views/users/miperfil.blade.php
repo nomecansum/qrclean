@@ -217,7 +217,7 @@
         });
 
         $('.configuracion').addClass('active active-sub');
-	    $('.usuarios').addClass('active-link');
+	    $('.usuarios').addClass('active');
         @if(isSupervisor($users->id))
             $(function(){
                 $('#puestos_usuario').load("{{ url('users/puestos_supervisor/'.$users->id) }}")

@@ -153,6 +153,18 @@ class CombosController extends Controller
                 ->orderby('clientes.nom_cliente')
                 ->orderby('des_colectivo')
                 ->get(),
+            
+            "zonas" => DB::table('plantas_zonas')
+                ->select('clientes.id_cliente','clientes.nom_cliente','plantas_zonas.key_id as id_zona','plantas_zonas.des_zona','edificios.id_edificio','edificios.des_edificio','plantas.id_planta','plantas.des_planta')
+                ->join('plantas','plantas_zonas.id_planta','plantas.id_planta')
+                ->join('clientes','clientes.id_cliente','plantas.id_cliente')
+                ->join('edificios','plantas.id_edificio','edificios.id_edificio')
+                ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
+                ->orderby('des_edificio')
+                ->orderby('des_planta')
+                ->orderby('des_zona')
+                ->get(),
         ];
     }
 
@@ -173,6 +185,19 @@ class CombosController extends Controller
                     ->join('edificios','edificios.id_edificio','plantas.id_edificio')
                     ->whereIn('clientes.id_cliente',$r->cliente)
                     ->wherein('edificios.id_edificio',$r->edificio)
+                    ->get(),
+            
+            "zonas" => DB::table('plantas_zonas')
+                    ->select('clientes.id_cliente','clientes.nom_cliente','plantas_zonas.key_id as id_zona','plantas_zonas.des_zona','edificios.id_edificio','edificios.des_edificio','plantas.id_planta','plantas.des_planta')
+                    ->join('plantas','plantas_zonas.id_planta','plantas.id_planta')
+                    ->join('clientes','clientes.id_cliente','plantas.id_cliente')
+                    ->join('edificios','plantas.id_edificio','edificios.id_edificio')
+                    ->whereIn('clientes.id_cliente',$r->cliente)
+                    ->wherein('edificios.id_edificio',$r->edificio)
+                    ->orderby('clientes.nom_cliente')
+                    ->orderby('des_edificio')
+                    ->orderby('des_planta')
+                    ->orderby('des_zona')
                     ->get(),
 
             "puestos" => DB::table('puestos')
@@ -209,6 +234,20 @@ class CombosController extends Controller
 
         return
         [
+            "zonas" => DB::table('plantas_zonas')
+                    ->select('clientes.id_cliente','clientes.nom_cliente','plantas_zonas.key_id as id_zona','plantas_zonas.des_zona','edificios.id_edificio','edificios.des_edificio','plantas.id_planta','plantas.des_planta')
+                    ->join('plantas','plantas_zonas.id_planta','plantas.id_planta')
+                    ->join('clientes','clientes.id_cliente','plantas.id_cliente')
+                    ->join('edificios','plantas.id_edificio','edificios.id_edificio')
+                    ->whereIn('clientes.id_cliente',$r->cliente)
+                    ->wherein('edificios.id_edificio',$r->edificio)
+                    ->wherein('plantas.id_planta',$r->planta)
+                    ->orderby('clientes.nom_cliente')
+                    ->orderby('des_edificio')
+                    ->orderby('des_planta')
+                    ->orderby('des_zona')
+                    ->get(),
+
             "puestos" => DB::table('puestos')
                 ->select('clientes.id_cliente','clientes.nom_cliente','edificios.id_edificio','edificios.des_edificio','plantas.id_planta','plantas.des_planta','puestos.id_puesto','puestos.cod_puesto')
                 ->join('clientes','clientes.id_cliente','puestos.id_cliente')
@@ -269,9 +308,7 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('plantas.id_cliente',Auth::user()->id_cliente);
-                } else {
-                    $q->where('plantas.id_cliente',session('CL')['id_cliente']);
-                }
+                } 
             })
             ->get();
         return view('resources.combo_plantas',compact('plantas'));
@@ -286,9 +323,7 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('plantas.id_cliente',Auth::user()->id_cliente);
-                } else {
-                    $q->where('plantas.id_cliente',session('CL')['id_cliente']);
-                }
+                } 
             })
             ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_sala'))
             ->distinct()
@@ -303,9 +338,7 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
-                } else {
-                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
-                }
+                } 
             })
             ->get();
         return view('resources.combo_edificios',compact('edificios'));
@@ -321,9 +354,7 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
-                } else {
-                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
-                }
+                } 
             })
             ->orderby('nom_pais')
             ->distinct()
@@ -341,9 +372,7 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
-                } else {
-                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
-                }
+                } 
             })
             ->orderby('nom_region')
             ->distinct()
@@ -361,9 +390,7 @@ class CombosController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('edificios.id_cliente',Auth::user()->id_cliente);
-                } else {
-                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
-                }
+                } 
             })
             ->orderby('nombre')
             ->distinct()

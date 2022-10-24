@@ -140,7 +140,7 @@
 
     <script>
         $('.parametrizacion').addClass('active active-sub');
-        $('.ferias').addClass('active-link');
+        $('.ferias').addClass('active');
 
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/ferias/create') }}", function(){

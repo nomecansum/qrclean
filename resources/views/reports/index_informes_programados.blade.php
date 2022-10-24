@@ -291,7 +291,7 @@
     <script src="{{ asset('plugins/typeahead-js/main.js') }}"></script>
     <script>
         $('.informes').addClass('active active-sub');
-	    $('.inf_programados').addClass('active-link');
+	    $('.inf_programados').addClass('active');
         
         $('.fila').click(function(){
             $('#detalle_'+$(this).data('id')).toggle();

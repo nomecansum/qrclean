@@ -75,8 +75,8 @@
                 </li>
                 @endif
                 @if(checkPermissions(['Reservas'],['R']))
-                <li class="nav-item has-sub reservas">
-                    <a href="#" class="mininav-toggle nav-link "><i class="fa-light fa-calendar-day fs-5 me-2"></i>{{-- active --}}
+                <li class="nav-item has-sub ">
+                    <a href="#" class="mininav-toggle nav-link reservas"><i class="fa-light fa-calendar-day fs-5 me-2"></i>{{-- active --}}
                         <span class="nav-label">Reservas</span>
                     </a>
                     <!-- Dashboard submenu list -->
@@ -89,18 +89,18 @@
                 @endif
 
                 @if(checkPermissions(['Mi oficina'],['R']))
-                <li class="nav-item has-sub parametrizacion">
-                    <a href="#" class="mininav-toggle nav-link">
+                <li class="nav-item has-sub ">
+                    <a href="#" class="mininav-toggle nav-link parametrizacion">
                         <i class="fa-light fa-browser fs-5 me-2"></i>
                         @if(checkPermissions(['Parametrizacion'],['R']))<span class="nav-label">Mi oficina</span> @endif
                     </a>
                     
                     <!--Submenu-->
                     <ul class="mininav-content nav collapse">
-                        @if(checkPermissions(['Mapa puestos'],['R']))<li class="mapa  nav-item"><a href="/puestos/mapa"  class="text-nowrap nav-link"><i class="fad fa-th"></i> Mapa</a></li> @endif
-                        @if(checkPermissions(['Compañeros'],['R']))<li class="compas  nav-item"><a href="/puestos/compas"  class="text-nowrap nav-link"><i class="fa-duotone fa-users"></i> Mis compañeros</a></li> @endif
-                        @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class="salas text-nowrap nav-item"><a href="/salas" class="text-nowrap nav-link"><i class="fa-light fa-users-class"></i> Salas reunion</a></li> @endif
-                        @if(checkPermissions(['Incidencias > Mis incidencias'],['R']))<li class="incidencias  nav-item"><a href="/incidencias/mis_incidencias" class="text-nowrap nav-link"><i class="fa-light fa-exclamation-triangle"></i> Mis incidencias</a></li> @endif
+                        @if(checkPermissions(['Mapa puestos'],['R']))<li class="  nav-item"><a href="/puestos/mapa"  class="text-nowrap nav-link mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
+                        @if(checkPermissions(['Compañeros'],['R']))<li class="  nav-item"><a href="/puestos/compas"  class="text-nowrap nav-link compas"><i class="fa-duotone fa-users"></i> Mis compañeros</a></li> @endif
+                        @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class=" text-nowrap nav-item"><a href="/salas" class="text-nowrap nav-link salas"><i class="fa-light fa-users-class"></i> Salas reunion</a></li> @endif
+                        @if(checkPermissions(['Incidencias > Mis incidencias'],['R']))<li class="  nav-item"><a href="/incidencias/mis_incidencias" class="text-nowrap nav-link incidencias"><i class="fa-light fa-exclamation-triangle"></i> Mis incidencias</a></li> @endif
                     </ul>
                 </li>
                 @endif
@@ -110,32 +110,32 @@
             <ul class="mainnav__menu nav flex-column">
 
                 @if(checkPermissions(['Limpieza'],['R']) && session('CL')['mca_limpieza']=='S')
-                <li class="nav-item has-sub limpieza">
-                    <a href="#" class="mininav-toggle nav-link "><i class="fa-light fa-broom fs-5 me-2"></i>{{-- active --}}
+                <li class="nav-item has-sub ">
+                    <a href="#" class="mininav-toggle nav-link limpieza"><i class="fa-light fa-broom fs-5 me-2"></i>{{-- active --}}
                         <span class="nav-label">Limpieza</span>
                     </a>
                     <!-- Dashboard submenu list -->
                     <ul class="mininav-content nav collapse">
-                        @if(checkPermissions(['Rondas de limpieza'],['R']))<li class="rondas text-nowrap  nav-item"><a href="/rondas/index/L" class="text-nowrap nav-link"><i class="fa-light fa-broom"></i> Rondas limpieza</a></li> @endif
-                        @if(checkPermissions(['Pendientes limpieza'],['R']))<li class="pendientes text-nowrap  nav-item"><a href="/limpieza/pendientes" class="text-nowrap nav-link"><i class="fa-light fa-broom" style="color: #f00"></i> Pendientes limpieza</a></li> @endif
-                        @if(checkPermissions(['Scan limpieza'],['R']))<li class="scan_ronda  nav-item"><a href="/rondas/scan" class="text-nowrap nav-link"><i class="fa-light fa-qrcode"></i> Scan</a></li> @endif
+                        @if(checkPermissions(['Rondas de limpieza'],['R']))<li class=" text-nowrap  nav-item"><a href="/rondas/index/L" class="text-nowrap nav-link rondas"><i class="fa-light fa-broom"></i> Rondas limpieza</a></li> @endif
+                        @if(checkPermissions(['Pendientes limpieza'],['R']))<li class=" text-nowrap  nav-item"><a href="/limpieza/pendientes" class="text-nowrap nav-link pendientes"><i class="fa-light fa-broom" style="color: #f00"></i> Pendientes limpieza</a></li> @endif
+                        @if(checkPermissions(['Scan limpieza'],['R']))<li class="  nav-item"><a href="/rondas/scan" class="text-nowrap nav-link scan_ronda"><i class="fa-light fa-qrcode "></i> Scan</a></li> @endif
                     </ul>
                     <!-- END : Dashboard submenu list -->
                 </li>
                 @endif
 
                 @if(checkPermissions(['Mantenimiento'],['R']))
-                <li class="nav-item has-sub mantenimiento">
-                    <a href="#" class="mininav-toggle nav-link">
+                <li class="nav-item has-sub ">
+                    <a href="#" class="mininav-toggle nav-link mantenimiento">
                         <i class="fa-light fa-tools fs-5 me-2"></i>
                         @if(checkPermissions(['Parametrizacion'],['R']))<span class="nav-label">Mantenimiento</span> @endif
                     </a>
                     
                     <!--Submenu-->
                     <ul class="mininav-content nav collapse">
-                        @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class="rondas_mant text-nowrap  nav-item"><a href="/rondas/index/M/" class="text-nowrap nav-link"><i class="fa-light fa-tools"></i> Rondas <br>mantenimiento</a></li> @endif
-                        @if(checkPermissions(['Incidencias'],['R']))<li class="incidencias  nav-item"><a href="/incidencias/" class="text-nowrap nav-link"><i class="fa-light fa-exclamation-triangle"></i> Incidencias</a></li> @endif
-                        @if(checkPermissions(['Scan mantenimiento'],['R']))<li class="scan_mant  nav-item"><a href="/scan_mantenimiento" class="text-nowrap nav-link"><i class="fa-light fa-qrcode"></i> Scan</a></li> @endif
+                        @if(checkPermissions(['Rondas de mantenimiento'],['R']))<li class=" text-nowrap  nav-item"><a href="/rondas/index/M/" class="text-nowrap nav-link rondas_mant"><i class="fa-light fa-tools"></i> Rondas <br>mantenimiento</a></li> @endif
+                        @if(checkPermissions(['Incidencias'],['R']))<li class="  nav-item"><a href="/incidencias/" class="text-nowrap nav-link incidencias"><i class="fa-light fa-exclamation-triangle"></i> Incidencias</a></li> @endif
+                        @if(checkPermissions(['Scan mantenimiento'],['R']))<li class="  nav-item"><a href="/scan_mantenimiento" class="text-nowrap nav-link scan_mant"><i class="fa-light fa-qrcode"></i> Scan</a></li> @endif
                     </ul>
                 </li>
                 @endif
@@ -146,35 +146,35 @@
                 <ul class="mainnav__menu nav flex-column">
 
                     @if(checkPermissions(['Informes'],['R']))
-                    <li class="nav-item has-sub informes">
-                        <a href="#" class="mininav-toggle nav-link "><i class="fa-light fa-file-chart-pie fs-5 me-2"></i>{{-- active --}}
+                    <li class="nav-item has-sub">
+                        <a href="#" class="mininav-toggle nav-link informes"><i class="fa-light fa-file-chart-pie fs-5 me-2"></i>{{-- active --}}
                             <span class="nav-label">Informes</span>
                         </a>
                         <!-- Dashboard submenu list -->
                         <ul class="mininav-content nav collapse">
-                                @if(checkPermissions(['Informes > Uso de puestos'],['R']))<li class="inf_puestos text-nowrap nav-item informes"><a href="/reports/puestos" class="text-nowrap nav-link"><i class="fa-light fa-file-alt"></i> Uso de puestos</a></li> @endif
-                                @if(checkPermissions(['Informes > Puestos por usuario'],['R']))<li class="inf_usuarios nav-item informes"><a href="/reports/users" class="text-nowrap nav-link"><i class="fa-light fa-file-alt"></i> Puestos por usuario</a></li> @endif
-                                @if(checkPermissions(['Informes > Reservas canceladas'],['R']))<li class="inf_reservas nav-item informes"><a href="/reports/canceladas" class="text-nowrap nav-link"><i class="fa-light fa-file-alt"></i> Reservas canceladas</a></li> @endif
-                                @if(checkPermissions(['Informes > Uso de espacio'],['R']))<li class="inf_heatmap nav-item informes"><a href="/reports/heatmap" class="text-nowrap nav-link"><i class="fa-light fa-file-alt"></i> Uso de espacio</a></li> @endif
+                                @if(checkPermissions(['Informes > Uso de puestos'],['R']))<li class=" text-nowrap nav-item informes"><a href="/reports/puestos" class="text-nowrap nav-link inf_puestos"><i class="fa-light fa-file-alt"></i> Uso de puestos</a></li> @endif
+                                @if(checkPermissions(['Informes > Puestos por usuario'],['R']))<li class=" nav-item informes"><a href="/reports/users" class="text-nowrap nav-link inf_usuarios"><i class="fa-light fa-file-alt"></i> Puestos por usuario</a></li> @endif
+                                @if(checkPermissions(['Informes > Reservas canceladas'],['R']))<li class=" nav-item informes"><a href="/reports/canceladas" class="text-nowrap nav-link inf_reservas"><i class="fa-light fa-file-alt"></i> Reservas canceladas</a></li> @endif
+                                @if(checkPermissions(['Informes > Uso de espacio'],['R']))<li class=" nav-item informes"><a href="/reports/heatmap" class="text-nowrap nav-link inf_heatmap"><i class="fa-light fa-file-alt"></i> Uso de espacio</a></li> @endif
                                 
-                                @if(checkPermissions(['Informes > Ferias'],['R']))<li class="inf_reservas nav-item informes"><a href="/reports/ferias" class="text-nowrap nav-link"><i class="fa-light fa-file-alt"></i> Ferias</a></li> @endif
-                                @if(checkPermissions(['Informes programados'],["R"]))<li class="inf_programados nav-item informes"><a href="{{url('prog_report')}}" class="text-nowrap nav-link"><i class="fa-light fa-envelope"></i> Informes Programados</a></li>@endif
+                                @if(checkPermissions(['Informes > Ferias'],['R']))<li class=" nav-item informes"><a href="/reports/ferias" class="text-nowrap nav-link inf_reservas"><i class="fa-light fa-file-alt"></i> Ferias</a></li> @endif
+                                @if(checkPermissions(['Informes programados'],["R"]))<li class=" nav-item informes"><a href="{{url('prog_report')}}" class="text-nowrap nav-link inf_programados"><i class="fa-light fa-envelope"></i> Informes Programados</a></li>@endif
                         </ul>
                         <!-- END : Dashboard submenu list -->
                     </li>
                     @endif
 
                     @if(checkPermissions(['Ferias'],['R']))
-                    <li class="nav-item has-sub ferias">
-                        <a href="#" class="mininav-toggle nav-link">
+                    <li class="nav-item has-sub ">
+                        <a href="#" class="mininav-toggle nav-link ferias">
                             <i class="fa-light fa-sensor-on fs-5 me-2"></i>
                             @if(checkPermissions(['Parametrizacion'],['R']))<span class="nav-label">Ferias</span> @endif
                         </a>
                         <!--Submenu-->
                         <ul class="mininav-content nav collapse">
-                            @if(checkPermissions(['Ferias'],['R']))<li class="ferias_asistentes nav-item"><a href="/ferias/asistentes" class="text-nowrap nav-link"><i class="fa-light fa-user-tie"></i> Asistentes</a></li> @endif
-                            @if(checkPermissions(['Ferias marcas'],['R']))<li class="ferias_marcas nav-item"><a href="/ferias/marcas" class="text-nowrap nav-link"><i class="fa-brands fa-bandcamp"></i> Marcas</a></li> @endif
-                            @if(checkPermissions(['Scan ferias'],['R']))<li class="scan_feriat nav-item"><a href="/ferias/actividad" class="text-nowrap nav-link"><i class="fa-light fa-file-chart-column"></i> Actividad</a></li> @endif
+                            @if(checkPermissions(['Ferias'],['R']))<li class=" nav-item"><a href="/ferias/asistentes" class="text-nowrap nav-link ferias_asistentes"><i class="fa-light fa-user-tie"></i> Asistentes</a></li> @endif
+                            @if(checkPermissions(['Ferias marcas'],['R']))<li class=" nav-item"><a href="/ferias/marcas" class="text-nowrap nav-link ferias_marcas"><i class="fa-brands fa-bandcamp"></i> Marcas</a></li> @endif
+                            @if(checkPermissions(['Scan ferias'],['R']))<li class=" nav-item"><a href="/ferias/actividad" class="text-nowrap nav-link scan_feriat"><i class="fa-light fa-file-chart-column"></i> Actividad</a></li> @endif
                         </ul>
                     </li>
                     @endif
@@ -187,64 +187,73 @@
             <ul class="mainnav__menu nav flex-column">
                 <li class="nav-item has-sub">
 
-                    <a href="#" class="mininav-toggle nav-link collapsed"><i class="fa-light fa-cog fs-5 me-2"></i>
+                    <a href="#" class="mininav-toggle nav-link collapsed menu_parametrizacion"><i class="fa-light fa-cog fs-5 me-2"></i>
                         <span class="nav-label">Parametrizacion</span>
                     </a>
 
                     <ul class="mininav-content nav collapse">
-                        <li class="nav-item"> 
-                            @if(checkPermissions(['Bitacora'],['R']))<li class="bitacora nav-item"><a href="/bitacoras" class="nav-link"><i class="fa-light fa-clipboard-list fs-5 me-2"></i> Bitacora</a></li> @endif
+                        <li class="nav-item">
+                            @if(checkPermissions(['Bitacora'],['R']))<li class=" nav-item"><a href="/bitacoras" class="nav-link bitacora"><i class="fa-light fa-clipboard-list fs-5 me-2"></i> Bitacora</a></li> @endif
                         </li>
-                        <li class="nav-item has-sub espacios">
-                            <a href="#" class="mininav-toggle nav-link collapsed"><i class="fa-light fa-city fs-5 me-2"></i> Espacios</a>
+                        <li class="nav-item has-sub ">
+                            <a href="#" class="mininav-toggle nav-link collapsed espacios"><i class="fa-light fa-city fs-5 me-2"></i> Espacios</a>
                             <ul class="mininav-content nav collapse">
-                                @if(checkPermissions(['Clientes'],['R']))<li class="clientes text-nowrap ml-2 nav-item"><a href="/clientes" class="nav-link"><i class="fa-light fa-user-tie"></i> Empresas</a></li> @endif
-                                @if(checkPermissions(['Edificios'],['R']))<li class="edificios text-nowrap ml-2 nav-item"><a href="/edificios" class="nav-link"><i class="fa-light fa-building"></i> Edificios</a></li> @endif
-                                @if(checkPermissions(['Plantas'],['R']))<li class="plantas text-nowrap ml-2 nav-item"><a href="/plantas" class="nav-link"> <i class="fa-light fa-layer-group"></i> Plantas</a></li> @endif
-                                @if(checkPermissions(['Puestos'],['R']))<li class="puestos text-nowrap ml-2 nav-item"><a href="/puestos" class="nav-link"> <i class="fa-light fa-desktop-alt"></i> Puestos</a></li> @endif
+                                @if(checkPermissions(['Clientes'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/clientes" class="nav-link clientes"><i class="fa-light fa-user-tie"></i> Empresas</a></li> @endif
+                                @if(checkPermissions(['Edificios'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/edificios" class="nav-link edificios"><i class="fa-light fa-building"></i> Edificios</a></li> @endif
+                                @if(checkPermissions(['Plantas'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/plantas" class="nav-link plantas"> <i class="fa-light fa-layer-group"></i> Plantas</a></li> @endif
+                                @if(checkPermissions(['Puestos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/puestos" class="nav-link puestos"> <i class="fa-light fa-desktop-alt"></i> Puestos</a></li> @endif
                                 
-                                @if(checkPermissions(['Tipos de puesto'],['R']))<li class="puestostipos  text-nowrap ml-2 nav-item" ><a href="/puestos/tipos" class="nav-link"><i class="fa-light fa-desktop-alt"></i> Tipos de puesto</a></li> @endif
-                                @if(checkPermissions(['Tags'],['R']))<li class="tags  text-nowrap ml-2 nav-item"><a href="/tags" class="nav-link"> <i class="fa-light fa-tags"></i> Tags</a></li> @endif
-                                @if(checkPermissions(['Encuestas'],['R']))<li class="encuestas text-nowrap ml-2 nav-item"><a href="/encuestas" class="nav-link"><i class="fa-light fa-poll-h"></i> Encuestas</a></li> @endif
+                                @if(checkPermissions(['Tipos de puesto'],['R']))<li class="  text-nowrap ml-2 nav-item" ><a href="/puestos/tipos" class="nav-link puestostipos"><i class="fa-light fa-desktop-alt"></i> Tipos de puesto</a></li> @endif
+                                @if(checkPermissions(['Tags'],['R']))<li class="  text-nowrap ml-2 nav-item"><a href="/tags" class="nav-link"> <i class="fa-light fa-tags tags"></i> Tags</a></li> @endif
+                                @if(checkPermissions(['Encuestas'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/encuestas" class="nav-link"><i class="fa-light fa-poll-h encuestas"></i> Encuestas</a></li> @endif
                             </ul>
                         </li>
-                        <li class="nav-item has-sub menu_usuarios">
-                            <a href="#" class="mininav-toggle nav-link collapsed"><i class="fa-light fa-user fs-5 me-2"></i>Personas</a>
+                        <li class="nav-item has-sub ">
+                            <a href="#" class="mininav-toggle nav-link collapsed menu_usuarios"><i class="fa-light fa-user fs-5 me-2"></i>Personas</a>
                             <ul class="mininav-content nav collapse">
-                                @if(checkPermissions(['Usuarios'],['R'])) <li class="usuarios text-nowrap ml-2 nav-item"><a href="/users" class="nav-link"><i class="fa-light fa-user"></i> Usuarios</a></li>  @endif
-                                @if(checkPermissions(['Plantas usuarios'],['R']))<li class="plantas_usuarios text-nowrap ml-2 nav-item"><a href="/users/plantas_usuarios" class="nav-link"> <i class="fa-light fa-layer-plus"></i> Asignar plantas</a></li> @endif
-                                @if(checkPermissions(['Puestos supervisores'],['R']))<li class="puestos_supervisores text-nowrap ml-2 nav-item"><a href="/users/puestos_supervisores" class="nav-link"> <i class="fa-light fa-magnifying-glass-location"></i> Supervision puestos</a></li> @endif
-                                @if(checkPermissions(['Departamentos'],['R']))<li class="departamentos text-nowrap ml-2 nav-item"><a href="/departments" class="nav-link"><i class="fa-light fa-sitemap"></i> Departamentos</a></li> @endif
-                                @if(checkPermissions(['Colectivos'],['R']))<li class="colectivos text-nowrap ml-2 nav-item"><a href="/collective" class="nav-link"><i class="fa-light fa-user-tag"></i> Colectivos</a></li> @endif
-                                @if(checkPermissions(['Turnos'],['R']))<li class="turnos text-nowrap ml-2 nav-item"><a href="/turnos" class="nav-link"><i class="fa-light fa-repeat-1"></i> Turnos</a></li> @endif
-                                @if(checkPermissions(['Festivos'],['R']))<li class="festivos text-nowrap ml-2 nav-item"><a href="/festives" class="nav-link"><i class="fa-light fa-calendar-range"></i> Festivos</a></li> @endif
+                                @if(checkPermissions(['Usuarios'],['R'])) <li class=" text-nowrap ml-2 nav-item"><a href="/users" class="nav-link usuarios"><i class="fa-light fa-user"></i> Usuarios</a></li>  @endif
+                                @if(checkPermissions(['Plantas usuarios'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/users/plantas_usuarios" class="nav-link plantas_usuarios"> <i class="fa-light fa-layer-plus"></i> Asignar plantas</a></li> @endif
+                                @if(checkPermissions(['Puestos supervisores'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/users/puestos_supervisores" class="nav-link puestos_supervisores"> <i class="fa-light fa-magnifying-glass-location"></i> Supervision puestos</a></li> @endif
+                                @if(checkPermissions(['Departamentos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/departments" class="nav-link departamentos"><i class="fa-light fa-sitemap"></i> Departamentos</a></li> @endif
+                                @if(checkPermissions(['Colectivos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/collective" class="nav-link colectivos"><i class="fa-light fa-user-tag"></i> Colectivos</a></li> @endif
+                                @if(checkPermissions(['Turnos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/turnos" class="nav-link turnos"><i class="fa-light fa-repeat-1"></i> Turnos</a></li> @endif
+                                @if(checkPermissions(['Festivos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/festives" class="nav-link festivos"><i class="fa-light fa-calendar-range"></i> Festivos</a></li> @endif
                             </ul>
                         </li>
-                        <li class="nav-item has-sub tipos_incidencia">
-                            <a href="#" class="mininav-toggle nav-link collapsed"><i class="fa-light fa-exclamation-triangle fs-5 me-2"></i> Incidencias</a>
+                        <li class="nav-item has-sub ">
+                            <a href="#" class="mininav-toggle nav-link collapsed tipos_incidencia"><i class="fa-light fa-exclamation-triangle fs-5 me-2"></i> Incidencias</a>
                             <ul class="mininav-content nav collapse">
-                                @if(checkPermissions(['Tipos de incidencia'],['R']))<li class="incidencias_tipos text-nowrap ml-2 nav-item"><a href="/incidencias/tipos" class="nav-link"> <i class="fa-light fa-exclamation-triangle"></i> Tipos de incidencia</a></li> @endif
-                                @if(checkPermissions(['Causas de cierre'],['R']))<li class="incidencias_causas text-nowrap ml-2 nav-item"><a href="/incidencias/causas" class="nav-link"> <i class="fa-light fa-times-hexagon"></i> Causas de cierre</a></li> @endif
-                                @if(checkPermissions(['Estados de incidencia'],['R']))<li class="incidencias_estados text-nowrap ml-2 nav-item"><a href="/incidencias/estados" class="nav-link"> <i class="fa-light fa-sign"></i> Estados</a></li> @endif
+                                @if(checkPermissions(['Tipos de incidencia'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/incidencias/tipos" class="nav-link incidencias_tipos"> <i class="fa-light fa-exclamation-triangle"></i> Tipos de incidencia</a></li> @endif
+                                @if(checkPermissions(['Causas de cierre'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/incidencias/causas" class="nav-link incidencias_causas"> <i class="fa-light fa-times-hexagon"></i> Causas de cierre</a></li> @endif
+                                @if(checkPermissions(['Estados de incidencia'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/incidencias/estados" class="nav-link incidencias_estados"> <i class="fa-light fa-sign"></i> Estados</a></li> @endif
                             </ul>
                         </li>
-                        <li class="nav-item has-sub menu_permisos">
-                            <a href="#" class="mininav-toggle nav-link collapsed"><i class="fa-light fa-user-lock fs-5 me-2"></i> Permisos</a>
+                        <li class="nav-item has-sub ">
+                            @if(checkPermissions(['Trabajos tipos','Trabajos','Trabajos planificacion'],['R']))<a href="#" class="mininav-toggle nav-link collapsed trabajos"><i class="fa-light fa-light fa-user-helmet-safety fs-5 me-2"></i> Trabajos</a>@endif
                             <ul class="mininav-content nav collapse">
-                                @if(checkPermissions(['Perfiles'],['R']))<li class="perfiles nav-item"><a href="/profiles"  class="nav-link"><i class="fa-light fa-users"></i> Perfiles</a></li> @endif
-                                @if(checkPermissions(['Secciones'],['R']))<li class="secciones nav-item"><a href="/sections" class="nav-link"> <i class="fa-light fa-browser"></i> Secciones</a></li> @endif
-                                @if(checkPermissions(['Permisos'],['R']))<li class="permisos nav-item"><a href="/profile-permissions" class="nav-link"><i class="fa-light fa-lock-alt"></i> Permisos</a></li> @endif
+                                @if(checkPermissions(['Trabajos tipos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/tipos" class="nav-link trabajos_tipos"> <i class="fa-light fa-list-check"></i>Tareas</a></li> @endif
+                                @if(checkPermissions(['Trabajos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/grupos" class="nav-link trabajos_grupos"> <i class="fa-light fa-list-tree"></i> Grupos</a></li> @endif
+                                @if(checkPermissions(['Trabajos contratas'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/contratas" class="nav-link trabajos_contratas"> <i class="fa-regular fa-industry"></i> Contratas</a></li> @endif
+                                @if(checkPermissions(['Trabajos planificacion'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/planes" class="nav-link trabajos_planes"> <i class="fa-light fa-square-kanban"></i> Planes de trabajo</a></li> @endif
                             </ul>
                         </li>
-                        <li class="nav-item has-sub menu_utilidades">
-                            <a href="#" class="mininav-toggle nav-link collapsed"><i class="fa-light fa-screwdriver-wrench fs-5 me-2"></i> Utilidaes</a>
+                        <li class="nav-item has-sub ">
+                            <a href="#" class="mininav-toggle nav-link collapsed menu_permisos"><i class="fa-light fa-user-lock fs-5 me-2"></i> Permisos</a>
                             <ul class="mininav-content nav collapse">
-                                @if(checkPermissions(['Tareas programadas'],['R']))<li class="tareas_programadas nav-item"><a href="/tasks" class="text-nowrap nav-link"> <i class="fa-light fa-timer"></i> Tareas programadas</a></li> @endif
-                                @if (checkPermissions(['Eventos'],["R"]))<li class="eventos nav-item"><a href="{{url('/events')}}" class="nav-link"><i class="fa-light fa-engine"></i> Eventos</a></li>@endif
-                                @if(checkPermissions(['Señaletica'],['R']))<li class="mkd nav-item"><a href="/MKD" class="nav-link"><i class="fa-light fa-sign"></i> Señaletica</a></li> @endif
+                                @if(checkPermissions(['Perfiles'],['R']))<li class=" nav-item"><a href="/profiles"  class="nav-link perfiles"><i class="fa-light fa-users"></i> Perfiles</a></li> @endif
+                                @if(checkPermissions(['Secciones'],['R']))<li class=" nav-item"><a href="/sections" class="nav-link secciones"> <i class="fa-light fa-browser"></i> Secciones</a></li> @endif
+                                @if(checkPermissions(['Permisos'],['R']))<li class=" nav-item"><a href="/profile-permissions" class="nav-link permisos" ><i class="fa-light fa-lock-alt"></i> Permisos</a></li> @endif
+                            </ul>
+                        </li>
+                        <li class="nav-item has-sub ">
+                            <a href="#" class="mininav-toggle nav-link collapsed menu_utilidades"><i class="fa-light fa-screwdriver-wrench fs-5 me-2"></i> Utilidaes</a>
+                            <ul class="mininav-content nav collapse">
+                                @if(checkPermissions(['Tareas programadas'],['R']))<li class=" nav-item"><a href="/tasks" class="text-nowrap nav-link tareas_programadas"> <i class="fa-light fa-timer"></i> Tareas programadas</a></li> @endif
+                                @if (checkPermissions(['Eventos'],["R"]))<li class=" nav-item"><a href="{{url('/events')}}" class="nav-link eventos"><i class="fa-light fa-engine"></i> Eventos</a></li>@endif
+                                @if(checkPermissions(['Señaletica'],['R']))<li class=" nav-item"><a href="/MKD" class="nav-link mkd"><i class="fa-light fa-sign"></i> Señaletica</a></li> @endif
                     
-                                @if(checkPermissions(['Importar datos'],['R']))<li class="importar nav-item"> <a href="/import" class="nav-link"><i class="fa-light fa-upload"></i> Importar datos</a></li> @endif
-                                @if(checkPermissions(['Log viewer'],['R']))<li class="logviewer nav-item"> <a href="/ext/docs/log-viewer" class="nav-link"><i class="fa-light fa-file-lines"></i> Logs</a></li> @endif
+                                @if(checkPermissions(['Importar datos'],['R']))<li class=" nav-item"> <a href="/import" class="nav-link importar"><i class="fa-light fa-upload"></i> Importar datos</a></li> @endif
+                                @if(checkPermissions(['Log viewer'],['R']))<li class=" nav-item"> <a href="/ext/docs/log-viewer" class="nav-link logviewer"><i class="fa-light fa-file-lines"></i> Logs</a></li> @endif
                             </ul>
                         </li>
                     </ul>

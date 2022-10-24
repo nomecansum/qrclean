@@ -455,7 +455,7 @@
     $('.configuracion').addClass('active active-sub');
     $('.menu_parametrizacion').addClass('active active-sub');
 	$('.espacios').addClass('active active-sub');
-    $('.puestos').addClass('active-link');
+    $('.puestos').addClass('active');
 
     $('.chk_accion').click(function(){
         if($(this).is(':checked')){

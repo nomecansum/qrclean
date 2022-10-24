@@ -228,7 +228,7 @@ if (isset($r->fechas)){
     <script>
 
     $('.configuracion').addClass('active active-sub');
-	$('.bitacora').addClass('active-link');
+	$('.bitacora').addClass('active');
 
     $('#headfiltro').click(function(){
         $('#divfiltro').toggle();

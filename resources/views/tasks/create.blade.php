@@ -217,7 +217,7 @@
     <script>
         $('.configuracion').addClass('active active-sub');
 		$('.menu_utilidades').addClass('active active-sub');
-        $('.tareas_programadas').addClass('active-link');
+        $('.tareas_programadas').addClass('active');
 	</script>
 	
 	<script>

@@ -74,7 +74,7 @@
 <script>
 	document.title = '{{$nombre_empresa}}';
 	$('.informes').addClass('active active-sub');
-    $('.inf_usuarios').addClass('active-link');
+    $('.inf_usuarios').addClass('active');
 
 
 	$('#btn_submit').click(function(){

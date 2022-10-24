@@ -148,7 +148,7 @@
 @section('scripts')
     <script>
         $('.parametrizacion').addClass('active active-sub');
-        $('.compas').addClass('active-link');
+        $('.compas').addClass('active');
 
 
         

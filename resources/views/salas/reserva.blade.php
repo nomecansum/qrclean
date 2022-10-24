@@ -82,7 +82,7 @@
 @section('scripts')
     <script>
         $('.reservas').addClass('active active-sub');
-        $('.reservas_salas').addClass('active-link');
+        $('.reservas_salas').addClass('active');
     </script>
 
     <script src="{{url('/plugins/noUiSlider/nouislider.min.js')}}"></script>

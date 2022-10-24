@@ -11,7 +11,7 @@
 
 <style>
      .select-all{
-            max-height: 46px !important;
+            max-height: 50px !important;
         }
 </style>
 
@@ -217,9 +217,17 @@
         <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_turno[]" id="multi-turnos" >
             
         </select>
-        <div class="input-group-btn">
-            <button class="btn btn-primary select-all" data-select="multi-turnos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
-        </div>
+        <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+    </div>
+</div>
+
+<div class="form-group  col-md-12 mt-3" style="{{ (isset($show['zon']) && $show['zon']==1) ? '' : 'display: none'  }}">
+    <label>Zona</label>
+    <div class="input-group select2-bootstrap-append">
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_zona[]" id="multi-zonas" >
+            
+        </select>
+        <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
     </div>
 </div>
 
@@ -404,6 +412,16 @@
                 $('#multi-colectivos').append('<option value="'+val.cod_colectivo+'">'+val.des_colectivo+'</option>');
             });
             $('#loadfilter').hide();
+
+            zona_c="";
+            $.each(data.zonas, function(index, val) {
+                if(zona_c!=val.id_cliente){
+                    $('#multi-zonas').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    zona_c=val.id_cliente;
+                }
+                $('#multi-zonas').append('<option value="'+val.id_zona+'">'+val.des_zona+'</option>');
+            });
+            $('#loadfilter').hide();
             //try{ end_update_filtros('cliente') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
         });
         
@@ -415,8 +433,6 @@
         $('#multi-planta').empty();
         $('#multi-puesto').empty();
        $.post('{{url('/filters/loadplantas')}}', {_token:'{{csrf_token()}}',centros:$(this).val(),cliente:$('#multi-cliente').val(),edificio:$('#multi-edificio').val()}, function(data, textStatus, xhr) {
-            console.log('edificio');
-            console.log(data);
             cliente_e="";
             edificio_e="";
             $.each(data.plantas, function(index, val) {
@@ -450,7 +466,23 @@
                 $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
             });
             $('#loadfilter').hide();
-            //try{ end_update_filtros('edificio') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado
+            
+            $.each(data.zonas, function(index, val) {
+                if(cliente_z!=val.id_cliente){
+                    $('#multi-zonas').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    cliente_z=val.id_cliente;
+                }
+                if(edificio_z!=val.id_edificio){
+                    $('#multi-zonas').append('<optgroup label="'+val.des_edificio+'"></optgroup>');
+                    edificio_z=val.id_edificio;
+                }
+                if(planta_z!=val.id_planta){
+                    $('#multi-zonas').append('<optgroup label="'+val.des_planta+'"></optgroup>');
+                    planta_z=val.id_planta;
+                }
+                $('#multi-zonas').append('<option value="'+val.id_zona+'">'+val.des_zona+'</option>');
+            });
+            $('#loadfilter').hide();
         });
         
     });
@@ -462,8 +494,6 @@
             cliente_p="";
             edificio_p="";
             planta_p="";
-            console.log('planta');
-            console.log(data);
             $.each(data.puestos, function(index, val) {
                 if(cliente_p!=val.id_cliente){
                     $('#multi-puesto').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -478,6 +508,26 @@
                     planta_p=val.id_planta;
                 }
                 $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            cliente_z="";
+            edificio_z="";
+            planta_z="";
+            $.each(data.zonas, function(index, val) {
+                if(cliente_z!=val.id_cliente){
+                    $('#multi-zonas').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    cliente_z=val.id_cliente;
+                }
+                if(edificio_z!=val.id_edificio){
+                    $('#multi-zonas').append('<optgroup label="'+val.des_edificio+'"></optgroup>');
+                    edificio_z=val.id_edificio;
+                }
+                if(planta_z!=val.id_planta){
+                    $('#multi-zonas').append('<optgroup label="'+val.des_planta+'"></optgroup>');
+                    planta_z=val.id_planta;
+                }
+                $('#multi-zonas').append('<option value="'+val.id_zona+'">'+val.des_zona+'</option>');
             });
             $('#loadfilter').hide();
             //try{ end_update_filtros('planta') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado

@@ -138,7 +138,7 @@
 <script>
 	$('.configuracion').addClass('active active-sub');
     $('.menu_permisos').addClass('active active-sub');
-	$('.permisos').addClass('active-link');
+	$('.permisos').addClass('active');
 		
 	$('.check-permission').on('change', function(event){
 		$(this).data('_token','{{csrf_token()}}');

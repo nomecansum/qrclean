@@ -88,7 +88,7 @@
         }));
 
         $('.parametrizacion').addClass('active active-sub');
-        $('.mapa').addClass('active-link');
+        $('.mapa').addClass('active');
         $('.adorno_puesto').css('margin-top','0px');
         $('.adorno_puesto').css('line-height','20px');
         $('.adorno_puesto').css('vertical-align','absmiddle');

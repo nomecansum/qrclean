@@ -81,7 +81,7 @@
 <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
     <script>
         $('.parametrizacion').addClass('active active-sub');
-        $('.salas').addClass('active-link');
+        $('.salas').addClass('active');
 
         $('#btn_nueva_puesto').click(function(){
             spshow('spin');

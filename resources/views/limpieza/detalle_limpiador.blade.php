@@ -74,7 +74,7 @@
 @section('scripts')
     <script>
         $('.limpieza').addClass('active active-sub');
-        $('.rondas').addClass('active-link');
+        $('.rondas').addClass('active');
 
         $('.divpuesto').click(function(){
            

@@ -36,6 +36,6 @@
 @section('scripts')
     <script>
         $('.parametrizacion').addClass('active active-sub');
-        $('.encuestas').addClass('active-link');
+        $('.encuestas').addClass('active');
     </script>
 @endsection

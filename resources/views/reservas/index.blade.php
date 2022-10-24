@@ -54,8 +54,8 @@
     <script src="{{url('/plugins/noUiSlider/wNumb.js')}}"></script>
     <script>
         $('.SECCION_MENU').addClass('active active-sub');
-        $('.reservas').addClass('active-link');
-        $('.reservas_puestos').addClass('active-link');
+        $('.reservas').addClass('active');
+        $('.reservas_puestos').addClass('active');
 
         function filter_hour(value, type) {
         return (value % 60 == 0) ? 1 : 0;

@@ -172,7 +172,7 @@
 	var lista_ficheros=new Array(0);
 
 	$('.ferias').addClass('active active-sub');
-	$('.ferias_asistentes').addClass('active-link');
+	$('.ferias_asistentes').addClass('active');
 
 	$('#btn-toggle').click(function(){
          $('#tabla').bootstrapTable('toggleView')

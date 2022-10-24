@@ -112,7 +112,7 @@
         $('.configuracion').addClass('active active-sub');
         $('.menu_utilidades').addClass('active active-sub');
         $('.menu_parametrizacion').addClass('active active-sub');
-        $('.mkd').addClass('active-link');
+        $('.mkd').addClass('active');
         var lista=[];
         var num=1;
 

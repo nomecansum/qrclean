@@ -163,7 +163,7 @@
 	<script>
 	$('.configuracion').addClass('active active-sub');
 	$('.menu_permisos').addClass('active active-sub');
-	$('.perfiles').addClass('active-link');
+	$('.perfiles').addClass('active');
 	
 	$(function(){
 		$('#nn').change(function(event){

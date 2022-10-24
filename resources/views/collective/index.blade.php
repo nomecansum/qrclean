@@ -129,7 +129,7 @@
         $('.configuracion').addClass('active active-sub');
 		$('.menu_parametrizacion').addClass('active active-sub');
 		$('.menu_usuarios').addClass('active active-sub');
-        $('.colectivos').addClass('active-link');
+        $('.colectivos').addClass('active');
 
 		function editar(id){
 			$('#editorCAM').load("{{ url('/collective/edit/') }}"+"/"+id, function(){

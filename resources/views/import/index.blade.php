@@ -240,6 +240,6 @@ Dropzone.options.dZUpload= {
 
     $('.configuracion').addClass('active active-sub');
     $('.menu_utilidades').addClass('active active-sub');
-    $('.importar').addClass('active-link');
+    $('.importar').addClass('active');
 </script>
 @endsection

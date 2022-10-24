@@ -225,7 +225,7 @@
 	$('.configuracion').addClass('active active-sub');
     $('.menu_parametrizacion').addClass('active active-sub');
 	$('.menu_usuarios').addClass('active active-sub');
-	$('.festivos').addClass('active-link');
+	$('.festivos').addClass('active');
 
 var anio = {{ Carbon\Carbon::now()->year }};
 

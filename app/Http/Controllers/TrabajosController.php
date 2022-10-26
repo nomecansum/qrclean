@@ -475,8 +475,12 @@ class TrabajosController extends Controller
         $dato = planes::find($r->id_plan);
         $tareas = trabajos::where('id_cliente',Auth::user()->id_cliente)->get();
         $grupos = grupos::where('id_cliente',Auth::user()->id_cliente)
-            ->when($r->grupos, function($q) use($r){
-                $q->wherein('id_grupo',$r->grupos);
+            ->where(function($q) use($r){
+                if(isset($r->grupos)){
+                    $q->wherein('id_grupo',$r->grupos);
+                } else {
+                    $q->wherein('id_grupo',[]);
+                }
             })
             ->get();
 
@@ -514,9 +518,9 @@ class TrabajosController extends Controller
             })
             ->where(function($q) use($r){
                 if(isset($r->zonas)){
-                    $q->wherein('plantas_zonas.id_planta_zona',$r->zonas);
+                    $q->wherein('plantas_zonas.key_id',$r->zonas);
                 } else {
-                    $q->wherein('plantas_zonas.id_planta_zona',[]);
+                    $q->wherein('plantas_zonas.key_id',[]);
                 }
             })
             ->get();
@@ -531,6 +535,146 @@ class TrabajosController extends Controller
             ->where('id_plan',$r->id_plan)
             ->get();
 
-        return view('trabajos.planes.detalle', compact('dato','tareas','grupos','contratas','operarios','plantas','zonas','trabajos'));
+        return view('trabajos.planes.detalle', compact('dato','tareas','grupos','contratas','operarios','plantas','zonas','trabajos','detalle'));
+    }
+
+    public function detalle_trabajo(Request $r){
+        $detalle= DB::table('trabajos_planes_detalle')
+            ->select('trabajos_planes_detalle.*','contratas.*','trabajos.val_operarios as operarios_teorico','trabajos.val_tiempo as tiempo_teorico')
+            ->where('id_plan',$r->id_plan)
+            ->join('contratas', 'trabajos_planes_detalle.id_contrata', 'contratas.id_contrata')
+            ->join('trabajos', 'trabajos_planes_detalle.id_trabajo', 'trabajos.id_trabajo')
+            ->where(function($q) use($r){
+                if($r->tipo=='P'){
+                    $q->join('plantas', 'trabajos_planes_detalle.id_planta', 'plantas.id_planta');
+                    $q->where('trabajos_planes_detalle.id_planta',$r->id);
+                } else {
+                    $q->join('plantas_zonas', 'trabajos_planes_detalle.id_zona', 'plantas_zonas.key_id');
+                    $q->where('trabajos_planes_detalle.id_zona',$r->id);
+                }
+            })
+            ->where('id_grupo_trabajo',$r->grupo)
+            ->where('trabajos.id_trabajo',$r->trabajo)
+            ->first();
+
+        $trabajo= trabajos::find($r->trabajo);
+        
+
+        $contratas=DB::Table('contratas')
+            ->when($r->contratas, function($q) use($r){
+                $q->wherein('id_contrata',$r->contratas);
+            })
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+        $operarios_genericos=DB::table('contratas_operarios')
+            ->wherein('id_contrata',$contratas->pluck('id_contrata')->toarray())
+            ->wherenull('id_usuario')
+            ->get();
+
+        $operarios=DB::table('contratas_operarios')
+            ->join('users', 'contratas_operarios.id_usuario', 'users.id')
+            ->wherein('id_contrata',$contratas->pluck('id_contrata')->toarray())
+            ->wherenotnull('id_usuario')
+            ->get();
+           
+        
+        if(isset($detalle->val_tiempo)){
+            $val_tiempo=$detalle->val_tiempo;
+        } else {
+            $val_tiempo=$trabajo->val_tiempo??0;
+        }
+
+        if(isset($detalle->val_operarios)){
+            $num_operarios=$detalle->val_operarios;
+        } elseif(isset($detalle->list_operarios)){
+            $num_operarios=explode(',',$detalle->list_operarios)->count();
+        } else {
+            $num_operarios=$trabajo->val_operarios??0;
+        }
+
+        return view('trabajos.planes.fill_detalle_trabajo', compact('detalle','r','contratas','operarios','operarios_genericos','val_tiempo','num_operarios'));
+        
+    }
+
+    public function mini_detalle($plan,$grupo,$trabajo,$contrata,$mostrar_operarios,$mostrar_tiempo){
+        $detalle= DB::table('trabajos_planes_detalle')
+            ->select('trabajos_planes_detalle.*','contratas.*','trabajos.val_operarios as operarios_teorico','trabajos.val_tiempo as tiempo_teorico')
+            ->where('id_plan',$plan)
+            ->join('contratas', 'trabajos_planes_detalle.id_contrata', 'contratas.id_contrata')
+            ->join('trabajos', 'trabajos_planes_detalle.id_trabajo', 'trabajos.id_trabajo')
+            ->where('id_grupo_trabajo',$grupo)
+            ->where('trabajos.id_trabajo',$trabajo)
+            ->first();
+
+        $contratas=DB::Table('contratas')
+            ->where('id_contrata',$contrata)
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+
+        $operarios_genericos=DB::table('contratas_operarios')
+            ->where('id_contrata',$contrata)
+            ->wherenull('id_usuario')
+            ->get();
+
+        $operarios=DB::table('contratas_operarios')
+            ->join('users', 'contratas_operarios.id_usuario', 'users.id')
+            ->where('id_contrata',$contrata)
+            ->wherenotnull('id_usuario')
+            ->get();
+
+        if(isset($detalle->val_tiempo)){
+            $val_tiempo=$detalle->val_tiempo;
+        } else {
+            $val_tiempo=$detalle->tiempo_teorico??0;
+        }
+
+        if(isset($detalle->val_operarios)){
+            $val_operarios=$detalle->val_operarios;
+        } elseif(isset($detalle->list_operarios)){
+            $val_operarios=explode(',',$detalle->list_operarios)->count();
+        } else {
+            $val_operarios=$detalle->operarios_teorico??0;
+        }
+        
+        return view('trabajos.planes.fill_mini_detalle', compact('detalle','contratas','operarios','operarios_genericos','mostrar_operarios','mostrar_tiempo'));
+
+    }
+
+    public function detalle_periodo ($plan,$grupo,$trabajo){
+
+    }
+
+    public function detalle_save(Request $r){
+            try{ $detalle=planes_detalle::find($r->id_detalle);
+                if(!isset($detalle)){
+                    $detalle=new planes_detalle;
+                }
+                $detalle->id_plan=$r->id_plan;
+                $detalle->id_grupo_trabajo=$r->id_grupo;
+                $detalle->id_trabajo=$r->id_trabajo;
+                $detalle->id_contrata=$r->id_contrata;
+                $detalle->id_planta=$r->id_planta;
+                $detalle->id_zona=$r->id_zona;
+                $detalle->val_tiempo=$r->val_tiempo;
+                if($r->sel_operarios==1 && isset($r->operarios)){
+                    $detalle->num_operarios=null;
+                    $detalle->list_operarios=implode(',',$r->operarios);
+                } else {
+                    $detalle->num_operarios=$r->num_operarios;
+                    $detalle->list_operarios=null;
+                }
+                $detalle->save();
+                savebitacora('Detalle actualizada con exito para el plan de trabajo '.$r->id_plan. ' borrado',"Trabajos","detalle_save","OK");
+                return [
+                    'title' => "Plan de trabajo",
+                    'message' => 'Detalle actualizada con exito',
+                ];
+            } catch (\Throwable $e) {
+            savebitacora('ERROR: Ocurrio un error actualizando el detalle  '.$e->getMessage() ,"Trabajos","detalle_save","ERROR");
+            return [
+                'title' => "Plan de trabajo",
+                'error' => 'ERROR: Ocurrio un error actualizando el detalle '.$e->getMessage(),
+            ];
+        }
     }
 }

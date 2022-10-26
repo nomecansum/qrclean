@@ -280,13 +280,13 @@
         "table-name": "contratas"
     },
     {
-        "model-name": "planes_detalle",
-        "resource-file": "planes_detalles.json",
-        "table-name": "trabajos_planes_detalle"
-    },
-    {
         "model-name": "planes",
         "resource-file": "planes.json",
         "table-name": "trabajos_planes"
+    },
+    {
+        "model-name": "planes_detalle",
+        "resource-file": "planes_detalles.json",
+        "table-name": "trabajos_planes_detalle"
     }
 ]

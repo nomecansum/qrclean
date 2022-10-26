@@ -213,6 +213,16 @@
                 $('#loadfilter').hide();
             });
         });
+
+        $('.select-all').click(function(event) {
+            $(this).parent().parent().find('select option').prop('selected', true)
+            $(this).parent().parent().find('select').select2({
+                placeholder: "Todos",
+                allowClear: true,
+                @desktop width: "90%", @elsedesktop width: "75%", @enddesktop 
+            });
+            $(this).parent().parent().find('select').change();
+        });
         ////////////////////////////////////////////////
 
         $(function(){

@@ -39,6 +39,7 @@ class planes_detalle extends Model
                   'id_grupo_trabajo',
                   'id_plan',
                   'id_planta',
+                  'id_trabajo',
                   'id_zona',
                   'list_operarios',
                   'num_operarios',

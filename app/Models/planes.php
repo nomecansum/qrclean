@@ -38,7 +38,8 @@ class planes extends Model
                   'id_externo',
                   'mca_activo',
                   'val_color',
-                  'val_icono'
+                  'val_icono',
+                  'num_dias_programar'
               ];
 
     /**

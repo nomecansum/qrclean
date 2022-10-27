@@ -525,13 +525,9 @@ class TrabajosController extends Controller
             })
             ->get();
 
-        $detalle= planes_detalle::where('id_plan',$r->id_plan)->get();
+        
 
         $detalle=DB::table('trabajos_planes_detalle')
-            ->join('trabajos_grupos', 'trabajos_planes_detalle.id_grupo_trabajo', 'trabajos_grupos.id_grupo')
-            ->leftjoin('plantas_zonas', 'trabajos_planes_detalle.id_zona', 'plantas_zonas.key_id')
-            ->leftjoin('plantas', 'plantas_zonas.id_planta', 'plantas.id_planta')
-            ->leftjoin('contratas', 'trabajos_planes_detalle.id_contrata', 'contratas.id_contrata')
             ->where('id_plan',$r->id_plan)
             ->get();
 
@@ -642,6 +638,7 @@ class TrabajosController extends Controller
 
     public function detalle_periodo ($plan,$grupo,$trabajo){
 
+        return view('trabajos.planes.fill_detalle_periodo');
     }
 
     public function detalle_save(Request $r){

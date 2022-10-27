@@ -14,10 +14,10 @@
             </tr>
             <tr>
                 @foreach($plantas as $planta)
-                    <th class="text-center"  scope="col" ><span class="vertical">{{$planta->des_planta}}</span></th>
+                    <th class="text-center text-nowrap"  scope="col" ><span class="vertical text-nowrap align-middle text-center" nowrap>{{$planta->des_planta}}</span></th>
                 @endforeach
                 @foreach($zonas as $zona)
-                    <th class="text-center"  scope="col" ><span class="vertical">{{ $zona->des_planta }}<br>{{$zona->des_zona}}</span></th>
+                    <th class="text-center text-nowrap"  scope="col" ><span class="vertical text-nowrap text-center align-middle" nowrap>[{{ $zona->des_planta }}] {{$zona->des_zona}}</span></th>
                 @endforeach
             </tr>
         </thead>
@@ -25,7 +25,6 @@
             @foreach($grupos as $grupo)
                 @php
                     $trabajos_grupo=$trabajos->where('id_grupo',$grupo->id_grupo);
-                    dump($trabajos_grupo);
                 @endphp
                 @foreach($trabajos_grupo as $trabajo)
                     <tr>
@@ -33,25 +32,28 @@
                             <td rowspan="{{ $trabajos_grupo->count() }}" class="text-center align-middle" style="vertical-align: middle; padding: 10px 0px 10px 0px; background-color: {{ $grupo->val_color }}"><span class="vertical text-center ml-2 {{ txt_blanco($grupo->val_color) }}"> {{ $grupo->des_grupo }}</span></td>
                         @endif
                         <td scope="col" class="{{ txt_blanco($trabajo->val_color) }}" style="background-color:{{ $trabajo->val_color }}"><div style="margin-left: {{ 30*$trabajo->num_nivel }}px;"><i class="{{ $trabajo->val_icono }}"></i> {{ $trabajo->des_trabajo }}</td></div>
-                        <td class="text-center"  scope="col" >@if(isset($trabajo->fec_inicio)){{ Carbon::parse($trabajo->fec_inicio)->format('d/M') }}->{{ Carbon::parse($trabajo->fec_fin)->format('d/M') }}@endif</td>
+                        <td class="text-center text-nowrap"  scope="col" >@if(isset($trabajo->fec_inicio)){{ Carbon::parse($trabajo->fec_inicio)->format('d/M') }} <i class="fa-solid fa-arrow-right"></i> {{ Carbon::parse($trabajo->fec_fin)->format('d/M') }}@endif</td>
                         <td scope="col" class="text-center td_periodo" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $grupo->des_grupo.' - '.$trabajo->des_trabajo }}"></td>
                         @foreach($plantas as $planta)
-                            <td scope="col" class="td_planta" data-id="{{ $planta->id_planta }}" data-tipo="P" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $planta->des_planta.' - '.$trabajo->des_trabajo }}">
+                            <td scope="col" class="td_planta text-center text-nowrap" data-id="{{ $planta->id_planta }}" data-tipo="P" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $planta->des_planta.' - '.$trabajo->des_trabajo }}" >
                                 @php
-                                    $item=$trabajos_grupo->where('id_planta',$planta->id_planta)->where('id_trabajo',$trabajo->id_trabajo)->dump();
+                                    $item=$detalle->where('id_planta',$planta->id_planta)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                                 @endphp
-                                @if(isset($item))
-                                    @php
-                                        dump($item);
-                                    @endphp
-                                @endif
+                                @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple"></i> {{ $item->num_operarios }}  <br>@endif
+                                @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple"></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
+                                @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch"></i> {{ $item->val_tiempo }}' @endif
+
                             </td>
                         @endforeach
                         @foreach($zonas as $zona)
-                            <td scope="col" class="td_planta" data-id="{{ $zona->key_id }}" data-tipo="Z" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}"  data-desc="{{ $zona->des_zona .' - '.$trabajo->des_trabajo}}">
+                            <td scope="col" class="td_planta text-center text-nowrap" data-id="{{ $zona->key_id }}" data-tipo="Z" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}"  data-desc="{{ $zona->des_zona .' - '.$trabajo->des_trabajo}}">
                                 @php
-                                    $item=$trabajos_grupo->where('id_zona',$zona->id_zona)->where('id_trabajo',$trabajo->id_trabajo)->first();
+                                    $item=$detalle->where('id_zona',$zona->key_id)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                                 @endphp
+                                @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple"></i> {{ $item->num_operarios }}  <br>@endif
+                                @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple"></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
+                                @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch"></i> {{ $item->val_tiempo }}' @endif
+                            </td>
                             </td>
                         @endforeach
                     </tr>
@@ -124,7 +126,7 @@ $('.td_periodo').click(function(){
     var grupo=$(this).data('grupo');
     var trabajo=$(this).data('trabajo');
     var desc=$(this).data('desc');
-    var url="{{ url('/trabajos/planes/periodo_trabajo') }}/{{ $dato->id_plan }}/"+grupo+"/"+trabajo;
+    var url="{{ url('/trabajos/planes/detalle_periodo') }}/{{ $dato->id_plan }}/"+grupo+"/"+trabajo;
     $('#detalle_periodo').load(url);
     $('#desc_periodo').html(desc);
     $('#detalle-periodo').modal('show');

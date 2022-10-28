@@ -79,9 +79,9 @@
                             <button type="button"  role="iconpicker" name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-search="true" data-rows="10" @desktop data-cols="20" @elsedesktop data-cols="8" @enddesktop data-search-text="Buscar..."></button>
                         </div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="num_dias_programar" class="control-label">Dias a programar</label>
-                        <input class="form-control" disabled  type="number" id="num_dias_programar" value="{{ old('id_externo', optional($dato)->num_dias_programar) }}" min=1 max=30  placeholder="">
+                        <input class="form-control"   type="number" id="num_dias_programar" name="num_dias_programar" value="{{ old('id_externo', optional($dato)->num_dias_programar) }}" min=1 max=30  placeholder="">
                     </div>
                     <div class="col-md-1" style="padding-top: 30px">
                         <div class="form-check">

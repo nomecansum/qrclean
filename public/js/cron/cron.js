@@ -1,9 +1,7 @@
 const _FF = {
     cron2text: function () {
         var expression = $('#cronExpression').val();
-        if ($.isBlank(expression)) {
-            return;
-        }
+
         $.ajax({
             type: "POST",
             url: "https://www.freeformatter.com/quartz-cron2text",
@@ -22,9 +20,7 @@ const _FF = {
     },
     nextDates: function() {
         var expression = $('#cronExpression').val();
-        if ($.isBlank(expression)) {
-            return;
-        }
+
         $.ajax({
             type: "POST",
             url: "https://www.freeformatter.com/quartz-next-dates",
@@ -57,6 +53,8 @@ const _FF = {
         var dow = $('#cronResultDow').text();
         var year = $('#cronResultYear').text();
         $('.cronResult').text(seconds + ' ' + minutes + ' ' + hours + ' ' + dom + ' ' + month + ' ' + dow + ' ' + year);
+        update_human();
+       
     },
     seconds: function () {
         var seconds = '';
@@ -251,8 +249,4 @@ const _FF = {
     }
 };
 
-$(function () {
-    $('#crontabs input, #crontabs select').change(_FF.cron);
-    _FF.cron();
-});
 

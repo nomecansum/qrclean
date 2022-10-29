@@ -39,22 +39,22 @@ const _FF = {
     },
     cron: function () {
         $(this).parents('.cron-option').children('input[type="radio"]').attr("checked", "checked");
-        _FF.seconds();
+       // _FF.seconds();
         _FF.minutes();
         _FF.hours();
         _FF.day();
         _FF.month();
         _FF.year();
-        var seconds = $('#cronResultSecond').text();
+        //var seconds = $('#cronResultSecond').text();
         var minutes = $('#cronResultMinute').text();
         var hours = $('#cronResultHour').text();
         var dom = $('#cronResultDom').text();
         var month = $('#cronResultMonth').text();
         var dow = $('#cronResultDow').text();
         var year = $('#cronResultYear').text();
-        $('.cronResult').text(seconds + ' ' + minutes + ' ' + hours + ' ' + dom + ' ' + month + ' ' + dow + ' ' + year);
+        $('.cronResult').text(minutes + ' ' + hours + ' ' + dom + ' ' + month + ' ' + dow);
         update_human();
-       
+        siguientes_cron();
     },
     seconds: function () {
         var seconds = '';

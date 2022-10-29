@@ -1580,3 +1580,18 @@ function hexToRgb($hex, $alpha = false) {
     }
     return $rgb;
  }
+
+ function next_cron($expresion,$veces=1,$inicio=null){
+     // Works with predefined scheduling definitions
+     $cron = new Cron\CronExpression($expresion);
+     $resultado=[];
+     foreach(range(1,$veces) as $i){
+         if($inicio==null){
+             $inicio=Carbon::now();
+         }
+         $inicio=$cron->getNextRunDate($inicio);
+         $resultado[]=$inicio->format('Y-m-d H:i:s');
+     }
+     return $resultado;
+    
+ }

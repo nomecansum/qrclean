@@ -412,7 +412,14 @@ class TrabajosController extends Controller
         $grupos = grupos::where('id_cliente',Auth::user()->id_cliente)->get();
         $contratas = contratas::where('id_cliente',Auth::user()->id_cliente)->get();
 
-        return view('trabajos.planes.edit', compact('dato','id','edificios','grupos','contratas'));
+        $detalle=planes_detalle::find($id);
+
+        $sel_plantas=implode(",",$detalle->pluck('id_planta')->unique()->toarray());
+        $sel_grupos=implode(",",$detalle->pluck('id_grupo_trabajo')->unique()->toarray());
+        $sel_zonas=implode(",",$detalle->pluck('id_zona')->unique()->toarray());
+        $sel_contratas=implode(",",$detalle->pluck('id_contrata')->unique()->toarray());
+
+        return view('trabajos.planes.edit', compact('dato','id','edificios','grupos','contratas','detalle','sel_plantas','sel_grupos','sel_zonas','sel_contratas'));
     }
 
     public function update_plan(Request $r ) {
@@ -588,7 +595,9 @@ class TrabajosController extends Controller
             $num_operarios=$trabajo->val_operarios??0;
         }
 
-        return view('trabajos.planes.fill_detalle_trabajo', compact('detalle','r','contratas','operarios','operarios_genericos','val_tiempo','num_operarios'));
+        $val_periodo=$detalle->val_periodo??'0 20 ? * MON-FRI';
+
+        return view('trabajos.planes.fill_detalle_trabajo', compact('detalle','r','contratas','operarios','operarios_genericos','val_tiempo','num_operarios','val_periodo'));
         
     }
 
@@ -638,7 +647,19 @@ class TrabajosController extends Controller
 
     public function detalle_periodo ($plan,$grupo,$trabajo){
 
-        return view('trabajos.planes.fill_detalle_periodo');
+        $detalle= DB::table('trabajos_planes_detalle')
+            ->select('trabajos_planes_detalle.val_periodo')
+            ->selectraw("count(val_periodo) as cuenta")
+            ->where('id_plan',$plan)
+            ->join('contratas', 'trabajos_planes_detalle.id_contrata', 'contratas.id_contrata')
+            ->join('trabajos', 'trabajos_planes_detalle.id_trabajo', 'trabajos.id_trabajo')
+            ->where('id_grupo_trabajo',$grupo)
+            ->where('trabajos.id_trabajo',$trabajo)
+            ->groupby('val_periodo')
+            ->orderby('cuenta','desc')
+            ->first();
+        $val_periodo=$detalle->val_periodo??'0 20 ? * MON-FRI';
+        return view('trabajos.planes.fill_detalle_periodo',compact('val_periodo'));
     }
 
     public function detalle_save(Request $r){
@@ -652,6 +673,8 @@ class TrabajosController extends Controller
                 $detalle->id_contrata=$r->id_contrata;
                 $detalle->id_planta=$r->id_planta;
                 $detalle->id_zona=$r->id_zona;
+                $detalle->val_tiempo=$r->val_tiempo;
+                $detalle->val_periodo=$r->val_periodo;
                 $detalle->val_tiempo=$r->val_tiempo;
                 if($r->sel_operarios==1 && isset($r->operarios)){
                     $detalle->num_operarios=null;
@@ -673,5 +696,37 @@ class TrabajosController extends Controller
                 'error' => 'ERROR: Ocurrio un error actualizando el detalle '.$e->getMessage(),
             ];
         }
+    }
+
+    public function next_cron(Request $r){
+        $cron=next_cron($r->expresion,$r->veces);
+        return view('trabajos.planes.fill_next_cron', compact('cron'));
+    }
+
+    public function periodo_save(Request $r){
+        try{
+            DB::table('trabajos_planes_detalle')
+                ->where('id_plan',$r->id_plan)
+                ->where('id_grupo_trabajo',$r->grupo)
+                ->where('id_trabajo',$r->trabajo)
+                ->update(['val_periodo' => $r->periodo]);
+
+            savebitacora('Actualizado periodo para el grupo de trabajos '.$r->grupo. ' del plan '.$r->id_plan,"Trabajos","periodo_save","OK");
+            return [
+                'title' => "Plan de trabajo",
+                'message' => 'Actualizado periodo para el grupo de trabajos '.$r->grupo. ' del plan '.$r->id_plan,
+            ];
+        } catch (\Throwable $e) {
+            savebitacora('ERROR: Ocurrio un error actualizando el detalle  '.$e->getMessage() ,"Trabajos","detalle_save","ERROR");
+            return [
+                'title' => "Plan de trabajo",
+                'error' => 'ERROR: Ocurrio un error actualizando periodo para el grupo de trabajos '.$r->grupo. ' del plan '.$r->id_plan.' '.$e->getMessage(),
+            ];
+        }
+    }
+
+    public function detalle_td($id){
+        $detalle=planes_detalle::find(request()->id);
+        return view('trabajos.planes.fill_detalle_td', compact('detalle'));
     }
 }

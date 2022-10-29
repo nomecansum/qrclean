@@ -173,7 +173,10 @@
 @endsection
 
 @section('scripts')
-   
+    <script src="{{ asset('/js/cron/cronstrue.min.js')}}" defer></script>
+    <script src="{{ asset('/js/cron/cron.js')}}" defer></script>
+    <script src="{{ asset('/js/cron/cronstrue-i18n.min.js')}}" defer></script>
+
     <script>
         $('.configuracion').addClass('active');
         $('.menu_parametrizacion').addClass('active');

@@ -33,36 +33,41 @@
                         @endif
                         <td scope="col" class="{{ txt_blanco($trabajo->val_color) }}" style="background-color:{{ $trabajo->val_color }}"><div style="margin-left: {{ 30*$trabajo->num_nivel }}px;"><i class="{{ $trabajo->val_icono }}"></i> {{ $trabajo->des_trabajo }}</td></div>
                         <td class="text-center text-nowrap"  scope="col" >@if(isset($trabajo->fec_inicio)){{ Carbon::parse($trabajo->fec_inicio)->format('d/M') }} <i class="fa-solid fa-arrow-right"></i> {{ Carbon::parse($trabajo->fec_fin)->format('d/M') }}@endif</td>
-                        <td scope="col" class="text-center td_periodo" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $grupo->des_grupo.' - '.$trabajo->des_trabajo }}"></td>
+                        <td scope="col" class="text-center td_periodo" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $grupo->des_grupo.' - '.$trabajo->des_trabajo }}">
+                            @php
+                                $periodos=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->pluck('val_periodo')->unique()->toarray();
+                            @endphp
+                                @if(count($periodos)>1)<i class="fa-solid fa-asterisk add-tooltip" title="Varias periodicidades definidas en distintas zonas"></i>@elseif(count($periodos)==1) <span class="add-tooltip" style="color:{{ genColorCodeFromText($periodos[0]) }}">{{ $periodos[0] }}</span> @else <i class="fa-solid fa-question add-tooltip" title="No se ha definido periodicidad para este trabajo en ninguna zona"></i> @endif
+                        </td>
                         @foreach($plantas as $planta)
-                            <td scope="col" class="td_planta text-center text-nowrap" data-id="{{ $planta->id_planta }}" data-tipo="P" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $planta->des_planta.' - '.$trabajo->des_trabajo }}" >
-                                @php
-                                    $item=$detalle->where('id_planta',$planta->id_planta)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
-                                @endphp
-                                @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple"></i> {{ $item->num_operarios }}  <br>@endif
-                                @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple"></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
-                                @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch"></i> {{ $item->val_tiempo }}' @endif
-
+                            @php
+                                $item=$detalle->where('id_planta',$planta->id_planta)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
+                            @endphp
+                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}" class="td_planta text-center text-nowrap" data-id="{{ $planta->id_planta }}" data-tipo="P" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $planta->des_planta.' - '.$trabajo->des_trabajo }}"  data-periodo="{{ $item->val_periodo??null }}">
+                                @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple add-tooltip " title="{{ $item->num_operarios }} Operarios asignados"></i> {{ $item->num_operarios }}  <br>@endif
+                                @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple add-tooltip "></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
+                                @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch add-tooltip " title="Duracion total {{ $item->val_tiempo }} minuos"></i> {{ $item->val_tiempo }}' <br>@endif
+                                @if(isset($item->val_periodo))<div class="add-tooltip span_cron" data-expresion="{{$item->val_periodo??null }}" style="color: {{ genColorCodeFromText($item->val_periodo??null) }}">{{ $item->val_periodo??null }}</div> @endif
+                                
                             </td>
                         @endforeach
                         @foreach($zonas as $zona)
-                            <td scope="col" class="td_planta text-center text-nowrap" data-id="{{ $zona->key_id }}" data-tipo="Z" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}"  data-desc="{{ $zona->des_zona .' - '.$trabajo->des_trabajo}}">
-                                @php
-                                    $item=$detalle->where('id_zona',$zona->key_id)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
-                                @endphp
-                                @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple"></i> {{ $item->num_operarios }}  <br>@endif
-                                @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple"></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
-                                @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch"></i> {{ $item->val_tiempo }}' @endif
-                            </td>
+                            @php
+                                $item=$detalle->where('id_zona',$zona->key_id)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
+                            @endphp
+                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}"  class="td_planta text-center text-nowrap" data-id="{{ $zona->key_id }}" data-tipo="Z" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}"  data-desc="{{ $zona->des_zona .' - '.$trabajo->des_trabajo}}"  data-periodo="{{ $item->val_periodo??null }}">
+                                @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple add-tooltip "></i> {{ $item->num_operarios }}  <br>@endif
+                                @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple add-tooltip " title="{{ count(explode(",",$item->list_operarios)) }} Operarios asignados"></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
+                                @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch add-tooltip " title="Duracion total {{ $item->val_tiempo }} minuos"></i> {{ $item->val_tiempo }}' <br>@endif
+                                @if(isset($item->val_periodo))<div class="add-tooltip span_cron" data-expresion="{{$item->val_periodo??null }}" style="color: {{ genColorCodeFromText($item->val_periodo??null) }}">{{$item->val_periodo??null }}</div> @endif
                             </td>
                         @endforeach
-                    </tr>
                 @endforeach
             @endforeach
         </tbody>
     </table>
 </div>
-
+ 
 <div class="modal fade" id="detalle-trabajo" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -100,21 +105,26 @@
                 
             </div>
             <div class="modal-footer">
-                <a class="btn btn-info" id="btn_si_detalle" href="javascript:void(0)">Si</a>
-                <button type="button" id="btn_no_detalle" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
+                <a class="btn btn-info" id="btn_si_periodo" href="javascript:void(0)">Si</a>
+                <button type="button" id="btn_no_periodo" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+var grupo_periodo;
+var trabajo_periodo;
+
 $('.td_planta').click(function(){
     var id=$(this).data('id');
     var tipo=$(this).data('tipo');
     var grupo=$(this).data('grupo');
     var trabajo=$(this).data('trabajo');
     var desc=$(this).data('desc');
-    $.post('{{url('/trabajos/planes/detalle_trabajo')}}', {_token:'{{csrf_token()}}',id_plan:{{ $dato->id_plan }},id:id,tipo:tipo,grupo:grupo,trabajo:trabajo,contratas:$('#multi-contratas').val()}, function(data, textStatus, xhr) {
+    var periodo=$(this).data('periodo');
+    $.post('{{url('/trabajos/planes/detalle_trabajo')}}', {_token:'{{csrf_token()}}',id_plan:{{ $dato->id_plan }},id:id,tipo:tipo,grupo:grupo,trabajo:trabajo,periodo:periodo,contratas:$('#multi-contratas').val()}, function(data, textStatus, xhr) {
+        $('.modal-body').empty();
         $('#detalle_modal').html(data);
         $('#desc_detalle').html(desc);
         $('#detalle-trabajo').modal('show');
@@ -123,10 +133,11 @@ $('.td_planta').click(function(){
 });
 
 $('.td_periodo').click(function(){
-    var grupo=$(this).data('grupo');
-    var trabajo=$(this).data('trabajo');
+    grupo_periodo=$(this).data('grupo');
+    trabajo_periodo=$(this).data('trabajo');
     var desc=$(this).data('desc');
-    var url="{{ url('/trabajos/planes/detalle_periodo') }}/{{ $dato->id_plan }}/"+grupo+"/"+trabajo;
+    var url="{{ url('/trabajos/planes/detalle_periodo') }}/{{ $dato->id_plan }}/"+grupo_periodo+"/"+trabajo_periodo;
+    $('.modal-body').empty();
     $('#detalle_periodo').load(url);
     $('#desc_periodo').html(desc);
     $('#detalle-periodo').modal('show');
@@ -142,9 +153,28 @@ $('#btn_si_detalle').click(function(){
             } else {
                 toast_ok(result.title,result.message);
                 $('.modal').modal('hide');
-                $('#detalle').load("{{ url('/trabajos/planes/detalle',[$dato->id_plan,$dato->grupo,$dato->trabajo]) }}");
+                //$('#detalle_plan').load("{{ url('/trabajos/planes/detalle',[$dato->id_plan,$dato->grupo,$dato->trabajo]) }}");
+                $('.select2-multiple').trigger('change');
             }
         });
     });
+
+$('#btn_si_periodo').click(function(){
+    var periodo=$('.cronResult').html();
+    $.post('{{url('/trabajos/planes/periodo_save')}}', {_token:'{{csrf_token()}}',id_plan:{{ $dato->id_plan }},grupo:grupo_periodo,trabajo:trabajo_periodo,periodo:periodo}, function(data, textStatus, xhr) {
+        if (data.error) {
+                toast_error(data.title,data.error);
+            } else {
+                toast_ok(data.title,data.message);
+                $('.modal').modal('hide');
+                //$('#detalle_plan').load("{{ url('/trabajos/planes/detalle',$dato->id_plan)}}/"+grupo_periodo+"/"+trabajo_periodo);
+                $('.select2-multiple').trigger('change');
+            }
+    });
+});
+
+$('.span_cron').each(function(item){
+    $(this).attr('title',cronstrue.toString($(this).data('expresion'),{ use24HourTimeFormat: true,locale: "es" }));
+})
 
 </script>

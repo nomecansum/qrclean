@@ -588,7 +588,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/planes/detalle_trabajo/',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_trabajo']);
         Route::get('/planes/detalle_periodo/{plan}/{grupo}/{trabajo}',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_periodo'])->where('id', '[0-9]+');
         Route::get('/planes/mini_detalle/{plan}/{grupo}/{trabajo}/{contrata}/{mostrar_operarios}/{mostrar_tiempo}',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@mini_detalle']);
-        Route::post('/planes/detalle_save/',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_save']);
+        Route::post('/planes/detalle_save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_save']);
+        Route::post('/planes/next_cron',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@next_cron']);
+        Route::post('/planes/periodo_save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@periodo_save']);
         
     });
 

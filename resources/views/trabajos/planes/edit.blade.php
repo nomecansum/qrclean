@@ -95,7 +95,9 @@
                     <div class="form-group  col-md-12 mt-3">
                         <label>Plantas</label>
                         <div class="input-group select2-bootstrap-append">
-                            <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="planta[]" id="multi-planta" all="0" ></select>
+                            <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="planta[]" id="multi-planta" all="0" >
+
+                            </select>
                             <button class="btn btn-primary select-all" data-select="multi-dispositivos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
                         </div>
                     </div>
@@ -152,7 +154,13 @@
 
     <script>
         $('.form-ajax').submit(form_ajax_submit);
-    
+
+        $(document).ready(function() {
+            //console.log($("#multi-planta"));
+            $('.scroll-top').click();
+            s=setTimeout('end_update_filtros()',2000);
+        
+        });
 
         $(".select2").select2();
         
@@ -235,5 +243,35 @@
                 $('#detalle_plan').html(data);
             });
         })
+
+        function end_update_filtros(entidad){
+            //window.scrollTo(0,0);
+            console.log('end_update');
+
+            string="{{ $sel_plantas }}"
+            var arr = string.split(',');
+            $('#multi-planta').select2().val(arr);
+
+            string="{{ $sel_zonas }}"
+            var arr = string.split(',');
+            $('#multi-zonas').select2().val(arr);
+
+            string="{{ $sel_grupos }}"
+            var arr = string.split(',');
+            $('#multi-grupos').select2().val(arr);
+
+            string="{{ $sel_contratas }}"
+            var arr = string.split(',');
+            $('#multi-contratas').select2().val(arr);
+
+            $('#multi-planta').select2().val();
+            $('#multi-zonas').select2().val();
+            $('#multi-grupos').select2().val();
+            $('#multi-contratas').select2().val();
+            $('.select2-multiple').trigger('change');
+            
+        }
+        
+
         document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
     </script>

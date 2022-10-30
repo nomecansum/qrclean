@@ -133,19 +133,15 @@
                         </div>
                     </div>
                 </div>
-
-
-                <h5>Detalle del plan</h5>
-                <div class="row mt-2 mb-4 b-all rounded pb-3 overflow-auto" id="detalle_plan">
-                    
-                </div>
-
-
-                
                 <div class="form-group">
                     <div class="col-md-12 text-end">
                         @if(checkPermissions(['Trabajos'],['W']))<input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
+                </div>
+
+                <h4>Detalle del plan</h4>
+                <div class="row mt-2 mb-4 b-all rounded pb-3 overflow-auto" id="detalle_plan">
+                    
                 </div>
             </form>
 
@@ -158,7 +154,7 @@
         $(document).ready(function() {
             //console.log($("#multi-planta"));
             $('.scroll-top').click();
-            s=setTimeout('end_update_filtros()',2000);
+            s=setTimeout('end_update_filtros()',1000);
         
         });
 

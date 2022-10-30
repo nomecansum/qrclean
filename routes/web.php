@@ -591,6 +591,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/planes/detalle_save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_save']);
         Route::post('/planes/next_cron',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@next_cron']);
         Route::post('/planes/periodo_save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@periodo_save']);
+        Route::get('/planes/delete_detalle/{id}',['middleware'=>'permissions:["Trabajos planificacion"],["D"]','uses'=>'TrabajosController@delete_detalle'])->where('id', '[0-9]+');
         
     });
 

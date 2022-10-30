@@ -535,6 +535,7 @@ class TrabajosController extends Controller
         
 
         $detalle=DB::table('trabajos_planes_detalle')
+            ->join('contratas','trabajos_planes_detalle.id_contrata','contratas.id_contrata')
             ->where('id_plan',$r->id_plan)
             ->get();
 
@@ -561,6 +562,7 @@ class TrabajosController extends Controller
             ->first();
 
         $trabajo= trabajos::find($r->trabajo);
+        $datos_plan= planes::find($r->id_plan);
         
 
         $contratas=DB::Table('contratas')
@@ -578,6 +580,28 @@ class TrabajosController extends Controller
             ->join('users', 'contratas_operarios.id_usuario', 'users.id')
             ->wherein('id_contrata',$contratas->pluck('id_contrata')->toarray())
             ->wherenotnull('id_usuario')
+            ->get();
+
+        $plan=DB::table('trabajos_planes_detalle')
+            ->select('trabajos.des_trabajo','trabajos.id_trabajo','grupos_trabajos.id_grupo','grupos_trabajos.des_grupo','trabajos_planes_detalle.id_planta','trabajos_planes_detalle.id_zona','trabajos_planes_detalle.key_id')
+            ->join('grupos_trabajos','trabajos_planes_detalle.id_grupo_trabajo','grupos_trabajos.id_grupo')
+            ->join('trabajos','trabajos_planes_detalle.id_trabajo','trabajos.id_trabajo')
+            ->where('id_plan',$r->id_plan)
+            ->get();
+        
+        $lista_plantas=DB::Table('plantas')
+            ->select('id_planta','des_planta')
+            ->where('id_edificio',$datos_plan->id_edificio)
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->orderby('num_orden')
+            ->get();
+
+        $lista_zonas=DB::Table('plantas_zonas')
+            ->select('key_id as id_zona', 'des_zona','plantas.id_planta','des_planta')
+            ->join('plantas', 'plantas_zonas.id_planta', 'plantas.id_planta')
+            ->where('id_edificio',$datos_plan->id_edificio)
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->orderby('des_planta')
             ->get();
            
         
@@ -597,7 +621,7 @@ class TrabajosController extends Controller
 
         $val_periodo=$detalle->val_periodo??'0 20 ? * MON-FRI';
 
-        return view('trabajos.planes.fill_detalle_trabajo', compact('detalle','r','contratas','operarios','operarios_genericos','val_tiempo','num_operarios','val_periodo'));
+        return view('trabajos.planes.fill_detalle_trabajo', compact('detalle','r','contratas','operarios','operarios_genericos','val_tiempo','num_operarios','val_periodo','plan','lista_plantas','lista_zonas'));
         
     }
 
@@ -684,6 +708,12 @@ class TrabajosController extends Controller
                     $detalle->list_operarios=null;
                 }
                 $detalle->save();
+                //Ahora las copias
+                foreach($plantas_copiar as $planta){
+                    //Primero borramos las copias que ya existan
+                    
+                }
+
                 savebitacora('Detalle actualizada con exito para el plan de trabajo '.$r->id_plan. ' borrado',"Trabajos","detalle_save","OK");
                 return [
                     'title' => "Plan de trabajo",
@@ -728,5 +758,24 @@ class TrabajosController extends Controller
     public function detalle_td($id){
         $detalle=planes_detalle::find(request()->id);
         return view('trabajos.planes.fill_detalle_td', compact('detalle'));
+    }
+
+    public function delete_detalle($id){
+        try {
+            $dato = planes_detalle::findOrFail($id);
+            $dato->delete();
+            savebitacora('Detalle '.$id.' del plan '.$dato->id_plan. ' borrado',"Trabajos","delete_detalle","OK");
+            return [
+                'title' => "Plan de trabajo",
+                'message' => 'Detalle '.$id.' del plan '.$dato->id_plan. ' borrado',
+            ];
+
+        } catch (\Throwable $exception) {
+            return [
+                'title' => "Plan de trabajo",
+                'error' => 'ERROR: Ocurrio un error borrando el detalle '.$id.' del plan '.$dato->id_plan.' '.$e->getMessage(),
+            ];
+
+        }
     }
 }

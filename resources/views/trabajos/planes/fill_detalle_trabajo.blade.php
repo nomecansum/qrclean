@@ -11,13 +11,16 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#_dm-programacion" type="button" role="tab" aria-controls="programacion" aria-selected="false">Programacion</button>
         </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#_dm-acciones" type="button" role="tab" aria-controls="acciones" aria-selected="false">Acciones</button>
+        </li>
     </ul>
 
     <!-- Tabs content -->
     <div class="tab-content">
         <div id="_dm-recursos" class="tab-pane fade active show" role="tabpanel" aria-labelledby="recursos-tab">
             <div class="row">
-                <input type="hidden" name="id_detalle" value="{{ $detalle->key_id }}">
+                <input type="hidden" name="id_detalle" value="{{ $detalle->key_id??0 }}">
                 <input type="hidden" name="id_plan" value="{{ $r->id_plan }}">
                 <input type="hidden" name="id_grupo" value="{{ $r->grupo }}">
                 <input type="hidden" name="tipo" value="{{ $r->tipo }}">
@@ -60,6 +63,9 @@
         </div>
         <div id="_dm-programacion" class="tab-pane fade" role="tabpanel" aria-labelledby="programacion-tab">
             @include('trabajos.planes.fill_detalle_periodo')
+        </div>
+        <div id="_dm-acciones" class="tab-pane fade" role="tabpanel" aria-labelledby="acciones-tab">
+            @include('trabajos.planes.fill_acciones_trabajo')
         </div>
         
     </div>

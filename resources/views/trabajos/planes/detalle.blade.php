@@ -37,13 +37,14 @@
                             @php
                                 $periodos=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->pluck('val_periodo')->unique()->toarray();
                             @endphp
-                                @if(count($periodos)>1)<i class="fa-solid fa-asterisk add-tooltip" title="Varias periodicidades definidas en distintas zonas"></i>@elseif(count($periodos)==1) <span class="add-tooltip" style="color:{{ genColorCodeFromText($periodos[0]) }}">{{ $periodos[0] }}</span> @else <i class="fa-solid fa-question add-tooltip" title="No se ha definido periodicidad para este trabajo en ninguna zona"></i> @endif
+                                @if(count($periodos)>1)<i class="fa-solid fa-asterisk add-tooltip" title="Varias periodicidades definidas en distintas zonas"></i>@elseif(count($periodos)==1) <span class="add-tooltip span_cron" data-expresion="{{ $periodos[0] }}" style="color:{{ genColorCodeFromText($periodos[0]) }}">{{ $periodos[0] }}</span> @else <i class="fa-solid fa-question add-tooltip" title="No se ha definido periodicidad para este trabajo en ninguna zona"></i> @endif
                         </td>
                         @foreach($plantas as $planta)
                             @php
                                 $item=$detalle->where('id_planta',$planta->id_planta)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                             @endphp
                             <td scope="col" data-key_id= "{{ $item->key_id??0 }}" class="td_planta text-center text-nowrap" data-id="{{ $planta->id_planta }}" data-tipo="P" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $planta->des_planta.' - '.$trabajo->des_trabajo }}"  data-periodo="{{ $item->val_periodo??null }}">
+                                <img src="{{ isset($item->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$item->img_logo) : ''}}"  title="{{ $item->des_contrata??'' }}"  style="margin: auto; display: block; width: 20px; heigth:20px" alt=""  class="img-fluid">
                                 @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple add-tooltip " title="{{ $item->num_operarios }} Operarios asignados"></i> {{ $item->num_operarios }}  <br>@endif
                                 @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple add-tooltip "></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
                                 @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch add-tooltip " title="Duracion total {{ $item->val_tiempo }} minuos"></i> {{ $item->val_tiempo }}' <br>@endif
@@ -56,6 +57,7 @@
                                 $item=$detalle->where('id_zona',$zona->key_id)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                             @endphp
                             <td scope="col" data-key_id= "{{ $item->key_id??0 }}"  class="td_planta text-center text-nowrap" data-id="{{ $zona->key_id }}" data-tipo="Z" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}"  data-desc="{{ $zona->des_zona .' - '.$trabajo->des_trabajo}}"  data-periodo="{{ $item->val_periodo??null }}">
+                                <img src="{{ isset($item->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$item->img_logo) : ''}}" title="{{ $item->des_contrata??'' }}" style="margin: auto; display: block; width: 20px; heigth:20px" alt=""  class="img-fluid">
                                 @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple add-tooltip "></i> {{ $item->num_operarios }}  <br>@endif
                                 @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple add-tooltip " title="{{ count(explode(",",$item->list_operarios)) }} Operarios asignados"></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
                                 @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch add-tooltip " title="Duracion total {{ $item->val_tiempo }} minuos"></i> {{ $item->val_tiempo }}' <br>@endif
@@ -112,6 +114,8 @@
     </div>
 </div>
 
+
+
 <script>
 var grupo_periodo;
 var trabajo_periodo;
@@ -123,7 +127,7 @@ $('.td_planta').click(function(){
     var trabajo=$(this).data('trabajo');
     var desc=$(this).data('desc');
     var periodo=$(this).data('periodo');
-    $.post('{{url('/trabajos/planes/detalle_trabajo')}}', {_token:'{{csrf_token()}}',id_plan:{{ $dato->id_plan }},id:id,tipo:tipo,grupo:grupo,trabajo:trabajo,periodo:periodo,contratas:$('#multi-contratas').val()}, function(data, textStatus, xhr) {
+    $.post('{{url('/trabajos/planes/detalle_trabajo')}}', {_token:'{{csrf_token()}}',id_plan:{{ $dato->id_plan }},id:id,tipo:tipo,grupo:grupo,trabajo:trabajo,periodo:periodo,contratas:$('#multi-contratas').val(),plantas:$('#multi-planta').val(),zonas:$('#multi-zonas').val(),grupos:$('#multi-grupos').val()}, function(data, textStatus, xhr) {
         $('.modal-body').empty();
         $('#detalle_modal').html(data);
         $('#desc_detalle').html(desc);
@@ -176,5 +180,6 @@ $('#btn_si_periodo').click(function(){
 $('.span_cron').each(function(item){
     $(this).attr('title',cronstrue.toString($(this).data('expresion'),{ use24HourTimeFormat: true,locale: "es" }));
 })
+
 
 </script>

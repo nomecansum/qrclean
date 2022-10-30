@@ -647,7 +647,9 @@
                         <td><span id="cronResultDow">*</span></td>
                     </tr>
                     <tr>
-                        <td colspan="5" id="next_cron"></td>
+                        <td colspan="5">
+                            <div class="row" id="next_cron"></div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -665,8 +667,15 @@
 
     function siguientes_cron(){
         var cron = $('.cronResult').html();
-        $.post('{{url('/trabajos/planes/next_cron')}}', {_token:'{{csrf_token()}}',expresion:cron,veces:9}, function(data, textStatus, xhr) {
-           $('#next_cron').html(data);
+        var cronSched = later.parse.cron(cron);
+        later.date.localTime();
+        moment.localeData("{{ config('app.lang') }}");
+        siguientes=later.schedule(cronSched).next(9);
+        $('#next_cron').empty();
+        i=1;
+        siguientes.forEach(function(element) {
+            $('#next_cron').append('<div class="col-md-4"><span class="text-info">['+i+']</span>'+moment(element).locale("{{ config('app.lang') }}").format('D MMMM YYYY, H:mm')+'</div>');
+            i++;
         });
     }
     $(function () {

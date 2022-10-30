@@ -26,6 +26,7 @@ class planes_detalle extends Model
     * @var string
     */
     protected $primaryKey = 'key_id';
+    public $incrementing = true;
 
     /**
      * Attributes that should be mass-assignable.

@@ -22,11 +22,13 @@
         "sass-loader": "^8.0.0"
     },
     "dependencies": {
+        "@breejs/later": "^4.1.0",
         "cron-parser": "^4.6.0",
         "gridstack": "^5.1.1",
         "heatmap.js": "^2.0.5",
         "html5-qrcode": "^1.0.9",
         "instascan": "^1.0.0",
+        "later": "^1.2.0",
         "litepicker": "^2.0.12",
         "qr-scanner": "^1.1.1"
     }

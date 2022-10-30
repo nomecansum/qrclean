@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        '/users/tema',    
+        '/users/tema', 
+        '/next_cron',   
     ];
 }

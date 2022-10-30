@@ -178,7 +178,10 @@ $('#btn_si_periodo').click(function(){
 });
 
 $('.span_cron').each(function(item){
-    $(this).attr('title',cronstrue.toString($(this).data('expresion'),{ use24HourTimeFormat: true,locale: "es" }));
+    if($(this).data('expresion')!=''){
+        $(this).attr('title',cronstrue.toString($(this).data('expresion'),{ use24HourTimeFormat: true,locale: "es" }));
+    }
+   
 })
 
 

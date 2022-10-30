@@ -192,6 +192,7 @@
                 cliente_z="";
                 edificio_z="";
                 planta_z="";
+               
                 $.each(data.zonas, function(index, val) {
                     if(planta_z!=val.id_planta){
                         $('#multi-zonas').append('</optgroup><optgroup label="'+val.des_planta+'">');
@@ -211,14 +212,21 @@
                 cliente_z="";
                 edificio_z="";
                 planta_z="";
+                string="{{ $sel_zonas }}"
+                var arr = string.split(',');
                 $.each(data.zonas, function(index, val) {
                     if(planta_z!=val.id_planta){
                         $('#multi-zonas').append('</optgroup><optgroup label="'+val.des_planta+'">');
                         planta_z=val.id_planta;
                     }
-                    $('#multi-zonas').append('<option value="'+val.id_zona+'">'+val.des_zona+'</option>');
+                    if(arr.includes(val.id_zona.toString())){
+                        $('#multi-zonas').append('<option value="'+val.id_zona+'" selected>'+val.des_zona+'</option>');
+                    } else {
+                        $('#multi-zonas').append('<option value="'+val.id_zona+'">'+val.des_zona+'</option>');
+                    }
                 });
                 $('#loadfilter').hide();
+
             });
         });
 

@@ -414,9 +414,9 @@ class TrabajosController extends Controller
 
         $detalle=planes_detalle::find($id);
 
-        $sel_plantas=implode(",",$detalle->pluck('id_planta')->unique()->toarray());
+        $sel_plantas=implode(",",$detalle->wherenotnull('id_planta')->pluck('id_planta')->unique()->toarray());
         $sel_grupos=implode(",",$detalle->pluck('id_grupo_trabajo')->unique()->toarray());
-        $sel_zonas=implode(",",$detalle->pluck('id_zona')->unique()->toarray());
+        $sel_zonas=implode(",",$detalle->wherenotnull('id_zona')->pluck('id_zona')->unique()->toarray());
         $sel_contratas=implode(",",$detalle->pluck('id_contrata')->unique()->toarray());
 
         return view('trabajos.planes.edit', compact('dato','id','edificios','grupos','contratas','detalle','sel_plantas','sel_grupos','sel_zonas','sel_contratas'));
@@ -583,10 +583,12 @@ class TrabajosController extends Controller
             ->get();
 
         $plan=DB::table('trabajos_planes_detalle')
-            ->select('trabajos.des_trabajo','trabajos.id_trabajo','grupos_trabajos.id_grupo','grupos_trabajos.des_grupo','trabajos_planes_detalle.id_planta','trabajos_planes_detalle.id_zona','trabajos_planes_detalle.key_id')
+            ->select('trabajos.des_trabajo','trabajos.id_trabajo','grupos_trabajos.id_grupo','grupos_trabajos.des_grupo')
             ->join('grupos_trabajos','trabajos_planes_detalle.id_grupo_trabajo','grupos_trabajos.id_grupo')
-            ->join('trabajos','trabajos_planes_detalle.id_trabajo','trabajos.id_trabajo')
+            ->join('trabajos_grupos','trabajos_grupos.id_grupo','grupos_trabajos.id_grupo')
+            ->join('trabajos','trabajos_grupos.id_trabajo','trabajos.id_trabajo')
             ->where('id_plan',$r->id_plan)
+            ->distinct()
             ->get();
         
         $lista_plantas=DB::Table('plantas')
@@ -613,7 +615,7 @@ class TrabajosController extends Controller
 
         if(isset($detalle->val_operarios)){
             $num_operarios=$detalle->val_operarios;
-        } elseif(isset($detalle->list_operarios)){
+        } elseif(isset($detalle->list_operarios)&&is_array($detalle->list_operarios)){
             $num_operarios=explode(',',$detalle->list_operarios)->count();
         } else {
             $num_operarios=$trabajo->val_operarios??0;
@@ -709,9 +711,29 @@ class TrabajosController extends Controller
                 }
                 $detalle->save();
                 //Ahora las copias
-                foreach($plantas_copiar as $planta){
+                foreach($r->plantas_copiar??[] as $planta){
                     //Primero borramos las copias que ya existan
-                    
+                    if($planta!=$r->id_planta){
+                       $copia=$detalle->replicate();
+                       $copia->id_planta=$planta;
+                       $copia->save();
+                    }
+                }
+                foreach($r->zonas_copiar??[] as $zona){
+                    //Primero borramos las copias que ya existan
+                    if($zona!=$r->id_zona){
+                       $copia=$detalle->replicate();
+                       $copia->id_zona=$zona;
+                       $copia->save();
+                    }
+                }
+                foreach($r->trabajos_copiar??[] as $trabajo){
+                    //Primero borramos las copias que ya existan
+                    if($trabajo!=$r->id_trabajo){
+                       $copia=$detalle->replicate();
+                       $copia->id_trabajo=$trabajo;
+                       $copia->save();
+                    }
                 }
 
                 savebitacora('Detalle actualizada con exito para el plan de trabajo '.$r->id_plan. ' borrado',"Trabajos","detalle_save","OK");
@@ -729,8 +751,9 @@ class TrabajosController extends Controller
     }
 
     public function next_cron(Request $r){
-        $cron=next_cron($r->expresion,$r->veces);
-        return view('trabajos.planes.fill_next_cron', compact('cron'));
+        $expresion=$r->expresion;
+        $veces=$r->veces;
+        return view('resources.next_cron', compact('expresion','veces'));
     }
 
     public function periodo_save(Request $r){

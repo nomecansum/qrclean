@@ -1,18 +1,7 @@
-<div class="row mb-3">
-    <label class="text-danger font-bold"><i class="fa-solid fa-trash"></i> Borrar configuracion</label>
-    <div class="col-md-4" id="boton_borrar_1">
-        <a class="btn btn-lg btn-danger btn_borrar_detalle" data-id="{{ $detalle->key_id }}"><i class="fa-solid fa-trash"></i> Borrar</a>
-    </div>
-    <div class="col-md-8" id="boton_borrar_2" style="display: none">
-        <label>¿Seguro que quiere borrar este detalle? Esta accion no puede deshacerse</label>
-        <a class="btn btn-lg btn-danger btn_borrar_detalleOK mr-3" data-id="{{ $detalle->key_id }}"><i class="fa-solid fa-trash"></i>Si, Borrar</a>
-        <a class="btn btn-lg btn-warning btn_borrar_detalleCANCEL" data-id="{{ $detalle->key_id }}">Cancelar</a>
-    </div>
-    
-</div>
 
-<div class="row">
-    <label><i class="fa-solid fa-copy"></i> Copiar configuracion a otros trabajos</label>
+
+<div class="row mb-3">
+    <h4><i class="fa-solid fa-copy"></i> Copiar configuracion a otros trabajos</h4>
     <h5>PLANTAS</h5>
     @foreach($lista_plantas as $planta)
         <div class="col-md-4 mb-2">
@@ -34,25 +23,17 @@
     @endforeach
 </div>
 
-<div class="modal fade" id="borrar-detalle" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-               <h3 class="modal-title text-nowrap">Borrar detalle</h3>
-                <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
-                    <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
-                </button>
-            </div>
-            <div class="modal-body" id="detalle_periodo">
-                ¿Borrar detalle de trabajo?
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-info" id="btn_si_borrar" href="javascript:void(0)">Si</a>
-                <button type="button" id="btn_no_borrar" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
-            </div>
-        </div>
+<div class="row mb-3">
+    <label class="text-danger font-bold"><i class="fa-solid fa-trash"></i> Borrar configuracion</label>
+    <div class="col-md-4" id="boton_borrar_1">
+        <a class="btn btn-lg btn-danger btn_borrar_detalle" data-id="{{ $detalle->key_id??0 }}"><i class="fa-solid fa-trash"></i> Borrar</a>
     </div>
+    <div class="col-md-8" id="boton_borrar_2" style="display: none">
+        <label>¿Seguro que quiere borrar este detalle? Esta accion no puede deshacerse</label>
+        <a class="btn btn-lg btn-danger btn_borrar_detalleOK mr-3" data-id="{{ $detalle->key_id??0  }}"><i class="fa-solid fa-trash"></i>Si, Borrar</a>
+        <a class="btn btn-lg btn-warning btn_borrar_detalleCANCEL" data-id="{{ $detalle->key_id??0  }}">Cancelar</a>
+    </div>
+    
 </div>
 
 <script>

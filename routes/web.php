@@ -52,7 +52,7 @@ Route::post('/encuestas/save_data','EncuestasController@save_data');
 Route::get('/politica','HomeController@politica');
 Route::get('/terminos','HomeController@terminos');
 Route::get('/cookies','HomeController@cookies');
-
+Route::post('/next_cron','TrabajosController@next_cron');
 
 /////////////////////////////COSAS DE LOGIN///////////////////////////////////////////////////////////
 //Mi login de toda la vida
@@ -589,7 +589,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/planes/detalle_periodo/{plan}/{grupo}/{trabajo}',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_periodo'])->where('id', '[0-9]+');
         Route::get('/planes/mini_detalle/{plan}/{grupo}/{trabajo}/{contrata}/{mostrar_operarios}/{mostrar_tiempo}',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@mini_detalle']);
         Route::post('/planes/detalle_save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_save']);
-        Route::post('/planes/next_cron',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@next_cron']);
+        
         Route::post('/planes/periodo_save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@periodo_save']);
         Route::get('/planes/delete_detalle/{id}',['middleware'=>'permissions:["Trabajos planificacion"],["D"]','uses'=>'TrabajosController@delete_detalle'])->where('id', '[0-9]+');
         

@@ -43,7 +43,7 @@
 
 
        @php
-            dd(next_cron('0 0 1 * *'));
+            dd(next_cron('0 15 7/5 * ?',20));
        @endphp
     </div>
 </div>

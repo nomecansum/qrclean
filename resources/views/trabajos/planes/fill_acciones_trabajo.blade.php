@@ -2,23 +2,23 @@
 
 <div class="row mb-3">
     <h4><i class="fa-solid fa-copy"></i> Copiar configuracion a otros trabajos</h4>
-    <h5>PLANTAS</h5>
+    <h5><input type="checkbox" class="chk_plantas"> PLANTAS</h5>
     @foreach($lista_plantas as $planta)
         <div class="col-md-4 mb-2">
             <input type="checkbox" class="chk_planta" name="plantas_copiar[]" data-id="{{ $planta->id_planta }}"  value="{{ $planta->id_planta }}">  {!! $planta->des_planta !!}
         </div>
     @endforeach
-    <h5>ZONAS</h5>
+    <h5 class="mt-4"><input type="checkbox" class="chk_zonas"> ZONAS</h5>
     @foreach($lista_zonas as $zona)
         <div class="col-md-4 mb-2">
-            <input type="checkbox" class="chk_planta" name="zonas_copiar[]" data-id="{{ $zona->id_zona }}"  value="{{ $zona->id_zona }}"> <span class="text-info">[{{ $zona->des_planta }}]</span>  {!! $zona->des_zona !!}
+            <input type="checkbox" class="chk_zona" name="zonas_copiar[]" data-id="{{ $zona->id_zona }}"  value="{{ $zona->id_zona }}"> <span class="text-info">[{{ $zona->des_planta }}]</span>  {!! $zona->des_zona !!}
         </div>
     @endforeach
-    <h5>OTROS TRABAJOS DEL PLAN</h5>
+    <h5 class="mt-4"><input type="checkbox" class="chk_trabajos"> OTROS TRABAJOS DEL PLAN</h5>
     @foreach($plan as $p)
 
         <div class="col-md-6 mb-2">
-            <input type="checkbox" class="chk_planta" name="trabajos_copiar[]" data-id="{{ $p->id_trabajo }}" value="{{ $p->id_grupo.'_'.$p->id_trabajo }}"> <span class="text-info">[{{ $p->des_grupo }}]</span>  {!! $p->des_trabajo !!}
+            <input type="checkbox" class="chk_trab" name="trabajos_copiar[]" data-id="{{ $p->id_trabajo }}" value="{{ $p->id_grupo.'_'.$p->id_trabajo }}"> <span class="text-info">[{{ $p->des_grupo }}]</span>  {!! $p->des_trabajo !!}
         </div>
     @endforeach
 </div>
@@ -59,5 +59,27 @@
                 $('.select2-multiple').trigger('change');
             }
         })
+    })
+
+    $('.chk_plantas').click(function(){
+        if ($(this).is(':checked')) {
+            $('.chk_planta').prop('checked',true);
+        } else {
+            $('.chk_planta').prop('checked',false);
+        }
+    })
+    $('.chk_zonas').click(function(){
+        if ($(this).is(':checked')) {
+            $('.chk_zona').prop('checked',true);
+        } else {
+            $('.chk_zona').prop('checked',false);
+        }
+    })
+    $('.chk_trabajos').click(function(){
+        if ($(this).is(':checked')) {
+            $('.chk_trab').prop('checked',true);
+        } else {
+            $('.chk_trab').prop('checked',false);
+        }
     })
 </script>

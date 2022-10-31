@@ -15,6 +15,9 @@ use Jenssegers\Agent\Agent;
 use Illuminate\Support\Facades\Log;
 use Carbon\CarbonPeriod;
 use Shahonseven\ColorHash;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
+
 
 function stripAccents($str) {
     return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
@@ -1582,18 +1585,29 @@ function hexToRgb($hex, $alpha = false) {
  }
 
  function next_cron($expresion,$veces=1,$inicio=null){
-    //  // Works with predefined scheduling definitions
-    //  $cron = new Cron\CronExpression($expresion);
-    //  $resultado=[];
-    //  foreach(range(1,$veces) as $i){
-    //      if($inicio==null){
-    //          $inicio=Carbon::now();
-    //      }
-    //      $inicio=$cron->getNextRunDate($inicio);
-    //      $resultado[]=$inicio->format('Y-m-d H:i:s');
-    //  }
-    //  return $resultado;
-
-    return view('resources.next_cron', compact('expresion','veces'));
+    //Metodo 1 usando la libreria de Laravel
+     try{
+        $cron = new Cron\CronExpression($expresion);
+        $resultado=[];
+        foreach(range(1,$veces) as $i){
+            if($inicio==null){
+                $inicio=Carbon::now();
+            }
+            $inicio=$cron->getNextRunDate($inicio);
+            $resultado[]=$inicio->format('Y-m-d H:i:s');
+        }
+        return $resultado;
+     } catch (Exception $e) {
+       //Si este falla, opcion node
+        $process = new Process(['node', base_path('public/js/cron/cron.js'), $expresion, $veces, $inicio]);
+        $process->run();
+        
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+        //log::debug($process->getOutput());
+        return json_decode($process->getOutput());
+     }
+     
     
  }

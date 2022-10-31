@@ -729,9 +729,11 @@ class TrabajosController extends Controller
                 }
                 foreach($r->trabajos_copiar??[] as $trabajo){
                     //Primero borramos las copias que ya existan
-                    if($trabajo!=$r->id_trabajo){
+                    $trabajo=explode('_',$trabajo);
+                    if($trabajo[1]!=$r->id_trabajo || $trabajo[0]!==$r->id_grupo){
                        $copia=$detalle->replicate();
-                       $copia->id_trabajo=$trabajo;
+                       $copia->id_trabajo=$trabajo[1];
+                       $copia->id_grupo_trabajo=$trabajo[0];
                        $copia->save();
                     }
                 }

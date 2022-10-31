@@ -43,7 +43,7 @@
                             @php
                                 $item=$detalle->where('id_planta',$planta->id_planta)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                             @endphp
-                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}" class="td_planta text-center text-nowrap" data-id="{{ $planta->id_planta }}" data-tipo="P" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $planta->des_planta.' - '.$trabajo->des_trabajo }}"  data-periodo="{{ $item->val_periodo??null }}">
+                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}" class="td_planta text-center text-nowrap {{ ($item->mca_activa??'')=='N'?'bg-gray text-muted':'' }}" data-id="{{ $planta->id_planta }}" data-tipo="P" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $planta->des_planta.' - '.$trabajo->des_trabajo }}"  data-periodo="{{ $item->val_periodo??null }}">
                                 <img src="{{ isset($item->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$item->img_logo) : ''}}"  title="{{ $item->des_contrata??'' }}"  style="margin: auto; display: block; width: 20px; heigth:20px" alt=""  class="img-fluid">
                                 @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple add-tooltip " title="{{ $item->num_operarios }} Operarios asignados"></i> {{ $item->num_operarios }}  <br>@endif
                                 @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple add-tooltip "></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
@@ -56,7 +56,7 @@
                             @php
                                 $item=$detalle->where('id_zona',$zona->key_id)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                             @endphp
-                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}"  class="td_planta text-center text-nowrap" data-id="{{ $zona->key_id }}" data-tipo="Z" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}"  data-desc="{{ $zona->des_zona .' - '.$trabajo->des_trabajo}}"  data-periodo="{{ $item->val_periodo??null }}">
+                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}"  class="td_planta text-center text-nowrap {{ ($item->mca_activa??'')=='N'?'bg-gray text-muted':'' }}" data-id="{{ $zona->key_id }}" data-tipo="Z" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}"  data-desc="{{ $zona->des_zona .' - '.$trabajo->des_trabajo}}"  data-periodo="{{ $item->val_periodo??null }}">
                                 <img src="{{ isset($item->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$item->img_logo) : ''}}" title="{{ $item->des_contrata??'' }}" style="margin: auto; display: block; width: 20px; heigth:20px" alt=""  class="img-fluid">
                                 @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple add-tooltip "></i> {{ $item->num_operarios }}  <br>@endif
                                 @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple add-tooltip " title="{{ count(explode(",",$item->list_operarios)) }} Operarios asignados"></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif

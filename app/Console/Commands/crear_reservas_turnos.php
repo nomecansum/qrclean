@@ -50,20 +50,16 @@ class crear_reservas_turnos extends Command
 
     function escribelog_comando($tipo,$mensaje){
         Log::$tipo($mensaje);
-        log_tarea($mensaje,$this->argument('id'),$tipo);   
-        if($this->argument('origen')=='W')
-        {
-            
-        }
-    } 
+        log_tarea($mensaje,$this->argument('id'),$tipo);
+    }
+
     static function clientes(){
         if(is_array(clientes())){
             $clientes=implode(",",clientes());
         }   else {
             $clientes=implode(",",clientes()->ToArray());
-        } 
+        }
         return $clientes;
-        
     }
     
     static function params(){
@@ -81,7 +77,7 @@ class crear_reservas_turnos extends Command
                     "label": "Tipo de puesto",
                     "name": "id_tipo_puesto",
                     "tipo": "list_db",
-                    "multiple": true, 
+                    "multiple": true,
                     "sql": "SELECT DISTINCT \n
                                 `puestos_tipos`.`id_tipo_puesto` as id, \n
                                 concat(\'[\',nom_cliente,\'] - \',`puestos_tipos`.`des_tipo_puesto`) as nombre  \n
@@ -90,7 +86,7 @@ class crear_reservas_turnos extends Command
                                 INNER JOIN `clientes` ON (`puestos_tipos`.`id_cliente` = `clientes`.`id_cliente`) \n
                             WHERE \n
                             `puestos_tipos`.`id_cliente` in('.limpiarPuestos::clientes().')  \n
-                            ORDER BY 2", 
+                            ORDER BY 2",
                     "required": false,
                     "buscar": true
                 },
@@ -98,7 +94,7 @@ class crear_reservas_turnos extends Command
                     "label": "Perfil",
                     "name": "id_perfil",
                     "tipo": "list_db",
-                    "multiple": true, 
+                    "multiple": true,
                     "sql": "SELECT DISTINCT \n
                                 `niveles_acceso`.`cod_nivel` as id, \n
                                 concat(\'[\',nom_cliente,\'] - \',`niveles_acceso`.`des_nivel_acceso`) as nombre  \n
@@ -107,7 +103,7 @@ class crear_reservas_turnos extends Command
                                 INNER JOIN `clientes` ON (`niveles_acceso`.`id_cliente` = `clientes`.`id_cliente`) \n
                             WHERE \n
                             (`niveles_acceso`.`id_cliente` in('.limpiarPuestos::clientes().') or niveles_acceso.mca_fijo=\'S\') \n
-                            ORDER BY 2", 
+                            ORDER BY 2",
                     "required": false,
                     "buscar": true
                 },
@@ -115,7 +111,7 @@ class crear_reservas_turnos extends Command
                     "label": "Edificio",
                     "name": "id_edificio",
                     "tipo": "list_db",
-                    "multiple": true, 
+                    "multiple": true,
                     "sql": "SELECT DISTINCT \n
                                 `edificios`.`id_edificio` as id, \n
                                 concat(\'[\',nom_cliente,\'] - \',`edificios`.`des_edificio`) as nombre  \n
@@ -124,7 +120,7 @@ class crear_reservas_turnos extends Command
                                 INNER JOIN `clientes` ON (`edificios`.`id_cliente` = `clientes`.`id_cliente`) \n
                             WHERE \n
                             `edificios`.`id_cliente` in('.limpiarPuestos::clientes().')  \n
-                            ORDER BY 2", 
+                            ORDER BY 2",
                     "required": false,
                     "buscar": true
                 },
@@ -132,7 +128,7 @@ class crear_reservas_turnos extends Command
                     "label": "Turno",
                     "name": "id_turno",
                     "tipo": "list_db",
-                    "multiple": true, 
+                    "multiple": true,
                     "sql": "SELECT DISTINCT \n
                                 `turnos`.`id_turno` as id, \n
                                 concat(\'[\',nom_cliente,\'] - \',`turnos`.`des_turno`) as nombre  \n
@@ -141,7 +137,7 @@ class crear_reservas_turnos extends Command
                                 INNER JOIN `clientes` ON (`turnos`.`id_cliente` = `clientes`.`id_cliente`) \n
                             WHERE \n
                             `turnos`.`id_cliente` in('.limpiarPuestos::clientes().')  \n
-                            ORDER BY 2", 
+                            ORDER BY 2",
                     "required": false,
                     "buscar": true
                 },
@@ -149,7 +145,7 @@ class crear_reservas_turnos extends Command
                     "label": "Colectivo",
                     "name": "id_colectivo",
                     "tipo": "list_db",
-                    "multiple": true, 
+                    "multiple": true,
                     "sql": "SELECT DISTINCT \n
                                 `colectivos`.`cod_colectivo` as id, \n
                                 concat(\'[\',nom_cliente,\'] - \',`colectivos`.`des_colectivo`) as nombre  \n
@@ -158,7 +154,7 @@ class crear_reservas_turnos extends Command
                                 INNER JOIN `clientes` ON (`colectivos`.`id_cliente` = `clientes`.`id_cliente`) \n
                             WHERE \n
                             `colectivos`.`id_cliente` in('.limpiarPuestos::clientes().')  \n
-                            ORDER BY 2", 
+                            ORDER BY 2",
                     "required": false,
                     "buscar": true
                 },
@@ -245,7 +241,6 @@ class crear_reservas_turnos extends Command
                     $this->escribelog_comando('debug','Procesando fecha '.$fecha->format('Y-m-d'));
                     //A ver si es festivo o fin de semana y no puede reservar
                     $estadefiesta=collect(estadefiesta($user->id),$fecha)->first()->festivo;
-                    //$estadefiesta=collect(DB::select(DB::raw("select estadefiesta(".$user->id.",'".$fecha->format('Y-m-d')."') as estadefiesta ")))->first()->estadefiesta;
                     if($estadefiesta==1){
                         $this->escribelog_comando('info','El usuario '.$user->name.' no puede reservar en la fecha '.$fecha->format('Y-m-d').' porque es festivo');
                         continue;

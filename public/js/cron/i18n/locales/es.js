@@ -116,7 +116,7 @@ export class es implements Locale {
     return "quinto";
   }
   first() {
-    return "primero";
+    return "primer";
   }
   firstWeekday() {
     return "primer día de la semana";

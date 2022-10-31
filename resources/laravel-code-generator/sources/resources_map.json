@@ -288,5 +288,10 @@
         "model-name": "planes_detalle",
         "resource-file": "planes_detalles.json",
         "table-name": "trabajos_planes_detalle"
+    },
+    {
+        "model-name": "trabajos_programacion",
+        "resource-file": "trabajos_programacions.json",
+        "table-name": "trabajos_programacion"
     }
 ]

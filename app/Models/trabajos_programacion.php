@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class planes_detalle extends Model
+class trabajos_programacion extends Model
 {
     
     /**
@@ -18,15 +18,14 @@ class planes_detalle extends Model
      *
      * @var string
      */
-    protected $table = 'trabajos_planes_detalle';
+    protected $table = 'trabajos_programacion';
 
     /**
     * The database primary key value.
     *
     * @var string
     */
-    protected $primaryKey = 'key_id';
-    public $incrementing = true;
+    protected $primaryKey = 'id_programacion';
 
     /**
      * Attributes that should be mass-assignable.
@@ -34,19 +33,17 @@ class planes_detalle extends Model
      * @var array
      */
     protected $fillable = [
-                  'fec_prox_ejecucion',
-                  'fec_ult_ejecucion',
-                  'id_contrata',
-                  'id_grupo_trabajo',
                   'id_plan',
-                  'id_planta',
                   'id_trabajo',
-                  'id_zona',
-                  'list_operarios',
-                  'num_operarios',
-                  'val_periodo',
-                  'val_tiempo',
-                  'mca_activa',
+                  'id_grupo',
+                  'fec_programada',
+                  'fec_inicio',
+                  'fec_fin',
+                  'id_operario_inicio',
+                  'id_operario_fin',
+                  'observaciones',
+                  'val_tiempo_estimado',
+                  'val_tiempo_empleado'
               ];
 
     /**
@@ -63,15 +60,6 @@ class planes_detalle extends Model
      */
     protected $casts = [];
     
-    /**
-     * Get the key for this model.
-     *
-     * @return App\Models\Key
-     */
-    public function key()
-    {
-        return $this->belongsTo('App\Models\Key','key_id');
-    }
 
 
 

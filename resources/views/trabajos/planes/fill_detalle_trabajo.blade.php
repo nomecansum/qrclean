@@ -49,6 +49,12 @@
                         <option value="1" {{ isset($detalle) && old('id_contrata', optional($detalle)->num_operarios) == null ? 'selected' : '' }}>Detallar</option>
                     </select>
                 </div>
+                <div class="col-md-2 p-t-20 mt-1">
+                    <div class="form-check pt-1">
+                        <input name="mca_activa"  id="mca_activa" value="S" {{ $detalle->mca_activa=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                        <label for="mca_activa" class="form-check-label">Activa</label>
+                    </div>
+                </div>
                 {{-- <div class="col-md-2">
                     <label for="sel_tiempo" class="control-label">Tiempo</label>
                     <select class="form-control" required id="sel_tiempo" name="sel_tiempo">

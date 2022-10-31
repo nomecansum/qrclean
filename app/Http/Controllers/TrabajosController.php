@@ -398,7 +398,16 @@ class TrabajosController extends Controller
                 $q->where('trabajos_planes.id_cliente',Auth::user()->id_cliente);
             })
             ->get();
-        return view('trabajos.planes.index', compact('datos'));
+
+        $detalles= DB::table('trabajos_planes_detalle')
+            ->join('trabajos_planes', 'trabajos_planes.id_plan', 'trabajos_planes_detalle.id_plan')
+            ->join('trabajos', 'trabajos_planes_detalle.id_trabajo', 'trabajos.id_trabajo')
+            ->join('contratas', 'trabajos_planes_detalle.id_contrata', 'contratas.id_contrata')
+            ->where(function ($q){
+                $q->where('trabajos_planes.id_cliente',Auth::user()->id_cliente);
+            })
+            ->get();
+        return view('trabajos.planes.index', compact('datos','detalles'));
     }
 
     public function edit_plan($id=0 ) {
@@ -702,6 +711,7 @@ class TrabajosController extends Controller
                 $detalle->val_tiempo=$r->val_tiempo;
                 $detalle->val_periodo=$r->val_periodo;
                 $detalle->val_tiempo=$r->val_tiempo;
+                $detalle->mca_activa=isset($r->mca_activa)?'S':'N';
                 if($r->sel_operarios==1 && isset($r->operarios)){
                     $detalle->num_operarios=null;
                     $detalle->list_operarios=implode(',',$r->operarios);
@@ -778,11 +788,6 @@ class TrabajosController extends Controller
                 'error' => 'ERROR: Ocurrio un error actualizando periodo para el grupo de trabajos '.$r->grupo. ' del plan '.$r->id_plan.' '.$e->getMessage(),
             ];
         }
-    }
-
-    public function detalle_td($id){
-        $detalle=planes_detalle::find(request()->id);
-        return view('trabajos.planes.fill_detalle_td', compact('detalle'));
     }
 
     public function delete_detalle($id){

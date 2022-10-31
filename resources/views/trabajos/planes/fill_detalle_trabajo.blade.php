@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-md-2 p-t-20 mt-1">
                     <div class="form-check pt-1">
-                        <input name="mca_activa"  id="mca_activa" value="S" {{ $detalle->mca_activa=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                        <input name="mca_activa"  id="mca_activa" value="S" {{ (isset($detalle) && $detalle->mca_activa=='S')||(!isset($setalle))?'checked':'' }} class="form-check-input" type="checkbox">
                         <label for="mca_activa" class="form-check-label">Activa</label>
                     </div>
                 </div>

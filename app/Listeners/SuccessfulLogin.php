@@ -108,6 +108,12 @@ class SuccessfulLogin
         ///Perfil del usuario en session
         session(['perfil'=>$nivel]);
 
+        //Vemos si tiene operario de trabajos
+        $operario=DB::table('contratas_operarios')->where('id_usuario',auth()->user()->id)->first();
+        if(isset($operario)){
+            session(['id_operario'=>$operario->id_operario]);
+        } 
+
         //Temas del usuario
         try{
             if($user->theme===null){

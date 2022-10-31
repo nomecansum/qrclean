@@ -34,8 +34,7 @@ class trabajos_programacion extends Model
      */
     protected $fillable = [
                   'id_plan',
-                  'id_trabajo',
-                  'id_grupo',
+                  'id_trabajo_plan',
                   'fec_programada',
                   'fec_inicio',
                   'fec_fin',

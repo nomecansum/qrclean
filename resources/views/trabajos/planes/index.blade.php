@@ -146,7 +146,7 @@
                             <td class="text-center">{{ decimal_to_time($tiempo/60) }}</td>
                             <td class="text-center">
                                 @foreach($contratas as $contrata)
-                                <img src="{{ isset($contrata->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$contrata->img_logo) : ''}}"  title="{{ $contrata->des_contrata??'' }}"  style="margin: auto; display: block; width: 30px; heigth:30px" alt=""  class="img-fluid">
+                                <div><img src="{{ isset($contrata->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$contrata->img_logo) : ''}}"  title="{{ $contrata->des_contrata??'' }}"  style="margin: auto; display: block; width: 30px; heigth:30px" alt=""> {{ $contrata->des_contrata??'' }}</div>
                                 @endforeach
                             </td>
                             <td class="text-center"><i class="fa-solid fa-person-simple"></i> {{ ($operarios_gen??0)+count($operarios_list)??0 }}</td>
@@ -194,7 +194,7 @@
 
 @section('scripts')
     <script src="{{ asset('/js/cron/cronstrue.min.js')}}" defer></script>
-    <script src="{{ asset('/js/cron/cron.js')}}" defer></script>
+    <script src="{{ asset('/js/cron/cronlib.js')}}" defer></script>
     <script src="{{ asset('/js/cron/cronstrue-i18n.min.js')}}" defer></script>
     <script src="{{ asset('/js/cron/later.min.js')}}" defer></script>
     <script src="{{ asset('/plugins/momentjs/moment-with-locales.min.js')}}" defer></script>

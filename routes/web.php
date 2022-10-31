@@ -564,14 +564,18 @@ Route::group(['middleware' => 'auth'], function () {
 
      ////////////////////GESTION DE TRABAJOS////////////////////
      Route::group(['prefix' => 'trabajos'], function () {
+        //sECCIN DE PARAMETRIZACION - Gerstion de trabajos
+        //Tipos de trabajo
         Route::get('/tipos', ['middleware'=>'permissions:["Trabajos tipos"],["R"]','uses'=>'TrabajosController@tipos_index'])->name('trabajos.index');
         Route::get('/tipos/edit/{id?}',['middleware'=>'permissions:["Trabajos tipos"],["W"]','uses'=>'TrabajosController@edit_tipo'])->where('id', '[0-9]+');
         Route::post('/tipos/save',['middleware'=>'permissions:["Trabajos tipos"],["W"]','uses'=>'TrabajosController@update_tipo']);
         Route::get('/tipos/delete/{id}',['middleware'=>'permissions:["Trabajos tipos"],["D"]','uses'=>'TrabajosController@delete_tipo'])->where('id', '[0-9]+');
+        //Grupos de trabajo
         Route::get('/grupos',['middleware'=>'permissions:["Trabajos"],["R"]','uses'=>'TrabajosController@grupos_index'])->name('trabajos_grupos.index');
         Route::get('/grupos/edit/{id}',['middleware'=>'permissions:["Trabajos"],["W"]','uses'=>'TrabajosController@edit_grupo'])->where('id', '[0-9]+');
         Route::post('/grupos/save',['middleware'=>'permissions:["Trabajos"],["W"]','uses'=>'TrabajosController@update_grupo']);
         Route::get('/grupos/delete/{id}',['middleware'=>'permissions:["Trabajos"],["D"]','uses'=>'TrabajosController@delete_tipo'])->where('id', '[0-9]+');
+        //Gestion de contratas
         Route::get('/contratas',['middleware'=>'permissions:["Trabajos contratas"],["R"]','uses'=>'TrabajosController@contratas_index'])->name('trabajos_contratas.index');
         Route::get('/contratas/edit/{id}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@edit_contrata'])->where('id', '[0-9]+');
         Route::post('/contratas/save',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@update_contrata']);
@@ -580,18 +584,26 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/contratas/usuarios_genericos/{id}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@usuarios_genericos'])->where('id', '[0-9]+');
         Route::post('/contratas/crear_usuarios',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@crear_usuarios_genericos']);
         Route::get('/contratas/set_usuarios_contrata/{accion}/{id_contrata}/{id_operario}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@set_usuarios_contrata']);
-        Route::get('/planes',['middleware'=>'permissions:["Trabajos planificacion"],["R"]','uses'=>'TrabajosController@planes_index'])->name('trabajos_planes.index');
-        Route::get('/planes/edit/{id}',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@edit_plan'])->where('id', '[0-9]+');
-        Route::post('/planes/save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@update_plan']);
-        Route::get('/planes/delete/{id}',['middleware'=>'permissions:["Trabajos planificacion"],["D"]','uses'=>'TrabajosController@delete_plan'])->where('id', '[0-9]+');
-        Route::post('/planes/detalle',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@get_plan']);
-        Route::post('/planes/detalle_trabajo/',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_trabajo']);
-        Route::get('/planes/detalle_periodo/{plan}/{grupo}/{trabajo}',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_periodo'])->where('id', '[0-9]+');
-        Route::get('/planes/mini_detalle/{plan}/{grupo}/{trabajo}/{contrata}/{mostrar_operarios}/{mostrar_tiempo}',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@mini_detalle']);
-        Route::post('/planes/detalle_save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@detalle_save']);
-        
-        Route::post('/planes/periodo_save',['middleware'=>'permissions:["Trabajos planificacion"],["W"]','uses'=>'TrabajosController@periodo_save']);
-        Route::get('/planes/delete_detalle/{id}',['middleware'=>'permissions:["Trabajos planificacion"],["D"]','uses'=>'TrabajosController@delete_detalle'])->where('id', '[0-9]+');
+        //Gestion de planes de trabajo
+        Route::get('/planes',['middleware'=>'permissions:["Trabajos planificador"],["R"]','uses'=>'TrabajosController@planes_index'])->name('trabajos_planes.index');
+        Route::get('/planes/edit/{id}',['middleware'=>'permissions:["Trabajos planificador"],["W"]','uses'=>'TrabajosController@edit_plan'])->where('id', '[0-9]+');
+        Route::post('/planes/save',['middleware'=>'permissions:["Trabajos planificador"],["W"]','uses'=>'TrabajosController@update_plan']);
+        Route::get('/planes/delete/{id}',['middleware'=>'permissions:["Trabajos planificador"],["D"]','uses'=>'TrabajosController@delete_plan'])->where('id', '[0-9]+');
+        Route::post('/planes/detalle',['middleware'=>'permissions:["Trabajos planificador"],["W"]','uses'=>'TrabajosController@get_plan']);
+        Route::post('/planes/detalle_trabajo/',['middleware'=>'permissions:["Trabajos planificador"],["W"]','uses'=>'TrabajosController@detalle_trabajo']);
+        Route::get('/planes/detalle_periodo/{plan}/{grupo}/{trabajo}',['middleware'=>'permissions:["Trabajos planificador"],["W"]','uses'=>'TrabajosController@detalle_periodo'])->where('id', '[0-9]+');
+        Route::get('/planes/mini_detalle/{plan}/{grupo}/{trabajo}/{contrata}/{mostrar_operarios}/{mostrar_tiempo}',['middleware'=>'permissions:["Trabajos planificador"],["W"]','uses'=>'TrabajosController@mini_detalle']);
+        Route::post('/planes/detalle_save',['middleware'=>'permissions:["Trabajos planificador"],["W"]','uses'=>'TrabajosController@detalle_save']);
+        Route::post('/planes/periodo_save',['middleware'=>'permissions:["Trabajos planificador"],["W"]','uses'=>'TrabajosController@periodo_save']);
+        Route::get('/planes/delete_detalle/{id}',['middleware'=>'permissions:["Trabajos planificador"],["D"]','uses'=>'TrabajosController@delete_detalle'])->where('id', '[0-9]+');
+
+        //Menu de servicios -> Mis trabajos
+        Route::get('/mistrabajos', ['middleware'=>'permissions:["Trabajos mis trabajos"],["R"]','uses'=>'TrabajosController@mis_trabajos'])->name('mistrabajos.index');
+        Route::get('/mistrabajos/load_calendario/{fecha}', ['middleware'=>'permissions:["Trabajos mis trabajos"],["R"]','uses'=>'TrabajosController@load_calendario'])->name('mistrabajos.load_calendario');
+        Route::get('/mistrabajos/load_dia/{fecha}', ['middleware'=>'permissions:["Trabajos mis trabajos"],["R"]','uses'=>'TrabajosController@load_dia'])->name('mistrabajos.load_dia');
+        Route::get('/mistrabajos/iniciar/{id}', ['middleware'=>'permissions:["Trabajos iniciar finalizar"],["R"]','uses'=>'TrabajosController@iniciar_trabajo'])->name('trabajos.iniciar');
+        Route::get('/mistrabajos/finalizar/{id}', ['middleware'=>'permissions:["Trabajos iniciar finalizar"],["R"]','uses'=>'TrabajosController@finalizar_trabajo'])->name('trabajos.finalizar');
+        Route::post('/mistrabajos/comentarios', ['middleware'=>'permissions:["Trabajos iniciar finalizar"],["R"]','uses'=>'TrabajosController@comentarios_trabajo'])->name('trabajos.comentarios');
         
     });
 

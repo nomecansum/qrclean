@@ -14,6 +14,7 @@ use App\Models\planes_detalle;
 use App\Models\edificios;
 use App\Models\plantas;
 use App\Models\plantas_zonas;
+use App\Models\trabajos_programacion;
 
 use Illuminate\Http\Request;
 use Image;
@@ -365,6 +366,7 @@ class TrabajosController extends Controller
                 $usuario = new operarios();
                 $usuario->id_contrata = $id_contrata;
                 $usuario->id_usuario = $id_operario;
+                $usuario->nom_operario = \App\Models\users::find($id_operario)->name;
                 $usuario->id_cliente = $contrata->id_cliente;
                 $usuario->save();
                 return [
@@ -421,12 +423,20 @@ class TrabajosController extends Controller
         $grupos = grupos::where('id_cliente',Auth::user()->id_cliente)->get();
         $contratas = contratas::where('id_cliente',Auth::user()->id_cliente)->get();
 
-        $detalle=planes_detalle::find($id);
+        $detalle=planes_detalle::where('id_plan',$id)->get();
+       if($detalle!=null){
+            $sel_plantas=implode(",",$detalle->wherenotnull('id_planta')->pluck('id_planta')->unique()->toarray());
+            $sel_grupos=implode(",",$detalle->pluck('id_grupo_trabajo')->unique()->toarray());
+            $sel_zonas=implode(",",$detalle->wherenotnull('id_zona')->pluck('id_zona')->unique()->toarray());
+            $sel_contratas=implode(",",$detalle->pluck('id_contrata')->unique()->toarray());
+       } else {
+            $sel_plantas=null;
+            $sel_grupos=null;
+            $sel_zonas=null;
+            $sel_contratas=null;
+       }
 
-        $sel_plantas=implode(",",$detalle->wherenotnull('id_planta')->pluck('id_planta')->unique()->toarray());
-        $sel_grupos=implode(",",$detalle->pluck('id_grupo_trabajo')->unique()->toarray());
-        $sel_zonas=implode(",",$detalle->wherenotnull('id_zona')->pluck('id_zona')->unique()->toarray());
-        $sel_contratas=implode(",",$detalle->pluck('id_contrata')->unique()->toarray());
+        
 
         return view('trabajos.planes.edit', compact('dato','id','edificios','grupos','contratas','detalle','sel_plantas','sel_grupos','sel_zonas','sel_contratas'));
     }
@@ -706,7 +716,7 @@ class TrabajosController extends Controller
                 $detalle->id_grupo_trabajo=$r->id_grupo;
                 $detalle->id_trabajo=$r->id_trabajo;
                 $detalle->id_contrata=$r->id_contrata;
-                $detalle->id_planta=$r->id_planta;
+                $detalle->id_planta=isset($r->id_zona)?null:$r->id_planta;
                 $detalle->id_zona=$r->id_zona;
                 $detalle->val_tiempo=$r->val_tiempo;
                 $detalle->val_periodo=$r->val_periodo;
@@ -807,5 +817,107 @@ class TrabajosController extends Controller
             ];
 
         }
+    }
+
+
+    //////////////////////// SECCION DE TRABAJOS EN SERVICIOS //////////////////////////
+
+    public function mis_trabajos($fecha=null){
+        if(!isset($fecha)){
+            $fecha=Carbon::now();
+        } else {
+            $fecha=Carbon::parse($fecha);
+        }
+        return view('trabajos.mistrabajos.index', compact('fecha'));
+    }
+
+    public function load_calendario($fecha){
+        $fecha=Carbon::parse($fecha);
+        $calendario=DB::table('trabajos_programacion')
+            ->selectraw('DATE(trabajos_programacion.fec_programada) as fecha_corta,
+                        count(trabajos_programacion.id_programacion) as trabajos')
+            ->join('trabajos_planes_detalle','trabajos_programacion.id_trabajo_plan','trabajos_planes_detalle.key_id')
+            ->join('trabajos_planes','trabajos_planes_detalle.id_plan','trabajos_planes.id_plan')
+            ->join('trabajos','trabajos_planes_detalle.id_trabajo','trabajos.id_trabajo')
+            ->where('trabajos_planes.id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if(session('id_operario')!=null){
+                    $q->whereraw("find_in_set(".session('id_operario').",trabajos_planes_detalle.list_operarios)");
+                }
+                $q->orwherenull('trabajos_planes_detalle.list_operarios');
+            })
+            ->wherebetween('trabajos_programacion.fec_programada',[Carbon::parse($fecha)->startofmonth(),Carbon::parse($fecha)->endofmonth()])
+            ->groupby('fecha_corta')
+            ->get();
+
+        return view('trabajos.mistrabajos.fill_calendario', compact('fecha','calendario'));
+    }
+
+    public function load_dia($fecha){
+        $fecha=Carbon::parse($fecha);
+        $datos=DB::table('trabajos_programacion')
+            ->select('trabajos.des_trabajo','trabajos.val_icono as icono_trabajo','trabajos.val_color as color_trabajo',
+                     'trabajos_programacion.*',
+                     'trabajos_planes.des_plan','trabajos_planes.val_icono as icono_plan','trabajos_planes.val_color as color_plan','trabajos_planes.id_edificio',
+                     'edificios.des_edificio',
+                     'plantas.des_planta',
+                     'plantas_zonas.des_zona',
+                     'trabajos_planes_detalle.id_planta','trabajos_planes_detalle.id_zona','trabajos_planes_detalle.val_tiempo','trabajos_planes_detalle.num_operarios','trabajos_planes_detalle.list_operarios',
+                     'grupos_trabajos.id_grupo','grupos_trabajos.des_grupo','grupos_trabajos.val_icono as icono_grupo','grupos_trabajos.val_color as color_grupo',
+                     'operarios_ini.nom_operario as nom_operario_ini',
+                     'operarios_fin.nom_operario as nom_operario_fin',)
+            ->join('trabajos_planes_detalle','trabajos_programacion.id_trabajo_plan','trabajos_planes_detalle.key_id')
+            ->join('trabajos_planes','trabajos_planes_detalle.id_plan','trabajos_planes.id_plan')
+            ->join('edificios','trabajos_planes.id_edificio','edificios.id_edificio')
+            ->leftjoin('contratas_operarios as operarios_ini','trabajos_programacion.id_operario_inicio','operarios_ini.id_operario')
+            ->leftjoin('contratas_operarios  as operarios_fin','trabajos_programacion.id_operario_fin','operarios_fin.id_operario')
+            ->leftjoin('plantas','trabajos_planes_detalle.id_planta','plantas.id_planta')
+            ->leftjoin('plantas_zonas','trabajos_planes_detalle.id_zona','plantas_zonas.key_id')
+            ->join('trabajos','trabajos_planes_detalle.id_trabajo','trabajos.id_trabajo')
+            ->join('grupos_trabajos','trabajos_planes_detalle.id_grupo_trabajo','grupos_trabajos.id_grupo')
+            ->where('trabajos_planes.id_cliente',Auth::user()->id_cliente)
+            ->where(function($q){
+                if(session('id_operario')!=null){
+                    $q->whereraw("find_in_set(".session('id_operario').",trabajos_planes_detalle.list_operarios)");
+                }
+                $q->orwherenull('trabajos_planes_detalle.list_operarios');
+            })
+            ->wheredate('trabajos_programacion.fec_programada',$fecha)
+            ->get();
+
+        return view('trabajos.mistrabajos.trabajos_dia', compact('fecha','datos'));
+    }
+
+    public function iniciar_trabajo($id){
+        $trabajo=trabajos_programacion::find($id);
+        $trabajo->id_operario_inicio=session('id_operario');
+        $trabajo->fec_inicio=Carbon::now();
+        $trabajo->save();
+        return [
+            'title' => "Plan de trabajo",
+            'message' => 'Iniciado trabajo ',
+        ];
+    }
+
+    public function finalizar_trabajo($id){
+        $trabajo=trabajos_programacion::find($id);
+        $trabajo->id_operario_fin=session('id_operario');
+        $trabajo->fec_fin=Carbon::now();
+        $trabajo->save();
+        return [
+            'title' => "Plan de trabajo",
+            'message' => 'Finalizado trabajo ',
+        ];
+    }
+
+    public function comentarios_trabajo(Request $r){
+        $trabajo=trabajos_programacion::find($r->id);
+        $operario=contratas_operarios::find(session('id_operario'));
+        $trabajo->observaciones.='<br>['.$operario->nom_operario.']: '.$r->comentario;
+        $trabajo->save();
+        return [
+            'title' => "Plan de trabajo",
+            'message' => 'Añadido comentario ',
+        ];
     }
 }

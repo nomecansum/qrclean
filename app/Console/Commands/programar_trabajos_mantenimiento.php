@@ -9,6 +9,7 @@ use App\Models\rondas;
 use App\Models\puestos_ronda;
 use App\Models\puestos;
 use App\Models\limpiadores;
+use App\Models\trabajos_programacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -96,7 +97,6 @@ class programar_trabajos_mantenimiento extends Command
         //Sacamos los parametros de la tarea
         $tarea=tareas::find($this->argument('id'));
         $parametros=json_decode($tarea->val_parametros);
-        //$horas=valor($parametros,"horas");
         try{
             $timezone=users::find($tarea->usu_audit)->val_timezone;
         } catch(\Throwable $e){
@@ -111,11 +111,12 @@ class programar_trabajos_mantenimiento extends Command
 
         //Primero vamos a sacar las tareas que tiene el cliente en sus planes
         $trabajos = DB::table('trabajos_planes_detalle')
+            ->join('trabajos','trabajos.id_trabajo','trabajos_planes_detalle.id_trabajo')
             ->join('trabajos_planes','trabajos_planes.id_plan','trabajos_planes_detalle.id_plan')
             ->where(function($q) use($tarea){
                 if(isset($tarea->clientes) && $tarea->clientes!=''){
                     $lista_clientes=explode(',',$tarea->clientes);
-                    $q->wherein('id_cliente',$lista_clientes);
+                    $q->wherein('trabajos_planes.id_cliente',$lista_clientes);
                 }
             })
             ->where('trabajos_planes_detalle.mca_activa','S')
@@ -123,22 +124,37 @@ class programar_trabajos_mantenimiento extends Command
             ->get();
         //Ahora para cada uno de ellos a ver si tenemos al menos tantos dias como diga su plan que hay que tener
         foreach($trabajos as $t){
-            $programaciones=DB::table('trabajos_programacion')
-                ->where('id_trabajo',$t->id_trabajo)
-                ->where('id_grupo',$t->id_grupo_trabajo)
-                ->where('id_plan',$t->id_plan)
-                ->where('fec_programada','>=',Carbon::now())
-                ->orderby('fec_programacion')
-                ->get();
-            $fec_inicio=$programaciones->first()->fec_programacion??Carbon::now();
-            $fec_fin=$programaciones->last()->fec_programacion??Carbon::now();
-            dd($t);
+            try{
+                log::notice('Trabajo: ['.$t->id_trabajo.'] '.$t->des_trabajo.' '.$t->val_periodo);
+                $programaciones=DB::table('trabajos_programacion')
+                    ->where('id_trabajo_plan',$t->key_id)
+                    ->where('id_plan',$t->id_plan)
+                    ->where('fec_programada','>=',Carbon::now())
+                    ->orderby('fec_programada')
+                    ->get();
+                $cuenta=0;
+                $fec_inicio=$programaciones->first()->fec_programacion??Carbon::now();
+                $fec_fin=$programaciones->last()->fec_programacion??Carbon::now();
+                $proximas_fechas=next_cron($t->val_periodo,1000,Carbon::parse($fec_fin)->format('Y-m-d H:i:s'));
+                foreach($proximas_fechas as $f){
+                    $fec_fin=Carbon::parse($f);
+                    $programacion=new trabajos_programacion();
+                    $programacion->id_trabajo_plan=$t->key_id;
+                    $programacion->id_plan=$t->id_plan;
+                    $programacion->fec_programada=$fec_fin;
+                    $programacion->val_tiempo_estimado=$t->val_tiempo;
+                    $programacion->save();
+                    log::debug('Programada fecha: '.$f);
+                    $cuenta++;
+                    if(Carbon::parse($fec_fin)->diffinDays(Carbon::parse($fec_inicio))> $t->num_dias_programar){
+                        break;
+                    }
+                }
+            } catch(\Throwable $e){
+                log::error('Error creando programacion para el trabajo: '.$t->id_trabajo.' '.$t->des_trabajo.' '.$t->val_periodo.': '.$e->getMessage());
+            }
+            log::info('Se han programado '.$cuenta.' instancias del trabajo ['.$t->id_trabajo.'] '.$t->des_trabajo);
         }
-       
-
-        
-
-
         $tarea->fec_ult_ejecucion=Carbon::now();
         $tarea->save();
         $this->escribelog_comando('info','Fin de la tarea '.__CLASS__);

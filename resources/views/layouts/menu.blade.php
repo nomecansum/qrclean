@@ -139,6 +139,15 @@
                     </ul>
                 </li>
                 @endif
+                @if(checkPermissions(['Trabajos menu servicios'],['R']))
+                <li class="nav-item has-sub ">
+                    @if(checkPermissions(['Trabajos mis trabajos','Trabajos planes'],['R']))<a href="#" class="mininav-toggle nav-link collapsed servicios_trabajos"><i class="fa-light fa-light fa-user-helmet-safety fs-5 me-2"></i> Trabajos planificados</a>@endif
+                    <ul class="mininav-content nav collapse">
+                        @if(checkPermissions(['Trabajos mis trabajos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/mistrabajos" class="nav-link servicios_mistrabajos"> <i class="fa-light fa-list-check"></i>Mis tareas</a></li> @endif
+                        @if(checkPermissions(['Trabajos planes'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/planificacion" class="nav-link servicios_planes"> <i class="fa-light fa-list-tree"></i> Planes</a></li> @endif
+                    </ul>
+                </li>
+                @endif
             </ul>
             @endif
             @if(checkPermissions(['Informes'],['R']))
@@ -234,7 +243,7 @@
                                 @if(checkPermissions(['Trabajos tipos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/tipos" class="nav-link trabajos_tipos"> <i class="fa-light fa-list-check"></i>Tareas</a></li> @endif
                                 @if(checkPermissions(['Trabajos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/grupos" class="nav-link trabajos_grupos"> <i class="fa-light fa-list-tree"></i> Grupos</a></li> @endif
                                 @if(checkPermissions(['Trabajos contratas'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/contratas" class="nav-link trabajos_contratas"> <i class="fa-regular fa-industry"></i> Contratas</a></li> @endif
-                                @if(checkPermissions(['Trabajos planificacion'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/planes" class="nav-link trabajos_planes"> <i class="fa-light fa-square-kanban"></i> Planes de trabajo</a></li> @endif
+                                @if(checkPermissions(['Trabajos planificador'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/trabajos/planes" class="nav-link trabajos_planes"> <i class="fa-light fa-square-kanban"></i> Planes de trabajo</a></li> @endif
                             </ul>
                         </li>
                         <li class="nav-item has-sub ">

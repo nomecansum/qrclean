@@ -110,6 +110,31 @@ class programar_trabajos_mantenimiento extends Command
         }
 
         //Primero vamos a sacar las tareas que tiene el cliente en sus planes
+        $trabajos = DB::table('trabajos_planes_detalle')
+            ->join('trabajos_planes','trabajos_planes.id_plan','trabajos_planes_detalle.id_plan')
+            ->where(function($q) use($tarea){
+                if(isset($tarea->clientes) && $tarea->clientes!=''){
+                    $lista_clientes=explode(',',$tarea->clientes);
+                    $q->wherein('id_cliente',$lista_clientes);
+                }
+            })
+            ->where('trabajos_planes_detalle.mca_activa','S')
+            ->where('trabajos_planes.mca_activo','S')
+            ->get();
+        //Ahora para cada uno de ellos a ver si tenemos al menos tantos dias como diga su plan que hay que tener
+        foreach($trabajos as $t){
+            $programaciones=DB::table('trabajos_programacion')
+                ->where('id_trabajo',$t->id_trabajo)
+                ->where('id_grupo',$t->id_grupo_trabajo)
+                ->where('id_plan',$t->id_plan)
+                ->where('fec_programada','>=',Carbon::now())
+                ->orderby('fec_programacion')
+                ->get();
+            $fec_inicio=$programaciones->first()->fec_programacion??Carbon::now();
+            $fec_fin=$programaciones->last()->fec_programacion??Carbon::now();
+            dd($t);
+        }
+       
 
         
 

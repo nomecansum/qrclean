@@ -133,7 +133,7 @@ class liberarReserva extends Command
             ->where(function($q) use($tarea){
                 if(isset($tarea->clientes) && $tarea->clientes!=''){
                     $lista_clientes=explode(',',$tarea->clientes);
-                    $q->wherein('id_clientes',$lista_clientes);
+                    $q->wherein('id_cliente',$lista_clientes);
                 }
             })
             ->wheredate('fec_reserva',Carbon::now()->format('Y-m-d'))
@@ -189,7 +189,7 @@ class liberarReserva extends Command
             ->where(function($q) use($tarea){
                 if(isset($tarea->clientes) && $tarea->clientes!=''){
                     $lista_clientes=explode(',',$tarea->clientes);
-                    $q->wherein('id_clientes',$lista_clientes);
+                    $q->wherein('id_cliente',$lista_clientes);
                 }
             })
             ->wheredate('fec_reserva',Carbon::now()->format('Y-m-d'))

@@ -120,10 +120,10 @@
     //Para poner animaciones en caulquier elennto
     function animateCSS(element, animationName, callback) {
         const node = document.querySelector(element)
-        node.classList.add('animated', animationName)
+        node.classList.add('animate__animated', 'animate__'+animationName)
 
         function handleAnimationEnd() {
-            node.classList.remove('animated', animationName)
+            node.classList.remove('animate__animated', 'animate__'+animationName)
             node.removeEventListener('animationend', handleAnimationEnd)
 
             if (typeof callback === 'function') callback()

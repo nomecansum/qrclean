@@ -81,12 +81,16 @@
 @endif
 
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Mis trabajos</h3>
-    </div>
     
     <div class="card-body panel-body-with-table" id="calendario">
-
+        @mobile
+        <div class="col-md-3">
+            <div class="input-group float-right" id="div_fechas">
+                <input type="text" class="form-control pull-left ml-1" style="font-size: 15px" readonly id="fecha_ver" name="fecha_ver" value="{{ Carbon\Carbon::now()->format('d/m/Y') }}">
+                <span class="btn input-group-text btn-secondary btn_fecha"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
+            </div>
+        </div>
+        @endmobile
     </div>
 </div>
 
@@ -97,7 +101,6 @@
 @endsection
 
 @section('scripts')
-
     <script>
         $('.servicios').addClass('active');
         $('.servicios_trabajos').addClass('active');
@@ -113,9 +116,9 @@
             });
         }
 
-        function loadDia(fecha){
+        function loadDia(fecha,vista){
             $.ajax({
-                url: "{{url('trabajos/mistrabajos/load_dia')}}/"+fecha,
+                url: "{{url('trabajos/mistrabajos/load_dia')}}/"+fecha+"/"+vista,
                 type: "GET",
                 success: function(data){
                     $('#trabajos_dia').html(data);
@@ -126,9 +129,31 @@
         
 
         $(function(){
-            loadMes("{{date('Y-m-d')}}");
-            loadDia("{{date('Y-m-d')}}");
+           @desktop loadMes("{{date('Y-m-d')}}"); @enddesktop
+            loadDia("{{date('Y-m-d')}}","{{ session('tipo_vista')??'card' }}");
         })
+
+        @mobile
+        $('.btn_fecha').click(function(){
+            picker.open('#fecha_ver');
+        })
+
+        const picker = MCDatepicker.create({
+            el: "#fecha_ver",
+            dateFormat: cal_formato_fecha,
+            autoClose: true,
+            closeOnBlur: true,
+            firstWeekday: 1,
+            disableWeekDays: cal_dias_deshabilitados,
+            customMonths: cal_meses,
+            customWeekDays: cal_diassemana
+        });
+
+        picker.onSelect((date, formatedDate) => {
+            loadDia(moment(date).format('YYYY-MM-DD'));
+        });
+        
+        @endmobile
 
     </script>
 @endsection

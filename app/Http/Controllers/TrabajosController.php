@@ -853,7 +853,7 @@ class TrabajosController extends Controller
         return view('trabajos.mistrabajos.fill_calendario', compact('fecha','calendario'));
     }
 
-    public function load_dia($fecha){
+    public function load_dia($fecha,$vista='card'){
         $fecha=Carbon::parse($fecha);
         $datos=DB::table('trabajos_programacion')
             ->select('trabajos.des_trabajo','trabajos.val_icono as icono_trabajo','trabajos.val_color as color_trabajo',
@@ -885,7 +885,8 @@ class TrabajosController extends Controller
             ->wheredate('trabajos_programacion.fec_programada',$fecha)
             ->get();
 
-        return view('trabajos.mistrabajos.trabajos_dia', compact('fecha','datos'));
+        session(['tipo_vista'=>$vista]);
+        return view('trabajos.mistrabajos.trabajos_dia', compact('fecha','datos','vista'));
     }
 
     public function iniciar_trabajo($id){
@@ -910,14 +911,89 @@ class TrabajosController extends Controller
         ];
     }
 
-    public function comentarios_trabajo(Request $r){
+    public function get_comentarios_trabajo($id){
+        $trabajo=trabajos_programacion::find($id);
+        return $trabajo->observaciones;
+    }
+
+    public function save_comentarios_trabajo(Request $r){
         $trabajo=trabajos_programacion::find($r->id);
-        $operario=contratas_operarios::find(session('id_operario'));
-        $trabajo->observaciones.='<br>['.$operario->nom_operario.']: '.$r->comentario;
+        $operario=operarios::find(session('id_operario'));
+        $trabajo->observaciones.='<br>['.$operario->nom_operario.']: '.$r->observaciones;
         $trabajo->save();
         return [
             'title' => "Plan de trabajo",
             'message' => 'Añadido comentario ',
         ];
+    }
+
+    public function servicios_planes(){
+        $datos = DB::table('trabajos_planes')
+            ->join('clientes', 'trabajos_planes.id_cliente', 'clientes.id_cliente')
+            ->join('edificios', 'trabajos_planes.id_edificio', 'edificios.id_edificio')
+            ->where(function ($q){
+                $q->where('trabajos_planes.id_cliente',Auth::user()->id_cliente);
+            })
+            ->get();
+
+        $detalles= DB::table('trabajos_planes_detalle')
+            ->join('trabajos_planes', 'trabajos_planes.id_plan', 'trabajos_planes_detalle.id_plan')
+            ->join('trabajos', 'trabajos_planes_detalle.id_trabajo', 'trabajos.id_trabajo')
+            ->join('contratas', 'trabajos_planes_detalle.id_contrata', 'contratas.id_contrata')
+            ->where(function ($q){
+                $q->where('trabajos_planes.id_cliente',Auth::user()->id_cliente);
+            })
+            ->get();
+        return view('trabajos.servicios_planes.index', compact('datos','detalles'));
+    }
+
+    public function servicios_ver_plan($id,$fecha=null){
+        if($fecha==null){
+            $fecha=Carbon::now();
+        }
+        $fecha=Carbon::parse($fecha);
+        $dato = planes::find($id);
+        $detalle=DB::table('trabajos_planes_detalle')
+            ->where('id_plan',$id)
+            ->get();
+
+        $tareas = trabajos::where('id_cliente',Auth::user()->id_cliente)
+            ->wherein('id_trabajo',$detalle->pluck('id_trabajo')->unique()->toarray())
+            ->get();
+        $grupos = grupos::where('id_cliente',Auth::user()->id_cliente)
+            ->wherein('id_grupo',$detalle->pluck('id_grupo_trabajo')->unique()->toarray())
+            ->get();
+
+        $trabajos= DB::table('trabajos')
+            ->join('trabajos_tipos', 'trabajos_tipos.id_tipo_trabajo', 'trabajos.id_tipo_trabajo')
+            ->join('trabajos_grupos', 'trabajos_grupos.id_trabajo', 'trabajos.id_trabajo')
+            ->wherein('trabajos.id_trabajo',$detalle->pluck('id_trabajo')->unique()->toarray())
+            ->where('trabajos.id_cliente',Auth::user()->id_cliente)
+            ->orderby('num_orden')
+            ->get();
+        $contratas = contratas::where('id_cliente',Auth::user()->id_cliente)
+            ->wherein('id_contrata',$detalle->pluck('id_contrata')->unique()->toarray())
+            ->get();
+        $operarios = operarios::where('id_cliente',Auth::user()->id_cliente)
+            ->wherein('id_contrata',$detalle->pluck('id_contrata')->unique()->toarray())
+            ->get();
+        $plantas = plantas::where('id_cliente',Auth::user()->id_cliente)
+            ->wherein('id_planta',$detalle->pluck('id_planta')->unique()->toarray())
+            ->get();
+    
+        $zonas = DB::table('plantas_zonas')
+            ->select('plantas_zonas.*','plantas.des_planta')
+            ->join('plantas', 'plantas_zonas.id_planta', 'plantas.id_planta')
+            ->wherein('key_id',$detalle->pluck('id_zona')->unique()->toarray())
+            ->get();
+
+        $programaciones=DB::Table('trabajos_programacion')
+            ->select('trabajos_programacion.*')
+            ->selectraw("date(fec_programada) as fecha_corta")
+            ->where('id_plan',$id)
+            ->wherebetween('trabajos_programacion.fec_programada',[Carbon::parse($fecha)->startofmonth(),Carbon::parse($fecha)->endofmonth()])
+            ->get();
+
+        return view('trabajos.servicios_planes.detalle', compact('dato','tareas','grupos','contratas','operarios','plantas','zonas','trabajos','detalle','fecha','id','programaciones'));
     }
 }

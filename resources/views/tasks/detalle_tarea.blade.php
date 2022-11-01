@@ -67,7 +67,7 @@
         $('#spinlog'+$(this).data('id')).show();
         $('#cardlog'+$(this).data('id')).show();
 
-        $('#log'+$(this).data('id')).load("{{ url(config('app.carpeta_asset').'/log_tarea/'.$id)  }}/"+$(this).data('fecha')+"/"+$(this).data('hora'), function(){
+        $('#log'+$(this).data('id')).load("{{ url('/tasks/log_tarea/'.$id)  }}/"+$(this).data('fecha')+"/"+$(this).data('hora'), function(){
             $('#spinlog{{$id}}').hide();
         });
 

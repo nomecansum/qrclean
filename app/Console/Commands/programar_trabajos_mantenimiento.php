@@ -125,7 +125,7 @@ class programar_trabajos_mantenimiento extends Command
         //Ahora para cada uno de ellos a ver si tenemos al menos tantos dias como diga su plan que hay que tener
         foreach($trabajos as $t){
             try{
-                log::notice('Trabajo: ['.$t->id_trabajo.'] '.$t->des_trabajo.' '.$t->val_periodo);
+                $this->escribelog_comando('notice','Trabajo: ['.$t->id_trabajo.'] '.$t->des_trabajo.' '.$t->val_periodo);
                 $programaciones=DB::table('trabajos_programacion')
                     ->where('id_trabajo_plan',$t->key_id)
                     ->where('id_plan',$t->id_plan)
@@ -133,8 +133,8 @@ class programar_trabajos_mantenimiento extends Command
                     ->orderby('fec_programada')
                     ->get();
                 $cuenta=0;
-                $fec_inicio=$programaciones->first()->fec_programacion??Carbon::now();
-                $fec_fin=$programaciones->last()->fec_programacion??Carbon::now();
+                $fec_inicio=$programaciones->first()->fec_programada??Carbon::now();
+                $fec_fin=$programaciones->last()->fec_programada??Carbon::now();
                 $proximas_fechas=next_cron($t->val_periodo,1000,Carbon::parse($fec_fin)->format('Y-m-d H:i:s'));
                 foreach($proximas_fechas as $f){
                     $fec_fin=Carbon::parse($f);
@@ -144,16 +144,16 @@ class programar_trabajos_mantenimiento extends Command
                     $programacion->fec_programada=$fec_fin;
                     $programacion->val_tiempo_estimado=$t->val_tiempo;
                     $programacion->save();
-                    log::debug('Programada fecha: '.$f);
+                    $this->escribelog_comando('debug','Programada fecha: '.$f.' dias previstos '.Carbon::parse($fec_fin)->diffinDays(Carbon::parse($fec_inicio)));
                     $cuenta++;
                     if(Carbon::parse($fec_fin)->diffinDays(Carbon::parse($fec_inicio))> $t->num_dias_programar){
                         break;
                     }
                 }
             } catch(\Throwable $e){
-                log::error('Error creando programacion para el trabajo: '.$t->id_trabajo.' '.$t->des_trabajo.' '.$t->val_periodo.': '.$e->getMessage());
+                $this->escribelog_comando('error','Error creando programacion para el trabajo: '.$t->id_trabajo.' '.$t->des_trabajo.' '.$t->val_periodo.': '.$e->getMessage());
             }
-            log::info('Se han programado '.$cuenta.' instancias del trabajo ['.$t->id_trabajo.'] '.$t->des_trabajo);
+            $this->escribelog_comando('info','Se han programado '.$cuenta.' instancias del trabajo ['.$t->id_trabajo.'] '.$t->des_trabajo);
         }
         $tarea->fec_ult_ejecucion=Carbon::now();
         $tarea->save();

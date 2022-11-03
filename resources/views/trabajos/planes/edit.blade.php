@@ -201,6 +201,7 @@
                     $('#multi-zonas').append('<option value="'+val.id_zona+'">'+val.des_zona+'</option>');
                 });
                 $('#loadfilter').hide();
+                $('#multi-zonas').trigger('change');
             });
         });
 
@@ -226,6 +227,7 @@
                     }
                 });
                 $('#loadfilter').hide();
+                $('#multi-zonas').trigger('change');
 
             });
         });

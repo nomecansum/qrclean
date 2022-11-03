@@ -256,7 +256,7 @@
 			<div class="modal-header">
 				<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
 				<div class="spinner-border text-info float-left" role="status" style="margin-right: 10px; display: none" id="spin_tarea"><span class="sr-only">{{trans('strings.espere')}}...</span></div>
-				<h1 class="modal-title text-nowrap">Ejecutar tarea <span id="des_tarea_run"></span> </h1>
+				<h3 class="modal-title text-nowrap">Ejecutar tarea <span id="des_tarea_run"></span> </h3>
 				<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
 					<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
 				</button>

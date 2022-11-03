@@ -609,6 +609,7 @@ Route::group(['middleware' => 'auth'], function () {
         //Menu de servicios -> Planes
         Route::get('/planificacion', ['middleware'=>'permissions:["Trabajos planes"],["R"]','uses'=>'TrabajosController@servicios_planes'])->name('servicios.planes');
         Route::get('/planificacion/ver/{id}/{fecha?}', ['middleware'=>'permissions:["Trabajos planes"],["R"]','uses'=>'TrabajosController@servicios_ver_plan'])->name('servicios.ver_plan');
+        Route::post('/servicios/detalle_trabajo', ['middleware'=>'permissions:["Trabajos planes"],["R"]','uses'=>'TrabajosController@servicios_detalle_trabajo'])->name('servicios.detalle_trabajo');
         
     });
 

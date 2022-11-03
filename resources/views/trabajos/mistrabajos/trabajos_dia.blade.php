@@ -2,10 +2,10 @@
     use Carbon\Carbon;
     $edificios=$datos->pluck('des_edificio','id_edificio')->unique();
 @endphp
-<div class="row mt-4">
+<div class="row" style="margin-top: 4rem">
     <div class="col-md-2 mt-2">
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" {{ session('tipo_vista')=='card'?'checked':'' }}>
+            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" {{ session('tipo_vista')=='card' ||  session('tipo_vista')=='undefined'?'checked':'' }}>
             <label class="btn btn-outline-primary btn-xs boton_modo" onclick="loadDia(fecha_actual,'card')" data-href="comprobar" for="btnradio1"><i class="fa-regular fa-credit-card-blank"></i> Tarjetas</label>
             
             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" {{ session('tipo_vista')=='table'?'checked':'' }}>

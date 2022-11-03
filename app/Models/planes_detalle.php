@@ -47,6 +47,7 @@ class planes_detalle extends Model
                   'val_periodo',
                   'val_tiempo',
                   'mca_activa',
+                  'txt_observaciones',
               ];
 
     /**

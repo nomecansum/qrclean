@@ -996,4 +996,41 @@ class TrabajosController extends Controller
 
         return view('trabajos.servicios_planes.detalle', compact('dato','tareas','grupos','contratas','operarios','plantas','zonas','trabajos','detalle','fecha','id','programaciones'));
     }
+
+    public function servicios_detalle_trabajo(Request $r){
+        $fecha=Carbon::parse($r->fecha);
+        $datos=DB::table('trabajos_programacion')
+            ->select('trabajos.des_trabajo','trabajos.val_icono as icono_trabajo','trabajos.val_color as color_trabajo',
+                     'trabajos_programacion.*',
+                     'trabajos_planes.des_plan','trabajos_planes.val_icono as icono_plan','trabajos_planes.val_color as color_plan','trabajos_planes.id_edificio',
+                     'edificios.des_edificio',
+                     'plantas.des_planta',
+                     'plantas_zonas.des_zona',
+                     'trabajos_planes_detalle.id_planta','trabajos_planes_detalle.id_zona','trabajos_planes_detalle.val_tiempo','trabajos_planes_detalle.num_operarios','trabajos_planes_detalle.list_operarios','trabajos_planes_detalle.txt_observaciones','trabajos_planes_detalle.val_periodo',
+                     'grupos_trabajos.id_grupo','grupos_trabajos.des_grupo','grupos_trabajos.val_icono as icono_grupo','grupos_trabajos.val_color as color_grupo',
+                     'operarios_ini.nom_operario as nom_operario_ini',
+                     'operarios_fin.nom_operario as nom_operario_fin',
+                     'contratas.des_contrata','contratas.img_logo as logo_contrata')
+            ->join('trabajos_planes_detalle','trabajos_programacion.id_trabajo_plan','trabajos_planes_detalle.key_id')
+            ->join('contratas','contratas.id_contrata','trabajos_planes_detalle.id_contrata')
+            ->join('trabajos_planes','trabajos_planes_detalle.id_plan','trabajos_planes.id_plan')
+            ->join('edificios','trabajos_planes.id_edificio','edificios.id_edificio')
+            ->leftjoin('contratas_operarios as operarios_ini','trabajos_programacion.id_operario_inicio','operarios_ini.id_operario')
+            ->leftjoin('contratas_operarios  as operarios_fin','trabajos_programacion.id_operario_fin','operarios_fin.id_operario')
+            ->leftjoin('plantas','trabajos_planes_detalle.id_planta','plantas.id_planta')
+            ->leftjoin('plantas_zonas','trabajos_planes_detalle.id_zona','plantas_zonas.key_id')
+            ->join('trabajos','trabajos_planes_detalle.id_trabajo','trabajos.id_trabajo')
+            ->join('grupos_trabajos','trabajos_planes_detalle.id_grupo_trabajo','grupos_trabajos.id_grupo')
+            ->where('trabajos_planes.id_cliente',Auth::user()->id_cliente)
+            ->where('trabajos_programacion.id_programacion',$r->programa)
+            ->where(function($q){
+                if(session('id_operario')!=null){
+                    $q->whereraw("find_in_set(".session('id_operario').",trabajos_planes_detalle.list_operarios)");
+                }
+                $q->orwherenull('trabajos_planes_detalle.list_operarios');
+            })
+            ->wheredate('trabajos_programacion.fec_programada',$fecha)
+            ->get();
+        return view('trabajos.servicios_planes.fill_detalle_trabajo',compact('datos','fecha','r'));
+    }
 }

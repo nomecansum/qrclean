@@ -113,7 +113,7 @@
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
                                                 $datos_celda=celda($tarea,$programa,$hoy,$fecha);
                                             @endphp
-                                            <td class="{{ $datos_celda['color']??'' }} text-center" title="{{ $datos_celda['title'] }}"  data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="">
+                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"  data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="{{ $trabajo->des_trabajo }} en {{ $planta->des_planta}} el {{beauty_fecha($fecha)}}">
                                                 <i class="{{ $datos_celda['icono'] }}"></i>
                                             </td>
                                         @endfor
@@ -131,7 +131,7 @@
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
                                                 $datos_celda=celda($tarea,$programa,$hoy,$fecha);
                                             @endphp
-                                            <td class="{{ $datos_celda['color']??'' }} text-center" title="{{ $datos_celda['title'] }}">
+                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="{{ $trabajo->des_trabajo }} en {{$planta->des_planta}} el {{beauty_fecha($fecha)}}">
                                                 <i class="{{ $datos_celda['icono'] }}"></i>
                                             </td>
                                         @endfor
@@ -149,7 +149,7 @@
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
                                                 $datos_celda=celda($tarea,$programa,$hoy,$fecha);
                                             @endphp
-                                            <td class="{{ $datos_celda['color']??'' }} text-center" title="{{ $datos_celda['title'] }}">
+                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="{{ $trabajo->des_trabajo }} en [{{ $zona->des_planta }}] {{ $zona->des_zona }} el {{beauty_fecha($fecha)}}">
                                                 <i class="{{ $datos_celda['icono'] }}"></i>
                                             </td>
                                         @endfor
@@ -167,7 +167,7 @@
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
                                                 $datos_celda=celda($tarea,$programa,$hoy,$fecha);
                                             @endphp
-                                            <td class="{{ $datos_celda['color']??'' }} text-center" title="{{ $datos_celda['title'] }}">
+                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="{{ $trabajo->des_trabajo }} en [{{ $zona->des_planta }}] {{ $zona->des_zona }} el {{beauty_fecha($fecha)}}">
                                                 <i class="{{ $datos_celda['icono'] }}"></i>
                                             </td>
                                         @endfor
@@ -198,8 +198,8 @@
                 
             </div>
             <div class="modal-footer">
-                <a class="btn btn-info" id="btn_si_detalle" href="javascript:void(0)">Si</a>
-                <button type="button" id="btn_no_detalle" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">No</button>
+                {{-- <a class="btn btn-info" id="btn_si_detalle" href="javascript:void(0)">Si</a> --}}
+                <button type="button" id="btn_no_detalle" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cerrar</button>
             </div>
         </div>
     </div>
@@ -209,18 +209,6 @@
 <script>
 var grupo_periodo;
 var trabajo_periodo;
-
-$('.td_planta').click(function(){
-    var programa=$(this).data('programacion');
-    var trabajo=$(this).data('trabajo');
-    var fecha=$(this).data('fecha');
-    $.post('{{url('/trabajos/servicios/detalle_trabajo')}}', {_token:'{{csrf_token()}}',programa:programa,trabajo:trabajo,fecha:fecha}, function(data, textStatus, xhr) {
-        $('.modal-body').empty();
-        $('#detalle_modal').html(data);
-        $('#desc_detalle').html(desc);
-        $('#detalle-trabajo').modal('show');
-    });
-});
 
 function loadMes(fecha){
     $.ajax({
@@ -236,7 +224,19 @@ $('.changeMonth').click(function(){
     loadMes($(this).data('month'),'');
 })
 
+$('.td_planta').click(function(){
+    var programa=$(this).data('programacion');
+    var trabajo=$(this).data('trabajo');
+    var fecha=$(this).data('fecha');
+    var desc=$(this).data('desc');
+    $.post('{{url('/trabajos/servicios/detalle_trabajo')}}', {_token:'{{csrf_token()}}',programa:programa,trabajo:trabajo,fecha:fecha}, function(data, textStatus, xhr) {
+        $('.modal-body').empty();
+        $('#detalle_modal').html(data);
+        $('#desc_detalle').html(desc);
+        $('#detalle-trabajo').modal('show');
+    });
+});
 
-
+document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
 </script>

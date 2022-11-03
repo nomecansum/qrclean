@@ -60,6 +60,7 @@
         </div>
     </div>
 </div>
+<span class="float-right" id="spinner" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
 <div id="editorCAM" class="mt-2">
 
 </div>
@@ -178,8 +179,11 @@
         $('.servicios_planes').addClass('active');
 
         function editar(id){
+            $('#spinner').show();
+            $('#editorCAM').empty();
             $('#editorCAM').load("{{ url('/trabajos/planificacion/ver/') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
+                $('#spinner').hide();
             });
         }
 

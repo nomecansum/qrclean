@@ -1000,7 +1000,7 @@ class TrabajosController extends Controller
     public function servicios_detalle_trabajo(Request $r){
         $fecha=Carbon::parse($r->fecha);
         $datos=DB::table('trabajos_programacion')
-            ->select('trabajos.des_trabajo','trabajos.val_icono as icono_trabajo','trabajos.val_color as color_trabajo',
+            ->select('trabajos.des_trabajo','trabajos.val_icono as icono_trabajo','trabajos.val_color as color_trabajo', 'trabajos.val_operarios as operarios_previstos',
                      'trabajos_programacion.*',
                      'trabajos_planes.des_plan','trabajos_planes.val_icono as icono_plan','trabajos_planes.val_color as color_plan','trabajos_planes.id_edificio',
                      'edificios.des_edificio',
@@ -1030,7 +1030,73 @@ class TrabajosController extends Controller
                 $q->orwherenull('trabajos_planes_detalle.list_operarios');
             })
             ->wheredate('trabajos_programacion.fec_programada',$fecha)
+            ->first();
+
+        $historial=DB::table('trabajos_programacion')
+            ->select('trabajos_programacion.*',
+                     'operarios_ini.nom_operario as nom_operario_ini',
+                     'operarios_fin.nom_operario as nom_operario_fin',
+                     'trabajos_planes_detalle.id_planta','trabajos_planes_detalle.id_zona','trabajos_planes_detalle.val_tiempo')
+            ->join('trabajos_planes_detalle','trabajos_programacion.id_trabajo_plan','trabajos_planes_detalle.key_id')
+            ->leftjoin('contratas_operarios as operarios_ini','trabajos_programacion.id_operario_inicio','operarios_ini.id_operario')
+            ->leftjoin('contratas_operarios  as operarios_fin','trabajos_programacion.id_operario_fin','operarios_fin.id_operario')
+            ->where('trabajos_programacion.id_trabajo_plan',$datos->id_trabajo_plan)
+            ->where(function($q) use($fecha){
+                $q->where('trabajos_programacion.fec_programada','>=',$fecha->subdays(10)->format('Y-m-d'));
+                $q->where('trabajos_programacion.fec_programada','<=',$fecha->addDays(10)->format('Y-m-d'));
+            })
+            ->where(function($q) use($datos){
+                $q->where('trabajos_planes_detalle.id_planta',$datos->id_planta);
+                $q->orwhere('trabajos_planes_detalle.id_zona',$datos->id_zona);
+            })
+            ->orderby('trabajos_programacion.fec_programada','asc')
             ->get();
-        return view('trabajos.servicios_planes.fill_detalle_trabajo',compact('datos','fecha','r'));
+        return view('trabajos.servicios_planes.fill_detalle_trabajo',compact('datos','fecha','r','historial'));
     }
+
+    //Funcion que devuelve la celda del detalle de un trabajo con el color en funcion de su estado
+    public static function celda_plan_trabajos($tarea,$programa,$hoy,$fecha){
+        //Ahora vamos a ver si esta bien hecho el trabajo o no y en base a eso rellenaremos el color de la celda
+       $color='';
+       $icono='';
+       $title='';
+       if(isset($programa)){
+           if($fecha>$hoy){
+               $color='bg-light';
+               $icono='';
+               $title='El trabajo aun no se ha iniciado';
+           }
+           
+           if(isset($programa->fec_inicio) && isset($programa->fec_fin)){
+               if(Carbon::parse($programa->fec_inicio)->diffinminutes(Carbon::parse($programa->fec_fin))>$tarea->val_tiempo){
+                   $color='bg-warning';
+                   $icono='fa-regular fa-stopwatch';
+                   $title='El trabajo se ha realizado fuera de tiempo';
+               } else {
+                   $color='bg-success';
+                   $icono='';
+                   $title='El trabajo se ha realizado en tiempo';
+               }
+           } else if(!isset($programa->fec_inicio) && !isset($programa->fec_fin) && $fecha<$hoy){
+               $color='bg-danger';
+               $icono='';
+               $title='El trabajo no se ha realizado';
+           } else if(isset($programa->fec_inicio) && !isset($programa->fec_fin)){
+               $color='bg-warning';
+               $icono='fa-solid fa-circle-half-stroke';
+               $title='El trabajo se ha iniciado pero no se ha finalizado';
+           }
+           
+           if(isset($programa->fec_inicio) && Carbon::parse($programa->fec_inicio)->diffindays(Carbon::parse($programa->fec_programada))>1){
+               $color='bg-pink';
+               $icono='fa-solid fa-calendar-exclamation';
+               $title='El trabajo se ha iniciado pero fuera de la fecha prevista';
+           }
+       }
+       return [
+           'color'=>$color,
+           'icono'=>$icono,
+           'title'=>$title
+       ];
+   }
 }

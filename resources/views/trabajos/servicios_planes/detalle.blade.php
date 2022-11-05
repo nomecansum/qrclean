@@ -1,5 +1,6 @@
 @php
     use Carbon\Carbon;
+    use App\Http\Controllers\TrabajosController;
     $fecha_ant=Carbon::parse($fecha->format('Y-m-d'))->startOfMonth()->subHour(2)->format('Y-m-d');
     $fecha_sig=Carbon::parse($fecha->format('Y-m-d'))->endOfMonth()->addDay()->startOfMonth()->format('Y-m-d');
     $ultimo_dia=$fecha->endOfMonth()->format('d');
@@ -7,54 +8,7 @@
     $hoy=Carbon::now();
     $mes_anio=Carbon::parse($fecha)->format('Y-m').'-';
 
-    function celda($tarea,$programa,$hoy,$fecha){
-         //Ahora vamos a ver si esta bien hecho el trabajo o no y en base a eso rellenaremos el color de la celda
-        $color='';
-        $icono='';
-        $title='';
-        if(isset($programa)){
-            if($fecha>$hoy){
-                $color='bg-light';
-                $icono='';
-                $title='El trabajo aun no se ha iniciado';
-            }
-
-            if(isset($programa->fec_inicio) && isset($programa->fec_fin)){
-                if(Carbon::parse($programa->fec_inicio)->diffinminutes(Carbon::parse($programa->fec_inicio))>$tarea->val_tiempo){
-                    $color='bg-warning';
-                    $icono='fa-regular fa-stopwatch';
-                    $title='El trabajo se ha realizado fuera de tiempo';
-                } else {
-                    $color='bg-success';
-                    $icono='';
-                    $title='El trabajo se ha realizado en tiempo';
-                }
-            }
-            if(!isset($programa->fec_inicio) && !isset($programa->fec_fin) && $fecha<$hoy){
-                $color='bg-danger';
-                $icono='';
-                $title='El trabajo no se ha realizado';
-            }
-            if(isset($programa->fec_inicio) && !isset($programa->fec_fin)){
-                $color='bg-warning';
-                $icono='fa-solid fa-circle-half-stroke';
-                $title='El trabajo se ha iniciado pero no se ha finalizado';
-            }
-
-            if(isset($programa->fec_inicio) && Carbon::parse($programa->fec_inicio)->diffindays(Carbon::parse($programa->fec_programada))>1){
-                $color='bg-pink';
-                $icono='fa-solid fa-calendar-exclamation';
-                $title='El trabajo se ha iniciado pero fuera de la fecha prevista';
-            }
-
-            
-        }
-        return [
-            'color'=>$color,
-            'icono'=>$icono,
-            'title'=>$title
-        ];
-    }
+    
 @endphp
 
 
@@ -111,9 +65,9 @@
                                                 $fecha=Carbon::parse($mes_anio.lz($n,2));
                                                 $tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_planta',$planta->id_planta)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
-                                                $datos_celda=celda($tarea,$programa,$hoy,$fecha);
+                                                $datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
                                             @endphp
-                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"  data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="{{ $trabajo->des_trabajo }} en {{ $planta->des_planta}} el {{beauty_fecha($fecha)}}">
+                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"  data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="#{{ $programa->id_programacion??'' }} {{ $trabajo->des_trabajo }} en {{ $planta->des_planta}} el {{beauty_fecha($fecha)}}">
                                                 <i class="{{ $datos_celda['icono'] }}"></i>
                                             </td>
                                         @endfor
@@ -129,9 +83,9 @@
                                                 $fecha=Carbon::parse($mes_anio.lz($n,2));
                                                 $tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_planta',$planta->id_planta)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
-                                                $datos_celda=celda($tarea,$programa,$hoy,$fecha);
+                                                $datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
                                             @endphp
-                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="{{ $trabajo->des_trabajo }} en {{$planta->des_planta}} el {{beauty_fecha($fecha)}}">
+                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="#{{ $programa->id_programacion??'' }} {{ $trabajo->des_trabajo }} en {{$planta->des_planta}} el {{beauty_fecha($fecha)}}">
                                                 <i class="{{ $datos_celda['icono'] }}"></i>
                                             </td>
                                         @endfor
@@ -147,9 +101,9 @@
                                                 $fecha=Carbon::parse($mes_anio.lz($n,2));
                                                 $tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_zona',$zona->key_id)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
-                                                $datos_celda=celda($tarea,$programa,$hoy,$fecha);
+                                                $datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
                                             @endphp
-                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="{{ $trabajo->des_trabajo }} en [{{ $zona->des_planta }}] {{ $zona->des_zona }} el {{beauty_fecha($fecha)}}">
+                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="#{{ $programa->id_programacion??'' }} {{ $trabajo->des_trabajo }} en [{{ $zona->des_planta }}] {{ $zona->des_zona }} el {{beauty_fecha($fecha)}}">
                                                 <i class="{{ $datos_celda['icono'] }}"></i>
                                             </td>
                                         @endfor
@@ -165,9 +119,9 @@
                                                 $fecha=Carbon::parse($mes_anio.lz($n,2));
                                                 $tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_zona',$zona->key_id)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
-                                                $datos_celda=celda($tarea,$programa,$hoy,$fecha);
+                                                $datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
                                             @endphp
-                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="{{ $trabajo->des_trabajo }} en [{{ $zona->des_planta }}] {{ $zona->des_zona }} el {{beauty_fecha($fecha)}}">
+                                            <td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="#{{ $programa->id_programacion??'' }} {{ $trabajo->des_trabajo }} en [{{ $zona->des_planta }}] {{ $zona->des_zona }} el {{beauty_fecha($fecha)}}">
                                                 <i class="{{ $datos_celda['icono'] }}"></i>
                                             </td>
                                         @endfor

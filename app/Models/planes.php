@@ -39,7 +39,9 @@ class planes extends Model
                   'mca_activo',
                   'val_color',
                   'val_icono',
-                  'num_dias_programar'
+                  'num_dias_programar',
+                  'id_edificio',
+                  'espacios',
               ];
 
     /**

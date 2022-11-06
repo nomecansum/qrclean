@@ -32,5 +32,12 @@ class AppServiceProvider extends ServiceProvider
             } 
             return false;
         });
+
+        Blade::if('local', function () {
+            if (config('app.env') == 'local') {
+                return true;
+            } 
+            return false;
+        });
     }
 }

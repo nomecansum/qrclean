@@ -52,7 +52,7 @@
     </div>
     <div class="col-md-2 text-end">
         <div class="btn-group btn-group-sm pull-right" role="group">
-            @if(checkPermissions(['Trabajos planificacion'],['C']))
+            @if(checkPermissions(['Trabajos planificador'],['C']))
                 <a href="#" id="btn_nueva_puesto" class="btn btn-success" title="Nuevo tipo">
                     <i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
                     <span>Nuevo</span>
@@ -154,7 +154,7 @@
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
                                     <div class="btn-group btn-group pull-right ml-1" role="group">
                                         <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_plan }})" title="Editar tipo" data-id="{{ $tipo->id_plan }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
-                                        @if(checkPermissions(['Trabajos tipos'],['D']))<a href="#eliminar-planta-{{$tipo->id_plan}}" onclick="del({{ $tipo->id_plan }})" data-target="#eliminar-planta-{{$tipo->id_plan}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif
+                                        @if(checkPermissions(['Trabajos planificador'],['D']))<a href="#eliminar-planta-{{$tipo->id_plan}}" onclick="del({{ $tipo->id_plan }})" data-target="#eliminar-planta-{{$tipo->id_plan}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif
                                     </div>
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$tipo->id_plan}}" style="display: none;">

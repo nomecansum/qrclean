@@ -406,6 +406,13 @@ class sincronizarWorkdayGenerali extends Command
                         } else {
                             $nivel=$cod_nivel_supervisor;
                         }
+                        //Si antes tenia un nivel superior (administrador) se lo mantenemos
+                        if($usuario){
+                            $user=users::find($usuario);
+                            if($user->cod_nivel>$nivel->cod_nivel){
+                                $nivel=niveles_acceso::find($user->cod_nivel);
+                            }
+                        }
                         if($email){
                             $this->insertar_usu($usuario,$nombre,$tarea->clientes,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno);
                             $this->escribelog_comando('info',$usuario==null?'Usuario creado: '.$nombre:'Usuario actualizado: '.$nombre.' ['.$nivel->cod_nivel.']');

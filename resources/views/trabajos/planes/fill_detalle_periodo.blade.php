@@ -282,13 +282,13 @@
                                 <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
                             </select> dia(s) empezando en el
                             <select id="cronDowIncrementStart" style="width:125px; display: inline-block; "  class="form-control">
-                                <option value="1">Lunes</option>
-                                <option value="2">Martes</option>
-                                <option value="3">Miercoles</option>
-                                <option value="4">Jueves</option>
-                                <option value="5">Viernes</option>
-                                <option value="6">Sabado</option>
-                                <option value="7">Domingo</option>
+                                <option value="MON">Lunes</option>
+                                <option value="TUE">Martes</option>
+                                <option value="WED">Miercoles</option>
+                                <option value="THU">Jueves</option>
+                                <option value="FRI">Viernes</option>
+                                <option value="SAT">Sabado</option>
+                                <option value="SUN">Domingo</option>
                             </select>
                         </label>
                     </div>
@@ -376,13 +376,13 @@
                         <label class="form-check-label" for="cronLastSpecificDom">
                             El ultimo
                             <select id="cronLastSpecificDomDay" style="width:125px; display: inline-block; "  class="form-control">
-                                <option value="1">Lunes</option>
-                                <option value="2">Martes</option>
-                                <option value="3">Miercoles</option>
-                                <option value="4">Jueves</option>
-                                <option value="5">Viernes</option>
-                                <option value="6">Sabado</option>
-                                <option value="7">Domingo</option>
+                                <option value="MON">Lunes</option>
+                                <option value="TUE">Martes</option>
+                                <option value="WED">Miercoles</option>
+                                <option value="THU">Jueves</option>
+                                <option value="FRI">Viernes</option>
+                                <option value="SAT">Sabado</option>
+                                <option value="SUN">Domingo</option>
                             </select>
                             del mes
                         </label>
@@ -423,13 +423,13 @@
                                 <option value="5">quinto</option>
                             </select>
                             <select id="cronNthDayDay" style="width:125px; display: inline-block; "  class="form-control">
-                                <option value="1">Lunes</option>
-                                <option value="2">Martes</option>
-                                <option value="3">Miercoles</option>
-                                <option value="4">Jueves</option>
-                                <option value="5">Viernes</option>
-                                <option value="6">Sabado</option>
-                                <option value="7">Domingo</option>
+                                <option value="MON">Lunes</option>
+                                <option value="TUE">Martes</option>
+                                <option value="WED">Miercoles</option>
+                                <option value="THU">Jueves</option>
+                                <option value="FRI">Viernes</option>
+                                <option value="SAT">Sabado</option>
+                                <option value="SUN">Domingo</option>
                             </select>
                             del mes
                         </label>
@@ -661,7 +661,7 @@
 <script>
     function update_human(){
         $('#val_periodo').val($('.cronResult').html());
-        $('.cronHuman').html((cronstrue.toString($('.cronResult').html(),{ use24HourTimeFormat: true,locale: "es" })));
+        $('.cronHuman').html((cronstrue.toString($('.cronResult').html(),{ use24HourTimeFormat: true,locale: "es",dayOfWeekStartIndexZero: false })));
         
     }
 

@@ -6,7 +6,7 @@
             <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#_dm-recursos" type="button" role="tab" aria-controls="recursos" aria-selected="false">Detalle</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#_dm-programacion" type="button" role="tab" aria-controls="programacion" aria-selected="false">Historial</button>
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#_dm-programacion" type="button" role="tab" aria-controls="programacion" aria-selected="false">Historial ({{ $historial->count() }})</button>
         </li>
     </ul>
 
@@ -110,7 +110,7 @@
                     <tbody>
                         @foreach($historial as $h)
                         @php
-                            $celda=App\Http\Controllers\TrabajosController::celda_plan_trabajos($h,$h,Carbon\Carbon::now(),Carbon\Carbon::parse($h->fec_inicio));
+                            $celda=App\Http\Controllers\TrabajosController::celda_plan_trabajos($h,$h,Carbon\Carbon::now(),$fecha);
                         @endphp
                             <tr>
                                 <td>
@@ -127,7 +127,7 @@
                                 </td>
                                 <td>
                                     <div class="w-100 text-center rounded {{ $celda['color'] }}" title="{{ $celda['title'] }}">
-                                        <i class="{{ $celda['icono'] }}"></i>
+                                        <i class="{{ $celda['icono']==''?"fa-solid fa-circle":$celda['icono'] }}"></i>
                                     </div>
                                 </td>
                             </tr>

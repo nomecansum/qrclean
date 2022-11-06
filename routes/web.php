@@ -477,6 +477,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/heatmap',['middleware' => 'permissions:["Informes > Uso de espacio"],["R"]', 'uses' => 'ReportsController@heatmap_index']);
 	    Route::post('/heatmap/filter',['middleware' => 'permissions:["Informes > Uso de espacio"],["R"]', 'uses' => 'ReportsController@heatmap']);
 
+        Route::get('/trabajos',['middleware' => 'permissions:["Informes > Trabajos planificados"],["R"]', 'uses' => 'ReportsController@trabajos_index']);
+	    Route::post('/trabajos/filter',['middleware' => 'permissions:["Informes > Trabajos planificados"],["R"]', 'uses' => 'ReportsController@trabajos']);
+
         Route::get('program/{id}', ['middleware' => 'permissions:["Informes programados"],["R"]', 'uses' => 'ReportsController@reportFromEmail']);
 		
 	});
@@ -583,6 +586,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/contratas/usuarios_internos/{id}/{id_perfil?}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@usuarios_internos'])->where('id', '[0-9]+');
         Route::get('/contratas/usuarios_genericos/{id}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@usuarios_genericos'])->where('id', '[0-9]+');
         Route::post('/contratas/crear_usuarios',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@crear_usuarios_genericos']);
+        Route::post('/contratas/save_operario_generico',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@save_operario_generico']);
+        Route::post('/contratas/del_operario_generico',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@del_operario_generico']);
         Route::get('/contratas/set_usuarios_contrata/{accion}/{id_contrata}/{id_operario}',['middleware'=>'permissions:["Trabajos contratas"],["W"]','uses'=>'TrabajosController@set_usuarios_contrata']);
         //Gestion de planes de trabajo
         Route::get('/planes',['middleware'=>'permissions:["Trabajos planificador"],["R"]','uses'=>'TrabajosController@planes_index'])->name('trabajos_planes.index');
@@ -600,11 +605,12 @@ Route::group(['middleware' => 'auth'], function () {
         //Menu de servicios -> Mis trabajos
         Route::get('/mistrabajos', ['middleware'=>'permissions:["Trabajos mis trabajos"],["R"]','uses'=>'TrabajosController@mis_trabajos'])->name('mistrabajos.index');
         Route::get('/mistrabajos/load_calendario/{fecha}', ['middleware'=>'permissions:["Trabajos mis trabajos"],["R"]','uses'=>'TrabajosController@load_calendario'])->name('mistrabajos.load_calendario');
-        Route::get('/mistrabajos/load_dia/{fecha}/{vista}', ['middleware'=>'permissions:["Trabajos mis trabajos"],["R"]','uses'=>'TrabajosController@load_dia'])->name('mistrabajos.load_dia');
+        Route::get('/mistrabajos/load_dia/{fecha}/{vista?}', ['middleware'=>'permissions:["Trabajos mis trabajos"],["R"]','uses'=>'TrabajosController@load_dia'])->name('mistrabajos.load_dia');
         Route::get('/mistrabajos/iniciar/{id}', ['middleware'=>'permissions:["Trabajos iniciar finalizar"],["R"]','uses'=>'TrabajosController@iniciar_trabajo'])->name('trabajos.iniciar');
         Route::get('/mistrabajos/finalizar/{id}', ['middleware'=>'permissions:["Trabajos iniciar finalizar"],["R"]','uses'=>'TrabajosController@finalizar_trabajo'])->name('trabajos.finalizar');
         Route::get('/mistrabajos/comentarios/{id}', ['middleware'=>'permissions:["Trabajos iniciar finalizar"],["R"]','uses'=>'TrabajosController@get_comentarios_trabajo'])->name('trabajos.comentarios');
         Route::post('/mistrabajos/comentarios', ['middleware'=>'permissions:["Trabajos iniciar finalizar"],["R"]','uses'=>'TrabajosController@save_comentarios_trabajo'])->name('trabajos.save_comentarios');
+        Route::get('/mistrabajos/observaciones/{id}', ['middleware'=>'permissions:["Trabajos iniciar finalizar"],["R"]','uses'=>'TrabajosController@get_observaciones_trabajo'])->name('trabajos.observaciones');
 
         //Menu de servicios -> Planes
         Route::get('/planificacion', ['middleware'=>'permissions:["Trabajos planes"],["R"]','uses'=>'TrabajosController@servicios_planes'])->name('servicios.planes');

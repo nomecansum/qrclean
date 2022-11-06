@@ -339,6 +339,7 @@ class TrabajosController extends Controller
             $usuario->val_color = $r->val_color;
             $usuario->id_cliente = Auth::user()->id_cliente;
             $usuario->nom_operario = $r->des_prefijo.($i+1);
+            $usuario->val_icono = $r->val_icono;
             $usuario->save();
         }
         savebitacora( 'Creados '.$r->num_usuarios. ' operarios de '.$r->des_prefijo,"Trabajos","crear_usuarios_genericos","OK");
@@ -348,6 +349,39 @@ class TrabajosController extends Controller
             'url' => url('/trabajos/contratas')
         ];
        
+    }
+
+    public function save_operario_generico(Request $r){
+        if($r->val_color=="#000000"){
+            $r->request->add(['val_color'=>null]);
+        }
+       
+        $op=operarios::find($r->id_operario);
+        $op->val_color=$r->val_color;
+        $op->val_icono=$r->val_icono;
+        $op->nom_operario=$r->nom_operario;
+        $op->save();
+        savebitacora( 'Operario '.$r->nom_operario." actualizado","Trabajos","save_operario_generico","OK");
+        return [
+            'title' => "Contratas de trabajos",
+            'message' => 'Operario '.$r->nom_operario." actualizado",
+            //'url' => url('/trabajos/contratas')
+        ];
+    }
+
+    public function del_operario_generico(Request $r){
+        if($r->val_color=="#000000"){
+            $r->request->add(['val_color'=>null]);
+        }
+       
+        $op=operarios::find($r->id_operario);
+        $op->delete();
+        savebitacora( 'Operario '.$r->nom_operario." borrado","Trabajos","save_operario_generico","OK");
+        return [
+            'title' => "Contratas de trabajos",
+            'message' => 'Operario '.$r->nom_operario." borrado",
+            //'url' => url('/trabajos/contratas')
+        ];
     }
 
     public function set_usuarios_contrata($accion,$id_contrata,$id_operario){
@@ -391,7 +425,7 @@ class TrabajosController extends Controller
     }
 
 
-    ///////////////////GRUPOS DE TRABAJOS ///////////////////////
+    ///////////////////PLANES DE TRABAJOS ///////////////////////
     public function planes_index() {
         $datos = DB::table('trabajos_planes')
             ->join('clientes', 'trabajos_planes.id_cliente', 'clientes.id_cliente')
@@ -422,13 +456,15 @@ class TrabajosController extends Controller
         $edificios = edificios::where('id_cliente',Auth::user()->id_cliente)->get();
         $grupos = grupos::where('id_cliente',Auth::user()->id_cliente)->get();
         $contratas = contratas::where('id_cliente',Auth::user()->id_cliente)->get();
-
         $detalle=planes_detalle::where('id_plan',$id)->get();
-       if($detalle!=null){
-            $sel_plantas=implode(",",$detalle->wherenotnull('id_planta')->pluck('id_planta')->unique()->toarray());
-            $sel_grupos=implode(",",$detalle->pluck('id_grupo_trabajo')->unique()->toarray());
-            $sel_zonas=implode(",",$detalle->wherenotnull('id_zona')->pluck('id_zona')->unique()->toarray());
-            $sel_contratas=implode(",",$detalle->pluck('id_contrata')->unique()->toarray());
+
+
+        if($dato->espacios!=null){
+            $espacios=json_decode($dato->espacios);
+            $sel_plantas=implode(",",$espacios->plantas??[]);
+            $sel_grupos=implode(",",$espacios->grupos??[]);
+            $sel_zonas=implode(",",$espacios->zonas??[]);
+            $sel_contratas=implode(",",$espacios->contratas??[]);
        } else {
             $sel_plantas=null;
             $sel_grupos=null;
@@ -442,8 +478,8 @@ class TrabajosController extends Controller
     }
 
     public function update_plan(Request $r ) {
-        try {
-            
+        
+        try {     
             if($r->val_color=="#000000"){
                 $r->request->add(['val_color'=>null]);
             }
@@ -453,6 +489,14 @@ class TrabajosController extends Controller
             } else {
                 $r->request->add(['mca_activo'=>'N']);
             }
+
+            $espacios=new \stdClass();
+            $espacios->plantas=$r->planta;
+            $espacios->zonas=$r->id_zona;
+            $espacios->grupos=$r->id_grupo;
+            $espacios->contratas=$r->id_contrata;
+            $espacios=json_encode($espacios);
+            $r->request->add(['espacios'=>$espacios]);
 
             if ($r->id==0){
                 $dato = planes::create($r->all());
@@ -464,6 +508,22 @@ class TrabajosController extends Controller
                 $dato->save();
             }
             
+            //Ahora vamos a regularizar los trabajos del plan, borraremos todos aquellos que no esten en los filtros seleccionados
+            //Solo puede habner un detalle por espacio, trabajo y grupo
+            $tareas_ok=DB::table('trabajos_planes_detalle')
+                ->selectraw("max(key_id) as id_detalle")
+                ->where('id_plan',$dato->id_plan)
+                ->where(function($q) use($r){
+                    $q->wherein('id_zona',$r->id_zona??[]);
+                    $q->orwherein('id_planta',$r->planta??[]);
+                })
+                ->wherein('id_grupo_trabajo',$r->id_grupo??[])
+                ->wherein('id_contrata',$r->id_contrata??[])
+                ->groupby(['id_trabajo','id_contrata','id_zona','id_planta','id_grupo_trabajo'])
+                ->pluck('id_detalle')
+                ->toArray();
+            planes_detalle::where('id_plan',$dato->id_plan)->whereNotIn('key_id',$tareas_ok)->delete();
+           
 
             savebitacora('Plan de trabajo creado '.$r->des_plan,"Trabajos","update_plan","OK");
             return [
@@ -471,8 +531,8 @@ class TrabajosController extends Controller
                 'message' => 'Plan '.$r->des_plan. ' actualizada con exito',
                 'url' => url('/trabajos/planes')
             ];
-        } catch (\Throwable $e) {
-            savebitacora('ERROR: Ocurrio un error actualizando el plan  '.$dato->des_plan.' '.$e->getMessage() ,"Trabajos","update_plan","ERROR");
+            } catch (\Throwable $e) {
+            savebitacora('ERROR: Ocurrio un error actualizando el plan  '.$r->des_plan.' '.$e->getMessage() ,"Trabajos","update_plan","ERROR");
             return [
                 'title' => "Plan de trabajo",
                 'error' => 'ERROR: Ocurrio un error actualizando el plan '.$r->des_plan.' '.$e->getMessage(),
@@ -497,6 +557,7 @@ class TrabajosController extends Controller
         }
     }
 
+    //Pintar la table de deatlle de un plan
     public function get_plan(Request $r) {
         $dato = planes::find($r->id_plan);
         $tareas = trabajos::where('id_cliente',Auth::user()->id_cliente)->get();
@@ -550,7 +611,6 @@ class TrabajosController extends Controller
                 }
             })
             ->get();
-
         
 
         $detalle=DB::table('trabajos_planes_detalle')
@@ -561,6 +621,7 @@ class TrabajosController extends Controller
         return view('trabajos.planes.detalle', compact('dato','tareas','grupos','contratas','operarios','plantas','zonas','trabajos','detalle'));
     }
 
+    //Detalle de un trabajo dentro del editor de planes
     public function detalle_trabajo(Request $r){
         $detalle= DB::table('trabajos_planes_detalle')
             ->select('trabajos_planes_detalle.*','contratas.*','trabajos.val_operarios as operarios_teorico','trabajos.val_tiempo as tiempo_teorico')
@@ -685,11 +746,11 @@ class TrabajosController extends Controller
         } else {
             $val_operarios=$detalle->operarios_teorico??0;
         }
-        
         return view('trabajos.planes.fill_mini_detalle', compact('detalle','contratas','operarios','operarios_genericos','mostrar_operarios','mostrar_tiempo'));
 
     }
 
+    //Detalle de la periodicidad de un trabajo en un plan
     public function detalle_periodo ($plan,$grupo,$trabajo){
 
         $detalle= DB::table('trabajos_planes_detalle')
@@ -706,7 +767,7 @@ class TrabajosController extends Controller
         $val_periodo=$detalle->val_periodo??'0 20 ? * MON-FRI';
         return view('trabajos.planes.fill_detalle_periodo',compact('val_periodo'));
     }
-
+    //Guarda el detalle de un trabajo en un plan    
     public function detalle_save(Request $r){
             try{ $detalle=planes_detalle::find($r->id_detalle);
                 if(!isset($detalle)){
@@ -721,6 +782,7 @@ class TrabajosController extends Controller
                 $detalle->val_tiempo=$r->val_tiempo;
                 $detalle->val_periodo=$r->val_periodo;
                 $detalle->val_tiempo=$r->val_tiempo;
+                $detalle->txt_observaciones=$r->txt_observaciones;
                 $detalle->mca_activa=isset($r->mca_activa)?'S':'N';
                 if($r->sel_operarios==1 && isset($r->operarios)){
                     $detalle->num_operarios=null;
@@ -730,9 +792,20 @@ class TrabajosController extends Controller
                     $detalle->list_operarios=null;
                 }
                 $detalle->save();
+                //Ahora buscamos en las programaciones aquellos que sean de este detalle y los eliminamos
+                $programaciones=trabajos_programacion::where('id_plan',$r->id_plan)
+                    ->where('id_trabajo_plan',$detalle->key_id)
+                    ->delete();
+
                 //Ahora las copias
                 foreach($r->plantas_copiar??[] as $planta){
                     //Primero borramos las copias que ya existan
+                    planes_detalle::where('id_plan',$r->id_plan)
+                        ->where('id_grupo_trabajo',$r->id_grupo)
+                        ->where('id_trabajo',$r->id_trabajo)
+                        ->where('id_planta',$planta)
+                        ->wherenot('id_planta',$r->id_planta)
+                        ->delete();
                     if($planta!=$r->id_planta){
                        $copia=$detalle->replicate();
                        $copia->id_planta=$planta;
@@ -741,6 +814,12 @@ class TrabajosController extends Controller
                 }
                 foreach($r->zonas_copiar??[] as $zona){
                     //Primero borramos las copias que ya existan
+                    planes_detalle::where('id_plan',$r->id_plan)
+                        ->where('id_grupo_trabajo',$r->id_grupo)
+                        ->where('id_trabajo',$r->id_trabajo)
+                        ->where('id_zona',$zona)
+                        ->wherenot('id_zona',$r->id_planta)
+                        ->delete();
                     if($zona!=$r->id_zona){
                        $copia=$detalle->replicate();
                        $copia->id_zona=$zona;
@@ -750,6 +829,12 @@ class TrabajosController extends Controller
                 foreach($r->trabajos_copiar??[] as $trabajo){
                     //Primero borramos las copias que ya existan
                     $trabajo=explode('_',$trabajo);
+                    planes_detalle::where('id_plan',$r->id_plan)
+                        ->where('id_grupo_trabajo',$r->id_grupo)
+                        ->where('id_trabajo',$trabajo)
+                        ->wherenot('id_trabajo',$r->id_trabajo)
+                        ->delete();
+                    
                     if($trabajo[1]!=$r->id_trabajo || $trabajo[0]!==$r->id_grupo){
                        $copia=$detalle->replicate();
                        $copia->id_trabajo=$trabajo[1];
@@ -772,12 +857,7 @@ class TrabajosController extends Controller
         }
     }
 
-    public function next_cron(Request $r){
-        $expresion=$r->expresion;
-        $veces=$r->veces;
-        return view('resources.next_cron', compact('expresion','veces'));
-    }
-
+    //Cambiar el periodo en todos los detalles de un trabajo
     public function periodo_save(Request $r){
         try{
             DB::table('trabajos_planes_detalle')
@@ -785,6 +865,15 @@ class TrabajosController extends Controller
                 ->where('id_grupo_trabajo',$r->grupo)
                 ->where('id_trabajo',$r->trabajo)
                 ->update(['val_periodo' => $r->periodo]);
+
+            //Ahora buscamos en las programaciones aquellos que sean de este detalle y los eliminamos
+            $arr_trabajos=planes_detalle::where('id_plan',$r->id_plan)
+                ->where('id_grupo_trabajo',$r->grupo)
+                ->where('id_trabajo',$r->trabajo)
+                ->pluck('key_id');
+            $programaciones=trabajos_programacion::where('id_plan',$r->id_plan)
+                ->whereIn('id_trabajo_plan',$arr_trabajos)
+                ->delete();
 
             savebitacora('Actualizado periodo para el grupo de trabajos '.$r->grupo. ' del plan '.$r->id_plan,"Trabajos","periodo_save","OK");
             return [
@@ -819,8 +908,14 @@ class TrabajosController extends Controller
         }
     }
 
+    //Esta es para que si se quita una plnata, zona o grupo de trabajo se borren los detalles que no tienen sentido
+    public function quitar_recurso_plan(Request $r){
+
+    }
+
 
     //////////////////////// SECCION DE TRABAJOS EN SERVICIOS //////////////////////////
+    //MIS TRABAJOS
 
     public function mis_trabajos($fecha=null){
         if(!isset($fecha)){
@@ -853,7 +948,7 @@ class TrabajosController extends Controller
         return view('trabajos.mistrabajos.fill_calendario', compact('fecha','calendario'));
     }
 
-    public function load_dia($fecha,$vista='card'){
+    public function load_dia($fecha,$vista=null){
         $fecha=Carbon::parse($fecha);
         $datos=DB::table('trabajos_programacion')
             ->select('trabajos.des_trabajo','trabajos.val_icono as icono_trabajo','trabajos.val_color as color_trabajo',
@@ -862,7 +957,7 @@ class TrabajosController extends Controller
                      'edificios.des_edificio',
                      'plantas.des_planta',
                      'plantas_zonas.des_zona',
-                     'trabajos_planes_detalle.id_planta','trabajos_planes_detalle.id_zona','trabajos_planes_detalle.val_tiempo','trabajos_planes_detalle.num_operarios','trabajos_planes_detalle.list_operarios',
+                     'trabajos_planes_detalle.id_planta','trabajos_planes_detalle.id_zona','trabajos_planes_detalle.val_tiempo','trabajos_planes_detalle.num_operarios','trabajos_planes_detalle.list_operarios','trabajos_planes_detalle.txt_observaciones',
                      'grupos_trabajos.id_grupo','grupos_trabajos.des_grupo','grupos_trabajos.val_icono as icono_grupo','grupos_trabajos.val_color as color_grupo',
                      'operarios_ini.nom_operario as nom_operario_ini',
                      'operarios_fin.nom_operario as nom_operario_fin',)
@@ -884,8 +979,14 @@ class TrabajosController extends Controller
             })
             ->wheredate('trabajos_programacion.fec_programada',$fecha)
             ->get();
-
-        session(['tipo_vista'=>$vista]);
+        if($vista!==null){
+            session(['tipo_vista'=>$vista]);
+        } else if(session('tipo_vista')==null){
+            $vista='card';
+            session(['tipo_vista'=>$vista]);
+        } else {
+            $vista=session('tipo_vista');
+        }
         return view('trabajos.mistrabajos.trabajos_dia', compact('fecha','datos','vista'));
     }
 
@@ -916,6 +1017,11 @@ class TrabajosController extends Controller
         return $trabajo->observaciones;
     }
 
+    public function get_observaciones_trabajo($id){
+        $detalle=planes_detalle::find($id);
+        return $detalle->txt_observaciones;
+    }
+
     public function save_comentarios_trabajo(Request $r){
         $trabajo=trabajos_programacion::find($r->id);
         $operario=operarios::find(session('id_operario'));
@@ -927,6 +1033,7 @@ class TrabajosController extends Controller
         ];
     }
 
+    //GESTION DE PLANES
     public function servicios_planes(){
         $datos = DB::table('trabajos_planes')
             ->join('clientes', 'trabajos_planes.id_cliente', 'clientes.id_cliente')
@@ -1000,14 +1107,14 @@ class TrabajosController extends Controller
     public function servicios_detalle_trabajo(Request $r){
         $fecha=Carbon::parse($r->fecha);
         $datos=DB::table('trabajos_programacion')
-            ->select('trabajos.des_trabajo','trabajos.val_icono as icono_trabajo','trabajos.val_color as color_trabajo', 'trabajos.val_operarios as operarios_previstos',
+            ->select('trabajos.des_trabajo','trabajos.val_icono as icono_trabajo','trabajos.val_color as color_trabajo', 'trabajos.val_operarios as operarios_previstos','trabajos.fec_inicio as fec_ini_trabajo','trabajos.fec_fin as fec_fin_trabajo',
                      'trabajos_programacion.*',
                      'trabajos_planes.des_plan','trabajos_planes.val_icono as icono_plan','trabajos_planes.val_color as color_plan','trabajos_planes.id_edificio',
                      'edificios.des_edificio',
                      'plantas.des_planta',
                      'plantas_zonas.des_zona',
                      'trabajos_planes_detalle.id_planta','trabajos_planes_detalle.id_zona','trabajos_planes_detalle.val_tiempo','trabajos_planes_detalle.num_operarios','trabajos_planes_detalle.list_operarios','trabajos_planes_detalle.txt_observaciones','trabajos_planes_detalle.val_periodo',
-                     'grupos_trabajos.id_grupo','grupos_trabajos.des_grupo','grupos_trabajos.val_icono as icono_grupo','grupos_trabajos.val_color as color_grupo',
+                     'grupos_trabajos.id_grupo','grupos_trabajos.des_grupo','grupos_trabajos.val_icono as icono_grupo','grupos_trabajos.val_color as color_grupo','grupos_trabajos.fec_inicio as fec_ini_grupo','grupos_trabajos.fec_fin as fec_fin_grupo',
                      'operarios_ini.nom_operario as nom_operario_ini',
                      'operarios_fin.nom_operario as nom_operario_fin',
                      'contratas.des_contrata','contratas.img_logo as logo_contrata')
@@ -1034,16 +1141,20 @@ class TrabajosController extends Controller
 
         $historial=DB::table('trabajos_programacion')
             ->select('trabajos_programacion.*',
+                     'trabajos.fec_inicio as fec_ini_trabajo','trabajos.fec_fin as fec_fin_trabajo',
+                     'grupos_trabajos.fec_inicio as fec_ini_grupo','grupos_trabajos.fec_fin as fec_fin_grupo',
                      'operarios_ini.nom_operario as nom_operario_ini',
                      'operarios_fin.nom_operario as nom_operario_fin',
                      'trabajos_planes_detalle.id_planta','trabajos_planes_detalle.id_zona','trabajos_planes_detalle.val_tiempo')
             ->join('trabajos_planes_detalle','trabajos_programacion.id_trabajo_plan','trabajos_planes_detalle.key_id')
+            ->join('trabajos','trabajos_planes_detalle.id_trabajo','trabajos.id_trabajo')
             ->leftjoin('contratas_operarios as operarios_ini','trabajos_programacion.id_operario_inicio','operarios_ini.id_operario')
             ->leftjoin('contratas_operarios  as operarios_fin','trabajos_programacion.id_operario_fin','operarios_fin.id_operario')
+            ->join('grupos_trabajos','trabajos_planes_detalle.id_grupo_trabajo','grupos_trabajos.id_grupo')
             ->where('trabajos_programacion.id_trabajo_plan',$datos->id_trabajo_plan)
             ->where(function($q) use($fecha){
-                $q->where('trabajos_programacion.fec_programada','>=',$fecha->subdays(10)->format('Y-m-d'));
-                $q->where('trabajos_programacion.fec_programada','<=',$fecha->addDays(10)->format('Y-m-d'));
+                $q->where('trabajos_programacion.fec_programada','>=',Carbon::parse($fecha)->subdays(10)->format('Y-m-d'));
+                $q->where('trabajos_programacion.fec_programada','<=',Carbon::parse($fecha)->addDays(10)->format('Y-m-d'));
             })
             ->where(function($q) use($datos){
                 $q->where('trabajos_planes_detalle.id_planta',$datos->id_planta);
@@ -1092,7 +1203,26 @@ class TrabajosController extends Controller
                $icono='fa-solid fa-calendar-exclamation';
                $title='El trabajo se ha iniciado pero fuera de la fecha prevista';
            }
+            //Comprobamos si el dia esta excluido en el rango de fechas a aplicar del grupo o del trabajo
+            $in_time=true;
+            if($tarea->fec_ini_grupo!=null && $tarea->fec_fin_grupo!=null && !$fecha->between($tarea->fec_ini_grupo,$tarea->fec_fin_grupo)){
+                $in_time=false;
+                $donde="grupo";
+            }
+            if($tarea->fec_ini_trabajo!=null && $tarea->fec_fin_trabajo!=null && !$fecha->between($tarea->fec_ini_trabajo,$tarea->fec_fin_trabajo)){
+                $in_time=false;
+                $donde="trabajo";
+            }
+
+            if(!$in_time){
+                $color='bg-dark';
+                $icono='fa-light fa-calendar-circle-minus';
+                $title='La tarea esta fuera del rango de fechas establecido en el '.$donde;
+            }
        }
+
+       
+
        return [
            'color'=>$color,
            'icono'=>$icono,

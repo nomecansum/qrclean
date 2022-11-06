@@ -636,7 +636,7 @@ class ReportsController extends Controller
         }
     }
 
-    ////////////////////////////////INFORME DE USO DE ESPACIOS (MAPAS DE CALOR)///////////////////////////////                                                   
+    ////////////////////////////////INFORME DE USO DE ESPACIOS (MAPAS DE CALOR)////////////////////////////
 
     public function heatmap_index(){
         return view('reports.heatmap.index');
@@ -766,7 +766,7 @@ class ReportsController extends Controller
                         return $pdf->download($filename);
                     } catch(\Exception $e){
                         Log::error('Error generando PDF '.$e->getMessage());
-                        flash("Error al solicitar el informe: afine los filtros para evitar grandes cargas de datos al navegador (".mensaje_excepcion($e) . ")")->error();  
+                        flash("Error al solicitar el informe: afine los filtros para evitar grandes cargas de datos al navegador (".mensaje_excepcion($e) . ")")->error();
                         return redirect()->back()->withInput();
                     }
                 }
@@ -782,6 +782,172 @@ class ReportsController extends Controller
                     $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
                 } else {  //Navegacion
                     return Excel::download(new ExportExcel($view,compact('informe','r','executionTime')),$filename);
+                }
+            break;
+        }
+    }
+
+    ///////////////INFORME DE TRABAJOS PROGRAMADOS /////////////////
+    public function trabajos_index(){
+        return view('reports.trabajos.index');
+    }
+
+    public function trabajos(Request $r){
+        
+        //PARAMETROS DE ENTRADA COMUNES, USUARIO Y FECHAS
+        if(isset($r->cod_usuario))
+            Auth::loginUsingId($r->cod_usuario);
+        $f = explode(' - ',$r->fechas);
+        $f1 = adaptar_fecha($f[0]);
+        $f2 = adaptar_fecha($f[1]);
+
+        ///////////////////////////
+        ///CONTENIDO DEL INFORME///
+        ///////////////////////////
+        $planes = DB::table('trabajos_planes')
+            ->join('clientes','trabajos_planes.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()){
+                    $q->WhereIn('clientes.id_cliente',clientes());
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->id_plan) {
+                    $q->WhereIn('trabajos_planes.id_plan',$r->id_plan);
+                }
+            })
+            ->get();
+
+        $detalle=DB::table('trabajos_planes_detalle')
+            ->where(function($q) use($r){
+                if ($r->id_plan) {
+                    $q->WhereIn('trabajos_planes_detalle.id_plan',$r->id_plan);
+                }
+            })
+            ->get();
+
+        $tareas = DB::table('trabajos')
+            ->where(function($q){
+                if (!isAdmin()){
+                    $q->WhereIn('trabajos.id_cliente',clientes());
+                }
+            })
+            ->wherein('id_trabajo',$detalle->pluck('id_trabajo')->unique()->toarray())
+            ->get();
+        $grupos=DB::table('trabajos_grupos')
+            ->where(function($q){
+                if (!isAdmin()){
+                    $q->WhereIn('trabajos_grupos.id_cliente',clientes());
+                }
+            })
+            ->wherein('id_grupo',$detalle->pluck('id_grupo_trabajo')->unique()->toarray())
+            ->get();
+
+        $trabajos= DB::table('trabajos')
+            ->join('trabajos_tipos', 'trabajos_tipos.id_tipo_trabajo', 'trabajos.id_tipo_trabajo')
+            ->join('trabajos_grupos', 'trabajos_grupos.id_trabajo', 'trabajos.id_trabajo')
+            ->wherein('trabajos.id_trabajo',$detalle->pluck('id_trabajo')->unique()->toarray())
+            ->where('trabajos.id_cliente',Auth::user()->id_cliente)
+            ->orderby('num_orden')
+            ->get();
+        $contratas =DB::table('contratas')
+            ->where(function($q){
+                if (!isAdmin()){
+                    $q->WhereIn('contratas.id_cliente',clientes());
+                }
+            })
+            ->wherein('id_contrata',$detalle->pluck('id_contrata')->unique()->toarray())
+            ->get();
+        $operarios =DB::table('contratas_operarios')
+            ->where(function($q){
+                if (!isAdmin()){
+                    $q->WhereIn('contratas_operarios.id_cliente',clientes());
+                }
+            })
+            ->wherein('id_contrata',$detalle->pluck('id_contrata')->unique()->toarray())
+            ->get();
+        $plantas=DB::table('plantas')
+            ->where(function($q){
+                if (!isAdmin()){
+                    $q->WhereIn('plantas.id_cliente',clientes());
+                }
+            })
+            ->wherein('id_planta',$detalle->pluck('id_planta')->unique()->toarray())
+            ->get();
+    
+        $zonas = DB::table('plantas_zonas')
+            ->select('plantas_zonas.*','plantas.des_planta')
+            ->join('plantas', 'plantas_zonas.id_planta', 'plantas.id_planta')
+            ->wherein('key_id',$detalle->pluck('id_zona')->unique()->toarray())
+            ->get();
+
+        $programaciones=DB::Table('trabajos_programacion')
+            ->select('trabajos_programacion.*')
+            ->selectraw("date(fec_programada) as fecha_corta")
+            ->wherein('id_plan',$planes->pluck('id_plan')->unique()->toarray())
+            ->wherebetween('trabajos_programacion.fec_programada',[Carbon::parse($f1),Carbon::parse($f2)])
+            ->get();
+
+
+        $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+        ///////////////////////////////////////////////////
+        ///////////SALIDA DEL INFORME/////////////////////
+        //Para añadir a los nomres de fichero y hacerlos un poco mas unicos
+        //dd($r->all());
+        $nombre_informe="Informe trabajos planificados";
+        $cliente=clientes::find($r->id_cliente);
+        $rango_safe=str_replace(" - ","_",$r->fechas);
+        $rango_safe=str_replace("/","",$rango_safe);
+        $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
+        $usuario = users::find($r->cod_usuario)??Auth::user()->id;;
+        $view='reports.trabajos.filter';
+
+        switch($r->output){
+            case "pantalla":
+                if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("dato" => $dato, "detalle" => $detalle, "tareas" => $tareas, "grupos" => $grupos, "trabajos" => $trabajos, "contratas" => $contratas, "operarios" => $operarios, "plantas" => $plantas, "zonas" => $zonas, "programaciones" => $programaciones, 'executionTime' => $executionTime));
+                } else {  //Navegacion
+                    return view($view,compact('planes','detalle','tareas','grupos','trabajos','contratas','operarios','plantas','zonas','programaciones','r','executionTime'))->render();
+                }
+
+            break;
+
+            case "pdf":
+                $orientation = $r->orientation == 'h' ? 'landscape' : 'portrait';
+                $pdf = PDF::loadView($view,compact('planes','detalle','tareas','grupos','trabajos','contratas','operarios','plantas','zonas','programaciones','r','executionTime'));
+                $pdf->setPaper('legal', $orientation);
+                $filename = str_replace(' ', '_', $prepend . '_' . $nombre_informe . '.pdf');
+                $fichero = storage_path() . "/exports/" . $filename;
+
+                if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                    try{
+                        $pdf->save($fichero);
+                        $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                    } catch(\Exception $e){
+                        Log::error('Error generando PDF '.$e->getMessage());
+                    }
+
+                } else {  //Navegacion
+                    try{
+                        return $pdf->download($filename);
+                    } catch(\Exception $e){
+                        Log::error('Error generando PDF '.$e->getMessage());
+                        flash("Error al solicitar el informe: afine los filtros para evitar grandes cargas de datos al navegador (".mensaje_excepcion($e) . ")")->error();  
+                        return redirect()->back()->withInput();
+                    }
+                }
+
+            break;
+
+            case "excel":
+                $filename = str_replace(' ', '_', $prepend.'_'.$nombre_informe.'.xlsx');
+                $fichero = storage_path()."/exports/".$filename;
+                libxml_use_internal_errors(true); //para quitar los errores de libreria
+                if(isset($r->email_schedule) && $r->email_schedule == 1) { //Programado
+                    Excel::store(new ExportExcel($view, compact('planes','detalle','tareas','grupos','trabajos','contratas','operarios','plantas','zonas','programaciones','r','executionTime')),$filename,'exports');
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                } else {  //Navegacion
+                    return Excel::download(new ExportExcel($view,compact('planes','detalle','tareas','grupos','trabajos','contratas','operarios','plantas','zonas','programaciones','executionTime')),$filename);
                 }
             break;
         }

@@ -14,10 +14,10 @@
             </tr>
             <tr>
                 @foreach($plantas as $planta)
-                    <th class="text-center text-nowrap"  scope="col" ><span class="vertical text-nowrap align-middle text-center" nowrap>{{$planta->des_planta}}</span></th>
+                    <th class="text-center text-nowrap"  scope="col" ><span class="vertical text-nowrap align-middle text-center" nowrap>@local [{{ $planta->id_planta }}]  @endlocal {{$planta->des_planta}}</span></th>
                 @endforeach
                 @foreach($zonas as $zona)
-                    <th class="text-center text-nowrap"  scope="col" ><span class="vertical text-nowrap text-center align-middle" nowrap>[{{ $zona->des_planta }}] {{$zona->des_zona}}</span></th>
+                    <th class="text-center text-nowrap"  scope="col" ><span class="vertical text-nowrap text-center align-middle" nowrap>@local [{{ $zona->key_id }}]  @endlocal [{{ $zona->des_planta }}] {{$zona->des_zona}}</span></th>
                 @endforeach
             </tr>
         </thead>
@@ -31,8 +31,8 @@
                         @if($loop->index==0)
                             <td rowspan="{{ $trabajos_grupo->count() }}" class="text-center align-middle" style="vertical-align: middle; padding: 10px 0px 10px 0px; background-color: {{ $grupo->val_color }}"><span class="vertical text-center ml-2 {{ txt_blanco($grupo->val_color) }}"> {{ $grupo->des_grupo }}</span></td>
                         @endif
-                        <td scope="col" class="{{ txt_blanco($trabajo->val_color) }}" style="background-color:{{ $trabajo->val_color }}"><div style="margin-left: {{ 30*$trabajo->num_nivel }}px;"><i class="{{ $trabajo->val_icono }}"></i> {{ $trabajo->des_trabajo }}</div></td>
-                        <td class="text-center text-nowrap"  scope="col" >@if(isset($trabajo->fec_inicio)){{ Carbon::parse($trabajo->fec_inicio)->format('d/M') }} <i class="fa-solid fa-arrow-right"></i> {{ Carbon::parse($trabajo->fec_fin)->format('d/M') }}@endif</td>
+                        <td scope="col" class="text-nowrap {{ txt_blanco($trabajo->val_color) }}" style="background-color:{{ $trabajo->val_color }}"><div style="margin-left: {{ 30*$trabajo->num_nivel }}px;"><i class="{{ $trabajo->val_icono }}"></i>@local [{{ $trabajo->id_trabajo }}]  @endlocal {{ $trabajo->des_trabajo }}</div></td>
+                        <td class="text-center text-nowrap"  scope="col" >@if(isset($grupo->fec_inicio))(G) {{ Carbon::parse($grupo->fec_inicio)->format('d/M') }} <i class="fa-solid fa-arrow-right"></i> {{ Carbon::parse($grupo->fec_fin)->format('d/M') }}@endif @if(isset($trabajo->fec_inicio))(T) {{ Carbon::parse($trabajo->fec_inicio)->format('d/M') }} <i class="fa-solid fa-arrow-right"></i> {{ Carbon::parse($trabajo->fec_fin)->format('d/M') }}@endif</td>
                         <td scope="col" class="text-center td_periodo" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $grupo->des_grupo.' - '.$trabajo->des_trabajo }}">
                             @php
                                 $periodos=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->pluck('val_periodo')->unique()->toarray();
@@ -43,8 +43,8 @@
                             @php
                                 $item=$detalle->where('id_planta',$planta->id_planta)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                             @endphp
-                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}" class="td_planta text-center text-nowrap {{ ($item->mca_activa??'')=='N'?'bg-gray text-muted':'' }}" data-id="{{ $planta->id_planta }}" data-tipo="P" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $planta->des_planta.' - '.$trabajo->des_trabajo }}"  data-periodo="{{ $item->val_periodo??null }}">
-                                <img src="{{ isset($item->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$item->img_logo) : ''}}"  title="{{ $item->des_contrata??'' }}"  style="margin: auto; display: block; width: 20px; heigth:20px" alt=""  class="img-fluid">
+                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}" class="td_planta text-center text-nowrap {{ ($item->mca_activa??'')=='N'?'bg-gray text-muted':'' }}" data-detalle="{{ $item->key_id??0 }}" data-id="{{ $planta->id_planta }}" data-tipo="P" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}" data-desc="{{ $planta->des_planta.' - '.$trabajo->des_trabajo }}"  data-periodo="{{ $item->val_periodo??null }}">
+                                <img src="{{ isset($item->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$item->img_logo) : ''}}"  title="{{ $item->des_contrata??'' }}"  style="margin: auto; display: block; width: 20px; heigth:20px" alt=""  class="img-fluid">@local [{{ $item->key_id??'-' }}]  @endlocal
                                 @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple add-tooltip " title="{{ $item->num_operarios }} Operarios asignados"></i> {{ $item->num_operarios }}  <br>@endif
                                 @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple add-tooltip "></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
                                 @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch add-tooltip " title="Duracion total {{ $item->val_tiempo }} minuos"></i> {{ $item->val_tiempo }}' <br>@endif
@@ -56,8 +56,8 @@
                             @php
                                 $item=$detalle->where('id_zona',$zona->key_id)->where('id_trabajo',$trabajo->id_trabajo)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
                             @endphp
-                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}"  class="td_planta text-center text-nowrap {{ ($item->mca_activa??'')=='N'?'bg-gray text-muted':'' }}" data-id="{{ $zona->key_id }}" data-tipo="Z" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}"  data-desc="{{ $zona->des_zona .' - '.$trabajo->des_trabajo}}"  data-periodo="{{ $item->val_periodo??null }}">
-                                <img src="{{ isset($item->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$item->img_logo) : ''}}" title="{{ $item->des_contrata??'' }}" style="margin: auto; display: block; width: 20px; heigth:20px" alt=""  class="img-fluid">
+                            <td scope="col" data-key_id= "{{ $item->key_id??0 }}"  class="td_planta text-center text-nowrap {{ ($item->mca_activa??'')=='N'?'bg-gray text-muted':'' }}" data-detalle="{{ $item->key_id??0 }}"  data-id="{{ $zona->key_id }}" data-tipo="Z" data-grupo="{{ $grupo->id_grupo }}" data-trabajo="{{ $trabajo->id_trabajo }}"  data-desc="{{ $zona->des_zona .' - '.$trabajo->des_trabajo}}"  data-periodo="{{ $item->val_periodo??null }}">
+                                <img src="{{ isset($item->img_logo) ? Storage::disk(config('app.img_disk'))->url('img/contratas/'.$item->img_logo) : ''}}" title="{{ $item->des_contrata??'' }}" style="margin: auto; display: block; width: 20px; heigth:20px" alt=""  class="img-fluid">@local [{{ $item->key_id??'-' }}]  @endlocal
                                 @if(isset($item->num_operarios))<i class="fa-solid fa-person-simple add-tooltip "></i> {{ $item->num_operarios }}  <br>@endif
                                 @if(isset($item->list_operarios)) <i class="fa-solid fa-person-simple add-tooltip " title="{{ count(explode(",",$item->list_operarios)) }} Operarios asignados"></i> {{ count(explode(",",$item->list_operarios)) }} <br>@endif
                                 @if(isset($item->val_tiempo)) <i class="fa-regular fa-stopwatch add-tooltip " title="Duracion total {{ $item->val_tiempo }} minuos"></i> {{ $item->val_tiempo }}' <br>@endif
@@ -126,7 +126,7 @@ $('.td_planta').click(function(){
     var tipo=$(this).data('tipo');
     var grupo=$(this).data('grupo');
     var trabajo=$(this).data('trabajo');
-    var desc=$(this).data('desc');
+    var desc='#'+$(this).data('detalle')+' '+$(this).data('desc');
     var periodo=$(this).data('periodo');
     $.post('{{url('/trabajos/planes/detalle_trabajo')}}', {_token:'{{csrf_token()}}',id_plan:{{ $dato->id_plan }},id:id,tipo:tipo,grupo:grupo,trabajo:trabajo,periodo:periodo,contratas:$('#multi-contratas').val(),plantas:$('#multi-planta').val(),zonas:$('#multi-zonas').val(),grupos:$('#multi-grupos').val()}, function(data, textStatus, xhr) {
         $('.modal-body').empty();
@@ -180,7 +180,7 @@ $('#btn_si_periodo').click(function(){
 
 $('.span_cron').each(function(item){
     if($(this).data('expresion')!=''){
-        $(this).attr('title',cronstrue.toString($(this).data('expresion'),{ use24HourTimeFormat: true,locale: "es" }));
+        $(this).attr('title',cronstrue.toString($(this).data('expresion'),{ use24HourTimeFormat: true,locale: "es",dayOfWeekStartIndexZero: false }));
     }
    
 })

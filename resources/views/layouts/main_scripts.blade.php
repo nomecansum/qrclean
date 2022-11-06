@@ -495,6 +495,25 @@
     }, 45000);
 
 
+    //Conversion de colores
+    function RGB2Color(r,g,b)
+    {
+        return '#' + this.byte2Hex(r) + this.byte2Hex(g) + this.byte2Hex(b);
+    }
+    function byte2Hex (n)
+    {
+        var nybHexString = "0123456789ABCDEF";
+        return String(nybHexString.substr((n >> 4) & 0x0F,1)) + nybHexString.substr(n & 0x0F,1);
+    }
+
+    function hexToRgb(h)
+    {
+        var r = parseInt((cutHex(h)).substring(0,2),16), g = ((cutHex(h)).substring(2,4),16), b = parseInt((cutHex(h)).substring(4,6),16)
+        return r+''+b+''+b;
+    }
+    function cutHex(h) {return (h.charAt(0)=="#") ? h.substring(1,7):h}
+
+
     //Boton de notificaicones en el header
     $('#btn_notif').click(function(){
         $('#div_notif').toggle();

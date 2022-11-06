@@ -39,13 +39,19 @@
                         <p class="h4">{{  $item->des_trabajo }} </p>
                         <p class="text-head fw-semibold">
                             <i class="fa-solid fa-person-simple add-tooltip " title="{{ $item->num_operarios }} Operarios asignados"></i> {{ $item->num_operarios }}
-                            <i class="fa-regular fa-stopwatch add-tooltip " title="Duracion total {{ $item->val_tiempo }} minuos"></i> {{ $item->val_tiempo }}'
+                            <i class="fa-regular fa-stopwatch add-tooltip ml-3" title="Duracion total {{ $item->val_tiempo }} minuos"></i> {{ $item->val_tiempo }}'
+                            <i class="fa-regular fa-clock add-tooltip ml-3" title="Programado para las {{ Carbon::parse($item->fec_programada)->format('H:i') }}"></i> {{ Carbon::parse($item->fec_programada)->format('H:i') }}
                         </p>
+                        <small class="d-block text-muted my-3">
+                            @if($item->txt_observaciones!=null)
+                                <div class="btn_notas" data-id="{{ $item->id_trabajo_plan }}" {{ $item->fec_fin==null?"data-add=1":'' }}><i class="fa-duotone fa-notes"></i><b>Notas del supervisor:</b> {!! substr($item->txt_observaciones,0,100) !!}<br></div>
+                            @endif
+                        </small>
                         <small class="d-block text-muted my-3">
                             @if($item->observaciones!=null)
                                 <div class="btn_comentarios" data-id="{{ $item->id_programacion }}" {{ $item->fec_fin==null?"data-add=1":'' }}><i class="fa-duotone fa-comments"></i> {!! substr($item->observaciones,0,100) !!}<br></div>
                             @elseif(session('id_operario')!=null && $item->fec_fin==null)
-                                <button class="btn btn-light btn_comentarios btn-lg  w-100" data-add="1" data-id="{{ $item->id_programacion }}"><i class="fa-duotone fa-comments"></i> Observaciones</button> 
+                                <button class="btn btn-light btn_comentarios btn-lg  w-100" data-add="1" data-id="{{ $item->id_programacion }}"><i class="fa-duotone fa-comments"></i> Comentarios</button>
                             @endif
                         </small>
                         <div class="text-center text-info mb-2">
@@ -81,6 +87,7 @@
                     <th>Trabajo</th>
                     <th>Edificio</th>
                     <th>Espacio</th>
+                    <th class="d-none d-sm-table-cell text-center" style="width: 5%;">Hora</th>
                     <th class="d-none d-sm-table-cell text-center" style="width: 5%;">Operarios</th>
                     <th class="d-none d-sm-table-cell text-center" style="width: 5%;">Duracion</th>
                     <th class="d-none d-sm-table-cell" style="width: 15%;">Inicio</th>
@@ -104,6 +111,9 @@
                             <i class="fa-solid fa-draw-square"></i> {{ $item->des_zona }}
 
                         @endif
+                    </td>
+                    <td class="d-none d-sm-table-cell text-start" nowrap>
+                        <i class="fa-regular fa-clock add-tooltip" title="Programado para las {{ Carbon::parse($item->fec_programada)->format('H:i') }}"></i> {{ Carbon::parse($item->fec_programada)->format('H:i') }}
                     </td>
                     <td class="d-none d-sm-table-cell text-center">
                         <i class="fa-solid fa-person-simple add-tooltip " title="{{ $item->num_operarios }} Operarios asignados"></i> {{ $item->num_operarios }}
@@ -146,7 +156,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <h1 class="modal-title text-nowrap">Comentarios del trabajo </h1>
+                <h3 class="modal-title text-nowrap" id="tit_modal_comentarios">Comentarios del trabajo </h3>
                 <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
                     <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
                 </button>
@@ -160,7 +170,7 @@
                         @csrf
                         <input type="hidden" name="id" id="id_programacion">
                         <div class="form-group">
-                            <label for="observaciones">Observaciones</label>
+                            <label for="observaciones">Comentarios</label>
                             <textarea class="form-control" name="observaciones" id="observaciones" rows="3"></textarea>
                         </div>
                     
@@ -201,6 +211,7 @@
     })
 
     $('.btn_comentarios').click(function(){
+        $('#tit_modal_comentarios').html('Comentarios del trabajo ');
         if($(this).data('add')==1){
             $('#form_comentario').show();
             $('#btn_guardar_comentario').show();
@@ -210,6 +221,20 @@
             $('#btn_guardar_comentario').hide();
         }
         $.get('{{ url('trabajos/mistrabajos') }}/comentarios/'+$(this).data('id'),function(data){
+            if(!data.error){
+                $('#body_comentario').html(data);
+                $('#modal-comentarios').modal('show');
+            }else{
+                toast_error(data.title,data.error);
+            }
+        });
+    })
+
+    $('.btn_notas').click(function(){
+        $('#tit_modal_comentarios').html('Notas del supervisor ');
+        $('#form_comentario').hide();
+            $('#btn_guardar_comentario').hide();
+        $.get('{{ url('trabajos/mistrabajos') }}/observaciones/'+$(this).data('id'),function(data){
             if(!data.error){
                 $('#body_comentario').html(data);
                 $('#modal-comentarios').modal('show');

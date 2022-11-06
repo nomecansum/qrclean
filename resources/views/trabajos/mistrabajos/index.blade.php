@@ -130,7 +130,7 @@
 
         $(function(){
            @desktop loadMes("{{date('Y-m-d')}}"); @enddesktop
-            loadDia("{{date('Y-m-d')}}","{{ session('tipo_vista')??'card' }}");
+            loadDia("{{date('Y-m-d')}}");
         })
 
         @mobile

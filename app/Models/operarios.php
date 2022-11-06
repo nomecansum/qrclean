@@ -37,7 +37,8 @@ class operarios extends Model
                   'id_cliente',
                   'id_contrata',
                   'id_usuario',
-                  'val_color'
+                  'val_color',
+                  'val_icono'
               ];
 
     /**

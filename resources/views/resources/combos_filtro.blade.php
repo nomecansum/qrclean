@@ -231,6 +231,36 @@
     </div>
 </div>
 
+<div class="form-group  col-md-12 mt-3" style="{{ (isset($show['gru']) && $show['gru']==1) ? '' : 'display: none'  }}">
+    <label>Grupos de trabajos</label>
+    <div class="input-group select2-bootstrap-append">
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_grupo[]" id="multi-grupos" >
+            
+        </select>
+        <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+    </div>
+</div>
+
+<div class="form-group  col-md-12 mt-3" style="{{ (isset($show['con']) && $show['con']==1) ? '' : 'display: none'  }}">
+    <label>Contratas</label>
+    <div class="input-group select2-bootstrap-append">
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_contrata[]" id="multi-contratas" >
+            
+        </select>
+        <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+    </div>
+</div>
+
+<div class="form-group  col-md-12 mt-3" style="{{ (isset($show['pln']) && $show['pln']==1) ? '' : 'display: none'  }}">
+    <label>Planes de trabajo</label>
+    <div class="input-group select2-bootstrap-append">
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_plan[]" id="multi-planes" >
+            
+        </select>
+        <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
+    </div>
+</div>
+
 <div class="row mt-5" style="{{ (isset($hide['btn']) && $hide['btn']==1) ? 'display: none' : ''  }}">
     <div class="col-md-12 text-end mb-3">
         <button id="btn_submit" class="btn btn-primary btn-lg float-right"><i class="fa fa-search"></i> {{ $etiqueta_boton??'Ver' }}</button>
@@ -420,6 +450,36 @@
                     zona_c=val.id_cliente;
                 }
                 $('#multi-zonas').append('<option value="'+val.id_zona+'">'+val.des_zona+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            grupo_c="";
+            $.each(data.grupos, function(index, val) {
+                if(grupo_c!=val.id_cliente){
+                    $('#multi-grupos').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    grupo_c=val.id_cliente;
+                }
+                $('#multi-grupos').append('<option value="'+val.id_grupo+'">'+val.des_grupo+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            contrata_c="";
+            $.each(data.contratas, function(index, val) {
+                if(contrata_c!=val.id_cliente){
+                    $('#multi-contratas').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    contrata_c=val.id_cliente;
+                }
+                $('#multi-contratas').append('<option value="'+val.id_contrata+'">'+val.des_contrata+'</option>');
+            });
+            $('#loadfilter').hide();
+
+            plan_c="";
+            $.each(data.planes, function(index, val) {
+                if(plan_c!=val.id_cliente){
+                    $('#multi-planes').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
+                    plan_c=val.id_cliente;
+                }
+                $('#multi-planes').append('<option value="'+val.id_plan+'">'+val.des_plan+'</option>');
             });
             $('#loadfilter').hide();
             //try{ end_update_filtros('cliente') } catch(excp){ } //Funcion para actualizar cosas despues ed que se hayan cargado

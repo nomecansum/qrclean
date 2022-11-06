@@ -1,3 +1,7 @@
+@php
+    isset($detalle) && old('id_contrata', optional($detalle)->list_operarios) != null? $mostrar_operarios=1:$mostrar_operarios=0;
+@endphp
+
 <form method="POST" action="{{ url('/trabajos/planes/detalle_save') }}" id="edit_plan_detalle" name="edit_plan_detalle" accept-charset="UTF-8" class="form-horizontal form-ajax">
 {{ csrf_field() }}
 
@@ -46,7 +50,7 @@
                     <label for="sel_operarios" class="control-label">Operarios</label>
                     <select class="form-control" required id="sel_operarios" name="sel_operarios">
                         <option value="0">Genericos</option>
-                        <option value="1" {{ isset($detalle) && old('id_contrata', optional($detalle)->num_operarios) == null ? 'selected' : '' }}>Detallar</option>
+                        <option value="1" {{  $mostrar_operarios==1? 'selected' : '' }}>Detallar</option>
                     </select>
                 </div>
                 <div class="col-md-2 p-t-20 mt-1">
@@ -62,6 +66,12 @@
                         <option value="1" {{ isset($detalle) && old('id_contrata', optional($detalle)->val_tiempo) == null ? 'selected' : '' }}>Calculado</option>
                     </select>
                 </div> --}}
+            </div>
+            <div class="row mt-3">
+                <div class="form-group">
+                    <label for="observaciones">Observaciones</label>
+                    <textarea class="form-control" name="txt_observaciones" id="txt_observaciones" rows="3">{{ old('txt_observaciones', optional($detalle)->txt_observaciones) }}</textarea>
+                </div>
             </div>
             <div class="row  mt-3" id="detalle_mini">
                 @include('trabajos.planes.fill_mini_detalle')

@@ -49,7 +49,11 @@
                     @foreach($grupos as $grupo)
                         @php
                             $trabajos_grupo=$trabajos->where('id_grupo',$grupo->id_grupo);
-                            //dump($programaciones);
+                            if($grupo->fec_inicio==null && $grupo->fec_fin==null){
+                                $in_time=true;
+                            }
+                            $fec_ini_grupo=$grupo->fec_inicio!=null?Carbon::parse(Carbon::parse($fecha)->format('Y').'-'.Carbon::parse($grupo->fec_inicio)->format('m-d')):null;
+                            $fec_fin_grupo=$grupo->fec_inicio!=null?Carbon::parse(Carbon::parse($fecha)->format('Y').'-'.Carbon::parse($grupo->fec_fin)->format('m-d')):null;
                         @endphp
                         @foreach($trabajos_grupo as $trabajo)
                             <tr>
@@ -64,6 +68,12 @@
                                             @php
                                                 $fecha=Carbon::parse($mes_anio.lz($n,2));
                                                 $tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_planta',$planta->id_planta)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
+                                                if($tarea){
+                                                    $tarea->fec_ini_grupo=$fec_ini_grupo;
+                                                    $tarea->fec_fin_grupo=$fec_fin_grupo;
+                                                    $tarea->fec_ini_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_inicio):null;
+                                                    $tarea->fec_fin_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_fin):null;
+                                                }
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
                                                 $datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
                                             @endphp
@@ -82,6 +92,12 @@
                                             @php
                                                 $fecha=Carbon::parse($mes_anio.lz($n,2));
                                                 $tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_planta',$planta->id_planta)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
+                                                if($tarea){
+                                                    $tarea->fec_ini_grupo=$fec_ini_grupo;
+                                                    $tarea->fec_fin_grupo=$fec_fin_grupo;
+                                                    $tarea->fec_ini_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_inicio):null;
+                                                    $tarea->fec_fin_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_fin):null;
+                                                }
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
                                                 $datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
                                             @endphp
@@ -100,6 +116,12 @@
                                             @php
                                                 $fecha=Carbon::parse($mes_anio.lz($n,2));
                                                 $tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_zona',$zona->key_id)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
+                                                if($tarea){
+                                                    $tarea->fec_ini_grupo=$fec_ini_grupo;
+                                                    $tarea->fec_fin_grupo=$fec_fin_grupo;
+                                                    $tarea->fec_ini_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_inicio):null;
+                                                    $tarea->fec_fin_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_fin):null;
+                                                }
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
                                                 $datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
                                             @endphp
@@ -118,6 +140,12 @@
                                             @php
                                                 $fecha=Carbon::parse($mes_anio.lz($n,2));
                                                 $tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_zona',$zona->key_id)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
+                                                if($tarea){
+                                                    $tarea->fec_ini_grupo=$fec_ini_grupo;
+                                                    $tarea->fec_fin_grupo=$fec_fin_grupo;
+                                                    $tarea->fec_ini_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_inicio):null;
+                                                    $tarea->fec_fin_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_fin):null;
+                                                }
                                                 $programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
                                                 $datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
                                             @endphp

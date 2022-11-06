@@ -35,6 +35,7 @@
     </tbody>
 </table>
 <script>
+
     $('.changeMonth').click(function(){
         loadMes($(this).data('month'),'');
     })

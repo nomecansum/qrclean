@@ -165,6 +165,30 @@ class CombosController extends Controller
                 ->orderby('des_planta')
                 ->orderby('des_zona')
                 ->get(),
+
+            "grupos" => DB::table('grupos_trabajos')
+                ->select('clientes.id_cliente','clientes.nom_cliente','grupos_trabajos.id_grupo','grupos_trabajos.des_grupo')
+                ->join('clientes','clientes.id_cliente','grupos_trabajos.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
+                ->orderby('des_grupo')
+                ->get(),
+
+            "contratas" => DB::table('contratas')
+                ->select('clientes.id_cliente','clientes.nom_cliente','contratas.id_contrata','contratas.des_contrata')
+                ->join('clientes','clientes.id_cliente','contratas.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
+                ->orderby('des_contrata')
+                ->get(),
+
+            "planes" => DB::table('trabajos_planes')
+                ->select('clientes.id_cliente','clientes.nom_cliente','trabajos_planes.id_plan','trabajos_planes.des_plan')
+                ->join('clientes','clientes.id_cliente','trabajos_planes.id_cliente')
+                ->whereIn('clientes.id_cliente',$r->cliente)
+                ->orderby('clientes.nom_cliente')
+                ->orderby('des_plan')
+                ->get(),
         ];
     }
 

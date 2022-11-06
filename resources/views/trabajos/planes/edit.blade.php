@@ -81,7 +81,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="num_dias_programar" class="control-label">Dias a programar</label>
-                        <input class="form-control"   type="number" id="num_dias_programar" name="num_dias_programar" value="{{ old('id_externo', optional($dato)->num_dias_programar) }}" min=1 max=30  placeholder="">
+                        <input class="form-control"   type="number" id="num_dias_programar" name="num_dias_programar" value="{{ old('id_externo', optional($dato)->num_dias_programar) }}" min=1 max=400  placeholder="">
                     </div>
                     <div class="col-md-1" style="padding-top: 30px">
                         <div class="form-check">

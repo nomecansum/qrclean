@@ -930,6 +930,16 @@ function validar_acceso_tabla($id,$tabla){
             $campo="id_plan";
             $ruta="trabajos_planes.index";
             break;
+        case "puestos":
+            $descriptivo="puestos";
+            $campo="id_puesto";
+            $ruta="puestos.index";
+            break;
+        case "incidencias":
+            $descriptivo="incidencia";
+            $campo="id_incidencia";
+            $ruta="incidencia.index";
+            break;
             
         default:
             $descriptivo=$tabla;

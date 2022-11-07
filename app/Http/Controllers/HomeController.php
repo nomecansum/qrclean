@@ -881,7 +881,11 @@ class HomeController extends Controller
     
         return view('search.index',compact('clientes','puestos','plantas','edificios','usuarios','incidencias','r'));
     }
-    
-    }
 
+    public function target($tipo,$id,$nombre=null){
+        validar_acceso_tabla($id,$tipo);
+
+        return view('search.target',compact('tipo','id','nombre'));
+    }
+    
 }

@@ -144,6 +144,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Buscador
     Route::post('/search','HomeController@search')->name('home.search');
+    Route::get('/target/{tipo}/{id}/{nombre?}','HomeController@target')->name('home.target');
     
     ////////////////////GESTION DE USUAR IOS////////////////////
     Route::group(['prefix' => 'users'], function () {

@@ -26,7 +26,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-
+       // $this->middleware('auth');
     }
     /**
      * Show the application dashboard.
@@ -40,7 +40,7 @@ class HomeController extends Controller
             return redirect('/logout');
         }
 
-        $contenido_home=DB::table('niveles_acceso')->where('id_nivel',Auth::user()->id_nivel)->first()->home_page;
+        $contenido_home=DB::table('niveles_acceso')->where('cod_nivel',Auth::user()->cod_nivel)->first()->home_page;
         $contenido_home='home.'.$contenido_home;
 
         return view('home',compact('contenido_home'));
@@ -56,7 +56,7 @@ class HomeController extends Controller
 
     }
 
-    public function getpuesto($puesto){
+    public function getpuesto($puesto){ 
         $p=DB::table('puestos')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
@@ -70,10 +70,10 @@ class HomeController extends Controller
         if(Auth::check())
             {
                 $id_usuario=Auth::user()->id;
-                $id_nivel=Auth::user()->id_nivel;
+                $cod_nivel=Auth::user()->cod_nivel;
             } else {
                 $id_usuario=0;
-                $id_nivel=0;
+                $cod_nivel=0;
             }
         $encuesta=0;
 
@@ -86,7 +86,7 @@ class HomeController extends Controller
                 'operativo' => 0
             ];
             $reserva=null;
-        } else {
+        } else {    
             $tags=DB::table('tags_puestos')->where('id_puesto',$p->id_puesto)->get();
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$p->id_cliente)->first();
         
@@ -110,7 +110,7 @@ class HomeController extends Controller
                     $q->orwhereraw('FIND_IN_SET('.$p->id_tipo_puesto.', list_tipos) <> 0');
                     $q->orwherenull('list_tipos');
                 })
-                ->where(function($q) use($p,$tags){
+                ->where(function($q) use($p,$tags){    
                     $q->orwhere(function($q) use($tags){
                         foreach($tags as $tag){
                             $q->orwhereraw('FIND_IN_SET('.$tag->id_tag.', list_tags) <> 0');
@@ -123,7 +123,7 @@ class HomeController extends Controller
 
 
             $disponibles=DB::table('puestos')
-                ->select('id_puesto','des_puesto','val_color','val_icono')
+                ->select('cod_puesto','des_puesto','val_color','val_icono')
                 ->where('id_cliente',$p->id_cliente)
                 ->where('id_edificio',$p->id_edificio)
                 ->where('id_planta',$p->id_planta)
@@ -133,7 +133,7 @@ class HomeController extends Controller
             //Ahora comprobamos si el puesto esta reservado por alguien distinto a el usuario
             $reserva=DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
-                ->join('users','users.id','reservas.id_usuario')
+                ->join('users','users.id','reservas.id_usuario') 
                 ->where(function($q){
                     $q->where(function($q){
                         $q->wherenull('fec_fin_reserva');
@@ -148,7 +148,7 @@ class HomeController extends Controller
                 try{
                     $usuario_usando="";
                     if(session('CL')['mca_mostrar_nombre_usando']=='S'){
-                        $usuario_usando=$reserva->name;
+                        $usuario_usando=$reservas->name;
                         $usuario_usando=" por ".$usuario_usando;
                     }
                 } catch(\Exception $e){
@@ -182,9 +182,9 @@ class HomeController extends Controller
 
             //Aqui vemos si el puesto lo tiene alguien permanentemente asignado
             $asignados_usuarios=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
-                ->join('users','users.id','puestos_asignados.id_usuario')
-                ->where('puestos.id_puesto',$p->id_puesto)
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                ->join('users','users.id','puestos_asignados.id_usuario')  
+                ->where('puestos.id_puesto',$p->id_puesto)  
                 ->where('id_usuario','<>',$id_usuario)
                 ->where(function($q){
                     $q->wherenull('fec_desde');
@@ -216,9 +216,9 @@ class HomeController extends Controller
 
             //Y ahora vemos si el susodicho tiene asignado el puesto que se esta escaneando para darle la bienvenida
             $asignados_ami=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
-                ->join('users','users.id','puestos_asignados.id_usuario')
-                ->where('puestos.id_puesto',$p->id_puesto)
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                ->join('users','users.id','puestos_asignados.id_usuario')  
+                ->where('puestos.id_puesto',$p->id_puesto)  
                 ->where('id_usuario',$id_usuario)
                 ->where(function($q){
                     $q->wherenull('fec_desde');
@@ -248,9 +248,9 @@ class HomeController extends Controller
 
             //Aqui vamos a ver si el pollo tiene asignado un puesto distinto al que esta escaneado para decirle que se peine y se vaya a su puesto
             $puesto_mio_es_otro=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
-                ->join('users','users.id','puestos_asignados.id_usuario')
-                ->where('puestos.id_puesto','<>',$p->id_puesto)
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                ->join('users','users.id','puestos_asignados.id_usuario')  
+                ->where('puestos.id_puesto','<>',$p->id_puesto)  
                 ->where('id_usuario',$id_usuario)
                 ->where('puestos.id_tipo_puesto',$p->id_tipo_puesto)
                 ->where(function($q){
@@ -261,7 +261,7 @@ class HomeController extends Controller
 
             if(!$puesto_mio_es_otro->isEmpty()){
                 $respuesta=[
-                    'mensaje'=>"Hola ".Auth::user()->name.', para hoy usted tiene asignado el puesto '.$puesto_mio_es_otro->first()->id_puesto.'.<br> <b>Debe utilizar ese puesto</b>',
+                    'mensaje'=>"Hola ".Auth::user()->name.', para hoy usted tiene asignado el puesto '.$puesto_mio_es_otro->first()->cod_puesto.'.<br> <b>Debe utilizar ese puesto</b>',
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
@@ -274,10 +274,10 @@ class HomeController extends Controller
             
             //Y aqui si el pñuesto esta reserrvado para un perfil en concreto
             $asignados_nomiperfil=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
-                ->join('niveles_acceso','niveles_acceso.id_nivel','puestos_asignados.id_perfil')
-                ->where('puestos.id_puesto',$p->id_puesto)
-                ->where('id_perfil','<>',$id_nivel)
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+                ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')   
+                ->where('puestos.id_puesto',$p->id_puesto)    
+                ->where('id_perfil','<>',$cod_nivel)
                 ->get();
 
             if(!$asignados_nomiperfil->isEmpty()){
@@ -335,6 +335,7 @@ class HomeController extends Controller
                 return view('scan.result',compact('respuesta','reserva','config_cliente'));
             }
 
+            //dd($encuesta);
             switch ($p->id_estado) {
                 case 7:  //Solo encuesta
                     $respuesta=[
@@ -456,15 +457,16 @@ class HomeController extends Controller
                     break;
             }
         }
+        //savebitacora('Cambio de puestos QR anonimo'.$p->id_puesto. ' a estado '.$p->id_estado,"Home","getpuesto","OK");
         return view('scan.result',compact('respuesta','reserva','mireserva','config_cliente'));
     }
 
     function actualizar_estado_parking($estado,$id_usuario){
          //Vamos a ver si tiene plaza de parking
          $tiene_parking=DB::table('puestos_asignados')
-            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
-            ->join('users','users.id','puestos_asignados.id_usuario')
-            ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+            ->join('users','users.id','puestos_asignados.id_usuario')  
+            ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))  
             ->where('id_usuario',$id_usuario)
             ->where(function($q){
                 $q->wherenull('fec_desde');
@@ -474,8 +476,8 @@ class HomeController extends Controller
          if(!isset($tiene_parking)){
              //Si no lo tiene asignado a ver si lo tiene reservado
              $tiene_parking=DB::table('reservas')
-                ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-                ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))
+                ->join('puestos','puestos.id_puesto','reservas.id_puesto')   
+                ->wherein('puestos.id_tipo_puesto',config('app.tipo_puesto_parking'))  
                 ->where(function($q){
                     $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
                     $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
@@ -496,15 +498,15 @@ class HomeController extends Controller
 
     }
 
-    public function estado_puesto($puesto,$estado){
+    public function estado_puesto($puesto,$estado){ 
         //A ver si el usuario viene autentificado
         if(Auth::check())
             {
                 $id_usuario=Auth::user()->id;
-                $id_nivel=Auth::user()->id_nivel;
+                $cod_nivel=Auth::user()->cod_nivel;
             } else {
                 $id_usuario=null;
-                $id_nivel=0;
+                $cod_nivel=0;
             }
         
         $p=DB::table('puestos')
@@ -519,7 +521,7 @@ class HomeController extends Controller
                 'tipo'=>'ERROR',
                 'mensaje'=>"Error, puesto no encontrado"
             ];
-        } else {
+        } else {    
             $reserva=DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
                 ->where(function($q){
@@ -537,9 +539,9 @@ class HomeController extends Controller
 
              //Aqui vemos si el puesto lo tiene alguien permanentemente asignado
              $asignados_usuarios=DB::table('puestos_asignados')
-             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
-             ->join('users','users.id','puestos_asignados.id_usuario')
-             ->where('puestos.id_puesto',$p->id_puesto)
+             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+             ->join('users','users.id','puestos_asignados.id_usuario')  
+             ->where('puestos.id_puesto',$p->id_puesto)  
              ->where('id_usuario','<>',$id_usuario)
              ->where(function($q){
                 $q->wherenull('fec_desde');
@@ -556,10 +558,10 @@ class HomeController extends Controller
          
          //Y aqui si el pñuesto esta reserrvado para un perfil en concreto
          $asignados_nomiperfil=DB::table('puestos_asignados')
-             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
-             ->join('niveles_acceso','niveles_acceso.id_nivel','puestos_asignados.id_perfil')
-             ->where('puestos.id_puesto',$p->id_puesto)
-             ->where('id_perfil','<>',$id_nivel)
+             ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
+             ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')   
+             ->where('puestos.id_puesto',$p->id_puesto)    
+             ->where('id_perfil','<>',$cod_nivel)
              ->get();
 
          if($asignados_nomiperfil){
@@ -626,7 +628,7 @@ class HomeController extends Controller
                         'id'=>$p->id_puesto,
                     ];
                     break;
-                case 5:
+                case 4:
                     $respuesta=[
                         'tipo'=>'OK',
                         'mensaje'=>"Puesto ".nombrepuesto($p)." marcado como bloqueado",
@@ -690,7 +692,7 @@ class HomeController extends Controller
         foreach($secciones as $seccion){
             DB::table('secciones_perfiles')->insert([
                 'id_perfil'=>5,
-                'id_seccion'=>$seccion->id_seccion,
+                'id_seccion'=>$seccion->cod_seccion,
                 'mca_read'=>1,
                 'mca_write'=>1,
                 'mca_create'=>1,
@@ -774,8 +776,8 @@ class HomeController extends Controller
                 }
             }
         }
-
-
+    
+    
         //BUSQUEDA GENERAL DE TEXTO
         //Busqueda de empresas
         $clientes=DB::table('clientes')
@@ -792,7 +794,7 @@ class HomeController extends Controller
         })
         ->orderby('clientes.nom_cliente')
         ->get();
-
+    
         //Busqueda de empleados
         $puestos=DB::table('puestos')
         ->join('clientes','puestos.id_cliente','clientes.id_cliente')
@@ -807,7 +809,7 @@ class HomeController extends Controller
         })
         ->orderby('puestos.cod_puesto')
         ->get();
-
+    
         //Busqueda de departamentos
         $plantas=DB::table('plantas')
         ->join('clientes','plantas.id_cliente','clientes.id_cliente')
@@ -818,9 +820,9 @@ class HomeController extends Controller
             }
         })
         ->orderby('plantas.des_planta')
-
+    
         ->get();
-
+    
         //Busqueda de centros
         $edificios=DB::table('edificios')
         ->join('clientes','edificios.id_cliente','clientes.id_cliente')
@@ -834,14 +836,14 @@ class HomeController extends Controller
         })
         ->orderby('edificios.des_edificio')
         ->get();
-
+    
         //Busqueda de incidencias
         $incidencias=DB::table('incidencias')
         ->join('clientes','incidencias.id_cliente','clientes.id_cliente')
         ->where(function($q) use ($r){
             $q->where('incidencias.des_incidencia', 'LIKE', "%{$r->txt_buscar}%");
             $q->orwhere('incidencias.txt_incidencia', 'LIKE', "%{$r->txt_buscar}%");
-
+    
         })
         ->where(function($q){
             if (!isAdmin()){
@@ -849,7 +851,7 @@ class HomeController extends Controller
             }
         })
         ->get();
-
+    
         //Busqueda de usuarios
         $usuarios=DB::table('users')
         ->join('clientes','users.id_cliente','clientes.id_cliente')
@@ -876,8 +878,10 @@ class HomeController extends Controller
         })
         ->orderby('users.name')
         ->get();
-
+    
         return view('search.index',compact('clientes','puestos','plantas','edificios','usuarios','incidencias','r'));
+    }
+    
     }
 
 }

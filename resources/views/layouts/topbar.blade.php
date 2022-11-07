@@ -46,8 +46,9 @@
                 </label>
 
                 <!-- Searchbox input -->
-                <form class="searchbox searchbox--auto-expand searchbox--hide-btn input-group">
-                    <input id="header-search-input" class="searchbox__input form-control bg-transparent" type="search" placeholder="Type for search . . ." aria-label="Search">
+                <form class="searchbox searchbox--auto-expand searchbox--hide-btn input-group" method="post" action="{{ url('/search') }}">
+                    @csrf
+                    <input id="header-search-input" class="searchbox__input form-control bg-transparent" name="txt_buscar" type="search" placeholder="Buscar . . ." aria-label="Search" value="{{ isset($r->txt_busar)?$r->txt_buscar:'' }}">
                     <div class="searchbox__backdrop">
                         <button class="searchbox__btn header__btn btn btn-icon rounded shadow-none border-0 btn-sm" type="button" id="button-addon2">
                             <i class="demo-pli-magnifi-glass"></i>

@@ -133,7 +133,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', 'HomeController@index');
     Route::view('/scan', 'scan');
     Route::view('/lockscreen','lock');
-    //
 
     //Escaneo de sala
     Route::get('/sala/{sala}','SalasController@getpuesto');
@@ -143,6 +142,8 @@ Route::group(['middleware' => 'auth'], function () {
     //Lista todos los iconos del fontawesome para añadirlos en el iconpicker
     Route::get('/regenera_fontawesome','HomeController@regenera_fontawesome');
 
+    //Buscador
+    Route::post('/search','HomeController@search')->name('home.search');
     
     ////////////////////GESTION DE USUAR IOS////////////////////
     Route::group(['prefix' => 'users'], function () {
@@ -266,14 +267,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/tipos/delete/{id?}',['middleware'=>'permissions:["Tipos de puesto"],["D"]', 'uses' => 'PuestosController@tipos_delete']);
 
     });
+
+    ////////////////////GESTION DE TAGS////////////////////
     Route::group(['prefix' => 'tags'], function () {
         Route::get('/',['middleware'=>'permissions:["Tags"],["R"]', 'uses' => 'TagsController@index'])->name('tags.index');
         Route::post('/save',['middleware'=>'permissions:["Tags"],["W"]', 'uses' => 'TagsController@save']);
         Route::get('/edit/{id?}',['middleware'=>'permissions:["Tags"],["C"]', 'uses' => 'TagsController@edit']);
         Route::get('/delete/{id?}',['middleware'=>'permissions:["Tags"],["D"]', 'uses' => 'TagsController@delete']);
     });
-
-
 
     ////////////////////EDIFICIOS////////////////////
     Route::group(['prefix' => 'edificios'], function () {

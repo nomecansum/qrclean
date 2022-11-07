@@ -53,9 +53,8 @@ class sincronizarWorkdayGenerali extends Command
         log_tarea($mensaje,$this->argument('id'),$tipo);   
         if($this->argument('origen')=='W')
         {
-            
-        }
-    } 
+    }
+    
     static function clientes(){
         if(is_array(clientes())){
             $clientes=implode(",",clientes());
@@ -361,7 +360,7 @@ class sincronizarWorkdayGenerali extends Command
                     $turno=turnos::where('id_cliente',$tarea->clientes)->where('id_externo',$item['Turno_trabajo']??0)->first();
                     $des_edificio=$item['CENTRO_DE_TRABAJO']['@attributes']['Descriptor']??null;
                     if(isset($des_edificio) && in_array($des_edificio,$edificios_procesar)){
-                        $nombre=$item['NOMBRE'].' '.($item['APELLIDO_1']??'').' '.($item['APELLIDO_2']??'');   
+                        $nombre=$item['NOMBRE'].' '.($item['APELLIDO_1']??'').' '.($item['APELLIDO_2']??'');
                         $id_externo=$item['CODIGO_EMPLEADO'];
                         $email=$item['MAIL']??null;
                         $email=isset($email)?strtolower($email):null;
@@ -409,7 +408,7 @@ class sincronizarWorkdayGenerali extends Command
                         //Si antes tenia un nivel superior (administrador) se lo mantenemos
                         if($usuario){
                             $user=users::find($usuario);
-                            if($user->cod_nivel>$nivel->cod_nivel){
+                            if($user->nivel_acceso>=$nivel->val_nivel_acceso){
                                 $nivel=niveles_acceso::find($user->cod_nivel);
                             }
                         }

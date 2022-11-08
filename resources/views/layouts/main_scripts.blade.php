@@ -386,6 +386,7 @@
             }
 
             if (tipo == 'pantalla') {
+                console.log(data);
                 $('#myFilter').html(data);
                 //$('#divfiltro').toggle();
             }
@@ -550,7 +551,7 @@
                 //$('.viewport').html('w:'+plano.width()+' h:'+plano.height())+' vw:'+Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)+' vh:'+Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
             });
 
-        }) 
+        })
     }
 
     $('#boton_politica').click(function() {

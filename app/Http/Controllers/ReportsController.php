@@ -834,10 +834,10 @@ class ReportsController extends Controller
             })
             ->wherein('id_trabajo',$detalle->pluck('id_trabajo')->unique()->toarray())
             ->get();
-        $grupos=DB::table('trabajos_grupos')
+        $grupos=DB::table('grupos_trabajos')
             ->where(function($q){
                 if (!isAdmin()){
-                    $q->WhereIn('trabajos_grupos.id_cliente',clientes());
+                    $q->WhereIn('grupos_trabajos.id_cliente',clientes());
                 }
             })
             ->wherein('id_grupo',$detalle->pluck('id_grupo_trabajo')->unique()->toarray())

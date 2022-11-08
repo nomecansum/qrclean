@@ -767,7 +767,7 @@ class TrabajosController extends Controller
         $val_periodo=$detalle->val_periodo??'0 20 ? * MON-FRI';
         return view('trabajos.planes.fill_detalle_periodo',compact('val_periodo'));
     }
-    //Guarda el detalle de un trabajo en un plan    
+    //Guarda el detalle de un trabajo en un plan
     public function detalle_save(Request $r){
             try{ $detalle=planes_detalle::find($r->id_detalle);
                 if(!isset($detalle)){

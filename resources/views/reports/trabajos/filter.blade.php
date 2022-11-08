@@ -1,23 +1,24 @@
 @php
 	use Carbon\Carbon;
+	use Carbon\CarbonPeriod;
     use App\Http\Controllers\TrabajosController;
-	($total = 0); 
+	$total = 0;
 	$clientes=$planes->pluck('id_cliente')->unique();
-	$cnt_fechas=$programaciones->pluck('fec_programacion')->unique()->count();  
+	$cnt_fechas=$programaciones->pluck('fec_programacion')->unique()->count();
 	$cnt_clientes=$planes->pluck('id_cliente')->unique()->count();
 	$filas=$planes->count();
 	$nombre_informe="Informe de trabajos planificados";
 	$date = explode(" - ",$r->fechas);
-	$f1 = adaptar_fecha($date[0]);
-	$f2 = adaptar_fecha($date[1]);
+	$f1 = Carbon::parse(adaptar_fecha($date[0]));
+	$f2 = Carbon::parse(adaptar_fecha($date[1]));
 
 	
-    $fecha_ant=Carbon::parse($f1)->format('Y-m-d');
-    $fecha_sig=Carbon::parse($f2)->format('Y-m-d');
-    $ultimo_dia=Carbon::parse($f2)->format('d');
+    $fecha_ant=$f1->format('Y-m-d');
+    $fecha_sig=$f2->format('Y-m-d');
+    $ultimo_dia=$f2->format('d');
     $meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
     $hoy=Carbon::now();
-	$fecha=Carbon::now();
+	$periodo=CarbonPeriod::create($f1,$f2);
 
 @endphp
 @if($r->output=="pdf" || (isset($r->email_schedule)&&$r->email_schedule==1))
@@ -46,7 +47,7 @@
 <link href="{{ url('/css/mosaic.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{ URL('/plugins/bootstrap-table/bootstrap-table.min.css') }}">
 
-<div class="table-responsive m-t-40 overflow-hidden">			
+<div class="table-responsive m-t-40 overflow-hidden">
 <span id="resumen_informe"></span>
 @endif
 
@@ -54,10 +55,10 @@
 @if($clientes->isEmpty())
 	@if($r->output=="pdf" || $r->output=="excel")
 	<table class="table table-bordered table-condensed table-hover table-informes" style="font-size: 12px">
-		<tbody id="myFilter" >
+		<tbody >
 	@endif
 	<div class="text-center">
-		<h4 class="text-muted">Periodo {!! beauty_fecha($f1,0) !!} <i class="mdi mdi-arrow-right-bold"></i> {!! beauty_fecha($f2,0) !!}</h4>		
+		<h4 class="text-muted">Periodo {!! beauty_fecha($f1,0) !!} <i class="mdi mdi-arrow-right-bold"></i> {!! beauty_fecha($f2,0) !!}</h4>
 		<h3 class="text-warning">No hay datos para mostrar</h3>
 	</div>
 	@if($r->output=="pdf" || $r->output=="excel")
@@ -74,7 +75,7 @@
 	@endif
 	@php
 		$inf=$planes->where('id_cliente',$cliente);
-	@endphp	
+	@endphp
 	
 	@if($planes->count()>0)
 		<tr>
@@ -94,9 +95,11 @@
 	@endif
 	<tbody>
 		@foreach($inf as $plan)
-			@foreach($grupos->where('id_plan',$plan->id_plan) as $grupo)
+			@php
+				$grupos_plan=$detalle->where('id_plan',$plan->id_plan)->pluck('id_grupo_trabajo')->unique()->toarray();
+			@endphp
+			@foreach($grupos->wherein('id_grupo',$grupos_plan) as $grupo)
 				@php
-					dump($plan);
 					$trabajos_grupo=$trabajos->where('id_grupo',$grupo->id_grupo);
 					if($grupo->fec_inicio==null && $grupo->fec_fin==null){
 						$in_time=true;
@@ -113,9 +116,8 @@
 						@foreach($plantas as $planta)
 							@if($loop->index==0)
 								<td nowrap>{{ $planta->des_planta }}</td>
-								@for ($n=1;$n<=$ultimo_dia;$n++)
+								@foreach($periodo as $fecha)
 									@php
-										$fecha=Carbon::parse($mes_anio.lz($n,2));
 										$tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_planta',$planta->id_planta)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
 										if($tarea){
 											$tarea->fec_ini_grupo=$fec_ini_grupo;
@@ -123,13 +125,13 @@
 											$tarea->fec_ini_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_inicio):null;
 											$tarea->fec_fin_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_fin):null;
 										}
-										$programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
+										$programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$fecha->format('Y-m-d'))->first();
 										$datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
 									@endphp
 									<td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"  data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="#{{ $programa->id_programacion??'' }} {{ $trabajo->des_trabajo }} en {{ $planta->des_planta}} el {{beauty_fecha($fecha)}}">
 										<i class="{{ $datos_celda['icono'] }}"></i>
 									</td>
-								@endfor
+								@endforeach
 							@endif
 						@endforeach
 					</tr>
@@ -137,9 +139,8 @@
 						@if($loop->index!=0)
 							<tr>
 								<td nowrap>{{ $planta->des_planta }}</td>
-								@for ($n=1;$n<=$ultimo_dia;$n++)
+								@foreach ($periodo as $fecha)
 									@php
-										$fecha=Carbon::parse($mes_anio.lz($n,2));
 										$tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_planta',$planta->id_planta)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
 										if($tarea){
 											$tarea->fec_ini_grupo=$fec_ini_grupo;
@@ -147,13 +148,13 @@
 											$tarea->fec_ini_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_inicio):null;
 											$tarea->fec_fin_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_fin):null;
 										}
-										$programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
+										$programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$fecha->format('Y-m-d'))->first();
 										$datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
 									@endphp
 									<td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="#{{ $programa->id_programacion??'' }} {{ $trabajo->des_trabajo }} en {{$planta->des_planta}} el {{beauty_fecha($fecha)}}">
 										<i class="{{ $datos_celda['icono'] }}"></i>
 									</td>
-								@endfor
+								@endforeach
 							</tr>
 						@endif
 					@endforeach
@@ -161,9 +162,8 @@
 						@foreach($zonas as $zona)
 							@if($loop->index==0)
 								<td nowrap>[{{ $zona->des_planta }}] {{ $zona->des_zona }}</td>
-								@for ($n=1;$n<=$ultimo_dia;$n++)
+								@foreach ($periodo as $fecha)
 									@php
-										$fecha=Carbon::parse($mes_anio.lz($n,2));
 										$tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_zona',$zona->key_id)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
 										if($tarea){
 											$tarea->fec_ini_grupo=$fec_ini_grupo;
@@ -171,13 +171,13 @@
 											$tarea->fec_ini_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_inicio):null;
 											$tarea->fec_fin_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_fin):null;
 										}
-										$programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
+										$programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$fecha->format('Y-m-d'))->first();
 										$datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
 									@endphp
 									<td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="#{{ $programa->id_programacion??'' }} {{ $trabajo->des_trabajo }} en [{{ $zona->des_planta }}] {{ $zona->des_zona }} el {{beauty_fecha($fecha)}}">
 										<i class="{{ $datos_celda['icono'] }}"></i>
 									</td>
-								@endfor
+								@endforeach
 							@endif
 						@endforeach
 					</tr>
@@ -185,9 +185,8 @@
 						@if($loop->index!=0)
 							<tr>
 								<td nowrap>[{{ $zona->des_planta }}] {{ $zona->des_zona }}</td>
-								@for ($n=1;$n<=$ultimo_dia;$n++)
+								@foreach ($periodo as $fecha)
 									@php
-										$fecha=Carbon::parse($mes_anio.lz($n,2));
 										$tarea=$detalle->where('id_trabajo',$trabajo->id_trabajo)->where('id_zona',$zona->key_id)->where('id_grupo_trabajo',$grupo->id_grupo)->first();
 										if($tarea){
 											$tarea->fec_ini_grupo=$fec_ini_grupo;
@@ -195,13 +194,13 @@
 											$tarea->fec_ini_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_inicio):null;
 											$tarea->fec_fin_trabajo=$trabajo->fec_inicio!=null?Carbon::parse($trabajo->fec_fin):null;
 										}
-										$programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$mes_anio.lz($n,2))->first();
+										$programa=$programaciones->where('id_trabajo_plan',$tarea->key_id??0)->where('fecha_corta',$fecha->format('Y-m-d'))->first();
 										$datos_celda=TrabajosController::celda_plan_trabajos($tarea,$programa,$hoy,$fecha);
 									@endphp
 									<td class="{{ $datos_celda['color']??'' }} text-center td_planta" title="{{ $datos_celda['title'] }}"   data-programacion="{{ $programa->id_programacion??0 }}" data-trabajo={{ $programa->id_trabajo_plan??'0' }} data-fecha="{{ $fecha->format('Y-m-d') }}" data-desc="#{{ $programa->id_programacion??'' }} {{ $trabajo->des_trabajo }} en [{{ $zona->des_planta }}] {{ $zona->des_zona }} el {{beauty_fecha($fecha)}}">
 										<i class="{{ $datos_celda['icono'] }}"></i>
 									</td>
-								@endfor
+								@endforeach
 							</tr>
 						@endif
 					@endforeach

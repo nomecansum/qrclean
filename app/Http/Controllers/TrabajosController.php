@@ -1171,11 +1171,13 @@ class TrabajosController extends Controller
        $color='';
        $icono='';
        $title='';
+       $abr='';
        if(isset($programa)){
            if($fecha>$hoy){
                $color='bg-light';
                $icono='';
                $title='El trabajo aun no se ha iniciado';
+               $abr='';
            }
            
            if(isset($programa->fec_inicio) && isset($programa->fec_fin)){
@@ -1183,25 +1185,30 @@ class TrabajosController extends Controller
                    $color='bg-warning';
                    $icono='fa-regular fa-stopwatch';
                    $title='El trabajo se ha realizado fuera de tiempo';
+                   $abr='T';
                } else {
                    $color='bg-success';
                    $icono='';
                    $title='El trabajo se ha realizado en tiempo';
+                   $abr='OK';
                }
            } else if(!isset($programa->fec_inicio) && !isset($programa->fec_fin) && $fecha<$hoy){
                $color='bg-danger';
                $icono='';
                $title='El trabajo no se ha realizado';
+               $abr='X';
            } else if(isset($programa->fec_inicio) && !isset($programa->fec_fin)){
                $color='bg-warning';
                $icono='fa-solid fa-circle-half-stroke';
                $title='El trabajo se ha iniciado pero no se ha finalizado';
+               $abr='I';
            }
            
            if(isset($programa->fec_inicio) && Carbon::parse($programa->fec_inicio)->diffindays(Carbon::parse($programa->fec_programada))>1){
                $color='bg-pink';
                $icono='fa-solid fa-calendar-exclamation';
                $title='El trabajo se ha iniciado pero fuera de la fecha prevista';
+               $abr='F';
            }
             //Comprobamos si el dia esta excluido en el rango de fechas a aplicar del grupo o del trabajo
             $in_time=true;
@@ -1218,6 +1225,7 @@ class TrabajosController extends Controller
                 $color='bg-dark';
                 $icono='fa-light fa-calendar-circle-minus';
                 $title='La tarea esta fuera del rango de fechas establecido en el '.$donde;
+                $abr='R';
             }
        }
 
@@ -1226,7 +1234,8 @@ class TrabajosController extends Controller
        return [
            'color'=>$color,
            'icono'=>$icono,
-           'title'=>$title
+           'title'=>$title,
+           'abr'=>$abr
        ];
    }
 }

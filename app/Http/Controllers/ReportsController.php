@@ -296,7 +296,7 @@ class ReportsController extends Controller
                     $q->whereIn('puestos.id_puesto',$puestos_tags);
                 } else { //Busqueda con OR
                     $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
-                    $q->whereIn('puestos.id_puesto',$puestos_tags); 
+                    $q->whereIn('puestos.id_puesto',$puestos_tags);
                 }
             }
         })
@@ -947,7 +947,7 @@ class ReportsController extends Controller
                     Excel::store(new ExportExcel($view, compact('planes','detalle','tareas','grupos','trabajos','contratas','operarios','plantas','zonas','programaciones','r','executionTime')),$filename,'exports');
                     $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
                 } else {  //Navegacion
-                    return Excel::download(new ExportExcel($view,compact('planes','detalle','tareas','grupos','trabajos','contratas','operarios','plantas','zonas','programaciones','executionTime')),$filename);
+                    return Excel::download(new ExportExcel($view,compact('planes','detalle','tareas','grupos','trabajos','contratas','operarios','plantas','zonas','programaciones','r','executionTime')),$filename);
                 }
             break;
         }

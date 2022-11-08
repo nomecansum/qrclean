@@ -77,7 +77,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
     <label>Tipo de puesto</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipo[]" id="multi-tipo" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="tipo[]" id="multi-tipo" >
             
         </select>
         <button class="btn btn-primary select-all" data-select="multi-estado"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -151,7 +151,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($hide['usu']) && $hide['usu']==1) ? 'display: none' : ''  }}">
     <label>Usuario</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="user[]" id="multi-user" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="user[]" id="multi-user" >
 
         </select>
         <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -161,7 +161,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['sup']) && $show['sup']==1) ? '' : 'display: none' }}">
     <label>Supervisor</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="supervisor[]" id="multi-supervisor" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="supervisor[]" id="multi-supervisor" >
 
         </select>
         <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -184,7 +184,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['perfil']) && $show['perfil']==1) ? '' : 'display: none'  }}">
     <label>Perfil</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="cod_nivel[]" id="multi-perfiles" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="cod_nivel[]" id="multi-perfiles" >
             
         </select>
         <button class="btn btn-primary select-all" data-select="multi-perfiles"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -194,7 +194,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['dep']) && $show['dep']==1) ? '' : 'display: none'  }}">
     <label>Departamento</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_departamento[]" id="multi-departamentos" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="id_departamento[]" id="multi-departamentos" >
             
         </select>
         <button class="btn btn-primary select-all" data-select="multi-departamentos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -204,7 +204,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['col']) && $show['col']==1) ? '' : 'display: none'  }}">
     <label>Colectivo</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="cod_colectivo[]" id="multi-colectivos" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="cod_colectivo[]" id="multi-colectivos" >
             
         </select>
         <button class="btn btn-primary select-all" data-select="multi-colectivos"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -214,7 +214,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['tur']) && $show['tur']==1) ? '' : 'display: none'  }}">
     <label>Turno</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_turno[]" id="multi-turnos" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="id_turno[]" id="multi-turnos" >
             
         </select>
         <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -224,7 +224,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['zon']) && $show['zon']==1) ? '' : 'display: none'  }}">
     <label>Zona</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_zona[]" id="multi-zonas" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="id_zona[]" id="multi-zonas" >
             
         </select>
         <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -234,7 +234,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['gru']) && $show['gru']==1) ? '' : 'display: none'  }}">
     <label>Grupos de trabajos</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_grupo[]" id="multi-grupos" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="id_grupo[]" id="multi-grupos" >
             
         </select>
         <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -244,7 +244,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['con']) && $show['con']==1) ? '' : 'display: none'  }}">
     <label>Contratas</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_contrata[]" id="multi-contratas" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="id_contrata[]" id="multi-contratas" >
             
         </select>
         <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
@@ -254,7 +254,7 @@
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['pln']) && $show['pln']==1) ? '' : 'display: none'  }}">
     <label>Planes de trabajo</label>
     <div class="input-group select2-bootstrap-append">
-        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="id_plan[]" id="multi-planes" >
+        <select class="select2 select2-filtro mb-2 select2-multiple form-control multi2" multiple="multiple" name="id_plan[]" id="multi-planes" >
             
         </select>
         <button class="btn btn-primary select-all" data-select="multi-user"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>

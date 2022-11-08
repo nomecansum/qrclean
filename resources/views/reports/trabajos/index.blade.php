@@ -5,7 +5,26 @@
 @endsection
 
 @section('styles')
-
+<style type="text/css">
+    .vertical{
+        writing-mode:tb-rl;
+        -webkit-transform:rotate(180deg);
+        -moz-transform:rotate(180deg);
+        -o-transform: rotate(180deg);
+        -ms-transform:rotate(180deg);
+        transform: rotate(180deg);
+        white-space:nowrap;
+        display:block;
+        bottom:0;
+    }
+    .rotado{
+        -webkit-transform:rotate(180deg);
+        -moz-transform:rotate(180deg);
+        -o-transform: rotate(180deg);
+        -ms-transform:rotate(180deg);
+        transform: rotate(180deg);
+    }
+    </style>
 @endsection
 
 @section('breadcrumb')
@@ -55,7 +74,7 @@
 <div class="table m-t-40 overflow-hidden table-vcenter">
 
 	@include('resources.informes_imprimir_resumen')
-	<table class="table table-hover table-sm" style="font-size: 12px; background-color: #fff">
+	<table class="table table-sm" style="font-size: 12px; background-color: #fff;">
 		<tbody id="myFilter" >
 		</tbody>
 	</table>

@@ -75,7 +75,7 @@
         </div>
         <div class="col-md-3"></div>
     </div>
-    @if(isset($respuesta['incidencia']) && session('CL')['mca_incidencia_scan']=='S')
+    @if(isset($respuesta['incidencia']) && session('CL')!=null && session('CL')['mca_incidencia_scan']=='S')
         <div>
             <div class="row" id="div_respuesta">
                 <div class="col-md-3"></div>

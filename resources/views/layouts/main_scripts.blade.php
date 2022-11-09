@@ -493,7 +493,7 @@
         .then(function(response){
             $('.cuenta_notificaciones').html(response.length);
         })
-    }, 45000);
+    }, 30000);
 
 
     //Conversion de colores

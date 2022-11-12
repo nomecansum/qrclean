@@ -92,7 +92,7 @@
                 <li class="nav-item has-sub ">
                     <a href="#" class="mininav-toggle nav-link parametrizacion">
                         <i class="fa-light fa-browser fs-5 me-2"></i>
-                        @if(checkPermissions(['Parametrizacion'],['R']))<span class="nav-label">Mi oficina</span> @endif
+                        @if(checkPermissions(['Mi oficina'],['R']))<span class="nav-label">Mi oficina</span> @endif
                     </a>
                     
                     <!--Submenu-->
@@ -105,7 +105,7 @@
                 </li>
                 @endif
             </ul>
-            @if(checkPermissions(['Mantenimiento'],['R']) || (checkPermissions(['Limpieza'],['R']) && session('CL')['mca_limpieza']=='S'))
+            @if(checkPermissions(['Mantenimiento','Limpieza','Trabajos menu servicios'],['R']))
             <h6 class="mainnav__caption mt-5 px-3 fw-bold">Servicios</h6>
             <ul class="mainnav__menu nav flex-column">
 

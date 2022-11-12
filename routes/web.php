@@ -567,8 +567,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/log_tarea/{id}/{fecha}','EventosController@log_tarea_web');
     });
 
-     ////////////////////GESTION DE TRABAJOS////////////////////
-     Route::group(['prefix' => 'trabajos'], function () {
+    ////////////////////GESTION DE TRABAJOS////////////////////
+    Route::group(['prefix' => 'trabajos'], function () {
         //sECCIN DE PARAMETRIZACION - Gerstion de trabajos
         //Tipos de trabajo
         Route::get('/tipos', ['middleware'=>'permissions:["Trabajos tipos"],["R"]','uses'=>'TrabajosController@tipos_index'])->name('trabajos.index');
@@ -618,11 +618,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/planificacion', ['middleware'=>'permissions:["Trabajos planes"],["R"]','uses'=>'TrabajosController@servicios_planes'])->name('servicios.planes');
         Route::get('/planificacion/ver/{id}/{fecha?}', ['middleware'=>'permissions:["Trabajos planes"],["R"]','uses'=>'TrabajosController@servicios_ver_plan'])->name('servicios.ver_plan');
         Route::post('/servicios/detalle_trabajo', ['middleware'=>'permissions:["Trabajos planes"],["R"]','uses'=>'TrabajosController@servicios_detalle_trabajo'])->name('servicios.detalle_trabajo');
+
+        //Home de operarios de contratas
+        Route::post('/set_operario', ['middleware'=>'permissions:["Trabajos mis trabajos"],["R"]','uses'=>'HomeController@set_operario'])->name('home.set_operario');
+        
         
     });
 
-     ///////////////////COMBOS AJAX///////////////////
-     Route::group(['prefix' => 'combos'], function () {
+    ///////////////////COMBOS AJAX///////////////////
+    Route::group(['prefix' => 'combos'], function () {
         Route::post('/limpiadores', 'CombosController@combo_limpiadores');
         Route::get('/plantas/{id_edificio}', 'CombosController@combo_plantas');
         Route::get('/plantas_salas/{id_edificio}', 'CombosController@combo_plantas_salas');
@@ -634,6 +638,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/paises/{id_cliente}', 'CombosController@combo_paises');
         Route::get('/ReloadDepartamentoPadre/{cliente}/{padre}/{id}', 'CombosController@ReloadDepartamentoPadre');
     });
+
     Route::group(['prefix' => 'filters'], function () {
         Route::post('/loadedificios', 'CombosController@loadedificios');
         Route::post('/loadplantas', 'CombosController@loadplantas');

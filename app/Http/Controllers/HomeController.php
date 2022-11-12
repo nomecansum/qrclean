@@ -887,5 +887,12 @@ class HomeController extends Controller
 
         return view('search.target',compact('tipo','id','nombre'));
     }
+
+    public function set_operario(Request $r){
+        $operario=DB::table('contratas_operarios')
+            ->where('id_operario',$r->id_operario)
+            ->first();
+        session(['id_operario'=> $operario->id_operario??null]);
+    }
     
 }

@@ -136,7 +136,7 @@
                             }
                             $operarios_list = array_unique($operarios_list);
                         @endphp
-                        <tr class="hover-this">
+                        <tr class="hover-this {{ $tipo->mca_activo=='N'?'bg-light':'' }}">
                             <td>{{ $tipo->id_plan }}</td>
                             <td class="text-center"><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
                             <td>{{ $tipo->des_plan }}</td>

@@ -486,7 +486,7 @@ class APIController extends Controller
                 }
             }
             
-            savebitacora('Solicitud de resincronizacion de estructuras salas'.file_get_contents('php://input'),"API","solicitud_sincro","OK"); 
+            savebitacora('Solicitud de resincronizacion de estructuras salas'.file_get_contents('php://input'),"API","solicitud_sincro","OK");
             return response()->json([
                 'result'=>'ok',
                 'timestamp'=>Carbon::now(),
@@ -642,7 +642,6 @@ class APIController extends Controller
 
         //OJO este solo debe daro las incidencias que esten pendientes de sincornizazion
         try{
-            
             //Fechas
             $f1=(isset($fecha))?Carbon::parse($fecha):Carbon::now()->startOfMonth();
             $f2=Carbon::now()->endOfMonth();
@@ -668,13 +667,13 @@ class APIController extends Controller
                         "incidencia_id_puestos"=>$item->id_incidencia
                     ];
             });
-            savebitacora('Solicitud de listado de incidencias '.file_get_contents('php://input'),"API","get_incidents","OK"); 
+            savebitacora('Solicitud de listado de incidencias '.file_get_contents('php://input'),"API","get_incidents","OK");
             return response()->json([
                 'result'=>'ok',
                 'timestamp'=>Carbon::now(),
                 'a_incidencias_pendientes' => $incidencias]);
         }catch (\Throwable $e) {
-            savebitacora('ERROR Solicitud de listado de incidencias '.file_get_contents('php://input'),"API","get_incidents","ERROR"); 
+            savebitacora('ERROR Solicitud de listado de incidencias '.file_get_contents('php://input'),"API","get_incidents","ERROR");
             return $this->respuesta_error('ERROR Solicitud de listado de incidencias '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         }
     }

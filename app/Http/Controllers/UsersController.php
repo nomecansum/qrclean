@@ -279,9 +279,32 @@ class UsersController extends Controller
             ->where('id_usuario',$users->id)
             ->pluck('cod_colectivo')
             ->toarray();
-        
 
-        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras','tipos_puestos','pref_turnos','tipos_puesto_usuario','colectivos_cliente','colectivos_user'));
+        $contratas=DB::table('contratas')
+            ->where('id_cliente',$users->id_cliente)
+            ->get();
+
+        $operarios_ind=DB::table('contratas_operarios')
+            ->join('contratas','contratas_operarios.id_contrata','contratas.id_contrata')
+            ->where('contratas_operarios.id_cliente',$users->id_cliente)
+            ->wherenotnull('nom_operario')
+            ->distinct()
+            ->orderby('contratas.id_contrata')
+            ->get();
+
+        $operarios_gen=DB::table('contratas_operarios')
+            ->where('id_cliente',$users->id_cliente)
+            ->wherenotnull('nom_operario')
+            ->distinct()
+            ->get();
+
+        $operarios_gen->transform(function($item,$key){
+            $item->nom_operario=explode("_",$item->nom_operario)[0];
+            return $item;
+        });
+        $operarios_gen=$operarios_gen->unique('nom_operario');
+
+        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras','tipos_puestos','pref_turnos','tipos_puesto_usuario','colectivos_cliente','colectivos_user','contratas','operarios_gen','operarios_ind'));
     }
 
     public function update($id, Request $request)
@@ -316,9 +339,13 @@ class UsersController extends Controller
             $data["id_usuario_supervisor"]=$request->id_usuario_supervisor??null;
             $data["mca_notif_push"] = isset($data["mca_notif_push"]) ? 'S' : 'N';
             $data["mca_notif_email"] = isset($data["mca_notif_email"]) ? 'S' : 'N';
+            $data["mca_compartido"] = isset($data["mca_compartido"]) ? 'S' : 'N';
+            $data["val_prefijo_compartido"] = $data["mca_compartido"]=="S" ? $data["val_prefijo_compartido"] : null;
+            $data["id_operario"] = $data["mca_compartido"]=="N" ? $data["id_operario"] : null;
             if(isset($data['tipos_puesto_admitidos']) && is_array($data['tipos_puesto_admitidos'])){
                 $data['tipos_puesto_admitidos']=implode(",",$data['tipos_puesto_admitidos']);
             }
+            
 
             $users->update($data);
 
@@ -542,6 +569,10 @@ class UsersController extends Controller
             'mca_notif_push'=>'nullable',
             'mca_notif_email'=>'nullable',
             'tipos_puesto_admitidos'=>'nullable',
+            'id_contrata'=>'nullable',
+            'mca_compartido'=>'nullable',
+            'val_prefijo_compartido'=>'nullable',
+            'id_operario'=>'nullable',
         ];
 
 

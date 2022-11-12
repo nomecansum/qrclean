@@ -64,6 +64,10 @@ class users extends Model
                   'zoom_mobile',
                   'zoom_desktop',
                   'sync_at',
+                  'id_contrata',
+                  'mca_compartido',
+                  'val_prefijo_compartido',
+                  'id_operario',
               ];
 
     /**

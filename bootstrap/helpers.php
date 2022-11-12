@@ -700,13 +700,11 @@ function checkPermissions($secciones = [],$permisos = [])
     }
     foreach ($secciones as $key => $s) {
         foreach($mispermisos as $per){
-            if($per->des_seccion===$s){
+            if(strtoupper($per->des_seccion)==strtoupper($s)){
                 $encontrado=true;
             }
         }
-        if (!$encontrado){
-            return false;
-        }
+       
         foreach ($permisos as $key => $p) {
             if ($p == "R") {$type = "mca_read";}
             if ($p == "W") {$type = "mca_write";}

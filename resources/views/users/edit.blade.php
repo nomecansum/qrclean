@@ -401,6 +401,48 @@
                                             </div>
                                         @endif
                                     </div>
+                                    <div class="row rounded b-all mt-4 pb-3">
+                                        <div class="col-md-2" >
+                                            <div class="form-group ">
+                                                <label><b>Contrata</b></label><br>
+                                                <select name="id_contrata" id="id_contrata" class="select2 form-control" style="width:350px">
+                                                    <option value=""></option>
+                                                    @foreach ($contratas as $c)
+                                                        <option {{isset($users) && $users->id_contrata == $c->id_contrata ? 'selected' : ''}} value="{{$c->id_contrata}}">{{$c->des_contrata}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2  mt-2 d_contrata"  style="display:none">
+                                            <div class="form-check pt-3">
+                                                <input  name="mca_compartido"  id="mca_compartido" value="S" {{ isset($users->mca_compartido)&&$users->mca_compartido=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                                <label class="form-check-label" for="mca_compartido">Usuario compartido</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 d_contrata cmb_gen" style="{{ isset($users->mca_compartido)&&$users->mca_compartido=='S'?'':'display:none' }}" >
+                                            <div class="form-group">
+                                                <label>Prefijo de operario GEN</label><br>
+                                                <select name="val_prefijo_compartido" id="val_prefijo_compartido " class="select2 form-control" style="width:350px;"  >
+                                                    <option value=""></option>
+                                                    @foreach ($operarios_gen->unique() as $c)
+                                                        <option {{isset($users) && $users->val_prefijo_compartido == $c->nom_operario ? 'selected' : ''}} value="{{$c->nom_operario}}">{{$c->nom_operario}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 d_contrata cmb_op" style="{{ isset($users->mca_compartido)&&$users->mca_compartido=='N'?'':'display:none' }}" >
+                                            <div class="form-group">
+                                                <label>Operario</label><br>
+                                                <select name="id_operario" id="id_operario " class="select2 form-control"  >
+                                                    <option value=""></option>
+                                                    @foreach ($operarios_ind as $c)
+                                                        <option {{isset($users) && $users->id_operario == $c->id_operario ? 'selected' : ''}} value="{{$c->id_operario}}">[{{ $c->des_contrata }}] {{$c->nom_operario}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -901,297 +943,316 @@
 <script src="{{ asset('plugins/fullcalendar/lib/main.min.js') }}"></script>
 <script src="{{ asset('plugins/fullcalendar/lib/locales/es.js') }}"></script>
 <script src="{{ asset('plugins/fullcalendar/tooltip.min.js') }}"></script>
-    <script>
+<script>
+    $(function(){
+        $('#plantas_usuario').load("{{ url('users/plantas/'.$users->id) }}/1");
+        $('#id_contrata').trigger('change');
+        $('#mca_compartido').trigger('change');
+    });
+
+    $('.configuracion').addClass('active active-sub');
+    $('.usuarios').addClass('active');
+    @if(isSupervisor($users->id))
         $(function(){
-            $('#plantas_usuario').load("{{ url('users/plantas/'.$users->id) }}/1")
+            $('#puestos_usuario').load("{{ url('users/puestos_supervisor/'.$users->id) }}")
         });
+    @endif
 
-        $('.configuracion').addClass('active active-sub');
-	    $('.usuarios').addClass('active');
-        @if(isSupervisor($users->id))
-            $(function(){
-                $('#puestos_usuario').load("{{ url('users/puestos_supervisor/'.$users->id) }}")
-            });
-        @endif
-
-        $('#tablapuestos').bootstrapTable();
-        
-        
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+    $('#tablapuestos').bootstrapTable();
     
-                reader.onload = function (e) {
-                    $('#img_preview').attr('src', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
+    
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#img_preview').attr('src', e.target.result);
             }
+            reader.readAsDataURL(input.files[0]);
         }
+    }
 
-        $(".select2").select2({
-            width: "100%",
-        });
-    
-        $(".select2-filtro").select2({
+    $(".select2").select2({
+        width: "100%",
+    });
+
+    $(".select2-filtro").select2({
+        placeholder: "Todos",
+        allowClear: true,
+        @desktop width: "90%", @elsedesktop width: "75%", @enddesktop
+        
+    });
+
+    $('.select-all').click(function(event) {
+        $(this).parent().parent().find('select option').prop('selected', true)
+        $(this).parent().parent().find('select').select2({
             placeholder: "Todos",
             allowClear: true,
-            @desktop width: "90%", @elsedesktop width: "75%", @enddesktop
-            
+            width: "99.2%",
         });
-    
-        $('.select-all').click(function(event) {
-            $(this).parent().parent().find('select option').prop('selected', true)
-            $(this).parent().parent().find('select').select2({
-                placeholder: "Todos",
-                allowClear: true,
-                width: "99.2%",
-            });
-            $(this).parent().parent().find('select').change();
-        });
-    
-        $("#img_usuario").change(function(){
-            readURL(this);
-        });
-    
-        $('#btn_generar_token').click(function(event){
-            //console.log('token');
-            $.get( "/users/gen_token/{{ $users->id??'' }}")
-            .done(function( data, textStatus, jqXHR ) {
-                $('#token_1uso').val(data.access_token);
-            })
-            .fail(function( jqXHR, textStatus, errorThrown ) {
-                    console.log(errorThrown);
-            });
+        $(this).parent().parent().find('select').change();
+    });
+
+    $("#img_usuario").change(function(){
+        readURL(this);
+    });
+
+    $('#btn_generar_token').click(function(event){
+        //console.log('token');
+        $.get( "/users/gen_token/{{ $users->id??'' }}")
+        .done(function( data, textStatus, jqXHR ) {
+            $('#token_1uso').val(data.access_token);
         })
+        .fail(function( jqXHR, textStatus, errorThrown ) {
+                console.log(errorThrown);
+        });
+    })
+    
+    $('#btn_generar_password').click(function(event){
+        //console.log('token');
+        $.get( "/users/gen_password/{{ $users->id??'' }}")
+        .done(function( data, textStatus, jqXHR ) {
+            $('#password').val(data.pwd);
+            $('#password').attr('type', 'text')
+        })
+        .fail(function( jqXHR, textStatus, errorThrown ) {
+                console.log(errorThrown);
+        });
+    })
+
+    $('.notsearch').select2({
+        minimumResultsForSearch: -1,
+        width: "100%"
+    });
+
+    $('.chkdia').click(function(){
+        $.get("{{ url('users/turno') }}/{{ $users->id??0 }}/"+$(this).val()+"/"+$(this).is(':checked'));
+    })
+
+    $('#actividad').click(function(){
+        setTimeout(function(){
+            calendar.render();
+        },200)
+    })
+
+    $( function() {
         
-        $('#btn_generar_password').click(function(event){
-            //console.log('token');
-            $.get( "/users/gen_password/{{ $users->id??'' }}")
-            .done(function( data, textStatus, jqXHR ) {
-                $('#password').val(data.pwd);
-                $('#password').attr('type', 'text')
-            })
-            .fail(function( jqXHR, textStatus, errorThrown ) {
-                    console.log(errorThrown);
-            });
-        })
-    
-        $('.notsearch').select2({
-            minimumResultsForSearch: -1,
-            width: "100%"
-        });
-    
-        $('.chkdia').click(function(){
-            $.get("{{ url('users/turno') }}/{{ $users->id??0 }}/"+$(this).val()+"/"+$(this).is(':checked'));
-        })
-    
-        $('#actividad').click(function(){
-            setTimeout(function(){
-                calendar.render();
-            },200)
-        })
-    
-        $( function() {
-            
-            $( "#sortable" ).sortable({
-                revert: true,
-                dropOnEmpty: true,
-                connectWith : ".draggable",
-                stop: function( event, ui ) {
-                    console.log(ui.item.find('.puesto_pref'));
-                    ui.item.parent().find('.select2').css('display','none');
-                    ui.item.find('.detalle').css('display','block');
-                    ui.item.find('.papelera').css('display','block');
-                    ui.item.attr('id',ui.item.find('.puesto_pref').val());
-                    ui.item.attr('type',ui.item.attr('type'));
-                    $('.btn_borrar').click(function(){
-                        $(this).parents(':eq(1)').remove();
-                    });
-                    if(ui.item.find('.detalle').data('id')==0){
-                        console.log("El elemento no tiene ID");
-                            
-                        $( "#sortable" ).sortable( "cancel" );
-                        toast_error('Error', 'Debe seleccionar una opcion en el elemento');
-                        ui.item.remove();
-                    }
-                }
-            });
-    
-            $( ".draggable" ).draggable({
-                connectToSortable: "#sortable",
-                helper: "clone",
-                revert: "invalid",
-                opacity: 0.7,
-            });
-            $( "ul, li" ).disableSelection();
-        });
-            
-        $('.puesto_pref').on('change', function (e) {
-            $(this).parent().find('.detalle').attr('data-id', $(this).val());
-            $(this).parent().find('.detalle').html($(this).find('option:selected').text());
-        })
-    
-        $('.btn_guardar').click(function(){
-    
-            if($('#demo-stk-lft-tab-3').hasClass('active')){
-                event.preventDefault();
-                resultado=[];
-                $('#sortable').children().each(function(item){
-                    elem = new Object();
-                    elem.id=$(this).find('.detalle').data('id');
-                    elem.tipo=$(this).find('.detalle').data('tipo');
-                    elem.text=$(this).find('.detalle').html();
-                    elem.color=$(this).css( "background-color" );
-                    elem.icono=$(this).find('h4').html();
-                    resultado.push(elem);
+        $( "#sortable" ).sortable({
+            revert: true,
+            dropOnEmpty: true,
+            connectWith : ".draggable",
+            stop: function( event, ui ) {
+                console.log(ui.item.find('.puesto_pref'));
+                ui.item.parent().find('.select2').css('display','none');
+                ui.item.find('.detalle').css('display','block');
+                ui.item.find('.papelera').css('display','block');
+                ui.item.attr('id',ui.item.find('.puesto_pref').val());
+                ui.item.attr('type',ui.item.attr('type'));
+                $('.btn_borrar').click(function(){
+                    $(this).parents(':eq(1)').remove();
                 });
-                console.log(resultado);
-                $('#list_puestos_preferidos').val(JSON.stringify(resultado));
-                $('#edit_users_form').submit();
+                if(ui.item.find('.detalle').data('id')==0){
+                    console.log("El elemento no tiene ID");
+                        
+                    $( "#sortable" ).sortable( "cancel" );
+                    toast_error('Error', 'Debe seleccionar una opcion en el elemento');
+                    ui.item.remove();
+                }
             }
         });
 
-        $('.btn_borrar').click(function(){
-            console.log("papelera");
-           $(this).parents(':eq(1)').remove();
+        $( ".draggable" ).draggable({
+            connectToSortable: "#sortable",
+            helper: "clone",
+            revert: "invalid",
+            opacity: 0.7,
         });
+        $( "ul, li" ).disableSelection();
+    });
+        
+    $('.puesto_pref').on('change', function (e) {
+        $(this).parent().find('.detalle').attr('data-id', $(this).val());
+        $(this).parent().find('.detalle').html($(this).find('option:selected').text());
+    })
 
-        $('.btn_desactivar_2fa').click(function(){
-            $.get("{{ url('users/activar_2fa/'.$users->id) }}/D")
-            .done(function( data, textStatus, jqXHR ) {
-                $('.btn_activar_2fa').html('Activar 2FA');
-                $('.btn_desactivar_2fa').hide();
-                $('.btn_activar_2fa').show();
-                $('.check_2fa').hide();
-                $('#content_2fa').empty();
-            })
-            .fail(function( jqXHR, textStatus, errorThrown ) {
-                    console.log(errorThrown);
+    $('.btn_guardar').click(function(){
+
+        if($('#demo-stk-lft-tab-3').hasClass('active')){
+            event.preventDefault();
+            resultado=[];
+            $('#sortable').children().each(function(item){
+                elem = new Object();
+                elem.id=$(this).find('.detalle').data('id');
+                elem.tipo=$(this).find('.detalle').data('tipo');
+                elem.text=$(this).find('.detalle').html();
+                elem.color=$(this).css( "background-color" );
+                elem.icono=$(this).find('h4').html();
+                resultado.push(elem);
             });
+            console.log(resultado);
+            $('#list_puestos_preferidos').val(JSON.stringify(resultado));
+            $('#edit_users_form').submit();
+        }
+    });
+
+    $('.btn_borrar').click(function(){
+        console.log("papelera");
+        $(this).parents(':eq(1)').remove();
+    });
+
+    $('.btn_desactivar_2fa').click(function(){
+        $.get("{{ url('users/activar_2fa/'.$users->id) }}/D")
+        .done(function( data, textStatus, jqXHR ) {
+            $('.btn_activar_2fa').html('Activar 2FA');
+            $('.btn_desactivar_2fa').hide();
+            $('.btn_activar_2fa').show();
+            $('.check_2fa').hide();
+            $('#content_2fa').empty();
         })
-      
+        .fail(function( jqXHR, textStatus, errorThrown ) {
+                console.log(errorThrown);
+        });
+    })
+    
     // Initialize the calendar
     // -----------------------------------------------------------------
     var calendarEl = document.getElementById('demo-calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,listWeek'
-            },
-            eventDidMount: function(info) {
-                //console.log(info);
-                var tooltip = new Tooltip(info.el, {
-                title: info.event.extendedProps.description,
-                placement: 'top',
-                trigger: 'hover',
-                container: 'body'
-                });
-            },
-            eventLimit: 4,
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listWeek'
+        },
+        eventDidMount: function(info) {
+            //console.log(info);
+            var tooltip = new Tooltip(info.el, {
+            title: info.event.extendedProps.description,
+            placement: 'top',
+            trigger: 'hover',
+            container: 'body'
+            });
+        },
+        eventLimit: 4,
 
-            eventLimitClick: function (cellInfo, jsEvent) {
-        
-                $(cellInfo.dayEl).popover({
-                    html: true,
-                    placement: 'bottom',
-                    container: 'body',
-                    title: function () {
-                        return $("#events-popover-head").html();
-                    },
-                    content: function () {
-                        return $("#events-popover-content").html();
-                    }
-                });
-
-                $(cellInfo.dayEl).popover('show');
-            },
-            dayClick: function (cellInfo, jsEvent) {
-                $(this).popover({
-                    html: true,
-                    placement: 'bottom',
-                    container: 'body',
-                    title: function () {
-                        return $("#events-popover-head").html();
-                    },
-                    content: function () {
-                        return $("#events-popover-content").html();
-                    }
-                });
-
-                $(this).popover('show');
-            },
-            editable: false,
-            droppable: false, // this allows things to be dropped onto the calendar
-            eventLimit: true, // allow "more" link when too many events
-            locale: 'es',
-            firstDay: 1,
-            themeSystem: 'bootstrap',
-            moreLinkClick: "popover",
-            dayMaxEventRows: 4,
-            initialView: 'listWeek',
-            events: {!! $eventos !!}
-        });
-        calendar.render();
-
-        $('#btn_restablecer').click(function(){
-            console.log("{{ url('users/restablecer/') }}/{{ $users->id??0 }}");
-            window.open("{{ url('users/restablecer/') }}/{{ $users->id??0 }}",'_self');
-        })
-
-        $('#btn_definitivo').click(function(){
-            console.log("{{ url('users/destroy/') }}/{{ $users->id??0 }}");
-            window.open("{{ url('users/destroy/') }}/{{ $users->id??0 }}",'_self');
-        })
-
-
-        $('.form-ajax').submit(form_ajax_submit);
-
-        document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
+        eventLimitClick: function (cellInfo, jsEvent) {
     
+            $(cellInfo.dayEl).popover({
+                html: true,
+                placement: 'bottom',
+                container: 'body',
+                title: function () {
+                    return $("#events-popover-head").html();
+                },
+                content: function () {
+                    return $("#events-popover-content").html();
+                }
+            });
 
-        //PErmisos del usuario
-        $('.check-permission').click(function(event) {
-            $(this).data('_token','{{csrf_token()}}');
-            if ($(this).is(':checked')) {
-                $.post('{{url('addPermissions_user')}}', $(this).data(), function(data, textStatus, xhr) {
-                });
-            }else{
-                $.post('{{url('removePermissions_user')}}', $(this).data(), function(data, textStatus, xhr) {
-                });
-            }
-        });
-    
-        $('#niveles').on('select2:select', function (e) {
-            var data = e.params.data;
-            $(".celda_"+data.id).fadeToggle();
-            //console.log(data.id);
-        });
-        $('#niveles').on('select2:unselect', function (e) {
-            var data = e.params.data;
-            $(".celda_"+data.id).fadeToggle();
-            //console.log(data.id);
-        });
-        @foreach ($secciones as $s)
-    
-            @if(checkChecked($users->cod_nivel,$s->cod_seccion,'R',$permisos,'id_perfil'))
-                $('#read{{$s->cod_seccion}}').prop("disabled", true);
-                $('#read{{$s->cod_seccion}}').prop("checked", 'checked');
-            @endif
-            @if(checkChecked($users->cod_nivel,$s->cod_seccion,'W',$permisos,'id_perfil'))
-                $('#write{{$s->cod_seccion}}').prop("disabled", true);
-                $('#write{{$s->cod_seccion}}').prop("checked", 'checked');
-            @endif
-            @if(checkChecked($users->cod_nivel,$s->cod_seccion,'C',$permisos,'id_perfil'))
-                $('#create{{$s->cod_seccion}}').prop("disabled", true);
-                $('#create{{$s->cod_seccion}}').prop("checked", 'checked');
-            @endif
-            @if(checkChecked($users->cod_nivel,$s->cod_seccion,'D',$permisos,'id_perfil'))
-                $('#delete{{$s->cod_seccion}}').prop("disabled", true);
-                $('#delete{{$s->cod_seccion}}').prop("checked", 'checked');
-            @endif
-        @endforeach
-    
-        $('#cnt_permisos').html("{{$permisos_usu->count()}}")
+            $(cellInfo.dayEl).popover('show');
+        },
+        dayClick: function (cellInfo, jsEvent) {
+            $(this).popover({
+                html: true,
+                placement: 'bottom',
+                container: 'body',
+                title: function () {
+                    return $("#events-popover-head").html();
+                },
+                content: function () {
+                    return $("#events-popover-content").html();
+                }
+            });
+
+            $(this).popover('show');
+        },
+        editable: false,
+        droppable: false, // this allows things to be dropped onto the calendar
+        eventLimit: true, // allow "more" link when too many events
+        locale: 'es',
+        firstDay: 1,
+        themeSystem: 'bootstrap',
+        moreLinkClick: "popover",
+        dayMaxEventRows: 4,
+        initialView: 'listWeek',
+        events: {!! $eventos !!}
+    });
+    calendar.render();
+
+    $('#btn_restablecer').click(function(){
+        console.log("{{ url('users/restablecer/') }}/{{ $users->id??0 }}");
+        window.open("{{ url('users/restablecer/') }}/{{ $users->id??0 }}",'_self');
+    })
+
+    $('#btn_definitivo').click(function(){
+        console.log("{{ url('users/destroy/') }}/{{ $users->id??0 }}");
+        window.open("{{ url('users/destroy/') }}/{{ $users->id??0 }}",'_self');
+    })
+
+
+    $('.form-ajax').submit(form_ajax_submit);
+
+    document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
+
+
+    //PErmisos del usuario
+    $('.check-permission').click(function(event) {
+        $(this).data('_token','{{csrf_token()}}');
+        if ($(this).is(':checked')) {
+            $.post('{{url('addPermissions_user')}}', $(this).data(), function(data, textStatus, xhr) {
+            });
+        }else{
+            $.post('{{url('removePermissions_user')}}', $(this).data(), function(data, textStatus, xhr) {
+            });
+        }
+    });
+
+    $('#niveles').on('select2:select', function (e) {
+        var data = e.params.data;
+        $(".celda_"+data.id).fadeToggle();
+        //console.log(data.id);
+    });
+    $('#niveles').on('select2:unselect', function (e) {
+        var data = e.params.data;
+        $(".celda_"+data.id).fadeToggle();
+        //console.log(data.id);
+    });
+    @foreach ($secciones as $s)
+
+        @if(checkChecked($users->cod_nivel,$s->cod_seccion,'R',$permisos,'id_perfil'))
+            $('#read{{$s->cod_seccion}}').prop("disabled", true);
+            $('#read{{$s->cod_seccion}}').prop("checked", 'checked');
+        @endif
+        @if(checkChecked($users->cod_nivel,$s->cod_seccion,'W',$permisos,'id_perfil'))
+            $('#write{{$s->cod_seccion}}').prop("disabled", true);
+            $('#write{{$s->cod_seccion}}').prop("checked", 'checked');
+        @endif
+        @if(checkChecked($users->cod_nivel,$s->cod_seccion,'C',$permisos,'id_perfil'))
+            $('#create{{$s->cod_seccion}}').prop("disabled", true);
+            $('#create{{$s->cod_seccion}}').prop("checked", 'checked');
+        @endif
+        @if(checkChecked($users->cod_nivel,$s->cod_seccion,'D',$permisos,'id_perfil'))
+            $('#delete{{$s->cod_seccion}}').prop("disabled", true);
+            $('#delete{{$s->cod_seccion}}').prop("checked", 'checked');
+        @endif
+    @endforeach
+
+    $('#mca_compartido').change(function(event) {
+        if ($(this).is(':checked')) {
+            $('.cmb_gen').show();
+            $('.cmb_op').hide();
+        }else{
+            $('.cmb_gen').hide();
+            $('.cmb_op').show();
+        }
+    });
+
+    $('#cnt_permisos').html("{{$permisos_usu->count()}}")
+    $('#id_contrata').change(function(){
+        if ($(this).val()!='') {
+            $('.d_contrata').show();
+        }else{
+            $('.d_contrata').hide();
+        }
+    })
 </script>
 

@@ -135,7 +135,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-12 text-end">
-                        @if(checkPermissions(['Trabajos'],['W']))<input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
+                        @if(checkPermissions(['Trabajos'],['W']))<input class="btn btn-primary btn-lg" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
 

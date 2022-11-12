@@ -21,6 +21,11 @@
                 <th style="font-weight: normal; width: 20px; background-color: #eee" class="text-center">{{ $n }}</th>
             @endfor
         </tr>
+        <tr>
+            @for ($n=1;$n<=$ultimo_dia;$n++)
+                <th style="font-weight: normal; width: 20px; background-color: #ccc; font-size: 8px; color: #fff" class="text-center">{{ Carbon::parse(Carbon::parse($fecha->format('Y-m-').$n))->ISOformat('dd') }}</th>
+            @endfor
+        </tr>
     </thead>
     <tbody>
         <tr>

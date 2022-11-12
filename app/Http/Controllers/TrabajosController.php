@@ -658,7 +658,7 @@ class TrabajosController extends Controller
 
         $operarios=DB::table('contratas_operarios')
             ->join('users', 'contratas_operarios.id_usuario', 'users.id')
-            ->wherein('id_contrata',$contratas->pluck('id_contrata')->toarray())
+            ->wherein('contratas_operarios.id_contrata',$contratas->pluck('id_contrata')->toarray())
             ->wherenotnull('id_usuario')
             ->get();
 
@@ -981,9 +981,10 @@ class TrabajosController extends Controller
             ->get();
         if($vista!==null){
             session(['tipo_vista'=>$vista]);
-        } else if(session('tipo_vista')==null){
+        }
+        if(session('tipo_vista')==null || $vista=='undefined'){
             $vista='card';
-            session(['tipo_vista'=>$vista]);
+            session(['tipo_vista'=>'card']);
         } else {
             $vista=session('tipo_vista');
         }

@@ -114,7 +114,12 @@ class SuccessfulLogin
         session(['perfil'=>$nivel]);
 
         //Vemos si tiene operario de trabajos
-        $operario=DB::table('contratas_operarios')->where('id_usuario',auth()->user()->id)->first();
+        $operario=DB::table('contratas_operarios')
+            ->where(function($q){
+                $q->where('id_usuario',auth()->user()->id);
+                $q->orwhere('id_operario',auth()->user()->id_operario);
+            })
+        ->first();
         if(isset($operario)){
             session(['id_operario'=>$operario->id_operario]);
         } 

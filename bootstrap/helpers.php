@@ -475,6 +475,56 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
     return true;
 }
 
+function enviar_email($user, $from, $to, $to_name, $subject, $plantilla, $cli=null, $error=null, $texto=null, $adjuntos=null){
+    try
+    {
+    	if(!is_array($to)){
+    		$destinatarios = array($to);
+    	} else {
+            $destinatarios = $to;
+        }
+
+		foreach ($destinatarios as $recipient)
+		{
+	        $resp = \Mail::send($plantilla, ['user' => $user,  'cli' => $cli, 'error' => $error, 'texto'=>$texto, 'adjuntos'=>$adjuntos], function ($m) use ($from, $recipient, $to_name, $subject, $adjuntos) {
+	            $m->from($from, 'Spotlinker');
+	            if (config('app.manolo')){
+	                $m->to("nomecansum@gmail.com", $to_name)->subject($subject);
+	            }
+	            else {
+	                $m->to($recipient, $to_name)->subject($subject);
+	            }
+
+	            if(!empty($adjuntos))
+	            {
+	            	if(is_array($adjuntos))
+					{
+						foreach ($adjuntos as $adjunto)
+		            	{
+							$m->attach($adjunto, array(
+			                    //'as' => 'pdf-report.pdf',
+			                    'mime' => 'application/pdf')
+			                );
+						}
+					}
+					else
+					{
+		                $m->attach($adjuntos, array(
+		                    //'as' => 'pdf-report.pdf',
+		                    'mime' => 'application/pdf')
+		                );
+					}
+	            }
+	        });
+        }
+    } catch(\Exception $e){
+    	Log::info("Error envio");
+    	Log::info($e->getMessage());
+        return $e->getMessage();
+    }
+    return true;
+}
+
 function tags($string, $encoding = 'UTF-8'){
     $string = trim(strip_tags(html_entity_decode(urldecode($string))));
     if(empty($string)){ return false; }
@@ -1590,7 +1640,7 @@ function hexToRgb($hex, $alpha = false) {
        $rgb['a'] = $alpha;
     }
     return $rgb;
- }
+}
 
  function next_cron($expresion,$veces=1,$inicio=null){
     //Metodo 1 usando la libreria de Laravel
@@ -1618,4 +1668,4 @@ function hexToRgb($hex, $alpha = false) {
      }
      
     
- }
+}

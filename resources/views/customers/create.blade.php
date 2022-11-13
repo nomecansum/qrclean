@@ -178,6 +178,12 @@
 									<label class="form-check-label"  for="mca_incidencia_scan">Mostrar incidencia al escanear</label>
 								</div>
 							</div>
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input name="mca_mail_apertura_incidencia"  id="mca_mail_apertura_incidencia" value="S" {{ isset($config->mca_mail_apertura_incidencia)&&$config->mca_mail_apertura_incidencia=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+									<label class="form-check-label"  for="mca_mail_apertura_incidencia">Mail de apertura de incidencia</label>
+								</div>
+							</div>
 							
 						</div>
 

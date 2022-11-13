@@ -107,4 +107,6 @@ return [
         ],
     ],
 
+    'error' => env('MAIL_ERROR', 'manuel@spotlinker.com'),
+
 ];

@@ -846,7 +846,7 @@ class IncidenciasController extends Controller
                                     if($momento=='A'){
                                         $accion=incidencias_acciones::where('id_incidencia',$inc->id_incidencia)->orderBy('id_accion','desc')->first();
                                         $notas_admin.=$accion->txt_accion;
-                                    } 
+                                    }
                                     if($sala!=null && $sala->id_externo_salas!=null){
                                         $body=new \stdClass;
                                         $body->sala_id=$sala->id_externo_salas;
@@ -888,7 +888,7 @@ class IncidenciasController extends Controller
                             //dump($e);
                         }
                         
-                        break;  
+                        break;
 
                     default:
                         # code...
@@ -900,24 +900,27 @@ class IncidenciasController extends Controller
             }
         }
         $inc->save();
-        //Enviamos mail al uusario abriente
-        $to_email = $usuario_abriente->email;
-        Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
-            if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
-                $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-            } else {
-                $message->to(explode(';',$usuario_abriente->email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
-            }
-            $message->from(config('mail.from.address'),config('mail.from.name'));
-            if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
-                $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
-                $message->attachData($adj1,$inc->img_attach1);
-            }     
-            if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
-                $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
-                $message->attachData($adj2,$inc->img_attach2);
-            }
-        });
+        if(config_cliente('mca_mail_apertura_incidencia')=='S' && $momento=='C'){
+           //Enviamos mail al uusario abriente
+            $to_email = $usuario_abriente->email;
+            Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
+                if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
+                    $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                } else {
+                    $message->to(explode(';',$usuario_abriente->email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                }
+                $message->from(config('mail.from.address'),config('mail.from.name'));
+                if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
+                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
+                    $message->attachData($adj1,$inc->img_attach1);
+                }
+                if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
+                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
+                    $message->attachData($adj2,$inc->img_attach2);
+                }
+            });
+        }
+        
         
 
     }

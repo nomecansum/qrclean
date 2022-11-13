@@ -102,14 +102,14 @@
         <div class="card">
             <div class="card-body text-center">
                 <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0 p-3">
+                    <a class="flex-shrink-0 p-3 btn btn-outline-light" href="{{ url('/trabajos/mistrabajos') }}">
                         <div class="h3 display-3">{{ $datos->count() }}</div>
                         <span class="h6">Tareas para hoy</span>
-                    </div>
-                    <div class="flex-grow-1 text-center ms-3">
-                        <a class="btn btn-sm btn-info" id="btn_ir" href="{{ url('/trabajos/mistrabajos') }}">Ver detalles</a>
+                    </a>
+                    <div class="flex-grow-1 text-center ms-3 ">
                         <!-- Social media statistics -->
-                        <div class="mt-4 pt-3 d-flex justify-content-around border-top">
+                        
+                            @desktop <div class="mt-4 pt-3 d-flex justify-content-around border-top"> @elsedesktop <div class="row text-center ms-3"> @enddesktop
                             <div class="card bg-cyan text-white mb-3 mb-xl-3">
                                 <div class="card-body py-3 d-flex align-items-stretch">
                                     <div class="d-flex align-items-center justify-content-center flex-shrink-0 rounded-start">

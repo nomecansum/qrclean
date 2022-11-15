@@ -352,6 +352,10 @@ class PuestosController extends Controller
         try{
             
             $r['max_horas_reservar']=time_to_dec($r->max_horas_reservar.':00','h');
+            if($r->val_color=="#000000"){
+                $r->request->add(['val_color'=>null]);
+            }
+            
             if($r->id_puesto==0){
                 $puesto=puestos::create($r->all());
             } else {
@@ -360,6 +364,9 @@ class PuestosController extends Controller
                 $puesto->update($r->all());
 
             }
+
+            
+
             $puesto->mca_acceso_anonimo=$r->mca_acceso_anonimo??'N';
             $puesto->mca_reservar=$r->mca_reservar??'N';
             $r->val_icono=='undefined'?$puesto->val_icono=null:$puesto->val_icono=$r->val_icono;

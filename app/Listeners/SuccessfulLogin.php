@@ -122,7 +122,7 @@ class SuccessfulLogin
         ->first();
         if(isset($operario)){
             session(['id_operario'=>$operario->id_operario]);
-        } 
+        }
 
         //Temas del usuario
         try{
@@ -133,6 +133,7 @@ class SuccessfulLogin
             }
         } catch (\Exception $e) {}
 
+        savebitacora('Inicio de sesion del usuario '.$user->name,'SuccessfulLogin','handle','OK');
         
     }
 }

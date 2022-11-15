@@ -68,11 +68,12 @@ class Handler extends ExceptionHandler
 
             }
         }
-		if((Auth::user()) && (!$exception instanceof ValidationException) && (!$exception instanceof TokenMismatchException) && (!$exception instanceof \Illuminate\Session\TokenMismatchException) && (!config('app.debug'))) //que no sea de validacion de datos
+		if((Auth::user()) && (!$exception instanceof ValidationException) && (!$exception instanceof TokenMismatchException) && (!$exception instanceof \Illuminate\Session\TokenMismatchException) && (config('!app.debug'))) //que no sea de validacion de datos
 		{
 			try {
 	    		//mandamos un email con datos
-	    		enviar_email($request, config('mail.from.address'), config('mail.error'), config('mail.error'), "Error en QrClean PROD - catch", "emails.mail_error_catch", null, null, $exception); //error
+	    		enviar_email_error($request, config('mail.from.address'), config('mail.error'), config('mail.error'), "Error en QrClean PROD - catch", "emails.mail_error_catch",  $exception); //error
+    
 	    	}
 	    	catch(\Exception $e){
 	    		Log::error("Error al enviar el email con el catch");

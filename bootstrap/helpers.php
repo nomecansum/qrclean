@@ -475,7 +475,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
     return true;
 }
 
-function enviar_email($user, $from, $to, $to_name, $subject, $plantilla, $cli=null, $error=null, $texto=null, $adjuntos=null){
+function enviar_email_error($request, $from, $to, $to_name, $subject, $plantilla, $exception){
     try
     {
     	if(!is_array($to)){
@@ -486,7 +486,7 @@ function enviar_email($user, $from, $to, $to_name, $subject, $plantilla, $cli=nu
 
 		foreach ($destinatarios as $recipient)
 		{
-	        $resp = \Mail::send($plantilla, ['user' => $user,  'cli' => $cli, 'error' => $error, 'texto'=>$texto, 'adjuntos'=>$adjuntos], function ($m) use ($from, $recipient, $to_name, $subject, $adjuntos) {
+	        $resp = \Mail::send($plantilla, ['request'=>$request, 'exception'=>$exception], function ($m) use ($from, $recipient, $to_name, $subject) {
 	            $m->from($from, 'Spotlinker');
 	            if (config('app.manolo')){
 	                $m->to("nomecansum@gmail.com", $to_name)->subject($subject);
@@ -495,26 +495,6 @@ function enviar_email($user, $from, $to, $to_name, $subject, $plantilla, $cli=nu
 	                $m->to($recipient, $to_name)->subject($subject);
 	            }
 
-	            if(!empty($adjuntos))
-	            {
-	            	if(is_array($adjuntos))
-					{
-						foreach ($adjuntos as $adjunto)
-		            	{
-							$m->attach($adjunto, array(
-			                    //'as' => 'pdf-report.pdf',
-			                    'mime' => 'application/pdf')
-			                );
-						}
-					}
-					else
-					{
-		                $m->attach($adjuntos, array(
-		                    //'as' => 'pdf-report.pdf',
-		                    'mime' => 'application/pdf')
-		                );
-					}
-	            }
 	        });
         }
     } catch(\Exception $e){

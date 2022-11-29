@@ -123,6 +123,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('queue:work --sleep=3 --timeout=1800 --tries=3 --daemon --queue=high,default,low')->runInBackground()->withoutOverlapping()->everyMinute();
         //Cola generica de informs
     	$schedule->command('queue:work --sleep=3 --timeout=1800 --tries=3 --daemon --queue=Informes0')->runInBackground()->withoutOverlapping()->everyMinute();
+        $schedule->command('queue:work --sleep=3 --timeout=1800 --tries=3 --daemon --queue=salas')->runInBackground()->withoutOverlapping()->everyMinute();
 	    foreach($colas_informes as $cola){
 	    	$schedule->command('queue:work --sleep=3 --timeout=1800 --tries=3 --daemon --queue='.$cola)->runInBackground()->withoutOverlapping()->everyMinute();
 	    }

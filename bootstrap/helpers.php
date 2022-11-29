@@ -1622,6 +1622,7 @@ function hexToRgb($hex, $alpha = false) {
     return $rgb;
 }
 
+//Ejecuta el NODE.JS que devuelve las siguientes iteraciones de una expresion cron
  function next_cron($expresion,$veces=1,$inicio=null){
     //Metodo 1 usando la libreria de Laravel
      try{
@@ -1648,4 +1649,25 @@ function hexToRgb($hex, $alpha = false) {
      }
      
     
+}
+
+//Enviar peticiones al API de Salas
+function enviar_request_salas($metodo,$accion,$param,$body,$id_cliente){
+    $cliente=clientes::find($id_cliente);
+    Log::debug($metodo.' '.config('app.url_base_api_salas').$accion);
+    $response=Http::withOptions(['verify' => false])
+        ->withHeaders(['Accept' => 'application/json', 'Content-Type' => 'application/json','Authorization'=>$cliente->token_acceso_salas])
+        ->withbody($body,'application/json')
+        ->$metodo(config('app.url_base_api_salas').$accion);
+    if($response->status()!=200){
+        Log::error('Error en la respuesta de la API de salas: '.$metodo.' '.$accion.' '.$param);
+        return [
+            "error"=>'Error en la respuesta de la API de salas: '.$metodo.' '.$accion.' '.$param,
+            "status"=>$response->status()
+           ];
+    } 
+    return [
+        "body"=>$response->body(),
+        "status"=>$response->status()
+       ];
 }

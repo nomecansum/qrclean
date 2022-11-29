@@ -360,6 +360,11 @@ class IncidenciasController extends Controller
                     $q->whereIn('incidencias.id_tipo_incidencia',$r->tipoinc);
                 }
             })
+            ->where(function($q) use($r){
+                if ($r->user) {
+                    $q->whereIn('incidencias.id_usuario_apertura',$r->user);
+                }
+            })
             ->orderby('fec_apertura','desc')
             ->get();
         $f1=Carbon::parse($f1);

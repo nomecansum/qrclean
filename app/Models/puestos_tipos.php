@@ -43,7 +43,8 @@ class puestos_tipos extends Model
                   'observaciones',
                   'mca_liberar_auto',
                   'abreviatura',
-                  'val_tiempo_limpieza'
+                  'val_tiempo_limpieza',
+                  'val_dias_antelacion'
               ];
 
     /**

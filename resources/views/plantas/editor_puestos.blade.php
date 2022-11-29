@@ -67,14 +67,14 @@
             <div class="row">
                 <div class="form-group col-md-4 mb-3">
                     <label>Zoom: </label> <span id="puesto-zoom-def-val"></span>
-                    <div id="puesto-zoom-def"></div>	
+                    <div id="puesto-zoom-def"></div>
                 </div>
                 <div class="col-md-5">
     
                 </div>
                 <div class="form-group col-md-2 mb-3">
                     <label>Alpha fondo: </label> <span id="puesto-transp-def-val"></span>
-                    <div id="puesto-transp-def"></div>	
+                    <div id="puesto-transp-def"></div>
                 </div>
             </div>
             
@@ -107,7 +107,6 @@
                                  $asignado_otroperfil=null;
                                  $reserva=null;
                                  $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
-                                 //$borde="border: 5px solid ".$puesto->val_color??"#fff".";";   
                                  if($puesto->top==null && $puesto->left==null){
                                     $puesto->color_estado="secondary";
                                  }
@@ -135,27 +134,27 @@
                 <div class="row mt-3">
                     <div class="form-group col-md-2">
                         <label>Ancho puestos: </label> <span id="puesto-rangew-def-val"></span>
-                        <div id="puesto-rangew-def"></div>	
+                        <div id="puesto-rangew-def"></div>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Alto puestos: </label> <span id="puesto-rangeh-def-val"></span>
-                        <div id="puesto-rangeh-def"></div>	
+                        <div id="puesto-rangeh-def"></div>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Borde: </label> <span id="puesto-rangeb-def-val"></span>
-                        <div id="puesto-rangeb-def"></div>	
+                        <div id="puesto-rangeb-def"></div>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Redondeo: </label> <span id="puesto-ranger-def-val"></span>
-                        <div id="puesto-ranger-def"></div>	
+                        <div id="puesto-ranger-def"></div>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Tamaño letra: </label> <span id="letra-range-def-val"></span>
-                        <div id="letra-range-def"></div>	
+                        <div id="letra-range-def"></div>
                     </div>
                     <div class="form-group col-md-2">
                         <label>Tamaño grid: </label> <span id="grid-range-def-val"></span>
-                        <div id="grid-range-def"></div>	
+                        <div id="grid-range-def"></div>
                     </div>
                     <div class="col-md-12 text-end pt-3">
                         <input class="btn btn-primary" id="btn_guardar" type="submit" value="Guardar">
@@ -185,7 +184,7 @@
     try{
         posiciones={!! json_encode($plantas->posiciones)??'[]' !!};
         document.getElementById('plano').setAttribute('data-posiciones',posiciones);
-        posiciones=$.parseJSON(posiciones); 
+        posiciones=$.parseJSON(posiciones);
        
     } catch($err){
         posiciones=[];
@@ -193,6 +192,16 @@
 
 
     $( function() {
+        $( ".puesto_child" ).resizable(
+            { animate: true,
+            ghost: true,
+            handles: 'n,s,e,w,ne,se,nw,sw',
+            start: function (event, ui) { startResize(event, ui); },
+            resize: function (event, ui) { monitorResize(event, ui); },
+            stop: function (event, ui) { stopResize(event, ui); }
+        }
+        );
+        
         $( ".draggable" ).draggable({
             containment: "parent",
             grid: [ 5, 5 ],

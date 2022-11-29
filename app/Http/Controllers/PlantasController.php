@@ -240,7 +240,7 @@ class PlantasController extends Controller
         $puestos= DB::Table('puestos')
             ->select('puestos.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','plantas.factor_puestow','plantas.factor_puestoh','plantas.factor_puestob','plantas.factor_puestor','plantas.factor_letra','puestos.val_color as hex_color')
             ->join('plantas','plantas.id_planta','puestos.id_planta')
-            ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
+            ->leftjoin('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
             ->where('puestos.id_planta',$id)
             ->get();
         $reservas=DB::table('reservas')

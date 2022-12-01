@@ -342,6 +342,7 @@ class UsersController extends Controller
             $data["mca_compartido"] = isset($data["mca_compartido"]) ? 'S' : 'N';
             $data["val_prefijo_compartido"] = $data["mca_compartido"]=="S" ? $data["val_prefijo_compartido"] : null;
             $data["id_operario"] = $data["mca_compartido"]=="N" ? $data["id_operario"] : null;
+            $data["sso_override"] = isset($data["sso_override"]) ? 'S' : 'N';
             if(isset($data['tipos_puesto_admitidos']) && is_array($data['tipos_puesto_admitidos'])){
                 $data['tipos_puesto_admitidos']=implode(",",$data['tipos_puesto_admitidos']);
             }
@@ -573,6 +574,7 @@ class UsersController extends Controller
             'mca_compartido'=>'nullable',
             'val_prefijo_compartido'=>'nullable',
             'id_operario'=>'nullable',
+            'sso_override'=>'nullable',
         ];
 
 

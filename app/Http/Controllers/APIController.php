@@ -444,26 +444,28 @@ class APIController extends Controller
         try{
             $cliente_salas=clientes::where('id_cliente_salas',$cliente)->first()->id_cliente;
             $r->request->add(['id_cliente' => $cliente_salas]);
-            $r->request->add(['procedencia' => "salas"]);            
+            $r->request->add(['procedencia' => "salas"]);
             //Lanzamos el job de sincronizacion con salas
-            sincroIncidenciasSalas::dispatch($fecha,$cliente_salas)->onQueue('salas');
+            getEstructuraIncidenciasSalas::dispatch($fecha,$cliente_salas)->onQueue('salas');
             savebitacora('Solicitud de resincronizacion de estructuras salas'.file_get_contents('php://input'),"API","solicitud_sincro","OK");
             return response()->json([
                 'result'=>'ok',
                 'timestamp'=>Carbon::now(),
                 'message' => 'Proceso de sincronizacion completado ']);
         }catch (\Throwable $e) {
-            savebitacora('Error en sincronizacion  de estructuras salas '.file_get_contents('php://input'),"API","reabrir_ticket","ERROR");
+            savebitacora('Error en sincronizacion  de estructuras salas '.file_get_contents('php://input'),"API","solicitud_sincro","ERROR");
             return $this->respuesta_error('ERROR: Ocurrio un error en el proceso '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
             
-        } 
+        }
     }
 
     public function crear_incidencia_salas(Request $r){
         try{
-            $request=json_decode($r->all()[0],true);
-            foreach($request as $key=>$value){
-                $r->request->add([$key => $value]);
+            if(isset($r->all()[0])){
+                $request=json_decode($r->all()[0],true);
+                foreach($request as $key=>$value){
+                    $r->request->add([$key => $value]);
+                }
             }
             
             $r->request->add(['id_cliente' => $this->get_cliente_ext($r)]);
@@ -483,7 +485,7 @@ class APIController extends Controller
             $r->request->add(['des_incidencia' => $r->descripcion_adicional]);
 
             $respuesta=app('App\Http\Controllers\IncidenciasController')->save($r);
-            savebitacora('Crear de incidencia desde salas '.file_get_contents('php://input'),"API","crear_incidencia_salas","OK"); 
+            savebitacora('Crear de incidencia desde salas '.file_get_contents('php://input'),"API","crear_incidencia_salas","OK");
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR Creacion de incidencia desde salas '.file_get_contents('php://input'),"API","crear_incidencia_salas","ERROR");
@@ -494,9 +496,11 @@ class APIController extends Controller
 
     public function add_accion_salas(Request $r){
         try{
-            $request=json_decode($r->all()[0],true);
-            foreach($request as $key=>$value){
-                $r->request->add([$key => $value]);
+            if(isset($r->all()[0])){
+                $request=json_decode($r->all()[0],true);
+                foreach($request as $key=>$value){
+                    $r->request->add([$key => $value]);
+                }
             }
 
             $r->request->add(['id_cliente' => $this->get_cliente_ext($r)]);
@@ -517,7 +521,7 @@ class APIController extends Controller
             $r->request->add(['des_accion' => $txt_nuevo]);
             $r->request->add(['id_incidencia' => $r->incidencia_id_puestos]);
             $respuesta=app('App\Http\Controllers\IncidenciasController')->add_accion($r);
-            savebitacora('Modificar incidencia '.file_get_contents('php://input'),"API","add_accion_salas","OK"); 
+            savebitacora('Modificar incidencia '.file_get_contents('php://input'),"API","add_accion_salas","OK");
             return response()->json($respuesta);
         }catch (\Throwable $e) {
             savebitacora('ERROR Modificacion de incidencia '.file_get_contents('php://input'),"API","add_accion_salas","ERROR");
@@ -526,7 +530,7 @@ class APIController extends Controller
                 'error' => 'ERROR: Ocurrio un error añadiendo accion '.$e->getMessage(),
                 'timestamp'=>Carbon::now(),
             ])->setStatusCode(400);
-        } 
+        }
     }
 
     public function request_sincro($fecha,$cliente){
@@ -556,7 +560,7 @@ class APIController extends Controller
             savebitacora('Error en sincronizacion  de incidencias salas '.file_get_contents('php://input'),"API","reabrir_ticket","ERROR");
             return $this->respuesta_error('ERROR: Ocurrio un error en el proceso '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
             
-        } 
+        }
     }
 
     public function get_incidencias_desde_fecha(Request $r,$fecha,$cliente){
@@ -604,9 +608,11 @@ class APIController extends Controller
     public function add_incidencia_id_puestos_pendientes(Request $r){
         try{
 
-            $request=json_decode($r->all()[0],true);
-            foreach($request as $key=>$value){
-                $r->request->add([$key => $value]);
+            if(isset($r->all()[0])){
+                $request=json_decode($r->all()[0],true);
+                foreach($request as $key=>$value){
+                    $r->request->add([$key => $value]);
+                }
             }
             
             $r->request->add(['id_cliente' => [$this->get_cliente_ext($r)]]);
@@ -625,12 +631,12 @@ class APIController extends Controller
                     $pendientes[]=$i;
                 }
             }
-            savebitacora('Solicitud de actualizacion de id de incidencias en salas '.file_get_contents('php://input'),"API","add_incidencia_id_puestos_pendientes","OK"); 
+            savebitacora('Solicitud de actualizacion de id de incidencias en salas '.file_get_contents('php://input'),"API","add_incidencia_id_puestos_pendientes","OK");
             return response()->json([
                 'result'=>'ok',
                 'timestamp'=>Carbon::now()]);
         }catch (\Throwable $e) {
-            savebitacora('ERROR Solicitud de actualizacion de id de incidencias en salas '.file_get_contents('php://input'),"API","add_incidencia_id_puestos_pendientes","ERROR"); 
+            savebitacora('ERROR Solicitud de actualizacion de id de incidencias en salas '.file_get_contents('php://input'),"API","add_incidencia_id_puestos_pendientes","ERROR");
             return $this->respuesta_error('ERROR Solicitud de actualizacion de id de incidencias en salas '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);
         }
     }

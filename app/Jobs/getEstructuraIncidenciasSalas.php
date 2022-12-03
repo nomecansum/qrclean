@@ -11,6 +11,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\usuarios;
+use App\Models\salas;
+use App\Models\puestos;
 
 class getEstructuraIncidenciasSalas implements ShouldQueue
 {

@@ -254,6 +254,53 @@ class PlantasController extends Controller
         return view('plantas.editor_puestos', compact('plantas','puestos','reservas'));
     }
 
+    public function puestos_custom(Request $r){
+        $lista_puestos=puestos::wherein('id_puesto',$r->id)->get();
+        foreach($lista_puestos as $puesto){
+            if($r->has('width')){
+                $puesto->width=$r->width;
+            }
+            if($r->has('height')){
+                $puesto->height=$r->height;
+            }
+            if($r->has('border')){
+                $puesto->border=$r->border;
+            }
+            if($r->has('roundness')){
+                $puesto->roundness=$r->roundness;
+            }
+            if($r->has('border')){
+                $puesto->border=$r->border;
+            }
+            if($r->has('font')){
+                $puesto->font=$r->font;
+            }
+            $puesto->save();
+        }
+        return [
+            'title' => "Plantas",
+            'message' => 'Propiedades custom de los puestos ['.implode(",",$r->id).'] actualizadas',
+            'result' => 'ok'
+        ];
+    }
+
+    public function borrar_custom(Request $r){
+        $lista_puestos=puestos::wherein('id_puesto',$r->id)->update([
+            'width'=>null,
+            'height'=>null,
+            'border'=>null,
+            'roundness'=>null,
+            'border'=>null,
+        ]);
+       
+        return [
+            'title' => "Plantas",
+            'message' => 'Propiedades custom de los puestos ['.implode(",",$r->id).'] borradas',
+            'result' => 'ok'
+        ];
+
+    }
+
     public function puestos_save(Request $r){
         validar_acceso_tabla($r->id_planta,'plantas');
         $planta = plantas::findOrFail($r->id_planta);

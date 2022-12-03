@@ -17,7 +17,7 @@
   --litepicker-day-color-hover: var( --ton-comp-active-bg );
   --litepicker-is-today-color: #f44336;
   --litepicker-is-in-range-color: rgba( var( --ton-comp-active-bg-rgb ), .2 );
-  --litepicker-is-locked-color: var( --ton-muted-color );
+  --litepicker-is-locked-color: #ffa69e;
   --litepicker-is-start-color: #fff;
   --litepicker-is-start-color-bg: var( --ton-comp-active-bg );
   --litepicker-is-end-color: #fff;

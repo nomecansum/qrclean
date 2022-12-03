@@ -19,7 +19,7 @@
         }
         
         $puestos= DB::Table('puestos')
-            ->select('puestos.*','plantas.*','estados_puestos.val_color as color_estado','estados_puestos.hex_color','estados_puestos.des_estado', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo')
+            ->select('puestos.*','puestos.width as puesto_width', 'puestos.height as puesto_height','plantas.*','estados_puestos.val_color as color_estado','estados_puestos.hex_color','estados_puestos.des_estado', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo')
             ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
@@ -52,18 +52,22 @@
     
     @foreach($puestos as $puesto)
         @php
-            $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();  
-            $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();  
-            $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();  
-            $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
+            $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();
+            $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();
+            $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();
+            $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();
             $es_reserva="P";
             $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$es_reserva);
-
+            if($puesto->puesto_width!=null || $puesto->puesto_height!=null || $puesto->border!=null || $puesto->font!=null  || $puesto->roundness!=null){
+                $custom=true;
+            } else {
+                $custom=false;
+            }
         @endphp
         {{--  --}}
-        <div class="text-center  add-tooltip align-middle flpuesto draggable puesto_parent {{ $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }}" id="puesto{{ $puesto->id_puesto }}" title="{{ strip_tags( $puesto->cod_puesto." \r\n ".$cuadradito['title']) }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" data-factorh="{{ $puesto->factor_puestoh }}" data-factorw="{{$puesto->factor_puestow}}" data-factorr="{{ $puesto->factor_puestor }}" style="height: {{ $puesto->factor_puestoh }}% ; width: {{ $puesto->factor_puestow }}%; top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $cuadradito['color'] }}; @if(session('CL')['modo_visualizacion_puestos']=='C') color: {{ $cuadradito['font_color'] }} @endif; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']}}; border-radius: {{ $cuadradito['border-radius'] }}  ">
+        <div class="text-center  add-tooltip align-middle flpuesto draggable puesto_parent {{ $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }}  {{ $custom?'custom':'' }}" id="puesto{{ $puesto->id_puesto }}" title="{{ strip_tags( $puesto->cod_puesto." \r\n ".$cuadradito['title']) }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $pl->id_planta }}" data-factorh="{{ $puesto->factor_puestoh }}" data-factorw="{{$puesto->factor_puestow}}" data-factorr="{{ $puesto->roundness!=null?$puesto->roundness:$puesto->factor_puestor }}" data-width="{{ $puesto->puesto_width??0 }}" data-height="{{ $puesto->puesto_height??0 }}" style="height: {{ $puesto->factor_puestoh }}% ; width: {{ $puesto->factor_puestow }}%; top: {{ $top }}px; left: {{ $left }}px; background-color: {{ $cuadradito['color'] }}; @if(session('CL')['modo_visualizacion_puestos']=='C') color: {{ $cuadradito['font_color'] }} @endif; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']}}; border-radius: {{ $cuadradito['border-radius'] }}  ">
             @if(session('CL')['modo_visualizacion_puestos']=='C')
-                <span class="h-100 align-middle text-center puesto_child" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">{{ $puesto->des_puesto }}</span>
+                <span class="h-100 align-middle text-center puesto_child {{ $puesto->font!=null?'custom':'' }}" style="font-size: {{ $puesto->font!=null?$puesto->font:$puesto->factor_letra }}vw; color:#666">{{ $puesto->des_puesto }}</span>
                 @include('resources.adornos_iconos_puesto')
             @else
                 <i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i><br>
@@ -118,7 +122,6 @@
     
     try{
         posiciones={!! json_encode($pl->posiciones)??'[]' !!};
-        //posiciones=JSON.parse(posiciones); 
     } catch($err){
         posiciones=[];
     }
@@ -136,7 +139,7 @@
         $('#plano{{ $pl->id_planta }}').animate({ 'width': zoom_actual{{ $pl->id_planta }}+'%' }, 0);
         //$('#plano{{ $pl->id_planta }}').scale(zoom_actual{{ $pl->id_planta }}/100);
         setTimeout(() => {
-            recolocar_puestos();;
+            recolocar_puestos();
         }, 1000);
        
     }

@@ -292,8 +292,8 @@ class ReservasController extends Controller
         $period = CarbonPeriod::create($f1,$f2);
         foreach($period as $p){
             $asignados_usuarios=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
-                ->join('users','users.id','puestos_asignados.id_usuario')    
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+                ->join('users','users.id','puestos_asignados.id_usuario')
                 // ->where('id_usuario','<>',Auth::user()->id)
                 ->where(function($q){
                     if (!isAdmin()) {
@@ -313,8 +313,8 @@ class ReservasController extends Controller
      
          
         $asignados_miperfil=DB::table('puestos_asignados')
-            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
-            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')    
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')
             ->where('id_perfil',Auth::user()->cod_nivel)
             ->where(function($q){
                 if (!isAdmin()) {
@@ -326,8 +326,8 @@ class ReservasController extends Controller
             ->get();
         
         $asignados_nomiperfil=DB::table('puestos_asignados')
-            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
-            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')     
+            ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')
             ->where('id_perfil','<>',Auth::user()->cod_nivel)
             ->where(function($q){
                 if (!isAdmin()) {
@@ -344,7 +344,7 @@ class ReservasController extends Controller
         }
 
         $puestos=DB::table('puestos')
-            ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo')
+            ->select('puestos.*','puestos.width as puesto_width', 'puestos.height as puesto_height','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','puestos_tipos.val_dias_antelacion')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -399,7 +399,7 @@ class ReservasController extends Controller
                         $q->whereIn('puestos.id_puesto',$puestos_tags);
                     } else { //Busqueda con OR
                         $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
-                        $q->whereIn('puestos.id_puesto',$puestos_tags); 
+                        $q->whereIn('puestos.id_puesto',$puestos_tags);
                     }
                 }
             })
@@ -423,6 +423,19 @@ class ReservasController extends Controller
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
             ->get();
+
+        //Ahora vamos a ver quepuestos no pueden ser reservados porque no cumplen la regla de maxima antelacion
+        $puestos_antelacion=$puestos->wherenotnull('val_dias_antelacion');
+        foreach($period as $p){
+            foreach($puestos_antelacion as $pa){
+                if($p->greaterThan(Carbon::now()->addDays($pa->val_dias_antelacion))){
+                    $puestos->where('id_puesto',$pa->id_puesto)->first()->quitar=true;
+                }
+            }
+        }
+        $puestos = $puestos->reject(function($item) {
+            return isset($item->quitar);
+        });
 
         $edificios=DB::table('edificios')
             ->select('id_edificio','des_edificio')

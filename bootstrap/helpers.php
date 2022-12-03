@@ -1399,6 +1399,7 @@ function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fi
     
     $fec_desde=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_inicio.':00');
     $fec_hasta=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_fin.':00');
+    $datos_tipo=DB::table('puestos_tipos')->where('id_tipo_puesto',$tipo)->first();
     //Primero comprobamos si tiene una reserva para ese dia de ese tipo de puesto
     $reservas=DB::table('reservas')
     ->join('puestos','puestos.id_puesto','reservas.id_puesto')
@@ -1436,6 +1437,7 @@ function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fi
         ->where('puestos.id_cliente',$cliente)
         ->pluck('puestos.id_puesto')
         ->toArray();
+        
     $no_disponibles=array_merge($reservas,$asignados);
     
     $puestos_disponibles=DB::table('puestos')

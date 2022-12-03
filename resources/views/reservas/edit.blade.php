@@ -10,6 +10,9 @@
         max-height: 150px;
         overflow-y: auto;
     }
+    .litepicker .container__days .day-item.is-locked{
+        background-color: #f2dede !important;
+    }
 
     
 
@@ -129,6 +132,7 @@
                     <div class="form-group col-md-3">
                         <label for="id_usuario">Tipo de puesto</label>
                         <select name="id_tipo_puesto" id="id_tipo_puesto" class="form-control">
+                            <option value="0">Cualquiera</option>
                             @foreach($tipos as $t)
                                 <option value="{{ $t->id_tipo_puesto}}" {{ isset($reserva->id_tipo_puesto)&&$reserva->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }} data-observaciones="{{ $t->observaciones }}" data-slots="{{ $t->slots_reserva }}">{{ $t->des_tipo_puesto }}</option>
                             @endforeach
@@ -312,6 +316,7 @@
         autoApply: true,
         format: 'DD/MM/YYYY',
         lang: "es-ES",
+        firstDay: 1,
         lockDays: [{!! $festivos_usuario !!}],
         maxDays: {{ config_cliente('max_dias_reserva',Auth::user()->id_cliente) }},
         tooltipText: {
@@ -323,7 +328,7 @@
         },
         lockDaysFilter: (day) => {
             const d = day.getDay();
-            return [-1{{ $perfil_usuario->mca_reservar_sabados=='N'?'':',6' }}{{ $perfil_usuario->mca_reservar_domingos=='N'?'':',0' }}].includes(d);
+            return [-1{{ $perfil_usuario->mca_reservar_sabados=='N'?',6':'' }}{{ $perfil_usuario->mca_reservar_domingos=='N'?',0':'' }}].includes(d);
         },
         setup: (picker) => {
             picker.on('selected', (date1, date2) => {

@@ -543,8 +543,20 @@
                 puesto.css('top',plano.height()*item.offsettop/100);
                 puesto.css('left',(plano.width()*item.offsetleft/100));
                 //las dimensiones del cuadradito
-                puesto.css('width',plano.width()*(puesto.data('factorw')/100)+'px');
-                puesto.css('height',plano.height()*(puesto.data('factorh')/100)+'px');
+                if(puesto.data('width')!=0) {
+                    puesto.css('width',plano.width()*(puesto.data('width')/100)+'px');
+                    console.log('w');
+                } else {
+                    puesto.css('width',plano.width()*(puesto.data('factorw')/100)+'px');
+                }
+                if(puesto.data('height')!=0) {
+                    puesto.css('height',plano.width()*(puesto.data('height')/100)+'px');
+                    console.log('h');
+                } else {
+                    puesto.css('height',plano.width()*(puesto.data('factorh')/100)+'px');
+                }
+                // puesto.css('width',plano.width()*(puesto.data('factorw')/100)+'px');
+                // puesto.css('height',plano.height()*(puesto.data('factorh')/100)+'px');
                 @mobile()
                     puesto.css('border-radius',puesto.data('factorr')*0.2+'px');
                 @endmobile()

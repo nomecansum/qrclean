@@ -54,7 +54,13 @@ class puestos extends Model
                   'top',
                   'left',
                   'offset_top',
-                  'offset_left'
+                  'offset_left',
+                  'width',
+                  'height',
+                  'border',
+                  'font',
+                  'roundness',
+                  'val_dias_antelacion',
               ];
 
     /**

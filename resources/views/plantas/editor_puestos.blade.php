@@ -30,6 +30,11 @@
     margin: 0px 0px 0px 0px;
 }
 
+.seleccionado{
+    border: 2px solid #FF0000 !important;
+    background-color: #ffe066 !important;
+}
+
 </style>
 
     <div class="card editor mb-5">
@@ -105,15 +110,19 @@
                                  $asignado_usuario=null;
                                  $asignado_miperfil=null;
                                  $asignado_otroperfil=null;
+                                 $custom=false;
                                  $reserva=null;
                                  $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
                                  if($puesto->top==null && $puesto->left==null){
                                     $puesto->color_estado="secondary";
                                  }
-
+                                 if($puesto->width!=null || $puesto->height!=null || $puesto->border!=null || $puesto->font!=null  || $puesto->roundness!=null){
+                                    $custom=true;
+                                 }
                                 @endphp
-                                    <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto puesto_parent draggable add-tooltip" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-factorh="{{ $puesto->factor_puestoh }}" data-factorw="{{$puesto->factor_puestow}}" data-factorr="{{ $puesto->factor_puestor }}" style="height: {{ $puesto->factor_puestoh }}% ; width: {{ $puesto->factor_puestow }}%;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }};  opacity: {{ $cuadradito['transp']}}; border-radius: {{ $cuadradito['border-radius'] }}">
-                                        <span class="h-100 align-middle texto_puesto puesto_child" style="font-size: {{ $puesto->factor_letra }}vw;">{{ nombrepuesto($puesto) }}</span>
+                                    <div class="text-center font-bold  add-tooltip bg-{{ $puesto->color_estado }} align-middle flpuesto puesto_parent draggable add-tooltip {{ $custom?'custom':'' }}" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-factorh="{{ $puesto->factor_puestoh }}" data-factorw="{{$puesto->factor_puestow}}" data-factorr="{{ $puesto->factor_puestor }}" data-width="{{ $puesto->width??0 }}" data-height="{{ $puesto->height??0 }}" style="height: {{ $puesto->factor_puestoh }}% ; width: {{  $puesto->factor_puestow }}%;top: {{ $top }}px; left: {{ $left }}px; {{ $cuadradito['borde'] }};  opacity: {{ $cuadradito['transp']}}; border-radius: {{  $cuadradito['border-radius'] }}">
+                                        {!! $custom?'<i class="fa-solid fa-circle-small"></i>':'' !!}
+                                        <span class="h-100 align-middle texto_puesto puesto_child {{ $puesto->font!=null?'custom':'' }}" style="font-size: {{ $puesto->font!=null?$puesto->font:$puesto->factor_letra }}vw;">{{ nombrepuesto($puesto) }}</span>
                                     </div>
                                 @php
                                     $left+=50;
@@ -156,7 +165,16 @@
                         <label>Tamaño grid: </label> <span id="grid-range-def-val"></span>
                         <div id="grid-range-def"></div>
                     </div>
-                    <div class="col-md-12 text-end pt-3">
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-2 text-end pt-3">
+                        <button type="button" class="btn btn-pink" id="btn_custom" style="display: none">Modificar </button>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-md-3 text-end pt-3">
                         <input class="btn btn-primary" id="btn_guardar" type="submit" value="Guardar">
                     </div>
                 </div>
@@ -164,12 +182,77 @@
             </form>
 
         </div>
+
+
+    </div>
+
+    <div class="modal fade" id="modal-modif" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                    <h3 class="modal-title">Modificar apariencia de <span id_="cuenta_puestos"></span> puestos </h3>
+                    <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
+                        <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Ancho <i class="fa-solid fa-arrows-left-right"></i></label>
+                                <input type="number" class="form-control resize val_ancho_modif bind_value width" min="0" max="200" data-clase="width"  required name="val_ancho_modif" id="val_ancho_modif" value="5">
+                            </div>
+                            <input type="range" class="form-range val_ancho_modif bind_value width" min="0" max="200" step="1" data-clase="width"  id="range_ancho_modif" value="5">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Alto <i class="fa-solid fa-arrows-up-down"></i></label>
+                                <input type="number" class="form-control resize val_alto_modif bind_value height" min="0" max="200" data-clase="height"  required name="val_alto_modif" id="val_alto_modif" value="5">
+                            </div>
+                            <input type="range" class="form-range val_alto_modif bind_value height" min="0" max="200" step="1" data-clase="height"  id="range_alto_modif" value="5">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Borde <i class="fa-duotone fa-border-outer"></i></label>
+                                <input type="number" class="form-control resize val_borde_modif bind_value border-width" min="0" max="15" data-clase="border-width"  required name="val_borde_modif" id="val_borde_modif" value="2">
+                            </div>
+                            <input type="range" class="form-range val_borde_modif bind_value border-width" min="0" step="0.1" max="15" data-clase="border-width"  id="range_borde_modif" value="2">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Redondeo <i class="fa-light fa-drone"></i></label>
+                                <input type="number" class="form-control resize val_round_modif bind_value border-radius" min="0" max="15" data-clase="border-radius"  required name="val_round_modif" id="val_round_modif" value="2">
+                            </div>
+                            <input type="range" class="form-range val_round_modif bind_value border-radius" min="0" max="15" step="1" data-clase="border-radius"  id="range_round_modif" value="2">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Tamaño letra <i class="fa-solid fa-text-size"></i></label>
+                                <input type="number" class="form-control resize val_letra_modif bind_value font-size" min="0" max="5" data-clase="font-size"  required name="val_letra_modif" id="val_letra_modif" value="0.9">
+                            </div>
+                            <input type="range" class="form-range val_letra_modif bind_value font-size" min="0" max="5"  step="0.1"  data-clase="font-size"  id="range_letra_modif" value="0.9">
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn_select_all" class="btn btn-primary mr-3"><i class="fa-solid fa-ballot-check"></i> Seleccionar todos</button>
+                    <button type="button" id="btn_reset_modif" class="btn btn-danger mr-3"><i class="fa-solid fa-eraser"></i> Reset</button>
+                    <a class="btn btn-info" id="btn_guardar_modif" href="javascript:void(0)">Guardar</a>
+                    <button type="button" id="btn_cancel_modif" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
+                   
+                </div>
+            </div>
+        </div>
     </div>
 
 <script>
     $('.form-ajax').submit(form_ajax_submit);
     zoom_actual=100;
     var hacer_zoom;
+    var seleccionados=[];
 
     function zoom(){
 
@@ -190,18 +273,95 @@
         posiciones=[];
     }
 
+    //Empareja los valores de los edigores y los range en el modal de modificacion de apariencia
+    $('.bind_value').change(function(){
+        console.log('bind '+$(this).data('clase'));
+        $('.'+$(this).data('clase')).val($(this).val());
+        if($(this).data('clase')=='font-size'){
+            $('.seleccionado').find('span').css($(this).data('clase'),$(this).val()+'vw');
+        } else {
+            $('.seleccionado').css($(this).data('clase'),$(this).val()+'px');
+        }
+        $('.'+$(this).data('clase')).addClass('edited');
+    })
+
+    //Para marcar los puestos como seleccionados y despues modificarlos con el boton de modificar
+    $('.flpuesto').click(function(){
+        if($(this).hasClass('seleccionado')){
+            $(this).removeClass('seleccionado');
+            seleccionados.splice(seleccionados.indexOf($(this).data('id')),1);
+        } else {
+            $(this).addClass('seleccionado');
+            seleccionados.push($(this).data('id'));
+        }
+        $('#btn_custom').html('Modificar ('+seleccionados.length+')');
+        if(seleccionados.length>0){
+            $('#btn_custom').show();
+        } else {
+            $('#btn_custom').hide();
+        }
+    })
+
+    //Borrar la seeccion de puestos
+    $('#img_fondo').click(function(){
+        $('.seleccionado').removeClass('seleccionado');
+        seleccionados=[];
+        $('#btn_custom').hide();
+    })
+
+    //Seleccionar todos los puestos
+    $('#btn_select_all').click(function(){
+        $('.flpuesto').addClass('seleccionado');
+        seleccionados=[];
+        $('.flpuesto').each(function(){
+            seleccionados.push($(this).data('id'));
+        })
+        $('#btn_custom').html('Modificar ('+seleccionados.length+')');
+        $('#btn_custom').show();
+    })
+
+    //Modal de modificacion de apariencia
+    $('#btn_custom').click(function(){
+        $('#modal-modif').modal('show');
+        $('#cuenta_puestos').html(seleccionados.length);
+    })
+
+    //Guarda los cambios de apariencia de los puestos seleccionados
+    $('#btn_guardar_modif').click(function(){
+        var data={};
+        data._token="{{ csrf_token() }}";
+        data.id=seleccionados;
+        if ($('#val_alto_modif').hasClass('edited')) { data.height=$('#val_alto_modif').val()*100/$('#plano').height()};
+        if ($('#val_ancho_modif').hasClass('edited')) { data.width=$('#val_ancho_modif').val()*100/$('#plano').width()};
+        if ($('#val_borde_modif').hasClass('edited')) { data['border']=$('#val_borde_modif').val()};
+        if ($('#val_round_modif').hasClass('edited')) { data['roundness']=$('#val_round_modif').val()};
+        if ($('#val_letra_modif').hasClass('edited')) { data['font']=$('#val_letra_modif').val()};
+        $.ajax({
+            url: '{{route('plantas.puestos.custom')}}',
+            type: 'POST',
+            data: data,
+            success: function (data) {
+                toast_ok('Modificar puestos',data.message);
+                $('#modal-modif').modal('hide');
+            }
+        });
+    });
+    $('#btn_reset_modif').click(function(){
+        var data={};
+        data._token="{{ csrf_token() }}";
+        data.id=seleccionados;
+        $.ajax({
+            url: '{{route('plantas.puestos.custom_reset')}}',
+            type: 'POST',
+            data: data,
+            success: function (data) {
+                toast_ok('Resetear modificacion de puestos',data.message);
+                $('#modal-modif').modal('hide');
+            }
+        });
+    });
 
     $( function() {
-        $( ".puesto_child" ).resizable(
-            { animate: true,
-            ghost: true,
-            handles: 'n,s,e,w,ne,se,nw,sw',
-            start: function (event, ui) { startResize(event, ui); },
-            resize: function (event, ui) { monitorResize(event, ui); },
-            stop: function (event, ui) { stopResize(event, ui); }
-        }
-        );
-        
         $( ".draggable" ).draggable({
             containment: "parent",
             grid: [ 5, 5 ],
@@ -219,30 +379,30 @@
         pw_def.noUiSlider.on('update', function( values, handle ) {
             pw_def_value.innerHTML = values[handle];
             //$('.flpuesto').css('width',values[handle]+'vw');
-            console.log('w: '+parseInt($('#plano').css('width')));
-            $('.flpuesto').css('width',parseInt($('#plano').css('width'))*(values[handle]/100)+'px');
+            //console.log('w: '+parseInt($('#plano').css('width')));
+            $('.flpuesto:not(.custom)').css('width',parseInt($('#plano').css('width'))*(values[handle]/100)+'px');
             $('#factor_puestow').val(values[handle]);
         });
         ph_def.noUiSlider.on('update', function( values, handle ) {
             ph_def_value.innerHTML = values[handle];
             //$('.flpuesto').css('height',values[handle]+'vh');
-            console.log('h: '+$('#plano').css('height'));
-            $('.flpuesto').css('height',parseInt($('#plano').css('height'))*(values[handle]/100)+'px');
+            //console.log('h: '+$('#plano').css('height'));
+            $('.flpuesto:not(.custom)').css('height',parseInt($('#plano').css('height'))*(values[handle]/100)+'px');
             $('#factor_puestoh').val(values[handle]);
         });
         pr_def.noUiSlider.on('update', function( values, handle ) {
             pr_def_value.innerHTML = values[handle];
-            $('.flpuesto').css('border-radius',values[handle]+'px');
+            $('.flpuesto:not(.custom)').css('border-radius',values[handle]+'px');
             $('#factor_puestor').val(values[handle]);
         });
         pb_def.noUiSlider.on('update', function( values, handle ) {
             pb_def_value.innerHTML = values[handle];
-             $('.flpuesto').css('border-width',values[handle]+'px');
+             $('.flpuesto:not(.custom)').css('border-width',values[handle]+'px');
             $('#factor_puestob').val(values[handle]);
         });
         l_def.noUiSlider.on('update', function( values, handle ) {
             l_def_value.innerHTML = values[handle];
-            $('.texto_puesto').css('font-size',values[handle]+'vw');
+            $('.texto_puesto:not(.custom)').css('font-size',values[handle]+'vw');
             $('#factor_letra').val(values[handle]);
         });
         g_def.noUiSlider.on('update', function( values, handle ) {
@@ -264,7 +424,7 @@
             $('#factor_transp').val(values[handle]);
             $('#img_fondo').css('opacity',values[handle]/100);
         });
-    } );
+    });
 
     $('#btn_guardar').click(function(){
         //event.preventDefault();

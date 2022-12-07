@@ -217,6 +217,7 @@ return [
         Riverskies\Laravel\MobileDetect\MobileDetectServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         Slides\Saml2\ServiceProvider::class,
+        Tremby\LaravelGitVersion\GitVersionServiceProvider::class,
 
     ],
 

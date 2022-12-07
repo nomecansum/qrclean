@@ -202,16 +202,16 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Ancho <i class="fa-solid fa-arrows-left-right"></i></label>
-                                <input type="number" class="form-control resize val_ancho_modif bind_value width" min="0" max="200" data-clase="width"  required name="val_ancho_modif" id="val_ancho_modif" value="5">
+                                <input type="number" class="form-control resize val_ancho_modif bind_value width" min="0" max="400" data-clase="width"  required name="val_ancho_modif" id="val_ancho_modif" value="5">
                             </div>
-                            <input type="range" class="form-range val_ancho_modif bind_value width" min="0" max="200" step="1" data-clase="width"  id="range_ancho_modif" value="5">
+                            <input type="range" class="form-range val_ancho_modif bind_value width" min="0" max="400" step="1" data-clase="width"  id="range_ancho_modif" value="5">
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Alto <i class="fa-solid fa-arrows-up-down"></i></label>
-                                <input type="number" class="form-control resize val_alto_modif bind_value height" min="0" max="200" data-clase="height"  required name="val_alto_modif" id="val_alto_modif" value="5">
+                                <input type="number" class="form-control resize val_alto_modif bind_value height" min="0" max="400" data-clase="height"  required name="val_alto_modif" id="val_alto_modif" value="5">
                             </div>
-                            <input type="range" class="form-range val_alto_modif bind_value height" min="0" max="200" step="1" data-clase="height"  id="range_alto_modif" value="5">
+                            <input type="range" class="form-range val_alto_modif bind_value height" min="0" max="400" step="1" data-clase="height"  id="range_alto_modif" value="5">
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
@@ -331,7 +331,10 @@
         }
         $('#cuenta_puestos').html(seleccionados.length);
     })
-
+    $(".modal-dialog").draggable({
+        cursor: "move",
+        handle: ".dragable_touch",
+    });
 
     //Guarda los cambios de apariencia de los puestos seleccionados
     $('#btn_guardar_modif').click(function(){

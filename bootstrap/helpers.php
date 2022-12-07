@@ -1674,3 +1674,13 @@ function enviar_request_salas($metodo,$accion,$param,$body,$id_cliente){
        ];
 }
 
+function gitVersion()
+{
+    // exec('git describe --always',$version_mini_hash);
+    // exec('git log -1',$line);
+    // $version=Tremby\LaravelGitVersion\GitVersionHelper::getVersion()
+    // // $version['short'] = "v1.".trim($version_number[0]);//.".".$version_mini_hash[0];
+    // // $version['full'] = "v1.".trim($version_number[0]).".$version_mini_hash[0] (".str_replace('commit ','',$line[0]).")";
+    // return $version_mini_hash.' '.$version;
+    
+}

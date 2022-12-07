@@ -1,5 +1,5 @@
 <div class="content__wrap py-3 py-md-1 border-top d-flex flex-column flex-md-row align-items-md-center">
-    <div class="text-nowrap mb-4 mb-md-0">Copyright &copy; 2022 <a href="{{ config('app.url') }}" class="ms-1 btn-link fw-bold">{{ config('app.name') }}</a> {{ config('app.env') }} [{{ Tremby\LaravelGitVersion\GitVersionHelper::getNameAndVersion() }}]</div>
+    <div class="text-nowrap mb-4 mb-md-0">Copyright &copy; 2022 <a href="{{ config('app.url') }}" class="ms-1 btn-link fw-bold">{{ config('app.name') }}</a> {{ config('app.env') }}</div>
     
     @desktop
     <nav class="nav flex-column gap-1 flex-md-row gap-md-3 ms-md-auto me-5" style="row-gap: 0 !important;">

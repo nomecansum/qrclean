@@ -56,6 +56,11 @@
                     </div>
                 </form>
             </div>
+
+            @if(config('app.env') == 'local')
+                <div>{{ env('DB_DATABASE') }}</div>
+            @endif
+            
         </div>
         <!-- End - Content Header - Left Side -->
 

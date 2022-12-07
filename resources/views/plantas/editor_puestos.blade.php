@@ -186,10 +186,10 @@
 
     </div>
 
-    <div class="modal fade" id="modal-modif" style="display: none;">
+    <div class="modal fade dragable_modal" id="modal-modif" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header dragable_touch">
                     <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
                     <h3 class="modal-title">Modificar apariencia de <span id_="cuenta_puestos"></span> puestos </h3>
                     <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
@@ -323,8 +323,15 @@
     //Modal de modificacion de apariencia
     $('#btn_custom').click(function(){
         $('#modal-modif').modal('show');
+        if (!$(".modal.in").length) {
+            $(".modal-dialog").css({
+                top: 20,
+                left: 100,
+            });
+        }
         $('#cuenta_puestos').html(seleccionados.length);
     })
+
 
     //Guarda los cambios de apariencia de los puestos seleccionados
     $('#btn_guardar_modif').click(function(){

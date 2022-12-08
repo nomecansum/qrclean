@@ -43,8 +43,8 @@
 
 
        @php
-           $d=1/0;
-       @endphp
+        dump(Storage::disk(config('app.img_disk'))->url('/img'));
+    @endphp
     </div>
 </div>
 

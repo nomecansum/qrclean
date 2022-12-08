@@ -230,7 +230,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="">Tamaño letra <i class="fa-solid fa-text-size"></i></label>
-                                <input type="number" class="form-control resize val_letra_modif bind_value font-size" min="0" max="5" data-clase="font-size"  required name="val_letra_modif" id="val_letra_modif" value="0.9">
+                                <input type="number" class="form-control resize val_letra_modif bind_value font-size" min="0" max="5" step="0.1" data-clase="font-size"  required name="val_letra_modif" id="val_letra_modif" value="0.9">
                             </div>
                             <input type="range" class="form-range val_letra_modif bind_value font-size" min="0" max="5"  step="0.1"  data-clase="font-size"  id="range_letra_modif" value="0.9">
                         </div>

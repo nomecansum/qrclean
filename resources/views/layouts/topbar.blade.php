@@ -112,9 +112,9 @@
                     <!-- User dropdown header -->
                     <div class="d-flex align-items-center border-bottom p-3">
                         <div class="flex-shrink-0">
-
+                           
                             @if (isset(Auth::user()->img_usuario ) && Auth::user()->img_usuario!='')
-                                <img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.Auth::user()->img_usuario) }}" class="img-md rounded-circle">
+                                <img src="{{ Storage::disk(config('app.img_disk'))->url('/img/users/'.Auth::user()->img_usuario) }}" class="img-md rounded-circle">
                             @else
                             {!! icono_nombre(Auth::user()->name,50,18) !!}
                             @endif

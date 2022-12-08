@@ -17,7 +17,7 @@
         "darkaonline/l5-swagger": "^8.3",
         "dragonmantank/cron-expression": "^3.3",
         "fideloper/proxy": "^4.0",
-        "fruitcake/laravel-cors": "^2.0",
+        "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.5",
         "jenssegers/agent": "^2.6",

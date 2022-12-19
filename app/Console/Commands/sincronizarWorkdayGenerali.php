@@ -63,25 +63,34 @@ class sincronizarWorkdayGenerali extends Command
     }
     
     static function params(){
-
+        // {
+        //     "label": "Edificio",
+        //     "name": "id_edificio",
+        //     "tipo": "list_db",
+        //     "multiple": true, 
+        //     "sql": "SELECT DISTINCT \n
+        //                 `edificios`.`des_edificio` as id, \n
+        //                 concat(\'[\',nom_cliente,\'] - \',`edificios`.`des_edificio`) as nombre  \n
+        //             FROM \n
+        //                 `edificios` \n
+        //                 INNER JOIN `clientes` ON (`edificios`.`id_cliente` = `clientes`.`id_cliente`) \n
+        //             WHERE \n
+        //             `edificios`.`id_cliente` in('.sincronizarWorkdayGenerali::clientes().')  \n
+        //             ORDER BY 2", 
+        //     "required": true,
+        //     "buscar": true
+        // },
         $params='{
             "parametros":[
+                
                 {
                     "label": "Edificio",
                     "name": "id_edificio",
-                    "tipo": "list_db",
-                    "multiple": true, 
-                    "sql": "SELECT DISTINCT \n
-                                `edificios`.`des_edificio` as id, \n
-                                concat(\'[\',nom_cliente,\'] - \',`edificios`.`des_edificio`) as nombre  \n
-                            FROM \n
-                                `edificios` \n
-                                INNER JOIN `clientes` ON (`edificios`.`id_cliente` = `clientes`.`id_cliente`) \n
-                            WHERE \n
-                            `edificios`.`id_cliente` in('.sincronizarWorkdayGenerali::clientes().')  \n
-                            ORDER BY 2", 
-                    "required": true,
-                    "buscar": true
+                    "tipo": "list",
+                    "multiple": true,
+                    "list": "BARCELONA-PEDROSA|BARCELONA TORRECERD\u00C1",
+                    "values": "41|41",
+                    "required": true
                 },
                 {
                     "label": "Perfil por defecto",

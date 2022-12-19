@@ -364,40 +364,36 @@ class TareasController extends Controller
             $className = 'App\\Console\\Commands\\' . str_replace(".php","",$r->comando);
             $controller =  new $className;
             $parametros=[];
+            $tareas=null;
+			if (file_exists($fic_comando)){
+				$parametros=decodeComplexJson($controller->params());
+				if($parametros!=""){
+					$parametros=$parametros->parametros;//Esto es porque el JSON lleva un nodo que se llama parametros
+				}
+			} else{
+				return response()->json([
+					"response" => "ERROR",
+					"error" => "No existe el comando ".$r->comando,
+					"TS" => Carbon::now()->format('Y-m-d h:i:s')
+					],400)->throwResponse();
+			}
             if ($id!=0){
 				//Regla existente, recuperamos de la bdd la info y la pasamos a la vista
                 $tareas=tareas::find($id);
                 if($tareas->val_parametros!=[] && $tareas->nom_comando==$r->comando){
-                    $parametros=json_decode($tareas->val_parametros);
-                }else {
-                    //Si los parametros estan vacios porque los hemos añadio despues, los volvemos a leer del PHP
-                    $parametros=decodeComplexJson($controller->params());
-                    if($parametros!=""){
-                        $parametros=$parametros->parametros;//Esto es porque el JSON lleva un nodo que se llama parametros
-                    }
+                    $parametros_tarea=json_decode($tareas->val_parametros);
                 }
-				$descripcion=$controller->definicion();
-                return view('tasks.param_comando',compact('parametros','descripcion','tareas','id'));
-            } else {
-                //Regla nueva, leemos fichero de comando y pasamos los parametros
-                if (file_exists($fic_comando)){
-					$className = 'App\\Console\\Commands\\' . str_replace(".php","",$r->comando);
-					$controller =  new $className;
-					$descripcion=$controller->definicion();
-					$grupo=$controller->grupo();
-					$parametros=decodeComplexJson($controller->params());
-					if($parametros!=""){
-						$parametros=$parametros->parametros;//Esto es porque el JSON lleva un nodo que se llama parametros
+				foreach($parametros_tarea as $p_t){
+					foreach($parametros as $p){
+						if(isset($p_t->value) && $p->name==$p_t->name){
+							$p->value=$p_t->value;
+						}
 					}
-                    return view('tasks.param_comando',compact('parametros','descripcion','grupo'));
-                } else{
-                    return response()->json([
-                        "response" => "ERROR",
-                        "error" => trans('tareas.no_existe_comando')." ".$r->comando,
-                        "TS" => Carbon::now()->format('Y-m-d h:i:s')
-                        ],400)->throwResponse();
-                }
-            }
+				}
+                $descripcion=$controller->definicion();
+                
+            } 
+			return view('tasks.param_comando',compact('parametros','descripcion','tareas','id'));
 
             } catch(\Exception $e){
             return response()->json([

@@ -619,6 +619,12 @@
             
         })
 
+        $('#formbuscador').submit(function(event){
+            $('.fixed-table-footer').hide();
+            $('.fixed-table-pagination').hide();
+            $("nav[role='navigation']").hide();
+        })
+
 
 
     </script>

@@ -74,10 +74,10 @@
 
         {{-- Campo numerico --}}
         @if($p->tipo=="num")
-            <div class="col-md-{{ $p->width??3 }}"  {{ $margin }}>
+            <div class="col-md-3"  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name }}">{{ $p->label }}</label><br>
-                    <input type="number" name="{{ $p->name }}" id="{{ $p->name }}" class="form-control col-10" value="{{ isset($p->value)&&!is_array($p->value)? $p->value : $p->def }}" {{ $p->required==true?'required':'' }}>
+                    <input type="number" name="{{ $p->name }}" id="{{ $p->name }}" {{ isset($p->min)?'min='.$p->min:'' }} {{ isset($p->max)?'max='.$p->max:'' }} class="form-control col-10" value="{{ isset($p->value)&&!is_array($p->value)? $p->value : $p->def }}" {{ $p->required==true?'required':'' }}>
                 </div>
             </div>
         @endif

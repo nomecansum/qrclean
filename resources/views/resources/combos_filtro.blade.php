@@ -261,6 +261,13 @@
     </div>
 </div>
 
+<div class="form-group  col-md-12 mt-3" style="{{ (isset($show['u_l']) && $show['u_l']==1) ? '' : 'display: none'  }}">
+    <label>Lista de usuarios (separada por ,)</label>
+    <div class="form-control">
+        <textarea name="user_list" style="width: 98%" cols="80" rows="3"></textarea>
+    </div>
+</div>
+
 <div class="row mt-5" style="{{ (isset($hide['btn']) && $hide['btn']==1) ? 'display: none' : ''  }}">
     <div class="col-md-12 text-end mb-3">
         <button id="btn_submit" class="btn btn-primary btn-lg float-right"><i class="fa fa-search"></i> {{ $etiqueta_boton??'Ver' }}</button>

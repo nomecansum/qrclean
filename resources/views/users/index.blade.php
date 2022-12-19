@@ -82,7 +82,7 @@
             <form method="post" name="form_puestos" id="formbuscador" action="{{ url('users/search') }}" class>
                 @csrf
                 <input type="hidden" name="document" value="pantalla">
-                @include('resources.combos_filtro',[$hide=['tag'=>1,'est_inc'=>1,'pue'=>1,'est'=>1,'tip_mark'=>1,'tip_inc'=>1],$show=['dep'=>1,'perfil'=>1,'tur'=>1,'col'=>1]])
+                @include('resources.combos_filtro',[$hide=['tag'=>1,'est_inc'=>1,'pue'=>1,'est'=>1,'tip_mark'=>1,'tip_inc'=>1],$show=['dep'=>1,'perfil'=>1,'tur'=>1,'col'=>1,'u_l'=>1]])
             </form>
         </div>
         

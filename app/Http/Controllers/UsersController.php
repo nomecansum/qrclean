@@ -105,6 +105,18 @@ class UsersController extends Controller
         })
         ->when($r->cod_colectivo, function($q) use($r){
             $q->whereRaw('users.id in (select id_usuario from colectivos_usuarios where cod_colectivo in ('.implode(",",$r->cod_colectivo).'))');
+        })  
+        ->when($r->user_list, function($q) use($r){
+            try{
+                $r->user_list=str_replace(" ","",$r->user_list);
+                $r->user_list=str_replace("\r","",$r->user_list);
+                $r->user_list=str_replace("\n","",$r->user_list);
+                $r->user_list=strtolower($r->user_list);
+                $arr_lista=explode(",",$r->user_list);
+                $q->wherein('users.email',$arr_lista);
+            } catch(Exception $e){
+            }
+           
         })
         ->when($r->supervisor, function($q) use($r){
             $q->wherein('users.id_usuario_supervisor',$r->supervisor);

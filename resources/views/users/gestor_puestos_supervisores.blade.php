@@ -16,6 +16,20 @@
     display:block;
     bottom:0;
 }
+table {
+    text-align: left;
+    position: relative;
+    border-collapse: collapse;
+    }
+    th, td {
+    padding: 0.25rem;
+    }
+    th {
+    background: white;
+    position: sticky;
+    top: 0; /* Don't forget this, required for the stickiness */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+    }
 </style>
 @endsection
 
@@ -58,7 +72,7 @@
 				<h3 class="card-title">Gestor de puestos para supervisores</h3>
 			</div>
 			<div class="card-body">
-				<table id="myTable" class="table table-condensed table-hover table-responsive-lg">
+				<table id="myTable" class="">
 					<thead>
 						<tr>
                             <th style="width: 180px"></th>

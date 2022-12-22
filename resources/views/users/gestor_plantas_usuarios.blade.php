@@ -16,6 +16,20 @@
         display:block;
         bottom:0;
     }
+    table {
+    text-align: left;
+    position: relative;
+    border-collapse: collapse;
+    }
+    th, td {
+    padding: 0.25rem;
+    }
+    th {
+    background: white;
+    position: sticky;
+    top: 0; /* Don't forget this, required for the stickiness */
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+    }
     </style>
 @endsection
 
@@ -58,13 +72,15 @@
 				<h3 class="card-title">Gestor de plantas por usuarios</h3>
 			</div>
 			<div class="card-body">
-				<table id="tabla" class="table table-condensed table-hover  table-responsive-lg">
+
+                
+				<table id="tabla" class="">
 					<thead>
 						<tr>
 							
 							<th></th>
                             @foreach ($plantas as $planta)
-                                <th data-sortable="true" style="font-size: 12px;" class="tdplanta" data-checked="false" data-planta="{{ $planta->id_planta }}" title="{{ $planta->des_planta }}"><div class="vertical" style="margin-left: 10px;">{{ acronimo($planta->des_planta,30) }}</div></th>
+                                <th style="font-size: 12px;" class="tdplanta"data-planta="{{ $planta->id_planta }}" title="{{ $planta->des_planta }}"><div class="vertical" style="margin-left: 10px;">{{ acronimo($planta->des_planta,30) }}</div></th>
                             @endforeach
 						</tr>
 					</thead>
@@ -76,7 +92,7 @@
                             <tr>
                                 <td class="tduser" data-usuario="{{ $u->id }}" data-checked="false">{{ $u->name }}</td>
                                 @foreach($plantas as $pl)
-                                    <td class="text-center" title="{{ $pl->des_planta }} -> {{ $u->name }}" id="pastilla_{{ $u->id }}_{{ $pl->id_planta }}" >
+                                    <td class="text-center" style="padding-left:20px" title="{{ $pl->des_planta }} -> {{ $u->name }}" id="pastilla_{{ $u->id }}_{{ $pl->id_planta }}" >
                                         <div class="form-check pt-2">
                                             <input  name="chk_{{ $u->id }}_{{ $pl->id_planta }}"  id="chk_{{ $u->id }}_{{ $pl->id_planta }}" data-usuario="{{ $u->id }}"  data-planta="{{ $pl->id_planta }}" {{ in_array($pl->id_planta,$asignadas)?'checked':'' }} class="form-check-input chkplanta" type="checkbox">
                                             <label class="form-check-label" for="chk_{{ $u->id }}_{{ $pl->id_planta }}"></label>

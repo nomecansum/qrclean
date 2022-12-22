@@ -364,7 +364,8 @@ class TareasController extends Controller
             $className = 'App\\Console\\Commands\\' . str_replace(".php","",$r->comando);
             $controller =  new $className;
             $parametros=[];
-            $tareas=null;
+			$parametros_tarea=[];
+			$tareas=null;
 			if (file_exists($fic_comando)){
 				$parametros=decodeComplexJson($controller->params());
 				if($parametros!=""){
@@ -391,8 +392,7 @@ class TareasController extends Controller
 					}
 				}
                 $descripcion=$controller->definicion();
-                
-            } 
+            }
 			return view('tasks.param_comando',compact('parametros','descripcion','tareas','id'));
 
             } catch(\Exception $e){

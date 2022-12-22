@@ -51,7 +51,7 @@ class UsersController extends Controller
                 $q->wherein('users.id',$usuarios_supervisados);
             }
         })
-        ->paginate(50);            
+        ->get();            
 
         //$usersObjects = users::with('grupo','perfile')->paginate(25);
 
@@ -107,14 +107,22 @@ class UsersController extends Controller
             $q->whereRaw('users.id in (select id_usuario from colectivos_usuarios where cod_colectivo in ('.implode(",",$r->cod_colectivo).'))');
         })  
         ->when($r->user_list, function($q) use($r){
-            try{
+            
                 $r->user_list=str_replace(" ","",$r->user_list);
-                $r->user_list=str_replace("\r","",$r->user_list);
-                $r->user_list=str_replace("\n","",$r->user_list);
+                // $r->user_list=str_replace("\r","",$r->user_list);
+                // $r->user_list=str_replace("\n","",$r->user_list);
                 $r->user_list=strtolower($r->user_list);
-                $arr_lista=explode(",",$r->user_list);
-                $q->wherein('users.email',$arr_lista);
-            } catch(Exception $e){
+                if(strpos($r->user_list,","))
+                    $arr_lista=explode(",",$r->user_list);
+                else if(strpos($r->user_list,";"))
+                    $arr_lista=explode(";",$r->user_list);
+                else if(strpos($r->user_list,"|"))
+                    $arr_lista=explode("|",$r->user_list);
+                else if(strpos($r->user_list,"\r\n"))
+                    $arr_lista=explode("\r\n",$r->user_list);
+                
+                    $q->wherein('users.email',$arr_lista);
+                try{ } catch(Exception $e){
             }
            
         })

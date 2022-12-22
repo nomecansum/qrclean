@@ -137,7 +137,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $usersObjects->links() }}
+                {{-- {{ $usersObjects->links() }} --}}
             </div>
             @endif
         </div>
@@ -330,6 +330,13 @@
         var searchIDs;
         $('#formbuscador').submit(ajax_filter);
 
+        //Busqueda de la tabla
+        function customSearch(data, text) {
+            console.log(text);
+            $('#myfilter').empty();
+            // return data.filter(function (row) {
+            // return row.price.indexOf(text) > -1
+        }
         
         function del(id){
             id_usuario_borrar = id;

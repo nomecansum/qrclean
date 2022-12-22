@@ -14,6 +14,7 @@ use App\Models\departamentos;
 use App\Models\edificios;
 use App\Models\niveles_acceso;
 use App\Models\turnos;
+use App\Models\puestos;
 use Str;
 
 class sincronizarWorkdayGenerali extends Command
@@ -67,7 +68,7 @@ class sincronizarWorkdayGenerali extends Command
         //     "label": "Edificio",
         //     "name": "id_edificio",
         //     "tipo": "list_db",
-        //     "multiple": true, 
+        //     "multiple": true,
         //     "sql": "SELECT DISTINCT \n
         //                 `edificios`.`des_edificio` as id, \n
         //                 concat(\'[\',nom_cliente,\'] - \',`edificios`.`des_edificio`) as nombre  \n
@@ -76,7 +77,7 @@ class sincronizarWorkdayGenerali extends Command
         //                 INNER JOIN `clientes` ON (`edificios`.`id_cliente` = `clientes`.`id_cliente`) \n
         //             WHERE \n
         //             `edificios`.`id_cliente` in('.sincronizarWorkdayGenerali::clientes().')  \n
-        //             ORDER BY 2", 
+        //             ORDER BY 2",
         //     "required": true,
         //     "buscar": true
         // },
@@ -89,14 +90,14 @@ class sincronizarWorkdayGenerali extends Command
                     "tipo": "list",
                     "multiple": true,
                     "list": "BARCELONA-PEDROSA|BARCELONA TORRECERD\u00C1",
-                    "values": "41|41",
+                    "values": "BARCELONA-PEDROSA|BARCELONA TORRECERD\u00C1",
                     "required": true
                 },
                 {
                     "label": "Perfil por defecto",
                     "name": "cod_nivel",
                     "tipo": "list_db",
-                    "multiple": false, 
+                    "multiple": false,
                     "sql": "SELECT DISTINCT \n
                                 `niveles_acceso`.`cod_nivel` as id, \n
                                 concat(\'[\',nom_cliente,\'] - \',`niveles_acceso`.`des_nivel_acceso`) as nombre  \n
@@ -106,7 +107,7 @@ class sincronizarWorkdayGenerali extends Command
                             WHERE \n
                             `niveles_acceso`.`id_cliente` in('.sincronizarWorkdayGenerali::clientes().') \n
                             or mca_fijo=\'S\'  \n
-                            ORDER BY 2", 
+                            ORDER BY 2",
                     "required": true,
                     "buscar": true,
                     "width": 6
@@ -115,7 +116,7 @@ class sincronizarWorkdayGenerali extends Command
                     "label": "Perfil supervisores",
                     "name": "cod_nivel_supervisor",
                     "tipo": "list_db",
-                    "multiple": false, 
+                    "multiple": false,
                     "sql": "SELECT DISTINCT \n
                                 `niveles_acceso`.`cod_nivel` as id, \n
                                 concat(\'[\',nom_cliente,\'] - \',`niveles_acceso`.`des_nivel_acceso`) as nombre  \n
@@ -125,7 +126,7 @@ class sincronizarWorkdayGenerali extends Command
                             WHERE \n
                             `niveles_acceso`.`id_cliente` in('.sincronizarWorkdayGenerali::clientes().') \n
                             or mca_fijo=\'S\'  \n
-                            ORDER BY 2", 
+                            ORDER BY 2",
                     "required": true,
                     "buscar": true,
                     "width": 6,
@@ -217,7 +218,7 @@ class sincronizarWorkdayGenerali extends Command
         return $dato->cod_colectivo;
     }
 
-    static function insertar_usu($id,$nombre,$cliente,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno){
+    static function insertar_usu($id,$nombre,$cliente,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno,$puesto,$planta){
         if($id!=null){
             $dato=users::find($id);
             if($nivel->val_nivel_acceso>$dato->val_nivel_acceso){
@@ -248,6 +249,69 @@ class sincronizarWorkdayGenerali extends Command
         if(isset($turno)){
             DB::table('turnos_usuarios')->where('id_usuario',$dato->id)->delete();
             DB::table('turnos_usuarios')->insert(['id_turno'=>$turno->id_turno,'id_usuario'=>$dato->id]);
+        }
+
+    
+        //planta
+        if(isset($planta)){
+            //Cagada con la baja
+            if($planta==0){
+                $txt_planta='B';
+            } else if($planta==-1) {
+                $txt_planta='S1';
+            } else if($planta==-2) {
+                $txt_planta='S2';
+            } else {
+                $txt_planta=lz($planta,2);
+            }
+            $id_planta=DB::table('plantas')->where('id_cliente',$cliente)->where('id_edificio',$edificio)->where('abreviatura',$txt_planta)->first();
+            if(isset($id_planta)){
+                $planta=$id_planta->id_planta;
+                $esta=DB::table('plantas_usuario')->where('id_usuario',$dato->id)->where('id_planta',$planta)->first();
+                if(!isset($esta)){
+                    DB::table('plantas_usuario')->insert(['id_planta'=>$planta,'id_usuario'=>$dato->id]);
+                }
+            }
+            
+        }
+
+        //El puesto
+        if(isset($puesto)){
+            if($dato->list_puestos_preferidos!=null){
+                $puestos_preferidos=json_decode($dato->list_puestos_preferidos);
+            } else {
+                $puestos_preferidos=json_decode("[{
+                    \"id\": 20,
+                    \"tipo\": \"ul\",
+                    \"text\": \"Ultimas 20 reservas\",
+                    \"color\": \"rgba(0, 0, 0, 0)\"
+                }]");
+            }
+            $txt_puesto=lz($puesto,3);
+            $puesto=edificios::where('id_edificio',$edificio)->first()->abreviatura.'-'.$txt_planta.'-WS-'.$txt_puesto;
+            $datos_puesto=puestos::where('cod_puesto',$puesto)->first();
+            if(isset($datos_puesto))
+            {
+                $id_puesto=$datos_puesto->id_puesto;
+                //Ahopra a ponerselo en las preferencias de reservas
+                $ya_esta=collect($puestos_preferidos)->where('id',$id_puesto)->first();
+                if(!isset($ya_esta)){
+                    foreach($puestos_preferidos as $key=>$p){
+                        if($p->tipo=='pu' && $p->id!=$id_puesto){
+                            $nuevo=new \stdClass();
+                            $nuevo->id=$id_puesto;
+                            $nuevo->tipo='pu';
+                            $nuevo->text='S '.$txt_puesto;
+                            $nuevo->color="rgb(239, 195, 230)";
+                            $nuevo->icono="<i class=\"fa-solid fa-chair-office\"></i> Puesto  ";
+                            $nuevo->workday=true;
+                            array_splice($puestos_preferidos,$key,0,[$nuevo]);
+                        }
+                    }
+                }
+                $dato->list_puestos_preferidos=json_encode($puestos_preferidos);
+                $dato->save();
+            }
         }
         return $dato->id;
     }
@@ -370,6 +434,8 @@ class sincronizarWorkdayGenerali extends Command
                         $nombre=$item['NOMBRE'].' '.($item['APELLIDO_1']??'').' '.($item['APELLIDO_2']??'');
                         $id_externo=$item['CODIGO_EMPLEADO'];
                         $email=$item['MAIL']??null;
+                        $puesto=$item['PUESTO']??null;
+                        $planta=$item['PLANTA']??null;
                         $email=isset($email)?strtolower($email):null;
                         $usuario=users::where('id_cliente',$tarea->clientes)
                             ->where(function($q) use($email,$id_externo){
@@ -420,7 +486,7 @@ class sincronizarWorkdayGenerali extends Command
                             }
                         }
                         if($email){
-                            $this->insertar_usu($usuario,$nombre,$tarea->clientes,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno);
+                            $this->insertar_usu($usuario,$nombre,$tarea->clientes,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno,$puesto,$planta);
                             $this->escribelog_comando('info',$usuario==null?'Usuario creado: '.$nombre:'Usuario actualizado: '.$nombre.' ['.$nivel->cod_nivel.']');
                         } else {
                             $this->escribelog_comando('error','Usuario no creado, no tiene email: '.$nombre);
@@ -458,7 +524,10 @@ class sincronizarWorkdayGenerali extends Command
                 
 
                 // //Borramos los que sobran
-                users::where('id_cliente',$tarea->clientes)->where('sync_at','<',Carbon::now()->subminutes(2))->update(['deleted_at'=>Carbon::now()]);
+                users::where('id_cliente',$tarea->clientes)->where('sync_at','<',Carbon::now()->subminutes(5))->update(['deleted_at'=>Carbon::now()]);
+
+                //Actualizamos el edificio TORRECERDA
+                DB::table('users')->where('id_edificio',110)->update(['id_edificio'=>41]);
             }
             $this->escribelog_comando('info','Fin de la tarea programada ['.$this->argument('id').']'.__CLASS__);
         }

@@ -19,13 +19,13 @@ use Str;
 
 class sincronizarWorkdayGenerali extends Command
 {
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
     protected $signature = 'task:sincronizarWorkdayGenerali {id?} {origen=C} {--queue}'; //todas las tareas se tienen que llamar task:NOMBRE
-
     /**
      * The console command description.
      *
@@ -51,7 +51,7 @@ class sincronizarWorkdayGenerali extends Command
 
     function escribelog_comando($tipo,$mensaje){
         Log::$tipo($mensaje);
-        log_tarea($mensaje,$this->argument('id'),$tipo);   
+        log_tarea($mensaje,$this->argument('id'),$tipo);
     }
     
     static function clientes(){
@@ -59,7 +59,7 @@ class sincronizarWorkdayGenerali extends Command
             $clientes=implode(",",clientes());
         }   else {
             $clientes=implode(",",clientes()->ToArray());
-        } 
+        }
         return $clientes;
     }
     
@@ -218,7 +218,7 @@ class sincronizarWorkdayGenerali extends Command
         return $dato->cod_colectivo;
     }
 
-    static function insertar_usu($id,$nombre,$cliente,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno,$puesto,$planta){
+    static function insertar_usu($id,$nombre,$cliente,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno,$puesto,$planta,$id_tarea){
         if($id!=null){
             $dato=users::find($id);
             if($nivel->val_nivel_acceso>$dato->val_nivel_acceso){
@@ -276,7 +276,7 @@ class sincronizarWorkdayGenerali extends Command
         }
 
         //El puesto
-        if(isset($puesto)){
+        if(isset($puesto) && $puesto!='BENCH'){
             if($dato->list_puestos_preferidos!=null){
                 $puestos_preferidos=json_decode($dato->list_puestos_preferidos);
             } else {
@@ -287,8 +287,15 @@ class sincronizarWorkdayGenerali extends Command
                     \"color\": \"rgba(0, 0, 0, 0)\"
                 }]");
             }
+            if(strpos($puesto,'SWS')!==false){
+                $prefijo_puesto='SWS';
+                $puesto=str_replace('SWS','',$puesto);
+                $puesto=str_replace(' ','',$puesto);
+            } else {
+                $prefijo_puesto='WS';
+            }
             $txt_puesto=lz($puesto,3);
-            $puesto=edificios::where('id_edificio',$edificio)->first()->abreviatura.'-'.$txt_planta.'-WS-'.$txt_puesto;
+            $puesto=edificios::where('id_edificio',$edificio)->first()->abreviatura.'-'.$txt_planta.'-'.$prefijo_puesto.'-'.$txt_puesto;
             $datos_puesto=puestos::where('cod_puesto',$puesto)->first();
             if(isset($datos_puesto))
             {
@@ -296,21 +303,28 @@ class sincronizarWorkdayGenerali extends Command
                 //Ahopra a ponerselo en las preferencias de reservas
                 $ya_esta=collect($puestos_preferidos)->where('id',$id_puesto)->first();
                 if(!isset($ya_esta)){
+                    $encontrado=false;
                     foreach($puestos_preferidos as $key=>$p){
-                        if($p->tipo=='pu' && $p->id!=$id_puesto){
-                            $nuevo=new \stdClass();
-                            $nuevo->id=$id_puesto;
-                            $nuevo->tipo='pu';
-                            $nuevo->text='S '.$txt_puesto;
-                            $nuevo->color="rgb(239, 195, 230)";
-                            $nuevo->icono="<i class=\"fa-solid fa-chair-office\"></i> Puesto  ";
-                            $nuevo->workday=true;
-                            array_splice($puestos_preferidos,$key,0,[$nuevo]);
+                        if($p->tipo=='pu' && $p->id==$id_puesto){
+                           $encontrado=true;
                         }
+                    }
+                    if(!$encontrado){
+                        $nuevo=new \stdClass();
+                        $nuevo->id=$id_puesto;
+                        $nuevo->tipo='pu';
+                        $nuevo->text=$datos_puesto->des_puesto;
+                        $nuevo->color="rgb(239, 195, 230)";
+                        $nuevo->icono="<i class=\"fa-solid fa-chair-office\"></i> Puesto  ";
+                        $nuevo->workday=true;
+                        array_splice($puestos_preferidos,$key,0,[$nuevo]);
                     }
                 }
                 $dato->list_puestos_preferidos=json_encode($puestos_preferidos);
                 $dato->save();
+            } else {
+                Log::error('No se ha encontrado el puesto '.$puesto.' para el usuario '.$email);
+                log_tarea('No se ha encontrado el puesto '.$puesto.' para el usuario '.$email,$id_tarea,'error');
             }
         }
         return $dato->id;
@@ -406,7 +420,7 @@ class sincronizarWorkdayGenerali extends Command
                 foreach($datos as $item){
                     $des_edificio=$item['CENTRO_DE_TRABAJO']['@attributes']['Descriptor']??null;
                     if(isset($des_edificio) && in_array($des_edificio,$edificios_procesar)){
-                        $des_coletivo=$item['CECOS']['@attributes']['Descriptor']??null;   
+                        $des_coletivo=$item['CECOS']['@attributes']['Descriptor']??null;
                         $id_externo=$item['CECOS']['ID'][1];
                         $colectivo=colectivos::where('id_externo',$id_externo)->where('id_cliente',$tarea->clientes)->first();
                         if(!$colectivo){
@@ -486,7 +500,7 @@ class sincronizarWorkdayGenerali extends Command
                             }
                         }
                         if($email){
-                            $this->insertar_usu($usuario,$nombre,$tarea->clientes,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno,$puesto,$planta);
+                            $this->insertar_usu($usuario,$nombre,$tarea->clientes,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno,$puesto,$planta,$tarea->id_tarea);
                             $this->escribelog_comando('info',$usuario==null?'Usuario creado: '.$nombre:'Usuario actualizado: '.$nombre.' ['.$nivel->cod_nivel.']');
                         } else {
                             $this->escribelog_comando('error','Usuario no creado, no tiene email: '.$nombre);

@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\usuarios;
 use App\Models\salas;
 use App\Models\puestos;
+use Illuminate\Support\Facades\Log;
 
 class getEstructuraIncidenciasSalas implements ShouldQueue
 {
@@ -37,11 +38,12 @@ class getEstructuraIncidenciasSalas implements ShouldQueue
      */
     public function handle()
     {
-        $fecha=$this->fecha;
+        $fecha=Carbon::parse($this->fecha)->format('Y-m-d').'T'.Carbon::parse($this->fecha)->format('H:i:s');
         $cliente_salas=$this->cliente_salas;
         //Codigo para la resincronizacion de incidencias
        $url="get_estructura_incidencias_empresa_desde_fecha/".$fecha;
        $respuesta=enviar_request_salas("GET",$url,"","",$cliente_salas);
+       log::debug($respuesta);
        $respuesta=json_decode($respuesta['body']);
 
        //Sincronizamos las salas

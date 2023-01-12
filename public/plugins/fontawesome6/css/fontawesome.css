@@ -1,5 +1,5 @@
 /*!
- * Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com
+ * Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license (Commercial License)
  * Copyright 2022 Fonticons, Inc.
  */
@@ -1569,6 +1569,9 @@ readers do not read off random characters that represent icons */
 .fa-hockey-puck::before {
   content: "\f453"; }
 
+.fa-mustache::before {
+  content: "\e5bc"; }
+
 .fa-hyphen::before {
   content: "\2d"; }
 
@@ -2543,6 +2546,9 @@ readers do not read off random characters that represent icons */
 
 .fa-face-zany::before {
   content: "\e3a4"; }
+
+.fa-tricycle::before {
+  content: "\e5c3"; }
 
 .fa-land-mine-on::before {
   content: "\e51b"; }
@@ -4029,6 +4035,9 @@ readers do not read off random characters that represent icons */
 .fa-underline::before {
   content: "\f0cd"; }
 
+.fa-prescription-bottle-pill::before {
+  content: "\e5c0"; }
+
 .fa-user-pen::before {
   content: "\f4ff"; }
 
@@ -4127,6 +4136,9 @@ readers do not read off random characters that represent icons */
 
 .fa-face-downcast-sweat::before {
   content: "\e371"; }
+
+.fa-mailbox-flag-up::before {
+  content: "\e5bb"; }
 
 .fa-memo-circle-info::before {
   content: "\e49a"; }
@@ -4550,6 +4562,9 @@ readers do not read off random characters that represent icons */
 
 .fa-check-circle::before {
   content: "\f058"; }
+
+.fa-square-dashed-circle-plus::before {
+  content: "\e5c2"; }
 
 .fa-money-simple-from-bracket::before {
   content: "\e313"; }
@@ -5022,6 +5037,9 @@ readers do not read off random characters that represent icons */
 .fa-usd-square::before {
   content: "\f2e9"; }
 
+.fa-phone-arrow-right::before {
+  content: "\e5be"; }
+
 .fa-hand-holding-seedling::before {
   content: "\f4bf"; }
 
@@ -5369,6 +5387,9 @@ readers do not read off random characters that represent icons */
 
 .fa-comments-dollar::before {
   content: "\f653"; }
+
+.fa-pickaxe::before {
+  content: "\e5bf"; }
 
 .fa-link-simple-slash::before {
   content: "\e1ce"; }
@@ -6084,6 +6105,9 @@ readers do not read off random characters that represent icons */
 .fa-kitchen-set::before {
   content: "\e51a"; }
 
+.fa-diamond-half::before {
+  content: "\e5b7"; }
+
 .fa-lock-keyhole::before {
   content: "\f30d"; }
 
@@ -6194,6 +6218,9 @@ readers do not read off random characters that represent icons */
 
 .fa-user-astronaut::before {
   content: "\f4fb"; }
+
+.fa-interrobang::before {
+  content: "\e5ba"; }
 
 .fa-plane-slash::before {
   content: "\e069"; }
@@ -6338,6 +6365,9 @@ readers do not read off random characters that represent icons */
 
 .fa-image-user::before {
   content: "\e1b8"; }
+
+.fa-buoy::before {
+  content: "\e5b5"; }
 
 .fa-plane-departure::before {
   content: "\f5b0"; }
@@ -7668,6 +7698,9 @@ readers do not read off random characters that represent icons */
 .fa-hammer-crash::before {
   content: "\e414"; }
 
+.fa-message-heart::before {
+  content: "\e5c9"; }
+
 .fa-cloud-meatball::before {
   content: "\f73b"; }
 
@@ -7704,6 +7737,9 @@ readers do not read off random characters that represent icons */
 .fa-sort-numeric-down::before {
   content: "\f162"; }
 
+.fa-buoy-mooring::before {
+  content: "\e5b6"; }
+
 .fa-square-4::before {
   content: "\e259"; }
 
@@ -7712,6 +7748,9 @@ readers do not read off random characters that represent icons */
 
 .fa-hand-holding-water::before {
   content: "\f4c1"; }
+
+.fa-tricycle-adult::before {
+  content: "\e5c4"; }
 
 .fa-waveform::before {
   content: "\f8f1"; }
@@ -7950,6 +7989,9 @@ readers do not read off random characters that represent icons */
 .fa-sportsball::before {
   content: "\e44b"; }
 
+.fa-game-console-handheld-crank::before {
+  content: "\e5b9"; }
+
 .fa-train-subway::before {
   content: "\f239"; }
 
@@ -8045,9 +8087,6 @@ readers do not read off random characters that represent icons */
 
 .fa-arrow-alt-to-right::before {
   content: "\f34c"; }
-
-.fa-child-rifle::before {
-  content: "\e4e0"; }
 
 .fa-gif::before {
   content: "\e190"; }
@@ -9780,6 +9819,9 @@ readers do not read off random characters that represent icons */
 .fa-dove::before {
   content: "\f4ba"; }
 
+.fa-snowflake-droplets::before {
+  content: "\e5c1"; }
+
 .fa-battery-empty::before {
   content: "\f244"; }
 
@@ -10380,8 +10422,14 @@ readers do not read off random characters that represent icons */
 .fa-shipping-fast::before {
   content: "\f48b"; }
 
+.fa-user-magnifying-glass::before {
+  content: "\e5c5"; }
+
 .fa-star-sharp::before {
   content: "\e28b"; }
+
+.fa-comment-heart::before {
+  content: "\e5c8"; }
 
 .fa-circle-1::before {
   content: "\e0ee"; }
@@ -10439,6 +10487,9 @@ readers do not read off random characters that represent icons */
 
 .fa-arrow-square-down::before {
   content: "\f339"; }
+
+.fa-diamond-half-stroke::before {
+  content: "\e5b8"; }
 
 .fa-clapperboard::before {
   content: "\e131"; }
@@ -10562,6 +10613,12 @@ readers do not read off random characters that represent icons */
 
 .fa-keynote::before {
   content: "\f66c"; }
+
+.fa-child-combatant::before {
+  content: "\e4e0"; }
+
+.fa-child-rifle::before {
+  content: "\e4e0"; }
 
 .fa-gun::before {
   content: "\e19b"; }
@@ -10922,6 +10979,9 @@ readers do not read off random characters that represent icons */
 
 .fa-holly-berry::before {
   content: "\f7aa"; }
+
+.fa-nose::before {
+  content: "\e5bd"; }
 
 .fa-chevron-left::before {
   content: "\f053"; }

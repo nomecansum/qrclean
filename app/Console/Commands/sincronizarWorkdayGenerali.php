@@ -486,17 +486,18 @@ class sincronizarWorkdayGenerali extends Command
                                 }
                             }
                         }
-                        if($item['Es_gerente-manager']==0){
-                            $nivel=$cod_nivel;
-                           
-                        } else {
-                            $nivel=$cod_nivel_supervisor;
-                        }
+                        
                         //Si antes tenia un nivel superior (administrador) se lo mantenemos
                         if($usuario){
                             $user=users::find($usuario);
                             if($user->nivel_acceso>=$nivel->val_nivel_acceso){
                                 $nivel=niveles_acceso::find($user->cod_nivel);
+                            } else {
+                                if($item['Es_gerente-manager']==0){
+                                    $nivel=$cod_nivel;
+                                } else {
+                                    $nivel=$cod_nivel_supervisor;
+                                }
                             }
                         }
                         if($email){
@@ -538,7 +539,7 @@ class sincronizarWorkdayGenerali extends Command
                 
 
                 // //Borramos los que sobran
-                users::where('id_cliente',$tarea->clientes)->where('sync_at','<',Carbon::now()->subminutes(5))->update(['deleted_at'=>Carbon::now()]);
+                users::where('id_cliente',$tarea->clientes)->where('sync_at','<',Carbon::now()->subminutes(20))->update(['deleted_at'=>Carbon::now()]);
 
                 //Actualizamos el edificio TORRECERDA
                 DB::table('users')->where('id_edificio',110)->update(['id_edificio'=>41]);

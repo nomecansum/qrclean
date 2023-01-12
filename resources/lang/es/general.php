@@ -120,7 +120,7 @@ return [
     "enero"=>"enero",
     "febrero"=>"febrero",
     "marzo"=>"marzo",
-    "abril"=>"marzo",
+    "abril"=>"abril",
     "mayo"=>"mayo",
     "junio"=>"junio",
     "julio"=>"julio",

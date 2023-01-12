@@ -85,6 +85,7 @@ class liberarReserva extends Command
      static function signature(){
 
         return "task:liberarReserva";
+        
      }
 
     static function definicion(){

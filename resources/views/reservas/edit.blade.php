@@ -25,9 +25,9 @@
                     <label for="fechas">Reservas activas para el día {{ $f1->format('d/m/Y')}}</label>
                     <div class="table-responsive">
                         @mobile
-                        <table id="tablares" class="table table-hover " 
-                        data-toggle="table" 
-                        data-mobile-responsive="true" 
+                        <table id="tablares" class="table table-hover"
+                        data-toggle="table"
+                        data-mobile-responsive="true"
                         data-locale="es-ES">
                         @elsemobile
                         <table id="tablares" class="table table-hover">
@@ -56,7 +56,7 @@
                                             <div class="btn-group btn-group pull-right" role="group">
                                                 <a href="javascript:void(0)" class="btn btn-info btn-xs btn_edit  add-tooltip" title="Modificar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-pencil-alt"></i> Editar</a>
                                                 <a href="#planta{{ $res->id_planta }}" class="btn btn-secondary btn-xs btn_ver  add-tooltip" title="Ver puesto en plano/mapa" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-puesto="{{ $res->id_puesto }}"><i class="fad fa-search-location"></i> Ver</a>
-                                                <a href="javascript:void(0)" class="btn btn-danger btn-xs btn_del  add-tooltip" title="Cancelar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-trash-alt"></i> Cancelar</a> 
+                                                <a href="javascript:void(0)" class="btn btn-danger btn-xs btn_del  add-tooltip" title="Cancelar reserva" data-id="{{ $res->id_reserva }}" data-fecha="{{ Carbon\Carbon::parse($res->fec_reserva)->format('d/m/Y') }}" data-des_puesto="{{ $res->cod_puesto }}"><i class="fad fa-trash-alt"></i> Cancelar</a>
                                             </div>
                                         </div>
                                     </td>
@@ -232,7 +232,7 @@
     })
 
     $('#id_edificio').change(function(){
-        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$(this).val(), function(){
+        $('#id_planta').load("{{ url('/combos/plantas_usuario/') }}/"+$(this).val(), function(){
             $('#id_planta').prepend("<option value='0'>Cualquiera</option>")
             $('#id_planta').val({{ $reserva->id_planta }});
         });
@@ -245,7 +245,7 @@
     });
 
     $(function(){
-        $('#id_planta').load("{{ url('/combos/plantas/') }}/"+$('#id_edificio').val(), function(){
+        $('#id_planta').load("{{ url('/combos/plantas_usuario/') }}/"+$('#id_edificio').val(), function(){
             $('#id_planta').val({{ $reserva->id_planta==0?session('planta_pref'):$reserva->id_planta }});
             $('#id_planta option[value={{ $reserva->id_planta }}]').attr('selected','selected');
             $('#id_planta').prepend("<option value='0'>Cualquiera</option>")

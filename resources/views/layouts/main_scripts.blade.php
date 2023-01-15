@@ -41,46 +41,60 @@
 
     //Funciones para mostrar los mensajes Toast
     function toast_ok(titulo,mensaje){
-        $.toast({
-            heading: titulo,
-            text: mensaje,
-            position: 'top-center',
-            showHideTransition: 'slide',
-            loaderBg: '#ff8000',
-            icon: 'success',
-            hideAfter: 3000,
-            stack: 6,
-            bgColor : '#d4edda',
-            textColor : '#155724',
-        });
+        if (titulo==undefined){
+            titulo="{{ env('APP_NAME') }}";
+        }
+        let toast = {
+            title: titulo,
+            message: mensaje,
+            status: TOAST_STATUS.SUCCESS,
+            timeout: 3000
+        }
+        Toast.setTheme(TOAST_THEME.LIGHT);
+        Toast.setPlacement(TOAST_PLACEMENT.TOP_CENTER);
+        Toast.create(toast);
     }
     function toast_error(titulo,mensaje){
-        $.toast({
-            heading: titulo,
-            text: mensaje,
-            position: 'top-right',
-            showHideTransition: 'slide',
-            loaderBg: '#ff8000',
-            icon: 'error',
-            hideAfter: 10000,
-            stack: 6,
-            bgColor : '#f8d7da',
-            textColor : '#721c24',
-        });
+        if (titulo==undefined){
+            titulo="ERROR";
+        }
+        let toast = {
+            title: titulo,
+            message: mensaje,
+            status: TOAST_STATUS.DANGER,
+            timeout: 5000
+        }
+        Toast.setTheme(TOAST_THEME.LIGHT);
+        Toast.setPlacement(TOAST_PLACEMENT.TOP_CENTER);
+        Toast.create(toast);
     }
     function toast_warning(titulo,mensaje){
-        $.toast({
-            heading: titulo,
-            text: mensaje,
-            position: 'top-right',
-            showHideTransition: 'slide',
-            loaderBg: '#ff8000',
-            icon: 'warning',
-            hideAfter: 6000,
-            stack: 6,
-            bgColor : '#fff3cd',
-            textColor : '#856404',
-        });
+        if (titulo==undefined){
+            titulo="{{ env('APP_NAME') }}";
+        }
+        let toast = {
+            title: titulo,
+            message: mensaje,
+            status: TOAST_STATUS.WARNING,
+            timeout: 5000
+        }
+        Toast.setTheme(TOAST_THEME.LIGHT);
+        Toast.setPlacement(TOAST_PLACEMENT.TOP_CENTER);
+        Toast.create(toast);
+    }
+    function toast_info(titulo,mensaje){
+        if (titulo==undefined){
+            titulo="{{ env('APP_NAME') }}";
+        }
+        let toast = {
+            title: titulo,
+            message: mensaje,
+            status: TOAST_STATUS.INFO,
+            timeout: 5000
+        }
+        Toast.setTheme(TOAST_THEME.LIGHT);
+        Toast.setPlacement(TOAST_PLACEMENT.TOP_CENTER);
+        Toast.create(toast);
     }
 
     function mensaje_error_respuesta(err){
@@ -545,13 +559,13 @@
                 //las dimensiones del cuadradito
                 if(puesto.data('width')!=0) {
                     puesto.css('width',plano.width()*(puesto.data('width')/100)+'px');
-                    console.log('w');
+                    //console.log('w');
                 } else {
                     puesto.css('width',plano.width()*(puesto.data('factorw')/100)+'px');
                 }
                 if(puesto.data('height')!=0) {
                     puesto.css('height',plano.width()*(puesto.data('height')/100)+'px');
-                    console.log('h');
+                    //console.log('h');
                 } else {
                     puesto.css('height',plano.width()*(puesto.data('factorh')/100)+'px');
                 }

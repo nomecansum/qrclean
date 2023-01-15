@@ -1793,5 +1793,22 @@ class UsersController extends Controller
             'data' => $id
         ];
     }
+
+    public function enviar_recordatorio_asignacion(Request $r){
+        ini_set('max_execution_time', 1000);
+        foreach($r->lista_id as $id){
+            $usuario=users::find($id);
+            $str_notificacion='Recordatorio de su asignacion permanente de puesto';
+            $puestos_asignados=puestos_asignados::where('id_usuario',$id)->where('fec_desde',null)->pluck('id_puesto')->toArray();
+            if(count($puestos_asignados)>0){
+                notificar_usuario($usuario,"Tiene los siguientes puestos asignados de forma indefinida",'emails.asignacion_puesto',$str_notificacion,[1,3],4,[],$puestos_asignados);
+            }
+        }
+        return [
+            'title' => "Recordatorio de asignacion permanente de puesto",
+            'message' => 'e-mail recordatorio enviado a '.count($r->lista_id). ' usuarios: '.implode(",",$r->lista_id),
+            //'url' => url('users')
+        ];
+    }
     
 }

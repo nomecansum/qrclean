@@ -190,6 +190,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/gen_password/{id}',['middleware'=>'permissions:["API_TOKEN"],["R"]','uses'=>'UsersController@gen_password'])->name('users.api.gen_password');
         Route::get('/turno/{id}/{turno}/{estado}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@turno_usuario'])->name('users.turno_usuario');
 
+        Route::post('/enviar_recordatorio_asignacion',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@enviar_recordatorio_asignacion'])->name('users.enviar_recordatorio_asignacion');
+        
+
         Route::post('/tema','UsersController@tema_usuario');
         Route::post('/osid','UsersController@osid_usuario');
         
@@ -631,6 +634,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'combos'], function () {
         Route::post('/limpiadores', 'CombosController@combo_limpiadores');
         Route::get('/plantas/{id_edificio}', 'CombosController@combo_plantas');
+        Route::get('/plantas_usuario/{id_edificio}', 'CombosController@combo_plantas_usuario');
         Route::get('/plantas_salas/{id_edificio}', 'CombosController@combo_plantas_salas');
         Route::get('/edificios/{id_cliente}', 'CombosController@combo_edificios');
         Route::get('/clientes','CombosController@clientes');

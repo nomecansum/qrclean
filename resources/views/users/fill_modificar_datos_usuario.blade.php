@@ -21,7 +21,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label>Cliente</label><br>
-                <select required name="id_cliente" id="id_cliente" class="select2" style="width: 100%">
+                <select required name="id_cliente" id="id_cliente" class="select2_modal" style="width: 100%">
                     <option value=""></option>
                     @foreach ($clientes as $c)
                         <option  value="{{$c->id_cliente}}">{{$c->nom_cliente}}</option>
@@ -32,7 +32,7 @@
         <div class="col-md-4">
             <div class="form-group {{ $errors->has('id_perfil') ? 'has-error' : '' }}">
                 <label for="id_perfil">Perfil</label>
-                <select class="select2 notsearch"  id="cod_nivel" name="cod_nivel">
+                <select class="select2_modal notsearch"  id="cod_nivel" name="cod_nivel">
                     <option value=""></option>
                     @foreach ($Perfiles as $Perfile)
                         <option value="{{ $Perfile->cod_nivel }}">
@@ -74,7 +74,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label>Zona horaria</label>
-                <select name="val_timezone" class="select2" style="width: 100%; margin-top: 25px; height: 38px">
+                <select name="val_timezone" class="select2_modal" style="width: 100%; margin-top: 25px; height: 38px">
                     <option value="" selected></option>
                     @foreach($regions as $region => $list)
                     <optgroup label="{{ $region }}">
@@ -91,7 +91,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label>Edificio de referencia</label><br>
-                <select name="id_edificio" id="id_edificio" class="select2 notsearch">
+                <select name="id_edificio" id="id_edificio" class="select2_modal notsearch">
                     <option value=""></option>
                     @foreach ($edificios as $t)
                         <option  value="{{$t->id_edificio}}">{{$t->des_edificio}}</option>
@@ -102,7 +102,7 @@
         <div class="col-md-8">
             <div class="form-group">
                 <label>Departamento</label>
-                    <select   name="id_departamento" class="select2 tab_general" style="width: 100%" id="id_departamento">
+                    <select   name="id_departamento" class="select2_modal tab_general" style="width: 100%" id="id_departamento">
                         <option value=""> </option>
                         @php $departamentos=lista_departamentos("cliente",Auth::user()->id_cliente); @endphp
                         @isset($departamentos)
@@ -119,7 +119,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>Asignacion automatica de puestos (Copiar de)</label>
-                    <select   name="id_usuario_asig_auto" class="select2 tab_general" style="width: 100%" id="id_usuario_asig_auto">
+                    <select   name="id_usuario_asig_auto" class="select2_modal tab_general" style="width: 100%" id="id_usuario_asig_auto">
                         <option value=""> </option>
                             @foreach($usuarios as $usuario)
                                 <option style="padding-left: 20px"  value="{{ $usuario->id}}"  >
@@ -133,7 +133,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label>Supervisor</label>
-                    <select   name="id_usuario_supervisor" class="select2 tab_general" style="width: 100%" id="id_usuario_supervisor">
+                    <select   name="id_usuario_supervisor" class="select2_modal tab_general" style="width: 100%" id="id_usuario_supervisor">
                         <option value=""> </option>
                         @foreach($usuarios as $usuario)
                             <option style="padding-left: 20px"  value="{{ $usuario->id}}"  >
@@ -144,7 +144,7 @@
                 <br>
             </div>
         </div>
-        <div class="col-md-12 ml-2 " >
+        <div class="col-md-12 mb-2" >
             <div class="form-group"  style="overflow: hidden">
                 <label class="text-nowrap ml-2">Colectivos
                     <div class="controls ">
@@ -162,7 +162,7 @@
                         </div>
                     </div>
                 </label><br>
-                <select  name="val_colectivo[]" multiple="" class="form-control  select2" style="width: 100%" id="val_colectivo">
+                <select  name="val_colectivo[]" multiple="" class="form-control  select2_modal" style="width: 100%" id="val_colectivo">
                     @foreach ($colectivos_cliente as $col)
                         <option  value="{{$col->cod_colectivo}}">{{$col->des_colectivo}}</option>
                     @endforeach
@@ -242,7 +242,7 @@
                         </div>
                     </div>
                 </label><br>
-                <select  name="plantas[]" multiple="" class="form-control  select2" style="width: 100%" id="plantas">
+                <select  name="plantas[]" multiple="" class="form-control  select2_modal" style="width: 100%" id="plantas">
                     @foreach ($plantas as $pl)
                         <option  value="{{$pl->id_planta}}">{{$pl->des_planta}}</option>
                     @endforeach
@@ -253,7 +253,7 @@
     </div>
 </form>
 <script>
-    $(".select2").select2({
+    $(".select2_modal").select2({
         placeholder: "No modificar",
         allowClear: true,
         width: "99.2%",

@@ -15,6 +15,7 @@ use App\Models\puestos_tipos;
 use stdClass;
 use Spatie\IcalendarGenerator\Components\Calendar;
 use Spatie\IcalendarGenerator\Components\Event;
+use Illuminate\Support\Facades\Log;
 
 class ReservasController extends Controller
 {
@@ -48,10 +49,7 @@ class ReservasController extends Controller
        
     }
 
-
     ////////////////////////////////////////////////////////////////
-    
-    
     public function index(){
         return view('reservas.index');
     }
@@ -88,7 +86,7 @@ class ReservasController extends Controller
             ->where('reservas.id_usuario',Auth::user()->id)
             ->where('mca_anulada','N')
             ->wherebetween('fec_reserva',[$month,$end])
-            ->get();    
+            ->get();
 
 
         $asignados=DB::table('puestos_asignados')
@@ -425,10 +423,21 @@ class ReservasController extends Controller
             ->get();
 
         //Ahora vamos a ver quepuestos no pueden ser reservados porque no cumplen la regla de maxima antelacion
+        $festivos=collect(estadefiesta(Auth::user()->id,Carbon::now(),Carbon::parse($f2)->addDay(),0));
         $puestos_antelacion=$puestos->wherenotnull('val_dias_antelacion');
         foreach($period as $p){
             foreach($puestos_antelacion as $pa){
-                if($p->greaterThan(Carbon::now()->addDays($pa->val_dias_antelacion))){
+                $dias_antelacion=$pa->val_dias_antelacion;
+                //En caso de que la fecha en la que va el bucle sea festivo o no laborable, se añaden dias a los dias de antelacion hasta el siguiente dia laborable
+                $periodo_antelacion=CarbonPeriod::create(Carbon::now(),$p->endOfDay());
+                foreach($periodo_antelacion as $p2) {
+                    $es_festivo=$p2->isWeekend() || $festivos->where('date',$p2->format('Y-m-d'))->where('festivo',1)->first();
+                    if($es_festivo){
+                        $p2->addDay();
+                        $dias_antelacion++;
+                    }
+                }
+                if($p->greaterThan(Carbon::now()->addDays($dias_antelacion))){
                     $puestos->where('id_puesto',$pa->id_puesto)->first()->quitar=true;
                 }
             }
@@ -474,10 +483,13 @@ class ReservasController extends Controller
         $f = explode(' - ',$r->fechas);
         $f1 = adaptar_fecha($f[0]);
         $f2 = adaptar_fecha($f[1]);
-
+        $mensajes_error=[];
         
         $puesto=puestos::find($r->id_puesto);
-        $mensajes_error=[];
+        if($puesto->mca_reservar=='N'){
+            $mensajes_error[]='El puesto seleccionado no admite reservas';
+        }
+       
         $period = CarbonPeriod::create($f1,$f2);
         foreach($period as $p){
             $fec_desde=Carbon::parse($p->format('Y-m-d').' '.$r->hora_inicio);

@@ -47,7 +47,8 @@
     <link rel="stylesheet" href="{{ asset('/plugins/bootstrap-table/bootstrap-table.min.css') }}">
 
     {{--  Toast  --}}
-    <link href="{{asset('/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet" media="all">
+    {{-- <link href="{{asset('/plugins/toast-master/css/jquery.toast.css')}}" rel="stylesheet" media="all"> --}}
+    <link href="{{ asset('/plugins/BootstrapToaster-master/css/bootstrap-toaster.min.css') }}" rel="stylesheet">
 
     {{--  Iconpicker  --}}
     <link href="{{asset('/plugins/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css')}}" rel="stylesheet" media="all">
@@ -218,7 +219,8 @@
     <script src="{{ asset('/plugins/bootstrap-iconpicker/js/bootstrap-iconpicker.js') }}"></script>
 
     {{--  Toast  --}}
-    <script src="{{url('/plugins/toast-master/js/jquery.toast.js')}}"></script>
+    {{-- <script src="{{url('/plugins/toast-master/js/jquery.toast.js')}}"></script> --}}
+    <script src="{{ asset('/plugins/BootstrapToaster-master/js/bootstrap-toaster.min.js') }}"></script>
     
     {{-- Plugin print --}}
     <script src="{{asset('/plugins/printThis-master/printThis.js')}}"></script>

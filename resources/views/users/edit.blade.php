@@ -682,11 +682,11 @@
                                 <div class="card-body">
                                     <div class="row rounded b-all mb-2 bg-gray-light">
                                         <div class="col-md-12">
-                                            <label><b>Tipos de puesto que puede reservar</b></label><br>
+                                            <label><input  id="chk_todos_tipo_puesto"  class="form-check-input chk_tipo_puesto mr-1" type="checkbox"> <b>Tipos de puesto que puede reservar</b></label><br>
                                             @foreach($tipos_puestos as $t)
                                                 <div class="form-group col-md-4">
                                                     <div class="form-check pt-2">
-                                                        <input name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" {{ in_array($t->id_tipo_puesto,$tipos_puesto_usuario)?'checked':'' }} class="form-check-input" type="checkbox">
+                                                        <input name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" {{ in_array($t->id_tipo_puesto,$tipos_puesto_usuario)?'checked':'' }} class="form-check-input chk_tipo_puesto" type="checkbox">
                                                         <label class="form-check-label" for="tipo_puesto{{$t->id_tipo_puesto}}"> {{$t->des_tipo_puesto}}</label>
                                                     </div>
                                                 </div>
@@ -729,7 +729,7 @@
                                             data-show-columns-toggle-all="true"
                                             data-page-list="[5, 10, 20, 30, 40, 50]"
                                             data-page-size="10"
-                                            data-pagination="true" 
+                                            data-pagination="true"
                                             data-show-button-text="true"
                                             >
                                             <thead>
@@ -774,6 +774,8 @@
                         </div>
                         <div id="demo-stk-lft-tab-7"  class="tab-pane fade" role="tabpanel" aria-labelledby="permisos-tab">
                             @php
+                               
+
                                 function checkChecked($n,$s,$t,$permisos,$campo)
                                 {
                                     $type = "";
@@ -960,7 +962,14 @@
 
     $('#tablapuestos').bootstrapTable();
     
-    
+    $('#chk_todos_tipo_puesto').click(function(){
+        if($(this).is(':checked')){
+            $('.chk_tipo_puesto').prop('checked',true);
+        }else{
+            $('.chk_tipo_puesto').prop('checked',false);
+        }
+    });
+
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();

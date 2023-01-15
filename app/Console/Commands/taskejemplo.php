@@ -67,25 +67,10 @@ class taskejemplo extends Command
                     "required": false
                 },
                 {
-                    "label": "Parametro lista multiple proveniente de BDD",
-                    "name": "id_planta",
-                    "tipo": "list_db",
-                    "multiple": true,
-                    "sql": "select id_planta as id, des_planta as nombre from plantas where id_planta>0",
-                    "required": false
-                },
-                {
-                    "label": "Parametro lista simple proveniente de BDD",
-                    "name": "id_estado",
-                    "tipo": "list_db",
-                    "multiple": false,
-                    "sql": "select id_estado as id, des_estado as nombre from estados_puestos",
-                    "required": false
-                },
-                {
-                    "label": "Parametro color",
-                    "name": "val_color",
-                    "tipo": "color",
+                    "label": "Parametro de fecha",
+                    "name": "fec_demo",
+                    "tipo": "fec",
+                    "def": "2020-01-01",
                     "required": false
                 },
                 {
@@ -93,17 +78,54 @@ class taskejemplo extends Command
                     "name": "cod_motivo",
                     "tipo": "list",
                     "multiple": false,
-                    "list": "Motivo1,Motivo2,Motivo3,Motivo4,Motivo5,Motivo6",
-                    "values": "1,2,3,4,5,6",
+                    "list":  "Motivo1|Motivo2|Motivo3|Motivo4|Motivo5|Motivo6",
+                    "values": "1|2|3|4|5|6",
                     "required": false
+                },
+                {
+                    "label": "TIPO PRODUCTO -> Parametro lista multiple proveniente de BDD",
+                    "name": "id_tipo_producto",
+                    "tipo": "list_db",
+                    "multiple": true,
+                    "sql": "select id_tipo_incidencia as id, des_tipo_incidencia as nombre from incidencias_tipos",
+                    "required": false
+                },
+                {
+                    "label": "ROL -> Parametro lista simple proveniente de BDD",
+                    "name": "id_rol",
+                    "tipo": "list_db",
+                    "multiple": false,
+                    "sql": "select id_pais as id, nom_pais as nombre from paises",
+                    "required": false
+                },
+                {
+                    "label": "ROL -> Parametro lista simple proveniente de BDD CON BUSQUEDA INTEGRADA",
+                    "name": "id_rol",
+                    "tipo": "list_db",
+                    "multiple": false,
+                    "sql": "select id_pais as id, nom_pais as nombre from paises",
+                    "required": false,
+                    "buscar": true
                 },
                 {
                     "label": "Parametro con lista multiple estatica",
                     "name": "cod_motivo",
                     "tipo": "list",
                     "multiple": true,
-                    "list": "Motivo1,Motivo2,Motivo3,Motivo4,Motivo5,Motivo6",
-                    "values": "1,2,3,4,5,6",
+                    "list": "Motivo1|Motivo2|Motivo3|Motivo4|Motivo5|Motivo6",
+                    "values": "1|2|3|4|5|6",
+                    "required": false
+                },
+                {
+                    "label": "Parametro con lista de tags de los clientes seleccionados",
+                    "name": "id_tag",
+                    "tipo": "tags",
+                    "required": false
+                },
+                {
+                    "label": "Parametro con lista de dispositivos de los clientes seleccionados",
+                    "name": "id_dispositivo",
+                    "tipo": "disp",
                     "required": false
                 },
                 {
@@ -111,6 +133,12 @@ class taskejemplo extends Command
                     "name": "control_cliente",
                     "tipo": "cli",
                     "required": true
+                },
+                {
+                    "label": "Parametro de mentira para que este relleno",
+                    "name": "void",
+                    "tipo": "void",
+                    "required": false
                 }
             ]
         }';

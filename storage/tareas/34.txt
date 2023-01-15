@@ -1,0 +1,4 @@
+Inicio de la tarea programada [34]App\Console\Commands\limpiarPuestos
+Fin de la tarea App\Console\Commands\limpiarPuestos
+Fin de la tarea php [34] Marcar los puestos para limpiar
+Tarea [34] Marcar los puestos para limpiar se ha ejecutado correctamente. Resp: 

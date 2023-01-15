@@ -1,0 +1,10 @@
+Inicio de la tarea programada [21]App\Console\Commands\liberarReserva
+Buscando reservas anulables
+Encontradas 0 anulables
+Buscando preavisos de anulacion de reserva
+Encontrados 0 preavisos
+Liberacion automatica de puestos usados
+Encontrados 0 puestos para liberar
+Fin de la tarea App\Console\Commands\liberarReserva
+Fin de la tarea php [21] Liberar reservas
+Tarea [21] Liberar reservas se ha ejecutado correctamente. Resp: 

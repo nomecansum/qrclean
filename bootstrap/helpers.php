@@ -443,6 +443,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
                         $cliente=clientes::find($user->id_cliente);
                         \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'id'=>$id], function ($m) use ($user,$subject) {
                             if(config('app.env')=='local' || config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
+                                Log::debug('Capturado email para '.$user->email.' ('.$user->name.')');
                                 $m->to('nomecansum@gmail.com', $user->name)->subject(strip_tags($subject));
                             } else {
                                 $m->to($user->email, $user->name)->subject(strip_tags($subject));
@@ -1555,7 +1556,7 @@ function cuenta_notificaciones(){
 }
 
 //Devuelve para cada dia indicado si el usuario tiene fiesta o no
-function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
+function estadefiesta($id,$fecha_inicio,$fecha_fin=null,$comprobar_reserva_festivo=1){
     if($fecha_fin==null){
         $fecha_fin=$fecha_inicio;
     }
@@ -1572,8 +1573,9 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
 
 
     $festivos=DB::table('festivos')
-        ->select('val_fecha','des_festivo')
-        ->selectraw("IFNULL(MAX(cod_festivo), 0) as idfestivo")
+        ->select('des_festivo')
+        ->selectraw("IFNULL(MAX(cod_festivo), 0) as idfestivo,
+                    date(val_fecha) as val_fecha")
         ->where(function($q) use($pertenencias){
             $q->whereraw("FIND_IN_SET(CONVERT(IFNULL(".$pertenencias->id_provincia.",-1),char), cod_provincia) <> 0");
             $q->orwhereraw("FIND_IN_SET(CONVERT(IFNULL(".$pertenencias->cod_pais.",-1),char), cod_pais) <> 0");
@@ -1591,9 +1593,9 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
     foreach($periodo as $fecha){
         $desc=null;
         $es_festivo=0;
-        if($festivos->where('val_fecha',$fecha)->first() && $pertenencias->mca_reservar_festivos=='N'){
+        if($festivos->where('val_fecha',$fecha->format('Y-m-d'))->first() && $pertenencias->mca_reservar_festivos=='N'){
             $es_festivo=1;
-            $desc=$festivos->where('val_fecha',$fecha)->first()->des_festivo;
+            $desc=$festivos->where('val_fecha',$fecha->format('Y-m-d'))->first()->des_festivo;
         }
         if($fecha->dayOfWeek==0 && $pertenencias->mca_reservar_domingos=='N'){
             $es_festivo=1;
@@ -1601,7 +1603,10 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null){
         if($fecha->dayOfWeek==6 && $pertenencias->mca_reservar_sabados=='N'){
             $es_festivo=1;
         }
-        
+        if($festivos->where('val_fecha',$fecha->format('Y-m-d'))->first() && $comprobar_reserva_festivo==0){
+            $es_festivo=1;
+            $desc=$festivos->where('val_fecha',$fecha->format('Y-m-d'))->first()->des_festivo;
+        }
         $item=new \stdClass();
         $item->date=$fecha->format('Y-m-d');
         $item->festivo=$es_festivo;

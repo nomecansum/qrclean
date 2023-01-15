@@ -61,6 +61,7 @@
                     <li class="divider"></li>
                     @if(checkPermissions(['Asignar puesto a usuario'],['R']))<li><a href="#asignar-puesto" data-toggle="modal" class="btn_asignar_puesto reserva btn_search dropdown-item" data-tipo="M"><i class="fad fa-desktop-alt"></i> Asignar temporalmente puesto a usuario</a></li>@endif
                     @if(checkPermissions(['Crear reservas para otros'],['R']))<li><a href="#crear-reserva" data-toggle="modal"  class="btn_crear_reserva reserva btn_search dropdown-item" data-tipo="M"><i class="fad fa-calendar-alt"></i> Crear reserva para usuario</a></li>@endif 
+                    @if(checkPermissions(['Usuarios'],['R']))<li><a href="#"  class="btn_enviar_recodratorio btn_search dropdown-item" data-tipo="M"><i class="fad fa-envelope"></i> Enviar recordatorio de asignacion</a></li>@endif
                     @if(checkPermissions(['Usuarios'],['D']))<li><a href="#" class="btn_borrar_usuarios btn_toggle_dropdown btn_search dropdown-item"  data-tipo="M"><i class="fad fa-trash"></i></i> Borrar usuarios</a> </li>@endif
             </div>
             <div class="btn">
@@ -115,7 +116,7 @@
                     data-show-columns="true"
                     data-show-toggle="true"
                     data-show-columns-toggle-all="true"
-                    data-page-list="[5, 10, 20, 30, 40, 50, 75, 100]"
+                    data-page-list="[20, 50, 100, 300, 500, 750, 1000, 2000, 5000, 10000]"
                     data-page-size="50"
                     data-pagination="true" 
                     data-toolbar="#all_toolbar"
@@ -545,11 +546,11 @@
         $('#btn_si_planta').click(function(){
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
                 return $(this).val();
-            }).get(); // 
+            }).get();
 
             searchPLs= $('.chkplanta:checkbox:checked').map(function(){
                 return $(this).val();
-            }).get(); // 
+            }).get();
 
             $.post('{{url('/users/asignar_plantas')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs,lista_plantas:searchPLs,borrar_ant: $('#chk_anterior').is(':checked')}, function(data, textStatus, xhr) {
                 console.log(data);
@@ -560,26 +561,26 @@
                 } else{
                     toast_ok(data.title,data.message);
                 }
-            }) 
+            })
             .fail(function(err){
                 toast_error('Error',err.responseJSON.message);
             })
             .always(function(data){
-                $('#asignar-planta').modal('hide');  
+                $('#asignar-planta').modal('hide');
                 if(data.url){
                     setTimeout(()=>{window.open(data.url,'_self')},3000);
-                } 
+                }
                 
-            });  
+            });
         })
 
         $('.btn_search').click(function(){
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
                 return $(this).val();
-            }).get(); // 
+            }).get();
             $('.dropdown-menu').removeClass('show');
             if(searchIDs.length==0){
-                $('.modal').modal('hide');  
+                $('.modal').modal('hide');
                 toast_error('Error','Debe seleccionar algún usuario');
                 return;
             }
@@ -588,7 +589,7 @@
         $('#btn_si_supervisor').click(function(){
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
                 return $(this).val();
-            }).get(); // 
+            }).get();
         })
 
         $('#btn_si_modificar').click(function(){
@@ -602,9 +603,9 @@
             $('#spin_asignar').hide();
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
                 return $(this).val();
-            }).get(); // 
+            }).get();
             if(searchIDs.length>1){
-                $('.modal').modal('hide');  
+                $('.modal').modal('hide');
                 toast_warning('Error','Solo se puede hacer la asignacion temporal de 1 usuario a la vez');
                 exit();
             }
@@ -616,14 +617,33 @@
             $('#spin_reserva').hide();
             searchIDs = $('.chkuser:checkbox:checked').map(function(){
                 return $(this).val();
-            }).get(); // 
+            }).get(); //
             if(searchIDs.length>1){
-                $('.modal').modal('hide');  
+                $('.modal').modal('hide');
                 toast_warning('Error','Solo se puede hacer la reserva de 1 usuario a la vez');
                 exit();
             }
             //$('#fechas_reserva').change();
-            
+        })
+
+        $('.btn_enviar_recodratorio').click(function(){
+            $('#spin_reserva').hide();
+            searchIDs = $('.chkuser:checkbox:checked').map(function(){
+                return $(this).val();
+            }).get();
+            $.post('{{url('/users/enviar_recordatorio_asignacion')}}', {_token: '{{csrf_token()}}',lista_id:searchIDs}, function(data, textStatus, xhr) {
+                console.log(data);
+                if(data.error){
+                    toast_error(data.title,data.error);
+                } else if(data.alert){
+                    toast_warning(data.title,data.alert);
+                } else{
+                    toast_ok(data.title,data.message);
+                }
+            })
+            .fail(function(err){
+                toast_error('Error',err.responseJSON.message);
+            });
         })
 
         $('#formbuscador').submit(function(event){

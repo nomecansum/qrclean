@@ -13,7 +13,7 @@
         <li data-emp="{{$_emp->id}}" style="font-size:14px" @if($_emp->cod_nivel=1) class="ml-3" @endif>
             <label style="text-transform: capitalize; font-weight: normal">
                 {{-- <i class="mdi mdi-account icon-box"  style="color:darkorange"></i> --}}
-                @if (isset($_emp->img_usuario ) && $_emp->img_usuario!='')<img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$_emp->img_usuario) }}" class="img-md rounded-circle" style="height:30px; width:30px; object-fit: cover;">@else {!! icono_nombre($_emp->name,30,13,'ic_planner') !!} @endif
+                @if (isset($_emp->img_usuario ) && $_emp->img_usuario!='')<img src="{{ Storage::disk(config('app.img_disk'))->url('img/users/'.$_emp->img_usuario) }}" class="img-md rounded-circle" style="height:30px; width:30px; object-fit: cover;">@else {!! icono_nombre($_emp->name,30,13) !!} @endif
                  {{strtolower($_emp->name)}} 
             </label>
         </li>

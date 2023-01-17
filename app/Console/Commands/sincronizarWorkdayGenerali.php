@@ -326,7 +326,7 @@ class sincronizarWorkdayGenerali extends Command
         //         Log::error('No se ha encontrado el puesto '.$puesto.' para el usuario '.$email);
         //         log_tarea('No se ha encontrado el puesto '.$puesto.' para el usuario '.$email,$id_tarea,'error');
         //     }
-        }
+        //}
         return $dato->id;
     }
 

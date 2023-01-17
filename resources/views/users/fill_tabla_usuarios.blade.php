@@ -34,7 +34,7 @@
             {{ csrf_field() }}
             <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
                 <div class="btn-group btn-group pull-right ml-1" role="group">
-                    @if (checkPermissions(['ReLogin'],["R"]))<a href="{{url('relogin',$users->id)}}" class="btn btn-xs btn-warning"><i class="fa fa-user" ></i> Suplantar</a>@endif
+                    @if (checkPermissions(['ReLogin'],["R"]) && $users->nivel_acceso<=Auth::user()->nivel_acceso)<a href="{{url('relogin',$users->id)}}" class="btn btn-xs btn-warning"><i class="fa fa-user" ></i> Suplantar</a>@endif
                     <a href="#" onclick="editar({{ $users->id }})" class="btn btn-xs btn-info  add-tooltip" title="Editar Usuario"  style="float: left"><span class="fa fa-pencil pt-1" ></span> Edit</a>
                     <a class="btn btn-xs btn-danger add-tooltip ml-1 btn_eliminar"   data-target="#eliminar-usuario" data-toggle="modal" style="float: left" title="Borrar usuario" onclick="del({{ $users->id }});$('#txt_borrar').html('{{ $users->name }}'); $('#id_usuario_borrar').val({{ $users->id }})" data-name="{{ $users->name }}"   style="float: right">
                         <span class="fa fa-trash"></span> Del

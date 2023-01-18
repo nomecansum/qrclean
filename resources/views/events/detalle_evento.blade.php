@@ -3,7 +3,7 @@
     // use App\Classes\RandomColor;
     // dd(implode("','",RandomColor::many(40, array('hue'=>'green'))));
     $colores=['#FFFFFF','#7af26d','#59ea65','#8aeab5','#15eabc','#92efac','#9bf2e0','#c3ff84','#f1ff5e','#bed153','#b1ef45','#b3f99d','#bbdb48','#96f704','#47efd3','#1ae02e','#67e23b','#68e284','#dbf99a','#a1f4db','#adffeb','#4bb522','#64d83a','#a4fcb5','#3ee8cb','#54dd2e','#53ef45','#68f288','#34f941','#9cd662','#73ddbf','#72ff68','#ddef51','#67dba1','#ccf9a4','#00c181','#5fd8a2','#54a508','#63e209','#6de88b','#adea44'];
-    $tz_offset=Carbon\Carbon::now()->setTimezone(session('timezone'))->getOffset()/3600;
+    $tz_offset=Carbon\Carbon::now()->setTimezone(Auth::user()->val_timezone)->getOffset()/3600;
 @endphp
 
 <div class="row">

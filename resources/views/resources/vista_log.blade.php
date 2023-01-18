@@ -39,6 +39,6 @@
         $des_log=str_replace('Schedule start','<i class="fa-sharp fa-solid fa-stopwatch" style="color:#f4a462"></i><span class="font-bold" style="color:#f4a462">  Schedule start</span>',$des_log);
         $des_log=str_replace('Fin schedule','<i class="fa-thin fa-stopwatch"  style="color:#3d5a7f"></i><span class="font-bold" style="color: #3d5a7f">  Fin schedule</span>',$des_log);
     @endphp
-    <tr style="font-size: 10px; " @isset($bgcolor) background-color: {{ $bgcolor }}; color: {{ txt_blanco($bgcolor) }} @endisset><td style="width: 5%" class="td_log"><b>{{ Carbon\Carbon::parse($l->fec_log)->setTimezone(session('timezone'))->format('H:i')}}</b></td><td class="font-bold td_log" style="color: {{ $color }}">{{ $l->tip_mensaje }}</td><td class="td_log"> {!! nl2br($des_log) !!}</td></tr>
+    <tr style="font-size: 10px; " @isset($bgcolor) background-color: {{ $bgcolor }}; color: {{ txt_blanco($bgcolor) }} @endisset><td style="width: 5%" class="td_log"><b>{{ Carbon\Carbon::parse($l->fec_log)->setTimezone(Auth::user()->val_timezone)->format('H:i')}}</b></td><td class="font-bold td_log" style="color: {{ $color }}">{{ $l->tip_mensaje }}</td><td class="td_log"> {!! nl2br($des_log) !!}</td></tr>
 @endforeach
    

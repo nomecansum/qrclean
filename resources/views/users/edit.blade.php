@@ -561,7 +561,7 @@
                                                                                 }
                                                                                 
                                                                             @endphp
-                                                                            {{ $salida }}
+                                                                            {!! $salida !!}
                                                                             @break
                                                                         @default
                                                                             
@@ -649,7 +649,7 @@
                                                                     @foreach($ple as $key=>$value)
                                                                         <optgroup label="{{$value}}">
                                                                             @php
-                                                                                $z=$plantas_usuario->where('id_planta',$key)->pluck('des_zona','key_id')->unique()->all();
+                                                                                $z=$plantas_usuario->where('id_planta',$key)->pluck('des_zona','num_zona')->unique()->all();
                                                                                 $des_planta=$value;
                                                                             @endphp
                                                                             @foreach($z as $key=>$value)

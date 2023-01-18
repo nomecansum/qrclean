@@ -11,7 +11,7 @@
                 $des_log=str_replace('Superado el maximo de iteraciones','<span style="color: #f08080; font-weight: bold">Superado el maximo de iteraciones</span>',$des_log);
                 $des_log=str_replace('Añadido no molestar','<span style="color: #20b2aa; font-weight: bold">Añadido no molestar</span>',$des_log);
             @endphp
-            <tr style="font-size: 10px"><td style="width: 5%"><b>{{ Carbon\Carbon::parse($l->fec_log)->setTimezone(session('timezone'))->format('H:i')}}</b></td><td> {!! nl2br($des_log) !!}</td></tr>
+            <tr style="font-size: 10px"><td style="width: 5%"><b>{{ Carbon\Carbon::parse($l->fec_log)->setTimezone(Auth::user()->val_timezone)->format('H:i')}}</b></td><td> {!! nl2br($des_log) !!}</td></tr>
         @endforeach
     </table>
 </div>

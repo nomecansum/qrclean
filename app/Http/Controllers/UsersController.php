@@ -366,7 +366,9 @@ class UsersController extends Controller
             if(isset($data['tipos_puesto_admitidos']) && is_array($data['tipos_puesto_admitidos'])){
                 $data['tipos_puesto_admitidos']=implode(",",$data['tipos_puesto_admitidos']);
             }
-            
+            if(isset($data['lista_zonas']) && is_array($data['lista_zonas'])){
+                $data['list_zonas_admitidas']=implode(",",$data['lista_zonas']);
+            }
 
             $users->update($data);
 
@@ -595,6 +597,7 @@ class UsersController extends Controller
             'val_prefijo_compartido'=>'nullable',
             'id_operario'=>'nullable',
             'sso_override'=>'nullable',
+            'lista_zonas'=>'nullable',
         ];
 
 
@@ -625,8 +628,12 @@ class UsersController extends Controller
         ->where('edificios.id_cliente',$user->id_cliente)
         ->get();
 
+        $plantas_cliente=DB::table('plantas')->wherein('id_edificio',$edificios->pluck('id_edificio'))->get();
+        $zonas=DB::table('plantas_zonas')->wherein('id_planta',$plantas_cliente->pluck('id_planta'))->get();
+
         $plantas_usuario=DB::table('plantas_usuario')->where('id_usuario',$id)->pluck('id_planta')->toarray();
-        return view('users.selector_plantas',compact('puestos','edificios','plantas_usuario','id','check'));
+        $zonas_usuario=explode(",",Auth::user()->list_zonas_admitidas);
+        return view('users.selector_plantas',compact('puestos','edificios','plantas_usuario','id','check','zonas','zonas_usuario'));
     }
 
     public function addplanta($usuario,$planta){
@@ -1056,6 +1063,8 @@ class UsersController extends Controller
             ->orderby('des_planta')
             ->get();
 
+        $zonas=DB::table('plantas_zonas')->wherein('id_planta',$plantas->pluck('id_planta'))->get();
+
         $usuarios=DB::table('users')
             ->where(function($q){
                 if (!isAdmin()) {
@@ -1080,7 +1089,7 @@ class UsersController extends Controller
             })
             ->get();
 
-        return view('users.gestor_plantas_usuarios',compact('plantas','usuarios','plantas_users'));
+        return view('users.gestor_plantas_usuarios',compact('plantas','usuarios','plantas_users','zonas'));
     }
 
     public function asignar_plantas(Request $r){

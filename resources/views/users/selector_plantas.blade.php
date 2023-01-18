@@ -33,12 +33,21 @@
         @endphp
         <div class="d-flex flex-wrap">
             @foreach($plantas as $key=>$value)
-                <div class="font-bold rounded mr-2 mb-2 align-middle pad-all pastilla  add-tooltip" title="{{ $value }}" id="pastilla{{ $key }}" style="font-size: 12px; width: 200px; height: 46px; overflow: hidden;  {{ $check&&in_array($key,$plantas_usuario)?'background-color: #02c59b': 'background-color: #eae3b8' }}">
+                @php
+                    $zonas_planta=$zonas->where('id_planta',$key);
+                @endphp
+                <div class="font-bold rounded mr-2 mb-2 align-middle pad-all pastilla  add-tooltip" title="{{ $value }}" id="pastilla{{ $key }}" style="font-size: 12px; width: 200px; overflow: hidden;  {{ $check&&in_array($key,$plantas_usuario)?'background-color: #02c59b': 'background-color: #eae3b8' }}">
                     <span class="h-100 align-middle pl-1" >
                         <div class="form-check pt-2 ml-2 mt-1">
                             <input   name="lista_id[]" data-id="{{ $key }}" data-edificio="{{ $e->id_edificio }}" id="chkpl{{ $key }}" value="{{ $key }}" {{ $check&&in_array($key,$plantas_usuario)?' checked ': '' }} class="form-check-input chkplanta" type="checkbox">
                             <label class="form-check-label" for="chkpl{{ $key }}">{{ substr($value,0,21) }} {{ strlen($value)>19?'...':'' }}</label>
                         </div>
+                        @foreach($zonas_planta as $z)
+                            <div class="form-check pt-2 ml-5 mt-1">
+                                <input   name="lista_zonas[]" data-id="{{ $z->num_zona }}" data-edificio="{{ $e->id_edificio }}" $data-planta="{{ $key }}" id="chkzo{{ $z->key_id }}" value="{{ $z->num_zona }}" {{ $check&&in_array($z->num_zona,$zonas_usuario)?' checked ': '' }} class="form-check-input chkzona" type="checkbox">
+                                <label class="form-check-label" style="font-weight: normal" for="chkpl{{ $z->num_zona }}">{{ substr($z->des_zona,0,21) }} {{ strlen($z->des_zona)>19?'...':'' }}</label>
+                            </div>
+                        @endforeach
                         
                     </span>
                 </div>

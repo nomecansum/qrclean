@@ -68,6 +68,7 @@ class users extends Model
                   'mca_compartido',
                   'val_prefijo_compartido',
                   'id_operario',
+                  'list_zonas_admitidas',
               ];
 
     /**

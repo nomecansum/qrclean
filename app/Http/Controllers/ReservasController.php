@@ -413,9 +413,8 @@ class ReservasController extends Controller
                 if(session('CL')['mca_incidencia_reserva']=='N'){
                     $q->where('mca_incidencia','N');
                 }
-                
             })
-           
+
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
@@ -437,7 +436,8 @@ class ReservasController extends Controller
                         $dias_antelacion++;
                     }
                 }
-                if($p->greaterThan(Carbon::now()->addDays($dias_antelacion))){
+                //Le añadimos a la fecha los dias de antelacion y 2 horas mas por cortesia
+                if($p->greaterThan(Carbon::now()->setTimezone(Auth::user()->val_timezone)->addDays($dias_antelacion)->addHours(2))){
                     $puestos->where('id_puesto',$pa->id_puesto)->first()->quitar=true;
                 }
             }
@@ -445,6 +445,29 @@ class ReservasController extends Controller
         $puestos = $puestos->reject(function($item) {
             return isset($item->quitar);
         });
+
+        //En el caso de que tenga restriccion de zonas en alguna planta, quitamos los puestos que no esten en esas zonas
+        if(Auth::user()->list_zonas_admitidas!=null){
+            //Primero a ver que plantas son
+            $plantas=DB::table('plantas_zonas')->wherein('num_zona',explode(",",Auth::user()->list_zonas_admitidas))->pluck('id_planta')->toarray();
+            foreach($plantas as $p){
+                $puestos_zona=DB::table('puestos')
+                    ->select('id_puesto','plantas.id_planta','plantas_zonas.val_ancho','plantas_zonas.val_alto','plantas_zonas.val_x','plantas_zonas.val_y','puestos.offset_top','puestos.offset_left','plantas.width','plantas.height')
+                    ->join('plantas_zonas','plantas_zonas.id_planta','puestos.id_planta')
+                    ->join('plantas','plantas.id_planta','plantas_zonas.id_planta')
+                    ->where('puestos.id_planta',$p)
+                    ->wherein('plantas_zonas.num_zona',explode(",",Auth::user()->list_zonas_admitidas))
+                    ->where(function($q){  //Este rollo viene de que las posiciones de las zonas estan guardadas como valores absolutos sobre los pixeles reales de la imagen y las posiciones de los puestos estan guardadas como valores de porcentaje (offsettop y offsetleft) de las dimensiones de la imagen
+                        $q->whereraw('puestos.offset_top between (100*plantas_zonas.val_y/plantas.`height`) AND ((100*plantas_zonas.val_y/plantas.`height`) + (100*plantas_zonas.val_alto/plantas.`height`))');
+                        $q->whereraw('puestos.offset_left between (100*plantas_zonas.val_x/plantas.`width`) AND ((100*plantas_zonas.val_x/plantas.`width`) + (100*plantas_zonas.val_ancho/plantas.`width`))');
+                    })
+                    ->pluck('id_puesto')
+                    ->toArray();
+                    $puestos = $puestos->reject(function($item) use($puestos_zona,$p) {
+                        return $item->id_planta==$p && !in_array($item->id_puesto,$puestos_zona);
+                    });
+            }
+        }
 
         $edificios=DB::table('edificios')
             ->select('id_edificio','des_edificio')

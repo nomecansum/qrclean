@@ -44,7 +44,7 @@
             
             
         @endphp
-            <tr style="font-size: 10px" @isset($bgcolor) background-color: {{ $bgcolor }}; color: {{ txt_blanco($bgcolor) }} @endisset><td style="width: 5%"><b>{{ Carbon\Carbon::parse($l->fec_log)->setTimezone(session('timezone'))->format('H:i')}}</b></td><td style="font-weight: bold; color: {{ $color }}">{{ $l->tip_mensaje }}</td><td> {!! nl2br($des_log) !!}</td></tr>
+            <tr style="font-size: 10px" @isset($bgcolor) background-color: {{ $bgcolor }}; color: {{ txt_blanco($bgcolor) }} @endisset><td style="width: 5%"><b>{{ Carbon\Carbon::parse($l->fec_log)->setTimezone(Auth::user()->val_timezone)->format('H:i')}}</b></td><td style="font-weight: bold; color: {{ $color }}">{{ $l->tip_mensaje }}</td><td> {!! nl2br($des_log) !!}</td></tr>
         @endforeach
     </table>
 </div>

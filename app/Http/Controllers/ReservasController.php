@@ -437,7 +437,9 @@ class ReservasController extends Controller
                     }
                 }
                 //Le añadimos a la fecha los dias de antelacion y 2 horas mas por cortesia
-                if($p->greaterThan(Carbon::now()->setTimezone(Auth::user()->val_timezone)->addDays($dias_antelacion)->addHours(2))){
+                // dump(Carbon::now()->setTimezone(Auth::user()->val_timezone)->addDays($dias_antelacion)->endofday()->addminutes(2));
+                // dd($p);
+                if($p->greaterThan(Carbon::now()->setTimezone(Auth::user()->val_timezone)->addDays($dias_antelacion)->endofday()->addminutes(2))){
                     $puestos->where('id_puesto',$pa->id_puesto)->first()->quitar=true;
                 }
             }

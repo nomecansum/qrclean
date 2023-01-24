@@ -611,6 +611,7 @@ class UsersController extends Controller
         $user=users::findorfail($id);
 
         $puestos=DB::table('puestos')
+            ->select('puestos.id_puesto','puestos.id_edificio','puestos.id_planta','puestos.des_puesto','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado','clientes.nom_cliente','puestos.cod_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')

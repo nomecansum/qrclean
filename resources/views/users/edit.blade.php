@@ -929,9 +929,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group mt-2">
+                <div class="row mt-2">
                     @if(checkPermissions(['Usuarios'],['W']))
-                    <div class="col-md-12 text-end">
+                    <div class="col-md-10 text-end">
+                        @if (checkPermissions(['ReLogin'],["R"]) && $users->nivel_acceso<=Auth::user()->nivel_acceso)<a href="{{url('relogin',$users->id)}}" class="btn btn-lg btn-warning"><i class="fa fa-user" ></i> Suplantar</a>@endif
+                    </div>
+                    <div class="col-md-2 text-end">
                         <input class="btn btn-primary btn-lg btn_guardar" type="submit" value="Guardar">
                     </div>
                     @endif

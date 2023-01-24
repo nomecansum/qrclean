@@ -74,7 +74,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                <div>
+                    @include('resources.spin_puntitos',['id_spin'=>'spin_confirmarnoasignado'])
+                    <img src="/img/Mosaic_brand_20.png" class="float-right"></div>
                 <h1 class="modal-title text-nowrap">Cancelar reserva de puesto </h1>
                 <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
                     <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
@@ -97,7 +99,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
+                <div>
+                    @include('resources.spin_puntitos',['id_spin'=>'spin_confirmarasignado'])
+                    <img src="/img/Mosaic_brand_20.png" class="float-right"></div>
                 <h1 class="modal-title text-nowrap">Liberar puesto asignado</h1>
                 <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
                     <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
@@ -136,6 +140,7 @@
     })
 
     $(".btn_confirmar_cancelacion").click(function(){
+        $('#spin_confirmarnoasignado').show();
         var id_puesto=puesto_sel;
         $.post('{{ url('reservas/cancelar') }}', {_token: '{{csrf_token()}}',id:reserva_sel,fecha:"{{ \Carbon\Carbon::now()->format('Y-m-d') }}",des_puesto:nombre_sel}, function(data, textStatus, xhr) {
             toast_ok('Reserva cancelada','Se ha cancelado la reserva del puesto '+nombre_sel);
@@ -143,6 +148,7 @@
         .always(function(){
             $('#modal-confirmarnoasignado').modal('hide');
             $('#puesto'+id_puesto).remove();
+            $('#spin_confirmarnoasignado').hide();
         })
         .fail(function(err){
             toast_error('Error',err.responseJSON.message);
@@ -151,6 +157,7 @@
 
     $(".btn_confirmar_liberacion").click(function(){
         var id_puesto=puesto_sel;
+        $('#spin_confirmarasignado').show();
         $.post('{{ url('users/anular_asignacion_temporal') }}', {_token: '{{csrf_token()}}',id:puesto_sel,fecha: $("#fechas").val(),des_puesto:nombre_sel}, function(data, textStatus, xhr) {
             toast_ok('Puesto liberado',data.message);
         })
@@ -159,6 +166,7 @@
             if(data-ocultar==1){
                 $('#puesto'+id_puesto).remove();
             }
+            $('#spin_confirmarasignado').hide();
         })
         .fail(function(err){
             toast_error('Error',err.responseJSON.message);

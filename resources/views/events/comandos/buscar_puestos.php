@@ -13,10 +13,12 @@ if(!function_exists('mis_clientes')){
             $clientes=implode(",",clientes());
         }   else {
             $clientes=implode(",",clientes()->ToArray());
-        } 
+        }
         return $clientes;
     }
 }
+
+$optgroup="Puestos";
 
 $params='{
     "parametros":[
@@ -139,8 +141,7 @@ $campos='{
 
 $func_comando = function($evento,$output){
     //aqui va el codigo que queramos ejecutar, puede ser una simple consulta a BDD o cualquier logica compleja que se necesite
-
-    $parametros = json_decode(json_decode($evento->param_comando));
+    $parametros=json_decode($evento->param_comando);
     //Log::debug('Parametros de busqueda '.$evento->param_comando);
     $id_estado=valor($parametros,"id_estado");
     $val_horas=valor($parametros,"val_horas");
@@ -169,8 +170,9 @@ $func_comando = function($evento,$output){
             ->when($id_estado, function($q) use ($id_estado){
                 $q->WhereIn('puestos.id_estado',$id_estado);
             })
-            ->where('puestos.fec_ult_estado','<=',Carbon::now()->subHours($val_horas))
-            ->get();
+            ->where('puestos.fec_ult_estado','<=',Carbon::now()->subHours($val_horas));
+        $query=getFullSql($data);
+        $data=$data->get();
     
     $lista_id=$data->pluck('id')->toArray();
     //Al final se debe retornar un JSON con la lista de ID que se han obtenido de la consulta y sobre los que se actuará en las acciones
@@ -182,6 +184,7 @@ $func_comando = function($evento,$output){
         "campo" => "id_puesto",
         "lista_id" =>$lista_id,
         "data" => $data,
+        "query" => $query,
         "TS" => Carbon::now()->format('Y-m-d h:i:s')
     ]);
 }

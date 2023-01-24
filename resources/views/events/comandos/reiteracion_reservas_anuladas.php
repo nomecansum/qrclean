@@ -18,6 +18,8 @@ if(!function_exists('mis_clientes')){
     }
 }
 
+$optgroup="Puestos";
+
 $params='{
     "parametros":[
         {
@@ -139,7 +141,7 @@ $campos='{
 $func_comando = function($evento,$output){
     //aqui va el codigo que queramos ejecutar, puede ser una simple consulta a BDD o cualquier logica compleja que se necesite
 
-    $parametros = json_decode(json_decode($evento->param_comando));
+    $parametros = json_decode($evento->param_comando);
     //Log::debug('Parametros de busqueda '.$evento->param_comando);
     $id_estado=valor($parametros,"id_estado");
     $val_veces=valor($parametros,"val_veces");
@@ -169,8 +171,9 @@ $func_comando = function($evento,$output){
                 $q->WhereIn('puestos.id_estado',$id_estado);
             })
             ->where('reservas.mca_anulada','S')
-            ->groupby(['users.id_usuario_externo','users.name','users.email'])
-            ->get();
+            ->groupby(['users.id_usuario_externo','users.name','users.email']);
+        $query=getFullSql($data);
+        $data=$data->get();
 
     $lista_id=$data->pluck('id')->toArray();
     //Al final se debe retornar un JSON con la lista de ID que se han obtenido de la consulta y sobre los que se actuará en las acciones
@@ -182,6 +185,7 @@ $func_comando = function($evento,$output){
         "campo" => "id",
         "lista_id" =>$lista_id,
         "data" => $data,
+        "query" => $query,
         "TS" => Carbon::now()->format('Y-m-d h:i:s')
     ]);
 }

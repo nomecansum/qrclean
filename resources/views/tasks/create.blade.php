@@ -185,30 +185,32 @@
 									</div>
 								</div>
 							</div>
-	
-							<div class="row mt-3" id="div_regla" style="display:none">
-								<div class="col-md-12">
-									<div class="card totales_resultados b-all" >
-										<h4 class="mt-2 ml-2" >{{__('tareas.parametrizacion_del_comando')}}</h4>
-										<div class="card-body" id="param_regla">
-	
-										</div>
-									</div>
-								</div>
-							</div>
-	
-							<div class="row mt-2">
-								<div class="col-md-12 text-end">
-									<button type="submit" class="btn btn-primary btn_form float-right">{{__('general.submit')}}</button>
-								</div>
-							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-    </div>
+	</div>
 </div>
+<div class="row mt-3" id="div_regla" style="display:none">
+	<div class="col-md-12">
+		<div class="card totales_resultados b-all" >
+			<h4 class="mt-2 ml-2" >{{__('tareas.parametrizacion_del_comando')}}</h4>
+			<div class="card-body" id="param_regla">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-2">
+	<div class="col-md-12 text-end">
+		<button type="submit" class="btn btn-primary btn_form float-right">{{__('general.submit')}}</button>
+	</div>
+</div>
+</form>
+					
+			
+   
 
 @endsection
 

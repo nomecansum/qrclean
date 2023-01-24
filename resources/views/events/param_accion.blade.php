@@ -91,11 +91,11 @@
                         @foreach($campos as $campo)
                             <li><b>{{ $campo->label }}: </b>{{ $campo->desc }}</li>
                         @endforeach
-                        @if(isset($solouno))
+                        <div class="solouno" style="display: none">
                             <li><b>[cuenta_id]: </b>{{ __('eventos.cuenta_id_afectados') }}</li>
                             <li><b>[lista_id]: </b>{{ __('eventos.lista_id_afectados') }}</li>
                             <li><b>[lista_nombres]: </b>{{ __('eventos.lista_nombres_afectados') }}</li>
-                        @endif
+                        </div>
                     @endif
                 </ul>
             </div>
@@ -122,6 +122,13 @@
 
     $(function(){
       
+    });
+
+    $(function(){
+        if($('#solouno').is(':checked'))
+            $('.solouno').show();
+        else
+            $('.solouno').hide();
     });
 
 </script>

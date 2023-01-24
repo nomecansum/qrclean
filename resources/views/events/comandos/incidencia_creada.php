@@ -18,6 +18,8 @@ if(!function_exists('mis_clientes')){
     }
 }
 
+$optgroup="Incidencias";
+
 $params='{
     "parametros":[
         {
@@ -166,7 +168,7 @@ $campos='{
 $func_comando = function($evento,$output){
     //aqui va el codigo que queramos ejecutar, puede ser una simple consulta a BDD o cualquier logica compleja que se necesite
 
-    $parametros = json_decode(json_decode($evento->param_comando));
+    $parametros = json_decode($evento->param_comando);
     //Log::debug('Parametros de busqueda '.$evento->param_comando);
     $id_estado=valor($parametros,"id_estado");
     $id_tipo_puesto=valor($parametros,"id_tipo_puesto");
@@ -205,8 +207,9 @@ $func_comando = function($evento,$output){
             $q->where('incidencias.val_procedencia',$val_procedencia);
         })
         ->where('incidencias.fec_audit','>=',Carbon::parse($evento->fec_ult_ejecucion))
-        ->orderby('fec_apertura','desc')
-        ->get();
+        ->orderby('fec_apertura','desc');
+    $query=getFullSql($data);
+    $data=$data->get();
 
     
     $lista_id=$data->pluck('id')->toArray();
@@ -219,6 +222,7 @@ $func_comando = function($evento,$output){
         "campo" => "id_puesto",
         "lista_id" =>$lista_id,
         "data" => $data,
+        "query" => $query,
         "TS" => Carbon::now()->format('Y-m-d h:i:s')
     ]);
 }

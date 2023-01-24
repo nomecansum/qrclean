@@ -36,7 +36,7 @@ use Carbon\Carbon;
 class colorPuesto_generali
 {
     static function colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$origen="P"){
-        $tam_borde=isMobile()?$puesto->factor_puesto-1:$puesto->factor_puesto;
+        $tam_borde=$puesto->border!=null?$puesto->border:(isMobile()?$puesto->factor_puestob-1:$puesto->factor_puestob);
         if ($puesto->mca_incidencia=='S'){  //Incidencia
             return [
                 'color'=>"#ffb300",

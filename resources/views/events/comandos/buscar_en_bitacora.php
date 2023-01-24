@@ -18,6 +18,8 @@ if(!function_exists('mis_clientes')){
     }
 }
 
+$optgroup="Varios";
+
 $params='{
     "parametros":[
         {
@@ -129,7 +131,7 @@ $campos='{
 $func_comando = function($evento,$output){
     //aqui va el codigo que queramos ejecutar, puede ser una simple consulta a BDD o cualquier logica compleja que se necesite
 
-    $parametros = json_decode(json_decode($evento->param_comando));
+    $parametros = json_decode($evento->param_comando);
     //Log::debug('Parametros de busqueda '.$evento->param_comando);
     $status=valor($parametros,"status");
     $id_usuario=valor($parametros,"id_usuario");
@@ -164,8 +166,9 @@ $func_comando = function($evento,$output){
             ->when($val_texto, function($q) use ($val_texto){
                 $q->Where('bitacora.accion', 'LIKE', "%{$val_texto}%");
             })
-            ->where('bitacora.fecha','>=',Carbon::parse($evento->fec_ult_ejecucion))
-            ->get();
+            ->where('bitacora.fecha','>=',Carbon::parse($evento->fec_ult_ejecucion));
+    $query=getFullSql($data);
+    $data=$data->get();
     
     $lista_id=$data->pluck('id')->toArray();
     //Al final se debe retornar un JSON con la lista de ID que se han obtenido de la consulta y sobre los que se actuará en las acciones
@@ -177,6 +180,7 @@ $func_comando = function($evento,$output){
         "campo" => "id_bitacora",
         "lista_id" =>$lista_id,
         "data" => $data,
+        "query" => $query,
         "TS" => Carbon::now()->format('Y-m-d h:i:s')
     ]);
 }

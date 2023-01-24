@@ -1,11 +1,33 @@
-
+<style type="text/css">
+    .btn_filtro{
+        cursor: pointer;
+    }
+</style>
 <div class="table-responsive rounded" style="width:100%">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-1 btn_total btn_filtro" data-tipo="total" style="color:#000000"></div>
+        <div class="col-md-1 btn_error btn_filtro"  data-tipo="error" style="color:#f25c5a"></div>
+        <div class="col-md-1 btn_warning btn_filtro"  data-tipo="warning" style="color:#ffe066"></div>
+        <div class="col-md-1 btn_debug btn_filtro"  data-tipo="debug" style="color:#8e9aaf"></div>
+        <div class="col-md-1 btn_info btn_filtro"  data-tipo="info" style="color:#00a4eb"></div>
+        <div class="col-md-1 btn_critical btn_filtro"  data-tipo="critical" style="color:#ff0000"></div>
+        <div class="col-md-1 btn_alert btn_filtro"  data-tipo="alert" style="color:#ff9f1a"></div>
+        <div class="col-md-1 btn_user btn_filtro"  data-tipo="user" style="color:#7cc0d0"></div>
+    </div>
     <table class="table">
         @foreach($log as $l)
         @php
             $bgcolor = null;
+            //Contador de tipos de mensaje
+            $tipo=$l->tip_mensaje;
+                if(isset($$tipo)){
+                    $$tipo++;
+                } else {
+                    $$tipo=0;
+                }
             switch($l->tip_mensaje){
-                case ("error"):
+                case "error":
                     $color="#f25c5a";
                 break;
                 case "warning":
@@ -44,7 +66,32 @@
             
             
         @endphp
-            <tr style="font-size: 10px" @isset($bgcolor) background-color: {{ $bgcolor }}; color: {{ txt_blanco($bgcolor) }} @endisset><td style="width: 5%"><b>{{ Carbon\Carbon::parse($l->fec_log)->setTimezone(Auth::user()->val_timezone)->format('H:i')}}</b></td><td style="font-weight: bold; color: {{ $color }}">{{ $l->tip_mensaje }}</td><td> {!! nl2br($des_log) !!}</td></tr>
+            <tr class="row_log {{ $l->tip_mensaje }}"   style="font-size: 10px" @isset($bgcolor) background-color: {{ $bgcolor }}; color: {{ txt_blanco($bgcolor) }} @endisset><td style="width: 5%"><b>{{ Carbon\Carbon::parse($l->fec_log)->setTimezone(session('timezone'))->format('H:i')}}</b></td><td style="font-weight: bold; color: {{ $color }}">{{ $l->tip_mensaje }}</td><td> {!! nl2br($des_log) !!}</td></tr>
         @endforeach
     </table>
 </div>
+<script>
+    $(document).ready(function(){
+        $('.btn_total').html('Total: {{ count($log) }}');
+        $('.btn_error').html('Error: {{ $error??0 }}');
+        $('.btn_warning').html('Warning: {{ $warning??0 }}');
+        $('.btn_debug').html('Debug: {{ $debug??0 }}');
+        $('.btn_info').html('Info: {{ $info??0 }}');
+        $('.btn_critical').html('Critical: {{ $critical??0 }}');
+        $('.btn_alert').html('Alert: {{ $alert??0 }}');
+        $('.btn_user').html('User: {{ $user??0 }}');
+    });
+
+    $('.btn_filtro').click(function(){
+        $('.btn_filtro').removeClass('b-all  bg-light');
+        $(this).addClass('b-all bg-light');
+        if($(this).data('tipo')=='total'){
+            $('.row_log').show();
+            return;
+        } else {
+            $('.row_log').hide();
+            $('.'+$(this).data('tipo')).show();
+        }
+        
+    });
+</script>

@@ -28,7 +28,7 @@ class EventosController extends Controller
                 $q->orWhere('eventos_reglas.cod_cliente',session('CL')['id_cliente']);
             }
         })
-        ->groupby('eventos_reglas.cod_regla')
+        ->groupby('eventos_reglas.cod_regla','eventos_reglas.nom_regla','eventos_reglas.nom_comando','eventos_reglas.fec_inicio','eventos_reglas.fec_fin','eventos_reglas.fec_ult_ejecucion','eventos_reglas.fec_prox_ejecucion','eventos_reglas.mca_activa','eventos_reglas.clientes')
         ->get();
 
         return view('events.index',compact('eventos'));
@@ -556,5 +556,64 @@ class EventosController extends Controller
             ->where('fec_log','>=',$fecha)
             ->get();
         return view('resources.vista_log',compact('tarea','log'));
+    }
+
+    public function test(Request $r){
+        try{
+            //Primero vamos a recuperar el comando
+            $path = resource_path('views/events/comandos');
+            $fic_comando=$path.'/'.$r->comando;
+            include_once($fic_comando);
+            $JSON_param=decodeComplexJson($params);
+            $parametros=$JSON_param->parametros;//Esto es porque el JSON lleva un nodo que se llama parametros
+            //Ahora sustituimos en el JSON de parametros los valores que se han seleccionado
+            //Buscamos en el request el parametro con el nombre en cuestion y si esta, guardamos su valor
+            foreach($parametros as $p){
+                $nombre=$p->name;
+                if(isset($r->$nombre)){
+                    $p->value=$r->$nombre;
+                }
+            }
+            $parametros=json_encode($parametros);
+            if (isset($r->clientes)){
+                $r->clientes=implode(",",$r->clientes);
+            } else {
+                $r->clientes="0";
+            }
+            $evento=new reglas;
+            $evento->cod_regla=0;
+            $evento->param_comando=$parametros;
+            
+            $evento->clientes=$r->clientes;
+            $output=null;
+            $resultado=$func_comando($evento,$output);
+            $resultado=decodeComplexJson($resultado);
+            $cod_regla=$r->cod_regla;
+            return view('events.test',compact('resultado','cod_regla'));
+            
+
+        } catch(Throwable $e){
+            return response()->json([
+                "response" => "ERROR",
+                "error" => "Error al probar el comando ".$r->comando." ".mensaje_excepcion($e),
+                "TS" => Carbon::now()->format('Y-m-d h:i:s')
+                ])->throwResponse();
+        }
+    }
+
+    public function reset_regla(Request $r){
+
+        DB::table('eventos_evolucion_id')
+            ->where('cod_regla',$r->cod_regla)
+            ->delete();
+        DB::table('eventos_noactuar')
+            ->where('cod_regla',$r->cod_regla)
+            ->delete();
+        DB::table('eventos_reglas')->where('cod_regla',$r->cod_regla)->update(['fec_ult_ejecucion'=>null,'fec_prox_ejecucion'=>null]);
+        return [
+            'title' => trans('general.eventos'),
+            'message' => trans('eventos.evolucion_y_estado_de_regla_reseteados'),
+            //'url' => url('tasks')
+        ];
     }
 }

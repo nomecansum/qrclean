@@ -177,6 +177,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/puestos_usuario/{id}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@puestos_usuario'])->name('users.puestos_usuario');
         Route::get('/add_puesto_supervisor/{id}/{puesto}/{accion}',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@add_puesto_supervisor'])->name('users.add_puesto_supervisor');
         Route::post('/asignar_temporal',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@asignar_temporal'])->name('users.asignar_temporal');
+        Route::post('/anular_asignacion_temporal',['middleware'=>'permissions:["Usuarios"],["W"]','uses'=>'UsersController@anular_asignacion_temporal'])->name('users.anular_asignacion_temporal');
 
         Route::get('/plantas_usuarios',['middleware'=>'permissions:["Plantas usuarios"],["W"]','uses'=>'UsersController@plantas_usuarios'])->name('users.plantas_usuarios');
         Route::get('/puestos_supervisores',['middleware'=>'permissions:["Puestos supervisores"],["W"]','uses'=>'UsersController@puestos_supervisores'])->name('users.puestos_supervisores');
@@ -249,6 +250,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::Post('/export_qr','PuestosController@export_qr');
         Route::Post('/preview_qr','PuestosController@preview_qr');
         Route::Post('/save_config_print','PuestosController@save_config_print');
+
        
         Route::post('/ronda_limpieza',['middleware'=>'permissions:["Rondas de limpieza"],["R"]', 'uses' => 'PuestosController@ronda_limpieza']);
         Route::get('/mapa',['middleware'=>'permissions:["Puestos"],["R"]', 'uses' => 'PuestosController@mapa']);
@@ -269,6 +271,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/tipos/save',['middleware'=>'permissions:["Tipos de puesto"],["W"]', 'uses' => 'PuestosController@tipos_save']);
         Route::get('/tipos/edit/{id?}',['middleware'=>'permissions:["Tipos de puesto"],["C"]', 'uses' => 'PuestosController@tipos_edit']);
         Route::get('/tipos/delete/{id?}',['middleware'=>'permissions:["Tipos de puesto"],["D"]', 'uses' => 'PuestosController@tipos_delete']);
+        
 
     });
 
@@ -570,6 +573,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/detalle_evento/{id}',['middleware' => 'permissions:["Eventos"],["R"]', 'uses' => 'EventosController@detalle_evento']);
         Route::get('/log_evento/{id}/{fecha}/{hora}',['middleware' => 'permissions:["Eventos"],["R"]', 'uses' => 'EventosController@ver_log_evento']);
         Route::get('/log_tarea/{id}/{fecha}','EventosController@log_tarea_web');
+        Route::post('/probar_comando',['middleware' => 'permissions:["Eventos"],["R"]', 'uses' => 'EventosController@test']);
+        Route::post('/reset_estado',['middleware' => 'permissions:["Eventos"],["R"]', 'uses' => 'EventosController@reset_regla']);
     });
 
     ////////////////////GESTION DE TRABAJOS////////////////////

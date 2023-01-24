@@ -37,7 +37,7 @@ use Auth;
 class colorPuesto
 {
     static function colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$origen="P"){
-        $tam_borde=isMobile()?$puesto->factor_puestob-1:$puesto->factor_puestob;
+        $tam_borde=$puesto->border!=null?$puesto->border:(isMobile()?$puesto->factor_puestob-1:$puesto->factor_puestob);
         
         if(Auth::user()->id_cliente===5){  //Generali
             $borde=$puesto->val_color?$puesto->val_color:$puesto->hex_color;

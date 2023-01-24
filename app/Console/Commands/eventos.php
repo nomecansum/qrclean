@@ -53,6 +53,7 @@ class eventos extends Command
         }';
         return $params;
      }
+     
 
      static function signature(){
 
@@ -184,7 +185,7 @@ class eventos extends Command
                 if(config('app.env')=="local"){
                     dump($e);
                 }
-                $this->log_evento('Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando.', no encontrado',$evento->cod_regla,'error');
+                $this->log_evento('Comando :'.resource_path('views/events/comandos').'/'.$evento->nom_comando.', ERROR :'.mensaje_excepcion($e),$evento->cod_regla,'error');
                 $resultado=json_decode(json_encode([
                     "respuesta" => "ERROR",
                     "comando" => $evento->nom_comando,
@@ -238,8 +239,8 @@ class eventos extends Command
                                     $result_accion=$func_accion($accion,$resultado,$campos,$id,$output);
                                     //Como norma general, la funcion de la accion devolvera null, en caso de devolver otra cosa será para evitar que se vuelva a ejecutar en esa iteracion (notificaciones) o porque se va a rellenar la lista de id (evaluar regla )
                                     if(isset($result_accion['no_ejecutar_mas']) && $result_accion['no_ejecutar_mas']==true){
-                                        $acciones_no_ejecutar[]=$accion->cod_accion;    
-                                    } 
+                                        $acciones_no_ejecutar[]=$accion->cod_accion;
+                                    }
                                     //En este caso si en la accion se ha rellenado la lista de id, se añaden a la lista de id para la siguiente accion
                                     if(isset($result_accion['lista_id']) && count($result_accion['lista_id'])>0){
                                         $lista_ids_procesar=$result_accion['lista_id'];
@@ -250,7 +251,6 @@ class eventos extends Command
                                     //Se elimina la funcion por si hay mas acciones en la misma regla
                                     unset($func_accion);
                                 }
-                                
                             } catch(\Throwable $e){
                                 if(config('app.env')=="local"){
                                     dump($e);
@@ -264,7 +264,7 @@ class eventos extends Command
                     }
                 }
                 foreach(array_values($ids_para_la_iteracion) as $id){
-                    if($iteracion==1){ //Estamos en la primera ya hay que insertar en la tabla de evolucion para ir progresandola
+                    if($iteracion==1 && $max_iteracion>1){ //Estamos en la primera ya hay que insertar en la tabla de evolucion para ir progresandola
                         DB::table('eventos_evolucion_id')->insert([
                             "cod_regla"=>$evento->cod_regla,
                             "val_iteracion"=>$iteracion,
@@ -312,7 +312,7 @@ class eventos extends Command
                 'fec_prox_ejecucion'=>config('app.debug_eventos')==true?Carbon::now():Carbon::now()->addMinutes($evento->intervalo)
                 ]);
             $this->log_evento('Proxima ejecucion establecida para  '.Carbon::now()->addMinutes($evento->intervalo)->toString(),$evento->cod_regla,'notice');
-        } 
+        }
         if($eventos->count()==0){
             $this->escribelog_comando('info','No hay eventos para evaluar');
         }

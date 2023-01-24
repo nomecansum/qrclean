@@ -37,6 +37,10 @@ $clientes=DB::table('clientes')
 
 
 <script>
+    @if(isset($parametros))
+        $('#count_parametros').html('({{ count($parametros)+1 }})')
+    @endif
+
     $('#nom_queue').val("{{ $scope??'events' }}");
     $("#multi-clientes").select2(
     {

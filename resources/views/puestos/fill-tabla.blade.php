@@ -36,11 +36,11 @@
                                 <th data-sortable="true">Puesto</th>
                                 <th data-sortable="true" @if(isMobile()) data-visible="false" @endif>Edificio</th>
                                 <th data-sortable="true" @if(isMobile()) data-visible="false" @endif>Planta</th>
-                                
+                                <th data-sortable="true" title="Puesto con asignacion fija" @if(isMobile()) data-visible="false" @endif>Fijo</th>
                                 <th data-sortable="true">Alias</th>
                                 {{-- <th data-sortable="true" title="Acceso anonimo permitido en el puesto" style="width: 20px"  @if(isMobile()) data-visible="false" @endif>Anonimo</th> --}}
                                 {{-- <th data-sortable="true" title="Reserva permitida en el puesto" @if(isMobile()) data-visible="false" @endif>Reserva</th> --}}
-                                <th data-sortable="true" title="Puesto con asignacion fija" @if(isMobile()) data-visible="false" @endif>Fijo</th>
+                                
                                 <th data-sortable="true"class="text-center" style="width: 100px">Estado</th>
                                 <th  data-switchable="false"></th>
                             </tr>
@@ -69,7 +69,7 @@
                                 </td>
                                 <td class="td" data-id="">{{ $puesto->des_edificio }}</td>
                                 <td class="td" data-id="">{{$puesto->des_planta}}</td>
-                                
+                                <td class="text-center text-muted" >@if(isset($puesto->id_usuario))<i class="fad fa-user add-tooltip"  data-bs-toggle="popover" title="Puesto asignado al usuario {{ \App\Models\users::find($puesto->id_usuario)->name }}" style="color: #f4a462"></i> {{ iniciales(\App\Models\users::find($puesto->id_usuario)->name,3) }} @endif @if(isset($puesto->id_perfil))<i class="fad fa-users" title="Puesto asignado a perfil {{ \App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso }}" style="color: #f4a462"></i> {{ iniciales(\App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso,3) }}@endif</td>
                                 <td class="td" data-id="">
                                     <div class="m-0 badge pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
                                         {{ nombrepuesto($puesto) }}
@@ -77,7 +77,7 @@
                                 </td>
                                 {{-- <td class="text-center text-muted" >@if($puesto->mca_acceso_anonimo=='S') <i class="fas fa-circle"></i> @endif</td> --}}
                                 {{-- <td class="text-center text-muted" >@if($puesto->mca_reservar=='S') <i class="fas fa-circle"  style="color: #70c2b4"></i> @endif</td> --}}
-                                <td class="text-center text-muted" >@if(isset($puesto->id_usuario))<i class="fad fa-user" title="Puesto asignado al usuario {{ \App\Models\users::find($puesto->id_usuario)->name }}" style="color: #f4a462"></i> @endif @if(isset($puesto->id_perfil))<i class="fad fa-users" title="Puesto asignado a perfil {{ \App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso }}" style="color: #f4a462"></i> @endif</td>
+                                
                                 <td class="td text-center" data-id="">
                                     @if($puesto->mca_incidencia=='N')
                                         @switch($puesto->id_estado)

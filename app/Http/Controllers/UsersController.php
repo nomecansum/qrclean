@@ -1616,6 +1616,76 @@ class UsersController extends Controller
 
     }
 
+    public function anular_asignacion_temporal(Request $r){
+
+        $f = explode(' - ',$r->fecha);
+        $f1 = adaptar_fecha($f[0]);
+        $f2 = adaptar_fecha($f[1]);
+
+        $puesto=puestos::find($r->id);
+
+        //Buscamos la asignacion de puesto
+        $asignaciones=DB::Table('puestos_asignados')
+            ->where('id_puesto',$puesto->id_puesto)
+            ->where(function($q) use($r,$f1){
+                $q->where('fec_desde','<=',$f1);
+                $q->orwherenull('fec_desde');
+            })
+            ->where(function($q) use($r,$f2){
+                $q->where('fec_hasta','>=',$f2);
+                $q->orwherenull('fec_hasta');
+            })
+            ->where('id_tipo_asignacion',1)
+            ->get();
+
+        if($asignaciones->count()>0){
+            foreach($asignaciones as $asignacion){
+                $usuario=users::find($asignacion->id_usuario);
+                DB::table('puestos_asignados')->where('key_id',$asignacion->key_id)->update([
+                    'fec_hasta'=>Carbon::parse($f1)->subDay()
+                ]);
+                if($asignacion->fec_desde==null && $asignacion->fec_hasta==null){
+                    //Es un puesto permanente hacemos un hueco
+                    //E insertamos una nueva despues del hueco
+                    DB::table('puestos_asignados')->insert([
+                        'id_puesto'=>$puesto->id_puesto,
+                        'id_usuario'=>$usuario->id,
+                        'fec_desde'=>Carbon::parse($f2)->addDay(),
+                        'fec_hasta'=>null,
+                        'id_tipo_asignacion'=>1
+                    ]);
+                } else {
+                    //Esto es si la assignacion ya tenia fechas
+                    DB::table('puestos_asignados')->insert([
+                        'id_puesto'=>$puesto->id_puesto,
+                        'id_usuario'=>$usuario->id,
+                        'fec_desde'=>Carbon::parse($f2)->addDay(),
+                        'fec_hasta'=>$asignacion->fec_hasta,
+                        'id_tipo_asignacion'=>1
+                    ]);
+                }
+                $str_respuesta=' Se ha anulado su asignacion de puesto '.$puesto->cod_puesto.' para el intervalo '.$r->fecha;
+                savebitacora('Anulada asignacion temporal del puesto '.$puesto->cod_puesto.' al usuario '.$usuario->name.' para el intervalo '.$r->fecha,"Usuarios","anular_asignacion_temporal","OK");
+                //Notificar al usuario entrante
+                $str_notificacion=Auth::user()->name.' ha anulado la asignacion temporal del puesto '.$puesto->cod_puesto.' ('.$puesto->des_puesto.') para usted en el intervalo '.$r->fecha;
+                notificar_usuario($usuario,"<span class='super_negrita'>Anulada asignacion de puesto....<br></span>Estimado usuario:<br><span class='super_negrita'>Se le ha anulado temporalmente una asignacion de puesto</span>",'emails.asignacion_puesto',$str_notificacion,[1,3],4,[],$puesto->id_puesto);
+            }
+            return [
+                'result' => "OK",
+                'title' => "Usuarios",
+                'message' =>'Anulada asignacion temporal del puesto '.$puesto->cod_puesto.' para el intervalo '.$r->fecha,
+                'ocultar'=>Carbon::now()>=$f1&&Carbon::now()<=$f2?1:0,
+            ];
+        } else {
+            return [
+                'result' => "ERROR",
+                'title' => "Usuarios",
+                'message' =>'No se ha encontrado ninguna asignacion temporal del puesto '.$puesto->cod_puesto.' para el intervalo '.$r->fecha,
+            ];
+        }
+        
+    }
+
 
     //FUNCIONES ESPECIALES USUARIOS
     public function miperfil($id){
@@ -1679,7 +1749,7 @@ class UsersController extends Controller
                 $q->wherenull('fec_desde');
                 $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
             })
-            ->first();
+            ->get();
         $asignado_miperfil=[];
         $asignado_otroperfil=[];
 
@@ -1706,7 +1776,7 @@ class UsersController extends Controller
                     $q->wherenull('puestos_asignados.fec_desde');
                     $q->orwhereraw("'".Carbon::now()."' between puestos_asignados.fec_desde AND puestos_asignados.fec_hasta");
                 })
-                ->where('puestos.id_puesto',$asignado_usuario->id_puesto)
+                ->wherein('puestos.id_puesto',$asignado_usuario->pluck('id_puesto')->toArray())
                 ->get();
                 if(isset($mispuestos)){
                     $mispuestos=$mispuestos->merge($misasignados);

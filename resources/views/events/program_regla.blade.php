@@ -12,6 +12,7 @@
             }
         }
     }
+    $list_dias=[];
 @endphp
 
 
@@ -51,6 +52,11 @@
                             <div class="form-check pt-2 fs-4">
                                 <input name="dia{{ $d }}[]" data-dia="{{ $d }}" data-hora="{{ $h }}" id="check_{{ $d }}_{{ $h }}" value="{{ $h }}" @isset($sched){{ check_hora($d,$h,$sched) }}@endisset class="form-check-input chk_dia" type="checkbox">
                                 <label class="form-check-label" for="check_{{ $d }}_{{ $h }}"></label>
+                                @php
+                                    if(check_hora($d,$h,$sched)){
+                                        $list_dias[]=$dowMap[$d-1];
+                                    }
+                                @endphp
                             </div>
                         </div>
                     </td>
@@ -66,6 +72,8 @@
 </div>
 
 <script>
+    $('#count_programacion').html('('+$('#fec_inicio').val() + ' - ' + $('#fec_fin').val() +' | {{ implode(",",array_unique($list_dias)) }})');
+
     $('.td_dia').click(function(){
         $('[data-dia='+$(this).data('dia')+']').each(function () { this.checked = !this.checked; });
     })

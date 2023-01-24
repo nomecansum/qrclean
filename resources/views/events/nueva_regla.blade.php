@@ -41,7 +41,7 @@
 <div class="row botones_accion mb-2">
     <br><br>
 </div>
-<div class="card">
+<div class="card mb-3">
     <div class="card-header">
         <h3 class="card-title">{{ isset($reglas->nom_regla)?$reglas->nom_regla:'' }}</h3>
     </div>
@@ -51,7 +51,7 @@
             <input type="hidden" name="cod_regla" value="{{ $cod_regla }}">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card">
+                    <div class="card ">
                         <div class="card-body">
                             {{-- <h4 class="card-title">Nueva regla</h4> --}}
                             <div class="row">
@@ -132,12 +132,18 @@
                                 </div>
                                 <div class="col-md-5 d-flex flex-row p-t-20">
                                     <label class="mt-2 mr-1" for="" title="{{ __('eventos.hint_tiempo_espera') }}">{{ __('eventos.intervalo_de_espera') }}</label>
-                                    <input required type="number" name="int_espera" id="int_espera" class="form-control col-4" value="{{ $reglas->nomolestar??'' }}" min="0" max="365">
-                                    <select class="form-control col-4"  name="tip_espera" id="tip_espera">
+                                    <input required type="number" name="int_espera" id="int_espera" class="form-control col-2" value="{{ $reglas->nomolestar??'' }}" min="0" max="365">
+                                    <select class="form-control col-3"  name="tip_espera" id="tip_espera">
                                         <option value="M" {{ isset($reglas->tip_nomolestar) && $reglas->tip_nomolestar=='M'? 'selected':'' }}>{{ __('general.minutos') }}</option>
                                         <option value="H" {{ isset($reglas->tip_nomolestar) && $reglas->tip_nomolestar=='H'? 'selected':'' }}>{{ __('general.horas') }}</option>
                                         <option value="D" {{ isset($reglas->tip_nomolestar) && $reglas->tip_nomolestar=='D'? 'selected':'' }}>{{ __('general.dias') }}</option>
                                     </select>
+                                </div>
+                                <div class="col-md-1 mt-4 text-end">
+                                    <button type="submit" class="btn btn-primary btn_form float-right">{{trans('general.submit')}}</button>
+                                </div>
+                                <div class="col-md-1 mt-4 text-end">
+                                    <a class="btn btn-secondary text-white btn_probar"> Probar</a>
                                 </div>
                             </div>
     
@@ -145,55 +151,74 @@
                     </div>
                 </div>
             </div>
-            <div class="row" id="div_regla" style="display:none">
-                <div class="col-md-12">
-                    <div class="card totales_resultados b-all" >
-                        <h4 class="mt-2 ml-2" >{{ __('eventos.parametrizacion_del_comando') }}</h4>
-                        <div class="card-body" id="param_regla">
+        </div>
+    </div>
+    <div class="row" id="div_regla" style="display:none">
+        <div class="col-md-12">
+            <div class="card totales_resultados  mb-3" >
+                <h4 class="mt-2 ml-2 expandir"  data-div="param_regla">{{ __('eventos.parametrizacion_del_comando') }} <span id="count_parametros"  class="text-light"></span> <i class="fas fa-caret-right text-info"></i></h4>
+                <div class="card-body" id="param_regla"  style="display:none">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="div_prog" style="display:none">
+        <div class="col-md-12">
+            <div class="card  mb-3" >
+                <h4 class="mt-2 ml-2 expandir"  data-div="prog_regla">{{ __('eventos.programacion_de_la_regla') }} <span id="count_programacion" class="text-light"></span> <i class="fas fa-caret-right text-info"></i></h4>
+                <div class="card-body" id="prog_regla"  style="display:none">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form action="{{url(config('app.carpeta_asset').'/acciones/param_acciones/save')}}" method="POST" class="form-ajax" id="formaccion">
     
+    <div class="row" id="div_acc" style="display:none">
+        <div class="col-md-12">
+            <div class="card  mb-3" >
+                <div class="row pt-1 pb-1">
+                    <div class="col-md-4">
+                        <h4 class="mt-2 ml-2 expandir"  data-div="acciones_regla" >Acciones <span id="count_acciones"  class="text-light"></span> <i class="fas fa-caret-down text-info"></i></h4>
+                    </div>
+                    <div class="col-md-8 text-end">
+                        <div class="dropdown">
+                            <a href="javascript:void(0)" class="btn float-right hidden-sm-down btn-success dropdown-toggle mr-3 pr-3" data-bs-toggle="dropdown"><i class="fas fa-plus-circle"></i> {{ ucfirst(__('general.addadir')) }}</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item nueva_accion p-1"  id="nueva_iteracion" data-tipo="iteracion" href="javascript:void(0)"><i class="fad fa-recycle" style="width:20px"></i> {{ __('eventos.iteracion') }}</a>
+                                <a class="dropdown-item nueva_accion p-1" id="nueva_accion" data-tipo="accion" href="javascript:void(0)"><i class="fad fa-shoe-prints" style="width:20px"></i> {{ __('general.accion') }}</a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                    
+                <div class="card-body" id="acciones_regla"></div>
             </div>
+        </div>
+    </div>
+</form>
     
-            <div class="row" id="div_prog" style="display:none">
-                <div class="col-md-12">
-                    <div class="card" >
-                        <h4 class="mt-2 ml-2" >{{ __('eventos.programacion_de_la_regla') }}</h4>
-                        <div class="card-body" id="prog_regla">
-    
-                        </div>
-                    </div>
-                </div>
+
+<div class="modal fade" id="run_tarea">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>@include('resources.spin_puntitos',['id_spin'=>'spin_tarea','clase'=>'spin_tarea'])
+                    <b>{{ __('eventos.prueba_de_comando') }} <span id="des_tarea_run"></span></b></h3>
+                <button type="button" class="btn btn-info btn-xs" data-bs-dismiss="modal" aria-label="Close" >
+                    <span aria-hidden="true"><i class="fa-solid fa-circle-x"></i></span>
+                </button>
             </div>
-        </form>
-        <form action="{{url(config('app.carpeta_asset').'/acciones/param_acciones/save')}}" method="POST" class="form-ajax" id="formaccion">
-           
-            <div class="row" id="div_acc" style="display:none">
-                <div class="col-md-12">
-                    <div class="card" >
-                        <div class="card-header bg-white">
-                            <h4 class="mt-2 ml-2" >Acciones</h4>
-                                <div class="dropdown text-end">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fas fa-plus-circle"></i> Añadir
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item nueva_accion p-1"  id="nueva_iteracion" data-tipo="iteracion" href="javascript:void(0)"><i class="fad fa-recycle" style="width:20px"></i> {{ __('eventos.iteracion') }}</a></li>
-                                        <li><a class="dropdown-item nueva_accion p-1" id="nueva_accion" data-tipo="accion" href="javascript:void(0)"><i class="fad fa-shoe-prints" style="width:20px"></i> {{ __('general.accion') }}</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                        </div>
-                        
-                        <div class="card-body" id="acciones_regla">
-    
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-body text-left" id="log_fichero" style="height: 550px; overflow: Auto">
+
             </div>
-        </form>
+            <div class="modal-footer">
+                <button type="button" data-bs-dismiss="modal" class="btn btn-warning">{{ __('general.cerrar') }}</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -230,6 +255,10 @@
 
     @endif;
 
+    $('.expandir').click(function(){
+        $('#'+$(this).data('div')).toggle();
+        $(this).find('i').toggleClass('fas fa-caret-right fas fa-caret-down');
+    })
 
     $('.nueva_accion').click(function(){
         tipo_accion=$(this).data('tipo');
@@ -293,6 +322,50 @@
     });
 
 
+
+    $('.btn_probar').click(function(){
+        let form = $('#formcomando');
+
+        let data = new FormData(form[0]);
+
+        $.ajax({
+            url: "{{ url(config('app.carpeta_asset').'/probar_comando') }}",
+            type: form.attr('method'),
+            contentType: false,
+            processData: false,
+            data: data,
+        })
+
+        .done(function(data) {
+            $('#log_fichero').empty();
+            if($('#comando').val()=='' || $('#comando').val()==null){
+                toast_error("{{__('general.error')}}","{{__('eventos.seleccione_un_comando')}}");
+                return false;
+            }
+            $('#run_tarea').modal('show');
+            $('#des_tarea_run').html($('#comando option:selected').text());
+            $('#log_fichero').html(data);
+           //console.log(data);
+        })
+        .fail(function(err) {
+            let error = JSON.parse(err.responseText);
+            let html = "";
+            if(error.message){
+                html+=error.message;
+            }
+            @if(fullAccess())
+                html+=error.exception+' '+'['+error.line+']';
+            @endif
+            console.log(error);
+            $.each(error.errors, function(index, val) {
+                 html += "- "+$(this)[0]+"<br>";
+            });
+            toast_error("{{__('general.error_general')}}",html);
+        })
+        .always(function() {
+            console.log("complete");
+        });
+    })
 </script>
 @endsection
 

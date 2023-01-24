@@ -65,6 +65,8 @@
 <script>
 
 
+    $('#count_acciones').html('({{ $n-1 }} <i class="fad fa-recycle"></i> | {{ $acciones->count() }} <i class="fad fa-shoe-prints"></i>)');
+
     $('#num_acciones').change(function(){
         console.log('change');
         $('#acciones_regla').html('');

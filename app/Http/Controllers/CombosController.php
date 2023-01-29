@@ -12,7 +12,7 @@ class CombosController extends Controller
     private function filtro_clientes($r){
         if (!isset($r->cliente)){
             if (fullaccess()){
-                $r->cliente=DB::table('clientes')->wherenull('fec_borrado')->pluck('id_cliente')->toArray();
+                $r->cliente=DB::table('clientes')->where('id_cliente',session('CL')['id_cliente'])->pluck('id_cliente')->toArray();
             } else {
                 $r->cliente=DB::table('clientes')
                     ->wherein('id_cliente',clientes())
@@ -128,11 +128,8 @@ class CombosController extends Controller
                     $q->orwherein('id',$supervisores_usuario);
                 })
                 ->where(function($q){
-                    if (!isAdmin()) {
-                        $q->wherein('users.id_cliente',clientes());
-                    } else {
-                        $q->where('users.id_cliente',session('CL')['id_cliente']);
-                    }
+                    $q->wherein('users.id_cliente',clientes());
+                    $q->where('users.id_cliente',session('CL')['id_cliente']);
                 })
                 ->orderby('clientes.nom_cliente')
                 ->orderby('name')

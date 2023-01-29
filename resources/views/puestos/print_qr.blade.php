@@ -79,9 +79,9 @@ try{
                 <div class="col-md-2">
                     <div class="form-group">
                         <label for="">Tamaño <i class="fa-solid fa-arrow-down-small-big"></i></label>
-                        <input type="number" class="form-control resize val_qr bind_value" min="50" max="500" step="1" data-clase="val_qr" required name="tam_qr" id="tam_qr" value="{{ $r->tam_qr??230 }}">
+                        <input type="number" class="form-control resize val_qr bind_value" min="50" max="1000" step="1" data-clase="val_qr" required name="tam_qr" id="tam_qr" value="{{ $r->tam_qr??230 }}">
                     </div>
-                    <input type="range" class="form-range val_qr bind_value resize" min="50" max="500" step="1" data-clase="val_qr"  id="range_tam_qr">
+                    <input type="range" class="form-range val_qr bind_value resize" min="50" max="1000" step="1" data-clase="val_qr"  id="range_tam_qr">
                 </div>
                 <div class="col-md-2">
                     <label for="val_color">Color QR <i class="fa-solid fa-palette"></i></label><br>
@@ -167,19 +167,19 @@ try{
                 <div class="col-md-1">
                     <div class="form-group">
                         <label for="">Salto p. <i class="fa-solid fa-file-dashed-line"></i></label>
-                        <input type="number" class="form-control resize val_page_break bind_value" min="0" max="200" data-clase="val_page_break"  required name="page_break" id="page_break" value="{{ $r->page_break??40 }}" value="{{ $r->page_break??40 }}">
+                        <input type="number" class="form-control resize val_page_break bind_value" min="0" max="500" data-clase="val_page_break"  required name="page_break" id="page_break" value="{{ $r->page_break??40 }}" value="{{ $r->page_break??40 }}">
                     </div>
-                    <input type="range" class="form-range val_page_break bind_value resize" min="0" max="200" step="1" data-clase="val_page_break"  id="range_page_break">
+                    <input type="range" class="form-range val_page_break bind_value resize" min="0" max="500" step="1" data-clase="val_page_break"  id="range_page_break">
                 </div>
                 <div class="col-md-1 text-right pt-2">
                     @include('resources.loading',['id_spin'=>'spinner','clase'=>'spinner'])
                 </div>
                 <div class="col-md-1 text-right">
-                    <a href="javascript:void(0)" class="btn  btn-primary add-tooltip mt-3 " id="btn_pdf"  title="Exportar en PDF" data-id="1" data-url="" style="height: 53.81px; width: 67.23px"> <i class="fad fa-file-pdf"></i><br> PDF</a>
+                    <a href="javascript:void(0)" class="btn  btn-info add-tooltip mt-3 " id="btn_pdf"  title="Exportar en PDF" data-id="1" data-url="" style="height: 53.81px; width: 67.23px"> <i class="fad fa-file-pdf"></i><br> PDF</a>
                 </div>
                 
                 <div class="col-md-1 text-right">
-                    <a href="javascript:void(0)" class="btn  btn-warning add-tooltip mt-3" id="btn_print" title="Imprimir" data-id="1" data-url="" > <i class="fad fa-print"></i> PRINT</a>
+                    <a href="javascript:void(0)" class="btn  btn-warning add-tooltip mt-3 text-nowrap" id="btn_print" title="Imprimir" data-id="1" data-url="" > <i class="fad fa-print"></i> PRINT</a>
                 </div>
             </div>
             <div class="row">

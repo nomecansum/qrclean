@@ -649,8 +649,8 @@ class ReservasController extends Controller
             // }
             $res->id_cliente=Auth::user()->id_cliente;
             $res->save();
-            savebitacora('Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,"Reservas","save","OK");
-            insertar_notificacion_web($res->id_usuario,2,'Puesto '.$r->des_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,$res->id_reserva);
+            savebitacora('Puesto '.$puesto->cod_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,"Reservas","save","OK");
+            insertar_notificacion_web($res->id_usuario,2,'Puesto '.$puesto->cod_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,$res->id_reserva);
             $id_reserva[]=$res->id_reserva;
         }
         enviar_mail_reserva($res->id_reserva,$r->mca_ical);
@@ -659,7 +659,7 @@ class ReservasController extends Controller
 
         return [
             'title' => "Reservas",
-            'mensaje' => 'Puesto '.$r->des_puesto.' reservado. Identificadores de reserva: '.implode(",",$id_reserva),
+            'mensaje' => 'Puesto '.$puesto->cod_puesto.' reservado. Identificadores de reserva: '.implode(",",$id_reserva),
             'fecha' => '['.$fec_desde->format('d/m/Y H:i').' - '.$fec_hasta->format('d/m/Y H:i').']',
             'fec_ver' => $fec_desde->format('Y-m-d'),
             //'url' => url('puestos')

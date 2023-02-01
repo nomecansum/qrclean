@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
         //
         //Directiva para mostrar cosas solo si se es superadmin
         Blade::if('admin', function () {
-            if (isAdmin()) {
+            if (isAdmin()===true) {
                 return true;
             } 
             return false;

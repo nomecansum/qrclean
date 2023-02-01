@@ -68,7 +68,7 @@ class Handler extends ExceptionHandler
 
             }
         }
-		if((Auth::user()) && (!$exception instanceof ValidationException) && (!$exception instanceof TokenMismatchException) && (!$exception instanceof \Illuminate\Session\TokenMismatchException) && (config('!app.debug'))) //que no sea de validacion de datos
+		if((Auth::user()) && (!$exception instanceof ValidationException) && (!$exception instanceof TokenMismatchException) && (!$exception instanceof \Illuminate\Session\TokenMismatchException) && (!config('app.debug'))) //que no sea de validacion de datos
 		{
 			try {
 	    		//mandamos un email con datos

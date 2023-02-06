@@ -22,7 +22,9 @@ Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [4] Limpir debajo de las alfombras 0 10 ? * MON,FRI
 Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 17 1/4 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-09T17:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-13T17:00:00.000Z dias previstos 32
+Se han programado 2 instancias del trabajo [2] Pasar la aspiradora
 Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
 Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
@@ -30,17 +32,27 @@ Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
 Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-09T17:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-13T17:00:00.000Z dias previstos 32
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-09T17:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-13T17:00:00.000Z dias previstos 32
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-09T17:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-13T17:00:00.000Z dias previstos 32
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Limpieza Pedrosa -> Trabajo: [4] Limpir debajo de las alfombras 0 10 ? * MON,FRI
 Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-09T17:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-13T17:00:00.000Z dias previstos 32
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-09T17:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-13T17:00:00.000Z dias previstos 32
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
@@ -52,29 +64,65 @@ Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-10T11:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T16:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T22:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-15T11:00:00.000Z dias previstos 33
+Se han programado 4 instancias del trabajo [4] Limpir debajo de las alfombras
 Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-10T11:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T16:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T22:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-15T11:00:00.000Z dias previstos 33
+Se han programado 4 instancias del trabajo [4] Limpir debajo de las alfombras
 Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-10T11:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T16:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T22:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-15T11:00:00.000Z dias previstos 33
+Se han programado 4 instancias del trabajo [4] Limpir debajo de las alfombras
 Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-10T11:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T16:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T22:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-15T11:00:00.000Z dias previstos 33
+Se han programado 4 instancias del trabajo [4] Limpir debajo de las alfombras
 Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-10T11:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T16:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T22:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-15T11:00:00.000Z dias previstos 33
+Se han programado 4 instancias del trabajo [4] Limpir debajo de las alfombras
 Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-10T11:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T16:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T22:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-15T11:00:00.000Z dias previstos 33
+Se han programado 4 instancias del trabajo [4] Limpir debajo de las alfombras
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-10T11:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T16:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-10T22:00:00.000Z dias previstos 28
+Programada fecha: 2023-03-15T11:00:00.000Z dias previstos 33
+Se han programado 4 instancias del trabajo [4] Limpir debajo de las alfombras
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 14 ? * MON,WED,FRI
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
@@ -82,25 +130,45 @@ Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [8] Limpiar las mesas 0 15 ? * 1#1
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
+Programada fecha: 2023-03-08 14:00:00 dias previstos 30
+Programada fecha: 2023-03-09 14:00:00 dias previstos 31
+Se han programado 2 instancias del trabajo [3] Fregar
 Fin de la tarea App\Console\Commands\programar_trabajos_mantenimiento
 Fin de la tarea php [39] Programacion de trabajos de mantenimiento
 Tarea [39] Programacion de trabajos de mantenimiento se ha ejecutado correctamente. Resp: 

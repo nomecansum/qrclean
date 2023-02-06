@@ -63,6 +63,7 @@ class config_clientes extends Model
                   'mca_spotlinker_salas',
                   'config_print_qr',
                   'mca_mail_apertura_incidencia',
+                  'mca_tipo_antelacion',
               ];
 
     /**

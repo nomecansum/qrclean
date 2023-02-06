@@ -1,0 +1,4 @@
+Inicio de la tarea programada [11]App\Console\Commands\taskejemplo
+YO estuve aqui
+Fin de la tarea App\Console\Commands\taskejemplo
+PHP Parse error:  syntax error, unexpected token "foreach" in C:\WWW\qrclean\bootstrap\helpers.php on line 439

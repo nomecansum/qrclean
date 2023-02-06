@@ -82,18 +82,13 @@
                     @endif
                 </div>
                 <div class="row mt-2">
-                    <div class="col-md-3 p-t-20 mt-2">
-                        <div class="form-check pt-1">
-                            <input name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ $tipo->mca_liberar_auto=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
-                            <label for="mca_liberar_auto" class="form-check-label">Liberar reservas AUTO</label>
-                        </div>
-                    </div>
+                    
                     <div class="form-group col-md-2">
                         <label for="max_usos">Cortesia (min)</label><br>
                         <input type="number" autocomplete="off" name="hora_liberar" id="hora_liberar" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->hora_liberar??config_cliente('hora_liberar_puestos',$tipo->id_cliente)}}" />
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="max_usos">Tiempo limpieza (min)</label><br>
+                        <label for="max_usos">Tiempo limpieza(min)</label><br>
                         <input type="number" autocomplete="off" name="val_tiempo_limpieza" id="val_tiempo_limpieza" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->val_tiempo_limpieza}}" />
                     </div>
                     <div class="form-group col-md-2" >
@@ -101,8 +96,14 @@
                         <input type="number" autocomplete="off" min="1" max="20" style="width: 100px"  name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="max_usos">Tiempo antelacion (dias)</label><br>
+                        <label for="max_usos">Tiempo antelac.(dias)</label><br>
                         <input type="number" autocomplete="off" name="val_dias_antelacion" id="val_dias_antelacion" style="width: 120px" min="0" max="365"  class="form-control" value="{{$tipo->val_dias_antelacion}}" />
+                    </div>
+                    <div class="col-md-3 p-t-20 mt-2">
+                        <div class="form-check pt-1">
+                            <input name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ $tipo->mca_liberar_auto=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
+                            <label for="mca_liberar_auto" class="form-check-label">Liberar reservas AUTO</label>
+                        </div>
                     </div>
                 </div>
                 

@@ -613,8 +613,8 @@
     const popoverTriggerList = [...document.querySelectorAll( '[data-bs-toggle="popover"]' )];
     const popoverList = popoverTriggerList.map( popoverTriggerEl => new bootstrap.Popover( popoverTriggerEl ));
 
-    const tooltipTriggerList = [...document.querySelectorAll( '.add-tooltip' )];
-    const tooltipList = tooltipTriggerList.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl ));
+    tooltipTriggerList = [...document.querySelectorAll( '.add-tooltip' )];
+    tooltipList = tooltipTriggerList.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl ));
 
     const cal_formato_fecha="{{trans("general.date_format")}}";
     const cal_meses=["{{trans('general.enero')}}","{{trans('general.febrero')}}","{{trans('general.marzo')}}","{{trans('general.abril')}}","{{trans('general.mayo')}}","{{trans('general.junio')}}","{{trans('general.julio')}}","{{trans('general.agosto')}}","{{trans('general.septiembre')}}","{{trans('general.octubre')}}","{{trans('general.noviembre')}}","{{trans('general.diciembre')}}"];

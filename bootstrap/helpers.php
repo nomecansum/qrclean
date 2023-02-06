@@ -17,6 +17,9 @@ use Carbon\CarbonPeriod;
 use Shahonseven\ColorHash;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Event;
+use Illuminate\Support\Facades\Storage;
 
 
 function stripAccents($str) {
@@ -412,6 +415,14 @@ function comodines_texto($texto,$campos,$datos){
 
 
 function insertar_notificacion_web($user,$tipo,$texto,$id){
+
+    $url_base="/";
+    $tipo_notif=notificaciones_tipos::find($tipo);
+   
+    if(isset($tipo_notif)){
+        $url_base=$tipo_notif->url_base;
+    }
+    
     $notif=DB::table('notificaciones')->insertGetId(
         [
             'id_usuario'=>$user,
@@ -419,18 +430,19 @@ function insertar_notificacion_web($user,$tipo,$texto,$id){
             'txt_notificacion'=>$texto,
             'fec_notificacion'=>Carbon::now(),
             'mca_leida'=>'N',
-            'url_notificacion'=>url(notificaciones_tipos::find($tipo)->url_base??'/',$id)
+            'url_notificacion'=>url($url_base,$id)
         ]
     );
     return $notif;
 
 }
 
-function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$attachments=[],$id=null){
-    try{
-        
+function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$attachments=null,$id=null){
+    
+    try{    
         //Añadimos notificacion en la web
         $id_notif=insertar_notificacion_web($user->id,$tipo,$body,$id);
+        Log::debug('Notificacion web insertada '.$id_notif);
 
 
         foreach($metodo as $m){
@@ -441,7 +453,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
                 case 1: //Mail
                     if($user->mca_notif_email=='S'){
                         $cliente=clientes::find($user->id_cliente);
-                        \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'id'=>$id], function ($m) use ($user,$subject) {
+                        \Mail::send($plantilla, ['user' => $user,'body'=>$body,'cliente'=>$cliente,'id'=>$id], function ($m) use ($user,$subject,$attachments) {
                             if(config('app.env')=='local' || config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
                                 Log::debug('Capturado email para '.$user->email.' ('.$user->name.')');
                                 $m->to('nomecansum@gmail.com', $user->name)->subject(strip_tags($subject));
@@ -449,6 +461,15 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
                                 $m->to($user->email, $user->name)->subject(strip_tags($subject));
                             }
                             $m->from(config('mail.from.address'),config('mail.from.name'));
+                            if($attachments!==null){
+                                if (is_array($attachments)){ //adjuntamos si existe
+                                    foreach($attachments as $fichero){
+                                        $m->attach($fichero);
+                                    }
+                                } else {
+                                    $m->attach($attachments);
+                                }
+                            }
                         });
                     }
                     break;
@@ -470,7 +491,7 @@ function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$
 
         }
         
-    } catch(\Exception $e){
+        } catch(\Exception $e){
         log::error($e->getMessage());
         return $e->getMessage();
     }
@@ -1469,32 +1490,37 @@ function enviar_mail_reserva($id_reserva,$mca_ical,$sender_name=null){
         $des_evento="Reserva de puesto [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto;
         $tipo="el puesto";
     }
-    $body="Tiene reservado ".$tipo. " [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto." con el siguiente identificador de reserva: ".$id_reserva;
-    if($id_reserva!=null){
-        $body.=".\n\n Su reserva anterior ha sido anulada";
-    }
+    // $body="Tiene reservado ".$tipo. " [".$det_puesto->cod_puesto."] ".$det_puesto->des_puesto." con el siguiente identificador de reserva: ".$id_reserva;
+    // if($id_reserva!=null){
+    //     $body.=".\n\n Su reserva anterior ha sido anulada";
+    // }
     $subject="Detalles de su reserva con Spotdesking";
-    $str_notificacion=$sender_name??$user->name.' ha creado una Reserva  del puesto ['.$det_puesto->cod_puesto.'] '.$det_puesto->des_puesto.' para usted en el periodo  '.$det_reserva->fec_reserva.' - '.$det_reserva->fec_fin_reserva;
+    $str_notificacion=$sender_name??$user->name.' ha creado una Reserva  del puesto ['.$det_puesto->cod_puesto.'] '.$det_puesto->des_puesto.' para usted en el periodo  '.beauty_fecha($det_reserva->fec_reserva).' - '.beauty_fecha($det_reserva->fec_fin_reserva);
 
     if(isset($mca_ical) && $mca_ical=='S'){
         $cal=Calendar::create('Reserva de puestos Spotdesking');
-        foreach($period as $p){
-            $evento=Event::create()
-                ->name($des_evento)
-                ->description($body)
-                ->uniqueIdentifier(implode(",",$id_reserva))
-                ->organizer($user->email, $user->name)
-                ->createdAt(Carbon::now())
-                ->startsAt($det_reserva->fec_reserva)
-                ->endsAt($reserva->fec_fin_reserva);
-            $cal->event($evento);
-        }
+       
+        $evento=Event::create()
+            ->name($des_evento)
+            ->description($str_notificacion)
+            ->uniqueIdentifier($id_reserva)
+            ->organizer($user->email, $user->name)
+            ->createdAt(Carbon::now())
+            ->startsAt(Carbon::parse($det_reserva->fec_reserva))
+            ->endsAt(Carbon::parse($det_reserva->fec_fin_reserva));
+        $cal->event($evento);
+        
         $cal=$cal->get();
-        $attach=['nombre'=>"reserva_".Auth::user()->id."_".Carbon::now()->format('Ymdhi').".ics","tipo"=>'text/calendar','dato'=>$cal];
+        $nombre_ical="reserva_".Auth::user()->id."_".Carbon::now()->format('Ymdhi').".ics";
+        $attach=Storage::disk('local')->put("ical/".$nombre_ical,$cal);
+        if($attach){
+            $attach=storage_path('app/ical/'.$nombre_ical);
+        }
+        //$attach=['nombre'=>"reserva_".Auth::user()->id."_".Carbon::now()->format('Ymdhi').".ics","tipo"=>'text/calendar','dato'=>$cal];
     } else {
         $attach=null;
     }
-    notificar_usuario($user,$des_evento,'emails.mail_reserva',$body,$str_notificacion,[1,3],2,$attach,$det_reserva->id_reserva);
+    notificar_usuario($user,$des_evento,'emails.mail_reserva',$str_notificacion,[1,3],2,$attach,$det_reserva->id_reserva);
 }
 
 //Funcion para aplicar los colores de la pagina

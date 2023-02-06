@@ -122,9 +122,22 @@ class limpiar_bitacora extends Command
         $affected=DB::table('reservas')
         ->whereraw("fec_reserva < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
         ->delete();
-
         $this->escribelog_comando('info',$affected.' filas borradas');
+
+        $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG de tareas');
         $affected=DB::table('tareas_programadas_log')
+        ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
+        ->delete();
+        $this->escribelog_comando('info',$affected.' filas borradas');
+
+        $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG de eventos');
+        $affected=DB::table('eventos_log')
+        ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
+        ->delete();
+        $this->escribelog_comando('info',$affected.' filas borradas');
+
+        $this->escribelog_comando('debug','LOGS - Borrando entradas de notificaciones');
+        $affected=DB::table('notificaciones')
         ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
         ->delete();
         $this->escribelog_comando('info',$affected.' filas borradas');

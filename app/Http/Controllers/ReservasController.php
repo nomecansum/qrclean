@@ -424,11 +424,14 @@ class ReservasController extends Controller
         //Ahora vamos a ver quepuestos no pueden ser reservados porque no cumplen la regla de maxima antelacion
         $festivos=collect(estadefiesta(Auth::user()->id,Carbon::now(),Carbon::parse($f2)->addDay(),0));
         $puestos_antelacion=$puestos->wherenotnull('val_dias_antelacion');
+        $tipo_antelacion_cliente=config_cliente('mca_tipo_antelacion');
+        $min_hora_reserva_cliente=config_cliente('min_hora_reservas');
         foreach($period as $p){
             foreach($puestos_antelacion as $pa){
                 $dias_antelacion=$pa->val_dias_antelacion;
+                
                 //En caso de que la fecha en la que va el bucle sea festivo o no laborable, se añaden dias a los dias de antelacion hasta el siguiente dia laborable
-                $periodo_antelacion=CarbonPeriod::create(Carbon::now(),$p->endOfDay());
+                $periodo_antelacion=CarbonPeriod::create(Carbon::now()->addday(),$p->endOfDay());
                 foreach($periodo_antelacion as $p2) {
                     $es_festivo=$p2->isWeekend() || $festivos->where('date',$p2->format('Y-m-d'))->where('festivo',1)->first();
                     if($es_festivo){
@@ -436,10 +439,21 @@ class ReservasController extends Controller
                         $dias_antelacion++;
                     }
                 }
+                
                 //Le añadimos a la fecha los dias de antelacion y 2 horas mas por cortesia
-                // dump(Carbon::now()->setTimezone(Auth::user()->val_timezone)->addDays($dias_antelacion)->endofday()->addminutes(2));
-                // dd($p);
-                if($p->greaterThan(Carbon::now()->setTimezone(Auth::user()->val_timezone)->addDays($dias_antelacion)->endofday()->addminutes(2))){
+                // En funcion de la configuracion del cliente, se puede reservar desde las 00:00 del dia en cuestion o desde la hora minima de rango de horas de reserva del cliente, se establece con el campo mca_tipo_antelacion de la tabla config_clientes
+                if($tipo_antelacion_cliente=='H'){
+                    $min_inicial=$min_hora_reserva_cliente;
+                } else {
+                    $min_inicial=0;
+                }
+                
+               
+                $fecha_comparacion=Carbon::parse($p->format('Y-m-d'))->addminutes($min_inicial);
+                $fecha_limite=Carbon::now()->setTimezone(Auth::user()->val_timezone)->addDays($dias_antelacion);
+                //log::debug("fecha ".$fecha_comparacion." | Dias antelacion ".$dias_antelacion." dias | Fecha limite ".$fecha_limite." ");
+                if(($fecha_limite<$fecha_comparacion)){
+                    //Log::debug("quito puesto ".$pa->id_puesto." por antelacion");
                     $puestos->where('id_puesto',$pa->id_puesto)->first()->quitar=true;
                 }
             }

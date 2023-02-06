@@ -664,7 +664,7 @@ class ReservasController extends Controller
             $res->id_cliente=Auth::user()->id_cliente;
             $res->save();
             savebitacora('Puesto '.$puesto->cod_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,"Reservas","save","OK");
-            insertar_notificacion_web($res->id_usuario,2,'Puesto '.$puesto->cod_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,$res->id_reserva);
+            //insertar_notificacion_web($res->id_usuario,2,'Puesto '.$puesto->cod_puesto.' reservado. Identificador de reserva: '.$res->id_reserva,$res->id_reserva);
             $id_reserva[]=$res->id_reserva;
         }
         enviar_mail_reserva($res->id_reserva,$r->mca_ical);

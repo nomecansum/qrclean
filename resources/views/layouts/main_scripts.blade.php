@@ -551,8 +551,8 @@
     function recolocar_puestos(posiciones){
         $('.container').each(function(){
             plano=$(this);
-            console.log('plano: '+plano.height()+' '+plano.width());
-            $.each(plano.data('posiciones'), function(i, item) {//console.log(item);
+            //console.log('plano: '+plano.height()+' '+plano.width());
+            $.each(plano.data('posiciones'), function(i, item) {
                 puesto=$('#puesto'+item.id);
                 puesto.css('top',plano.height()*item.offsettop/100);
                 puesto.css('left',(plano.width()*item.offsetleft/100));
@@ -569,6 +569,13 @@
                 } else {
                     puesto.css('height',plano.width()*(puesto.data('factorh')/100)+'px');
                 }
+                // if(i==0){
+                //     console.log(item);
+                //     console.log(puesto.css('width'));
+                //     console.log(puesto.css('height'));
+                //     console.log(puesto.css('top'));
+                //     console.log(puesto.css('left'));
+                // }
                 // puesto.css('width',plano.width()*(puesto.data('factorw')/100)+'px');
                 // puesto.css('height',plano.height()*(puesto.data('factorh')/100)+'px');
                 @mobile()

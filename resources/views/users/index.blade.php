@@ -607,7 +607,7 @@
             if(searchIDs.length>1){
                 $('.modal').modal('hide');
                 toast_warning('Error','Solo se puede hacer la asignacion temporal de 1 usuario a la vez');
-                exit();
+                return;
             }
 
             
@@ -621,7 +621,7 @@
             if(searchIDs.length>1){
                 $('.modal').modal('hide');
                 toast_warning('Error','Solo se puede hacer la reserva de 1 usuario a la vez');
-                exit();
+                return;
             }
             //$('#fechas_reserva').change();
         })

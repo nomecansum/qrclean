@@ -103,6 +103,7 @@
                 $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fechas: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $(this).data('href'), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(),id_planta:$('#id_planta').val()}, function(data, textStatus, xhr) {
                     $('#detalles_reserva').html(data);
                     recolocar_puestos();
+                    console.log('modo.click');
                 });
         }
 
@@ -110,11 +111,13 @@
     
         $(window).resize(function(){
             recolocar_puestos();
+            console.log('window.resize');
         })
 
         document.querySelectorAll(".nav-toggler").forEach(item => 
             item.addEventListener("click", () => {
                 setTimeout(() => {
+                    console.log('nav-toggler');
                     recolocar_puestos();
                 }, 300);
         }));

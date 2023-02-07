@@ -109,7 +109,7 @@
                     </select>
                 </div>
                 <div class="form-group col-md-3 {{ $errors->has('val_periodo_minimo') ? 'has-error' : '' }}">
-                    <label for="val_periodo_minimo" class="control-label">Intervalo minimo votos</label>
+                    <label for="val_periodo_minimo" class="control-label">Intervalo minimo votos (min)</label>
                         <input class="form-control" required name="val_periodo_minimo" type="number" id="val_periodo_minimo" value="{{ $encuesta->val_periodo_minimo }}" min="0" max="1440" placeholder="Enter periodo minimo">
                         {!! $errors->first('val_periodo_minimo', '<p class="help-block">:message</p>') !!}
                 </div>

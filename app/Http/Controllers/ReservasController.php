@@ -401,6 +401,7 @@ class ReservasController extends Controller
                     }
                 }
             })
+            //Indica si se quiere ver en el gestor de reservas todos los puestos, viendo cuales estan reservados y cuales no, o solo los disponibles segun los criterios dados D: Solo disponibles, T: Todos
             ->where(function($q) use($puestos_usuarios,$puestos_nomiperfil,$puestos_reservados){
                 if(config_cliente('mca_mostrar_puestos_reservas')=='D'){
                     $q->wherenotin('puestos.id_estado',[4,5,6]);
@@ -409,6 +410,7 @@ class ReservasController extends Controller
                     $q->wherenotin('puestos.id_puesto',$puestos_reservados);
                 }
             })
+            //Ocultar de reserva los puestos que tengan incidencias
             ->where(function($q){
                 if(session('CL')['mca_incidencia_reserva']=='N'){
                     $q->where('mca_incidencia','N');
@@ -797,6 +799,7 @@ class ReservasController extends Controller
 
         $puestos=DB::table('puestos')
             ->select('puestos.*','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color')
+            ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -828,6 +831,7 @@ class ReservasController extends Controller
                 }
                 
             })
+            ->where('puestos_tipos.mca_reserva_masiva','S')
             ->wherenotin('puestos.id_estado',[4,5,6])
             ->where(function($q) use($r){
                 if(isset($r->lista_id) && is_array($r->lista_id)){
@@ -849,7 +853,7 @@ class ReservasController extends Controller
             return [
                 'title' => "Reserva multiple",
                 'message' => $puestos->count().' puestos disponibles de '.count($r->lista_id).' puestos solicitados para para el periodo  '.beauty_fecha($r->desde).' - '.beauty_fecha($r->hasta),
-                'recomendacion'=>$puestos->count()!=count($r->lista_id)?'Libere primero las reservas existentes en los puestos o reserve solo los puestos disponibles':'',
+                'recomendacion'=>$puestos->count()!=count($r->lista_id)?'Libere primero las reservas existentes en los puestos y compruebe que los puestos pueden ser reservados,  o reserve solo los puestos disponibles':'',
                 'lista'=>$puestos->pluck('id_puesto')->toArray()
             ]; 
         } else {  //Si viene por GET es que estamos en usuario ->crear reserva

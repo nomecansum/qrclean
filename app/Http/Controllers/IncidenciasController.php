@@ -649,6 +649,12 @@ class IncidenciasController extends Controller
                     $incidencia->fec_cierre=Carbon::now();
                     $incidencia->id_usuario_cierre=$r->id_usuario??Auth::user()->id;
                     $accion_postprocesado="F";
+                    //Actualizamos el puesto para que deje ed estar en estado de "con incidencia"
+                    $puesto=puestos::find($incidencia->id_puesto);
+                    $puesto->mca_incidencia='N';
+                    $puesto->id_estado=$incidencia->id_estado_vuelta_puesto??1;
+                    $puesto->save();
+
                 }
                 $incidencia->id_estado=$r->id_estado;
                 $incidencia->save();
@@ -961,7 +967,7 @@ class IncidenciasController extends Controller
         validar_acceso_tabla($id,"incidencias");
         $incidencia=DB::table('incidencias')
             ->select('incidencias.*','edificios.des_edificio','plantas.des_planta','users.name','users.img_usuario','puestos.cod_puesto','puestos.des_puesto','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia')
-            ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->join('users','incidencias.id_usuario_apertura','users.id')
             ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -970,7 +976,7 @@ class IncidenciasController extends Controller
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                $q->wherein('puestos.id_cliente',clientes());
             })
             ->where('incidencias.id_incidencia',$id)
             ->first();

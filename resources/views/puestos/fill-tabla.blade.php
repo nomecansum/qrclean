@@ -7,6 +7,7 @@
         <div class="card-body w-100" id="main_panel">
             <div class="table-responsive w-100" style="position: relative">
                 <form action="{{url('/puestos/print_qr')}}" method="POST"  id="frmpuestos" enctype='multipart/form-data'>
+                    <h5>{{ $puestos->count() }} Puestos encontrados</h5>
                     @csrf
                         {{-- <div class="td"><div class="loader"></div></div> --}}
                      {{-- <table class="table table-striped table-hover table-vcenter" id="tablapuestos"  style="width: 98%" data-toggle="table" data-mobile-responsive="true"  data-pagination="true" data-search="true"> --}}
@@ -63,15 +64,15 @@
                                     @endisset
                                 </td>
                                 <td class="td" data-id="">
-                                    <div class="m-0 badge pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
+                                    <div class="m-0 badge pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }}">
                                         {{ $puesto->cod_puesto }}
                                     </div>
                                 </td>
                                 <td class="td" data-id="">{{ $puesto->des_edificio }}</td>
                                 <td class="td" data-id="">{{$puesto->des_planta}}</td>
-                                <td class="text-center text-muted" >@if(isset($puesto->id_usuario))<i class="fad fa-user add-tooltip"  data-bs-toggle="popover" title="Puesto asignado al usuario {{ \App\Models\users::find($puesto->id_usuario)->name }}" style="color: #f4a462"></i> {{ iniciales(\App\Models\users::find($puesto->id_usuario)->name,3) }} @endif @if(isset($puesto->id_perfil))<i class="fad fa-users" title="Puesto asignado a perfil {{ \App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso }}" style="color: #f4a462"></i> {{ iniciales(\App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso,3) }}@endif</td>
+                                <td class="text-center text-muted" >@if(isset($puesto->id_usuario))<i class="fad fa-user add-tooltip"  title="Puesto asignado al usuario {{ \App\Models\users::find($puesto->id_usuario)->name }}" style="color: #f4a462"></i> {{ iniciales(\App\Models\users::find($puesto->id_usuario)->name,3) }} @endif @if(isset($puesto->id_perfil))<i class="fad fa-users add-tooltip" title="Puesto asignado a perfil {{ \App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso }}" style="color: #f4a462"></i> {{ iniciales(\App\Models\niveles_acceso::find($puesto->id_perfil)->des_nivel_acceso,3) }}@endif</td>
                                 <td class="td" data-id="">
-                                    <div class="m-0 badge pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }} ">
+                                    <div class="m-0 badge pl-1e"  style="width: 100%; heigth: 100%; @if($puesto->color_puesto) background-color: {{ $puesto->color_puesto }}@endif; color: {{ $puesto->color_puesto && txt_blanco($puesto->color_puesto)=='text-white'?'#FFF':'navy' }}">
                                         {{ nombrepuesto($puesto) }}
                                     </div>
                                 </td>
@@ -89,7 +90,7 @@
                                                 @break
                                             @case(3)
                                                 <div class="badge bg-info rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
-                                                @break     
+                                                @break
                                             @case(4)
                                                 <div class="badge bg-dark rounded"  id="estado_{{ $puesto->id_puesto }}" style="width: 100%; height: 100%;">
                                                 @break
@@ -116,8 +117,7 @@
                                             @if(isAdmin() || config('app.env')=='local')<a href="#"  class="btn btn-warning btn_scan add-tooltip toolbutton"  title="Scan" onclick="scan('{{ $puesto->token }}')"  data-id="{{ $puesto->id_puesto }}"> <span class="fa fa-qrcode" aria-hidden="true"></span> </a>  @endif
                                             @if(checkPermissions(['Puestos'],['W']))<a href="#"  class="btn btn-info btn_editar add-tooltip toolbutton ml-2" onclick="editar({{ $puesto->id_puesto }})" title="Editar puesto" data-id=""> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                                             {{-- @if(checkPermissions(['Puestos'],['D']))<a href="#" data-target="#eliminar-puesto" title="Borrar puesto" data-toggle="modal" class="btn btn-danger add-tooltip btn_del toolbutton"><span class="fa fa-trash" aria-hidden="true"></span> Del</a>@endif --}}
-                                            @if(checkPermissions(['Reservas'],['D']))<a href="#"  title="Cancelar Reserva" class="btn btn-pink add-tooltip btn_del toolbutton" onclick="cancelar('{{ $puesto->token }}')"><span class="fad fa-calendar-times" aria-hidden="true"></span> Res</a>@endif
-                                        
+                                            {{-- @if(checkPermissions(['Reservas'],['D']))<a href="#"  title="Cancelar Reserva" class="btn btn-pink add-tooltip btn_del toolbutton" onclick="cancelar('{{ $puesto->token }}')"><span class="fad fa-calendar-times" aria-hidden="true"></span> Res</a>@endif --}}
                                             @if(checkPermissions(['Puestos'],['W']))
                                                 <a href="#"  class="btn btn-success btn_estado add-tooltip toolbutton"  onclick="estado(1,'{{ $puesto->token }}')" title="Disponible" data-token="{{ $puesto->token }}"  data-estado="1" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-thumbs-up" aria-hidden="true"></span></a>
                                                 <a href="#"  class="btn btn-danger btn_estado add-tooltip toolbutton"  onclick="estado(2,'{{ $puesto->token }}')" title="Usado"  data-token="{{ $puesto->token }}"  data-estado="2" data-id="{{ $puesto->id_puesto }}"> <span class="fad fa-lock-alt" aria-hidden="true"></span></a>
@@ -130,7 +130,7 @@
                             </tr>
                             @endforeach
                         </tbody>
-                    </table> 
+                    </table>
                 </form>
             </div>
             {{ $puestos->links() }}
@@ -145,13 +145,17 @@
             $('.chkpuesto').not(this).prop('checked', this.checked);
         });
         
-        var tooltip = $('.add-tooltip');
-        if (tooltip.length)tooltip.tooltip();
-
         
+        tooltipTriggerList = [...document.querySelectorAll( '.add-tooltip' )];
+        tooltipList = tooltipTriggerList.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl ));
+    @else
+    window.onload=()=>{
+            tooltipTriggerList = [...document.querySelectorAll( '.add-tooltip' )];
+            tooltipList = tooltipTriggerList.map( tooltipTriggerEl => new bootstrap.Tooltip( tooltipTriggerEl ));
+        };
     @endif
    
-
+   
 
     
     

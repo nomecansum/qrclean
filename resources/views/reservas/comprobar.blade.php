@@ -41,7 +41,7 @@
         <span class="float-right" id="loadfilter" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
     </div>
     <div class="col-md-2 text-end">
-        <a href="#modal-leyenda " class="link-primary" data-toggle="modal" data-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
+        <a href="#modal-leyenda " class="link-primary" data-bs-toggle="modal" data-bs-target="#modal-leyenda"><img src="{{ url("img/img_leyenda.png") }}"> LEYENDA</a>
     </div>
     <div class="col-md-2 text-end">
         <div class="btn-group" role="group" aria-label="Basic radio toggle button group">

@@ -44,7 +44,8 @@ class puestos_tipos extends Model
                   'mca_liberar_auto',
                   'abreviatura',
                   'val_tiempo_limpieza',
-                  'val_dias_antelacion'
+                  'val_dias_antelacion',
+                  'mca_reserva_masiva',
               ];
 
     /**

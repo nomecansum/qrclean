@@ -287,7 +287,7 @@
 </div>
 
 @php
-    $colores=json_decode($config->theme_name);
+    $colores=json_decode($config->theme_name??null);
 
 @endphp
 

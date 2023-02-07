@@ -190,7 +190,15 @@
  <script>
 
     //$('#frm_contador').on('submit',form_ajax_submit);
-    comprobar_puestos();
+    $(function(){
+        $('#id_planta').load("{{ url('/combos/plantas_usuario/') }}/"+$('#id_edificio').val(), function(){
+            $('#id_planta').val({{ $reserva->id_planta==0?session('planta_pref'):$reserva->id_planta }});
+            $('#id_planta option[value={{ $reserva->id_planta }}]').attr('selected','selected');
+            $('#id_planta').prepend("<option value='0'>Cualquiera</option>")
+        });
+        comprobar_puestos();
+        
+    })
 
     var changeCheckbox = document.getElementById('andor'), changeField = document.getElementById('andor-field');
     new Switchery(changeCheckbox,{ size: 'small',color:'#489eed' })
@@ -244,14 +252,7 @@
         height: "20px"
     });
 
-    $(function(){
-        $('#id_planta').load("{{ url('/combos/plantas_usuario/') }}/"+$('#id_edificio').val(), function(){
-            $('#id_planta').val({{ $reserva->id_planta==0?session('planta_pref'):$reserva->id_planta }});
-            $('#id_planta option[value={{ $reserva->id_planta }}]').attr('selected','selected');
-            $('#id_planta').prepend("<option value='0'>Cualquiera</option>")
-        });
-        
-    })
+    
 
     $('#frm_contador').submit(function(event){
         event.preventDefault();

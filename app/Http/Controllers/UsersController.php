@@ -640,13 +640,23 @@ class UsersController extends Controller
     public function addplanta($usuario,$planta){
         validar_acceso_tabla($usuario,'users');
         savebitacora('Permiso de reserva en planta '.$planta. ' para el usuario '.$usuario,"Usuarios","addplanta","OK");
-        $pl=plantas_usuario::insert(['id_planta'=>$planta,'id_usuario'=>$usuario]);
-        return [
-            'title' => "Asociar planta a usuario",
-            'message' => 'Planta asociada ',
-            'id' =>$planta,
-            'user' =>$usuario
-        ];
+        try{
+            $pl=plantas_usuario::insert(['id_planta'=>$planta,'id_usuario'=>$usuario]);
+            return [
+                'title' => "Asociar planta a usuario",
+                'message' => 'Planta asociada ',
+                'id' =>$planta,
+                'user' =>$usuario
+            ];
+        } catch (\Illuminate\Database\QueryException $e) {
+            return [
+                'title' => "Asociar planta a usuario",
+                'message' => 'Planta ya asociada ',
+                'id' =>$planta,
+                'user' =>$usuario
+            ];
+        }
+        
     }
 
     public function delplanta($usuario,$planta){

@@ -187,7 +187,7 @@ class PuestosController extends Controller
             ->orderby('edificios.id_edificio')
             ->orderby('plantas.id_planta')
             ->orderby('puestos.cod_puesto')
-            ->paginate(250);
+            ->paginate(1000);
         return view('puestos.fill-tabla',compact('puestos','r'));
     }
 
@@ -602,6 +602,10 @@ class PuestosController extends Controller
             } else {
                 $tipo=puestos_tipos::find($r->id);
                 $tipo->update($r->all());
+                $tipo->mca_liberar_auto=$r->mca_liberar_auto??'N';
+                $tipo->mca_reserva_masiva=$r->mca_reserva_masiva??'N';
+                $tipo->mca_fijo=$r->mca_fijo??'N';
+                $tipo->save();
             }
             //Slots de reserva
             if(isset($r->hora_inicio)){

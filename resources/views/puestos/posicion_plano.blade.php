@@ -23,54 +23,51 @@
 @if(isset($puesto->img_plano))
 
 
-    <div class="row container" id="plano{{ $puesto->id_planta }}" data-posiciones="" data-id="{{ $puesto->id_planta }}" style="width: 100%; padding: 0px 0px 0px 0px">
-        <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$puesto->img_plano) }}" style="width: 100%" id="img_fondo{{ $puesto->id_planta }}">
-        @php
-            $left=0;
-            $top=0;
-
-        @endphp
-
+    <div class="row container"  data-posiciones="" data-id="{{ $puesto->id_planta }}" style="width: 100%; padding: 0px 0px 0px 0px">
+        <div class="col-md-12">
+            <img id="plano{{ $puesto->id_planta }}" src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$puesto->img_plano) }}" style="width: 100%" id="img_fondo{{ $puesto->id_planta }}">
             @php
-                $title= nombrepuesto($puesto);
-                $borde="";
-
-                $color=$puesto->val_color?$puesto->val_color:"#dff9d2";
-                $font_color="#fff";
+                $left=0;
+                $top=0;
+    
             @endphp
-            <i class="fa-solid fa-location-dot fa-3x text-danger glow" style="top: {{ $top }}px; left: {{ $left }}px; position: absolute"></i>
+    
+                @php
+                    $title= nombrepuesto($puesto);
+                    $borde="";
+    
+                    $color=$puesto->val_color?$puesto->val_color:"#dff9d2";
+                    $font_color="#fff";
+                @endphp
+                <div id="puesto{{ $puesto->id_puesto}}" style="top: {{ $top }}px; left: {{ $left }}px; position: absolute">
+                    <i class="fa-solid fa-location-dot fa-3x text-danger glow"></i>
+                </div>
+                
+        </div>
     </div>
-    @php
-        $posiciones=json_decode($puesto->posiciones);
-        $top=0;
-        $left=0;
-        if(isset($posiciones)){
-            foreach($posiciones as $pos){
-                if($pos->puesto==$puesto->cod_puesto){
-                    $top=$pos->offsettop;
-                    $left=$pos->offsetleft;
-                }
-            }   
-        }
-       
-    @endphp
-   
-
-   
     <script>
         
         function posicionar(){
-            h_plano=$('#img_fondo{{ $puesto->id_planta }}').outerHeight();
-            w_plano=$('#img_fondo{{ $puesto->id_planta }}').outerWidth();
+            //console.log("plano: "+h_plano+"x"+w_plano");
+            puesto=$('#puesto{{ $puesto->id_puesto }}');
+            h_plano=$('#plano{{ $puesto->id_planta }}').height();
+            w_plano=$('#plano{{ $puesto->id_planta }}').width();
+            console.log("plano: "+h_plano+"x"+w_plano);
 
-            t_puesto={{ $top }}*h_plano/100;
-            l_puesto={{ $left }}*w_plano/100;
-            console.log(t_puesto+' '+l_puesto);
-            $('#puesto{{ $puesto->id_puesto }}').css({top: t_puesto, left: l_puesto, position: 'absolute'}); 
+            try{ //Pra el caso de antiguos que no tienen los offset puestos
+                puesto.css('top',(h_plano*{{ $puesto->offset_top }}/100)-24);
+                puesto.css('left',(w_plano*{{ $puesto->offset_left }}/100)+10);
+                console.log("puesto: "+(h_plano*{{ $puesto->offset_top }}/100)+"x"+(w_plano*{{ $puesto->offset_left }})/100)
+            } catch (e) {
+                console.log(e);
+            }
+            
+
+            // $('#puesto{{ $puesto->id_puesto }}').css({top: t_puesto, left: l_puesto, position: 'absolute'}); 
         }
            
         $(function(){
-            setTimeout(posicionar,1500);
+            setTimeout(posicionar,100);
         })         
 
     </script>

@@ -15,30 +15,13 @@
         $left=0;
         $top=0;
         if(isset($puestos)){ //La lista de puestos a mostrar viene ya filtrada del controller
-            $puestos_mostrar=$puestos->pluck('id_puesto')->toArray();
+            $puestos_mostrar= $puestos->where('id_planta',$pl->id_planta);
         }
-        
-        $puestos= DB::Table('puestos')
-            ->select('puestos.*','puestos.width as puesto_width', 'puestos.height as puesto_height','plantas.*','estados_puestos.val_color as color_estado','estados_puestos.hex_color','estados_puestos.des_estado', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo')
-            ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
-            ->join('plantas','puestos.id_planta','plantas.id_planta')
-            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
-            ->where('puestos.id_planta',$pl->id_planta)
-            ->when(isset($puestos_mostrar), function($q) use($puestos_mostrar){
-                $q->wherein('puestos.id_puesto',$puestos_mostrar);
-            })
-            ->where(function($q){
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-            })
-            ->where(function($q){
-                if(!checkPermissions(['Mostrar puestos no reservables'],['R'])){
-                    $q->where('puestos.mca_reservar','S');
-                }
-            })
-            ->get();
+
+
     @endphp
     
-    @if($puestos->count()>0)
+    @if($puestos_mostrar->count()>0)
    
     <div class="container" id="plano{{ $pl->id_planta }}" data-posiciones="" data-id="{{ $pl->id_planta }}">
         <img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$pl->img_plano) }}" style="width: 100%; opacity: {{ ($pl->factor_transp??100)/100 }}" id="img_fondo{{ $pl->id_planta }}">
@@ -50,7 +33,7 @@
             </script>
     @endif
     
-    @foreach($puestos as $puesto)
+    @foreach($puestos_mostrar as $puesto)
         @php
             $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();
             $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();
@@ -140,7 +123,8 @@
         //$('#plano{{ $pl->id_planta }}').scale(zoom_actual{{ $pl->id_planta }}/100);
         setTimeout(() => {
             recolocar_puestos();
-        }, 1000);
+            console.log('zoom');
+        }, 100);
        
     }
     
@@ -162,6 +146,7 @@
     });
 
     z_def{{ $pl->id_planta }}.noUiSlider.on('update', function( values, handle ) {
+        console.log("on update");
         z_def_value{{ $pl->id_planta }}.innerHTML = values[handle]+' %';
         zoom_actual{{ $pl->id_planta }}=values[handle];
         clearTimeout(hacer_zoom{{ $pl->id_planta }});
@@ -169,10 +154,16 @@
             .then(data=>console.log(data));
         hacer_zoom{{ $pl->id_planta }}=setTimeout(() => {
             zoom{{ $pl->id_planta }}();
-        }, 200);
+        }, 100);
     });
 
     
+    $(function(){
+        setTimeout(function(){
+            zoom{{ $pl->id_planta }}();
+        }, 400);
+    });
+   
 
     //document.getElementById('plano{{ $pl->id_planta }}').setAttribute("data-posiciones", posiciones);
     //$('#plano{{ $pl->id_plano }}').data('posiciones',posiciones);

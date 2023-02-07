@@ -1,6 +1,5 @@
 
     <div class="card">
-
         <div class="card-header toolbar">
             <div class="toolbar-start">
                 <h5 class="m-0"> Detalle de la incidencia #{{ $incidencia->id_incidencia }}</h5>

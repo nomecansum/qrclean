@@ -99,10 +99,18 @@
                         <label for="max_usos">Tiempo antelac.(dias)</label><br>
                         <input type="number" autocomplete="off" name="val_dias_antelacion" id="val_dias_antelacion" style="width: 120px" min="0" max="365"  class="form-control" value="{{$tipo->val_dias_antelacion}}" />
                     </div>
+                </div>
+                <div class="row mt-2">
                     <div class="col-md-3 p-t-20 mt-2">
                         <div class="form-check pt-1">
                             <input name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ $tipo->mca_liberar_auto=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
                             <label for="mca_liberar_auto" class="form-check-label">Liberar reservas AUTO</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 p-t-20 mt-2">
+                        <div class="form-check pt-1">
+                            <input name="mca_reserva_masiva"  id="mca_reserva_masiva" value="S" {{ $tipo->mca_reserva_masiva=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
+                            <label for="mca_reserva_masiva" class="form-check-label">Permitir reserva supervisores</label>
                         </div>
                     </div>
                 </div>

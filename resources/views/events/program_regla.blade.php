@@ -53,7 +53,7 @@
                                 <input name="dia{{ $d }}[]" data-dia="{{ $d }}" data-hora="{{ $h }}" id="check_{{ $d }}_{{ $h }}" value="{{ $h }}" @isset($sched){{ check_hora($d,$h,$sched) }}@endisset class="form-check-input chk_dia" type="checkbox">
                                 <label class="form-check-label" for="check_{{ $d }}_{{ $h }}"></label>
                                 @php
-                                    if(check_hora($d,$h,$sched)){
+                                    if(isset($sched) && check_hora($d,$h,$sched)){
                                         $list_dias[]=$dowMap[$d-1];
                                     }
                                 @endphp

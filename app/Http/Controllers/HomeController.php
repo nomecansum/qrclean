@@ -66,6 +66,7 @@ class HomeController extends Controller
         
 
         $config_cliente=null;
+        $mireserva=null;
         //A ver si el usuario viene autentificado
         if(Auth::check())
             {
@@ -86,7 +87,7 @@ class HomeController extends Controller
                 'operativo' => 0
             ];
             $reserva=null;
-        } else {    
+        } else {
             $tags=DB::table('tags_puestos')->where('id_puesto',$p->id_puesto)->get();
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$p->id_cliente)->first();
         
@@ -110,7 +111,7 @@ class HomeController extends Controller
                     $q->orwhereraw('FIND_IN_SET('.$p->id_tipo_puesto.', list_tipos) <> 0');
                     $q->orwherenull('list_tipos');
                 })
-                ->where(function($q) use($p,$tags){    
+                ->where(function($q) use($p,$tags){
                     $q->orwhere(function($q) use($tags){
                         foreach($tags as $tag){
                             $q->orwhereraw('FIND_IN_SET('.$tag->id_tag.', list_tags) <> 0');
@@ -133,7 +134,7 @@ class HomeController extends Controller
             //Ahora comprobamos si el puesto esta reservado por alguien distinto a el usuario
             $reserva=DB::table('reservas')
                 ->where('id_puesto',$p->id_puesto)
-                ->join('users','users.id','reservas.id_usuario') 
+                ->join('users','users.id','reservas.id_usuario')
                 ->where(function($q){
                     $q->where(function($q){
                         $q->wherenull('fec_fin_reserva');
@@ -182,9 +183,9 @@ class HomeController extends Controller
 
             //Aqui vemos si el puesto lo tiene alguien permanentemente asignado
             $asignados_usuarios=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
-                ->join('users','users.id','puestos_asignados.id_usuario')  
-                ->where('puestos.id_puesto',$p->id_puesto)  
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+                ->join('users','users.id','puestos_asignados.id_usuario')
+                ->where('puestos.id_puesto',$p->id_puesto)
                 ->where('id_usuario','<>',$id_usuario)
                 ->where(function($q){
                     $q->wherenull('fec_desde');
@@ -216,9 +217,9 @@ class HomeController extends Controller
 
             //Y ahora vemos si el susodicho tiene asignado el puesto que se esta escaneando para darle la bienvenida
             $asignados_ami=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
-                ->join('users','users.id','puestos_asignados.id_usuario')  
-                ->where('puestos.id_puesto',$p->id_puesto)  
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+                ->join('users','users.id','puestos_asignados.id_usuario')
+                ->where('puestos.id_puesto',$p->id_puesto)
                 ->where('id_usuario',$id_usuario)
                 ->where(function($q){
                     $q->wherenull('fec_desde');
@@ -248,9 +249,9 @@ class HomeController extends Controller
 
             //Aqui vamos a ver si el pollo tiene asignado un puesto distinto al que esta escaneado para decirle que se peine y se vaya a su puesto
             $puesto_mio_es_otro=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
-                ->join('users','users.id','puestos_asignados.id_usuario')  
-                ->where('puestos.id_puesto','<>',$p->id_puesto)  
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+                ->join('users','users.id','puestos_asignados.id_usuario')
+                ->where('puestos.id_puesto','<>',$p->id_puesto)
                 ->where('id_usuario',$id_usuario)
                 ->where('puestos.id_tipo_puesto',$p->id_tipo_puesto)
                 ->where(function($q){
@@ -274,9 +275,9 @@ class HomeController extends Controller
             
             //Y aqui si el pñuesto esta reserrvado para un perfil en concreto
             $asignados_nomiperfil=DB::table('puestos_asignados')
-                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')   
-                ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')   
-                ->where('puestos.id_puesto',$p->id_puesto)    
+                ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
+                ->join('niveles_acceso','niveles_acceso.cod_nivel','puestos_asignados.id_perfil')
+                ->where('puestos.id_puesto',$p->id_puesto)
                 ->where('id_perfil','<>',$cod_nivel)
                 ->get();
 

@@ -20,41 +20,54 @@ class BitacorasController extends Controller
     public function index()
     {
         $bitacoras = DB::table('bitacora')
-        ->join('users','bitacora.id_usuario','users.id')
-        ->join('clientes','clientes.id_cliente','users.id_cliente')
-        ->where(function($q){
-            if (!isAdmin()) {
-                $q->wherein('clientes.id_cliente',clientes());
-            } else {
-                $q->where('clientes.id_cliente',session('CL')['id_cliente']);
-            }
-        })
-        ->orderby('fecha','desc')
-        ->get();
+            ->join('users','bitacora.id_usuario','users.id')
+            ->join('clientes','clientes.id_cliente','users.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->wherein('clientes.id_cliente',clientes());
+                } else {
+                    $q->where('clientes.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->where('fecha','>=',Carbon::now()->subDays(10))
+            ->orderby('fecha','desc')
+            ->get();
+        
+        $usuarios= DB::table('bitacora')
+            ->join('users','bitacora.id_usuario','users.id')
+            ->join('clientes','clientes.id_cliente','users.id_cliente')
+            ->orderby('name')
+            ->pluck('name','id_usuario')
+            ->unique();
 
-        $todas_bitacoras = DB::table('bitacora')
-        ->join('users','bitacora.id_usuario','users.id')
-        ->join('clientes','clientes.id_cliente','users.id_cliente')
-        ->get();
+        $modulos= DB::table('bitacora')
+            ->join('users','bitacora.id_usuario','users.id')
+            ->join('clientes','clientes.id_cliente','users.id_cliente')
+            ->orderby('id_modulo')
+            ->pluck('id_modulo')
+            ->unique();
 
-        $usuarios=$todas_bitacoras->pluck('name','id_usuario')->unique();
-
-        $modulos=$todas_bitacoras->pluck('id_modulo')->unique();
-
-        return view('bitacoras.index', compact('bitacoras','usuarios','modulos'));
+        $min=$bitacoras->min('fecha');
+        $max=$bitacoras->max('fecha');
+        return view('bitacoras.index', compact('bitacoras','usuarios','modulos','min','max'));
     }
     
     public function search(Request $r)
     {
-            //dd($r->all());
-            $todas_bitacoras = DB::table('bitacora')
-            ->join('users','bitacora.id_usuario','users.id')
-            ->join('clientes','clientes.id_cliente','users.id_cliente')
-            ->get();
+        try {      //dd($r->all());
+            $usuarios= DB::table('bitacora')
+                ->join('users','bitacora.id_usuario','users.id')
+                ->join('clientes','clientes.id_cliente','users.id_cliente')
+                ->orderby('name')
+                ->pluck('name','id_usuario')
+                ->unique();
 
-            $usuarios=$todas_bitacoras->pluck('name','id_usuario')->unique();
-
-            $modulos=$todas_bitacoras->pluck('id_modulo')->unique();
+            $modulos= DB::table('bitacora')
+                ->join('users','bitacora.id_usuario','users.id')
+                ->join('clientes','clientes.id_cliente','users.id_cliente')
+                ->orderby('id_modulo')
+                ->pluck('id_modulo')
+                ->unique();
 
             //D($r->modulos);
            
@@ -65,27 +78,29 @@ class BitacorasController extends Controller
             }
 
             $bitacoras=DB::table('bitacora')
-            ->join('users','bitacora.id_usuario','users.id')
-            ->join('clientes','clientes.id_cliente','users.id_cliente')
-            ->when($r->tipo_log, function($query) use ($r) {
-               return  $query->where('status', $r->tipo_log);
-              })
-            ->when($r->usuario, function($query) use ($r) {
-                return  $query->where('id_usuario', $r->usuario);
-               })
-            ->when($r->fechas, function($query) use ($f1,$f2) {
-                return  $query->whereBetween('fecha', [$f1,$f2]);
-               })
-            ->when($r->modulos, function($query) use ($r) {
-                return  $query->whereIn('id_modulo', $r->modulos);
+                ->join('users','bitacora.id_usuario','users.id')
+                ->join('clientes','clientes.id_cliente','users.id_cliente')
+                ->when($r->tipo_log, function($query) use ($r) {
+                return  $query->where('status', $r->tipo_log);
                 })
-            ->when($r->texto && $r->texto!='', function($query) use ($r) {
-                return  $query->whereraw("UPPER(accion) like '%".strtoupper($r->texto)."%'");
+                ->when($r->usuario, function($query) use ($r) {
+                    return  $query->where('id_usuario', $r->usuario);
                 })
-            ->orderby('fecha','desc')
-            ->get();
-            return view('bitacoras.index', compact('bitacoras'), compact('r','usuarios','modulos'));
-            try {     } catch (\Throwable $exception) {
+                ->when($r->fechas, function($query) use ($f1,$f2) {
+                    return  $query->whereBetween('fecha', [$f1,$f2]);
+                })
+                ->when($r->modulos, function($query) use ($r) {
+                    return  $query->whereIn('id_modulo', $r->modulos);
+                    })
+                ->when($r->texto && $r->texto!='', function($query) use ($r) {
+                    return  $query->whereraw("UPPER(accion) like '%".strtoupper($r->texto)."%'");
+                    })
+                ->orderby('fecha','desc')
+                ->get();
+            $min=$bitacoras->min('fecha');
+            $max=$bitacoras->max('fecha');
+            return view('bitacoras.index', compact('bitacoras'), compact('r','usuarios','modulos','min','max'));
+        } catch (\Throwable $exception) {
             flash('ERROR: Ocurrio un error al hacer la busqueda '.$exception->getMessage())->error();
             return back()->withInput();
         }        
@@ -103,7 +118,7 @@ class BitacorasController extends Controller
             'id_modulo' => 'required|string|min:1|max:50',
             'accion' => 'required|string|min:1|max:200',
             'status' => 'required|string|min:1|max:10',
-            'fecha' => 'required|date_format:j/n/Y g:i A', 
+            'fecha' => 'required|date_format:j/n/Y g:i A',
         ];
 
         

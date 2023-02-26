@@ -146,7 +146,7 @@ if (isset($r->fechas)){
                 <h4>No Bitacoras Available.</h4>
             </div>
         @else
-        
+            <div class="col-md-8 ml-3">{{ $bitacoras->count() }} registros del {!! beauty_fecha($min) !!} al {!! beauty_fecha($max) !!}</div>
             <div class="card-body panel-body-with-table">
                 <div class="table-responsive">
 

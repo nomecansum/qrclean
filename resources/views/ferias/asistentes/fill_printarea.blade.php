@@ -15,7 +15,7 @@
     $cuenta_elementos=1;
 @endphp
 
-<div class="contenedor" style="margin-top: {{ $r->margen_top??4 }}px; margin-left: {{ $r->margen_left??4 }}px; >
+<div class="contenedor" style="margin-top: {{ $r->margen_top??4 }}px; margin-left: {{ $r->margen_left??4 }}px;" >
 {{-- <div class="break-line"><div style="width: 100%; height:3px; background-color: #f00; z-index: 1000"><hr></div></div> --}}
 @foreach($datos as $dato)
     @php
@@ -40,17 +40,16 @@
     @endphp
 
     @if($columnas_mostrar>0 && $primera_vuelta)
-        <div class="d-flex flex-row prim">
+        <div class="d-flex flex-row primera">
     @endif
     <div class="text-center cont_ficha" style="display: inline-block;  margin: {{ $r->espacio_h }}px {{ $r->espacio_v }}px {{ $r->espacio_h }}px {{ $r->espacio_v }}px; border: {{ $r->border }}px solid #aaa"">
        
         @if(isset($r->header)) 
-    
             <div class="w-100 d-flex flex-row ">
                 <img src="{{ Storage::disk(config('app.img_disk'))->url('img/ferias/'.$r->header) }}" style="width: 100%;" alt="" >
             </div>
         @endif
-        <div class="w-100 bg-white text-center font-bold mt-0 texto_qr" style="color: {{ $color_texto}}; background-color: #fff; font-size: {{ $r->font_size??14 }}px;">
+        <div class="w-100 bg-white text-center font-bold mt-0 nombre" style="color: {{ $color_texto}}; background-color: #fff; font-size: {{ $r->font_size??14 }}px; overflow:hide">
             {{ $dato->nombre }}
             
         </div>
@@ -58,8 +57,11 @@
         <div class="img_qr">
             <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->color($color_qr["r"],$color_qr["g"],$color_qr["b"])->size($r->tam_qr??230)->generate(config('app.url_base_scan').$dato->token)) !!} ">
         </div>
-        {{ $dato->email }}
-        {{ $dato->empresa }}
+        <div class="w-100 bg-white text-center mt-0 resto" style="color: {{ $color_texto}}; background-color: #fff; font-size: {{ $r->font_size_resto??14 }}px; overflow:hide">
+            {{ $dato->email }}
+            <br>
+            {{ $dato->empresa }}
+        </div>
         @if(isset($r->footer)) 
             <div class="w-100 d-flex flex-row ">
                 <img src="{{ Storage::disk(config('app.img_disk'))->url('img/ferias/'.$r->footer) }}" style="width: 100%;" alt="" >

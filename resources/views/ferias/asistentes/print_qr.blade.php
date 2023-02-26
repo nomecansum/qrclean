@@ -1,4 +1,4 @@
-@extends($layout)
+@extends('layout')
 
 @php
 try{
@@ -53,10 +53,20 @@ try{
     }
 </style>
 @endsection
+
+@section('breadcrumb')
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
+	<li class="breadcrumb-item">ferias</li>
+	<li class="breadcrumb-item"><a href="{{url('/ferias/asitentes')}}" class="link-light">asistentes </a></li>
+	 <li class="breadcrumb-item active">Imprimir QR asistentes</li> 
+</ol>
+@endsection
+
 @section('content')
 
 @if($layout!='layout_simple')
-<form method="POST" action="{{url('/feraias_asistentes/preview_qr')}}"  name="frm_qr" id="frm_qr">
+<form method="POST" action="{{url('/ferias_asistentes/preview_qr')}}"  name="frm_qr" id="frm_qr" enctype="multipart/form-data">
     <div class=" card row b-all rounded mb-3  ml-3 bs-comp-active-bg">
             {{csrf_field()}}
             <div class="card-header">
@@ -66,6 +76,9 @@ try{
                 <input type="hidden" name="formato" value="" id="formato">
                 <input type="hidden" name="lista_id" value="{{ implode(",",$r->lista_id) }}" id="formato">
                 <input type="hidden" name="id_cliente" value="{{ Auth::user()->id_cliente }}">
+                <input type="hidden" name="header" id="header" value="{{$r->header??''}}">
+                <input type="hidden" name="footer" id="footer" value="{{$r->footer??''}}">
+                
                 <div class="row">
                     <div class="col-md-1">
                         <div class="form-group">
@@ -82,23 +95,23 @@ try{
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="">Alto ficha<i class="fa-solid fa-arrow-down-small-big"></i></label>
-                            <input type="number" class="form-control resize val_alto_ficha bind_value" min="50" max="1000" step="1" data-clase="val_alto_ficha" required name="tam_h_ficha" id="tam_h_ficha" value="{{ $r->tam_ficha??230 }}">
+                            <input type="number" class="form-control resize val_alto_ficha bind_value" min="50" max="1000" step="1" data-clase="val_alto_ficha" required name="tam_h_ficha" id="tam_h_ficha" value="{{ $r->tam_h_ficha??230 }}">
                         </div>
-                        <input type="range" class="form-range val_alto_ficha bind_value resize" min="50" max="1000" step="1" data-clase="val_alto_ficha"  id="range_tam_h_ficha">
+                        <input type="range" class="form-range val_alto_ficha bind_value resize" min="50" max="1000" step="1" data-clase="val_alto_ficha"  id="range_tam_h_ficha" value="{{ $r->tam_h_ficha??230 }}">
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="">Ancho ficha<i class="fa-solid fa-arrow-down-small-big"></i></label>
-                            <input type="number" class="form-control resize val_ancho_ficha bind_value" min="50" max="1000" step="1" data-clase="val_ancho_ficha" required name="tam_w_ficha" id="tam_w_ficha" value="{{ $r->tam_ficha??230 }}">
+                            <input type="number" class="form-control resize val_ancho_ficha bind_value" min="50" max="1000" step="1" data-clase="val_ancho_ficha" required name="tam_w_ficha" id="tam_w_ficha" value="{{ $r->tam_w_ficha??230 }}">
                         </div>
-                        <input type="range" class="form-range val_ancho_ficha bind_value resize" min="50" max="1000" step="1" data-clase="val_ancho_ficha"  id="range_tam_w_ficha">
+                        <input type="range" class="form-range val_ancho_ficha bind_value resize" min="50" max="1000" step="1" data-clase="val_ancho_ficha"  id="range_tam_w_ficha" value="{{ $r->tam_w_ficha??230 }}">
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="">Tamaño QR<i class="fa-solid fa-arrow-down-small-big"></i></label>
                             <input type="number" class="form-control resize val_qr bind_value" min="50" max="1000" step="1" data-clase="val_qr" required name="tam_qr" id="tam_qr" value="{{ $r->tam_qr??230 }}">
                         </div>
-                        <input type="range" class="form-range val_qr bind_value resize" min="50" max="1000" step="1" data-clase="val_qr"  id="range_tam_qr">
+                        <input type="range" class="form-range val_qr bind_value resize" min="50" max="1000" step="1" data-clase="val_qr"  id="range_tam_qr"  value="{{ $r->tam_qr??230 }}">
                     </div>
                 </div>
                 <div class="row">
@@ -117,22 +130,35 @@ try{
                         <label for="color_texto">Color txt <i class="fa-solid fa-text"></i></label><br>
                         <input type="color" autocomplete="off" name="sel_color_txt" id="sel_color_txt"  class="form-control refrescar_form" value="{{$r->sel_color_txt??'#000'}}" />
                     </div>
-                    {{-- <div class="col-md-2">
-                        <label for="color_texto">Icono <i class="fa-solid fa-icons"></i></label><br>
-                        <select name="mca_icono" id="mca_icono" class="form-control refrescar_form">
-                            <option value="1"  {{ $r->mca_icono??1==1?'selected':'' }} >No</option>
-                            <option value="2"  {{ $r->mca_icono??1==2?'selected':'' }} >Si</option>
-                        </select>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label for="">Nombre <i class="fa-solid fa-text-size"></i></label>
+                            <input type="number" class="form-control resize val_font_size bind_value" min="0" max="40" data-clase="val_font_size"  required name="font_size" id="font_size" value="{{ $r->font_size??14 }}" value="{{ $r->font_size??14 }}">
+                        </div>
+                        <input type="range" class="form-range val_font_size bind_value resize" min="0" max="40" step="1" data-clase="val_font_size"  id="range_font_size"  value="{{ $r->font_size??14 }}">
                     </div>
-                    <div class="col-md-2">
-                        <label for="val_color">Footer <i class="fa-regular fa-diagram-successor"></i></label><br>
-                        <select name="footer" id="footer" class="form-control refrescar_form">
-                                <option value="1" {{ $r->footer==1?'selected':'' }}>Ninguno</option>
-                                <option value="2" {{ $r->footer==2?'selected':'' }}>Logo</option>
-                                <option value="3" {{ $r->footer==3?'selected':'' }}>Logo y nombre</option>
-                                <option value="4" {{ $r->footer==4?'selected':'' }}>Logo junto a puesto</option>
-                        </select>
-                    </div> --}}
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label for="">Resto <i class="fa-solid fa-text-size"></i></label>
+                            <input type="number" class="form-control resize val_font_size_resto bind_value" min="0" max="40" data-clase="val_font_size_resto"  required name="font_size_resto" id="font_size_resto" value="{{ $r->font_size_resto??14 }}" value="{{ $r->font_size_resto??14 }}">
+                        </div>
+                        <input type="range" class="form-range val_font_size_resto bind_value resize" min="0" max="40" step="1" data-clase="val_font_size_resto"  id="range_font_size_resto" value="{{ $r->font_size_resto??14 }}">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for=""><i class="fa-solid fa-picture"></i> Header</label>
+                            <input type="file"  accept=".jpg,.png,.gif,.webp.jiff" class="form-control val_header ficheros refrescar_form" min="0" max="200" step="1" data-clase="fic_header"  id="fic_header"  value="{{ $r->header??'' }}">
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for=""><i class="fa-solid fa-picture"></i> Footer</label>
+                            <input type="file"  accept=".jpg,.png,.gif,.webp.jiff" class="form-control val_footer ficheros refrescar_form" min="0" max="200" step="1" data-clase="fic_footer"  id="fic_footer"  value="{{ $r->footer??'' }}">
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-md-1">
@@ -179,22 +205,17 @@ try{
                         </div>
                         <input type="range" class="form-range val_padding_cont bind_value resize" min="0" max="40" step="1" data-clase="val_padding_cont"  id="range_padding_cont" value="{{ $r->padding_cont??2 }}">
                     </div>
-                    <div class="col-md-1">
-                        <div class="form-group">
-                            <label for="">Fuente <i class="fa-solid fa-text-size"></i></label>
-                            <input type="number" class="form-control resize val_font_size bind_value" min="0" max="40" data-clase="val_font_size"  required name="font_size" id="font_size" value="{{ $r->font_size??14 }}" value="{{ $r->font_size??14 }}">
-                        </div>
-                        <input type="range" class="form-range val_font_size bind_value resize" min="0" max="40" step="1" data-clase="val_font_size"  id="range_font_size">
-                    </div>
+                    
                     <div class="col-md-1">
                         <div class="form-group">
                             <label for="">Salto p. <i class="fa-solid fa-file-dashed-line"></i></label>
                             <input type="number" class="form-control resize val_page_break bind_value" min="0" max="500" data-clase="val_page_break"  required name="page_break" id="page_break" value="{{ $r->page_break??40 }}" value="{{ $r->page_break??40 }}">
                         </div>
-                        <input type="range" class="form-range val_page_break bind_value resize" min="0" max="500" step="1" data-clase="val_page_break"  id="range_page_break">
+                        <input type="range" class="form-range val_page_break bind_value resize" min="0" max="500" step="1" data-clase="val_page_break"  id="range_page_break" value="{{ $r->page_break??40 }}">
                     </div>
                     <div class="col-md-1 text-right pt-2">
-                        @include('resources.loading',['id_spin'=>'spinner','clase'=>'spinner'])
+                        @include('resources.spin_gear',['id_spin'=>'spinner','clase'=>'spinner'])
+
                     </div>
                     <div class="col-md-1 text-right">
                         <a href="javascript:void(0)" class="btn  btn-info add-tooltip mt-3 text-nowrap" id="btn_pdf"  title="Exportar en PDF" data-id="1" data-url="" style="width: 80px"> <i class="fad fa-file-pdf"></i> PDF</a>
@@ -240,15 +261,16 @@ $columna=1;
             data: data,
             dataType: "json",
             success: function (data) {
-                console.log(data);
+                console.log("saved");
             },
             error: function (data) {
-                console.log(data);
+                console.log("Error: "+data.responsetext);
             }
         });
     }
     
     function setsize(){
+        console.log('setsize');
         $('.ficha').css('width',$('#tam_ficha').val());
         $('.qr').css('width',$('#tam_qr').val());
         $('.cont_qr').css('width',$('#tam_qr').val());
@@ -257,27 +279,18 @@ $columna=1;
         $('.contenedor').css('margin-top',$('#margen_top').val()+'px');
         $('.contenedor').css('margin-left',$('#margen_left').val()+'px');
         $('.cont_ficha').css('margin',$('#espacio_h').val()+'px '+$('#espacio_v').val()+'px '+$('#espacio_h').val()+'px '+$('#espacio_v').val()+'px');
-        $('.cont_ficha').css('width',parseInt($('#tam_ficha').val())+(2*parseInt($('#padding_qr').val()))+(2*parseInt($('#padding_cont').val()))+2);
+        $('.cont_ficha').css('width',parseInt($('#tam_w_ficha').val())+(2*parseInt($('#padding_qr').val()))+(2*parseInt($('#padding_cont').val()))+2);
+        $('.cont_ficha').css('height',parseInt($('#tam_h_ficha').val())+(2*parseInt($('#padding_qr').val()))+(2*parseInt($('#padding_cont').val()))+2);
+        $('.cont_ficha').css('border-width',$('#border').val()+'px');
         $('.img_qr').css('margin',$('#padding_qr').val()+'px');
         $('.cont_ficha').css('padding',$('#padding_cont').val()+'px');
-        $('.texto_qr').css('font-size',$('#font_size').val()+'px');
+        $('.nombre').css('font-size',$('#font_size').val()+'px');
+        $('.resto').css('font-size',$('#font_size_resto').val()+'px');
         $('.page_breaker').css('height',$('#page_break').val()+'px');
         save_config_print();
     }
 
-    $('#btn_print').click(function(){
-        $('#printarea:visible').printThis({
-            importCSS: true,
-            importStyle: true,
-            footer: "<img src='{{ url('/imgcompo/Mosaic_brand_20.png') }}' class='float-right'>"
-        });
-    })
-
-    $('.resize').change(function(){
-           setsize();
-    });
-
-    $('.refrescar_form').change(function(){
+    function refresca_form(){
         $('.spinner').show();
         $('#formato').val('preview');
         save_config_print();
@@ -295,6 +308,23 @@ $columna=1;
             $('.spinner').hide();
             
         });
+    }
+
+    $('#btn_print').click(function(){
+        $('#printarea:visible').printThis({
+            importCSS: true,
+            importStyle: true,
+            footer: "<img src='{{ url('/imgcompo/Mosaic_brand_20.png') }}' class='float-right'>"
+        });
+    })
+
+    $('.resize').on("keyup change", function(){
+           setsize();
+    });
+    
+
+    $('.refrescar_form').change(function(){
+        refresca_form();
     });
 
 
@@ -313,10 +343,43 @@ $columna=1;
             }
     })
 
-    $('.bind_value').change(function(){
+    $('.bind_value').on("keyup change", function(){
         //console.log('bind');
         $('.'+$(this).data('clase')).val($(this).val());
     
+    })
+
+    $('.ficheros').change(function(){
+        form=$('#frm_qr');
+        let formData = new FormData()
+        var header = $('#fic_header')[0].files[0]
+        var footer = $('#fic_footer')[0].files[0]
+
+        formData.append('header', header);
+        formData.append('footer', footer);
+
+        $.ajax({
+            url: "{{ url('/ferias/subir_imagen') }}",
+            data: formData,
+            cache: false,
+            enctype: 'multipart/form-data',
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            headers: 
+            {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            success: function (data) {
+                $('#header').val(data.header);
+                $('#footer').val(data.footer);
+                save_config_print();
+                refresca_form();
+            },
+            error: function (data) {
+                console.log("Error: "+data.responsetext);
+            }
+        });
     })
     
     $(function(){

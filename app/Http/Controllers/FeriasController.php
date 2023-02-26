@@ -486,65 +486,64 @@ class FeriasController extends Controller
     }
 
     public function print_qr_asistentes(Request $r){
+        try{       
+            $layout="layout";
+
+            if (!isset($r->lista_id)){
+                return Redirect::back();
+            }
+            if(!is_array($r->lista_id)){
+                $r->lista_id=explode(",",$r->lista_id);
+            }
+
+
+            $config_print=config_clientes::where('id_cliente',$r->id_cliente??Auth::user()->id_cliente)->first()->config_print_qr_ferias;
+            if (isset($config_print) && isJson($config_print)){
+                $config_print=json_decode($config_print,true);
+                $r->request->add(['tam_qr' => $config_print['tam_qr']]); //add request
+                $r->request->add(['tam_h_ficha' => $config_print['tam_h_ficha']]); //add request
+                $r->request->add(['tam_w_ficha' => $config_print['tam_w_ficha']]); //add request
+                $r->request->add(['border' => $config_print['border']]); //add request
+                $r->request->add(['col' => $config_print['col']]); //add request
+                $r->request->add(['row' => $config_print['row']??4]); //add request
+                $r->request->add(['sel_color' => $config_print['sel_color']]); //add request
+                $r->request->add(['sel_color_txt' => $config_print['sel_color_txt']]); //add request
+                $r->request->add(['footer' => $config_print['footer']??'']); //add request
+                $r->request->add(['header' => $config_print['header']??'']); //add request
+                $r->request->add(['margen_left' => $config_print['margen_left']]); //add request
+                $r->request->add(['margen_top' => $config_print['margen_top']]); //add request
+                $r->request->add(['espacio_h' => $config_print['espacio_h']]); //add request
+                $r->request->add(['espacio_v' => $config_print['espacio_v']]); //add request
+                $r->request->add(['padding_qr' => $config_print['padding_qr']]); //add request
+                $r->request->add(['padding_cont' => $config_print['padding_cont']]); //add request
+                $r->request->add(['font_size' => $config_print['font_size']]); //add request
+                $r->request->add(['font_size_resto' => $config_print['font_size_resto']]); //add request
+                $r->request->add(['page_break' => $config_print['page_break']]); //add request
+            }
         
-        $layout="layout";
+            $datos=DB::table('contactos')
+                ->select('contactos.*','clientes.nom_cliente','users.name')
+                ->leftjoin('clientes','clientes.id_cliente','contactos.id_cliente')
+                ->leftjoin('users','contactos.id_usuario','users.id')
+                ->where(function($q) use($r){
+                    if(isset($r->lista_id)){
+                        $q->wherein('id_contacto',$r->lista_id);
+                    }
+                })
+                ->orderby('contactos.nombre')
+                ->get();
 
-        if (!isset($r->lista_id)){
-            return Redirect::back();
-        }
-        if(!is_array($r->lista_id)){
-            $r->lista_id=explode(",",$r->lista_id);
-        }
-
-
-        $config_print=config_clientes::where('id_cliente',$r->id_cliente??Auth::user()->id_cliente)->first()->config_print_qr_ferias;
-        if (isset($config_print) && isJson($config_print)){
-            $config_print=json_decode($config_print,true);
-            $r->request->add(['tam_qr' => $config_print['tam_qr']]); //add request
-            $r->request->add(['tam_h_ficha' => $config_print['tam_h_ficha']]); //add request
-            $r->request->add(['tam_w_ficha' => $config_print['tam_w_ficha']]); //add request
-            $r->request->add(['border' => $config_print['border']]); //add request
-            $r->request->add(['col' => $config_print['col']]); //add request
-            $r->request->add(['row' => $config_print['row']??4]); //add request
-            $r->request->add(['sel_color' => $config_print['sel_color']]); //add request
-            $r->request->add(['sel_color_txt' => $config_print['sel_color_txt']]); //add request
-            $r->request->add(['footer' => $config_print['footer']??'']); //add request
-            $r->request->add(['header' => $config_print['header']??'']); //add request
-            $r->request->add(['margen_left' => $config_print['margen_left']]); //add request
-            $r->request->add(['margen_top' => $config_print['margen_top']]); //add request
-            $r->request->add(['espacio_h' => $config_print['espacio_h']]); //add request
-            $r->request->add(['espacio_v' => $config_print['espacio_v']]); //add request
-            $r->request->add(['padding_qr' => $config_print['padding_qr']]); //add request
-            $r->request->add(['padding_cont' => $config_print['padding_cont']]); //add request
-            $r->request->add(['font_size' => $config_print['font_size']]); //add request
-            $r->request->add(['page_break' => $config_print['page_break']]); //add request
-        }
-
+            if($r->formato && $r->formato=='PDF'){
+                $layout="layout_simple";
+                $filename='Codigos_QR Ferias_'.Auth::user()->id_cliente.'_.pdf';
+                $pdf = PDF::loadView('ferias.asistentes.print_qr',compact('datos','r','layout'));
+                return $pdf->download($filename);
+            } else if($r->formato && $r->formato=='preview'){
+                return view('ferias.asistentes.fill_printarea',compact('datos','r','layout'));
+            } else {
+                return view('ferias.asistentes.print_qr',compact('datos','r','layout'));
+            }
        
-    
-        $datos=DB::table('contactos')
-            ->select('contactos.*','clientes.nom_cliente','users.name')
-            ->leftjoin('clientes','clientes.id_cliente','contactos.id_cliente')
-            ->leftjoin('users','contactos.id_usuario','users.id')
-            ->where(function($q) use($r){
-                if(isset($r->lista_id)){
-                    $q->wherein('id_contacto',$r->lista_id);
-                }
-            })
-            ->orderby('contactos.nombre')
-            ->get();
-
-        if($r->formato && $r->formato=='PDF'){
-            $layout="layout_simple";
-            $filename='Codigos_QR Ferias_'.Auth::user()->id_cliente.'_.pdf';
-            $pdf = PDF::loadView('ferias.asistentes.print_qr',compact('datos','r','layout'));
-            return $pdf->download($filename);
-        } else if($r->formato && $r->formato=='preview'){
-            return view('ferias.asistentes.fill_printarea',compact('datos','r','layout'));
-        } else {
-            return view('ferias.asistentes.print_qr',compact('datos','r','layout'));
-        }
-        try{
         } catch(\Exception $e){
             return Redirect::back();
         }
@@ -580,6 +579,39 @@ class FeriasController extends Controller
         $config=config_clientes::find($r->id_cliente);
         $config->config_print_qr_ferias=json_encode($r->all());
         $config->save();
+        return [
+            'title' => "save_config_print",
+            'message' => 'OK',
+        ];
     }
 
+    public function subir_imagen(Request $r){
+        $data['header']=null;
+        $data['footer']=null;
+
+        if ($r->hasFile('header')) {
+            $file = $r->file('header');
+            $path = config('app.ruta_public').'/img/ferias/';
+            $img_final = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+            //$file->move($path,$img_usuario);
+            Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_final);
+            $data['header']=$img_final;
+        }
+
+        if ($r->hasFile('footer')) {
+            $file = $r->file('footer');
+            $path = config('app.ruta_public').'/img/ferias/';
+            $img_final = uniqid().rand(000000,999999).'.'.$file->getClientOriginalExtension();
+            //$file->move($path,$img_usuario);
+            Storage::disk(config('app.img_disk'))->putFileAs($path,$file,$img_final);
+            $data['footer']=$img_final;
+        }
+
+        return [
+            'title' => "subir_imagen",
+            'message' => 'OK',
+            'header' => $data['header'],
+            'footer' => $data['footer']
+        ];
+    }
 }

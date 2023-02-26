@@ -45,3 +45,7 @@
         </td>
     </tr>
 @endforeach
+
+<script>
+    $('#cuenta_usuarios').html('{{ $usersObjects->count()}} Usuarios encontrados');
+</script>

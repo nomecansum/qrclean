@@ -64,6 +64,7 @@ class config_clientes extends Model
                   'config_print_qr',
                   'mca_mail_apertura_incidencia',
                   'mca_tipo_antelacion',
+                  'config_print_qr_ferias',
               ];
 
     /**

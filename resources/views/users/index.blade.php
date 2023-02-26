@@ -100,6 +100,7 @@
                     <h4>No Users Available.</h4>
                 </div>
             @else
+            <h5 class="text-muted" id="cuenta_usuarios">{{ $usersObjects->count() }} Usuarios encontrados</h5>
             <div class="card-body panel-body-with-table">
                 <div class="table-responsive">
                     <div id="all_toolbar" class="ml-3">

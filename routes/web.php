@@ -451,6 +451,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/asistentes/delete/{id}',['middleware'=>'permissions:["Ferias"],["D"]', 'uses' => 'FeriasController@asistentes_delete']);
         Route::post('/asistentes/print_qr',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@print_qr_asistentes']);
         Route::post('/asistentes/export_qr',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@export_qr_asistentes']);
+        Route::Post('/save_config_print','FeriasController@save_config_print');
     });
 
     ////////////////////TAREAS////////////////////

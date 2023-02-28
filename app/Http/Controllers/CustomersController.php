@@ -242,6 +242,7 @@ class CustomersController extends Controller
             ->where('clientes.id_cliente',$r->id)
             ->first();  
         session(['CL'=>(array)$config_cliente]);
+        Auth::user()->id_cliente=$r->id;
         return redirect()->back();
     }
 }

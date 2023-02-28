@@ -384,16 +384,59 @@ class FeriasController extends Controller
      */
     public function asistentes_index()
     {
+        $feria_toca=ferias::where(function($q){
+            if (!isAdmin()) {
+                $q->where('id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('ferias.id_cliente',session('CL')['id_cliente']);
+            }
+        })
+        ->where('fec_feria','>',Carbon::now()->subday(30))->first();
+
+        
         $datos=DB::table('contactos')
-            ->select('contactos.*','clientes.nom_cliente','users.name')
+            ->select('contactos.*','clientes.nom_cliente','users.name','ferias.des_feria')
             ->leftjoin('clientes','clientes.id_cliente','contactos.id_cliente')
             ->leftjoin('users','contactos.id_usuario','users.id')
-            // ->where(function($q){
-            //     $q->where('contactos.id_cliente',Auth::user()->id_cliente);
-            // })
+            ->join('ferias','ferias.id_feria','contactos.id_feria')
+            ->where(function($q) use($feria_toca){
+                if(isset($feria_toca)){
+                    $q->where('ferias.id_feria',$feria_toca->id_feria);
+                }
+            })
             ->orderby('contactos.nombre')
             ->get();
         return view('ferias.asistentes.index', compact('datos'));
+    }
+
+    public function asistentes_search(Request $r)
+    {
+        $datos=DB::table('contactos')
+            ->select('contactos.*','clientes.nom_cliente','users.name','ferias.des_feria')
+            ->leftjoin('clientes','clientes.id_cliente','contactos.id_cliente')
+            ->leftjoin('users','contactos.id_usuario','users.id')
+            ->join('ferias','ferias.id_feria','contactos.id_feria')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('ferias.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->where(function($q) use($r){
+                if(isset($r->cliente)){
+                    $q->wherein('ferias.id_cliente',$r->cliente);
+                }
+            })
+            ->where(function($q) use($r){
+                if(isset($r->tipoferia)){
+                    $q->wherein('ferias.id_feria',$r->tipoferia);
+                }
+            })
+            ->orderby('contactos.nombre')
+            ->get();
+
+        return view('ferias.asistentes.index', compact('datos','r'));
     }
 
     /**
@@ -408,7 +451,16 @@ class FeriasController extends Controller
         if($id!=0){
             $datos = contactos::findOrFail($id);
         } else {
+            $feria_toca=ferias::where(function($q){
+                if (!isAdmin()) {
+                    $q->where('id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('ferias.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->where('fec_feria','>',Carbon::now()->subday(30))->first();
             $datos=new contactos;
+            $datos->id_feria=$feria_toca->id_feria;
         }
         
         $clientes = clientes::where(function($q){
@@ -420,7 +472,17 @@ class FeriasController extends Controller
         })
         ->pluck('nom_cliente','id_cliente')
         ->all();
-        return view('ferias.asistentes.editor', compact('datos','clientes'));
+
+        $ferias=ferias::where(function($q){
+            if (!isAdmin()) {
+                $q->where('id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('ferias.id_cliente',session('CL')['id_cliente']);
+            }
+        })
+        ->get();
+
+        return view('ferias.asistentes.editor', compact('datos','clientes','ferias'));
     }
 
     public function  asistentes_save(Request $r)
@@ -479,6 +541,7 @@ class FeriasController extends Controller
             'empresa' => 'string|min:0|max:500',
             'email' => 'email:rfc|min:0|max:500',
             'mensaje' => 'nullable|string',
+            'id_feria' => 'nullable|integer',
             'id_cliente' => 'integer',
         ];
         $data = $request->validate($rules);

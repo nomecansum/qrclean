@@ -46,17 +46,28 @@
 <div id="editorCAM" class="mt-2">
 
 </div>
-<form id="frm" name="frm" action="{{ url('/ferias/marcas/print_qr') }}" method="post">
-	@csrf
 
+<div class="row mt-2">
+	<div id="div_filtro">
+		<form method="post" name="formbuscador" id="formbuscador" action="{{ url('/ferias/asistentes/search') }}" class>
+			@csrf
+			<input type="hidden" name="document" value="pantalla">
+			@include('resources.combos_filtro',[$hide=['tag'=>1,'est_inc'=>1,'pue'=>1,'tip_mark'=>1,'est'=>1,'tip_inc'=>1, 'pla'=>1, 'edi'=>1, 'tip'=>1, 'usu'=>1],$show=[]])
+		</form>
+	</div>
+	
+</div>
+<form method="post" name="form_puestos" id="frm" action="{{ url('/ferias/asistentes/print_qr') }}" class>
+	@csrf
 <div class="row mt-2">
 	<div class="col-12">
 		<div class="card">
 			<div class="card-header">
-				<h3 class="card-title">Marcas</h3>
+				<h3 class="card-title">Asistentes</h3>
 			</div>
 			
 			<div class="card-body">
+				@if(isset($datos)){{ $datos->count() }} asistentes @endif
 				<div id="all_toolbar">
 					<div class="row">
 						<div class="col-md-4">
@@ -75,7 +86,7 @@
 							</div>
 						</div>
 					</div>
-				</div>	
+				</div>
 					
 				<table id="tabla"  data-toggle="table" data-mobile-responsive="true"
 					data-locale="es-ES"
@@ -84,7 +95,7 @@
 					data-show-columns-toggle-all="true"
 					data-page-list="[5, 10, 20, 30, 40, 50,100,200]"
 					data-page-size="50"
-					data-pagination="true" 
+					data-pagination="true"
 					data-show-pagination-switch="true"
 					data-show-button-text="true"
 					data-toolbar="#all_toolbar"
@@ -99,6 +110,7 @@
 							<th data-sortable="true">Fecha</th>
 							<th data-sortable="true">Envío</th>
 							<th data-sortable="true">Registrado</th>
+							<th data-sortable="true">Feria</th>
 							<th data-sortable="true">Observaciones</th>
 						</tr>
 					</thead>
@@ -119,6 +131,7 @@
 								<td>{!!beauty_fecha($dato->fec_audit)!!}</td>
 								<td>{{$dato->mca_enviar}}</td>
 								<td>{{$dato->name}}</td>
+								<td>{{$dato->des_feria}}</td>
                                 <td style="position: relative; vertical-align: middle" class="pt-2">
                                     {{ $dato->mensaje}}
                                     <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
@@ -138,7 +151,7 @@
 														<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
 															<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
 														</button>
-													</div>    
+													</div>
 													<div class="modal-body">
                                                         ¿Borrar contacto de {{ $dato->nombre}}?
                                                     </div>
@@ -168,6 +181,14 @@
 	
 	
 	<script>
+
+	@if(isset($r->cliente))
+		$('#multi-cliente').val({!!js_array($r->cliente)!!});
+	@endif
+
+	@if(isset($r->tipoferia))
+		$('#multi-tipoferia').val({!! js_array($r->tipoferia)!!});
+	@endif
 
 	var lista_ficheros=new Array(0);
 

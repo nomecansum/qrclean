@@ -33,15 +33,26 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6 {{ $errors->has('empresa') ? 'has-error' : '' }}">
+                <div class="form-group col-md-4 {{ $errors->has('empresa') ? 'has-error' : '' }}">
                     <label for="empresa" class="control-label">Empresa</label>
                     <input class="form-control"  name="empresa" type="text" id="empresa"  maxlength="500" value="{{ $datos->empresa }}">
                     {!! $errors->first('empresa', '<p class="help-block">:message</p>') !!}
                 </div>
-                <div class="form-group col-md-6 {{ $errors->has('email') ? 'has-error' : '' }}">
+                <div class="form-group col-md-4 {{ $errors->has('email') ? 'has-error' : '' }}">
                     <label for="email" class="control-label">e-mail</label>
                     <input class="form-control"  name="email" type="text" id="email"  maxlength="500" value="{{ $datos->email }}">
                     {!! $errors->first('email', '<p class="help-block">:message</p>') !!}
+                </div>
+                <div class="form-group col-md-4 {{ $errors->has('id_feria') ? 'has-error' : '' }}">
+                    <label for="id_feria" class="control-label">Feria</label>
+                    <select class="form-control" required id="id_feria" name="id_feria">
+                        @foreach ($ferias as $feria)
+                            <option value="{{ $feria->id_feria }}" {{ old('id_cliente', optional($datos)->id_feria) == $feria->id_feria ? 'selected' : '' }}>
+                                {{ $feria->des_feria }}
+                            </option>
+                        @endforeach
+                    </select>
+                    {!! $errors->first('id_feria', '<p class="help-block">:message</p>') !!}
                 </div>
             </div>
 

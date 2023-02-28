@@ -182,9 +182,10 @@
                         </a>
                         <!--Submenu-->
                         <ul class="mininav-content nav collapse">
+                            @if(checkPermissions(['Ferias'],['R']))<li class=" nav-item"><a href="/ferias" class="text-nowrap nav-link ferias_ferias"><i class="fa-light fa-sensor-on"></i> Ferias</a></li> @endif
                             @if(checkPermissions(['Ferias'],['R']))<li class=" nav-item"><a href="/ferias/asistentes" class="text-nowrap nav-link ferias_asistentes"><i class="fa-light fa-user-tie"></i> Asistentes</a></li> @endif
                             @if(checkPermissions(['Ferias marcas'],['R']))<li class=" nav-item"><a href="/ferias/marcas" class="text-nowrap nav-link ferias_marcas"><i class="fa-brands fa-bandcamp"></i> Marcas</a></li> @endif
-                            @if(checkPermissions(['Scan ferias'],['R']))<li class=" nav-item"><a href="/ferias/actividad" class="text-nowrap nav-link scan_feriat"><i class="fa-light fa-file-chart-column"></i> Actividad</a></li> @endif
+                            @if(checkPermissions(['Scan ferias'],['R']))<li class=" nav-item"><a href="/ferias/actividad" class="text-nowrap nav-link scan_ferias"><i class="fa-light fa-file-chart-column"></i> Actividad</a></li> @endif
                         </ul>
                     </li>
                     @endif

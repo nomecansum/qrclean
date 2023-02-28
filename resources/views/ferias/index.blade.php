@@ -139,8 +139,8 @@
 @section('scripts')
 
     <script>
-        $('.parametrizacion').addClass('active active-sub');
-        $('.ferias').addClass('active');
+        $('.ferias').addClass('active active-sub');
+        $('.ferias_ferias').addClass('active');
 
         $('#btn_nueva_puesto').click(function(){
             $('#editorCAM').load("{{ url('/ferias/create') }}", function(){

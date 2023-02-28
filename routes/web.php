@@ -446,6 +446,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/marcas/export_qr',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@export_qr_marcas']);
 
         Route::get('/asistentes',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@asistentes_index'])->name('contactos.index');
+        Route::post('/asistentes/search',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@asistentes_search'])->name('contactos.search');
         Route::get('/asistentes/edit/{id}',['middleware'=>'permissions:["Ferias"],["R"]', 'uses' => 'FeriasController@asistentes_edit']);
         Route::post('/asistentes/save',['middleware'=>'permissions:["Ferias"],["W"]', 'uses' => 'FeriasController@asistentes_save']);
         Route::get('/asistentes/delete/{id}',['middleware'=>'permissions:["Ferias"],["D"]', 'uses' => 'FeriasController@asistentes_delete']);

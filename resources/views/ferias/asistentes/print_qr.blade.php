@@ -109,9 +109,9 @@ try{
                     <div class="col-md-2">
                         <div class="form-group">
                             <label for="">Tamaño QR<i class="fa-solid fa-arrow-down-small-big"></i></label>
-                            <input type="number" class="form-control resize val_qr bind_value" min="50" max="1000" step="1" data-clase="val_qr" required name="tam_qr" id="tam_qr" value="{{ $r->tam_qr??230 }}">
+                            <input type="number" class="form-control resize val_qr bind_value" min="100" max="1000" step="1" data-clase="val_qr" required name="tam_qr" id="tam_qr" value="{{ $r->tam_qr??230 }}">
                         </div>
-                        <input type="range" class="form-range val_qr bind_value resize" min="50" max="1000" step="1" data-clase="val_qr"  id="range_tam_qr"  value="{{ $r->tam_qr??230 }}">
+                        <input type="range" class="form-range val_qr bind_value resize" min="100" max="1000" step="1" data-clase="val_qr"  id="range_tam_qr"  value="{{ $r->tam_qr??230 }}">
                     </div>
                 </div>
                 <div class="row">

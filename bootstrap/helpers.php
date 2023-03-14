@@ -1495,7 +1495,7 @@ function enviar_mail_reserva($id_reserva,$mca_ical,$sender_name=null){
     //     $body.=".\n\n Su reserva anterior ha sido anulada";
     // }
     $subject="Detalles de su reserva con Spotdesking";
-    $str_notificacion=$sender_name??$user->name.' ha creado una Reserva  del puesto ['.$det_puesto->cod_puesto.'] '.$det_puesto->des_puesto.' para usted en el periodo  '.beauty_fecha($det_reserva->fec_reserva).' - '.beauty_fecha($det_reserva->fec_fin_reserva);
+    $str_notificacion=$sender_name??$user->name.' ha creado una Reserva  del puesto ['.$det_puesto->cod_puesto.'] '.$det_puesto->des_puesto.' para usted en el periodo  '.beauty_fecha($det_reserva->fec_reserva).' - '.beauty_fecha($det_reserva->fec_fin_reserva).' con identificador #'.$id_reserva;
 
     if(isset($mca_ical) && $mca_ical=='S'){
         $cal=Calendar::create('Reserva de puestos Spotdesking');

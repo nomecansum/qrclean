@@ -60,7 +60,7 @@
                         <select name="cod_pais" id="cod_pais" class="select2 form-control" style="width:100%" >
                             <option value=""></option>
                             @foreach ($paises as $p)
-                                <option {{  (isset($fes)&&$fes->cod_pais == $p->id_pais ? 'selected' : '') }} {{ !isset($fes)&&$p->id_pais==73?'selected':'' }} value="{{$p->id_pais}}">{{$p->nom_pais}}</option>
+                                <option {{  (isset($fes)&&$fes->cod_pais == $p->id_pais ? 'selected' : '') }} {{ !isset($fes)&&$p->id_pais==$fes->id_pais?'selected':'' }} value="{{$p->id_pais}}">{{$p->nom_pais}}</option>
                             @endforeach
                         </select>
                     </div>

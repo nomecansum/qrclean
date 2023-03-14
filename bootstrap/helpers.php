@@ -1596,7 +1596,7 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null,$comprobar_reserva_festi
         ->leftjoin('provincias','edificios.id_provincia','provincias.id_prov')
         ->where('users.id',$id)
         ->first();
-
+        
 
     $festivos=DB::table('festivos')
         ->select('des_festivo')
@@ -1613,6 +1613,8 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null,$comprobar_reserva_festi
         ->where('festivos.id_cliente',$pertenencias->id_cliente)
         ->groupby(['val_fecha','des_festivo'])
         ->get();
+
+
     
     $resultado=[];
     $periodo=CarbonPeriod::create($fecha_inicio,$fecha_fin);
@@ -1640,6 +1642,7 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null,$comprobar_reserva_festi
         $resultado[]=$item;
     }
 
+    
     return $resultado;
 }
 

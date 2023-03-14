@@ -527,17 +527,17 @@ class ReservasController extends Controller
         $mensajes_error=[];
         
         $puesto=puestos::find($r->id_puesto);
+        $tipopuesto=puestos_tipos::find($puesto->id_tipo_puesto);
         if($puesto->mca_reservar=='N'){
             $mensajes_error[]='El puesto seleccionado no admite reservas';
         }
-       
         $period = CarbonPeriod::create($f1,$f2);
         foreach($period as $p){
             $fec_desde=Carbon::parse($p->format('Y-m-d').' '.$r->hora_inicio);
             $fec_hasta=Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin);
             //Si en el perfil le hemos puesto que pude reservar varios puestos del tipo no comprobamos si ya estaba pillado
             
-            if(session('NIV')["mca_reserva_multiple"]=='N')
+            if(session('NIV')["mca_reserva_multiple"]=='N' || $tipopuesto->mca_reserva_multiple=='N')
             {
                  //Primero comprobamos si tiene una reserva para ese dia de ese tipo de puesto
                 $reservas=DB::table('reservas')
@@ -899,7 +899,7 @@ class ReservasController extends Controller
             }
         }
         savebitacora('Reserva  de puesto '.$r->des_puesto.' creada para el usuario '.$usuario->name.' para el periodo  '.$r->desde.' - '.$r->hasta.". ".$cuenta." dias reservados","Reservas","asignar_reserva_multiple","OK");
-        $str_notificacion=Auth::user()->name.' ha creado una Reserva  del puesto '.$r->des_puesto.' para usted en el periodo  '.$r->desde.' - '.$r->hasta.". ".$cuenta." dias reservados";
+        $str_notificacion=Auth::user()->name.' ha creado una reserva  del puesto '.$r->des_puesto.' para usted en el periodo  '.$r->desde.' - '.$r->hasta.". ".$cuenta." dias reservados. Identificador de reserva: #".$res->id_reserva."";
         notificar_usuario($usuario,"Se le ha reservado un nuevo puesto",'emails.mail_reserva',$str_notificacion,[1,3],2,[],$res->id_reserva);
         return [
             'title' => "Reservas",

@@ -113,6 +113,12 @@
                             <label for="mca_reserva_masiva" class="form-check-label">Permitir reserva supervisores</label>
                         </div>
                     </div>
+                    <div class="col-md-3 p-t-20 mt-2">
+                        <div class="form-check pt-1">
+                            <input name="mca_reserva_multiple"  id="mca_reserva_multiple" value="S" {{ $tipo->mca_reserva_multiple=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
+                            <label for="mca_reserva_multiple" class="form-check-label">Reserva multiple</label>
+                        </div>
+                    </div>
                 </div>
                 
                 

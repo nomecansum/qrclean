@@ -2,44 +2,48 @@ Inicio de la tarea programada [31]App\Console\Commands\eventos
 Grupo *
 [52] -> Regla: Buscar en bitacora
 [52] -> Regla: Buscar en bitacora
-Dia: 2 Hora: 19
+Dia: 2 Hora: 14
 Iniciando proceso de la regla dentro del horario de programacion
 Comando :C:\WWW\qrclean\resources\views/events/comandos/buscar_en_bitacora.php
-Comando ejecutado, no hay ID para procesar
+Comando ejecutado, 8 ID a procesar: 104756,104757,104758,104759,104760,104761,104762,104763
 Resultado del comando: ok
 Iteraciones maximas de la regla: 1
 Iteracion: 1 -> acciones: 2
-No hay ID para la accion 1 de la iteracion 1
-No hay ID para la accion 2 de la iteracion 1
+ID: 104756 | Iteracion: 1 | Accion[1]: log.php
+ID: 104757 | Iteracion: 1 | Accion[1]: log.php
+ID: 104758 | Iteracion: 1 | Accion[1]: log.php
+ID: 104759 | Iteracion: 1 | Accion[1]: log.php
+ID: 104760 | Iteracion: 1 | Accion[1]: log.php
+ID: 104761 | Iteracion: 1 | Accion[1]: log.php
+ID: 104762 | Iteracion: 1 | Accion[1]: log.php
+ID: 104763 | Iteracion: 1 | Accion[1]: log.php
+ID: 104756 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 104757 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 104758 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 104759 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 104760 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 104761 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 104762 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 104763 | Iteracion: 1 | Accion[2]: notificacion_web.php
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 104756 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 104757 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 104758 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 104759 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 104760 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 104761 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 104762 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 104763 hasta dentro de 1 M
 Finalizado el procesado de la regla Buscar en bitacora
 Finalizado el procesado de la regla Buscar en bitacora
-Proxima ejecucion establecida para  Tue Feb 28 2023 19:55:19 GMT+0100
-[53] -> Regla: Notificacion de incidencias
-[53] -> Regla: Notificacion de incidencias
-Dia: 2 Hora: 19
-Iniciando proceso de la regla dentro del horario de programacion
-Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
-Comando ejecutado, no hay ID para procesar
-Resultado del comando: ok
-Iteraciones maximas de la regla: 1
-Iteracion: 1 -> acciones: 1
-No hay ID para la accion 1 de la iteracion 1
-Finalizado el procesado de la regla Notificacion de incidencias
-Finalizado el procesado de la regla Notificacion de incidencias
-Proxima ejecucion establecida para  Tue Feb 28 2023 19:45:19 GMT+0100
-[55] -> Regla: Manuel Ferrero Leonardo
-[55] -> Regla: Manuel Ferrero Leonardo
-Dia: 2 Hora: 19
-Iniciando proceso de la regla dentro del horario de programacion
-Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
-Comando ejecutado, no hay ID para procesar
-Resultado del comando: ok
-Iteraciones maximas de la regla: 1
-Iteracion: 1 -> acciones: 1
-No hay ID para la accion 1 de la iteracion 1
-Finalizado el procesado de la regla Manuel Ferrero Leonardo
-Finalizado el procesado de la regla Manuel Ferrero Leonardo
-Proxima ejecucion establecida para  Tue Feb 28 2023 19:45:19 GMT+0100
+Proxima ejecucion establecida para  Tue Mar 14 2023 14:55:19 GMT+0100
 Fin de la tarea App\Console\Commands\eventos
 Fin de la tarea php [31] Eventos
 Tarea [31] Eventos se ha ejecutado correctamente. Resp: 

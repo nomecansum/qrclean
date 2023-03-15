@@ -110,6 +110,15 @@
   }
 }
 
+.fa-icon-sharp-regular(@fa-var) {
+  .fa-icon;
+  .fa-sharp-regular;
+
+  &::before {
+    content: @fa-var;
+  }
+}
+
 .fa-icon-brands(@fa-var) {
   .fa-icon;
   .fa-brands;

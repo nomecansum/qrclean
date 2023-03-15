@@ -712,6 +712,7 @@ class HomeController extends Controller
                     $icons[]='fa-regular fa-'.$icon;
                     $icons[]='fa-duotone fa-'.$icon;
                     $icons[]='fa-light fa-'.$icon;
+                    $icons[]='fa-brands fa-'.$icon;
                 }
            }
            $icons=array_unique($icons);

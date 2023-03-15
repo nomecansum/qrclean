@@ -1,7 +1,7 @@
 /*!
- * Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com
+ * Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license (Commercial License)
- * Copyright 2022 Fonticons, Inc.
+ * Copyright 2023 Fonticons, Inc.
  */
 :root, :host {
   --fa-style-family-duotone: 'Font Awesome 6 Duotone';
@@ -813,6 +813,9 @@
 
 .fad.fa-torah::after, .fa-duotone.fa-torah::after {
   content: "\f6a0\f6a0"; }
+
+.fad.fa-webhook::after, .fa-duotone.fa-webhook::after {
+  content: "\e5d5\e5d5"; }
 
 .fad.fa-blinds-open::after, .fa-duotone.fa-blinds-open::after {
   content: "\f8fc\f8fc"; }
@@ -2005,6 +2008,9 @@
 .fad.fa-thought-bubble::after, .fa-duotone.fa-thought-bubble::after {
   content: "\e32e\e32e"; }
 
+.fad.fa-skeleton-ribs::after, .fa-duotone.fa-skeleton-ribs::after {
+  content: "\e5cb\e5cb"; }
+
 .fad.fa-raygun::after, .fa-duotone.fa-raygun::after {
   content: "\e025\e025"; }
 
@@ -2767,6 +2773,9 @@
 .fad.fa-house-flag::after, .fa-duotone.fa-house-flag::after {
   content: "\e50d\e50d"; }
 
+.fad.fa-circle-three-quarters-stroke::after, .fa-duotone.fa-circle-three-quarters-stroke::after {
+  content: "\e5d4\e5d4"; }
+
 .fad.fa-person-circle-minus::after, .fa-duotone.fa-person-circle-minus::after {
   content: "\e540\e540"; }
 
@@ -3006,6 +3015,9 @@
 
 .fad.fa-map-marker-xmark::after, .fa-duotone.fa-map-marker-xmark::after {
   content: "\f60e\f60e"; }
+
+.fad.fa-circle-quarter-stroke::after, .fa-duotone.fa-circle-quarter-stroke::after {
+  content: "\e5d3\e5d3"; }
 
 .fad.fa-lasso::after, .fa-duotone.fa-lasso::after {
   content: "\f8c8\f8c8"; }
@@ -4990,6 +5002,9 @@
 .fad.fa-p::after, .fa-duotone.fa-p::after {
   content: "\50\50"; }
 
+.fad.fa-broom-wide::after, .fa-duotone.fa-broom-wide::after {
+  content: "\e5d1\e5d1"; }
+
 .fad.fa-snowflake::after, .fa-duotone.fa-snowflake::after {
   content: "\f2dc\f2dc"; }
 
@@ -5058,6 +5073,9 @@
 
 .fad.fa-chart-waterfall::after, .fa-duotone.fa-chart-waterfall::after {
   content: "\e0eb\e0eb"; }
+
+.fad.fa-sparkle::after, .fa-duotone.fa-sparkle::after {
+  content: "\e5d6\e5d6"; }
 
 .fad.fa-face-party::after, .fa-duotone.fa-face-party::after {
   content: "\e383\e383"; }
@@ -5634,6 +5652,9 @@
 
 .fad.fa-toilet-paper-slash::after, .fa-duotone.fa-toilet-paper-slash::after {
   content: "\e072\e072"; }
+
+.fad.fa-circle-euro::after, .fa-duotone.fa-circle-euro::after {
+  content: "\e5ce\e5ce"; }
 
 .fad.fa-apple-whole::after, .fa-duotone.fa-apple-whole::after {
   content: "\f5d1\f5d1"; }
@@ -6736,6 +6757,9 @@
 .fad.fa-tshirt::after, .fa-duotone.fa-tshirt::after {
   content: "\f553\f553"; }
 
+.fad.fa-billboard::after, .fa-duotone.fa-billboard::after {
+  content: "\e5cd\e5cd"; }
+
 .fad.fa-square-r::after, .fa-duotone.fa-square-r::after {
   content: "\e27c\e27c"; }
 
@@ -7059,6 +7083,9 @@
 
 .fad.fa-coffee-bean::after, .fa-duotone.fa-coffee-bean::after {
   content: "\e13e\e13e"; }
+
+.fad.fa-circle-yen::after, .fa-duotone.fa-circle-yen::after {
+  content: "\e5d0\e5d0"; }
 
 .fad.fa-brackets-curly::after, .fa-duotone.fa-brackets-curly::after {
   content: "\f7ea\f7ea"; }
@@ -7605,6 +7632,9 @@
 
 .fad.fa-bracket-round-right::after, .fa-duotone.fa-bracket-round-right::after {
   content: "\29\29"; }
+
+.fad.fa-circle-sterling::after, .fa-duotone.fa-circle-sterling::after {
+  content: "\e5cf\e5cf"; }
 
 .fad.fa-circle-5::after, .fa-duotone.fa-circle-5::after {
   content: "\e0f2\e0f2"; }
@@ -9910,6 +9940,9 @@
 .fad.fa-megaphone::after, .fa-duotone.fa-megaphone::after {
   content: "\f675\f675"; }
 
+.fad.fa-wreath-laurel::after, .fa-duotone.fa-wreath-laurel::after {
+  content: "\e5d2\e5d2"; }
+
 .fad.fa-circle-exclamation-check::after, .fa-duotone.fa-circle-exclamation-check::after {
   content: "\e10d\e10d"; }
 
@@ -11292,6 +11325,9 @@
 
 .fad.fa-turtle::after, .fa-duotone.fa-turtle::after {
   content: "\f726\f726"; }
+
+.fad.fa-pencil-mechanical::after, .fa-duotone.fa-pencil-mechanical::after {
+  content: "\e5ca\e5ca"; }
 
 .fad.fa-up-down::after, .fa-duotone.fa-up-down::after {
   content: "\f338\f338"; }

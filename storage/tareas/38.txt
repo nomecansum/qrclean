@@ -1,27 +1,7 @@
 Inicio de la tarea programada [38]App\Console\Commands\sincronizarWorkdayGenerali
 GET http://localhost/response.xml
 Datos de workday recibidos
-Procesando USUARIOS
-Undefined variable $nivel
-
-   ErrorException 
-
-  Undefined variable $nivel
-
-  at C:\WWW\qrclean\app\Console\Commands\sincronizarWorkdayGenerali.php:498
-    494▕                         
-    495▕                         //Si antes tenia un nivel superior (administrador) se lo mantenemos
-    496▕                         if($usuario){
-    497▕                             $user=users::find($usuario);
-  ➜ 498▕                             if($user->nivel_acceso>=$nivel->val_nivel_acceso){
-    499▕                                 $nivel=niveles_acceso::find($user->cod_nivel);
-    500▕                             } else {
-    501▕                                 if($item['Es_gerente-manager']==0){
-    502▕                                     $nivel=$cod_nivel;
-
-  1   C:\WWW\qrclean\app\Console\Commands\sincronizarWorkdayGenerali.php:498
-      Illuminate\Foundation\Bootstrap\HandleExceptions::Illuminate\Foundation\Bootstrap\{closure}()
-
-  2   C:\WWW\qrclean\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:36
-      App\Console\Commands\sincronizarWorkdayGenerali::handle()
-Fin de la tarea php [38] Programacion de informes
+Fin de la tarea programada [38]App\Console\Commands\sincronizarWorkdayGenerali
+Fin de la tarea App\Console\Commands\sincronizarWorkdayGenerali
+Fin de la tarea php [38] Sincronizar Workday
+Tarea [38] Sincronizar Workday se ha ejecutado correctamente. Resp: 

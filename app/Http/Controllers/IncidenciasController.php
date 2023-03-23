@@ -461,7 +461,7 @@ class IncidenciasController extends Controller
                 
                 })
             ->where(function($q) use($puesto){
-                $q->wherenull('list_tipo_puesto');
+                //$q->wherenull('list_tipo_puesto');
                 $q->orwhereraw('FIND_IN_SET('.$puesto->id_tipo_puesto.', list_tipo_puesto) <> 0');
             })
             ->orderby('mca_fijo')

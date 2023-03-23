@@ -99,7 +99,7 @@
                             <td>{{ $tipo->des_tipo_incidencia }}</td>
                             <td>
                                 @php
-                                    $tipos_puesto = DB::table('puestos_tipos')->wherein('id_tipo_puesto',explode(',',$tipo->list_tipo_puesto))->get();
+                                    $tipos_puesto = DB::table('puestos_tipos')->wherein('id_tipo_puesto',explode(',',$tipo->list_tipo_puesto))->where('id_tipo_puesto','>',0)->get();
                                 @endphp
                                 @foreach ($tipos_puesto as $tp)
                                 <ul  style="font-size: 10px;list-style:none;">

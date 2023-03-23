@@ -291,7 +291,6 @@ class TareasController extends Controller
     public function save(Request $r)
     {
 		$this->validar_request($r);
-
 		try{
 			$parametros=$this->procesar_parametros($r);
 

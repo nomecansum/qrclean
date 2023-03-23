@@ -266,39 +266,6 @@ function decimal_to_time($dec)
     }
 }
 
-//Lista de zonas horarias
-function tz_list() {
-    $zones_array = array();
-    $timestamp = time();
-    $dummy_datetime_object = new DateTime();
-    foreach(timezone_identifiers_list() as $key => $zone) {
-        date_default_timezone_set($zone);
-        $zones_array[$key]['zone'] = $zone;
-        $zones_array[$key]['diff_from_GMT'] = 'GMT' . date('P', $timestamp);
-
-        $tz = new DateTimeZone($zone);
-        $zones_array[$key]['offset'] = $tz->getOffset($dummy_datetime_object);
-    }
-
-    return $zones_array;
-}
-
-
-//Lista de continentes
-function regions(){
-    $regions = array(
-        'Africa' => DateTimeZone::AFRICA,
-        'America' => DateTimeZone::AMERICA,
-        'Antarctica' => DateTimeZone::ANTARCTICA,
-        'Asia' => DateTimeZone::ASIA,
-        'Atlantic' => DateTimeZone::ATLANTIC,
-        'Europe' => DateTimeZone::EUROPE,
-        'Indian' => DateTimeZone::INDIAN,
-        'Pacific' => DateTimeZone::PACIFIC
-    );
-
-    return $regions;
-}
 
 function get_local_tz(){
     try{

@@ -357,6 +357,12 @@
                                                 <label class="form-check-label" for="mca_notif_email">e-mail</label>
                                             </div>
                                         </div>
+                                        <div class="col-md-3  mt-1">
+                                            <div class="form-check pt-3">
+                                                <input  name="mca_reserva_multiple"  id="mca_reserva_multiple" value="S" {{ isset($users->mca_reserva_multiple)&&$users->mca_reserva_multiple=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                                                <label class="form-check-label" for="mca_reserva_multiple">reserva multiple</label>
+                                            </div>
+                                        </div>
                                         <div class="form-group col-md-6 {{ $errors->has('id_onesignal') ? 'has-error' : '' }}">
                                             <label for="email" class="control-label">PlayerID</label>
                                             <input class="form-control" name="id_onesignal" disabled type="text" id="id_onesignal" value="{{ old('id_onesignal', optional($users)->id_onesignal) }}" minlength="1" maxlength="255" placeholder="Enter PlayerID here...">

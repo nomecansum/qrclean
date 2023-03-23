@@ -256,6 +256,7 @@
 
     $('#frm_contador').submit(function(event){
         event.preventDefault();
+        block_espere();
         let form = $(this);
         let data = new FormData(form[0]);
 
@@ -268,11 +269,13 @@
         })
         .done(function(data) {
             console.log(data);
+            fin_espere();
             if(data.error){
                 mensaje_error_controlado(data);
             } else if(data.alert){
                 mensaje_warning_controlado(data);
             } else{
+                
                 animateCSS('#editor','fadeOut',$('#editor').html(''));
                 toast_ok(data.title,data.mensaje);
                 loadMonth();

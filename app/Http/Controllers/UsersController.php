@@ -363,6 +363,7 @@ class UsersController extends Controller
             $data["val_prefijo_compartido"] = $data["mca_compartido"]=="S" ? $data["val_prefijo_compartido"] : null;
             $data["id_operario"] = $data["mca_compartido"]=="N" ? $data["id_operario"] : null;
             $data["sso_override"] = isset($data["sso_override"]) ? 'S' : 'N';
+            $data["mca_reserva_multiple"] = isset($data["mca_reserva_multiple"]) ? 'S' : 'N';
             if(isset($data['tipos_puesto_admitidos']) && is_array($data['tipos_puesto_admitidos'])){
                 $data['tipos_puesto_admitidos']=implode(",",$data['tipos_puesto_admitidos']);
             }
@@ -598,6 +599,7 @@ class UsersController extends Controller
             'id_operario'=>'nullable',
             'sso_override'=>'nullable',
             'lista_zonas'=>'nullable',
+            'mca_reserva_multiple'=>'nullable',
         ];
 
 

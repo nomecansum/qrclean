@@ -242,8 +242,12 @@ class sincronizarWorkdayGenerali extends Command
         $dato=users::where('email',$email)->first();
         //Colectivos
         $esta_colectivo=DB::table('colectivos_usuarios')->where('cod_colectivo',$colectivo)->where('id_usuario',$dato->id)->first();
-        if(!$esta_colectivo){
-            DB::table('colectivos_usuarios')->insert(['cod_colectivo'=>$colectivo,'id_usuario'=>$dato->id]);
+        if($esta_colectivo){
+            //A ver si el usuario ya estaba en el colectivo
+            $esta_colectivo=DB::table('colectivos_usuarios')->where('cod_colectivo',$colectivo)->where('id_usuario',$dato->id)->first();
+            if(!$esta_colectivo){
+                DB::table('colectivos_usuarios')->insert(['cod_colectivo'=>$colectivo,'id_usuario'=>$dato->id]);
+            }
         }
         //El turno
         if(isset($turno)){
@@ -495,7 +499,7 @@ class sincronizarWorkdayGenerali extends Command
                         //Si antes tenia un nivel superior (administrador) se lo mantenemos
                         if($usuario){
                             $user=users::find($usuario);
-                            if($user->nivel_acceso>=$nivel->val_nivel_acceso){
+                            if($user->nivel_acceso>=$cod_nivel->val_nivel_acceso){
                                 $nivel=niveles_acceso::find($user->cod_nivel);
                             } else {
                                 if($item['Es_gerente-manager']==0){

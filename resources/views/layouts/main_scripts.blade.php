@@ -116,13 +116,18 @@
     }
 
     //Mostrara un sweet alert indicando que hay algo leyendo en la pagina. Para quitarlo se llama a fin_espere()
-    function block_espere(mensaje="Cargando... espere"){
+    function block_espere(mensaje="{{ __('general.cargando_espere') }}"){
+        //Mostrara un sweet alert indicando que hay algo leyendo en la pagina. Para quitarlo se llama a fin_espere()
         sw=Swal.fire({
             title: mensaje,
-            footer: '<img src="/img/Mosaic_brand_20.png" class="float-right">',
+            footer: 'Spotlinker <img src="{{ asset('/img/Mosaic_brand_20.png') }}" height="20" class="float-right">',
             allowEscapeKey: true,
-            allowOutsideClick: false,
-            timer: 90000
+            //allowOutsideClick: false,
+            timer: 50000,
+            showConfirmButton: false,
+            //backdrop: false,
+            toast: true,
+            width: '15em'
             });
         Swal.showLoading();
     }

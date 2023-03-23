@@ -537,7 +537,7 @@ class ReservasController extends Controller
             $fec_hasta=Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin);
             //Si en el perfil le hemos puesto que pude reservar varios puestos del tipo no comprobamos si ya estaba pillado
             
-            if(session('NIV')["mca_reserva_multiple"]=='N' || $tipopuesto->mca_reserva_multiple=='N')
+            if((session('NIV')["mca_reserva_multiple"]=='N' || $tipopuesto->mca_reserva_multiple=='N') && Auth::user()->mca_reserva_multiple=='N')
             {
                  //Primero comprobamos si tiene una reserva para ese dia de ese tipo de puesto
                 $reservas=DB::table('reservas')

@@ -548,7 +548,7 @@ class sincronizarWorkdayGenerali extends Command
                 
 
                 // //Borramos los que sobran
-                users::where('id_cliente',$tarea->clientes)->where('sync_at','<',Carbon::now()->subminutes(100))->update(['deleted_at'=>Carbon::now()]);
+                //users::where('id_cliente',$tarea->clientes)->where('sync_at','<',Carbon::now()->subminutes(100))->update(['deleted_at'=>Carbon::now()]);
 
                 //Actualizamos el edificio TORRECERDA
                 DB::table('users')->where('id_edificio',101)->update(['id_edificio'=>41]);

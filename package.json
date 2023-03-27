@@ -25,6 +25,7 @@
         "@breejs/later": "^4.1.0",
         "animate.css": "^4.1.1",
         "cron-parser": "^4.6.0",
+        "cronstrue": "^2.24.0",
         "gridstack": "^5.1.1",
         "heatmap.js": "^2.0.5",
         "html5-qrcode": "^1.0.9",

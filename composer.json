@@ -36,6 +36,7 @@
         "riverskies/laravel-mobile-detect": "^1.3",
         "sebdesign/blade-sql-formatter": "^0.1.1",
         "shahonseven/php-color-hash": "^1.0",
+        "silviolleite/laravelpwa": "^2.0",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "socialiteproviders/microsoft": "^4.1",
         "spatie/icalendar-generator": "^2.1",

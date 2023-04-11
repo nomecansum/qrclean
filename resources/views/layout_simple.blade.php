@@ -14,6 +14,7 @@
     <!--Bootstrap Stylesheet [ REQUIRED ]-->
     <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
     @yield('styles')
+    @laravelPWA
 </head>
 
 <body>

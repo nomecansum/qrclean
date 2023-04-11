@@ -48,6 +48,7 @@
     Detailed information and more samples can be found in the documentation.
 
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~--- -->
+    @laravelPWA
 </head>
 
 <body class="">

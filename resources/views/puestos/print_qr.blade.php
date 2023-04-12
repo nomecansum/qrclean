@@ -225,7 +225,8 @@ $columna=1;
     }
     
     function setsize(){
-        $('.qr').css('width',$('#tam_qr').val());
+        $('.img_qr').css('width',$('#tam_qr').val());
+        $('.img_qr').css('height',$('#tam_qr').val());
         $('.cont_qr').css('width',$('#tam_qr').val());
         tam_fuente=Math.round(16*$('#tam_qr').val()/230);
         $('.texto_qr').css("font-size", tam_fuente + "px");

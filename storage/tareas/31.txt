@@ -1,6 +1,19 @@
 Inicio de la tarea programada [31]App\Console\Commands\eventos
 Grupo *
-No hay eventos para evaluar
+[52] -> Regla: Buscar en bitacora
+[52] -> Regla: Buscar en bitacora
+Dia: 3 Hora: 19
+Iniciando proceso de la regla dentro del horario de programacion
+Comando :C:\WWW\qrclean\resources\views/events/comandos/buscar_en_bitacora.php
+Comando ejecutado, no hay ID para procesar
+Resultado del comando: ok
+Iteraciones maximas de la regla: 1
+Iteracion: 1 -> acciones: 2
+No hay ID para la accion 1 de la iteracion 1
+No hay ID para la accion 2 de la iteracion 1
+Finalizado el procesado de la regla Buscar en bitacora
+Finalizado el procesado de la regla Buscar en bitacora
+Proxima ejecucion establecida para  Wed Apr 12 2023 19:20:19 GMT+0200
 Fin de la tarea App\Console\Commands\eventos
 Fin de la tarea php [31] Eventos
 Tarea [31] Eventos se ha ejecutado correctamente. Resp: 

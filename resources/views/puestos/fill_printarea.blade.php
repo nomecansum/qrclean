@@ -14,6 +14,13 @@
     $elementos_pagina=$columnas_mostrar*$r->row??0;
     $cuenta_elementos=1;
 @endphp
+<style>
+    .img_qr svg{
+        display:inline-block;
+        width:100%;
+        height:100%;
+    }
+</style>
 
 <div class="contenedor" style="margin-top: {{ $r->margen_top??4 }}px; margin-left: {{ $r->margen_left??4 }}px">
 {{-- <div class="break-line"><div style="width: 100%; height:3px; background-color: #f00; z-index: 1000"><hr></div></div> --}}
@@ -48,8 +55,9 @@
             {{ $puesto->cod_puesto }}
         </div>
         @endif
-        <div class="img_qr">
-            <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->color($color_qr["r"],$color_qr["g"],$color_qr["b"])->size($r->tam_qr??230)->generate(config('app.url_base_scan').$puesto->token)) !!} ">
+        <div class="img_qr" style="width: {{ $r->tam_qr??230 }}px; height: {{ $r->tam_qr??230 }}px">
+            {{ QrCode::format('svg')->errorCorrection('M')->color($color_qr["r"],$color_qr["g"],$color_qr["b"])->generate(config('app.url_base_scan').$puesto->token) }}
+            {{-- <img class="qr" src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->errorCorrection('H')->color($color_qr["r"],$color_qr["g"],$color_qr["b"])->size($r->tam_qr??230)->generate(config('app.url_base_scan').$puesto->token)) !!} "> --}}
         </div>
         <div class="w-100 bg-white text-center font-bold texto_qr" style="color: {{$color_texto}}; background-color: #fff; font-size: {{ $r->font_size??14 }}px">
             @if(isset($r->mca_icono)&&(int)$r->mca_icono==2)<i class="{{$puesto->icono_tipo}}"></i>@endif  {{ nombrepuesto($puesto) }}

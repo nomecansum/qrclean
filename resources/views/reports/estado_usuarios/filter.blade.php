@@ -75,7 +75,7 @@
 	@endif
 
 		<tr>
-			<th></th>
+			<th>e-mail</th>
 			<th @if($r->output=="excel") style="background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Usuario</th>
 			<th class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Plantas</th>
 			<th class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Puesto asignado</th>
@@ -88,7 +88,7 @@
 		@endphp
 
 			<tr>
-				<td></td>
+				<td>{{ $dato->email }}</td>
 				<td>{{ $dato->name }}</td>
 				<td>
 					{{implode(", ",$pl)}}

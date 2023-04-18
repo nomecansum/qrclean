@@ -291,15 +291,17 @@ class sincronizarWorkdayGenerali extends Command
                     \"color\": \"rgba(0, 0, 0, 0)\"
                 }]");
             }
-            if(strpos($puesto,'SWS')!==false){
-                $prefijo_puesto='SWS';
-                $puesto=str_replace('SWS','',$puesto);
-                $puesto=str_replace(' ','',$puesto);
-            } else {
-                $prefijo_puesto='WS';
-            }
-            $txt_puesto=lz($puesto,3);
-            $puesto=edificios::where('id_edificio',$edificio)->first()->abreviatura.'-'.$txt_planta.'-'.$prefijo_puesto.'-'.$txt_puesto;
+            //Ahora como ya viene el codigo de puesto no hace falta hacer essta mierda
+            
+            // if(strpos($puesto,'SWS')!==false){
+            //     $prefijo_puesto='SWS';
+            //     $puesto=str_replace('SWS','',$puesto);
+            //     $puesto=str_replace(' ','',$puesto);
+            // } else {
+            //     $prefijo_puesto='WS';
+            // }
+            // $txt_puesto=lz($puesto,3);
+            // $puesto=edificios::where('id_edificio',$edificio)->first()->abreviatura.'-'.$txt_planta.'-'.$prefijo_puesto.'-'.$txt_puesto;
             $datos_puesto=puestos::where('cod_puesto',$puesto)->first();
             if(isset($datos_puesto))
             {

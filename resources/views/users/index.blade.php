@@ -119,7 +119,7 @@
                     data-show-columns-toggle-all="true"
                     data-page-list="[20, 50, 100, 300, 500, 750, 1000, 2000, 5000, 10000]"
                     data-page-size="50"
-                    data-pagination="true" 
+                    data-pagination="false" 
                     data-toolbar="#all_toolbar"
                     data-buttons-class="secondary"
                     data-show-button-text="true"

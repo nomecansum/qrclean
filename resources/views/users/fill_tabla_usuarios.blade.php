@@ -29,9 +29,9 @@
         <td>{!! beauty_fecha($users->last_login,0) !!} {!! $users->deleted_at!=null?'<br> <i class="fa-solid fa-user-slash"></i> Disabled':'' !!}</td>
         <td style="vertical-align: middle; font-size:12px; position: relative">
             {{ $users->email }}
-            <form method="POST" action="{!! route('users.users.destroy', $users->id) !!}" accept-charset="UTF-8">
+            {{-- <form method="POST" action="{!! route('users.users.destroy', $users->id) !!}" accept-charset="UTF-8">
             <input name="_method" value="DELETE" type="hidden">
-            {{ csrf_field() }}
+            {{ csrf_field() }} --}}
             <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
                 <div class="btn-group btn-group pull-right ml-1" role="group">
                     @if (checkPermissions(['ReLogin'],["R"]) && $users->nivel_acceso<=Auth::user()->nivel_acceso)<a href="{{url('relogin',$users->id)}}" class="btn btn-xs btn-warning"><i class="fa fa-user" ></i> Suplantar</a>@endif
@@ -41,7 +41,7 @@
                     </a>
                 </div>
             </div>
-            </form>
+            {{-- </form> --}}
         </td>
     </tr>
 @endforeach

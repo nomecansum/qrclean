@@ -256,81 +256,81 @@ class sincronizarWorkdayGenerali extends Command
         }
 
     
-        // //planta
-        // if(isset($planta)){
-        //     //Cagada con la baja
-        //     if($planta==0){
-        //         $txt_planta='B';
-        //     } else if($planta==-1) {
-        //         $txt_planta='S1';
-        //     } else if($planta==-2) {
-        //         $txt_planta='S2';
-        //     } else {
-        //         $txt_planta=lz($planta,2);
-        //     }
-        //     $id_planta=DB::table('plantas')->where('id_cliente',$cliente)->where('id_edificio',$edificio)->where('abreviatura',$txt_planta)->first();
-        //     if(isset($id_planta)){
-        //         $planta=$id_planta->id_planta;
-        //         $esta=DB::table('plantas_usuario')->where('id_usuario',$dato->id)->where('id_planta',$planta)->first();
-        //         if(!isset($esta)){
-        //             DB::table('plantas_usuario')->insert(['id_planta'=>$planta,'id_usuario'=>$dato->id]);
-        //         }
-        //     }
+        //planta
+        if(isset($planta)){
+            //Cagada con la baja
+            if($planta==0){
+                $txt_planta='B';
+            } else if($planta==-1) {
+                $txt_planta='S1';
+            } else if($planta==-2) {
+                $txt_planta='S2';
+            } else {
+                $txt_planta=lz($planta,2);
+            }
+            $id_planta=DB::table('plantas')->where('id_cliente',$cliente)->where('id_edificio',$edificio)->where('abreviatura',$txt_planta)->first();
+            if(isset($id_planta)){
+                $planta=$id_planta->id_planta;
+                $esta=DB::table('plantas_usuario')->where('id_usuario',$dato->id)->where('id_planta',$planta)->first();
+                if(!isset($esta)){
+                    DB::table('plantas_usuario')->insert(['id_planta'=>$planta,'id_usuario'=>$dato->id]);
+                }
+            }
             
-        // }
+        }
 
-        // //El puesto
-        // if(isset($puesto) && $puesto!='BENCH'){
-        //     if($dato->list_puestos_preferidos!=null){
-        //         $puestos_preferidos=json_decode($dato->list_puestos_preferidos);
-        //     } else {
-        //         $puestos_preferidos=json_decode("[{
-        //             \"id\": 20,
-        //             \"tipo\": \"ul\",
-        //             \"text\": \"Ultimas 20 reservas\",
-        //             \"color\": \"rgba(0, 0, 0, 0)\"
-        //         }]");
-        //     }
-        //     if(strpos($puesto,'SWS')!==false){
-        //         $prefijo_puesto='SWS';
-        //         $puesto=str_replace('SWS','',$puesto);
-        //         $puesto=str_replace(' ','',$puesto);
-        //     } else {
-        //         $prefijo_puesto='WS';
-        //     }
-        //     $txt_puesto=lz($puesto,3);
-        //     $puesto=edificios::where('id_edificio',$edificio)->first()->abreviatura.'-'.$txt_planta.'-'.$prefijo_puesto.'-'.$txt_puesto;
-        //     $datos_puesto=puestos::where('cod_puesto',$puesto)->first();
-        //     if(isset($datos_puesto))
-        //     {
-        //         $id_puesto=$datos_puesto->id_puesto;
-        //         //Ahopra a ponerselo en las preferencias de reservas
-        //         $ya_esta=collect($puestos_preferidos)->where('id',$id_puesto)->first();
-        //         if(!isset($ya_esta)){
-        //             $encontrado=false;
-        //             foreach($puestos_preferidos as $key=>$p){
-        //                 if($p->tipo=='pu' && $p->id==$id_puesto){
-        //                    $encontrado=true;
-        //                 }
-        //             }
-        //             if(!$encontrado){
-        //                 $nuevo=new \stdClass();
-        //                 $nuevo->id=$id_puesto;
-        //                 $nuevo->tipo='pu';
-        //                 $nuevo->text=$datos_puesto->des_puesto;
-        //                 $nuevo->color="rgb(239, 195, 230)";
-        //                 $nuevo->icono="<i class=\"fa-solid fa-chair-office\"></i> Puesto  ";
-        //                 $nuevo->workday=true;
-        //                 array_splice($puestos_preferidos,$key,0,[$nuevo]);
-        //             }
-        //         }
-        //         $dato->list_puestos_preferidos=json_encode($puestos_preferidos);
-        //         $dato->save();
-        //     } else {
-        //         Log::error('No se ha encontrado el puesto '.$puesto.' para el usuario '.$email);
-        //         log_tarea('No se ha encontrado el puesto '.$puesto.' para el usuario '.$email,$id_tarea,'error');
-        //     }
-        //}
+        //El puesto
+        if(isset($puesto) && $puesto!='BENCH'){
+            if($dato->list_puestos_preferidos!=null){
+                $puestos_preferidos=json_decode($dato->list_puestos_preferidos);
+            } else {
+                $puestos_preferidos=json_decode("[{
+                    \"id\": 20,
+                    \"tipo\": \"ul\",
+                    \"text\": \"Ultimas 20 reservas\",
+                    \"color\": \"rgba(0, 0, 0, 0)\"
+                }]");
+            }
+            if(strpos($puesto,'SWS')!==false){
+                $prefijo_puesto='SWS';
+                $puesto=str_replace('SWS','',$puesto);
+                $puesto=str_replace(' ','',$puesto);
+            } else {
+                $prefijo_puesto='WS';
+            }
+            $txt_puesto=lz($puesto,3);
+            $puesto=edificios::where('id_edificio',$edificio)->first()->abreviatura.'-'.$txt_planta.'-'.$prefijo_puesto.'-'.$txt_puesto;
+            $datos_puesto=puestos::where('cod_puesto',$puesto)->first();
+            if(isset($datos_puesto))
+            {
+                $id_puesto=$datos_puesto->id_puesto;
+                //Ahopra a ponerselo en las preferencias de reservas
+                $ya_esta=collect($puestos_preferidos)->where('id',$id_puesto)->first();
+                if(!isset($ya_esta)){
+                    $encontrado=false;
+                    foreach($puestos_preferidos as $key=>$p){
+                        if($p->tipo=='pu' && $p->id==$id_puesto){
+                           $encontrado=true;
+                        }
+                    }
+                    if(!$encontrado){
+                        $nuevo=new \stdClass();
+                        $nuevo->id=$id_puesto;
+                        $nuevo->tipo='pu';
+                        $nuevo->text=$datos_puesto->des_puesto;
+                        $nuevo->color="rgb(239, 195, 230)";
+                        $nuevo->icono="<i class=\"fa-solid fa-chair-office\"></i> Puesto  ";
+                        $nuevo->workday=true;
+                        array_splice($puestos_preferidos,$key,0,[$nuevo]);
+                    }
+                }
+                $dato->list_puestos_preferidos=json_encode($puestos_preferidos);
+                $dato->save();
+            } else {
+                Log::error('No se ha encontrado el puesto '.$puesto.' para el usuario '.$email);
+                log_tarea('No se ha encontrado el puesto '.$puesto.' para el usuario '.$email,$id_tarea,'error');
+            }
+        }
         return $dato->id;
     }
 

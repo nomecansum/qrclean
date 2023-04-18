@@ -493,6 +493,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/trabajos',['middleware' => 'permissions:["Informes > Trabajos planificados"],["R"]', 'uses' => 'ReportsController@trabajos_index']);
 	    Route::post('/trabajos/filter',['middleware' => 'permissions:["Informes > Trabajos planificados"],["R"]', 'uses' => 'ReportsController@trabajos']);
 
+        Route::get('/estado_usu',['middleware' => 'permissions:["Informes > Estado usuarios"],["R"]', 'uses' => 'ReportsController@estado_usu_index']);
+	    Route::post('/estado_usu/filter',['middleware' => 'permissions:["Informes > Estado usuarios"],["R"]', 'uses' => 'ReportsController@estado_usu']);
+
         Route::get('program/{id}', ['middleware' => 'permissions:["Informes programados"],["R"]', 'uses' => 'ReportsController@reportFromEmail']);
 		
 	});

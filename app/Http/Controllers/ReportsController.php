@@ -953,6 +953,115 @@ class ReportsController extends Controller
         }
     }
 
+    ///////////////INFORME DE ESTADO DE USUARIOS /////////////////
+    public function estado_usu_index(){
+        return view('reports.estado_usuarios.index');
+    }
+
+    public function estado_usu(Request $r){
+        
+        //PARAMETROS DE ENTRADA COMUNES, USUARIO Y FECHAS
+        if(isset($r->cod_usuario))
+            Auth::loginUsingId($r->cod_usuario);
+
+        ///////////////////////////
+        ///CONTENIDO DEL INFORME///
+        ///////////////////////////
+        $informe=DB::table('users')
+        ->select('users.*','edificios.des_edificio','clientes.nom_cliente','clientes.id_cliente')
+        ->join('edificios','users.id_edificio','edificios.id_edificio')
+        ->join('clientes','users.id_cliente','clientes.id_cliente')
+        ->where(function($q){
+            if (!isAdmin()){
+                $q->WhereIn('clientes.id_cliente',clientes());
+            }
+        })
+        ->where(function($q) use($r){
+            if ($r->cliente) {
+                $q->WhereIn('users.id_cliente',$r->cliente);
+            }
+        })
+        ->where(function($q) use($r){
+            if ($r->edificio) {
+                $q->WhereIn('users.id_edificio',$r->edificio);
+            }
+        })
+        ->where(function($q) use($r){
+            if ($r->planta) {
+                $users_filtro=DB::table('plantas_usuario')
+                    ->select('id_usuario')
+                    ->wherein('id_planta',$r->planta)
+                    ->pluck('id_usuario');
+                $q->whereIn('users.id',$users_filtro);
+            }
+        })
+        ->get();
+
+        $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+        ///////////////////////////////////////////////////
+        ///////////SALIDA DEL INFORME/////////////////////
+        //Para añadir a los nomres de fichero y hacerlos un poco mas unicos
+        //dd($r->all());
+        $nombre_informe="Informe de estado de usuarios";
+        $cliente=clientes::find($r->id_cliente);
+        $rango_safe=str_replace(" - ","_",$r->fechas);
+        $rango_safe=str_replace("/","",$rango_safe);
+        $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
+        $usuario = users::find($r->cod_usuario)??Auth::user()->id;;
+        $view='reports.estado_usuarios.filter';
+
+
+        switch($r->output){
+            case "pantalla":
+                if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe, "r" => $r,'executionTime' => $executionTime));
+                } else {  //Navegacion
+                    return view($view,compact('informe','r','executionTime'))->render();
+                }
+
+            break;
+
+            case "pdf":
+                $orientation = $r->orientation == 'h' ? 'landscape' : 'portrait';
+                $pdf = PDF::loadView($view,compact('informe','r','executionTime'));
+                $pdf->setPaper('legal', $orientation);
+                $filename = str_replace(' ', '_', $prepend . '_' . $nombre_informe . '.pdf');
+                $fichero = storage_path() . "/exports/" . $filename;
+
+                if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                    try{
+                        $pdf->save($fichero);
+                        $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                    } catch(\Exception $e){
+                        Log::error('Error generando PDF '.$e->getMessage());
+                    }
+
+                } else {  //Navegacion
+                    try{
+                        return $pdf->download($filename);
+                    } catch(\Exception $e){
+                        Log::error('Error generando PDF '.$e->getMessage());
+                        flash("Error al solicitar el informe: afine los filtros para evitar grandes cargas de datos al navegador (".mensaje_excepcion($e) . ")")->error();  
+                        return redirect()->back()->withInput();
+                    }
+                }
+
+            break;
+
+            case "excel":
+                $filename = str_replace(' ', '_', $prepend.'_'.$nombre_informe.'.xlsx');
+                $fichero = storage_path()."/exports/".$filename;
+                libxml_use_internal_errors(true); //para quitar los errores de libreria
+                if(isset($r->email_schedule) && $r->email_schedule == 1) { //Programado
+                    Excel::store(new ExportExcel($view, compact('informe','r','executionTime')),$filename,'exports');
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                } else {  //Navegacion
+                    return Excel::download(new ExportExcel($view,compact('informe','r','executionTime')),$filename);
+                }
+            break;
+        }
+    }
+
     //////////////////////INFORMES PROGRAMADOS ////////////////////////////////
     //Crear nuevo informe programado
     public function programar_informe(Request $r){

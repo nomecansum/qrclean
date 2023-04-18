@@ -161,6 +161,7 @@
                         </a>
                         <!-- Dashboard submenu list -->
                         <ul class="mininav-content nav collapse">
+                                @if(checkPermissions(['Informes > Estado usuarios'],['R']))<li class=" text-nowrap nav-item informes"><a href="/reports/estado_usu" class="text-nowrap nav-link inf_estado_usuarios"><i class="fa-light fa-file-alt"></i> Estado de usuarios</a></li> @endif
                                 @if(checkPermissions(['Informes > Uso de puestos'],['R']))<li class=" text-nowrap nav-item informes"><a href="/reports/puestos" class="text-nowrap nav-link inf_puestos"><i class="fa-light fa-file-alt"></i> Uso de puestos</a></li> @endif
                                 @if(checkPermissions(['Informes > Puestos por usuario'],['R']))<li class=" nav-item informes"><a href="/reports/users" class="text-nowrap nav-link inf_usuarios"><i class="fa-light fa-file-alt"></i> Puestos por usuario</a></li> @endif
                                 @if(checkPermissions(['Informes > Reservas canceladas'],['R']))<li class=" nav-item informes"><a href="/reports/canceladas" class="text-nowrap nav-link inf_reservas"><i class="fa-light fa-file-alt"></i> Reservas canceladas</a></li> @endif

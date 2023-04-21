@@ -188,7 +188,7 @@
         <button class="btn btn-primary select-all" data-select="multi-tipomark"  type="button" style="margin-left:-10px"><i class="fad fa-check-double"></i> todos</button>
     </div>
 </div>
-<div class="form-group  col-md-12 mt-3" style="{{ (isset($hide['tip_feria']) && $hide['tip_feria']==1) ? 'display: none' : ''  }}">
+<div class="form-group  col-md-12 mt-3" style="{{ (isset($show['tip_feria']) && $show['tip_feria']==1) ?'' : 'display: none'  }}">
     <label>Feria</label>
     <div class="input-group select2-bootstrap-append">
         <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipoferia[]" id="multi-tipoferia" >
@@ -289,11 +289,19 @@
 </div>
 
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($show['u_l']) && $show['u_l']==1) ? '' : 'display: none'  }}">
-    <label>Lista de usuarios (separada por ,)</label>
+    <label>Lista de email usuarios (separada por ,)</label>
     <div class="form-control">
         <textarea name="user_list" style="width: 98%" cols="80" rows="3"></textarea>
     </div>
 </div>
+
+<div class="form-group  col-md-12 mt-3" style="{{ (isset($show['u_id']) && $show['u_id']==1) ? '' : 'display: none'  }}">
+    <label>Lista de ID de usuarios (separada por ,)</label>
+    <div class="form-control">
+        <textarea name="user_id_list" style="width: 98%" cols="80" rows="3"></textarea>
+    </div>
+</div>
+
 
 <div class="row mt-5" style="{{ (isset($hide['btn']) && $hide['btn']==1) ? 'display: none' : ''  }}">
     <div class="col-md-12 text-end mb-3">

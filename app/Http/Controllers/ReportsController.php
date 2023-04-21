@@ -995,6 +995,34 @@ class ReportsController extends Controller
                 $q->whereIn('users.id',$users_filtro);
             }
         })
+         ->where(function($q) use($r){
+            if ($r->planta) {
+                $users_filtro=DB::table('plantas_usuario')
+                    ->select('id_usuario')
+                    ->wherein('id_planta',$r->planta)
+                    ->pluck('id_usuario');
+                $q->whereIn('users.id',$users_filtro);
+            }
+        })
+        ->when($r->user_id_list, function($q) use($r){
+            try{     
+                $r->user_id_list=str_replace(" ","",$r->user_id_list);
+                // $r->user_list=str_replace("\r","",$r->user_list);
+                // $r->user_list=str_replace("\n","",$r->user_list);
+                $r->user_id_list=strtolower($r->user_id_list);
+                if(strpos($r->user_id_list,","))
+                    $arr_lista=explode(",",$r->user_id_list);
+                else if(strpos($r->user_id_list,";"))
+                    $arr_lista=explode(";",$r->user_id_list);
+                else if(strpos($r->user_id_list,"|"))
+                    $arr_lista=explode("|",$r->user_id_list);
+                else if(strpos($r->user_id_list,"\r\n"))
+                    $arr_lista=explode("\r\n",$r->user_id_list);
+                $q->wherein('users.id',$arr_lista);
+            } catch(Exception $e){
+                
+            }
+        })
         ->get();
 
         $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];

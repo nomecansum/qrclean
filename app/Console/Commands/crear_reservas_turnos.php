@@ -74,6 +74,13 @@ class crear_reservas_turnos extends Command
                     "required": true
                 },
                 {
+                    "label": "Enviar email de confirmacion",
+                    "name": "mca_enviar_email",
+                    "tipo": "bool",
+                    "def": true,
+                    "required": false
+                },
+                {
                     "label": "Tipo de puesto",
                     "name": "id_tipo_puesto",
                     "tipo": "list_db",
@@ -121,6 +128,23 @@ class crear_reservas_turnos extends Command
                             WHERE \n
                             `edificios`.`id_cliente` in('.limpiarPuestos::clientes().')  \n
                             ORDER BY 2",
+                    "required": false,
+                    "buscar": true
+                },
+                {
+                    "label": "Planta",
+                    "name": "id_planta",
+                    "tipo": "list_db",
+                    "multiple": true, 
+                    "sql": "SELECT DISTINCT \n
+                                `plantas`.`id_planta` as id, \n
+                                concat(\'[\',nom_cliente,\'] - \',`plantas`.`des_planta`) as nombre  \n
+                            FROM \n
+                                `plantas` \n
+                                INNER JOIN `clientes` ON (`plantas`.`id_cliente` = `clientes`.`id_cliente`) \n
+                            WHERE \n
+                            `plantas`.`id_cliente` in('.limpiarPuestos::clientes().')  \n
+                            ORDER BY 2", 
                     "required": false,
                     "buscar": true
                 },
@@ -193,11 +217,14 @@ class crear_reservas_turnos extends Command
         $tarea=tareas::find($this->argument('id'));
         $parametros=json_decode($tarea->val_parametros);
         $id_edificio=valor($parametros,"id_edificio");
+        $id_planta=valor($parametros,"id_planta");
         $id_perfil=valor($parametros,"id_perfil");
         $id_turno=valor($parametros,"id_turno");
         $id_colectivo=valor($parametros,"id_colectivo");
         $id_tipo_puesto=valor($parametros,"id_tipo_puesto");
         $dias_reservas=valor($parametros,"dias_reservas");
+        $mca_enviar_email=valor($parametros,"mca_enviar_email");
+
        
         $timezone=users::find($tarea->usu_audit)->val_timezone;
         if($tarea->clientes!=null){
@@ -212,6 +239,12 @@ class crear_reservas_turnos extends Command
             ->where(function($q) use($id_edificio){
                 if ($id_edificio) {
                     $q->WhereIn('users.id_edificio',$id_edificio);
+                }
+            })
+            ->where(function($q) use($id_planta){
+                if ($id_planta) {
+                    $usuarios_admitidos=DB::table('plantas_usuario')->wherein('id_planta',$id_planta)->pluck('id_usuario')->unique();
+                    $q->WhereIn('users.id',$usuarios_admitidos);
                 }
             })
             ->where(function($q) use($id_perfil){
@@ -240,7 +273,7 @@ class crear_reservas_turnos extends Command
                 foreach($periodo as $fecha){
                     $this->escribelog_comando('debug','Procesando fecha '.$fecha->format('Y-m-d'));
                     //A ver si es festivo o fin de semana y no puede reservar
-                    $estadefiesta=collect(estadefiesta($user->id),$fecha)->first()->festivo;
+                    $estadefiesta=collect(estadefiesta($user->id,$fecha))->first()->festivo;
                     if($estadefiesta==1){
                         $this->escribelog_comando('info','El usuario '.$user->name.' no puede reservar en la fecha '.$fecha->format('Y-m-d').' porque es festivo');
                         continue;
@@ -250,8 +283,14 @@ class crear_reservas_turnos extends Command
                     $turnos_usuario=DB::table('turnos_usuarios')
                         ->join('turnos','turnos.id_turno','turnos_usuarios.id_turno')
                         ->where('id_usuario',$user->id)
-                        ->wheredate('fec_inicio','<=',$fecha->year(now()->format('Y')))
-                        ->wheredate('fec_fin','>=',$fecha->year(now()->format('Y')))
+                        ->where(function($q) use($fecha){
+                            $q->wheremonth('fec_inicio','<=',Carbon::now()->format('m'));
+                            $q->whereday('fec_inicio','<=',Carbon::now()->format('d'));
+                        })
+                        ->where(function($q) use($fecha){
+                            $q->wheremonth('fec_fin','>=',Carbon::now()->format('m'));
+                            $q->whereday('fec_fin','>=',Carbon::now()->format('d'));
+                        })
                     ->get();
                     //ahora a ver si aplica el turno
                     $turno_aplica=null;
@@ -266,12 +305,14 @@ class crear_reservas_turnos extends Command
                             }
                         }
                     }
+
                     if(!isset($turno_aplica)){
-                        $this->escribelog_comando('warning','No se ha encontrado un turno valido para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'));
+                        $this->escribelog_comando('debug','No se ha encontrado un turno valido para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'));
                     } else {
                         //Tenemos turno, a jugar
+                        $slots=[];
                         //Ahora comprobamos si el tipo de puesto tiene slots
-                        if(isset($tipopuesto->slots_reserva)){
+                        if(isset($tipopuesto->slots_reserva) && is_array($tipopuesto->slots_reserva) && count($tipopuesto->slots_reserva)>0){
                             $slots=json_decode($tipopuesto->slots_reserva);
                         } else {
                             //Horas en las que hay que reservar. Como no tiene slots se cogen las horas del turno como inicio y fiin de la reserva
@@ -283,67 +324,76 @@ class crear_reservas_turnos extends Command
                         foreach($slots as $slot){
                             $this->escribelog_comando('debug','Slot: '.$slot->hora_inicio.' '.$slot->hora_fin);
                             //A ver si ya tenia un puesto reservado en esa fecha, en ese caso, rompemos el buicle y saltamos a la sigueinte fecha
+
                             $tiene_reserva=comprobar_reserva_usuario($user->id,$fecha,$tipo,$slot->hora_inicio,$slot->hora_fin);
                             if($tiene_reserva===true){
-                                $this->escribelog_comando('info','El usuario '.$user->name.' ya tiene una reserva en la fecha '.$fecha->format('Y-m-d').' de un puesto '.$tipopuesto->des_tipo_puesto);
+                                $this->escribelog_comando('warning','El usuario '.$user->name.' ya tiene una reserva en la fecha '.$fecha->format('Y-m-d').' de un puesto '.$tipopuesto->des_tipo_puesto);
                                 break;
                             }
-                            
                             //A ver que puestos hay disponibles
                             $puestos_disponibles=puestos_disponibles($cliente,$fecha,$tipo,$slot->hora_inicio,$slot->hora_fin);
                             //Reglas de reserva
-                            $puestos_usuario=json_decode($user->list_puestos_preferidos);
+                            if($user->list_puestos_preferidos!=null)
+                            {
+                                $puestos_usuario=json_decode($user->list_puestos_preferidos);
+                            } else{
+                                $puestos_usuario=null;
+                            }
+                            
                             $p=null;
-                            foreach($puestos_usuario as $puesto){
-                                switch ($puesto->tipo) {   //ul,pu,pl,zo
-                                    case 'ul':  //Ultimas 20 reservas. Se cogen las ultimas 20 reservas del tipo de puesto y se selecciona el mas usado
-                                        $ultimas_reservas=DB::table('reservas')
-                                            ->select('reservas.id_puesto')
-                                            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-                                            ->where('id_usuario',$user->id)
-                                            ->where('id_tipo_puesto',$tipo)
-                                            ->orderby('fec_reserva','desc')
-                                            ->take(20)
-                                            ->get();
-                                        $ultimas_reservas=$ultimas_reservas->countBy('id_puesto')->sortDesc();
-                                        $p=collect(array_intersect($puestos_disponibles->pluck('id_puesto')->toArray(),$ultimas_reservas->keys()->toArray()))->first();
+                            //El usuario tiene que tener al menos un criterio de reserva
+                            if($puestos_usuario!=null && is_array($puestos_usuario) && count($puestos_usuario)>0) {
+                                foreach($puestos_usuario as $puesto){
+                                    switch ($puesto->tipo) {   //ul,pu,pl,zo
+                                        case 'ul':  //Ultimas 20 reservas. Se cogen las ultimas 20 reservas del tipo de puesto y se selecciona el mas usado
+                                            $ultimas_reservas=DB::table('reservas')
+                                                ->select('reservas.id_puesto')
+                                                ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+                                                ->where('id_usuario',$user->id)
+                                                ->where('id_tipo_puesto',$tipo)
+                                                ->orderby('fec_reserva','desc')
+                                                ->take(20)
+                                                ->get();
+                                            $ultimas_reservas=$ultimas_reservas->countBy('id_puesto')->sortDesc();
+                                            $p=collect(array_intersect($puestos_disponibles->pluck('id_puesto')->toArray(),$ultimas_reservas->keys()->toArray()))->first();
 
-                                    case 'pu':  //Puestos preferidos. Se selecciona el puesto que esta en la lista de puestos preferidos
-                                        $puesto_preferido=[$puesto->id];
-                                        $p=collect(array_intersect($puestos_disponibles->pluck('id_puesto')->toArray(),$puesto_preferido))->first();
+                                        case 'pu':  //Puestos preferidos. Se selecciona el puesto que esta en la lista de puestos preferidos
+                                            $puesto_preferido=[$puesto->id];
+                                            $p=collect(array_intersect($puestos_disponibles->pluck('id_puesto')->toArray(),$puesto_preferido))->first();
+                                            break;
+                                        case 'pl':
+                                            $puestos_planta=DB::table('puestos')
+                                                ->select('id_puesto')
+                                                ->where('id_planta',$puesto->id)
+                                                ->pluck('id_puesto')
+                                                ->toArray();
+                                            $p=collect(array_intersect($puestos_disponibles->pluck('id_puesto')->toArray(),$puestos_planta))->first();
+                                            break;
+                                        case 'zo':
+                                            $puestos_zona=DB::table('puestos')
+                                                ->select('id_puesto','plantas.id_planta','plantas_zonas.val_ancho','plantas_zonas.val_alto','plantas_zonas.val_x','plantas_zonas.val_y','puestos.offset_top','puestos.offset_left','plantas.width','plantas.height')
+                                                ->join('plantas_zonas','plantas_zonas.id_planta','puestos.id_planta')
+                                                ->join('plantas','plantas.id_planta','plantas_zonas.id_planta')
+                                                ->where('plantas_zonas.num_zona',$puesto->id)
+                                                ->where(function($q){  //Este rollo viene de que las posiciones de las zonas estan guardadas como valores absolutos sobre los pixeles reales de la imagen y las posiciones de los puestos estan guardadas como valores de porcentaje (offsettop y offsetleft) de las dimensiones de la imagen
+                                                    $q->whereraw('puestos.offset_top between (100*plantas_zonas.val_y/plantas.`height`) AND ((100*plantas_zonas.val_y/plantas.`height`) + (100*plantas_zonas.val_alto/plantas.`height`))');
+                                                    $q->whereraw('puestos.offset_left between (100*plantas_zonas.val_x/plantas.`width`) AND ((100*plantas_zonas.val_x/plantas.`width`) + (100*plantas_zonas.val_ancho/plantas.`width`))');
+                                                })
+                                                ->pluck('id_puesto')
+                                                ->toArray();
+                                            $p=collect(array_intersect($puestos_disponibles->pluck('id_puesto')->toArray(),$puestos_zona))->first();
+                                            break;
+                                    }
+                                    //Si ya hemos encontrado puesto, no seguimos mirando, a reservar
+                                    if($p!==null){
                                         break;
-                                    case 'pl':
-                                        $puestos_planta=DB::table('puestos')
-                                            ->select('id_puesto')
-                                            ->where('id_planta',$puesto->id)
-                                            ->pluck('id_puesto')
-                                            ->toArray();
-                                        $p=collect(array_intersect($puestos_disponibles->pluck('id_puesto')->toArray(),$puestos_planta))->first();
-                                        break;
-                                    case 'zo':
-                                        $puestos_zona=DB::table('puestos')
-                                            ->select('id_puesto','plantas.id_planta','plantas_zonas.val_ancho','plantas_zonas.val_alto','plantas_zonas.val_x','plantas_zonas.val_y','puestos.offset_top','puestos.offset_left','plantas.width','plantas.height')
-                                            ->join('plantas_zonas','plantas_zonas.id_planta','puestos.id_planta')
-                                            ->join('plantas','plantas.id_planta','plantas_zonas.id_planta')
-                                            ->where('plantas_zonas.num_zona',$puesto->id)
-                                            ->where(function($q){  //Este rollo viene de que las posiciones de las zonas estan guardadas como valores absolutos sobre los pixeles reales de la imagen y las posiciones de los puestos estan guardadas como valores de porcentaje (offsettop y offsetleft) de las dimensiones de la imagen
-                                                $q->whereraw('puestos.offset_top between (100*plantas_zonas.val_y/plantas.`height`) AND ((100*plantas_zonas.val_y/plantas.`height`) + (100*plantas_zonas.val_alto/plantas.`height`))');
-                                                $q->whereraw('puestos.offset_left between (100*plantas_zonas.val_x/plantas.`width`) AND ((100*plantas_zonas.val_x/plantas.`width`) + (100*plantas_zonas.val_ancho/plantas.`width`))');
-                                            })
-                                            ->pluck('id_puesto')
-                                            ->toArray();
-                                        $p=collect(array_intersect($puestos_disponibles->pluck('id_puesto')->toArray(),$puestos_zona))->first();
-                                        break;
-                                }
-                                //Si ya hemos encontrado puesto, no seguimos mirando, a reservar
-                                if($p!==null){
-                                    break;
+                                    }
                                 }
                             }
 
                             if($p!==null){
                                 //Puesto disponible, reservar
-                                $this->escribelog_comando('info','Reservando puesto '.$p.' para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'));
+                                $this->escribelog_comando('notice','Reservando puesto '.$p.' para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'));
                                 $reserva=new reservas();
                                 $reserva->id_usuario=$user->id;
                                 $reserva->id_cliente=$cliente;
@@ -351,11 +401,14 @@ class crear_reservas_turnos extends Command
                                 $reserva->fec_reserva=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$slot->hora_inicio.':00');
                                 $reserva->fec_fin_reserva=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$slot->hora_fin.':00');
                                 $reserva->save();
-                                enviar_mail_reserva($reserva->id_reserva,'N','Tarea de creacion de reservas');
-                                $this->escribelog_comando('info','Reserva realizada');
+                                if($mca_enviar_email===true){
+                                    enviar_mail_reserva($reserva->id_reserva,'N','Tarea de creacion de reservas');
+                                }
+                                $this->escribelog_comando('debug','Reserva realizada');
                                 break; //<-- Aqui se sale del bucle de slots porque ya tenemos puesto reservado
                             } else {
-                                $this->escribelog_comando('warning','No se ha encontrado un puesto del tipo ['.$tipopuesto->des_tipo_puesto.'] para crear la reserva para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'));
+                                $this->escribelog_comando('error','No se ha encontrado un puesto del tipo ['.$tipopuesto->des_tipo_puesto.'] para crear la reserva para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'));
+                                savebitacora('No se ha encontrado un puesto del tipo ['.$tipopuesto->des_tipo_puesto.'] para crear la reserva para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'),'Tareas','Tarea de creacion de reservas','error',$user->id);
                             }
                         }
                         

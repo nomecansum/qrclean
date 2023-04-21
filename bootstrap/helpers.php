@@ -37,7 +37,7 @@ function getProfilePic()
     return url('default.png');
 }
 
-function savebitacora($des_bitacora,$modulo=null,$seccion=null,$tipo='OK')
+function savebitacora($des_bitacora,$modulo=null,$seccion=null,$tipo='OK',$user=0)
 {
     if(isset(Auth::user()->name)){
         $user=Auth::user()->name;
@@ -45,7 +45,7 @@ function savebitacora($des_bitacora,$modulo=null,$seccion=null,$tipo='OK')
 
     \DB::table('bitacora')->insert([
         'accion' => substr($des_bitacora,0,5000),
-        'id_usuario' =>Auth::user()->id??0,
+        'id_usuario' => $user!=0?$user:Auth::user()->id??0,
         'id_modulo' => $modulo,
         'id_seccion' => $seccion,
         'status' => $tipo,
@@ -1469,7 +1469,7 @@ function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fi
         ->whereNotIn('id_puesto',$no_disponibles)
         ->where('id_cliente',$cliente)
         ->where(function($q){
-            if(session('CL')['mca_incidencia_reserva']=='N'){
+            if(session('CL')!=null && session('CL')['mca_incidencia_reserva']=='N'){
                 $q->where('mca_incidencia','N');
             }
             

@@ -63,11 +63,15 @@
 		$inf=$informe->where('id_cliente',$cliente);
 		$puestos=DB::table('puestos')->where('id_cliente',$cliente)->get();
 		$plantas=DB::table('plantas')->where('id_cliente',$cliente)->get();
+		$turnos=DB::table('turnos')
+			->join('turnos_usuarios','turnos_usuarios.id_turno','=','turnos.id_turno')
+			->where('turnos.id_cliente',$cliente)
+			->get();
 		$plantas_usuario=DB::Table('plantas_usuario')->get();
 	@endphp
 	@if($informe->count()>0)
 		<tr>
-			<td colspan="4" >
+			<td colspan="5" >
 				@include('resources.cabecera_cliente_informes')
 			</td>
 		</tr>
@@ -79,12 +83,14 @@
 			<th @if($r->output=="excel") style="background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Usuario</th>
 			<th class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Plantas</th>
 			<th class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Puesto asignado</th>
+			<th class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Turno</th>
 		</tr>
 
 	@foreach ($inf as $dato)
 		@php
 			$pu=$plantas_usuario->where('id_usuario',$dato->id)->pluck('id_planta')->toArray();
 			$pl=$plantas->wherein('id_planta',$pu)->pluck('abreviatura')->toArray();
+			$tu=$turnos->where('id_usuario',$dato->id)->pluck('des_turno')->toArray();
 		@endphp
 
 			<tr>
@@ -97,15 +103,20 @@
 				@php
 					$data=json_decode($dato->list_puestos_preferidos);
 					$preferidos=Collect($data)->where('tipo','pu');
-					$puestos_preferidos=$preferidos->pluck('text')->toArray();
+					$puestos_preferidos=$preferidos->pluck('id')->toArray();
 					$preferidos=Collect($data)->where('tipo','zo');
 					$zonas_preferidas=$preferidos->pluck('text')->toArray();
 				@endphp
-				{{ implode(", ",$puestos_preferidos) }}
+				@foreach($puestos_preferidos as $pp)
+					{{ $puestos->where('id_puesto',$pp)->first()->cod_puesto }}<br>
+				@endforeach
+				{{-- {{ implode(", ",$puestos_preferidos) }} --}}
 				@if($zonas_preferidas)
-					<br>
-					{{ implode(", ",$zonas_preferidas) }}
+					{!! implode("<br> ",$zonas_preferidas) !!}
 				@endif
+				</td>
+				<td>
+					{!! implode("<li> ",$tu) !!}
 				</td>
 			</tr>
 

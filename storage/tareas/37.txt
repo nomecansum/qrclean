@@ -1,5 +1,13 @@
 Inicio de la tarea programada [37]App\Console\Commands\sincroIncidenciasSalas
 No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17194
+No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17195
+No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17689
+No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17578
+No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17692
+No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17194
+No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17198
+No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17575
+No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17689
 Iniciando proceso de sincronizacion de ID de incidencias
 Fin de la tarea App\Console\Commands\sincroIncidenciasSalas
 Fin de la tarea php [37] Sincronizacion de incidencias con salas

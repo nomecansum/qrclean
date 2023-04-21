@@ -130,7 +130,7 @@
                 <br>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 ">
             <div class="form-group">
                 <label>Supervisor</label>
                     <select   name="id_usuario_supervisor" class="select2_modal tab_general" style="width: 100%" id="id_usuario_supervisor">
@@ -144,7 +144,7 @@
                 <br>
             </div>
         </div>
-        <div class="col-md-12 mb-2" >
+        <div class="col-md-12 b-all rounded mb-2 pb-2 mt-3" >
             <div class="form-group"  style="overflow: hidden">
                 <label class="text-nowrap ml-2">Colectivos
                     <div class="controls ">
@@ -169,7 +169,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-12 b-all rounded ml-2 mr-4 mb-2">
+        <div class="col-md-12 b-all rounded mr-4 mb-2">
             <label>Turno de asistencia
                 <div class="controls">
                     <div >
@@ -186,18 +186,19 @@
                     </div>
                 </div>
             </label><br>
-            @foreach($turnos as $t)
-            <div class="form-group col-md-3">
-
-                <div class="form-check pt-2">
-                    <input   name="turno[]" id="turno{{$t->id_turno}}" value="{{$t->id_turno}}" class="form-check-input chkdia" type="checkbox">
-                    <label class="form-check-label" for="turno{{$t->id_turno}}"><b>{{$t->des_turno}} <i class="fa-solid fa-square" style="color: {{ $t->val_color }}"></i></b></label>
+            <div class="row">
+                @foreach($turnos as $t)
+                <div class="form-group col-md-3">
+                    <div class="form-check pt-2">
+                        <input   name="turno[]" id="turno{{$t->id_turno}}" value="{{$t->id_turno}}" class="form-check-input chkdia" type="checkbox">
+                        <label class="form-check-label" for="turno{{$t->id_turno}}"><b>{{$t->des_turno}} <i class="fa-solid fa-square" style="color: {{ $t->val_color }}"></i></b></label>
+                    </div>
                 </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
 
-        <div class="col-md-12 b-all rounded ml-2 mr-4 mb-2">
+        <div class="col-md-12 b-all rounded mr-4 mb-2">
             <label>Tipos de puesto que puede reservar
                 <div class="controls ">
                     <div >
@@ -214,17 +215,20 @@
                     </div>
                 </div>
             </label><br>
-            @foreach($tipos_puestos as $t)
-                <div class="form-group col-md-3">
-                    <div class="form-check pt-2">
-                        <input  name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" class="form-check-input chkdia" type="checkbox">
-                        <label class="form-check-label" for="tipo_puesto{{$t->id_tipo_puesto}}"> {{$t->des_tipo_puesto}} </label>
+            <div class="row">
+                @foreach($tipos_puestos as $t)
+                    <div class="form-group col-md-3">
+                        <div class="form-check pt-2">
+                            <input  name="tipos_puesto_admitidos[]" id="tipo_puesto{{$t->id_tipo_puesto}}" value="{{$t->id_tipo_puesto}}" class="form-check-input chkdia" type="checkbox">
+                            <label class="form-check-label" for="tipo_puesto{{$t->id_tipo_puesto}}" title="{{ $t->des_tipo_puesto }}"> {{$t->abreviatura!=''?$t->abreviatura:$t->des_tipo_puesto}} </label>
+                        </div>
+                
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
 
-        <div class="col-md-12 ml-2 " >
+        <div class="col-md-12 b-all rounded mb-2 pb-2" >
             <div class="form-group"  style="overflow: hidden">
                 <label class="text-nowrap ml-2">Plantas en las que puede reservar
                     <div class="controls">
@@ -245,6 +249,38 @@
                 <select  name="plantas[]" multiple="" class="form-control  select2_modal" style="width: 100%" id="plantas">
                     @foreach ($plantas as $pl)
                         <option  value="{{$pl->id_planta}}">{{$pl->des_planta}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-md-12 b-all rounded mb-2 pb-2"  >
+            <div class="form-group"  style="overflow: hidden">
+                <label class="text-nowrap ml-2">Zonas en las que puede reservar
+                    <div class="controls">
+                        <div >
+                            <input id="demo-form-radio-7" class="magic-radio" type="radio" name="zona_accion" value="add" checked="">
+                            <label class="radio" for="demo-form-radio-7">Añadir</label>
+                        </div>
+                        <div >
+                            <input id="demo-form-radio-8" class="magic-radio" type="radio"  name="zona_accion" value="del">
+                            <label for="demo-form-radio-8" class="radio">Quitar</label>
+                        </div>
+                        <div >
+                            <input id="demo-form-radio-8e" class="magic-radio" type="radio"  name="zona_accion" value="set">
+                            <label for="demo-form-radio-8e" class="radio">Establecer</label>
+                        </div>
+                    </div>
+                </label><br>
+                <select  name="zonas[]" multiple="" class="form-control  select2_modal" style="width: 100%" id="zonas">
+                    @foreach($plantas as $pl)
+                        @php
+                            $zonas_planta=$zonas->where('id_planta',$pl->id_planta);
+                        @endphp
+                        <optgroup label="{{ $pl->des_planta }}">
+                                @foreach($zonas_planta as $z)
+                                    <option  value="{{$z->num_zona}}">[{{ $pl->des_planta }}] {{$z->des_zona}}</option>
+                                @endforeach
+                        </optgroup>
                     @endforeach
                 </select>
             </div>

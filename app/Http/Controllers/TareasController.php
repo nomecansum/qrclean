@@ -193,6 +193,11 @@ class TareasController extends Controller
 			$nombre=$p->name;
 			if(isset($r->$nombre)){
 				$p->value=$r->$nombre;
+			} else {
+				if($p->tipo=='bool')
+					{
+						$p->value=false;
+					}
 			}
 		}
 		//Ahora lo convertimos en JSON para guardarlo
@@ -365,6 +370,7 @@ class TareasController extends Controller
             $parametros=[];
 			$parametros_tarea=[];
 			$tareas=null;
+			$descripcion=$controller->definicion();
 			if (file_exists($fic_comando)){
 				$parametros=decodeComplexJson($controller->params());
 				if($parametros!=""){
@@ -390,7 +396,7 @@ class TareasController extends Controller
 						}
 					}
 				}
-                $descripcion=$controller->definicion();
+                
             }
 			return view('tasks.param_comando',compact('parametros','descripcion','tareas','id'));
 

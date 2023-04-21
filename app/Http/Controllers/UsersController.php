@@ -126,6 +126,26 @@ class UsersController extends Controller
             }
            
         })
+        ->when($r->user_id_list, function($q) use($r){
+            try{     
+                $r->user_id_list=str_replace(" ","",$r->user_id_list);
+                // $r->user_list=str_replace("\r","",$r->user_list);
+                // $r->user_list=str_replace("\n","",$r->user_list);
+                $r->user_id_list=strtolower($r->user_id_list);
+                if(strpos($r->user_id_list,","))
+                    $arr_lista=explode(",",$r->user_id_list);
+                else if(strpos($r->user_id_list,";"))
+                    $arr_lista=explode(";",$r->user_id_list);
+                else if(strpos($r->user_id_list,"|"))
+                    $arr_lista=explode("|",$r->user_id_list);
+                else if(strpos($r->user_id_list,"\r\n"))
+                    $arr_lista=explode("\r\n",$r->user_id_list);
+                $q->wherein('users.id',$arr_lista);
+            } catch(Exception $e){
+                
+            }
+       
+    })
         ->when($r->supervisor, function($q) use($r){
             $q->wherein('users.id_usuario_supervisor',$r->supervisor);
         })
@@ -282,6 +302,11 @@ class UsersController extends Controller
             ->orderby('puestos.des_puesto')
             ->get();
 
+        $plantas=DB::table('plantas')
+            ->where('plantas.id_cliente',$users->id_cliente)
+            ->orderby('plantas.id_planta')
+            ->get();
+
         $plantas_usuario=DB::table('plantas_usuario')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->join('edificios','plantas.id_edificio','edificios.id_edificio')
@@ -323,8 +348,8 @@ class UsersController extends Controller
             return $item;
         });
         $operarios_gen=$operarios_gen->unique('nom_operario');
-
-        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras','tipos_puestos','pref_turnos','tipos_puesto_usuario','colectivos_cliente','colectivos_user','contratas','operarios_gen','operarios_ind'));
+        $zonas_usuario=DB::table('plantas_zonas')->wherein('id_planta',$plantas_usuario->pluck('id_planta'))->wherein('num_zona',explode(",",$users->list_zonas_admitidas))->get();
+        return view('users.edit', compact('users','Perfiles','supervisores','usuarios_supervisados','usuarios_supervisables','eventos','tokens','turnos','turnos_usuario','edificios','plantas_usuario','puestos','bitacoras','tipos_puestos','pref_turnos','tipos_puesto_usuario','colectivos_cliente','colectivos_user','contratas','operarios_gen','operarios_ind','zonas_usuario','plantas'));
     }
 
     public function update($id, Request $request)
@@ -635,7 +660,7 @@ class UsersController extends Controller
         $zonas=DB::table('plantas_zonas')->wherein('id_planta',$plantas_cliente->pluck('id_planta'))->get();
 
         $plantas_usuario=DB::table('plantas_usuario')->where('id_usuario',$id)->pluck('id_planta')->toarray();
-        $zonas_usuario=explode(",",Auth::user()->list_zonas_admitidas);
+        $zonas_usuario=explode(",",$user->list_zonas_admitidas);
         return view('users.selector_plantas',compact('puestos','edificios','plantas_usuario','id','check','zonas','zonas_usuario'));
     }
 
@@ -789,7 +814,19 @@ class UsersController extends Controller
                 }
             })
             ->get();
-        return view('users.fill_modificar_datos_usuario', compact('Perfiles','turnos','edificios','tipos_puestos','colectivos_cliente','clientes','usuarios','plantas','r'));
+
+        $zonas=DB::table('plantas_zonas')
+            ->select('plantas_zonas.*')
+            ->join('plantas','plantas.id_planta','=','plantas_zonas.id_planta')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('plantas.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('plantas.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->get();
+        return view('users.fill_modificar_datos_usuario', compact('Perfiles','turnos','edificios','tipos_puestos','colectivos_cliente','clientes','usuarios','plantas','r','zonas'));
     }
 
     public function modificar_usuarios(Request $r){
@@ -894,6 +931,47 @@ class UsersController extends Controller
                     break;
             }
             $datos_actualizados.='<b>'.strtoupper($r->planta_accion).'</b> planta=['.implode(",",$r->plantas).'], ';
+        }
+
+        if(isset($r->zonas)){
+            switch ($r->zona_accion) {
+                case 'add':
+                    foreach($r->id_usuario as $user){
+                        $u=users::find($user);
+                        try{
+                            $zonas=explode(",",$u->list_zonas_admitidas??[]);
+                        } catch(\Throwable $e){
+                            $zonas=[];
+                        }
+                        $zonas=array_unique(array_merge($zonas,$r->zonas));
+                        $u->list_zonas_admitidas=implode(",",$zonas);
+                        $u->save();
+                    }
+                    break;
+                case 'del':
+                    foreach($r->id_usuario as $user){
+                        $u=users::find($user);
+                        try{
+                            $zonas=explode(",",$u->list_zonas_admitidas??[]);
+                        } catch(\Throwable $e){
+                            $zonas=[];
+                        }
+                        foreach($r->list_zonas_admitidas as $t){
+                            foreach (array_keys($zonas, $t) as $key) {
+                                unset($zonas[$key]);
+                            }
+                        }
+                        $u->list_zonas_admitidas=implode(",",$zonas);
+                        $u->save();
+                    }
+                    break;
+                case 'set':
+                    DB::table('users')->wherein('id',$r->id_usuario)->update([
+                        'list_zonas_admitidas'=>implode(",",$r->zonas)
+                    ]);
+                    break;
+            }
+            $datos_actualizados.='<b>'.strtoupper($r->zona_accion).'</b> zona=['.implode(",",$r->zonas).'], ';
         }
 
         if(isset($r->tipos_puesto_admitidos)){

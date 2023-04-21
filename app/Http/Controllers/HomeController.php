@@ -872,7 +872,7 @@ class HomeController extends Controller
         })
         ->where(function($q){
             if (isSupervisor(Auth::user()->id)) {
-                $q->where('users.id_usuario_suoervisor',Auth::user()->id);
+                $q->where('users.id_usuario_supervisor',Auth::user()->id);
             }
             if(Auth::user()->val_nivel_acceso==1){
                 $q->where('users.id','=',Auth::user()->id);

@@ -594,13 +594,13 @@
                                                             <option value=""></option>
                                                             @foreach($edificios as $e)
                                                                 @php
-                                                                    $plantas_edificio=$plantas_usuario->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->unique();
+                                                                    $plantas_edificio=$plantas_usuario->where('id_edificio',$e->id_edificio)->unique();
                                                                 @endphp
                                                                 <optgroup label="{{$e->des_edificio}}">
-                                                                    @foreach($plantas_edificio as $key=>$value)
-                                                                        <optgroup label="{{$value}}">
+                                                                    @foreach($plantas_edificio as $p)
+                                                                        <optgroup label="{{$p->des_planta}}">
                                                                             @php
-                                                                                $puestos_plantas=$puestos->where('id_planta',$key);
+                                                                                $puestos_plantas=$puestos->where('id_planta',$p->id_planta);
                                                                             @endphp
                                                                             @foreach($puestos_plantas as $t)
                                                                                 <option value="{{$t->id_puesto}}">{{ $t->cod_puesto }}</option>
@@ -618,18 +618,18 @@
                                                     <div id="planta_pref" class="draggable" style="background-color:#fcc14a;">
                                                         <h4 class="text-white"><i class="fa-solid fa-layer-group"></i> Planta</h4>
                                                         @php
-                                                            $edificios=$plantas_usuario->unique('id_edificio')->pluck('des_edificio','id_edificio')->all();
+                                                            $edi_plantas=$edificios->wherein('id_edificio',$plantas_usuario->pluck('id_edificio')->toArray())->unique();
                                                         @endphp
                                                         <select class="puesto_pref identificador form-control select2">
                                                             <option value=""></option>
-                                                            @foreach($edificios as $key=>$value)
+                                                            @foreach($edi_plantas as $e)
                                                                 @php
-                                                                    $ple=$plantas_usuario->where('id_edificio',$key)->pluck('des_planta','id_planta')->unique()->all();
-                                                                    $des_edificio=$value;
+                                                                    $ple=$plantas->where('id_edificio',$e->id_edificio)->wherein('id_planta',$plantas_usuario->pluck('id_planta')->unique()->toArray())->unique();
+                                                                    $des_edificio=$e->des_edificio;
                                                                 @endphp
-                                                                <optgroup label="{{$value}}">
-                                                                    @foreach($ple as $key=>$value)
-                                                                        <option value="{{$key}}">{{ $des_edificio }} > {{ $value }}</option>
+                                                                <optgroup label="{{$e->des_edificio}}">
+                                                                    @foreach($ple as $p)
+                                                                        <option value="{{$p->id_planta}}">{{ $des_edificio }} > {{ $p->des_planta }}</option>
                                                                     @endforeach
                                                                 </optgroup>
                                                             @endforeach
@@ -642,24 +642,26 @@
                                                     <div id="zona_pref" class="draggable" style="background-color:#c6dabe" >
                                                         <h4 class="text-white"><i class="fa-solid fa-draw-square"></i> Zona</h4>
                                                         @php
-                                                            $edificios=$plantas_usuario->unique('id_edificio')->pluck('des_edificio','id_edificio')->all();
+                                                            $edificios=$plantas_usuario->unique('id_edificio')->all();
                                                         @endphp
                                                         <select class="puesto_pref identificador form-control select2">
                                                             <option value=""></option>
-                                                            @foreach($edificios as $key=>$value)
+                                                            @foreach($edificios as $e)
                                                                 @php
-                                                                    $ple=$plantas_usuario->where('id_edificio',$key)->pluck('des_planta','id_planta')->unique()->all();
-                                                                    $des_edificio=$value;
+                                                                    $ple=$plantas->where('id_edificio',$e->id_edificio)->wherein('id_planta',$plantas_usuario->pluck('id_planta')->unique()->toArray())->unique();
+                                                                    $des_edificio=$e->des_edificio;
                                                                 @endphp
-                                                                <optgroup label="{{$value}}">
-                                                                    @foreach($ple as $key=>$value)
-                                                                        <optgroup label="{{$value}}">
+                                                                <optgroup label="{{$e->des_edificio}}">
+                                                                    @foreach($ple as $p)
+                                                                        <optgroup label="{{$p->des_planta}}">
                                                                             @php
-                                                                                $z=$plantas_usuario->where('id_planta',$key)->pluck('des_zona','num_zona')->unique()->all();
-                                                                                $des_planta=$value;
+                                                                                
+                                                                                $z=$zonas_usuario->where('id_planta',$p->id_planta)->unique()->all();
+                                                                                $des_planta=$p->des_planta;
+                                                                                
                                                                             @endphp
-                                                                            @foreach($z as $key=>$value)
-                                                                                <option value="{{$key}}">{{ $des_edificio }} > {{ $des_planta  }} > {{ $value }}</option>
+                                                                            @foreach($z as $zona)
+                                                                                <option value="{{$zona->num_zona}}">{{ $des_edificio }} > {{ $des_planta  }} > {{ $zona->des_zona }}</option>
                                                                             @endforeach
                                                                         </optgroup>
                                                                     @endforeach
@@ -749,7 +751,7 @@
                                             </thead>
                                             <tbody>
                                             @foreach($bitacoras as $bitacora)
-                                                <tr @if($bitacora->status=="error" || strpos($bitacora->accion,"ERROR:")!==false) class="bg-red color-palette" @endif>
+                                                <tr @if($bitacora->status=="error" || strpos($bitacora->accion,"ERROR:")!==false)  @endif>
                                                     <td>{{ $bitacora->id_modulo }}</td>
                                                     <td>{{ $bitacora->id_seccion }}</td>
                                                     <td style="word-break: break-all;">{{ $bitacora->accion }}</td>

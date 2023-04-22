@@ -102,7 +102,7 @@ class limpiar_bitacora extends Command
         $tarea=tareas::find($this->argument('id'));
         $parametros=json_decode($tarea->val_parametros);
         $num_dias_bitacora=valor($parametros,"num_dias_bitacora");
-        $num_dias_acciones=valor($parametros,"num_dias_reservas");
+        $num_dias_reservas=valor($parametros,"num_dias_reservas");
         $num_dias_log=valor($parametros,"num_dias_log");
 
 
@@ -113,32 +113,44 @@ class limpiar_bitacora extends Command
         ->delete();
         $this->escribelog_comando('info',$affected.' filas borradas');
 
-        $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG');
+        $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG de cambio de estado '.$num_dias_log.' dias');
         $affected=DB::table('log_cambios_estado')
         ->whereraw("fecha < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
         ->delete();
 
-        $this->escribelog_comando('debug','RESERVAS - Borrando entradas de RESERVAS');
+        $this->escribelog_comando('debug','RESERVAS - Borrando entradas de RESERVAS'.$num_dias_reservas.' dias');
         $affected=DB::table('reservas')
-        ->whereraw("fec_reserva < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
+        ->whereraw("fec_reserva < DATE_SUB(now(), interval ".$num_dias_reservas." DAY)")
         ->delete();
         $this->escribelog_comando('info',$affected.' filas borradas');
 
-        $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG de tareas');
+        $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG de tareas '.$num_dias_log.' dias');
         $affected=DB::table('tareas_programadas_log')
         ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
         ->delete();
         $this->escribelog_comando('info',$affected.' filas borradas');
 
-        $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG de eventos');
+        $this->escribelog_comando('debug','LOGS - Borrando entradas de LOG de eventos '.$num_dias_log.' dias');
         $affected=DB::table('eventos_log')
         ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
         ->delete();
         $this->escribelog_comando('info',$affected.' filas borradas');
 
-        $this->escribelog_comando('debug','LOGS - Borrando entradas de notificaciones');
+        $this->escribelog_comando('debug','LOGS - Borrando entradas de eventos NOACTUAR '.$num_dias_log.' dias');
+        $affected=DB::table('eventos_noactuar')
+        ->whereraw("fecha < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
+        ->delete();
+        $this->escribelog_comando('info',$affected.' filas borradas');
+
+        $this->escribelog_comando('debug','LOGS - Borrando entradas de eventos EVOLUCION '.$num_dias_log.' dias');
+        $affected=DB::table('eventos_evolucion_id')
+        ->whereraw("fecha < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
+        ->delete();
+        $this->escribelog_comando('info',$affected.' filas borradas');
+
+        $this->escribelog_comando('debug','LOGS - Borrando entradas de notificaciones '.$num_dias_bitacora.' dias');
         $affected=DB::table('notificaciones')
-        ->whereraw("fec_log < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
+        ->whereraw("fec_notificacion < DATE_SUB(now(), interval ".$num_dias_log." DAY)")
         ->delete();
         $this->escribelog_comando('info',$affected.' filas borradas');
 

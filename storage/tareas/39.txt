@@ -1,4 +1,6 @@
 Inicio de la tarea programada [39]App\Console\Commands\programar_trabajos_mantenimiento
+Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
+Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [4] Limpir debajo de las alfombras 0 13 ? * THU,FRI
 Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 13 ? * THU,FRI
@@ -19,39 +21,25 @@ Plan: Limpieza Pedrosa -> Trabajo: [4] Limpir debajo de las alfombras 0 10 ? * M
 Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [4] Limpir debajo de las alfombras 0 10 ? * MON,FRI
 Trabajo completo, no se hace nada
+Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 17 1/4 * ?
+Trabajo completo, no se hace nada
+Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
+Trabajo completo, no se hace nada
+Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
+Trabajo completo, no se hace nada
+Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
+Trabajo completo, no se hace nada
+Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
+Trabajo completo, no se hace nada
+Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
+Trabajo completo, no se hace nada
+Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
+Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [4] Limpir debajo de las alfombras 0 10 ? * MON,FRI
 Trabajo completo, no se hace nada
-Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 2,21 ? * MON/1
-Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
 Trabajo completo, no se hace nada
 Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
-Trabajo completo, no se hace nada
-Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
-Trabajo completo, no se hace nada
-Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
-Trabajo completo, no se hace nada
-Plan: Limpieza Pedrosa -> Trabajo: [3] Fregar 0 17 1/4 * ?
-Trabajo completo, no se hace nada
-Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
-Trabajo completo, no se hace nada
-Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
-Trabajo completo, no se hace nada
-Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
-Trabajo completo, no se hace nada
-Plan: Limpieza Pedrosa -> Trabajo: [2] Pasar la aspiradora 0 22 ? * WED,THU,FRI
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
 Trabajo completo, no se hace nada
@@ -62,6 +50,26 @@ Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [4] Limpir debajo de las alfombras 0 11,16,22 5/5 * ?
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
+Trabajo completo, no se hace nada
+Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
 Trabajo completo, no se hace nada
@@ -72,14 +80,6 @@ Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [7] Limpiar los cristales 0 11 ? * 1/2
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [8] Limpiar las mesas 0 15 ? * 1#1
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
-Trabajo completo, no se hace nada
-Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
 Trabajo completo, no se hace nada
 Plan: Plan 2 -> Trabajo: [3] Fregar 0 14 ? * *
 Trabajo completo, no se hace nada

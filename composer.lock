@@ -12625,6 +12625,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "fruitcake/laravel-cors": 20,
         "heroku/heroku-buildpack-php": 20
     },
     "prefer-stable": true,

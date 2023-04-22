@@ -13,20 +13,20 @@ No hay ID para la accion 1 de la iteracion 1
 No hay ID para la accion 2 de la iteracion 1
 Finalizado el procesado de la regla Buscar en bitacora
 Finalizado el procesado de la regla Buscar en bitacora
+Proxima ejecucion establecida para  Sat Apr 22 2023 14:25:21 GMT+0200
+[53] -> Regla: Notificacion de incidencias
+[53] -> Regla: Notificacion de incidencias
+Dia: 6 Hora: 14
+Iniciando proceso de la regla dentro del horario de programacion
+Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
+Comando ejecutado, no hay ID para procesar
+Resultado del comando: ok
+Iteraciones maximas de la regla: 1
+Iteracion: 1 -> acciones: 1
+No hay ID para la accion 1 de la iteracion 1
+Finalizado el procesado de la regla Notificacion de incidencias
+Finalizado el procesado de la regla Notificacion de incidencias
 Proxima ejecucion establecida para  Sat Apr 22 2023 14:15:21 GMT+0200
-[53] -> Regla: Notificacion de incidencias
-[53] -> Regla: Notificacion de incidencias
-Dia: 6 Hora: 14
-Iniciando proceso de la regla dentro del horario de programacion
-Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
-Comando ejecutado, no hay ID para procesar
-Resultado del comando: ok
-Iteraciones maximas de la regla: 1
-Iteracion: 1 -> acciones: 1
-No hay ID para la accion 1 de la iteracion 1
-Finalizado el procesado de la regla Notificacion de incidencias
-Finalizado el procesado de la regla Notificacion de incidencias
-Proxima ejecucion establecida para  Sat Apr 22 2023 14:05:21 GMT+0200
 [55] -> Regla: Manuel Ferrero Leonardo
 [55] -> Regla: Manuel Ferrero Leonardo
 Dia: 6 Hora: 14
@@ -39,7 +39,7 @@ Iteracion: 1 -> acciones: 1
 No hay ID para la accion 1 de la iteracion 1
 Finalizado el procesado de la regla Manuel Ferrero Leonardo
 Finalizado el procesado de la regla Manuel Ferrero Leonardo
-Proxima ejecucion establecida para  Sat Apr 22 2023 14:05:21 GMT+0200
+Proxima ejecucion establecida para  Sat Apr 22 2023 14:15:21 GMT+0200
 Fin de la tarea App\Console\Commands\eventos
 Fin de la tarea php [31] Eventos
 Tarea [31] Eventos se ha ejecutado correctamente. Resp: 

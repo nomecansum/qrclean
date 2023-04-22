@@ -18,6 +18,7 @@
                 <input type="hidden" name="referer" value="{{ $referer }}">
                 <input type="hidden" name="adjuntos[]" id="adjuntos" value="">
                 <input type="hidden" name="procedencia" value="web"></input>
+                <input type="hidden" name="tipo" value="{{ $tipo }}"></input>
                 @if(isset($config->val_layout_incidencias) && ($config->val_layout_incidencias=='T' || $config->val_layout_incidencias=='A'))
                     <div class="form-group col-md-8 {{ $errors->has('des_incidencia') ? 'has-error' : '' }}">
                         <label for="des_incidencia" class="control-label">Titulo</label>

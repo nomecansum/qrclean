@@ -26,7 +26,7 @@
         <h3 class="card-title">Titulo</h3>
     </div>
     <div class="card-body">
-       @php
+       {{-- @php
              ini_set('max_execution_time', 300); //300 seconds = 5 minutes
            $icons=[];
            $json=file_get_contents(public_path('/plugins/fontawesome6/metadata/categories.json'));
@@ -40,12 +40,12 @@
            }
            $icons=array_unique($icons);
            dd(json_encode(array_values($icons)));
-       @endphp
+       @endphp --}}
 
 
-       {{-- @php
-        dump(Storage::disk(config('app.img_disk'))->url('/img'));
-    @endphp --}}
+       @php
+        dump(metodos_notificacion_usuario(2));
+    @endphp
     </div>
 </div>
 

@@ -21,6 +21,7 @@ class NotifController extends Controller
                 $q->where('mca_leida','N')
                   ->orWhere('fec_notificacion','>',Carbon::now()->subDays(10));
             })
+            ->orderby('notificaciones.fec_notificacion','desc')
             ->get();
         return view('notificaciones.index', compact('notif'));
     }

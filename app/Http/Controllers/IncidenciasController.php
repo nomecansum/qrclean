@@ -165,7 +165,8 @@ class IncidenciasController extends Controller
         $mostrar_graficos=1;
         $mostrar_filtros=1;
         $titulo_pagina="Gestión de incidencias";
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina'));
+        $tipo='embed';
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo'));
     }
 
     public function mis_incidencias($f1=0,$f2=0){
@@ -217,7 +218,8 @@ class IncidenciasController extends Controller
         $mostrar_graficos=0;
         $mostrar_filtros=0;
         $titulo_pagina="Mis incidencias";
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina'));
+        $tipo='mis';
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo'));
     }
     
     //BUSCAR INCIDENCIAS
@@ -422,8 +424,9 @@ class IncidenciasController extends Controller
         $mostrar_filtros=0;
         $open=$id;
         $titulo_pagina=$incidencias->first()->des_incidencia;
+        $tipo='embed';
 
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','open'));
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','open','tipo'));
     }
 
     //USUARIOS ABRIR INCIDENCIAS
@@ -447,7 +450,7 @@ class IncidenciasController extends Controller
                 ->first();
         }
         if(!isset($puesto)){
-            return view('scan.puesto_no_encontrado',compact('puesto'));    
+            return view('scan.puesto_no_encontrado',compact('puesto'));
         }
         validar_acceso_tabla($puesto->id_puesto,'puestos');
         $config=DB::table('config_clientes')->where('id_cliente',$puesto->id_cliente)->first();
@@ -469,10 +472,10 @@ class IncidenciasController extends Controller
             ->orderby('incidencias_tipos.des_tipo_incidencia')
             ->get();
 
-        if($tipo=='embed'){
-            return view('incidencias.fill_frm_incidencia',compact('puesto','tipos','referer','config'));
+        if($tipo=='embed' || $tipo=='mis'){
+            return view('incidencias.fill_frm_incidencia',compact('puesto','tipos','referer','config','tipo'));
         } else {
-            return view('incidencias.nueva_incidencia',compact('puesto','tipos','referer','config'));
+            return view('incidencias.nueva_incidencia',compact('puesto','tipos','referer','config','tipo'));
         }
         
     }
@@ -561,7 +564,11 @@ class IncidenciasController extends Controller
             $puesto->mca_incidencia='S';
             $puesto->save();
             if($r->referer=='incidencias'){
-                $url_vuelta='incidencias';
+                if($r->tipo??'normal'=='mis'){
+                    $url_vuelta='incidencias/mis_incidencias';
+                } else {
+                    $url_vuelta='incidencias';
+                }
             } else {
                 $url_vuelta='/';
             }
@@ -839,7 +846,7 @@ class IncidenciasController extends Controller
                     case 'W': //Web Push
                         Log::info("Iniciando postprocesado WEB Push de incidencia ".$inc->id_incidencia);
                         //Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta
-                        notificar_usuario( $usuario_abriente,null,null,$this->reemplazar_parametros($p->val_body,$inc)??'SIN TEXTO',[3],9,[],$inc->id_incidencia);
+                        notificar_usuario( $usuario_abriente,null,null,$this->reemplazar_parametros($p->val_body,$inc)??'SIN TEXTO',metodos_notificacion_usuario($usuario_abriente->id,3),9,[],$inc->id_incidencia);
                         break;
 
                     case 'L': //Spotlinker

@@ -438,7 +438,22 @@ function insertar_notificacion_web($user,$tipo,$texto,$id){
 
 }
 
-function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[1],$tipo=1,$attachments=null,$id=null){
+function metodos_notificacion_usuario($user,$metodo=null){
+    $usuario=users::find($user);
+    Log::debug('usuario notificacion: '.$usuario->mca_notif_email.'-'.$usuario->mca_notif_push);
+    $metodos=[];
+    if($usuario->mca_notif_email=='S' && ($metodo==null || $metodo==1)){
+        array_push($metodos,1);
+    }
+    if($usuario->mca_notif_push=='S' && ($metodo==null || $metodo==3)){
+        array_push($metodos,3);
+    }
+   
+    Log::debug('metodos notificacion: '.json_encode($metodos));
+    return $metodos;
+}
+
+function notificar_usuario($user,$subject,$plantilla,$body,$metodo=[],$tipo=1,$attachments=null,$id=null){
     
     try{    
         //Añadimos notificacion en la web
@@ -1521,7 +1536,7 @@ function enviar_mail_reserva($id_reserva,$mca_ical,$sender_name=null){
     } else {
         $attach=null;
     }
-    notificar_usuario($user,$des_evento,'emails.mail_reserva',$str_notificacion,[1,3],2,$attach,$det_reserva->id_reserva);
+    notificar_usuario($user,$des_evento,'emails.mail_reserva',$str_notificacion,metodos_notificacion_usuario($user->id),2,$attach,$det_reserva->id_reserva);
 }
 
 //Funcion para aplicar los colores de la pagina

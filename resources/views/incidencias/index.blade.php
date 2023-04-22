@@ -195,7 +195,7 @@
 						<option value="" ></option>
 						@php
 							$planta=0;
-							$edificio=0;	
+							$edificio=0;
 						@endphp
 						@foreach ($puestos as $puesto)
 							@if($edificio!= $puesto->id_edificio)
@@ -227,8 +227,13 @@
 
 	var lista_ficheros=new Array(0);
 
-	$('.mantenimiento').addClass('active active-sub');
-	$('.incidencias').addClass('active');
+	@if($tipo??'normal'=='mis')
+		$('.mioficina').addClass('active active-sub');
+		$('.mis_incidencias').addClass('active');
+	@else
+		$('.mantenimiento').addClass('active active-sub');
+		$('.incidencias').addClass('active');
+	@endif
 
 	$('#btn-toggle').click(function(){
          $('#tabla').bootstrapTable('toggleView')
@@ -238,13 +243,11 @@
 	//$('.formbuscador').submit(ajax_filter);
 
 	$(function(){
-
 		$('#fechas, #ac').change(function(){
 			$('#formbuscador').submit();
 		})
-
 		$('#divfiltro').hide();
-	})     
+	})
 
 	function change_fechas(){
 		$('#formbuscador').submit();
@@ -257,7 +260,7 @@
 		]) !!};
 		
 		//Dropzone para adjuntos de acciones
-		lista_ficheros=[];	
+		lista_ficheros=[];
 		$('#adjuntos').val('');
 		var myDropzone = new Dropzone("#dZUpload" , {
 			url: '{{ url('/incidencias/upload_imagen/') }}',
@@ -401,7 +404,7 @@
 	})
 
 	$('#id_puesto').change(function(e){
-		$('#editorCAM').load("{{ url('incidencias/create') }}/"+$('#id_puesto').val()+'/embed', function(){
+		$('#editorCAM').load("{{ url('incidencias/create') }}/"+$('#id_puesto').val()+'/{{ $tipo }}', function(){
 			animateCSS('#editorCAM','bounceInRight');
 			$('.modal').modal('hide');
 		});

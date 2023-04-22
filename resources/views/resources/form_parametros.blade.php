@@ -136,7 +136,7 @@
         {{-- Combo proveniente de consulta de BDD --}}
         @if($p->tipo=="list_db")
             @php
-                $qr=DB::select( DB::raw($p->sql));
+                $qr=DB::select($p->sql);
                 $qr=collect($qr);
                 try{
                     if (!fullAccess()){

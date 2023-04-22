@@ -1121,7 +1121,7 @@ function authbyToken($token){
         Auth::loginUsingId($usuario->id);
         session(['lang' => auth()->user()->lang]);
         //Permisos del usuario
-        $permisos = DB::select(DB::raw("
+        $permisos = DB::select("
         SELECT
                 des_seccion,
                 max(mca_read)as mca_read,
@@ -1154,7 +1154,7 @@ function authbyToken($token){
                 INNER JOIN `secciones` ON (`secciones_perfiles`.`id_seccion` = `secciones`.`cod_seccion`)
             WHERE
                 id_perfil=".auth()->user()->cod_nivel.") sq
-        GROUP BY sq.des_seccion"));
+        GROUP BY sq.des_seccion");
         session(['P' => $permisos]);
         return true;
     } else {
@@ -1296,7 +1296,7 @@ function lista_departamentos($tipo, $id, $r = null){
 }
 
 function departamentos_hijos($id){
-    $data = DB::select( DB::raw("
+    $data = DB::select("
     with recursive dep (cod_departamento, nom_departamento, num_nivel, cod_departamento_padre) as (
         select     departamentos.cod_departamento,
                    departamentos.nom_departamento,
@@ -1313,13 +1313,13 @@ function departamentos_hijos($id){
         inner join dep
                 on p.cod_departamento_padre = dep.cod_departamento
       )
-      select * from dep order by cod_departamento_padre;"));
+      select * from dep order by cod_departamento_padre;");
 
       return $data;
 }
 
 function departamentos_padres($id,$salida='collect'){
-    $data = DB::select( DB::raw("
+    $data = DB::select("
     with recursive dep (cod_departamento, nom_departamento, num_nivel, cod_departamento_padre) as (
         select     departamentos.cod_departamento,
                      departamentos.nom_departamento,
@@ -1336,7 +1336,7 @@ function departamentos_padres($id,$salida='collect'){
         inner join dep
                 on p.cod_departamento = dep.cod_departamento_padre
       )
-      select * from dep order by cod_departamento_padre;"));
+      select * from dep order by cod_departamento_padre;");
 
       if($salida!='simple'){
         return $data;
@@ -1346,7 +1346,7 @@ function departamentos_padres($id,$salida='collect'){
 }
 
 function departamentos_centro_hijos($id,$centro,$depth=10,$salida='collect'){
-    $data = DB::select( DB::raw("
+    $data = DB::select("
     with recursive dep (cod_departamento, nom_departamento, num_nivel, id_edificio, cod_departamento_padre,depth) as (
         select     departamentos.cod_departamento,
                    departamentos.nom_departamento,
@@ -1368,7 +1368,7 @@ function departamentos_centro_hijos($id,$centro,$depth=10,$salida='collect'){
                 on p.cod_departamento_padre = dep.cod_departamento
       )
       select * from dep
-      where dep.depth<".$depth." order by cod_departamento_padre"));
+      where dep.depth<".$depth." order by cod_departamento_padre");
 
       if($salida!='simple'){
         return $data;

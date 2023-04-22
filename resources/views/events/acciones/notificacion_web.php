@@ -92,6 +92,7 @@ $func_accion = function($accion, $resultado, $campos,$id) {
         insertar_notificacion_web($u,valor($param_accion, "id_tipo_notificacion"),comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos),0);
     }
 
+    $solouno=valor($param_accion, "solouno");
     if(isset($solouno) && $solouno==1){
         return ['no_ejecutar_mas'=>true];
     }

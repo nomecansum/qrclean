@@ -31,7 +31,7 @@
                 @if(($f->cod_centro == "" || $f->cod_centro == null) && ($f->cod_provincia != "" || $f->cod_provincia != null))
                     @php
                         try{
-                        $provincia = DB::select( DB::raw("select group_concat(`provincias`.`nombre` ORDER BY `nombre` ASC SEPARATOR '#') as provincia from provincias where `provincias`.`id_prov` IN (".$f->cod_provincia.")"));
+                        $provincia = DB::select( "select group_concat(`provincias`.`nombre` ORDER BY `nombre` ASC SEPARATOR '#') as provincia from provincias where `provincias`.`id_prov` IN (".$f->cod_provincia.")");
                         $provincia=array_filter(explode('#',$provincia[0]->provincia));
                     } catch (\Exception $e) {
                         $provincia=[];
@@ -45,7 +45,7 @@
                 @elseif(($f->cod_centro == "" || $f->cod_centro == null) && ($f->cod_region != "" || $f->cod_region != null) && ($f->cod_provincia == "" || $f->cod_provincia == null))
                     @php
                         try{
-                        $regional = DB::select( DB::raw("select group_concat(`regiones`.`nom_region` ORDER BY `nom_region` ASC SEPARATOR '#') as region from regiones where `regiones`.`cod_region` IN (".$f->cod_region.")"));
+                        $regional = DB::select("select group_concat(`regiones`.`nom_region` ORDER BY `nom_region` ASC SEPARATOR '#') as region from regiones where `regiones`.`cod_region` IN (".$f->cod_region.")");
                         $regional=array_filter(explode('#',$regional[0]->region));
                     } catch (\Exception $e) {
                         $regional=[];
@@ -59,7 +59,7 @@
                 @elseif(($f->cod_centro != "" || $f->cod_centro != null))
                     @php
                         try{
-                        $centros = DB::select( DB::raw("select group_concat(`centros`.`des_centro` ORDER BY `des_centro` ASC SEPARATOR '#') as centro from centros where `centros`.`cod_centro` IN (".$f->cod_centro.")"));
+                        $centros = DB::select("select group_concat(`centros`.`des_centro` ORDER BY `des_centro` ASC SEPARATOR '#') as centro from centros where `centros`.`cod_centro` IN (".$f->cod_centro.")");
                         $centros=array_filter(explode('#',$centros[0]->centro));
                     } catch (\Exception $e) {
                         $centros=[];

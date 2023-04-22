@@ -96,7 +96,7 @@ class LimpiezaController extends Controller
             ->where('id_ronda',$ronda->id_ronda)
             ->get();
             
-        $datos_tiempo=DB::select(DB::raw("select max(fec_fin) as maximo, min(fec_fin) as minimo from puestos_ronda where id_ronda=".$id));
+        $datos_tiempo=DB::select("select max(fec_fin) as maximo, min(fec_fin) as minimo from puestos_ronda where id_ronda=".$id);
         $tiempo_empleado=Carbon::parse($datos_tiempo[0]->maximo)->diffAsCarbonInterval (Carbon::parse($datos_tiempo[0]->minimo));
         $tiempo_empleado=$tiempo_empleado->forHumans();
 

@@ -67,7 +67,7 @@ class IncidenciasController extends Controller
             foreach($reglas as $key=>$value){
                 $tabla=explode(".",$key)[0];
                 $campo=explode(".",$key)[1];
-                $pk=DB::select(DB::raw("SHOW KEYS FROM ".$tabla." WHERE Key_name = 'PRIMARY'"))[0]->Column_name;
+                $pk=DB::select("SHOW KEYS FROM ".$tabla." WHERE Key_name = 'PRIMARY'")[0]->Column_name;
                 //Ahora a ver si es un valor o parte de la respuesta
                 if(strpos($value,'@R:')!==false){
                     $campo_respuesta=str_replace("@R:","",$value);

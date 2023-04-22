@@ -495,7 +495,7 @@ class EventosController extends Controller
 			->where('fec_log','>',Carbon::now()->subDays(7))
 			->get();
 
-		$patron=DB::select( DB::raw("select
+		$patron=DB::select("select
 											date(fec_log) as fecha,
 											date_format(fec_log,'%H') as hora,
 											count(cod_log) as cuenta
@@ -505,7 +505,7 @@ class EventosController extends Controller
 										and fec_log>date_sub(now(), interval 7 day)
 									group by
 										date(fec_log),
-										date_format(fec_log,'%H')"));
+										date_format(fec_log,'%H')");
 		$patron=Collect($patron);
 		$fechas=$patron->pluck('fecha')->unique()->sortby('fecha')->toArray();
 

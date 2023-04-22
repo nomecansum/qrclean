@@ -72,6 +72,7 @@ $func_accion = function($accion, $resultado, $campos,$id) {
 
     //echo("Enviado email a ".$datos->nombre." ".$emp->dir_email.chr(10).chr(13));
     //echo("Ejecutada accion enviar email empleado Regla: ".$accion->cod_regla." Accion: [".$accion->val_iteracion."-".$accion->num_orden."]".chr(10).chr(13));
+    $solouno=valor($param_accion, "solouno");
     if(isset($solouno) && $solouno==1){
         return ['no_ejecutar_mas'=>true];
     }

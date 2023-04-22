@@ -27,7 +27,7 @@ class ReservasController extends Controller
             ->join('provincias','provincias.id_prov','edificios.id_provincia')
             ->where('users.id',$id)
             ->first();
-        $festivos_usuario = DB::select( DB::raw("
+        $festivos_usuario = DB::select("
             SELECT
             date_format(val_fecha,'%Y-%m-%d') as fecha
         FROM festivos
@@ -37,7 +37,7 @@ class ReservasController extends Controller
             OR (FIND_IN_SET(CONVERT(IFNULL(". $ubicacion_usuario->id_edificio.",-1),char),cod_centro) <> 0  OR (IFNULL(cod_centro,0) = 0))
             OR mca_nacional='S') 
             AND val_fecha>subdate(curdate(), (day(curdate())-1))
-            AND id_cliente=".Auth::user()->id_cliente.";"));
+            AND id_cliente=".Auth::user()->id_cliente.";");
         $festivos_usuario=array_map(function($item){
             return $item->fecha;
         },$festivos_usuario);

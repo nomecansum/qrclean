@@ -1068,7 +1068,7 @@ class UsersController extends Controller
         //session(['lang' => Auth::user()->lang]);
         session(['back_id'=>$back_id]);
         //Permisos del usuario
-        $permisos = DB::select(DB::raw("
+        $permisos = DB::select("
         SELECT
                 des_seccion,
                 max(mca_read)as mca_read,
@@ -1101,7 +1101,7 @@ class UsersController extends Controller
                 INNER JOIN `secciones` ON (`secciones_perfiles`.`id_seccion` = `secciones`.`cod_seccion`)
             WHERE
                 id_perfil=".auth()->user()->cod_nivel.") sq
-        GROUP BY sq.des_seccion"));
+        GROUP BY sq.des_seccion");
         session(['P' => $permisos]);
 
         //Imagen del usuario

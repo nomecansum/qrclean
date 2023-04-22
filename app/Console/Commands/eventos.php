@@ -44,10 +44,16 @@ class eventos extends Command
                     "name": "cod_grupo_ejecucion",
                     "tipo": "list",
                     "multiple": false,
-                    "list": "Todos|Minuto|Hora|Dia|Semana|Quincena|grupo A|grupo B|grupo C|grupo D|grupo E|grupo F",
-                    "values": "*|I|H|D|S|Q|A|B|C|D|E|F",
+                    "list": "Todos|grupo A|grupo B|grupo C|grupo D|grupo E|grupo F",
+                    "values": "*|A|B|C|D|E|F",
                     "def": "*",
                     "required": false
+                },
+                {
+                    "label": "Poniendo este parametro a true, indicaremos que se oculte el selector de cliente",
+                    "name": "hide_cliente",
+                    "tipo": "hidecli",
+                    "required": true
                 }
             ]
         }';
@@ -77,10 +83,14 @@ class eventos extends Command
             'cod_regla'=>$cod_regla,
             'tip_mensaje'=>$tipo
         ]);
+        if($tipo=='success')
+            $tipo='warning';
         Log::$tipo($texto);
      }
 
     function escribelog_comando($tipo,$mensaje){
+        if($tipo=='success')
+            $tipo='notice';
         Log::$tipo($mensaje);
         log_tarea($mensaje,$this->argument('id'),$tipo);
     } 
@@ -108,11 +118,24 @@ class eventos extends Command
             $this->escribelog_comando('error','No existe la tarea '.$this->argument('id'));
             exit();
         }
+        $dowMap = array('Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom');
 
         try{
             $parametros=json_decode($tarea->val_parametros);
             $grupo=valor($parametros,"cod_grupo_ejecucion");
             $this->escribelog_comando('debug','Grupo '.$grupo);
+
+            try{
+                $clientes=$tarea->lista_clientes;
+            } catch (\Throwable $e){
+                $clientes="";
+            }
+             if($clientes!=''){
+                 $clientes=explode(",",$clientes);
+             } else {
+                 $clientes=null;
+             }
+
             //Primero vamos a obtener los eventos que tenemos que evaluar
             $eventos=DB::table('eventos_reglas')
                 ->where(function($qr) use($grupo){
@@ -123,6 +146,9 @@ class eventos extends Command
                 ->where('fec_inicio','<=',Carbon::now())
                 ->where('fec_fin','>=',Carbon::now())
                 ->where('mca_activa','S')
+                // ->when($clientes, function($q) use($clientes){
+                //     $q->wherein('cod_cliente',$clientes);
+                // })
                 ->where( function($q) {
                     $q->where('fec_prox_ejecucion','<',Carbon::now());
                     $q->orWhereNull('fec_prox_ejecucion');
@@ -140,24 +166,42 @@ class eventos extends Command
             $this->escribelog_comando('notice','['.$evento->cod_regla.'] -> Regla: '.$evento->nom_regla);
             
             //Siguiente paso, a ver si estamos dentro de las horas de programacion de la regla
-            //->setTimezone($evento->timezone)
-            $hora=Carbon::now()->setTimezone("Europe/Madrid")->format('H');
-            $dia=Carbon::now()->setTimezone("Europe/Madrid")->dayOfWeek;
+            if(!isset($evento->timezone) || $evento->timezone==''){
+                $evento->timezone="Europe/Madrid";
+            }
+            $hoy=Carbon::now()->setTimezone($evento->timezone)->format('Y-m-d');
+            $hoy_hora=Carbon::now()->setTimezone($evento->timezone);
+            $hora=Carbon::now()->setTimezone($evento->timezone)->format('H');
+            $dia=Carbon::now()->setTimezone($evento->timezone)->dayOfWeek;
             if($dia==0) $dia=7; //DOmingo en ingles
             $this->log_evento('Dia: '.$dia." Hora: ".$hora,$evento->cod_regla,'notice');
             $programacion=decodeComplexJson(decodeComplexJson($evento->schedule));
+            //Lo primero es comprobar si la preogramacion es del formato nuevo o del antiguo, se diferencia porque ta nueva es un objeto que tiene una propiedad llamada tipo_programacion. La vieja es un array con los dias de la semana y las horas por cada dia
             $toca_programacion=false;
-            foreach($programacion as $prog){
-                if($prog->num_dia==$dia){
-                    foreach($prog->horas as $h){
-                        if($h==$hora){
-                            $toca_programacion=true;
+            if(($programacion->tipo_programacion??'P')=='P'){
+                //Tipo planificador o antigua. Si es nueva , tiene la misma info que la vieja pero en el nodo "dias"
+                if(isset($programacion->tipo_programacion)){
+                    $programacion=$programacion->dias;
+                }
+                foreach($programacion as $prog){
+                    if($prog->num_dia==$dia){
+                        foreach($prog->horas as $h){
+                            if($h==$hora){
+                                $toca_programacion=true;
+                            }
                         }
                     }
                 }
+            } else { //Nueva Custom
+                if(in_array($dia,$programacion->dias)){ //Si el dia esta en la programacion
+                    if($hoy_hora->between(Carbon::parse($hoy.' '.$programacion->hora_inicio)->shiftTimezone($evento->timezone),Carbon::parse($hoy.' '.$programacion->hora_fin)->shiftTimezone($evento->timezone))){
+                        $toca_programacion=true;
+                    }
+                }
             }
+            
             if (!$toca_programacion){
-                $this->log_evento("La regla no esta programada para ser ejecutada el día ".$dia." en la hora ".$hora,$evento->cod_regla,'error');
+                $this->log_evento("La regla no esta programada para ser ejecutada el día ".$dowMap[$dia-1]." en la hora ".$hoy_hora->format('H:i'),$evento->cod_regla,'error');
                 continue;
             }
             $this->log_evento('Iniciando proceso de la regla dentro del horario de programacion',$evento->cod_regla);
@@ -224,7 +268,11 @@ class eventos extends Command
                     //Si no, los ID que ya estan en la iteracion anterior
                     $ids_para_la_iteracion=$evolucion->where('val_iteracion',$iteracion-1)->pluck('id')->toArray();
                 }
-                
+                //ID sobre los que no hay que actuar porque estan en espera(descompresion :-)
+                $lista_ids_en_espera=DB::table('eventos_noactuar')->where('cod_regla',$evento->cod_regla)->where('fecha','>',Carbon::now())->pluck('id')->unique()->toArray();
+                //Los quitamos de la lista a procesar
+                $ids_para_la_iteracion=array_diff($ids_para_la_iteracion,$lista_ids_en_espera);
+                $this->log_evento('Descontados: '.count($lista_ids_en_espera).' en estado no molestar, quedan '.count( $ids_para_la_iteracion).' id para procesar',$evento->cod_regla,'notice');
                 foreach($acciones_iteracion as $accion){
                     $acciones_no_ejecutar=[];
                     $lista_ids_procesar=array_values($ids_para_la_iteracion);
@@ -237,9 +285,11 @@ class eventos extends Command
                                     include(resource_path('views/events/acciones').'/'.$accion->nom_accion);
                                     //Ejecutamos la funcion principal de cada accion
                                     $result_accion=$func_accion($accion,$resultado,$campos,$id,$output);
+                                    
                                     //Como norma general, la funcion de la accion devolvera null, en caso de devolver otra cosa será para evitar que se vuelva a ejecutar en esa iteracion (notificaciones) o porque se va a rellenar la lista de id (evaluar regla )
                                     if(isset($result_accion['no_ejecutar_mas']) && $result_accion['no_ejecutar_mas']==true){
                                         $acciones_no_ejecutar[]=$accion->cod_accion;
+                                        $this->log_evento('SOLO UNA (1) ejecucion por iteracion',$evento->cod_regla,'warning');
                                     }
                                     //En este caso si en la accion se ha rellenado la lista de id, se añaden a la lista de id para la siguiente accion
                                     if(isset($result_accion['lista_id']) && count($result_accion['lista_id'])>0){
@@ -247,6 +297,7 @@ class eventos extends Command
                                         $ids_para_la_iteracion=$lista_ids_procesar;
                                         $resultado=$result_accion['resultado'];
                                         $campos=$result_accion['campos'];
+                                        
                                     }
                                     //Se elimina la funcion por si hay mas acciones en la misma regla
                                     unset($func_accion);
@@ -288,6 +339,7 @@ class eventos extends Command
                             } else if($evento->tip_nomolestar=='Y'){
                                 $fecha_noactuar=Carbon::now()->addYears($evento->nomolestar);
                             }
+                            // 
                             if($evento->nomolestar>0 && config('app.debug_eventos')==false){
                                 DB::table('eventos_noactuar')->insert([
                                     "cod_regla"=>$evento->cod_regla,

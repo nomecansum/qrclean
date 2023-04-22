@@ -79,6 +79,7 @@ $func_accion = function($accion, $resultado, $campos,$id) {
 
     $this->log_evento("Enviado email a ".$datos->nombre." ".valor($param_accion, "e-mail").': '.$result_email,$accion->cod_regla);
     
+    $solouno=valor($param_accion, "solouno");
     if(isset($solouno) && $solouno==1){
         return ['no_ejecutar_mas'=>true];
     }

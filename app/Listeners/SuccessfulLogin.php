@@ -54,7 +54,7 @@ class SuccessfulLogin
         $user->save();
         session(['lang' => $user->lang]);
         //Permisos del usuario
-        $permisos = DB::select(DB::raw("
+        $permisos = DB::select("
         SELECT
                 des_seccion,
                 max(mca_read)as mca_read,
@@ -87,7 +87,7 @@ class SuccessfulLogin
                 INNER JOIN `secciones` ON (`secciones_perfiles`.`id_seccion` = `secciones`.`cod_seccion`)
             WHERE
                 id_perfil=".$user->cod_nivel.") sq
-        GROUP BY sq.des_seccion"));
+        GROUP BY sq.des_seccion");
         session(['P' => $permisos]);
         if(isset($request->intended)&&$request->intended!=''){
             session(['redirectTo' => $request->intended]);

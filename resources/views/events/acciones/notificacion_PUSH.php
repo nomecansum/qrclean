@@ -84,6 +84,7 @@ $func_accion = function($accion, $resultado, $campos,$id) {
         notificar_usuario( $u,null,null,comodines_texto(valor($param_accion, "cuerpo"), $campos, $datos),[3],1,[],0);
     }
 
+    $solouno=valor($param_accion, "solouno");
     if(isset($solouno) && $solouno==1){
         return ['no_ejecutar_mas'=>true];
     }

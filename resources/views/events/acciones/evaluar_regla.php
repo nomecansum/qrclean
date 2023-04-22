@@ -37,10 +37,12 @@ $func_accion = function($accion, $resultado, $campos, $id,$output) {
         $campos=[];
     }
 
+    $solouno=valor($param_accion, "solouno");
     return ['lista_ids'=>$resultado->lista_id,
             'no_ejecutar_mas'=>true,
             'resultado'=>$resultado,
             'campos'=>$campos,
+            'no_ejecutar_mas'=>$solouno
         ];
 }
 ?>

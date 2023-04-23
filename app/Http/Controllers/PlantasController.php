@@ -336,8 +336,21 @@ class PlantasController extends Controller
             $error="Debe añadir una imagen de fondo para poder agregar zonas";
             return view('plantas.zonas', compact('plantas','error'));
         }
+        $puestos= DB::Table('puestos')
+            ->select('puestos.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','plantas.factor_puestow','plantas.factor_puestoh','plantas.factor_puestob','plantas.factor_puestor','plantas.factor_letra','puestos.val_color as hex_color')
+            ->join('plantas','plantas.id_planta','puestos.id_planta')
+            ->leftjoin('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
+            ->where('puestos.id_planta',$id)
+            ->get();
+        $reservas=DB::table('reservas')
+            ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+            ->where(function($q){
+                $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                $q->orwhereraw("'".Carbon::now()."' between fec_reserva AND fec_fin_reserva");
+            })
+            ->get();
 
-        return view('plantas.zonas', compact('plantas'));
+        return view('plantas.zonas', compact('plantas','puestos','reservas'));
     }
 
     public function save_zonas(Request $r){

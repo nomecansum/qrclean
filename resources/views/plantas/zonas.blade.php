@@ -32,7 +32,7 @@ try{
 
 
     .layout{
-        margin: 30px;
+
         width: {{ $width }}px; 
         height: {{ $height }}px;
         background-image: url('{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}');
@@ -54,6 +54,11 @@ try{
         overflow-y: hidden !important;
         overflow-x: hidden !important;
         opacity: 0.7;
+        z-index: 20;
+    }
+
+    .grid-stack-item {
+        z-index: 20;
     }
 
     .icono_borrar{
@@ -79,6 +84,39 @@ try{
         color: rgba(0, 0, 0, 0.397);
         text-align: center;
         font: 24px Arial, sans-serif;
+    }
+
+    .flpuesto {
+        float: left;
+        position: absolute;
+        z-index: 0;
+        color: #FFFFFF;
+        font-weight: bold;
+        font-size: 9px;
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+        opacity: 0.35;
+        border-radius: 0px;
+        border: 1px dashed #111;
+        background-color: #888;
+    }
+
+    .card_plano{
+        --bs-gutter-x: 0;
+        --bs-gutter-y: 0;
+        padding: 0px 0px 0px 0px;
+        margin: 0px 0px 0px 0px;
+    }
+
+    .container {
+        border: 1px solid #DDDDDD;
+        width: 100%;
+        position: relative;
+        padding: 0px 0px 0px 0px !important;
+        margin: 0px 0px 0px 0px !important;
+        --bs-gutter-x: 0 !important;
+        --bs-gutter-y: 0 !important;
     }
 
     
@@ -141,14 +179,44 @@ try{
                                 <div class="col-md-9"></div>
                             </div>
                             @if(isset($plantas->img_plano))
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="layout">
-                                            <div class="grid-stack" id="gridCont">
+                            <div class="card ">
+                                <div class="card-body overflow-auto card_plano layout">
+                                    <div class="grid-stack container" id="plano">
+                                        @php
+                                            $left=0;
+                                            $top=0;
+                                        @endphp
+                                        @foreach($puestos as $puesto)
+                                            @php
+                                            $asignado_usuario=null;
+                                            $asignado_miperfil=null;
+                                            $asignado_otroperfil=null;
+                                            $custom=false;
+                                            $reserva=null;
+                                            $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
+                                            if($puesto->top==null && $puesto->left==null){
+                                                $puesto->color_estado="secondary";
+                                            }
+                                            if($puesto->width!=null || $puesto->height!=null || $puesto->border!=null || $puesto->font!=null  || $puesto->roundness!=null){
+                                                $custom=true;
+                                            }
+                                            @endphp
+                                            <div class="text-center font-bold  add-tooltip align-middle flpuesto puesto_parent draggable add-tooltip {{ $custom?'custom':'' }}" title="{{ $puesto->des_puesto }}" id="puesto{{ $puesto->id_puesto }}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-factorh="{{ $puesto->factor_puestoh }}" data-factorw="{{$puesto->factor_puestow}}" data-factorr="{{ $puesto->factor_puestor }}" data-width="{{ $puesto->width??0 }}" data-height="{{ $puesto->height??0 }}" style="height: {{ $puesto->factor_puestoh }}% ; width: {{  $puesto->factor_puestow }}%;">
+                                                {!! $custom?'<i class="fa-solid fa-circle-small"></i>':'' !!}
+                                                <span class="h-100 align-middle texto_puesto puesto_child {{ $puesto->font!=null?'custom':'' }}" style="font-size: {{ $puesto->font!=null?$puesto->font:$puesto->factor_letra }}vw;">{{ nombrepuesto($puesto) }}</span>
                                             </div>
-                                        </div>
+                                            @php
+                                                $left+=50;
+                                                if($left==500){
+                                                    $left=0;
+                                                    $top+=50;
+                                                }
+                                            @endphp
+                                        @endforeach
                                     </div>
                                 </div>
+                            </div>
+
                             @endif
                             <div class="form-group">
                                 <div class="col-md-12 text-end">
@@ -251,11 +319,13 @@ try{
 
         loadGrid = function() {
             grid.load(serializedData, true); // update things
+            
         }
 
         @if($plantas->zonas!==null && !is_array($plantas->zonas) )
             serializedData ={!! json_decode(json_encode($plantas->zonas)) !!};
             loadGrid();
+            
         @endif
 
         function zoom(direccion){
@@ -264,6 +334,7 @@ try{
             $('.layout').css('zoom',zoom_actual+'%');
             $('#zoom_level').text(zoom_actual+'%');
             $('#factor_zoom').val(zoom_actual);
+            recolocar_puestos();
         }
        
     
@@ -275,6 +346,31 @@ try{
             
         });
 
+
+        var tooltip = $('.add-tooltip');
+        if (tooltip.length)tooltip.tooltip();
+
+        try{
+            posiciones={!! json_encode($plantas->posiciones)??'[]' !!};
+            document.getElementById('plano').setAttribute('data-posiciones',posiciones);
+            posiciones=$.parseJSON(posiciones);
+        
+        } catch($err){
+            posiciones=[];
+        }
+
+        $(window).resize(function(){
+            recolocar_puestos();
+        })
+
+        $('.nav-toggler').click(function(){
+            recolocar_puestos();
+        })
+
+        setTimeout(() => {
+            recolocar_puestos();
+        }, 1500);
+        
     
         document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
     </script>

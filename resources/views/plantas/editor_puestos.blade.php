@@ -583,7 +583,9 @@
         }),
     });
 
-    
+    setTimeout(() => {
+            recolocar_puestos();
+        }, 1500);
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 </script>

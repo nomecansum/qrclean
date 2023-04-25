@@ -995,6 +995,15 @@ class ReportsController extends Controller
                 $q->whereIn('users.id',$users_filtro);
             }
         })
+        ->where(function($q) use($r){
+            if ($r->id_turno) {
+                $users_filtro=DB::table('turnos_usuarios')
+                    ->select('id_usuario')
+                    ->wherein('id_turno',$r->id_turno)
+                    ->pluck('id_usuario');
+                $q->whereIn('users.id',$users_filtro);
+            }
+        })
          ->where(function($q) use($r){
             if ($r->planta) {
                 $users_filtro=DB::table('plantas_usuario')
@@ -1025,6 +1034,21 @@ class ReportsController extends Controller
         })
         ->get();
 
+        $reservas=DB::table('reservas')
+            ->join('puestos','reservas.id_puesto','puestos.id_puesto')
+            ->select('reservas.fec_reserva','puestos.cod_puesto','reservas.id_usuario','puestos.id_tipo_puesto')
+            ->where(function($q) use($r){
+                if ($r->fechas) {
+                    $q->wheredate('reservas.fec_reserva',adaptar_fecha($r->fechas));
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tipo) {
+                    $q->wherein('puestos.id_tipo_puesto',$r->tipo);
+                }
+            })
+            ->get();
+
         $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
         ///////////////////////////////////////////////////
         ///////////SALIDA DEL INFORME/////////////////////
@@ -1042,16 +1066,16 @@ class ReportsController extends Controller
         switch($r->output){
             case "pantalla":
                 if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
-                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe, "r" => $r,'executionTime' => $executionTime));
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe, "reservas" => $reservas, "r" => $r,'executionTime' => $executionTime));
                 } else {  //Navegacion
-                    return view($view,compact('informe','r','executionTime'))->render();
+                    return view($view,compact('informe','r','reservas','executionTime'))->render();
                 }
 
             break;
 
             case "pdf":
                 $orientation = $r->orientation == 'h' ? 'landscape' : 'portrait';
-                $pdf = PDF::loadView($view,compact('informe','r','executionTime'));
+                $pdf = PDF::loadView($view,compact('informe','reservas','r','executionTime'));
                 $pdf->setPaper('legal', $orientation);
                 $filename = str_replace(' ', '_', $prepend . '_' . $nombre_informe . '.pdf');
                 $fichero = storage_path() . "/exports/" . $filename;
@@ -1081,10 +1105,10 @@ class ReportsController extends Controller
                 $fichero = storage_path()."/exports/".$filename;
                 libxml_use_internal_errors(true); //para quitar los errores de libreria
                 if(isset($r->email_schedule) && $r->email_schedule == 1) { //Programado
-                    Excel::store(new ExportExcel($view, compact('informe','r','executionTime')),$filename,'exports');
+                    Excel::store(new ExportExcel($view, compact('informe','reservas','r','executionTime')),$filename,'exports');
                     $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
                 } else {  //Navegacion
-                    return Excel::download(new ExportExcel($view,compact('informe','r','executionTime')),$filename);
+                    return Excel::download(new ExportExcel($view,compact('informe','reservas','r','executionTime')),$filename);
                 }
             break;
         }

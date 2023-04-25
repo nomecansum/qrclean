@@ -79,10 +79,11 @@
 	@endif
 
 		<tr>
-			<th>e-mail</th>
+			{{-- <th>e-mail</th> --}}
 			<th @if($r->output=="excel") style="background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Usuario</th>
 			<th class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Plantas</th>
 			<th class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Puesto asignado</th>
+			<th class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Reserva</th>
 			<th class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Turno</th>
 		</tr>
 
@@ -91,10 +92,11 @@
 			$pu=$plantas_usuario->where('id_usuario',$dato->id)->pluck('id_planta')->toArray();
 			$pl=$plantas->wherein('id_planta',$pu)->pluck('abreviatura')->toArray();
 			$tu=$turnos->where('id_usuario',$dato->id)->pluck('des_turno')->toArray();
+			$res=$reservas->where('id_usuario',$dato->id)->pluck('cod_puesto')->toArray();
 		@endphp
 
 			<tr>
-				<td>{{ $dato->email }}</td>
+				{{-- <td>{{ $dato->email }}</td> --}}
 				<td>{{ $dato->name }}</td>
 				<td>
 					{{implode(", ",$pl)}}
@@ -114,6 +116,9 @@
 				@if($zonas_preferidas)
 					{!! implode("<br> ",$zonas_preferidas) !!}
 				@endif
+				</td>
+				<td>
+					{!! implode("<br> ",$res) !!}
 				</td>
 				<td>
 					{!! implode("<li> ",$tu) !!}

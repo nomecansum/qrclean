@@ -10,7 +10,7 @@
 //Date range picker
 var picker = new Litepicker({
     element: document.getElementById( "fechas" ),
-    singleMode: false,
+    singleMode: {{ $singleMode ?? 'false' }},
 
     @desktop numberOfMonths: 2, @elsedesktop numberOfMonths: 1, @enddesktop
     @desktop numberOfColumns: 2, @elsedesktop numberOfColumns: 1, @enddesktop

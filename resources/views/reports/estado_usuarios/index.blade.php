@@ -36,10 +36,10 @@
 			<form action="{{url('/reports/estado_usu/filter')}}" method="POST" class="ajax-filter">
 				{{csrf_field()}}
 				<input type="hidden" value="{{Auth::user()->id_cliente}}" name="id_cliente">
-				@include('resources.combos_filtro',[$hide=['est'=>1,'head'=>1,'btn'=>1,'est_inc'=>1,'tip_mark'=>1,'tip_inc'=>1,'tip_feria'=>1,'tip'=>1,'pue'=>1,'tag'=>1],$show=['u_id'=>1]])
-				{{-- <div class="col-md-4 mb-3">
-					@include('resources.combo_fechas')
-				</div> --}}
+				@include('resources.combos_filtro',[$hide=['est'=>1,'head'=>1,'btn'=>1,'est_inc'=>1,'tip_mark'=>1,'tip_inc'=>1,'tip_feria'=>1,'tip'=>0,'pue'=>1,'tag'=>1],$show=['u_id'=>1,'tur'=>1]])
+				<div class="col-md-2 mb-3">
+					@include('resources.combo_fechas',['singleMode'=>true])
+				</div>
 
 				@include('resources.combos_opciones_informes',[$show=['output'=>1,'orientation'=>1]])
 				

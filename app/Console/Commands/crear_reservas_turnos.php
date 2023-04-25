@@ -235,7 +235,7 @@ class crear_reservas_turnos extends Command
 
         //Primero vamos a buscar los usuarios a los que les toca
         $usuarios=users::where('id_cliente',$cliente)
-            ->select('users.id','users.name','users.list_puestos_preferidos')
+            ->select('users.id','users.name','users.list_puestos_preferidos','tipos_puesto_admitidos')
             ->where(function($q) use($id_edificio){
                 if ($id_edificio) {
                     $q->WhereIn('users.id_edificio',$id_edificio);
@@ -267,7 +267,10 @@ class crear_reservas_turnos extends Command
         $periodo=CarbonPeriod::create(Carbon::now(),Carbon::now()->addDays($dias_reservas));
         foreach($usuarios as $user){
             $this->escribelog_comando('debug','Procesando usuario ['.$user->id.'] '.$user->name);
-            foreach($id_tipo_puesto as $tipo){
+            //A ver que tipos de puesto tiene asignados el usuario
+            $tipos_usuario=explode(",",$user->tipos_puesto_admitidos);
+            $tipos_usuario=array_intersect($id_tipo_puesto,$tipos_usuario);
+            foreach($tipos_usuario as $tipo){
                 $tipopuesto=puestos_tipos::find($tipo);
                 $this->escribelog_comando('debug','Procesando tipo ['.$tipopuesto->id_tipo_puesto.'] '.$tipopuesto->des_tipo_puesto);
                 foreach($periodo as $fecha){

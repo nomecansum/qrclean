@@ -283,6 +283,12 @@ class sincronizarWorkdayGenerali extends Command
         if(isset($puesto) && $puesto!='BENCH'){
             if($dato->list_puestos_preferidos!=null){
                 $puestos_preferidos=json_decode($dato->list_puestos_preferidos);
+                //Borramos las reservas de tipo puesto que tengael usuario metidas desde workday por si hay cambios para que actuelicen
+                foreach($puestos_preferidos as $key=>$puesto_preferido){
+                    if($puesto_preferido->tipo=='pu' && $puesto_preferido->workday){
+                        unset($puestos_preferidos[$key]);
+                    }
+                }
             } else {
                 $puestos_preferidos=json_decode("[{
                     \"id\": 20,
@@ -292,16 +298,6 @@ class sincronizarWorkdayGenerali extends Command
                 }]");
             }
             //Ahora como ya viene el codigo de puesto no hace falta hacer essta mierda
-            
-            // if(strpos($puesto,'SWS')!==false){
-            //     $prefijo_puesto='SWS';
-            //     $puesto=str_replace('SWS','',$puesto);
-            //     $puesto=str_replace(' ','',$puesto);
-            // } else {
-            //     $prefijo_puesto='WS';
-            // }
-            // $txt_puesto=lz($puesto,3);
-            // $puesto=edificios::where('id_edificio',$edificio)->first()->abreviatura.'-'.$txt_planta.'-'.$prefijo_puesto.'-'.$txt_puesto;
             $datos_puesto=puestos::where('cod_puesto',$puesto)->first();
             if(isset($datos_puesto))
             {

@@ -331,7 +331,7 @@ class crear_reservas_turnos extends Command
                                 break;
                             }
                             //A ver que puestos hay disponibles
-                            $puestos_disponibles=puestos_disponibles($cliente,$fecha,$tipo,$slot->hora_inicio,$slot->hora_fin);
+                            $puestos_disponibles=puestos_disponibles($cliente,$fecha,$tipo,$slot->hora_inicio,$slot->hora_fin,$user);
                             //Reglas de reserva
                             if($user->list_puestos_preferidos!=null)
                             {
@@ -339,6 +339,7 @@ class crear_reservas_turnos extends Command
                             } else{
                                 $puestos_usuario=null;
                             }
+
                             
                             $p=null;
                             //El usuario tiene que tener al menos un criterio de reserva

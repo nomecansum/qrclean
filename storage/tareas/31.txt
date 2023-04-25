@@ -2,26 +2,170 @@ Inicio de la tarea programada [31]App\Console\Commands\eventos
 Grupo *
 [52] -> Regla: Buscar en bitacora
 [52] -> Regla: Buscar en bitacora
-Dia: 7 Hora: 12
+Dia: 2 Hora: 20
 Iniciando proceso de la regla dentro del horario de programacion
 Comando :C:\WWW\qrclean\resources\views/events/comandos/buscar_en_bitacora.php
-Comando ejecutado, no hay ID para procesar
+Comando ejecutado, 34 ID a procesar: 178443,178444,178445,178446,178447,178448,178449,178450,178451,178452,178453,178454,178455,178456,178457,178458,178459,178460,178461,178462,178463,178464,178465,178466,178467,178468,178469,178470,178471,178472,178473,178474,178475,178476
 Resultado del comando: ok
 Iteraciones maximas de la regla: 1
 Iteracion: 1 -> acciones: 2
-Descontados: 4461 en estado no molestar, quedan 0 id para procesar
+Descontados: 4238 en estado no molestar, quedan 34 id para procesar
+ID: 178443 | Iteracion: 1 | Accion[1]: log.php
+ID: 178444 | Iteracion: 1 | Accion[1]: log.php
+ID: 178445 | Iteracion: 1 | Accion[1]: log.php
+ID: 178446 | Iteracion: 1 | Accion[1]: log.php
+ID: 178447 | Iteracion: 1 | Accion[1]: log.php
+ID: 178448 | Iteracion: 1 | Accion[1]: log.php
+ID: 178449 | Iteracion: 1 | Accion[1]: log.php
+ID: 178450 | Iteracion: 1 | Accion[1]: log.php
+ID: 178451 | Iteracion: 1 | Accion[1]: log.php
+ID: 178452 | Iteracion: 1 | Accion[1]: log.php
+ID: 178453 | Iteracion: 1 | Accion[1]: log.php
+ID: 178454 | Iteracion: 1 | Accion[1]: log.php
+ID: 178455 | Iteracion: 1 | Accion[1]: log.php
+ID: 178456 | Iteracion: 1 | Accion[1]: log.php
+ID: 178457 | Iteracion: 1 | Accion[1]: log.php
+ID: 178458 | Iteracion: 1 | Accion[1]: log.php
+ID: 178459 | Iteracion: 1 | Accion[1]: log.php
+ID: 178460 | Iteracion: 1 | Accion[1]: log.php
+ID: 178461 | Iteracion: 1 | Accion[1]: log.php
+ID: 178462 | Iteracion: 1 | Accion[1]: log.php
+ID: 178463 | Iteracion: 1 | Accion[1]: log.php
+ID: 178464 | Iteracion: 1 | Accion[1]: log.php
+ID: 178465 | Iteracion: 1 | Accion[1]: log.php
+ID: 178466 | Iteracion: 1 | Accion[1]: log.php
+ID: 178467 | Iteracion: 1 | Accion[1]: log.php
+ID: 178468 | Iteracion: 1 | Accion[1]: log.php
+ID: 178469 | Iteracion: 1 | Accion[1]: log.php
+ID: 178470 | Iteracion: 1 | Accion[1]: log.php
+ID: 178471 | Iteracion: 1 | Accion[1]: log.php
+ID: 178472 | Iteracion: 1 | Accion[1]: log.php
+ID: 178473 | Iteracion: 1 | Accion[1]: log.php
+ID: 178474 | Iteracion: 1 | Accion[1]: log.php
+ID: 178475 | Iteracion: 1 | Accion[1]: log.php
+ID: 178476 | Iteracion: 1 | Accion[1]: log.php
+ID: 178443 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178444 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178445 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178446 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178447 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178448 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178449 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178450 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178451 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178452 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178453 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178454 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178455 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178456 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178457 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178458 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178459 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178460 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178461 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178462 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178463 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178464 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178465 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178466 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178467 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178468 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178469 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178470 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178471 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178472 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178473 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178474 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178475 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 178476 | Iteracion: 1 | Accion[2]: notificacion_web.php
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178443 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178444 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178445 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178446 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178447 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178448 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178449 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178450 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178451 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178452 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178453 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178454 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178455 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178456 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178457 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178458 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178459 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178460 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178461 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178462 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178463 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178464 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178465 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178466 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178467 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178468 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178469 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178470 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178471 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178472 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178473 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178474 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178475 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 178476 hasta dentro de 1 M
+Finalizado el procesado de la regla Buscar en bitacora
+Finalizado el procesado de la regla Buscar en bitacora
+Proxima ejecucion establecida para  Tue Apr 25 2023 20:55:20 GMT+0200
+[53] -> Regla: Notificacion de incidencias
+[53] -> Regla: Notificacion de incidencias
+Dia: 2 Hora: 20
+Iniciando proceso de la regla dentro del horario de programacion
+Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
+Comando ejecutado, no hay ID para procesar
+Resultado del comando: ok
+Iteraciones maximas de la regla: 1
+Iteracion: 1 -> acciones: 1
+Descontados: 3 en estado no molestar, quedan 0 id para procesar
 No hay ID para la accion 1 de la iteracion 1
-No hay ID para la accion 2 de la iteracion 1
-Finalizado el procesado de la regla Buscar en bitacora
-Finalizado el procesado de la regla Buscar en bitacora
-Proxima ejecucion establecida para  Sun Apr 23 2023 12:35:19 GMT+0200
-[53] -> Regla: Notificacion de incidencias
-[53] -> Regla: Notificacion de incidencias
-Dia: 7 Hora: 12
-La regla no esta programada para ser ejecutada el día Dom en la hora 12:20
+Finalizado el procesado de la regla Notificacion de incidencias
+Finalizado el procesado de la regla Notificacion de incidencias
+Proxima ejecucion establecida para  Tue Apr 25 2023 20:45:20 GMT+0200
 [55] -> Regla: Manuel Ferrero Leonardo
 [55] -> Regla: Manuel Ferrero Leonardo
-Dia: 7 Hora: 12
+Dia: 2 Hora: 20
 Iniciando proceso de la regla dentro del horario de programacion
 Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
 Comando ejecutado, no hay ID para procesar
@@ -32,7 +176,7 @@ Descontados: 0 en estado no molestar, quedan 0 id para procesar
 No hay ID para la accion 1 de la iteracion 1
 Finalizado el procesado de la regla Manuel Ferrero Leonardo
 Finalizado el procesado de la regla Manuel Ferrero Leonardo
-Proxima ejecucion establecida para  Sun Apr 23 2023 12:25:19 GMT+0200
+Proxima ejecucion establecida para  Tue Apr 25 2023 20:45:21 GMT+0200
 Fin de la tarea App\Console\Commands\eventos
 Fin de la tarea php [31] Eventos
 Tarea [31] Eventos se ha ejecutado correctamente. Resp: 

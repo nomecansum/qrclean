@@ -1434,7 +1434,7 @@ function comprobar_reserva_usuario($id_user,$fecha,$tipo,$hora_inicio="00:00",$h
 }
 
 //Lista de puestos disponibles para reserva en un dia y un tipo
-function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fin="23:59"){
+function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fin="23:59",$user){
     
     $fec_desde=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_inicio.':00');
     $fec_hasta=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_fin.':00');
@@ -1461,6 +1461,7 @@ function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fi
     ->pluck('puestos.id_puesto')
     ->toArray();
 
+    
     //Despues comprobamos si tiene una asignacion para ese dia de ese tipo de puesto
     $asignados=DB::table('puestos_asignados')
         ->join('puestos','puestos.id_puesto','puestos_asignados.id_puesto')
@@ -1473,10 +1474,17 @@ function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fi
             });
             $q->orwhereraw("'".$fec_desde->format('Y-m-d')."' between fec_desde AND fec_hasta");
         })
+       ->where(function($q) use($user){
+            $q->wherenot('puestos_asignados.id_usuario',$user->id);
+            $q->where('puestos_asignados.id_perfil',null);
+       })
+       ->where(function($q) use($user){
+            $q->wherenot('puestos_asignados.id_perfil',$user->cod_nivel);
+            $q->where('puestos_asignados.id_usuario',null);
+        })
         ->where('puestos.id_cliente',$cliente)
         ->pluck('puestos.id_puesto')
-        ->toArray();
-        
+        ->toArray();    
     $no_disponibles=array_merge($reservas,$asignados);
     
     $puestos_disponibles=DB::table('puestos')

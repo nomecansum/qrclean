@@ -54,7 +54,7 @@
             @if(isset($puesto) && (session('logo_cliente')!=null))
             <img src="{{ Storage::disk(config('app.img_disk'))->url('img/clientes/images/'.session('logo_cliente')) }}" style="width: 13vw" alt="" onerror="this.src='{{ url('/img/logo.png') }}';">
             @else
-            <h2>{{ $puesto->nom_cliente }}</h2>
+            <h2>{{ $puesto->nom_cliente??'' }}</h2>
             @endif
         </div>
         <div class="col-md-4"></div>

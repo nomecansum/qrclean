@@ -353,6 +353,20 @@ class PlantasController extends Controller
         return view('plantas.zonas', compact('plantas','puestos','reservas'));
     }
 
+    public function zonas_detalle($id){
+        $puestos_zona=DB::table('puestos')
+            ->select('id_puesto','cod_puesto')
+            ->join('plantas_zonas','plantas_zonas.id_planta','puestos.id_planta')
+            ->join('plantas','plantas.id_planta','plantas_zonas.id_planta')
+            ->where('plantas_zonas.num_zona',$id)
+            ->where(function($q){  //Este rollo viene de que las posiciones de las zonas estan guardadas como valores absolutos sobre los pixeles reales de la imagen y las posiciones de los puestos estan guardadas como valores de porcentaje (offsettop y offsetleft) de las dimensiones de la imagen
+                $q->whereraw('puestos.offset_top between (100*plantas_zonas.val_y/plantas.`height`) AND ((100*plantas_zonas.val_y/plantas.`height`) + (100*plantas_zonas.val_alto/plantas.`height`))');
+                $q->whereraw('puestos.offset_left between (100*plantas_zonas.val_x/plantas.`width`) AND ((100*plantas_zonas.val_x/plantas.`width`) + (100*plantas_zonas.val_ancho/plantas.`width`))');
+            })
+            ->get();
+        return json_encode($puestos_zona);
+    }
+
     public function save_zonas(Request $r){
         validar_acceso_tabla($r->id_planta,'plantas');
         $planta = plantas::findOrFail($r->id_planta);

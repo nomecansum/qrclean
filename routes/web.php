@@ -307,8 +307,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/puestos','PlantasController@puestos_save')->name('plantas.puestos.save')->where('id', '[0-9]+');
         Route::post('/puestos/custom','PlantasController@puestos_custom')->name('plantas.puestos.custom')->where('id', '[0-9]+');
         Route::post('/puestos/custom_reset','PlantasController@borrar_custom')->name('plantas.puestos.custom_reset')->where('id', '[0-9]+');
+        Route::get('/zonas/detalle/{id}','PlantasController@zonas_detalle')->name('plantas.zonas.detalle');
         Route::get('/zonas/{id}','PlantasController@zonas')->name('plantas.zonas.index')->where('id', '[0-9]+');
         Route::post('/save_zonas','PlantasController@save_zonas')->name('plantas.puestos.save_zonas')->where('id', '[0-9]+');
+       
     });
 
     ////////////////////////////   DEPARTAMENTOS   ////////////////////////////////

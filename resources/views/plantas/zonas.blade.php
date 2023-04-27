@@ -261,10 +261,30 @@ try{
             id="zona"+zonas;
             n.text=$("#nombre").val();
             n.id="zona"+randomString(10);
-            n.content = "<i class='fa-solid fa-trash-can text-danger icono_borrar fa-2z' onClick='grid.removeWidget(this.parentNode.parentNode)'></i><div class='num_zona'>"+zonas+"</div><div class='nombre_zona'>"+n.text+"</div>";
+            n.content = "<i class='fa-duotone fa-circle-info text-primary icono_detalle fa-2x mr-3' onClick='detallenodo(this.parentNode.parentNode)'></i><i class='fa-solid fa-trash-can text-danger icono_borrar fa-2x' onClick='grid.removeWidget(this.parentNode.parentNode)'></i><div class='num_zona'>"+zonas+"</div><div class='nombre_zona'>"+n.text+"</div>";
             grid.addWidget(n);
             //item=grid.addWidget($('<div><div class="grid-stack-item-content"  onclick="seleccionada('+zonas+')" idzona='+zonas+' >'+$("#nombre").val()+'</div></div>'), 0, 0, Math.floor(1 + 3 * Math.random()), Math.floor(4 + 3 * Math.random()), true,null,null,null,null,id);
             
+        }
+
+        function detallenodo(item){
+           $.get("{{ url('/plantas/zonas/detalle') }}/"+$(item).attr('gs-id'), function(data, status){
+                data=JSON.parse(data);
+                cuenta=data.length;
+                texto="";
+                for (let i = 0; i < cuenta; i++) {
+                    texto=texto+data[i].cod_puesto+"<br>";
+                    $('#puesto'+data[i].id_puesto).css('background-color','#ff9f1a');
+                    $('#puesto'+data[i].id_puesto).css('opacity','1');
+                }
+                toast_info(cuenta+ ' puestos',texto);
+                setTimeout(function(){
+                    for (let i = 0; i < cuenta; i++) {
+                        $('#puesto'+data[i].id_puesto).css('background-color','#888');
+                        $('#puesto'+data[i].id_puesto).css('opacity','0.35');
+                    }
+                },5000);
+            });
         }
 
         $("#pre-add-widget").click(function() {
@@ -319,6 +339,11 @@ try{
 
         loadGrid = function() {
             grid.load(serializedData, true); // update things
+            $( ".grid-stack-item-content" ).each(function(item) {
+               if ($(this).find('.icono_detalle').length==0){
+                    $(this).prepend($('<i class="fa-duotone fa-circle-info text-primary icono_detalle fa-2x mr-3" onClick="detallenodo(this.parentNode.parentNode)"></i>'));
+                }
+            });
             
         }
 

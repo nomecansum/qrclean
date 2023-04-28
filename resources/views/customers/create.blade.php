@@ -136,6 +136,12 @@
 									<label class="form-check-label"  for="mca_salas">Gestion de salas</label>
 								</div>
 							</div>
+							<div class="col-md-3  mt-1">
+								<div class="form-check pt-2">
+									<input  name="mca_checkin"  id="mca_checkin" value="S" title="Habilita el uso de la funcion check-in/check-out al escanear los puestos" {{ isset($config->mca_checkin)&&$config->mca_checkin=='S'?'checked':'' }} class="form-check-input add-tooltip" type="checkbox">
+									<label class="form-check-label" for="mca_checkin">Funcion de check-in</label>
+								</div>
+							</div>
 							<div class="col-md-3 mt-1">
 								<div class="form-check pt-2">
 									<input  name="mca_permitir_anonimo"  id="mca_permitir_anonimo" title="Permite el checkin de los puestos marcados como anonimos a usuarios que no tengan cuenta en la herramienta" value="S" {{ isset($config->mca_permitir_anonimo)&&$config->mca_permitir_anonimo=='S'?'checked':'' }} class="form-check-input add-tooltip" type="checkbox">

@@ -36,6 +36,7 @@ class config_clientes extends Model
                   'max_dias_reserva',
                   'mca_restringir_usuarios_planta',
                   'mca_limpieza',
+                  'mca_checkin',
                   'mca_permitir_anonimo',
                   'theme_name',
                   'mca_reserva_horas',

@@ -48,7 +48,7 @@
             title: titulo,
             message: mensaje,
             status: TOAST_STATUS.SUCCESS,
-            timeout: 3000
+            timeout: 2000
         }
         Toast.setTheme(TOAST_THEME.LIGHT);
         Toast.setPlacement(TOAST_PLACEMENT.TOP_CENTER);
@@ -257,7 +257,7 @@
                 } else {
                     window.open(data.url,'_self');
                 }
-            },3000)
+            },1500)
         })
         .fail(function(err) {
             let error = JSON.parse(err.responseText);

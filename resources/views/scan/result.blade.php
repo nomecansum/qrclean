@@ -132,7 +132,7 @@
                 @endif
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        @if($respuesta['operativo']==1)
+                        @if($respuesta['operativo']==1 && $config_cliente->mca_checkin=="S")
                         
                             @switch($puesto->id_estado)
                                 @case(1)

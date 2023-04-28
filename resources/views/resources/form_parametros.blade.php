@@ -147,10 +147,10 @@
                 }
             @endphp
 
-            <div @if($p->multiple) class="col-md-{{ $p->width??12 }} {{ $p->margin??'' }}" @else class="col-md-{{ $p->width??4 }} {{ $p->margin??'' }}" @endif  {{ $margin }}>
+            <div @if($p->multiple) class="col-md-{{ $p->width??12 }} {{ $p->margin??'' }}" @else class="col-md-{{ $p->width??4 }} {{ $p->margin??'' }}"  @endif  {{ $margin }}>
                 <div class="form-group">
                     <label  for="{{ $p->name.$sufijo }}">{{ $p->label }}</label><br>
-                    <select @if($p->multiple) class="select2 mb-2 col-md-11 select2-multiple multi2{{ $sufijo }} form-control {{ $p->classname??'' }}" style="width: 100%" multiple="multiple" name="{{ $p->name.$sufijo }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2_bus':'' }} {{ $p->classname??'' }}"  name="{{ $p->name.$sufijo }}"  @endif id="list_db-{{ $p->name.$sufijo }}" {{ $p->required==true?'required':'' }}>
+                    <select @if($p->multiple) class="select2 mb-2 col-md-11 select2-multiple multi2{{ $sufijo }} form-control {{ $p->classname??'' }}" style="width: 100%" multiple="multiple" name="{{ $p->name.$sufijo }}[]"  @else class="form-control {{ isset($p->buscar)&&$p->buscar==true?'select2_bus':'' }} {{ $p->classname??'' }}"  name="{{ $p->name.$sufijo }}" style="height: 50px"  @endif id="list_db-{{ $p->name.$sufijo }}" {{ $p->required==true?'required':'' }}>
                         @foreach($qr as $item)
 
                             @if($p->multiple)

@@ -100,6 +100,7 @@ class CustomersController extends Controller
             $config->update($r->all());
             $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';
             $config->mca_limpieza=$r->mca_limpieza??'N';
+            $config->mca_checkin=$r->mca_checkin??'N';
             $config->mca_permitir_anonimo=$r->mca_permitir_anonimo??'N';
             $config->mca_mostrar_nombre_usando=$r->mca_mostrar_nombre_usando??'N';
             $config->mca_mostrar_puestos_reservas=$r->mca_mostrar_puestos_reservas??'D';
@@ -155,6 +156,7 @@ class CustomersController extends Controller
             $config->update($r->all());
             $config->mca_restringir_usuarios_planta=$r->mca_restringir_usuarios_planta??'N';
             $config->mca_limpieza=$r->mca_limpieza??'N';
+            $config->mca_checkin=$r->mca_checkin??'N';
             $config->mca_permitir_anonimo=$r->mca_permitir_anonimo??'N';
             $config->mca_reserva_horas=$r->mca_reserva_horas??'N';
             $config->mca_mostrar_nombre_usando=$r->mca_mostrar_nombre_usando??'N';

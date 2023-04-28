@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Route;
 
 class HomeController extends Controller
 {
@@ -745,6 +746,19 @@ class HomeController extends Controller
     }
 
     public function search(Request $r){
+
+        //Primero vamos a ver si existe una ruta con ese nombre
+        //solo el nombre
+        $routes = Route::getRoutes();
+        foreach ($routes as $route)
+        {
+           if($r->txt_buscar==$route->uri()){
+               return redirect($r->txt_buscar);
+           }
+        }
+
+        dd($slugs);
+
         $r->txt_buscar=strtoupper($r->txt_buscar);
         //BUSQUEDA POR PALABRA CLAVE: palabra clave+identificador => EJ usuario 47
         $palabras_clave=[

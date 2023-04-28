@@ -62,7 +62,7 @@
     @yield('styles2')
     @include('layouts.styles')
     {{-- Onesignal SDK --}}
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" defer></script>
     @laravelPWA
 </head>
 

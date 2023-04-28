@@ -757,8 +757,6 @@ class HomeController extends Controller
            }
         }
 
-        dd($slugs);
-
         $r->txt_buscar=strtoupper($r->txt_buscar);
         //BUSQUEDA POR PALABRA CLAVE: palabra clave+identificador => EJ usuario 47
         $palabras_clave=[

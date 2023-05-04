@@ -110,7 +110,9 @@
 					$zonas_preferidas=$preferidos->pluck('text')->toArray();
 				@endphp
 				@foreach($puestos_preferidos as $pp)
-					{{ $puestos->where('id_puesto',$pp)->first()->cod_puesto }}<br>
+					@if(isset($puestos->where('id_puesto',$pp)->first()))
+						{{ $puestos->where('id_puesto',$pp)->first()->cod_puesto }}<br>
+					@endif
 				@endforeach
 				{{-- {{ implode(", ",$puestos_preferidos) }} --}}
 				@if($zonas_preferidas)

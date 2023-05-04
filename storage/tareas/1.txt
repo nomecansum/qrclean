@@ -1,0 +1,20 @@
+Inicio de la tarea programada [1]App\Console\Commands\limpiar_bitacora
+Bitacora - Dias a borrar, más de: 60
+Borrando entradas de bitacora 
+0 filas borradas
+LOGS - Borrando entradas de LOG de cambio de estado 7 dias
+RESERVAS - Borrando entradas de RESERVAS120 dias
+0 filas borradas
+LOGS - Borrando entradas de LOG de tareas 7 dias
+0 filas borradas
+LOGS - Borrando entradas de LOG de eventos 7 dias
+0 filas borradas
+LOGS - Borrando entradas de eventos NOACTUAR 7 dias
+0 filas borradas
+LOGS - Borrando entradas de eventos EVOLUCION 7 dias
+0 filas borradas
+LOGS - Borrando entradas de notificaciones 60 dias
+0 filas borradas
+Fin de la tarea App\Console\Commands\limpiar_bitacora
+Fin de la tarea php [1] Borrado de bitacora
+Tarea [1] Borrado de bitacora se ha ejecutado correctamente. Resp: 

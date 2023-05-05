@@ -41,8 +41,23 @@
 					@include('resources.combo_fechas',['singleMode'=>true])
 				</div>
 
-				@include('resources.combos_opciones_informes',[$show=['output'=>1,'orientation'=>1]])
 				
+				<div class="col-12">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Mostrar</label>
+								<select name="mostrar" class="form-control">
+									<option value="T">Todo</option>
+									<option value="E">Solo errores</option>
+									<option value="C">Solo correctos</option>
+
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				@include('resources.combos_opciones_informes',[$show=['output'=>1,'orientation'=>1]])
 				<div class="row">
 					<div class="col-md-12 text-end">
 						<button id="btn_submit" class="btn btn-primary btn-lg mb-2 mr-2" style="margin-top:10px"><i class="fa-solid fa-file-lines"></i> Obtener informe</button>

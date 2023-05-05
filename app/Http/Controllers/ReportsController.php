@@ -1004,13 +1004,18 @@ class ReportsController extends Controller
                 $q->whereIn('users.id',$users_filtro);
             }
         })
-         ->where(function($q) use($r){
+        ->where(function($q) use($r){
             if ($r->planta) {
                 $users_filtro=DB::table('plantas_usuario')
                     ->select('id_usuario')
                     ->wherein('id_planta',$r->planta)
                     ->pluck('id_usuario');
                 $q->whereIn('users.id',$users_filtro);
+            }
+        })
+        ->where(function($q) use($r){
+            if ($r->user) {
+                $q->whereIn('users.id',$r->user);
             }
         })
         ->when($r->user_id_list, function($q) use($r){

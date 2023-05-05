@@ -287,12 +287,12 @@ class crear_reservas_turnos extends Command
                         ->join('turnos','turnos.id_turno','turnos_usuarios.id_turno')
                         ->where('id_usuario',$user->id)
                         ->where(function($q) use($fecha){
-                            $q->wheremonth('fec_inicio','<=',Carbon::now()->format('m'));
-                            $q->whereday('fec_inicio','<=',Carbon::now()->format('d'));
+                            $q->wheremonth('fec_inicio','<=',$fecha->format('m'));
+                            $q->whereday('fec_inicio','<=',$fecha->format('d'));
                         })
                         ->where(function($q) use($fecha){
-                            $q->wheremonth('fec_fin','>=',Carbon::now()->format('m'));
-                            $q->whereday('fec_fin','>=',Carbon::now()->format('d'));
+                            $q->wheremonth('fec_fin','>=',$fecha->format('m'));
+                            $q->whereday('fec_fin','>=',$fecha->format('d'));
                         })
                     ->get();
                     //ahora a ver si aplica el turno
@@ -301,7 +301,7 @@ class crear_reservas_turnos extends Command
                     foreach($turnos_usuario as $turno){
                         $dias=json_decode($turno->dias_semana);
                         foreach($dias->dia as $key=>$value){
-                            if($value==$fecha->dayOfWeekIso && (Carbon::now()->weekOfYear % 2==$dias->mod_semana[$key] || $dias->mod_semana[$key]==-1)){
+                            if($value==$fecha->dayOfWeekIso && ($fecha->weekOfYear % 2==$dias->mod_semana[$key] || $dias->mod_semana[$key]==-1)){
                                 $turno_aplica=$dias;
                                 $indice=$key;
                                 break;

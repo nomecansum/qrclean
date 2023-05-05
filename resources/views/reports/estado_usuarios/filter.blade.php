@@ -4,7 +4,6 @@
 	$clientes=$informe->pluck('id_cliente')->unique();
 	$usuarios=$informe->pluck('id')->unique();
 	$cnt_clientes=$informe->pluck('id_cliente')->unique()->count();
-	$filas=$informe->count();
 	$nombre_informe="Informe de estado de usuarios";
 @endphp
 @if($r->output=="pdf" || (isset($r->email_schedule)&&$r->email_schedule==1))
@@ -68,6 +67,7 @@
 			->where('turnos.id_cliente',$cliente)
 			->get();
 		$plantas_usuario=DB::Table('plantas_usuario')->get();
+		$filas=0;
 	@endphp
 	@if($informe->count()>0)
 		<tr>
@@ -93,40 +93,75 @@
 			$pl=$plantas->wherein('id_planta',$pu)->pluck('abreviatura')->toArray();
 			$tu=$turnos->where('id_usuario',$dato->id)->pluck('des_turno')->toArray();
 			$res=$reservas->where('id_usuario',$dato->id)->pluck('cod_puesto')->toArray();
+	
+			$data=json_decode($dato->list_puestos_preferidos);
+			$preferidos=Collect($data)->where('tipo','pu');
+			$puestos_preferidos=$preferidos->pluck('id')->toArray();
+			$preferidos=Collect($data)->where('tipo','zo');
+			$zonas_preferidas=$preferidos->pluck('text')->toArray();
+			$puesto_pref_usuario="";
+			foreach($puestos_preferidos as $pp){
+				if($puestos->where('id_puesto',$pp)->first()!=null){
+					$puesto_pref_usuario=$puestos->where('id_puesto',$pp)->first()->cod_puesto;
+				}
+			}
+			//Vamos a ver si se tiene que mostrar la linea en base al tipo de visualizacion
+			//E: Errores, C: Correctos, T: Todos
+			$mostrar=false;
+			switch ($r->mostrar) {
+				case 'T':
+					$mostrar=true;
+					break;
+				
+				case 'E':
+					if($res===null || $res==[]){
+						$mostrar=true;
+					} else {
+						if($puesto_pref_usuario!="" && $puesto_pref_usuario!=implode("",$res)){
+							$mostrar=true;
+						}
+					}
+					break;
+				case 'C':
+					if($res===null  || $res==[]){
+						$mostrar=false;
+					} else {
+						if($puesto_pref_usuario==implode("",$res) || ($puesto_pref_usuario=="" && $res!==null)){
+							$mostrar=true;
+						}
+
+					}
+					break;
+
+				default:
+					$mostrar=false;
+					break;
+			}		
 		@endphp
 
-			<tr>
-				{{-- <td>{{ $dato->email }}</td> --}}
-				<td>{{ $dato->name }}</td>
-				<td>
-					{{implode(", ",$pl)}}
-				</td>
-				<td>
-				@php
-					$data=json_decode($dato->list_puestos_preferidos);
-					$preferidos=Collect($data)->where('tipo','pu');
-					$puestos_preferidos=$preferidos->pluck('id')->toArray();
-					$preferidos=Collect($data)->where('tipo','zo');
-					$zonas_preferidas=$preferidos->pluck('text')->toArray();
-				@endphp
-				@foreach($puestos_preferidos as $pp)
-					@if($puestos->where('id_puesto',$pp)->first()!=null)
-						{{ $puestos->where('id_puesto',$pp)->first()->cod_puesto }}<br>
+			@if($mostrar)
+				<tr>
+					<td>{{ $dato->name }}</td>
+					<td>
+						{{implode(", ",$pl)}}
+					</td>
+					<td>
+						{{ $puesto_pref_usuario }}
+					@if($zonas_preferidas)
+						{!! implode("<br> ",$zonas_preferidas) !!}
 					@endif
-				@endforeach
-				{{-- {{ implode(", ",$puestos_preferidos) }} --}}
-				@if($zonas_preferidas)
-					{!! implode("<br> ",$zonas_preferidas) !!}
-				@endif
-				</td>
-				<td>
-					{!! implode("<br> ",$res) !!}
-				</td>
-				<td>
-					{!! implode("<li> ",$tu) !!}
-				</td>
-			</tr>
-
+					</td>
+					<td>
+						{!! implode("<br> ",$res) !!}
+					</td>
+					<td>
+						{!! implode("<li> ",$tu) !!}
+					</td>
+				</tr>
+				@php
+					$filas++;
+				@endphp
+			@endif
 	@endforeach
 	@if($r->output=="pdf" || $r->output=="excel")
 		</tbody>

@@ -1434,7 +1434,7 @@ function comprobar_reserva_usuario($id_user,$fecha,$tipo,$hora_inicio="00:00",$h
 }
 
 //Lista de puestos disponibles para reserva en un dia y un tipo
-function puestos_disponibles($cliente,$fecha,$tipo,$hora_inicio="00:00",$hora_fin="23:59",$user){
+function puestos_disponibles($cliente,$fecha,$tipo,$user,$hora_inicio="00:00",$hora_fin="23:59"){
     
     $fec_desde=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_inicio.':00');
     $fec_hasta=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$hora_fin.':00');

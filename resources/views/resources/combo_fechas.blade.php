@@ -1,7 +1,7 @@
 <div class="form-group">
     <label>Fechas</label>
     <div class="input-group">
-        <input type="text" class="form-control pull-left" id="fechas" name="fechas"  @if($singleMode) value="{{ Carbon\Carbon::now()->format('d/m/Y')}}" @else value="{{ (isset($f1)?$f1->format('d/m/Y'):Carbon\Carbon::now()->startofmonth()->format('d/m/Y')).' - '.(isset($f2)?$f2->format('d/m/Y'):Carbon\Carbon::now()->endofmonth()->format('d/m/Y')) }}"@endif>
+        <input type="text" class="form-control pull-left" id="fechas" name="fechas"  @if(isset($singleMode) && $singleMode==true) value="{{ Carbon\Carbon::now()->format('d/m/Y')}}" @else value="{{ (isset($f1)?$f1->format('d/m/Y'):Carbon\Carbon::now()->startofmonth()->format('d/m/Y')).' - '.(isset($f2)?$f2->format('d/m/Y'):Carbon\Carbon::now()->endofmonth()->format('d/m/Y')) }}"@endif>
         <span class="btn input-group-text btn-secondary btn_calendario"  style="height: 44px;"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
     </div>
 </div>

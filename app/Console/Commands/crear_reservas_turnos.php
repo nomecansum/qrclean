@@ -260,7 +260,7 @@ class crear_reservas_turnos extends Command
                 $q->join('colectivos_usuarios','colectivos_usuarios.id_usuario','users.id');
                 $q->WhereIn('colectivos_usuarios.cod_colectivo',$id_colectivo);
             })
-            ->orderby('users.list_puestos_preferidos')
+            ->orderby('users.list_puestos_preferidos','desc')
             ->distinct()
             ->get();
         

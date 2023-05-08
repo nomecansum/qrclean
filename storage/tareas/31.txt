@@ -2,22 +2,296 @@ Inicio de la tarea programada [31]App\Console\Commands\eventos
 Grupo *
 [52] -> Regla: Buscar en bitacora
 [52] -> Regla: Buscar en bitacora
-Dia: 4 Hora: 12
+Dia: 1 Hora: 19
 Iniciando proceso de la regla dentro del horario de programacion
 Comando :C:\WWW\qrclean\resources\views/events/comandos/buscar_en_bitacora.php
-Comando ejecutado, no hay ID para procesar
+Comando ejecutado, 69 ID a procesar: 284258,284259,284260,284261,284262,284263,284264,284265,284266,284267,284268,284269,284270,284271,284272,284273,284274,284275,284276,284277,284278,284279,284280,284281,284282,284283,284284,284285,284286,284287,284288,284289,284290,284291,284292,284293,284294,284295,284296,284298,284299,284300,284301,284302,284303,284304,284305,284306,284307,284308,284309,284310,284311,284312,284313,284314,284315,284316,284317,284318,284319,284320,284321,284322,284323,284324,284325,284326,284327
 Resultado del comando: ok
 Iteraciones maximas de la regla: 1
 Iteracion: 1 -> acciones: 2
-Descontados: 6245 en estado no molestar, quedan 0 id para procesar
-No hay ID para la accion 1 de la iteracion 1
-No hay ID para la accion 2 de la iteracion 1
+Descontados: 7756 en estado no molestar, quedan 69 id para procesar
+ID: 284258 | Iteracion: 1 | Accion[1]: log.php
+ID: 284259 | Iteracion: 1 | Accion[1]: log.php
+ID: 284260 | Iteracion: 1 | Accion[1]: log.php
+ID: 284261 | Iteracion: 1 | Accion[1]: log.php
+ID: 284262 | Iteracion: 1 | Accion[1]: log.php
+ID: 284263 | Iteracion: 1 | Accion[1]: log.php
+ID: 284264 | Iteracion: 1 | Accion[1]: log.php
+ID: 284265 | Iteracion: 1 | Accion[1]: log.php
+ID: 284266 | Iteracion: 1 | Accion[1]: log.php
+ID: 284267 | Iteracion: 1 | Accion[1]: log.php
+ID: 284268 | Iteracion: 1 | Accion[1]: log.php
+ID: 284269 | Iteracion: 1 | Accion[1]: log.php
+ID: 284270 | Iteracion: 1 | Accion[1]: log.php
+ID: 284271 | Iteracion: 1 | Accion[1]: log.php
+ID: 284272 | Iteracion: 1 | Accion[1]: log.php
+ID: 284273 | Iteracion: 1 | Accion[1]: log.php
+ID: 284274 | Iteracion: 1 | Accion[1]: log.php
+ID: 284275 | Iteracion: 1 | Accion[1]: log.php
+ID: 284276 | Iteracion: 1 | Accion[1]: log.php
+ID: 284277 | Iteracion: 1 | Accion[1]: log.php
+ID: 284278 | Iteracion: 1 | Accion[1]: log.php
+ID: 284279 | Iteracion: 1 | Accion[1]: log.php
+ID: 284280 | Iteracion: 1 | Accion[1]: log.php
+ID: 284281 | Iteracion: 1 | Accion[1]: log.php
+ID: 284282 | Iteracion: 1 | Accion[1]: log.php
+ID: 284283 | Iteracion: 1 | Accion[1]: log.php
+ID: 284284 | Iteracion: 1 | Accion[1]: log.php
+ID: 284285 | Iteracion: 1 | Accion[1]: log.php
+ID: 284286 | Iteracion: 1 | Accion[1]: log.php
+ID: 284287 | Iteracion: 1 | Accion[1]: log.php
+ID: 284288 | Iteracion: 1 | Accion[1]: log.php
+ID: 284289 | Iteracion: 1 | Accion[1]: log.php
+ID: 284290 | Iteracion: 1 | Accion[1]: log.php
+ID: 284291 | Iteracion: 1 | Accion[1]: log.php
+ID: 284292 | Iteracion: 1 | Accion[1]: log.php
+ID: 284293 | Iteracion: 1 | Accion[1]: log.php
+ID: 284294 | Iteracion: 1 | Accion[1]: log.php
+ID: 284295 | Iteracion: 1 | Accion[1]: log.php
+ID: 284296 | Iteracion: 1 | Accion[1]: log.php
+ID: 284298 | Iteracion: 1 | Accion[1]: log.php
+ID: 284299 | Iteracion: 1 | Accion[1]: log.php
+ID: 284300 | Iteracion: 1 | Accion[1]: log.php
+ID: 284301 | Iteracion: 1 | Accion[1]: log.php
+ID: 284302 | Iteracion: 1 | Accion[1]: log.php
+ID: 284303 | Iteracion: 1 | Accion[1]: log.php
+ID: 284304 | Iteracion: 1 | Accion[1]: log.php
+ID: 284305 | Iteracion: 1 | Accion[1]: log.php
+ID: 284306 | Iteracion: 1 | Accion[1]: log.php
+ID: 284307 | Iteracion: 1 | Accion[1]: log.php
+ID: 284308 | Iteracion: 1 | Accion[1]: log.php
+ID: 284309 | Iteracion: 1 | Accion[1]: log.php
+ID: 284310 | Iteracion: 1 | Accion[1]: log.php
+ID: 284311 | Iteracion: 1 | Accion[1]: log.php
+ID: 284312 | Iteracion: 1 | Accion[1]: log.php
+ID: 284313 | Iteracion: 1 | Accion[1]: log.php
+ID: 284314 | Iteracion: 1 | Accion[1]: log.php
+ID: 284315 | Iteracion: 1 | Accion[1]: log.php
+ID: 284316 | Iteracion: 1 | Accion[1]: log.php
+ID: 284317 | Iteracion: 1 | Accion[1]: log.php
+ID: 284318 | Iteracion: 1 | Accion[1]: log.php
+ID: 284319 | Iteracion: 1 | Accion[1]: log.php
+ID: 284320 | Iteracion: 1 | Accion[1]: log.php
+ID: 284321 | Iteracion: 1 | Accion[1]: log.php
+ID: 284322 | Iteracion: 1 | Accion[1]: log.php
+ID: 284323 | Iteracion: 1 | Accion[1]: log.php
+ID: 284324 | Iteracion: 1 | Accion[1]: log.php
+ID: 284325 | Iteracion: 1 | Accion[1]: log.php
+ID: 284326 | Iteracion: 1 | Accion[1]: log.php
+ID: 284327 | Iteracion: 1 | Accion[1]: log.php
+ID: 284258 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284259 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284260 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284261 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284262 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284263 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284264 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284265 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284266 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284267 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284268 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284269 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284270 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284271 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284272 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284273 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284274 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284275 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284276 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284277 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284278 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284279 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284280 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284281 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284282 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284283 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284284 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284285 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284286 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284287 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284288 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284289 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284290 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284291 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284292 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284293 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284294 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284295 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284296 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284298 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284299 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284300 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284301 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284302 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284303 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284304 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284305 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284306 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284307 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284308 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284309 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284310 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284311 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284312 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284313 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284314 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284315 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284316 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284317 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284318 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284319 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284320 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284321 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284322 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284323 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284324 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284325 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284326 | Iteracion: 1 | Accion[2]: notificacion_web.php
+ID: 284327 | Iteracion: 1 | Accion[2]: notificacion_web.php
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284258 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284259 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284260 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284261 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284262 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284263 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284264 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284265 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284266 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284267 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284268 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284269 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284270 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284271 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284272 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284273 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284274 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284275 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284276 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284277 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284278 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284279 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284280 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284281 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284282 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284283 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284284 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284285 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284286 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284287 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284288 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284289 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284290 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284291 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284292 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284293 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284294 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284295 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284296 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284298 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284299 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284300 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284301 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284302 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284303 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284304 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284305 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284306 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284307 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284308 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284309 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284310 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284311 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284312 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284313 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284314 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284315 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284316 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284317 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284318 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284319 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284320 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284321 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284322 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284323 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284324 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284325 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284326 hasta dentro de 1 M
+Superado el maximo de iteraciones, borrando evolucion
+Añadido no molestar para 284327 hasta dentro de 1 M
 Finalizado el procesado de la regla Buscar en bitacora
 Finalizado el procesado de la regla Buscar en bitacora
-Proxima ejecucion establecida para  Thu May 04 2023 12:15:19 GMT+0200
+Proxima ejecucion establecida para  Mon May 08 2023 19:55:21 GMT+0200
 [53] -> Regla: Notificacion de incidencias
 [53] -> Regla: Notificacion de incidencias
-Dia: 4 Hora: 12
+Dia: 1 Hora: 19
 Iniciando proceso de la regla dentro del horario de programacion
 Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
 Comando ejecutado, no hay ID para procesar
@@ -28,10 +302,10 @@ Descontados: 3 en estado no molestar, quedan 0 id para procesar
 No hay ID para la accion 1 de la iteracion 1
 Finalizado el procesado de la regla Notificacion de incidencias
 Finalizado el procesado de la regla Notificacion de incidencias
-Proxima ejecucion establecida para  Thu May 04 2023 12:05:19 GMT+0200
+Proxima ejecucion establecida para  Mon May 08 2023 19:45:21 GMT+0200
 [55] -> Regla: Manuel Ferrero Leonardo
 [55] -> Regla: Manuel Ferrero Leonardo
-Dia: 4 Hora: 12
+Dia: 1 Hora: 19
 Iniciando proceso de la regla dentro del horario de programacion
 Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
 Comando ejecutado, no hay ID para procesar
@@ -42,7 +316,7 @@ Descontados: 0 en estado no molestar, quedan 0 id para procesar
 No hay ID para la accion 1 de la iteracion 1
 Finalizado el procesado de la regla Manuel Ferrero Leonardo
 Finalizado el procesado de la regla Manuel Ferrero Leonardo
-Proxima ejecucion establecida para  Thu May 04 2023 12:05:19 GMT+0200
+Proxima ejecucion establecida para  Mon May 08 2023 19:45:21 GMT+0200
 Fin de la tarea App\Console\Commands\eventos
 Fin de la tarea php [31] Eventos
 Tarea [31] Eventos se ha ejecutado correctamente. Resp: 

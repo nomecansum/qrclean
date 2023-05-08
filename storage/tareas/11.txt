@@ -1,5 +1,25 @@
 Inicio de la tarea programada [11]App\Console\Commands\taskejemplo
 YO estuve aqui
 Fin de la tarea App\Console\Commands\taskejemplo
-Fin de la tarea php [11] Tarea de control del proceso del scheduler
-Tarea [11] Tarea de control del proceso del scheduler se ha ejecutado correctamente. Resp: 
+syntax error, unexpected token "}"
+
+   ParseError 
+
+  syntax error, unexpected token "}"
+
+  at C:\WWW\qrclean\app\Console\Commands\crear_reservas_turnos.php:303
+    299▕         //Ahora lo que vamos a hacer es iterar con los usuarios en funcion de las cosas que tengan en priridad
+    300▕         $iteraciones=[];
+    301▕         if($mca_orden_estricto===true){
+    302▕             $usuarios
+  ➜ 303▕         }
+    304▕         
+    305▕         $this->escribelog_comando('info','Encontrados '.count($usuarios).' usuarios para procesar');
+    306▕         $periodo=CarbonPeriod::create(Carbon::now(),Carbon::now()->addDays($dias_reservas));
+    307▕         foreach($usuarios as $user){
+
+  1   C:\WWW\qrclean\vendor\composer\ClassLoader.php:432
+      Composer\Autoload\ClassLoader::Composer\Autoload\{closure}()
+
+  2   [internal]:0
+      Composer\Autoload\ClassLoader::loadClass()

@@ -87,9 +87,9 @@
         </div>
     @endif
 
-    @if($respuesta['encuesta']!=0 && (!isset($cookie) || (isset($cookie) && $cookie!=$respuesta['encuesta'])))
+    @if(isset($respuesta['encuesta']) && $respuesta['encuesta']!=0 && (!isset($cookie) || (isset($cookie) && $cookie!=$respuesta['encuesta'])))
         @php
-            $encuesta=DB::table('encuestas')->where('id_encuesta',$respuesta['encuesta'])->first();  
+            $encuesta=DB::table('encuestas')->where('id_encuesta',$respuesta['encuesta'])->first();
         @endphp
         <div class="row" id="div_encuesta"  @if($encuesta->val_momento=='D') style="display: none" @endif>
             <div class="col-md-12 text-center" id="pregunta">

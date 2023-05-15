@@ -87,7 +87,7 @@
         </div>
     @endif
 
-    @if(isset($respuesta['encuesta']) && $respuesta['encuesta']!=0 && (!isset($cookie) || (isset($cookie) && $cookie!=$respuesta['encuesta'])))
+    @if(isset($respuesta) && $respuesta['encuesta']!=0 && (!isset($cookie) || (isset($cookie) && $cookie!=$respuesta['encuesta'])))
         @php
             $encuesta=DB::table('encuestas')->where('id_encuesta',$respuesta['encuesta'])->first();
         @endphp

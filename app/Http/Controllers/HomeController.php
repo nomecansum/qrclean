@@ -59,7 +59,9 @@ class HomeController extends Controller
 
     public function getpuesto($puesto){ 
         $p=DB::table('puestos')
+            ->select('puestos.*','clientes.nom_cliente','clientes.img_logo','estados_puestos.*','puestos_tipos.*')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where('token',$puesto)
             ->first();
@@ -85,7 +87,8 @@ class HomeController extends Controller
                 'mensaje'=>"Error, puesto no encontrado",
                 'icono' => '<i class="fad fa-exclamation-triangle"></i>',
                 'color'=>'danger',
-                'operativo' => 0
+                'operativo' => 0,
+                'encuesta' => 0
             ];
             $reserva=null;
         } else {

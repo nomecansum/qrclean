@@ -121,6 +121,7 @@
     </div>
     @endif
     @if(isset($puesto))
+        
         <div id="div_botones">
             @if(!$reserva || isset($mireserva))
                 @if($puesto->id_estado<3)
@@ -132,7 +133,7 @@
                 @endif
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        @if($respuesta['operativo']==1 && $config_cliente->mca_checkin=="S")
+                        @if($respuesta['operativo']==1 && $config_cliente->mca_checkin=="S" && $puesto->mca_checkin=="S")
                         
                             @switch($puesto->id_estado)
                                 @case(1)

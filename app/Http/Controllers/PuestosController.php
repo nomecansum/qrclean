@@ -605,6 +605,7 @@ class PuestosController extends Controller
                 $tipo->mca_liberar_auto=$r->mca_liberar_auto??'N';
                 $tipo->mca_reserva_masiva=$r->mca_reserva_masiva??'N';
                 $tipo->mca_reserva_multiple=$r->mca_reserva_multiple??'N';
+                $tipo->mca_checkin=$r->mca_checkin??'N';
                 $tipo->mca_fijo=$r->mca_fijo??'N';
                 $tipo->save();
             }

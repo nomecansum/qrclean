@@ -47,6 +47,7 @@ class puestos_tipos extends Model
                   'val_dias_antelacion',
                   'mca_reserva_masiva',
                   'mca_reserva_multiple',
+                  'mca_checkin'
               ];
 
     /**

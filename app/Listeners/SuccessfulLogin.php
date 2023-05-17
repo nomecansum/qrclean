@@ -35,9 +35,9 @@ class SuccessfulLogin
         //dd($user);
 
         //dump("aqui en el listener");
-        $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();  
+        $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();
 
-        $cliente=DB::table('clientes')->where('id_cliente',$user->id_cliente)->first();  
+        $cliente=DB::table('clientes')->where('id_cliente',$user->id_cliente)->first();
         $nivel=DB::table('niveles_acceso')->where('cod_nivel',$user->cod_nivel)->first();
         session(['NIV'=>(array)$nivel]);
         if(isset($cliente->id_distribuidor)){

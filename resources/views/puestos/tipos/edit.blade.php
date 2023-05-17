@@ -119,6 +119,12 @@
                             <label for="mca_reserva_multiple" class="form-check-label">Reserva multiple</label>
                         </div>
                     </div>
+                    <div class="col-md-3 p-t-20 mt-2">
+                        <div class="form-check pt-1">
+                            <input name="mca_checkin"  id="mca_checkin" value="S" {{ $tipo->mca_checkin=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
+                            <label for="mca_checkin" class="form-check-label">Funcion de check-in</label>
+                        </div>
+                    </div>
                 </div>
                 
                 

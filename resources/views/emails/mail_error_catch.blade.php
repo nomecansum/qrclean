@@ -23,7 +23,11 @@
    
     <h2>Datos del error</h2>
     @php
-        dump($exception);
+        dump('['.$exception->getCode().'] "'.$exception->getMessage().'" on line '.$exception->getTrace()[0]['line'].' of file '.$exception->getTrace()[0]['file']);
+    @endphp
+    <h2>URL</h2>
+    @php
+        dump(url()->current());
     @endphp
     <h2>Datos del request</h2>
     @php

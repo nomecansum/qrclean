@@ -18,7 +18,7 @@
 @endsection
 
 @section('cuerpo')
-<p style="font-size: 14px; line-height: 160%;"> </p>
+<p style="font-size: 14px; line-height: 160%;"> </p
 <p style="font-size: 14px; line-height: 160%;">
    
     <h2>Datos del error</h2>

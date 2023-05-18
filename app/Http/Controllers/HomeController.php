@@ -647,7 +647,7 @@ class HomeController extends Controller
                     # code...
                     break;
             }
-            savebitacora('Cambio de puesto '.$p->id_puesto. ' a estado '.$estado,"Home","getpuesto","OK");
+            savebitacora('Cambio de puesto '.$p->cod_puesto. ' a estado '.$e->des_estado,"Home","getpuesto","OK");
         }
         
         return $respuesta;

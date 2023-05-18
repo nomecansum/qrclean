@@ -180,7 +180,7 @@ if (isset($r->fechas)){
                                 @admin @desktop<td>{{ $bitacora->nom_cliente }}</td>@enddesktop @endadmin
                                 <td>{{ $bitacora->id_modulo }}</td>
                                 <td>{{ $bitacora->id_seccion }}</td>
-                                <td style="word-break: break-all;">{{ $bitacora->accion }}</td>
+                                <td style="word-break: break-all;">{!! $bitacora->accion !!}</td>
                                 <td class="text-center" ><a href="#"  onclick="ver({{ $bitacora->id_bitacora }},'{!! beauty_fecha($bitacora->fecha) !!}')"><span @if(strtoupper($bitacora->status)=="OK") class="badge p-2 bg-success" @else class="badge p-2 bg-danger" @endif style="padding: 0 5px 0 5px">{{ $bitacora->status }}</span></a></td>
                                 <td>{!! beauty_fecha($bitacora->fecha) !!}</td>
                             </tr>

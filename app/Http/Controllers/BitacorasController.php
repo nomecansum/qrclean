@@ -20,7 +20,7 @@ class BitacorasController extends Controller
     public function index()
     {
         $bitacoras = DB::table('bitacora')
-            ->join('users','bitacora.id_usuario','users.id')
+            ->join('users','bitacora.id_usuario','users.name')
             ->join('clientes','clientes.id_cliente','users.id_cliente')
             ->where(function($q){
                 if (!isAdmin()) {
@@ -56,7 +56,7 @@ class BitacorasController extends Controller
     {
         try {      //dd($r->all());
             $usuarios= DB::table('bitacora')
-                ->join('users','bitacora.id_usuario','users.id')
+                ->join('users','bitacora.id_usuario','users.name')
                 ->join('clientes','clientes.id_cliente','users.id_cliente')
                 ->orderby('name')
                 ->pluck('name','id_usuario')
@@ -78,7 +78,7 @@ class BitacorasController extends Controller
             }
 
             $bitacoras=DB::table('bitacora')
-                ->join('users','bitacora.id_usuario','users.id')
+                ->join('users','bitacora.id_usuario','users.name')
                 ->join('clientes','clientes.id_cliente','users.id_cliente')
                 ->when($r->tipo_log, function($query) use ($r) {
                 return  $query->where('status', $r->tipo_log);
@@ -87,7 +87,8 @@ class BitacorasController extends Controller
                     return  $query->where('id_usuario', $r->usuario);
                 })
                 ->when($r->fechas, function($query) use ($f1,$f2) {
-                    return  $query->whereBetween('fecha', [$f1,$f2]);
+                    $query->where('fecha','>=',$f1);
+                    $query->where('fecha','<=',Carbon::parse($f2)->endofDay());
                 })
                 ->when($r->modulos, function($query) use ($r) {
                     return  $query->whereIn('id_modulo', $r->modulos);

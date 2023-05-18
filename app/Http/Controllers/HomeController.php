@@ -91,6 +91,7 @@ class HomeController extends Controller
                 'encuesta' => 0
             ];
             $reserva=null;
+            savebitacora('Puesto ['.$puesto.'] no encontrado en scan. '.url()->full(),"Scan","getpuesto","ERROR");
         } else {
             $tags=DB::table('tags_puestos')->where('id_puesto',$p->id_puesto)->get();
             $config_cliente=DB::table('config_clientes')->where('id_cliente',$p->id_cliente)->first();

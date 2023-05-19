@@ -31,7 +31,7 @@
                 }
                 $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();
                 $asignado_usuario->name=auth()->user()->name;
-                $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
+                $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"home",Carbon\Carbon::now()->format('d/m/Y'));
                 if($asignado_usuario->where('id_puesto',$puesto->id_puesto)->count()>0){
                     $es_asignado=true;
                 } else {

@@ -20,7 +20,7 @@ $agent = new \Jenssegers\Agent\Agent;
         $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();  
         $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();  
         $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();  
-        $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
+        $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"Refresh",Carbon\Carbon::now()->format('d/m/Y'));
         foreach($posiciones as $pos){
             if($pos->id==$puesto->id_puesto){
                 $left=$pos->offsetleft;

@@ -80,6 +80,7 @@
     $edificio_ahora=0;
     $planta_ahora=0;
     use App\Models\plantas;
+
 @endphp
 
 @section('content')

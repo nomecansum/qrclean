@@ -32,6 +32,14 @@
 	table td {
 		word-break: break-all;
 	}
+
+	.card_plano{
+        --bs-gutter-x: 0;
+        --bs-gutter-y: 0;
+        padding: 0px 0px 0px 0px;
+        margin: 0px 0px 0px 0px;
+        overflow: auto !important;
+    }
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <link href="{{ url('/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -135,7 +143,7 @@
 						<div class="card-header bg-gray">
 							<h3 >{{ $datos_planta->des_planta }}</h3>
 						</div>
-						<div class="card-body">
+						<div class="card_plano">
 							<style>
 								<style type="text/css">
 								.mapa{{ $planta }} {
@@ -151,7 +159,7 @@
 							<script>
 								var config = {
 									container: document.querySelector('#mapa{{ $planta }}'),
-									radius: 10,
+									radius: 15,
 									maxOpacity: 1,
 									minOpacity: 0,
 									blur: .75

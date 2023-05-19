@@ -45,7 +45,7 @@
 @php
     $puesto=$respuesta['puesto']??null;
     $cookie=Cookie::get('encuesta');
-    //dd($respuesta);
+    //dump($respuesta);
 @endphp
     
     <div class="row">
@@ -70,7 +70,7 @@
     </div>
     <div class="row" id="div_respuesta">
         <div class="col-md-3"></div>
-        <div class="col-md-6 fs-{{ round(strlen($respuesta['mensaje'])/20) }} text-center bg-{{$respuesta['color']}} badge">
+        <div class="col-md-6 fs-{{ round(strlen($respuesta['mensaje'])/30) }} text-center bg-{{$respuesta['color']}} badge">
             {!!$respuesta['icono']!!} {!!$respuesta['mensaje']!!}
         </div>
         <div class="col-md-3"></div>
@@ -173,6 +173,9 @@
                             @break
                             @default
                         @endswitch
+                        @if(isset($respuesta['puesto_liberar']))
+                                <button class="btn btn-lg btn-pink text-bold btn_estado" data-estado="1" data-id="{{$respuesta['puesto_liberar']}}"><i class="fa-regular fa-square"></i> Liberar puesto {{ $respuesta['puesto_liberar_lbl'] }}</button>
+                        @endif     
                         @if(isset($respuesta['hacer_login']) && $puesto->mca_acceso_anonimo=='N')
                             <button class="btn btn-lg btn-primary text-bold btn_login" data-id="{{$puesto->token}}"><i class="fad fa-user"></i> Iniciar sesion</button>
                             @php
@@ -280,6 +283,8 @@
                 animateCSS('#div_mensaje_fin','bounceInright');
                 if(data.tipo=='OK'){
                     $('#div_txt_mensaje').addClass('bg-info');
+                    $('#div_txt_mensaje').addClass('text-white');
+                    $('#div_txt_mensaje').addClass('fs-2');
                     $('#div_txt_mensaje').removeClass('bg-danger');
                     $('#div_txt_mensaje').html('<i class="fad fa-check-circle"></i> '+data.mensaje);
                     @if(isset($encuesta->val_momento) && $encuesta->val_momento=='D')

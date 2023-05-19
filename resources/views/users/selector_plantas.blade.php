@@ -47,8 +47,8 @@
                             
                         @endphp
                             <div class="form-check pt-2 ml-5 mt-1">
-                                <input   name="lista_zonas[]" data-id="{{ $z->num_zona }}" data-edificio="{{ $e->id_edificio }}" data-planta="{{ $key }}" id="chkzo{{ $z->key_id }}" value="{{ $z->num_zona }}" {{ $check&&in_array($z->num_zona,$zonas_usuario)?' checked ': '' }} class="form-check-input chkzona" type="checkbox">
-                                <label class="form-check-label" style="font-weight: normal" for="chkpl{{ $z->num_zona }}">{{ substr($z->num_zona,0,21) }} {{ strlen($z->des_zona)>19?'...':'' }}</label>
+                                <input   name="lista_zonas[]" data-id="{{ $z->num_zona }}"  data-planta="{{ $key }}" id="chkzo{{ $z->key_id }}" value="{{ $z->num_zona }}" {{ $check&&in_array($z->num_zona,$zonas_usuario)?' checked ': '' }} class="form-check-input chkzona" type="checkbox">
+                                <label class="form-check-label" style="font-weight: normal" for="chkpl{{ $z->num_zona }}">{{ substr($z->des_zona,0,21) }} {{ strlen($z->des_zona)>19?'...':'' }}</label>
                             </div>
                         @endforeach
                         

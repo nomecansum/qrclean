@@ -58,6 +58,7 @@ return [
     'seleccione_un_comando' => 'Select command',
     'desea_eliminar_tarea' => 'Delete task ',
     'la_tarea_no_existe' => 'Task not found ',
+    'last_day_of_month' => 'Last day of month',
     '0' => '0',
     '0' => '0',
     '0' => '0',

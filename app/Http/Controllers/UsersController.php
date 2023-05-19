@@ -394,6 +394,8 @@ class UsersController extends Controller
             }
             if(isset($data['lista_zonas']) && is_array($data['lista_zonas'])){
                 $data['list_zonas_admitidas']=implode(",",$data['lista_zonas']);
+            } else {
+                $data['list_zonas_admitidas']=null;
             }
 
             $users->update($data);

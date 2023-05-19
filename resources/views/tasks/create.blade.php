@@ -102,7 +102,7 @@
 								<option value="{{ $n }}"  {{isset($t)&&$t->det_diames==$n ? 'selected' : ''}}>{{ $n }}</option>
 							@endfor
 						</select>
-						<input type="time" placeholder="HH:mm" id="det_horaminuto" name="det_horaminuto" class="form-control hourMask col-sm-4" style="display:none" {{isset($t) ? $t->det_horaminuto : '00:00'}}>
+						<input type="time" placeholder="HH:mm" id="det_horaminuto" name="det_horaminuto" class="form-control hourMask col-sm-4" style="display:none" value="{{isset($t) ? $t->det_horaminuto : '00:00'}}">
 					</div>
 				</div>
 				<div class="col-sm-6">
@@ -221,6 +221,7 @@
 			$('.iconpicker').iconpicker({
 				icon:'{{isset($t) ? ($t->val_icono) : ''}}'
 			});
+			$('#val_intervalo').change();
 		})
 		
 	

@@ -321,7 +321,7 @@
         format: 'DD/MM/YYYY',
         lang: "es-ES",
         firstDay: 1,
-        lockDays: [{!! $festivos_usuario !!}],
+        lockDays: {!! $festivos_usuario !!},
         maxDays: {{ config_cliente('max_dias_reserva',Auth::user()->id_cliente) }},
         tooltipText: {
             one: "day",

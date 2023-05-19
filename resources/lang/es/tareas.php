@@ -80,6 +80,7 @@ return [
     'fines_de_semana' => 'Fines de semana',
     'tipo_contenido' => 'Tipo de contenido',
     'borrar_ficheros' => 'Borrar ficheros',
+    'last_day_of_month' => 'Último día del mes',
     '0' => '0',
     '0' => '0',
     '0' => '0',

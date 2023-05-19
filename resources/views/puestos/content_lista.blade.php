@@ -146,7 +146,7 @@ if(!isset($id_check))
                                     $puesto->factor_puestoh=3.7;
                                     $puesto->factor_letra=0.8;
                                 }
-                                $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
+                                $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"Mioficina");
                             @endphp
                             <tr  id="puesto{{ $puesto->id_puesto }}" title="{!!  nombrepuesto($puesto)." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}"  data-planta="{{ $value }}" data-fila="{{ $cuenta_fila }}">
 

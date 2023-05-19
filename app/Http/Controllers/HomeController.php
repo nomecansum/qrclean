@@ -183,6 +183,33 @@ class HomeController extends Controller
                 ->where('id_usuario',$id_usuario)
                 ->where('mca_anulada','N')
                 ->first();
+
+                $otra_reserva=DB::table('reservas')
+                ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+                ->where('reservas.id_usuario',Auth::user()->id)
+                ->wherenot('reservas.id_puesto',$p->id_puesto)
+                ->where('puestos.id_tipo_puesto',$p->id_tipo_puesto)
+                ->where(function($q){
+                    $q->where(function($q){
+                        $q->wherenull('fec_fin_reserva');
+                        $q->where('fec_reserva',Carbon::now()->format('Y-m-d'));
+                    });
+                    $q->orwhereraw("'".Carbon::now()."' between DATE_SUB(fec_reserva,interval 15 MINUTE) AND DATE_ADD(fec_fin_reserva,interval 15 MINUTE)");
+                })
+                ->where('mca_anulada','N')
+                ->first();
+                if(isset($otra_reserva)){
+                    $respuesta=[
+                        'mensaje'=>"Usted tiene reservado el puesto <br>".$otra_reserva->cod_puesto ." para hoy. <br><br> Anule esa reserva para poder usar este puesto",
+                        'icono' => '<i class="fad fa-bring-forward"></i>',
+                        'color'=>'danger',
+                        'puesto'=>$p,
+                        'disponibles'=>null,
+                        'operativo' => 0,
+                        'encuesta'=>0
+                    ];
+                    return view('scan.result',compact('respuesta','reserva','config_cliente'));
+                }
             }
 
 
@@ -209,7 +236,7 @@ class HomeController extends Controller
                     $usuario_usando="";
                 }
                 $respuesta=[
-                    'mensaje'=>"PUESTO ASIGNADO PERMANENTEMENTE ".$usuario_usando,
+                    'mensaje'=>"PUESTO ASIGNADO PERMANENTEMENTE <br>".$usuario_usando,
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
@@ -267,7 +294,7 @@ class HomeController extends Controller
 
             if(!$puesto_mio_es_otro->isEmpty()){
                 $respuesta=[
-                    'mensaje'=>"Hola ".Auth::user()->name.', para hoy usted tiene asignado el puesto '.$puesto_mio_es_otro->first()->cod_puesto.'.<br> <b>Debe utilizar ese puesto</b>',
+                    'mensaje'=>"Hola ".Auth::user()->name.', <br> para hoy usted tiene asignado el puesto '.$puesto_mio_es_otro->first()->cod_puesto.'.<br> <b>Debe utilizar ese puesto</b>',
                     'icono' => '<i class="fad fa-bring-forward"></i>',
                     'color'=>'danger',
                     'puesto'=>$p,
@@ -381,6 +408,28 @@ class HomeController extends Controller
                         'tiene_reserva'=>$horarios_reserva,
                         'encuesta'=>(isset($encuesta->val_momento) && ($encuesta->val_momento=="A" || $encuesta->val_momento=="0"))?$encuesta->id_encuesta:0,
                     ];
+
+                    //Caso, el usuario ya tiene un puesto en uso y esta intentando coger otro del mismo tipo
+                    $puesto_en_uso=DB::table('puestos')
+                        ->where('puestos.id_usuario_usando',$id_usuario)
+                        ->where('puestos.id_tipo_puesto',$p->id_tipo_puesto)
+                        ->where('puestos.id_puesto','<>',$p->id_puesto)
+                        ->where('puestos.mca_incidencia','N')
+                        ->where('puestos.id_estado',2)
+                        ->first();
+                    if($puesto_en_uso){
+                        $respuesta=[
+                            'mensaje'=>"En el sistema consta que usted tiene el puesto <br>".$puesto_en_uso->cod_puesto."  (".$p->des_tipo_puesto.") en uso. <br><br><br>Libere ese puesto para poder utilizar este",
+                            'icono' => '<i class="fa-solid fa-square-xmark"></i>',
+                            'color'=>'danger',
+                            'puesto'=>$p,
+                            'operativo' => 0,
+                            'tiene_reserva'=>0,
+                            'puesto_liberar_lbl'=>$puesto_en_uso->cod_puesto,
+                            'puesto_liberar'=>$puesto_en_uso->token,
+                            'encuesta'=>(isset($encuesta->val_momento) && ($encuesta->val_momento=="A" || $encuesta->val_momento=="0"))?$encuesta->id_encuesta:0,
+                        ];
+                    }
                     break;
                 case 2:
                     try{

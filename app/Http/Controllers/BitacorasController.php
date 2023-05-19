@@ -34,14 +34,14 @@ class BitacorasController extends Controller
             ->get();
         
         $usuarios= DB::table('bitacora')
-            ->join('users','bitacora.id_usuario','users.id')
+            ->join('users','bitacora.id_usuario','users.name')
             ->join('clientes','clientes.id_cliente','users.id_cliente')
             ->orderby('name')
             ->pluck('name','id_usuario')
             ->unique();
 
         $modulos= DB::table('bitacora')
-            ->join('users','bitacora.id_usuario','users.id')
+            ->join('users','bitacora.id_usuario','users.name')
             ->join('clientes','clientes.id_cliente','users.id_cliente')
             ->orderby('id_modulo')
             ->pluck('id_modulo')
@@ -63,7 +63,7 @@ class BitacorasController extends Controller
                 ->unique();
 
             $modulos= DB::table('bitacora')
-                ->join('users','bitacora.id_usuario','users.id')
+                ->join('users','bitacora.id_usuario','users.name')
                 ->join('clientes','clientes.id_cliente','users.id_cliente')
                 ->orderby('id_modulo')
                 ->pluck('id_modulo')
@@ -84,7 +84,7 @@ class BitacorasController extends Controller
                 return  $query->where('status', $r->tipo_log);
                 })
                 ->when($r->usuario, function($query) use ($r) {
-                    return  $query->where('id_usuario', $r->usuario);
+                    return  $query->where('users.id', $r->usuario);
                 })
                 ->when($r->fechas, function($query) use ($f1,$f2) {
                     $query->where('fecha','>=',$f1);

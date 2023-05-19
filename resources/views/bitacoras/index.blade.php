@@ -94,7 +94,7 @@ if (isset($r->fechas)){
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Usuario</label>
-                            <select class="form-control" tabindex="-1" aria-hidden="true" name="usuario">
+                            <select class="form-control select2" tabindex="-1" aria-hidden="true" name="usuario">
                                 <option value=""></option>
                                 @foreach($usuarios as $key=>$value)
                                 <option {{ isset($r) && $r->usuario==$key ? 'selected' : '' }} value="{{ $key }}">{{ $value }}</option>
@@ -123,7 +123,7 @@ if (isset($r->fechas)){
                     <div class="col-md-11">
                         <div class="form-group">  
                             <label>Modulo</label>
-                            <select class="form-control select2 select2-hidden-accessible" multiple="" data-placeholder="Seleccione modulo" tabindex="-1" aria-hidden="true" name="modulos[]"> 
+                            <select class="form-control select2 select2-multiple" multiple="" data-placeholder="Seleccione modulo" tabindex="-1" aria-hidden="true" name="modulos[]"> 
                                 @forelse($modulos as $modulo)
                                 <option {{ isset($r) &&is_array($r->modulos) && in_array($modulo,$r->modulos) ? 'selected' : '' }}  value="{{ $modulo }}">{{ $modulo }}</option>
                                 @endforeach
@@ -232,7 +232,7 @@ if (isset($r->fechas)){
 
     $('#headfiltro').click(function(){
         $('#divfiltro').toggle();
-    })  
+    })
 
     function ver(id,fecha){
         console.log("ver");

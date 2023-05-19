@@ -112,7 +112,7 @@
                                  $asignado_otroperfil=null;
                                  $custom=false;
                                  $reserva=null;
-                                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
+                                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"Plantas",Carbon\Carbon::now()->format('d/m/Y'));
                                  if($puesto->top==null && $puesto->left==null){
                                     $puesto->color_estado="secondary";
                                  }

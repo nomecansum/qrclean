@@ -76,5 +76,8 @@
         font-size: 2.5em;
     }
     
+    .select2-results__option[aria-selected=true] {
+        display: none;
+    }
 
 </style>

@@ -40,6 +40,19 @@
 				<div class="col-md-4 mb-3">
 					@include('resources.combo_fechas')
 				</div>
+				<div class="col-12">
+					<div class="row">
+						<div class="col-md-2">
+							<div class="form-group">
+								<label>Mostrar</label>
+								<select name="mostrar" class="form-control">
+									<option value="C">Check-in</option>
+									<option value="R">Reservas</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 				@include('resources.combos_opciones_informes',[$show=['output'=>1,'orientation'=>1]])
 				
 				<div class="row">

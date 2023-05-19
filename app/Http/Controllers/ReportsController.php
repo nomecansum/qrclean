@@ -654,72 +654,142 @@ class ReportsController extends Controller
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
-        $informe=DB::table('puestos')
-        ->select('puestos.id_puesto','puestos.cod_puesto','puestos.offset_top','puestos.offset_left','puestos.id_planta','edificios.id_edificio','edificios.des_edificio')
-        ->selectraw("count(reservas.id_reserva) as cuenta")
-        ->join('edificios','puestos.id_edificio','edificios.id_edificio')
-        ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
-        ->join('plantas','puestos.id_planta','plantas.id_planta')
-        ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-        ->join('reservas','puestos.id_puesto','reservas.id_puesto')
-       
-        ->where(function($q){
-            if (!isAdmin()){
-                $q->WhereIn('clientes.id_cliente',clientes());
-            }
-        })
-        ->where(function($q) use($r){
-            if ($r->cliente) {
-                $q->WhereIn('puestos.id_cliente',$r->cliente);
-            }
-        })
-        ->where(function($q) use($r){
-            if ($r->edificio) {
-                $q->WhereIn('puestos.id_edificio',$r->edificio);
-            }
-        })
-        ->where(function($q) use($r){
-            if ($r->planta) {
-                $q->whereIn('puestos.id_planta',$r->planta);
-            }
-        })
-        ->where(function($q) use($r){
-            if ($r->puesto) {
-                $q->whereIn('puestos.id_puesto',$r->puesto);
-            }
-        })
-        ->where(function($q) use($r){
-            if ($r->tipo) {
-                $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
-            }
-        })
-        ->where(function($q) use($r){
-            if ($r->tags) {
-                if($r->andor){//Busqueda con AND
-                    $puestos_tags=DB::table('tags_puestos')
-                        ->select('id_puesto')
-                        ->wherein('id_tag',$r->tags)
-                        ->groupby('id_puesto')
-                        ->havingRaw('count(id_tag)='.count($r->tags))
-                        ->pluck('id_puesto')
-                        ->toarray();
-                    $q->whereIn('puestos.id_puesto',$puestos_tags);
-                } else { //Busqueda con OR
-                    $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
-                    $q->whereIn('puestos.id_puesto',$puestos_tags); 
+        if($r->mostrar=="R"){ //RESERVAS
+            $informe=DB::table('puestos')
+            ->select('puestos.id_puesto','puestos.cod_puesto','puestos.offset_top','puestos.offset_left','puestos.id_planta','edificios.id_edificio','edificios.des_edificio')
+            ->selectraw("count(reservas.id_reserva) as cuenta")
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->join('reservas','puestos.id_puesto','reservas.id_puesto')
+        
+            ->where(function($q){
+                if (!isAdmin()){
+                    $q->WhereIn('clientes.id_cliente',clientes());
                 }
-            }
-        })
-        ->where(function($q){
-            if (isSupervisor(Auth::user()->id)) {
-                $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
-                $q->wherein('puestos.id_puesto',$puestos_usuario);
-            }
-        })
-        ->groupby(['puestos.id_puesto','puestos.cod_puesto','puestos.offset_top','puestos.offset_left','puestos.id_planta','edificios.id_edificio','edificios.des_edificio'])
-        ->orderby('puestos.id_puesto')
-        ->wherebetween('reservas.fec_reserva',[$f1,$f2])
-        ->get();
+            })
+            ->where(function($q) use($r){
+                if ($r->cliente) {
+                    $q->WhereIn('puestos.id_cliente',$r->cliente);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->edificio) {
+                    $q->WhereIn('puestos.id_edificio',$r->edificio);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->planta) {
+                    $q->whereIn('puestos.id_planta',$r->planta);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->puesto) {
+                    $q->whereIn('puestos.id_puesto',$r->puesto);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tipo) {
+                    $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tags) {
+                    if($r->andor){//Busqueda con AND
+                        $puestos_tags=DB::table('tags_puestos')
+                            ->select('id_puesto')
+                            ->wherein('id_tag',$r->tags)
+                            ->groupby('id_puesto')
+                            ->havingRaw('count(id_tag)='.count($r->tags))
+                            ->pluck('id_puesto')
+                            ->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags);
+                    } else { //Busqueda con OR
+                        $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags); 
+                    }
+                }
+            })
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                    $q->wherein('puestos.id_puesto',$puestos_usuario);
+                }
+            })
+            ->groupby(['puestos.id_puesto','puestos.cod_puesto','puestos.offset_top','puestos.offset_left','puestos.id_planta','edificios.id_edificio','edificios.des_edificio'])
+            ->orderby('puestos.id_puesto')
+            ->wherebetween('reservas.fec_reserva',[$f1,$f2])
+            ->get();
+        } else{ //CHECKINS
+            $informe=DB::table('puestos')
+                ->select('puestos.id_puesto','puestos.cod_puesto','puestos.offset_top','puestos.offset_left','puestos.id_planta','edificios.id_edificio','edificios.des_edificio')
+                ->selectraw("count(log_cambios_estado.id_log) as cuenta")
+                ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+                ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+                ->join('plantas','puestos.id_planta','plantas.id_planta')
+                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+                ->join('log_cambios_estado','puestos.id_puesto','log_cambios_estado.id_puesto')
+            
+                ->where(function($q){
+                    if (!isAdmin()){
+                        $q->WhereIn('clientes.id_cliente',clientes());
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->cliente) {
+                        $q->WhereIn('puestos.id_cliente',$r->cliente);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->edificio) {
+                        $q->WhereIn('puestos.id_edificio',$r->edificio);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->planta) {
+                        $q->whereIn('puestos.id_planta',$r->planta);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->puesto) {
+                        $q->whereIn('puestos.id_puesto',$r->puesto);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->tipo) {
+                        $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->tags) {
+                        if($r->andor){//Busqueda con AND
+                            $puestos_tags=DB::table('tags_puestos')
+                                ->select('id_puesto')
+                                ->wherein('id_tag',$r->tags)
+                                ->groupby('id_puesto')
+                                ->havingRaw('count(id_tag)='.count($r->tags))
+                                ->pluck('id_puesto')
+                                ->toarray();
+                            $q->whereIn('puestos.id_puesto',$puestos_tags);
+                        } else { //Busqueda con OR
+                            $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                            $q->whereIn('puestos.id_puesto',$puestos_tags); 
+                        }
+                    }
+                })
+                ->where(function($q){
+                    if (isSupervisor(Auth::user()->id)) {
+                        $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                        $q->wherein('puestos.id_puesto',$puestos_usuario);
+                    }
+                })
+                ->groupby(['puestos.id_puesto','puestos.cod_puesto','puestos.offset_top','puestos.offset_left','puestos.id_planta','edificios.id_edificio','edificios.des_edificio'])
+                ->orderby('puestos.id_puesto')
+                ->wherebetween('log_cambios_estado.fecha',[$f1,$f2])
+                ->get();
+        }
+        
 
 
         $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];

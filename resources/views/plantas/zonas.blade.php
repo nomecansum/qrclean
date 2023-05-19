@@ -61,7 +61,7 @@ try{
         z-index: 20;
     }
 
-    .icono_borrar{
+    .icono_borrar, .icono_detalle{
         cursor: pointer; 
     }
 
@@ -193,7 +193,7 @@ try{
                                             $asignado_otroperfil=null;
                                             $custom=false;
                                             $reserva=null;
-                                            $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto);
+                                            $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"Zonas",Carbon\Carbon::now()->format('d/m/Y'));
                                             if($puesto->top==null && $puesto->left==null){
                                                 $puesto->color_estado="secondary";
                                             }
@@ -261,7 +261,7 @@ try{
             id="zona"+zonas;
             n.text=$("#nombre").val();
             n.id="zona"+randomString(10);
-            n.content = "<i class='fa-duotone fa-circle-info text-primary icono_detalle fa-2x mr-3' onClick='detallenodo(this.parentNode.parentNode)'></i><i class='fa-solid fa-trash-can text-danger icono_borrar fa-2x' onClick='grid.removeWidget(this.parentNode.parentNode)'></i><div class='num_zona'>"+zonas+"</div><div class='nombre_zona'>"+n.text+"</div>";
+            n.content = "<i class='fa-duotone fa-circle-info text-secondary icono_detalle  mr-3' onClick='detallenodo(this.parentNode.parentNode)' title='Info de la zona'></i><i class='fa-solid fa-trash-can text-danger icono_borrar' onClick='grid.removeWidget(this.parentNode.parentNode)' title='Borrar zona'></i><div class='num_zona'>"+zonas+"</div><div class='nombre_zona'>"+n.text+"</div>";
             grid.addWidget(n);
             //item=grid.addWidget($('<div><div class="grid-stack-item-content"  onclick="seleccionada('+zonas+')" idzona='+zonas+' >'+$("#nombre").val()+'</div></div>'), 0, 0, Math.floor(1 + 3 * Math.random()), Math.floor(4 + 3 * Math.random()), true,null,null,null,null,id);
             
@@ -341,7 +341,7 @@ try{
             grid.load(serializedData, true); // update things
             $( ".grid-stack-item-content" ).each(function(item) {
                if ($(this).find('.icono_detalle').length==0){
-                    $(this).prepend($('<i class="fa-duotone fa-circle-info text-primary icono_detalle fa-2x mr-3" onClick="detallenodo(this.parentNode.parentNode)"></i>'));
+                    $(this).prepend($('<i class="fa-duotone fa-circle-info text-secondary icono_detalle mr-3" onClick="detallenodo(this.parentNode.parentNode)" title="Info de la zona"></i>'));
                 }
             });
             

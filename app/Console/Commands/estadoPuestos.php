@@ -223,8 +223,16 @@ class estadoPuestos extends Command
         foreach($puestos as $puesto){
             $p=Puestos::find($puesto->id_puesto);
             $p->id_estado=$id_estado_final;
+            $p->id_usuario_usando=null;
+            $p->fec_ult_estado=Carbon::now();
             $p->save();
             $this->escribelog_comando('debug','Puesto '.$puesto->id_puesto.' cambiado a estado '.$id_estado_final);
+            DB::table('log_cambios_estado')->insert([
+                'id_puesto' => $puesto->id_puesto,
+                'id_estado' => $id_estado_final,
+                'fecha' => Carbon::now(),
+                'id_user' => config('app.id_usuario_tareas')
+            ]);
         }
 
         $tarea->fec_ult_ejecucion=Carbon::now();

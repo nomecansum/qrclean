@@ -146,7 +146,7 @@ class colorPuesto
                 'color'=>"#e8c468",
                 'font_color'=>"#fff",
                 'clase_disp'=>"",
-                'title'=>"Puesto reservado para  ".$asignado_otroperfil->des_nivel_acceso,
+                'title'=>"Puesto reservado para  ".$asignado_otroperfil->des_nivel_acceso??'',
                 'borde'=>"",
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>0.8
@@ -157,7 +157,7 @@ class colorPuesto
                 'color'=>"#dff9d2",
                 'font_color'=>"#05688f",
                 'clase_disp'=>"disponible",
-                'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso,
+                'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso??'',
                 'borde'=>"border: ".$tam_borde." solid #05688f;",
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>1

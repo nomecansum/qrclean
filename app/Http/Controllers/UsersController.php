@@ -1843,8 +1843,8 @@ class UsersController extends Controller
                 $q->orwhereraw("'".Carbon::now()."' between fec_desde AND fec_hasta");
             })
             ->get();
-        $asignado_miperfil=[];
-        $asignado_otroperfil=[];
+        $asignado_miperfil=null;
+        $asignado_otroperfil=null;
 
         if(!$reservas->isempty()){
             $mispuestos=DB::table('puestos')

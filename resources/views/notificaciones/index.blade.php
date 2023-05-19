@@ -35,7 +35,7 @@
                         <a href="{{ $n->url_notificacion }}" class="h6 mb-0 stretched-link text-decoration-none">{!! beauty_fecha($n->fec_notificacion) !!} - {{ $n->des_tipo_notificacion }}</a>
                         @if($n->mca_leida=='N')<span class="badge bg-info rounded ms-auto">NEW</span>@endif
                     </div>
-                    <small class="text-muted">{{ $n->txt_notificacion }}</small>
+                    <small class="text-muted">{!! $n->txt_notificacion !!}</small>
                 </div>
             </div>
         @endforeach

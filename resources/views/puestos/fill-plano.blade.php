@@ -33,7 +33,7 @@
                 } else {
                     $custom=false;
                 }
-                $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"Mioficina",$r->fecha??Carbon\Carbon::now()->format('d/m/Y'));
+                $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"MKD",$r->fecha??Carbon\Carbon::now()->format('d/m/Y'));
 
             @endphp
             

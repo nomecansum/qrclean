@@ -64,20 +64,33 @@ class MKDController extends Controller
     
     public function plano($planta,$token,$view="plano"){
 
-        if(!authbyToken($token)){
+        //Buscamos el usuario por el token
+        $user=DB::table('users')->where('token_acceso',$token)->first();
+        if(!$user){
             $mensaje="No tiene permiso para ver esa informacion";
             return view('genericas.error',compact('mensaje'));
+        } else {
+            $id_usuario=$user->id;
+            Auth::loginUsingId($id_usuario);
         }
+        
+        // if(!authbyToken($token)){
+        //     $mensaje="No tiene permiso para ver esa informacion";
+        //     return view('genericas.error',compact('mensaje'));
+        // }
 
         validar_acceso_tabla($planta,'plantas');
         
-        $plantas = plantas::findOrFail($planta);
-        $cliente=clientes::find($plantas->id_cliente)->first();
-        $edificio=edificios::find($plantas->id_edificio)->first();
+        $plantas=plantas::findOrFail($planta);
+       
+        $cliente=clientes::where('id_cliente',$plantas->id_cliente)->first();
+        $edificio=edificios::where('id_edificio',$plantas->id_edificio)->first();
         $puestos= DB::Table('puestos')
-            ->select('puestos.*','plantas.*','estados_puestos.val_color as color_estado','estados_puestos.hex_color','estados_puestos.des_estado')
+            ->select('puestos.*','puestos.width as puesto_width', 'puestos.height as puesto_height','plantas.*','estados_puestos.val_color as color_estado','estados_puestos.hex_color','estados_puestos.des_estado','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','users.name as usuario_usando')
             ->join('estados_puestos','estados_puestos.id_estado','puestos.id_estado')
+            ->leftjoin('users','puestos.id_usuario_usando','users.id')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->where('puestos.id_planta',$planta)
             ->get();
 

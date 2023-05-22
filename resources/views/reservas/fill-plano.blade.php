@@ -40,7 +40,7 @@
             $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();
             $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();
             $es_reserva="Reservas";
-            $cuadradito=\App\Classes\colorPuestoRes::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$es_reserva);
+            $cuadradito=\App\Classes\colorPuestoRes::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$es_reserva,$r->fechas);
             if($puesto->puesto_width!=null || $puesto->puesto_height!=null || $puesto->border!=null || $puesto->font!=null  || $puesto->roundness!=null){
                 $custom=true;
             } else {

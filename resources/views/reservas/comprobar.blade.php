@@ -81,7 +81,7 @@
                     $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();
                     $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();
                     $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();
-                    $cuadradito=\App\Classes\colorPuestoRes::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"P");
+                    $cuadradito=\App\Classes\colorPuestoRes::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"P",$r->fechas);
                     $es_reserva="Reservas";
                     if(isMobile()){
                         $puesto->factor_puestow=15;

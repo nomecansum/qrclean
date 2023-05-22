@@ -36,70 +36,33 @@ use Auth;
 
 class colorPuestoRes
 {
-    static function colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$origen="Reservas"){
+    static function colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$origen="Reservas",$fechas){
         $tam_borde=$puesto->border!=null?$puesto->border:(isMobile()?$puesto->factor_puestob-1:$puesto->factor_puestob);
-        
 
+        $f = explode(' - ',$fechas);
+        $f1 = Carbon::parse(adaptar_fecha($f[0]));
+        
         $borde=$puesto->val_color?$puesto->val_color:$puesto->hex_color;
-        if ($puesto->mca_incidencia=='S'){  //Incidencia
-            return [
-                'color'=>"#ffb300",
-                'font_color'=>"#fff",
-                'clase_disp'=>"",
-                'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
-                'borde'=>"border: 3px solid #f00;",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } else if($puesto->id_estado==5){  //Bloqueado
-            return [
-                'color'=>"#3a444e",
-                'font_color'=>"#fff",
-                'clase_disp'=>"",
-                'title'=>"Puesto bloqueado",
-                'borde'=>"",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } else if($puesto->id_estado==4){  //Inoperativo
-            return [
-                'color'=>"#3a444e",
-                'font_color'=>"#fff",
-                'clase_disp'=>"",
-                'title'=>"Puesto inoperativo",
-                'borde'=>"",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } else if($puesto->id_estado==3 && session('CL')['mca_limpieza']=='S'){  //Limpieza
-            return [
-                'color'=>"#00a4e6",
-                'font_color'=>"#fff",
-                'clase_disp'=>"",
-                'title'=>"Puesto pendiente de limpieza",
-                'borde'=>"",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } else if($puesto->id_estado==7){  //No usabble
-            return [
-                'color'=>"#9bb3bf",
-                'font_color'=>"#000",
-                'clase_disp'=>"",
-                'title'=>"No usable (encuesta)",
-                'borde'=>"",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } else if(isset($reserva)){
+        $respuesta= [
+            'color'=>"#dff9d2",
+            'font_color'=>"#444",
+            'clase_disp'=>"disponible",
+            'title'=>"Disponible",
+            'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
+            'border-radius'=>$puesto->factor_puestor."px",
+            "transp"=>1
+        ];
+        
+        if(isset($reserva)){
             $borde=$puesto->val_color?$puesto->val_color:$puesto->hex_color;
             
             if(isset($reserva->fec_fin_reserva)){
-                $horas_reserva="de ".Carbon::parse($reserva->fec_reserva)->format('H:i')." a ".Carbon::parse($reserva->fec_fin_reserva)->format('H:i'); 
+                $horas_reserva="de ".Carbon::parse($reserva->fec_reserva)->format('H:i')." a ".Carbon::parse($reserva->fec_fin_reserva)->format('H:i');
             } else {
                 $horas_reserva="";
             }
-            return [
+            
+            $respuesta= [
                 'color'=>"LightCoral",
                 'font_color'=>"#fff",
                 'clase_disp'=>"",
@@ -108,8 +71,11 @@ class colorPuestoRes
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>0.8
             ];
-        } else if(isset($asignado_usuario)){
-            return [
+    
+        }
+
+        if(isset($asignado_usuario)){
+            $respuesta= [
                 'color'=>"#f2cb07",
                 'font_color'=>"#fff",
                 'clase_disp'=>"",
@@ -118,8 +84,10 @@ class colorPuestoRes
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>0.8
             ];
-        } else if(isset($asignado_otroperfil)){
-            return [
+        }
+        
+        if(isset($asignado_otroperfil)){
+            $respuesta= [
                 'color'=>"#e8c468",
                 'font_color'=>"#fff",
                 'clase_disp'=>"",
@@ -128,8 +96,10 @@ class colorPuestoRes
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>0.8
             ];
-        } else if(isset($asignado_miperfil)){
-            return [
+        }
+        
+        if(isset($asignado_miperfil)){
+            $respuesta= [
                 'color'=>"#dff9d2",
                 'font_color'=>"#05688f",
                 'clase_disp'=>"disponible",
@@ -138,29 +108,83 @@ class colorPuestoRes
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>1
             ];
-        } else if($puesto->id_estado==2){  //En uso
-            return [
-                'color'=>"#dff9d2",
-                'font_color'=>"#444",
-                'clase_disp'=>"disponible",
-                'title'=>"Disponible",
-                'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
+        }
+
+
+        if($f1->format('Y-m-d')==Carbon::now()->format('Y-m-d') && $puesto->id_estado==2){ //Si es una reserva para hoy hay que tener en cuenta el estado actual
+            $respuesta= [
+                'color'=>"#ef253c",
+                'font_color'=>"#fff",
+                'clase_disp'=>"",
+                'title'=>"Puesto en uso ",
+                'borde'=>"",
                 'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>1
+                "transp"=>0.8
             ];
-            
-        }   else {
-            $borde=$puesto->val_color?$puesto->val_color:$puesto->hex_color;
-            return [
-                'color'=>"#dff9d2",
-                'font_color'=>"#444",
-                'clase_disp'=>"disponible",
-                'title'=>"Disponible",
-                'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
+        }
+        
+
+        if ($puesto->mca_incidencia=='S'){  //Incidencia
+            $respuesta= [
+                'color'=>"#ffb300",
+                'font_color'=>"#fff",
+                'clase_disp'=>"",
+                'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
+                'borde'=>"border: 3px solid #f00;",
                 'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>1
+                "transp"=>0.8
             ];
-        } 
+        }
+
+        if($puesto->id_estado==5){  //Bloqueado
+            $respuesta= [
+                'color'=>"#3a444e",
+                'font_color'=>"#fff",
+                'clase_disp'=>"",
+                'title'=>"Puesto bloqueado",
+                'borde'=>"",
+                'border-radius'=>$puesto->factor_puestor."px",
+                "transp"=>0.8
+            ];
+        }
+
+        if($puesto->id_estado==4){  //Inoperativo
+            $respuesta= [
+                'color'=>"#3a444e",
+                'font_color'=>"#fff",
+                'clase_disp'=>"",
+                'title'=>"Puesto inoperativo",
+                'borde'=>"",
+                'border-radius'=>$puesto->factor_puestor."px",
+                "transp"=>0.8
+            ];
+        }
+         
+        if($puesto->id_estado==3 && session('CL')['mca_limpieza']=='S'){  //Limpieza
+            $respuesta= [
+                'color'=>"#00a4e6",
+                'font_color'=>"#fff",
+                'clase_disp'=>"",
+                'title'=>"Puesto pendiente de limpieza",
+                'borde'=>"",
+                'border-radius'=>$puesto->factor_puestor."px",
+                "transp"=>0.8
+            ];
+        }
+        
+        if($puesto->id_estado==7){  //No usabble
+            $respuesta= [
+                'color'=>"#9bb3bf",
+                'font_color'=>"#000",
+                'clase_disp'=>"",
+                'title'=>"No usable (encuesta)",
+                'borde'=>"",
+                'border-radius'=>$puesto->factor_puestor."px",
+                "transp"=>0.8
+            ];
+        }
+
+        return $respuesta;
     }
     
 }

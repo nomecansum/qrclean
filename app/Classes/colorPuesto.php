@@ -39,6 +39,8 @@ class colorPuesto
     static function colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,$origen="Reservas",$fecha){
         $tam_borde=$puesto->border!=null?$puesto->border:(isMobile()?$puesto->factor_puestob-1:$puesto->factor_puestob);
         $borde=$puesto->val_color?$puesto->val_color:$puesto->hex_color;
+        
+        //Respuesta buena
         $respuesta= [
             'color'=>"#dff9d2",
             'font_color'=>"#444",
@@ -49,61 +51,6 @@ class colorPuesto
             "transp"=>1
         ];
 
-        if ($puesto->mca_incidencia=='S'){  //Incidencia
-            $respuesta= [
-                'color'=>"#ffb300",
-                'font_color'=>"#fff",
-                'clase_disp'=>"",
-                'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
-                'borde'=>"border: 3px solid #f00;",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } 
-        if($puesto->id_estado==5){  //Bloqueado
-            $respuesta= [
-                'color'=>"#3a444e",
-                'font_color'=>"#fff",
-                'clase_disp'=>"",
-                'title'=>"Puesto bloqueado",
-                'borde'=>"",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } 
-        if($puesto->id_estado==4){  //Inoperativo
-            $respuesta= [
-                'color'=>"#3a444e",
-                'font_color'=>"#fff",
-                'clase_disp'=>"",
-                'title'=>"Puesto inoperativo",
-                'borde'=>"",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } 
-        if($puesto->id_estado==3 && session('CL')['mca_limpieza']=='S'){  //Limpieza
-            $respuesta= [
-                'color'=>"#00a4e6",
-                'font_color'=>"#fff",
-                'clase_disp'=>"",
-                'title'=>"Puesto pendiente de limpieza",
-                'borde'=>"",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } 
-        if($puesto->id_estado==7){  //No usabble
-            $respuesta= [
-                'color'=>"#9bb3bf",
-                'font_color'=>"#000",
-                'clase_disp'=>"",
-                'title'=>"No usable (encuesta)",
-                'borde'=>"",
-                'border-radius'=>$puesto->factor_puestor."px",
-                "transp"=>0.8
-            ];
-        } 
         //Primero vemos si el puesto esta reservado, asignado a persona o perfil
         if(isset($reserva)){
             
@@ -178,6 +125,7 @@ class colorPuesto
             } catch(\Exception $e){
                 $usuario_usando="";
             }
+           
             if($fecha==Carbon::now()->format('d/m/Y'))//Asumimos que todos los dias se resetearan los puestos, por lo que si es una fecha dsitinta de hoy no mostramos el puesto como ocupado
             {
                 $respuesta= [
@@ -190,6 +138,65 @@ class colorPuesto
                     "transp"=>0.8
                 ];
             }
+        } 
+
+        ///////Estados de incidencia, bloqueo, encuesta, etc.... si alguno de estos esta, da igual el estado del puesto, se muestra el color de la incidencia
+       
+
+        if ($puesto->mca_incidencia=='S'){  //Incidencia
+            $respuesta= [
+                'color'=>"#ffb300",
+                'font_color'=>"#fff",
+                'clase_disp'=>"",
+                'title'=>"<span class='text-warning'>(<i class='fa-solid fa-triangle-exclamation text-warning'></i> Puesto con incidencia)</span>",
+                'borde'=>"border: 3px solid #f00;",
+                'border-radius'=>$puesto->factor_puestor."px",
+                "transp"=>0.8
+            ];
+        } 
+        if($puesto->id_estado==5){  //Bloqueado
+            $respuesta= [
+                'color'=>"#3a444e",
+                'font_color'=>"#fff",
+                'clase_disp'=>"",
+                'title'=>"Puesto bloqueado",
+                'borde'=>"",
+                'border-radius'=>$puesto->factor_puestor."px",
+                "transp"=>0.8
+            ];
+        } 
+        if($puesto->id_estado==4){  //Inoperativo
+            $respuesta= [
+                'color'=>"#3a444e",
+                'font_color'=>"#fff",
+                'clase_disp'=>"",
+                'title'=>"Puesto inoperativo",
+                'borde'=>"",
+                'border-radius'=>$puesto->factor_puestor."px",
+                "transp"=>0.8
+            ];
+        } 
+        if($puesto->id_estado==3 && session('CL')['mca_limpieza']=='S'){  //Limpieza
+            $respuesta= [
+                'color'=>"#00a4e6",
+                'font_color'=>"#fff",
+                'clase_disp'=>"",
+                'title'=>"Puesto pendiente de limpieza",
+                'borde'=>"",
+                'border-radius'=>$puesto->factor_puestor."px",
+                "transp"=>0.8
+            ];
+        } 
+        if($puesto->id_estado==7){  //No usabble
+            $respuesta= [
+                'color'=>"#9bb3bf",
+                'font_color'=>"#000",
+                'clase_disp'=>"",
+                'title'=>"No usable (encuesta)",
+                'borde'=>"",
+                'border-radius'=>$puesto->factor_puestor."px",
+                "transp"=>0.8
+            ];
         } 
         
     return $respuesta;

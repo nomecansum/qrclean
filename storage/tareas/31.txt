@@ -2,47 +2,47 @@ Inicio de la tarea programada [31]App\Console\Commands\eventos
 Grupo *
 [52] -> Regla: Buscar en bitacora
 [52] -> Regla: Buscar en bitacora
-Dia: 5 Hora: 21
+Dia: 1 Hora: 20
 Iniciando proceso de la regla dentro del horario de programacion
 Comando :C:\WWW\qrclean\resources\views/events/comandos/buscar_en_bitacora.php
 Comando ejecutado, no hay ID para procesar
 Resultado del comando: ok
 Iteraciones maximas de la regla: 1
 Iteracion: 1 -> acciones: 2
-Descontados: 7729 en estado no molestar, quedan 0 id para procesar
+Descontados: 0 en estado no molestar, quedan 0 id para procesar
 No hay ID para la accion 1 de la iteracion 1
 No hay ID para la accion 2 de la iteracion 1
 Finalizado el procesado de la regla Buscar en bitacora
 Finalizado el procesado de la regla Buscar en bitacora
-Proxima ejecucion establecida para  Fri May 19 2023 21:45:34 GMT+0200
+Proxima ejecucion establecida para  Mon Jun 05 2023 20:20:28 GMT+0200
 [53] -> Regla: Notificacion de incidencias
 [53] -> Regla: Notificacion de incidencias
-Dia: 5 Hora: 21
+Dia: 1 Hora: 20
 Iniciando proceso de la regla dentro del horario de programacion
 Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
 Comando ejecutado, no hay ID para procesar
 Resultado del comando: ok
 Iteraciones maximas de la regla: 1
 Iteracion: 1 -> acciones: 1
-Descontados: 3 en estado no molestar, quedan 0 id para procesar
+Descontados: 5 en estado no molestar, quedan 0 id para procesar
 No hay ID para la accion 1 de la iteracion 1
 Finalizado el procesado de la regla Notificacion de incidencias
 Finalizado el procesado de la regla Notificacion de incidencias
-Proxima ejecucion establecida para  Fri May 19 2023 21:35:34 GMT+0200
+Proxima ejecucion establecida para  Mon Jun 05 2023 20:10:28 GMT+0200
 [55] -> Regla: Manuel Ferrero Leonardo
 [55] -> Regla: Manuel Ferrero Leonardo
-Dia: 5 Hora: 21
+Dia: 1 Hora: 20
 Iniciando proceso de la regla dentro del horario de programacion
 Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
 Comando ejecutado, no hay ID para procesar
 Resultado del comando: ok
 Iteraciones maximas de la regla: 1
 Iteracion: 1 -> acciones: 1
-Descontados: 0 en estado no molestar, quedan 0 id para procesar
+Descontados: 2 en estado no molestar, quedan 0 id para procesar
 No hay ID para la accion 1 de la iteracion 1
 Finalizado el procesado de la regla Manuel Ferrero Leonardo
 Finalizado el procesado de la regla Manuel Ferrero Leonardo
-Proxima ejecucion establecida para  Fri May 19 2023 21:35:35 GMT+0200
+Proxima ejecucion establecida para  Mon Jun 05 2023 20:10:28 GMT+0200
 Fin de la tarea App\Console\Commands\eventos
 Fin de la tarea php [31] Eventos
 Tarea [31] Eventos se ha ejecutado correctamente. Resp: 

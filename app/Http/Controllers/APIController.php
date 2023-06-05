@@ -514,9 +514,15 @@ class APIController extends Controller
             $r->request->add(['txt_incidencia' => $r->notas_admin]);
             //Vamos a sacar la diferencia en el campo de comentarios
             $incidencia=incidencias::find($r->incidencia_id_puestos);
-            $txt_nuevo=str_replace($incidencia->txt_incidencia,"",$r->notas_admin);
+
             $incidencia->txt_incidencia=$r->notas_admin;
             $incidencia->save();
+            if(isset($r->descipcion_adicional)){
+                $txt_nuevo=$r->descipcion_adicional;
+            } else {
+                $txt_nuevo=str_replace($incidencia->txt_incidencia,"",$r->notas_admin);
+            }
+            
 
             $r->request->add(['des_accion' => $txt_nuevo]);
             $r->request->add(['id_incidencia' => $r->incidencia_id_puestos]);
@@ -569,6 +575,7 @@ class APIController extends Controller
         //OJO este solo debe daro las incidencias que esten pendientes de sincornizazion
         try{
             //Fechas
+           
             $f1=(isset($fecha))?Carbon::parse($fecha):Carbon::now()->startOfMonth();
             $f2=Carbon::now()->endOfMonth();
             $fechas=$f1->format('d/m/Y').' - '.$f2->format('d/m/Y');

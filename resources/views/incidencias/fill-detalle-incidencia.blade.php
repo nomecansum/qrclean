@@ -55,6 +55,22 @@
                 </div>
             </div>
             @endif
+            @if(isset($incidencia->id_incidencia_salas) && Auth::user()->nivel_acceso==200)
+            <div class="row  mt-3 bg-gray">
+                <div class="col-md-3">
+                    <span class="font-bold">ID incidencia salas: </span><span>{{ $incidencia->id_incidencia_salas }}</span>
+                </div>
+                <div class="col-md-3">
+                    <span class="font-bold">ID tipo incidencia salas: </span><span>{{ $incidencia->id_tipo_salas }}</span>
+                </div>
+                <div class="col-md-3">
+                    <span class="font-bold">Sala ID: </span><span>{{ App\Models\salas::where('id_puesto',$incidencia->id_puesto)->first()->id_externo_salas??'' }}</span>
+                </div>
+                <div class="col-md-12 mt-3">
+                    {{ $incidencia->comentario_cierre }}
+                </div>
+            </div>
+            @endif
             <div class="row mt-3">
                 <div class="col-md-6">
                     @if($incidencia->img_attach1)

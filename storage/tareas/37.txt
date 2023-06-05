@@ -1,14 +1,27 @@
 Inicio de la tarea programada [37]App\Console\Commands\sincroIncidenciasSalas
 No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17194
 No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17195
-No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17689
-No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17578
-No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17692
-No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17194
-No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17198
-No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17575
-No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17689
-Iniciando proceso de sincronizacion de ID de incidencias
-Fin de la tarea App\Console\Commands\sincroIncidenciasSalas
+{"sala_id":2,"fecha":"2023-03-16T10:19:09.000000Z","tipo_incidencia_id":"52","estado":"1","descripcion_adicional":"Ped-p2-s1","notas_admin":"Las tomas el\u00e9ctricas de la pares no va y por tanto las tv y el pc de video no funciona.\r\n\r\nCuando lo arregl\u00e9is, por favor, encender el equipo de video cn el botoncito q dispone.\r\n\r\nTambi\u00e9n tengo la sensaci\u00f3n q las tomas el\u00e9ctricas d debajo de mesa no van.","incidencia_id_puestos":1681}
+Call to undefined method App\Http\Controllers\APIController::enviar_request_salas()
+
+   Error 
+
+  Call to undefined method App\Http\Controllers\APIController::enviar_request_salas()
+
+  at C:\WWW\qrclean\app\Console\Commands\sincroIncidenciasSalas.php:122
+    118▕                 $body->notas_admin=$notas_admin;
+    119▕                 $body->incidencia_id_puestos=$p->id_incidencia;
+    120▕                 $body=json_encode($body);
+    121▕                 log::debug($body);
+  ➜ 122▕                 $response=APIController::enviar_request_salas('post',$endpoint,"",$body,$p->id_cliente);
+    123▕                 if(isset($response['status']) && $response['status']==200){
+    124▕                     $resp=json_decode($response['body']);
+    125▕                     $i=incidencias::find($p->id_incidencia);
+    126▕                     $i->id_incidencia_salas=$resp->incidencia_sala_id;
+
+  1   C:\WWW\qrclean\vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:36
+      App\Console\Commands\sincroIncidenciasSalas::handle()
+
+  2   C:\WWW\qrclean\vendor\laravel\framework\src\Illuminate\Container\Util.php:41
+      Illuminate\Container\BoundMethod::Illuminate\Container\{closure}()
 Fin de la tarea php [37] Sincronizacion de incidencias con salas
-Tarea [37] Sincronizacion de incidencias con salas se ha ejecutado correctamente. Resp: 

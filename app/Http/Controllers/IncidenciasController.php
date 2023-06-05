@@ -338,7 +338,7 @@ class IncidenciasController extends Controller
                 }
             })
             ->wherein('incidencias.id_puesto',$lista_puestos)
-            ->whereBetween('fec_apertura',[$f1,$f2])
+            ->whereBetween('fec_apertura',[Carbon::parse($f1),Carbon::parse($f2)])
             ->where(function($q) use($r){
                 if($r->ac=='C'){
                     $q->wherenotnull('fec_cierre');

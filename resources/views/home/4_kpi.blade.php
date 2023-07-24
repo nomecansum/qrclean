@@ -42,7 +42,7 @@
 
     try{
         $pct_completado=(100*$puestos_si->count()/$puestos->count());
-    } catch(\Exception $e){
+    } catch(\Throwable $e){
         $pct_completado=0;
     }
 

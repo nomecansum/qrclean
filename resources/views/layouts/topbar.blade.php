@@ -57,7 +57,7 @@
                 </form>
             </div>
 
-            @if(config('app.env') == 'local')
+            @if(config('app.env') == 'local' || config('app.env') == 'qa')
                 <div>{{ env('DB_DATABASE') }}</div>
             @endif
             

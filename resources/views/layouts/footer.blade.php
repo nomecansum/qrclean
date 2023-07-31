@@ -6,14 +6,14 @@
         <a class="nav-link px-0 _dm-offcanvasBtn" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" id="boton_politica" value="offcanvas-bottom">Privacidad</a>
         <a class="nav-link px-0 _dm-offcanvasBtn" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" id="boton_cookies" value="offcanvas-bottom">Cookies</a>
         <a class="nav-link px-0 _dm-offcanvasBtn" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" id="boton_terminos" value="offcanvas-bottom">Aviso legal</a>
-        <a class="nav-link px-0 _dm-offcanvasBtn" href="{{ config('app.link_contacto') }}" target="_blank">Contacto</a>
+        <a class="nav-link px-0 _dm-offcanvasBtn" href="{{ config('app.link_contacto') }}" target="_blank"  rel="noopener noreferrer">Contacto</a>
     </nav>
     @elsedesktop
     <div class="d-inline-flex p-2">
         <a class="nav-link px-0 _dm-offcanvasBtn mr-3" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" id="boton_politica" value="offcanvas-bottom">Privacidad</a>
         <a class="nav-link px-0 _dm-offcanvasBtn mr-3" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" id="boton_cookies" value="offcanvas-bottom">Cookies</a>
         <a class="nav-link px-0 _dm-offcanvasBtn mr-3" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" id="boton_terminos" value="offcanvas-bottom">Aviso legal</a>
-        <a class="nav-link px-0 _dm-offcanvasBtn mr-3" href="{{ config('app.link_contacto') }}" target="_blank">Contacto</a>
+        <a class="nav-link px-0 _dm-offcanvasBtn mr-3" href="{{ config('app.link_contacto') }}" target="_blank"  rel="noopener noreferrer">Contacto</a>
     </div>
     @enddesktop
 </div>

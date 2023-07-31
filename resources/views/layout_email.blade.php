@@ -256,7 +256,7 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
     <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
     <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-        <a href="https://www.facebook.com/cramboeu/?modal=admin_todo_tour" title="Facebook" target="_blank">
+        <a href="https://www.facebook.com/cramboeu/?modal=admin_todo_tour" title="Facebook" target="_blank"  rel="noopener noreferrer">
           <img src="{{ url('img/image-5.png') }}" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
@@ -266,7 +266,7 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
     <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
     <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-        <a href="https://twitter.com/cramboEU?lang=es" title="Twitter" target="_blank">
+        <a href="https://twitter.com/cramboEU?lang=es" title="Twitter" target="_blank"  rel="noopener noreferrer">
           <img src="{{ url('img/image-1.png') }}" alt="Twitter" title="Twitter" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
@@ -276,7 +276,7 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
     <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
     <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-        <a href="https://www.linkedin.com/company/cramboeu/" title="LinkedIn" target="_blank">
+        <a href="https://www.linkedin.com/company/cramboeu/" title="LinkedIn" target="_blank"  rel="noopener noreferrer">
           <img src="{{ url('img/image-3.png') }}" alt="LinkedIn" title="LinkedIn" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
@@ -286,7 +286,7 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
     <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
     <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-        <a href="https://www.instagram.com/crambo_eu/" title="Instagram" target="_blank">
+        <a href="https://www.instagram.com/crambo_eu/" title="Instagram" target="_blank"  rel="noopener noreferrer">
           <img src="{{ url('img/image-4.png') }}" alt="Instagram" title="Instagram" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>
@@ -296,7 +296,7 @@ table, td { color: #000000; } a { color: #0000ee; text-decoration: underline; } 
     <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 0px;" valign="top"><![endif]-->
     <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 0px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-        <a href="https://www.youtube.com/channel/UC1AlXs5dP8qAy4yDENCkUyA?view_as=subscriber" title="YouTube" target="_blank">
+        <a href="https://www.youtube.com/channel/UC1AlXs5dP8qAy4yDENCkUyA?view_as=subscriber" title="YouTube" target="_blank"  rel="noopener noreferrer">
           <img src="{{ url('img/image-2.png') }}" alt="YouTube" title="YouTube" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
         </a>
       </td></tr>

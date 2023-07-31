@@ -414,8 +414,9 @@ class ImportController extends Controller
             foreach($original as $item){
                 $tipo=DB::table('puestos_tipos')->where(function($q) use($item){$q->whereraw("UPPER(abreviatura)='".strtoupper($item->tipo)."'");$q->orwhereraw("UPPER(des_tipo_puesto)='".strtoupper($item->tipo)."'");})->where('id_cliente',$id_cliente)->first();
                 $edificio=DB::table('edificios')->where(function($q) use($item){$q->whereraw("UPPER(abreviatura)='".strtoupper($item->edificio)."'");$q->orwhereraw("UPPER(des_edificio)='".strtoupper($item->edificio)."'");})->where('id_cliente',$id_cliente)->first();
-                $planta=DB::table('plantas')->where(function($q) use($item){$q->whereraw("UPPER(abreviatura)='".strtoupper($item->planta)."'");$q->orwhereraw("UPPER(des_planta)='".strtoupper($item->planta)."'");})->where('id_cliente',$id_cliente)->first();
+                $planta=DB::table('plantas')->where(function($q) use($item){$q->whereraw("UPPER(abreviatura)='".strtoupper($item->planta)."'");$q->orwhereraw("UPPER(des_planta)='".strtoupper($item->planta)."'");$q->orwhere('id_planta',$item->planta);})->where('id_cliente',$id_cliente)->first();
                 $esta=DB::table('puestos')->where('cod_puesto',$item->cod_puesto)->where('id_cliente',$id_cliente)->first();
+
                 $arr_nombre=explode("-",$item->cod_puesto);
                 if($tipo!=null && $edificio!=null && $planta!=null and $esta==null){
                     DB::table('puestos')->insert([

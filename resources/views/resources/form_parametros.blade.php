@@ -279,7 +279,7 @@
                     <div class="input-group mb-3 ">
                         <input type="text" name="{{ $p->name.$sufijo }}" id="{{ $p->name.$sufijo }}" class="form-control campo_url {{ $p->classname??'' }}" value="{{ isset($p->value)&&!is_array($p->value)? $p->value : '' }}" {{ $p->required==true?'required':'' }}>
                         <div class="input-group-append">
-                            <a class="input-group-text btn btn-warning btn_preview" target="_blank" @if(isset($p->value)&&!is_array($p->value)) href="{{ $p->value }}" @endif><i class="fa-solid fa-file-magnifying-glass"></i> Preview</a>
+                            <a class="input-group-text btn btn-warning btn_preview" target="_blank"  rel="noopener noreferrer" @if(isset($p->value)&&!is_array($p->value)) href="{{ $p->value }}" @endif><i class="fa-solid fa-file-magnifying-glass"></i> Preview</a>
                         </div>
                     </div>
                     

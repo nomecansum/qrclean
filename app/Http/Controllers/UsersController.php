@@ -627,6 +627,7 @@ class UsersController extends Controller
             'sso_override'=>'nullable',
             'lista_zonas'=>'nullable',
             'mca_reserva_multiple'=>'nullable',
+            'img_usuario' => 'required|max:10000|mimes:image/jpeg,image/png,image/jpg,image/gif,image/svg',
         ];
 
 

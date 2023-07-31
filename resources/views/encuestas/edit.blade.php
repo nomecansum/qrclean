@@ -148,12 +148,12 @@
             <div class="row b-all mt-2" style="width: 98%">
                 <div class="form-group col-md-11">
                     <label>URL de acceso</label><br>
-                    <a href="{{ url('encuestas/get',$encuesta->token) }}" id="link_url" target="_blank"><h5 id="span_url">{{ url('encuestas/get',$encuesta->token) }}</h5></a>
+                    <a href="{{ url('encuestas/get',$encuesta->token) }}" id="link_url" target="_blank"  rel="noopener noreferrer"><h5 id="span_url">{{ url('encuestas/get',$encuesta->token) }}</h5></a>
                 </div>
                 <div class="form-group col-md-1 text-end mt-3">
                     <a href="#modal_img"  class="btn  btn-warning add-tooltip  btn_url text-nowrap" id="btn_gen_qr" data-toggle="modal" title="Generar QR" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <span class="fad fa-qrcode pt-1" aria-hidden="true"></span> Ver QR</a>
                     <a href="#"  class="btn  btn-info  add-tooltip btn_url text-nowrap" id="boton_url" title="Copiar URL" data-id="{{ $encuesta->id_encuesta }}" data-clipboard-text="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <span class="fa fa-copy" aria-hidden="true"></span> Copiar</a>
-                    <a href="{{ url('encuestas/get',$encuesta->token) }}" target="_blank"  class="btn  btn-success  add-tooltip btn_url" id="boton_abrir" title="Abrir URL" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <i class="fad fa-external-link-square-alt"></i> Abrir</a>
+                    <a href="{{ url('encuestas/get',$encuesta->token) }}" target="_blank"  rel="noopener noreferrer" class="btn  btn-success  add-tooltip btn_url" id="boton_abrir" title="Abrir URL" data-id="{{ $encuesta->id_encuesta }}" data-url="{{ url('encuestas/get',$encuesta->token) }}" style="width: 86px"> <i class="fad fa-external-link-square-alt"></i> Abrir</a>
                 </div>
             </div>
             <div class="row mt-2">

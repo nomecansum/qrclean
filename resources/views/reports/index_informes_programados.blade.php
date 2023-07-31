@@ -57,7 +57,7 @@
                                             <td class="text-center">{{$i->cod_informe_programado}}</td>
                                             <td>{{$i->des_informe_programado}}</td>
                                             <td>{{$i->nom_cliente}}</td>
-                                            <td><a href="{{$i->url_informe}}" target="_blank">{{$i->url_informe}}</a></td>
+                                            <td><a href="{{$i->url_informe}}" target="_blank"  rel="noopener noreferrer">{{$i->url_informe}}</a></td>
                                             <td >
                                                 @switch($i->val_periodo)
                                                     @case(1)

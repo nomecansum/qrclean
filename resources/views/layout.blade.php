@@ -193,9 +193,9 @@
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
     <!--jQuery [ REQUIRED ]-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
     <!--jQueryUI [ REQUIRED ]-->
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
     <!-- Popper JS [ OPTIONAL ] -->
     <script src="{{ asset('/assets/vendors/popperjs/popper.min.js')}}" defer></script>
 

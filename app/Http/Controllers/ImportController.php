@@ -427,6 +427,7 @@ class ImportController extends Controller
                         'id_estado'=>1,
                         'cod_puesto'=>$item->cod_puesto,
                         'des_puesto'=>$arr_nombre[2].' '.$arr_nombre[3],
+                        'token'=>Str::random(50)
                     ]);
                 } else {
                     if (!$esta){
@@ -435,6 +436,5 @@ class ImportController extends Controller
                     
                 }
             }
-
     }
 }

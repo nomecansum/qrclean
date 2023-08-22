@@ -186,7 +186,7 @@ class HomeController extends Controller
 
                 $otra_reserva=DB::table('reservas')
                 ->join('puestos','puestos.id_puesto','reservas.id_puesto')
-                ->where('reservas.id_usuario',Auth::user()->id)
+                ->where('reservas.id_usuario',$id_usuario)
                 ->wherenot('reservas.id_puesto',$p->id_puesto)
                 ->where('puestos.id_tipo_puesto',$p->id_tipo_puesto)
                 ->where(function($q){

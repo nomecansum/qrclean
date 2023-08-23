@@ -32,7 +32,9 @@ class SuccessfulLogin
         //
         
         $user=\Auth::user();
-        //dd($user);
+        if((!isset($user))||(isset($u) && ($uuser->id_cliente==null || $user->cod_nivel==null))){
+            return redirect('login')->withErrors(["email"=>"ERROR: El usuario no existe o la contraseña no es valida"]);
+        }
 
         //dump("aqui en el listener");
         $config_cliente=DB::table('config_clientes')->where('id_cliente',$user->id_cliente)->first();

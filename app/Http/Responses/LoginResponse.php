@@ -19,6 +19,7 @@ class LoginResponse implements LoginResponseContract
         //dump("aqui en el listener");
         //Vamos a ver si es un usuario que se ha registrado y hay que activarlo
         
+        
         if($user->id_cliente == null || $user->nivel_acceso == null){
             $error_cuenta_no_activada="Su cuenta aun no ha sido activada, contacte con el administrador";
             return view('home',compact('error_cuenta_no_activada'));

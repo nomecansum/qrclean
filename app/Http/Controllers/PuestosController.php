@@ -485,6 +485,7 @@ class PuestosController extends Controller
                 $r->request->add(['color_texto' => $config_print['color_texto']]); //add request
                 $r->request->add(['mca_icono' => $config_print['mca_icono']]); //add request
                 $r->request->add(['footer' => $config_print['footer']]); //add request
+                $r->request->add(['header' => $config_print['header']]); //add request
                 $r->request->add(['margen_left' => $config_print['margen_left']]); //add request
                 $r->request->add(['margen_top' => $config_print['margen_top']]); //add request
                 $r->request->add(['espacio_h' => $config_print['espacio_h']]); //add request

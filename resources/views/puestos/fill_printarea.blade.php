@@ -54,6 +54,8 @@
         <div class="w-100 bg-white text-center font-bold mt-0 texto_qr" style="color: {{ $color_texto}}; background-color: #fff; font-size: {{ $r->font_size??14 }}px;">
            @if(isset($r->header) && ($r->header==2))
             {{ $puesto->des_puesto }}
+           @elseif(isset($r->header) && ($r->header==0))
+            {{-- No poner nada --}}
             @else
             {{ $puesto->cod_puesto }}
             @endif

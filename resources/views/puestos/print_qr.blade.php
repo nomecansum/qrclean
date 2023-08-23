@@ -105,7 +105,8 @@ try{
                 <div class="col-md-2">
                     <label for="val_color">Header <i class="fa-regular fa-diagram-successor"></i></label><br>
                     <select name="header" id="header" class="form-control refrescar_form">
-                            <option value="1" {{ $r->header==1?'selected':'' }}>Identificador</option>
+                            <option value="0" {{ $r->header==0?'selected':'' }}>Ninguno</option>
+                            <option value="1" {{ $r->header==1 || !isset($r->header)?'selected':'' }}>Identificador</option>
                             <option value="2" {{ $r->header==2?'selected':'' }}>descripcion</option>
                     </select>
                 </div>

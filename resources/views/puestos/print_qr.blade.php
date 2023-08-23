@@ -76,7 +76,7 @@ try{
                         <input type="number" class="form-control refrescar_form" min="0" max="12"  required name="row" id="row" value="{{ $r->row??0 }}">
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <div class="form-group">
                         <label for="">Tamaño <i class="fa-solid fa-arrow-down-small-big"></i></label>
                         <input type="number" class="form-control resize val_qr bind_value" min="50" max="1000" step="1" data-clase="val_qr" required name="tam_qr" id="tam_qr" value="{{ $r->tam_qr??230 }}">
@@ -95,11 +95,18 @@ try{
                         <option {{ $r->sel_color??1==3?'selected':'' }} value="3">Color del QR</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <label for="color_texto">Icono <i class="fa-solid fa-icons"></i></label><br>
                     <select name="mca_icono" id="mca_icono" class="form-control refrescar_form">
                         <option value="1"  {{ $r->mca_icono??1==1?'selected':'' }} >No</option>
                         <option value="2"  {{ $r->mca_icono??1==2?'selected':'' }} >Si</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="val_color">Header <i class="fa-regular fa-diagram-successor"></i></label><br>
+                    <select name="header" id="header" class="form-control refrescar_form">
+                            <option value="1" {{ $r->header==1?'selected':'' }}>Identificador</option>
+                            <option value="2" {{ $r->header==2?'selected':'' }}>descripcion</option>
                     </select>
                 </div>
                 <div class="col-md-2">

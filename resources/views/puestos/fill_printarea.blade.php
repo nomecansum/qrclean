@@ -52,7 +52,11 @@
     <div class="text-center cont_qr" style="display: inline-block;  margin: {{ $r->espacio_h }}px {{ $r->espacio_v }}px {{ $r->espacio_h }}px {{ $r->espacio_v }}px">
         @if(nombrepuesto($puesto)!=$puesto->cod_puesto)
         <div class="w-100 bg-white text-center font-bold mt-0 texto_qr" style="color: {{ $color_texto}}; background-color: #fff; font-size: {{ $r->font_size??14 }}px;">
+           @if(isset($r->header) && ($r->header==2))
+            {{ $puesto->des_puesto }}
+            @else
             {{ $puesto->cod_puesto }}
+            @endif
         </div>
         @endif
         <div class="img_qr" style="width: {{ $r->tam_qr??230 }}px; height: {{ $r->tam_qr??230 }}px">

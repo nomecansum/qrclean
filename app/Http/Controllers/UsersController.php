@@ -451,8 +451,6 @@ class UsersController extends Controller
     public function update_perfil($id, Request $request)
     {
         validar_acceso_tabla($id,"users");
-       
-        
         $data = $this->getData($request);
         $users = users::findOrFail($id);
         $img_usuario = $users->img_usuario;
@@ -470,13 +468,12 @@ class UsersController extends Controller
             if (isset($request->password)){
                 $users->password=Hash::make($request->password);
             }
-            
+
             $users->name=$request->name;
             $users->email=$request->email;
             $users->val_timezone=$request->val_timezone;
             $users->save();
 
-        
             savebitacora('Perfil de usuario '.$request->email. ' actualizado',"Usuarios","update_perfil","OK");
             return [
                 'title' => "Usuarios",
@@ -627,14 +624,13 @@ class UsersController extends Controller
             'sso_override'=>'nullable',
             'lista_zonas'=>'nullable',
             'mca_reserva_multiple'=>'nullable',
-            'img_usuario' => 'required|max:10000|mimes:image/jpeg,image/png,image/jpg,image/gif,image/svg',
+            'img_usuario' => 'nullable|max:10000|mimes:image/jpeg,image/png,image/jpg,image/gif,image/svg',
         ];
 
 
         $data = $request->validate($rules);
         return $data;
     }
-
     ////////////////////////////FUNCIONES PARA EL LISTADO DE USUARIOS
     public function plantas_usuario($id,$check){
         validar_acceso_tabla($id,'users');
@@ -1780,7 +1776,6 @@ class UsersController extends Controller
         
     }
 
-
     //FUNCIONES ESPECIALES USUARIOS
     public function miperfil($id){
         validar_acceso_tabla($id,"users");
@@ -1983,5 +1978,4 @@ class UsersController extends Controller
             //'url' => url('users')
         ];
     }
-    
 }

@@ -61,12 +61,12 @@
                 <div class="row mt-2">
                     <div class="form-group col-md-2">
                         <label for="des_estado" class="control-label">ID en salas</label>
-                        <input class="form-control" required name="id_estado_salas" type="text" id="id_estado_salas" value="{{ old('id_estado_salas', optional($estado)->id_estado_salas) }}" maxlength="200" placeholder="Enter id_estado_salas here...">
+                        <input class="form-control" required name="id_estado_salas" type="text" id="id_estado_salas" value="{{ old('id_estado_salas', optional($estado)->id_estado_salas) }}" maxlength="20" placeholder="Enter id_estado_salas here...">
                         {!! $errors->first('id_estado_salas', '<p class="help-block">:message</p>') !!}
                     </div>
                     <div class="form-group col-md-2">
                         <label for="des_estado" class="control-label">ID externo</label>
-                        <input class="form-control" name="id_estado_externo" type="text" id="id_estado_externo" value="{{ old('id_estado_externo', optional($estado)->id_estado_externo) }}" maxlength="200" placeholder="Enter id_estado_externo here...">
+                        <input class="form-control" name="id_estado_externo" type="text" id="id_estado_externo" value="{{ old('id_estado_externo', optional($estado)->id_estado_externo) }}" maxlength="20" placeholder="Enter id_estado_externo here...">
                         {!! $errors->first('id_estado_externo', '<p class="help-block">:message</p>') !!}
                     </div>
                     <div class="form-group col-md-2" style="margin-left: 10px">

@@ -1,21 +1,6 @@
 Inicio de la tarea programada [31]App\Console\Commands\eventos
 Grupo *
-[55] -> Regla: Manuel Ferrero Leonardo
-[55] -> Regla: Manuel Ferrero Leonardo
-Dia: 5 Hora: 11
-Function utf8_encode() is deprecated in C:\WWW\qrclean\bootstrap\helpers.php on line 172
-Function utf8_encode() is deprecated in C:\WWW\qrclean\bootstrap\helpers.php on line 172
-Iniciando proceso de la regla dentro del horario de programacion
-Comando :C:\WWW\qrclean\resources\views/events/comandos/incidencia_creada.php
-Comando ejecutado, no hay ID para procesar
-Resultado del comando: ok
-Iteraciones maximas de la regla: 1
-Iteracion: 1 -> acciones: 1
-Descontados: 0 en estado no molestar, quedan 0 id para procesar
-No hay ID para la accion 1 de la iteracion 1
-Finalizado el procesado de la regla Manuel Ferrero Leonardo
-Finalizado el procesado de la regla Manuel Ferrero Leonardo
-Proxima ejecucion establecida para  Fri Aug 25 2023 11:30:37 GMT+0200
+No hay eventos para evaluar
 Fin de la tarea App\Console\Commands\eventos
 Fin de la tarea php [31] Eventos
 Tarea [31] Eventos se ha ejecutado correctamente. Resp: 

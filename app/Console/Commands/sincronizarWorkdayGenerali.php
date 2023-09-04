@@ -285,7 +285,7 @@ class sincronizarWorkdayGenerali extends Command
                 $puestos_preferidos=json_decode($dato->list_puestos_preferidos);
                 //Borramos las reservas de tipo puesto que tengael usuario metidas desde workday por si hay cambios para que actuelicen
                 foreach($puestos_preferidos as $key=>$puesto_preferido){
-                    if($puesto_preferido->tipo=='pu' && $puesto_preferido->workday){
+                    if($puesto_preferido->tipo=='pu' && (isset($puesto_preferido->workday) && $puesto_preferido->workday==true)){
                         unset($puestos_preferidos[$key]);
                     }
                 }

@@ -345,6 +345,8 @@ class sincronizarWorkdayGenerali extends Command
         $cod_nivel=valor($parametros,"cod_nivel");
         $cod_nivel_supervisor=valor($parametros,"cod_nivel_supervisor");
         
+
+        
         
         //Peticion de datos de workday
         $this->escribelog_comando('debug','GET '.config('app.workday_url'));

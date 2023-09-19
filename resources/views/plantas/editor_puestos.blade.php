@@ -396,7 +396,7 @@
         ph_def.noUiSlider.on('update', function( values, handle ) {
             ph_def_value.innerHTML = values[handle];
             //$('.flpuesto').css('height',values[handle]+'vh');
-            //console.log('h: '+$('#plano').css('height'));
+            //console.log('altura '+parseInt($('#plano').css('height'))*(values[handle]/100)+'px');
             $('.flpuesto:not(.custom)').css('height',parseInt($('#plano').css('height'))*(values[handle]/100)+'px');
             $('#factor_puestoh').val(values[handle]);
         });
@@ -417,7 +417,7 @@
         });
         g_def.noUiSlider.on('update', function( values, handle ) {
             g_def_value.innerHTML = values[handle];
-            console.log(values[handle]);
+            //console.log(values[handle]);
             $('.draggable').draggable("option", "grid", [values[handle],values[handle]]);
             $('#factor_grid').val(values[handle]);
         });

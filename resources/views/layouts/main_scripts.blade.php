@@ -577,10 +577,10 @@
                     puesto.css('width',plano.width()*(puesto.data('factorw')/100)+'px');
                 }
                 if(puesto.data('height')!=0) {
-                    puesto.css('height',plano.width()*(puesto.data('height')/100)+'px');
+                    puesto.css('height',plano.height()*(puesto.data('height')/100)+'px');
                     //console.log('h');
                 } else {
-                    puesto.css('height',plano.width()*(puesto.data('factorh')/100)+'px');
+                    puesto.css('height',plano.height()*(puesto.data('factorh')/100)+'px');
                 }
                 // if(i==0){
                 //     console.log(item);

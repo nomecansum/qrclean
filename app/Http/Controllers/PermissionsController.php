@@ -28,7 +28,7 @@ class PermissionsController extends Controller
 			->get();
 		$cuenta =
 			DB::table('users')
-			->select('count(id) as cuenta,cod_nivel')
+			->selectraw('count(id) as cuenta,cod_nivel')
 			->where('id_cliente',Auth::user()->id_cliente)
 			  ->where('nivel_acceso','<=',$nivel_acceso)
 			  ->where(function($q){

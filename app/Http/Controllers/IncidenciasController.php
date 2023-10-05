@@ -144,6 +144,27 @@ class IncidenciasController extends Controller
             ->wherenull('incidencias.fec_cierre')
             ->orderby('fec_apertura','desc')
             ->get();
+
+        $solicitudes=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+            ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
+            ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
+            ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+            ->join('clientes','incidencias.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('incidencias.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('incidencias.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->where('incidencias.id_puesto',0)
+            ->whereBetween('fec_apertura',[$f1,$fhasta])
+            ->wherenull('incidencias.fec_cierre')
+            ->orderby('fec_apertura','desc')
+            ->get();
         
         $puestos=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -166,7 +187,7 @@ class IncidenciasController extends Controller
         $mostrar_filtros=1;
         $titulo_pagina="Gestión de incidencias";
         $tipo='embed';
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo'));
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo','solicitudes'));
     }
 
     public function mis_incidencias($f1=0,$f2=0){
@@ -197,6 +218,28 @@ class IncidenciasController extends Controller
             ->wherenull('incidencias.fec_cierre')
             ->orderby('fec_apertura','desc')
             ->get();
+
+        $solicitudes=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+            ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
+            ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
+            ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+            ->join('clientes','incidencias.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('incidencias.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('incidencias.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->where('incidencias.id_puesto',0)
+            ->where('incidencias.id_usuario_apertura',Auth::user()->id)
+            ->whereBetween('fec_apertura',[$f1,$fhasta])
+            ->wherenull('incidencias.fec_cierre')
+            ->orderby('fec_apertura','desc')
+            ->get();
         
         $puestos=DB::table('puestos')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
@@ -219,7 +262,7 @@ class IncidenciasController extends Controller
         $mostrar_filtros=0;
         $titulo_pagina="Mis incidencias";
         $tipo='mis';
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo'));
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo','solicitudes'));
     }
     
     //BUSCAR INCIDENCIAS
@@ -453,19 +496,26 @@ class IncidenciasController extends Controller
             return view('scan.puesto_no_encontrado',compact('puesto'));
         }
         validar_acceso_tabla($puesto->id_puesto,'puestos');
-        $config=DB::table('config_clientes')->where('id_cliente',$puesto->id_cliente)->first();
+        if($puesto->id_puesto==0){
+            $idcliente=Auth::user()->id_cliente;
+        } else {
+            $idcliente=$puesto->id_cliente;
+        }
+        $config=DB::table('config_clientes')->where('id_cliente',$idcliente)->first();
         $tipos=DB::table('incidencias_tipos')
             ->join('clientes','incidencias_tipos.id_cliente','clientes.id_cliente')
-            ->where(function($q) use($puesto){
-                $q->where('incidencias_tipos.id_cliente',$puesto->id_cliente);
+            ->where(function($q) use($puesto,$idcliente){
+                $q->where('incidencias_tipos.id_cliente',$idcliente);
                 if(config_cliente('mca_mostrar_datos_fijos')=='S'){
                     $q->orwhere('incidencias_tipos.mca_fijo','S');
                 }
                 
                 })
             ->where(function($q) use($puesto){
-                //$q->wherenull('list_tipo_puesto');
-                $q->orwhereraw('FIND_IN_SET('.$puesto->id_tipo_puesto.', list_tipo_puesto) <> 0');
+                if($puesto->id_puesto!=0){
+                    $q->orwhereraw('FIND_IN_SET('.$puesto->id_tipo_puesto.', list_tipo_puesto) <> 0');
+                }
+                
             })
             ->orderby('mca_fijo')
             ->orderby('nom_cliente')
@@ -525,6 +575,13 @@ class IncidenciasController extends Controller
     public function save(Request $r){
         $data=$this->getDataincidencia($r);
         $puesto=puestos::find($r->id_puesto);
+        if($puesto->id_puesto==0){
+            $idcliente=Auth::user()->id_cliente;
+            $destipo="Solicitud";
+        } else {
+            $idcliente=$puesto->id_cliente;
+            $destipo="Incidencia";
+        }
         $procedencia=$data['procedencia']??'web';
         if(isset($r->referer) && $r->referer=='scan'){
             $procedencia=$r->referer;
@@ -545,7 +602,7 @@ class IncidenciasController extends Controller
             $inc=new incidencias;
             $inc->des_incidencia=$data['des_incidencia']??null;
             $inc->txt_incidencia=$data['txt_incidencia']??null;
-            $inc->id_cliente=$puesto->id_cliente;
+            $inc->id_cliente=$idcliente;
             $inc->id_usuario_apertura=$r->id_usuario??Auth::user()->id;
             $inc->fec_apertura=Carbon::now();
             $inc->id_tipo_incidencia=$r->id_tipo_incidencia;
@@ -574,21 +631,21 @@ class IncidenciasController extends Controller
             }
             try{
                 $this->post_procesado_incidencia($inc,'C',$procedencia);
-                savebitacora('Incidencia de tipo '.$tipo->des_tipo_incidencia. ' '.$r->des_incidencia.' creada por '.Auth::user()->name,"Incidencias","save","OK");
+                savebitacora($destipo.' de tipo '.$tipo->des_tipo_incidencia. ' '.$r->des_incidencia.' creada por '.Auth::user()->name,"Incidencias","save","OK");
                 return [
-                    'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
-                    'message' => "Incidencia de tipo ".$tipo->des_tipo_incidencia.' creada. Muchas gracias',
+                    'title' => "Crear ".$destipo." en puesto ".$puesto->cod_puesto,
+                    'message' => $destipo." de tipo ".$tipo->des_tipo_incidencia.' creada. Muchas gracias',
                     'url' => url($url_vuelta),
                     'id' => $inc->id_incidencia,
                     'result'=>'ok',
                     'timestamp'=>Carbon::now(),
                 ];
             } catch(\Exception $exception){
-                savebitacora('ERROR: Ocurrio un error en el postprocesado de incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(). ' La incidencia se ha registrado correctamente pero no se ha podido procesar la accion de notificacion programada' ,"Incidencias","save","ERROR");
+                savebitacora('ERROR: Ocurrio un error en el postprocesado de '.$destipo.' del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(). ' La incidencia se ha registrado correctamente pero no se ha podido procesar la accion de notificacion programada' ,"Incidencias","save","ERROR");
                 //dump($exception);
                 return [
-                    'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
-                    'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
+                    'title' => "Crear ".$destipo." en puesto ".$puesto->cod_puesto,
+                    'error' => 'ERROR: Ocurrio un error creando '.$destipo.' del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
                     'url' => url($url_vuelta),
                     'id' => $inc->id_incidencia,
                     'result'=>'error',
@@ -598,10 +655,10 @@ class IncidenciasController extends Controller
             
             } catch (\Throwable $exception) {
 
-            savebitacora('ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","save","ERROR");
+            savebitacora('ERROR: Ocurrio un error creando '.$destipo.' del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","save","ERROR");
             return [
-                'title' => "Crear incidencia en puesto ".$puesto->cod_puesto,
-                'error' => 'ERROR: Ocurrio un error creando incidencia del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
+                'title' => "Crear ".$destipo." en puesto ".$puesto->cod_puesto,
+                'error' => 'ERROR: Ocurrio un error creando '.$destipo.' del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
                 //'url' => url('sections')
                 'result'=>'error',
                 'timestamp'=>Carbon::now(),

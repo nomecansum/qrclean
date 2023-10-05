@@ -120,8 +120,40 @@
 					@include('incidencias.fill_tabla_incidencias')
 					</tbody>
 				</table>
+
+				<h3 class="mt-3">Solicitudes</h3>
+				<table id="tabla_solicitudes"  
+					data-toggle="table" 
+					data-mobile-responsive="true"
+					data-locale="es-ES"
+					data-search="true"
+					data-show-columns="true"
+					data-show-columns-toggle-all="true"
+					data-page-list="[5, 10, 20, 30, 40, 50]"
+					data-page-size="50"
+					data-pagination="true" 
+					data-show-toggle="true"
+					data-show-button-text="true"
+					data-toolbar="#all_toolbar"
+					>
+					<thead>
+						<tr>
+							<th data-sortable="true">Id</th>
+							<th data-sortable="true">Tipo</th>
+							<th data-sortable="true">Fecha</th>
+							<th data-sortable="true">Usuario</th>
+							<th data-sortable="true">Situacion</th>
+							<th style="width: 30%" data-sortable="true">Solicitud</th>
+						</tr>
+					</thead>
+					<tbody  id="myFilter">
+					@include('incidencias.fill_tabla_solicitudes')
+					</tbody>
+				</table>
 			</div>
 		</div>
+
+		
 	</div>
 </div>
 
@@ -213,7 +245,11 @@
 					</select>
 					{!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
 				</div>
-				
+				<div class="form-group col-md-12 mt-3">
+					
+					<input type="checkbox" class="form-check-input" name="no_puesto" id="no_puesto"> 
+					<label for="no_puesto" class="control-label">Solicitud no asociada a un puesto concreto</label>
+					{!! $errors->first('no_puesto', '<p class="help-block">:message</p>') !!}
 			</div>
 		</div>
 	</div>
@@ -408,6 +444,15 @@
 			animateCSS('#editorCAM','bounceInRight');
 			$('.modal').modal('hide');
 		});
+	})
+
+	$('#no_puesto').click(function(e){
+		if($(this).is(':checked')){
+			$('#editorCAM').load("{{ url('incidencias/create') }}/"+0+'/{{ $tipo }}', function(){
+				animateCSS('#editorCAM','bounceInRight');
+				$('.modal').modal('hide');
+			});
+		}
 	})
 	
 	@if(isset($open))

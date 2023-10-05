@@ -1,8 +1,12 @@
 
+    @php
+        $entidad=$incidencia->id_puesto==0?'solicitud':'incidencia';
+    @endphp
+    
     <div class="card">
         <div class="card-header toolbar">
             <div class="toolbar-start">
-                <h5 class="m-0"> Detalle de la incidencia #{{ $incidencia->id_incidencia }}</h5>
+                <h5 class="m-0"> Detalle de la {{ $entidad }} #{{ $incidencia->id_incidencia }}</h5>
             </div>
             <div class="toolbar-end">
                 <button type="button" class="btn-close btn-close-card">
@@ -108,7 +112,7 @@
                         </div>
                         <div class="tl-content card bg-info text-white">
                             <div class="card-body">
-                                <i class="fa-solid fa-circle-exclamation"></i> Apertura de la incidencia
+                                <i class="fa-solid fa-circle-exclamation"></i> Apertura de la {{ $entidad }}
                             </div>
                         </div>
                     </div>
@@ -164,7 +168,7 @@
                                 <div class="card-body">
                                     <span class="btn-link">{{ $usuario_cierre->name }}</span> <i>{{ $incidencia->comentario_cierre }}</i>
                                     <br>
-                                    <i class="fa-solid fa-circle-check"></i> <b>CIERRE DE LA INCIDENCIA</b
+                                    <i class="fa-solid fa-circle-check"></i> <b>CIERRE DE LA {{ strtoupper($entidad) }}</b
                                 </div>
                             </div>
                         </div>

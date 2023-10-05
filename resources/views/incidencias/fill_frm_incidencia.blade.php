@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
         <h3 class="card-title" id="titulo">
-            Crear incidencia para el puesto 
+            Crear {{ isset($puesto->id_puesto)&&$puesto->id_puesto!=0?'incidencia para el puesto':'' }} 
             @isset($puesto->val_icono)
                 <i class="{{ $puesto->val_icono }} fa-2x" style="color:{{ $puesto->val_color }}"></i>
             @endisset

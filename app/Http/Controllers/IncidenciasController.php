@@ -443,6 +443,27 @@ class IncidenciasController extends Controller
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
                 }
             })
+            ->where('incidencias.id_puesto','<>',0)
+            ->where('incidencias.id_incidencia',$id)
+            ->get();
+
+
+        $solicitudes=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+            ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
+            ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
+            ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+            ->join('clientes','incidencias.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('incidencias.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('incidencias.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->where('incidencias.id_puesto',0)
             ->where('incidencias.id_incidencia',$id)
             ->get();
 
@@ -451,7 +472,7 @@ class IncidenciasController extends Controller
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
-            ->where('puestos.id_puesto',$incidencias->first()->id_puesto)
+            ->where('puestos.id_puesto',$incidencias->first()->id_puesto??0)
             ->orderby('edificios.des_edificio')
             ->orderby('plantas.num_orden')
             ->orderby('plantas.des_planta')
@@ -466,10 +487,10 @@ class IncidenciasController extends Controller
         $mostrar_graficos=0;
         $mostrar_filtros=0;
         $open=$id;
-        $titulo_pagina=$incidencias->first()->des_incidencia;
+        $titulo_pagina=$incidencias->first()->des_incidencia??'';
         $tipo='embed';
 
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','open','tipo'));
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','open','tipo','solicitudes'));
     }
 
     //USUARIOS ABRIR INCIDENCIAS
@@ -515,7 +536,13 @@ class IncidenciasController extends Controller
                 if($puesto->id_puesto!=0){
                     $q->orwhereraw('FIND_IN_SET('.$puesto->id_tipo_puesto.', list_tipo_puesto) <> 0');
                 }
-                
+            })
+            ->where(function($q) use($puesto){
+                if($puesto->id_puesto!=0){
+                    $q->wherein('incidencias_tipos.mca_aplica',['I','A']);
+                } else {
+                    $q->wherein('incidencias_tipos.mca_aplica',['S','A']);
+                }
             })
             ->orderby('mca_fijo')
             ->orderby('nom_cliente')
@@ -977,12 +1004,17 @@ class IncidenciasController extends Controller
         $inc->save();
         if(config_cliente('mca_mail_apertura_incidencia')=='S' && $momento=='C'){
            //Enviamos mail al uusario abriente
+           if($inc->id_puesto!=0){
+            $asunto='Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta;
+            } else {
+                $asunto='Nueva solicitud '.$tipo->des_tipo_incidencia;
+            }
             $to_email = $usuario_abriente->email;
-            Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente) {
+            Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente,$asunto) {
                 if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
-                    $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                    $message->to(explode(';','nomecansum@gmail.com'), '')->subject($asunto);
                 } else {
-                    $message->to(explode(';',$usuario_abriente->email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                    $message->to(explode(';',$usuario_abriente->email), '')->subject($asunto);
                 }
                 $message->from(config('mail.from.address'),config('mail.from.name'));
                 if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){

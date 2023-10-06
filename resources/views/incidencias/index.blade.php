@@ -454,6 +454,10 @@
 			});
 		}
 	})
+
+	$('#btn_nueva_incidencia').click(function(e){
+		$('#no_puesto').prop('checked',false);
+	})
 	
 	@if(isset($open))
 		edit({{ $open }})

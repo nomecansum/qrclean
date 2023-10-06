@@ -28,15 +28,17 @@
                 <div class="col-md-3">
                     <div class="rounded {{ txt_blanco($incidencia->val_color) }}" style="background-color: {{ $incidencia->val_color }}; padding: 4px; "><b>Tipo: &nbsp;&nbsp;&nbsp;</b> <i class="{{ $incidencia->val_icono }} {{ txt_blanco($incidencia->val_color) }}" style=""></i> {{ $incidencia->des_tipo_incidencia }} </div>
                 </div>
-                <div class="col-md-3">
-                    <span class="font-bold">Edificio: </span><span>{{ $incidencia->des_edificio }}</span>
-                </div>
-                <div class="col-md-3">
-                    <span class="font-bold">Planta: </span><span>{{ $incidencia->des_planta }}</span>
-                </div>
-                <div class="col-md-3">
-                    <span class="font-bold">Puesto: </span><span>{{ $incidencia->cod_puesto }}</span>
-                </div>
+                @if($incidencia->id_puesto!=0)
+                    <div class="col-md-3">
+                        <span class="font-bold">Edificio: </span><span>{{ $incidencia->des_edificio }}</span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="font-bold">Planta: </span><span>{{ $incidencia->des_planta }}</span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="font-bold">Puesto: </span><span>{{ $incidencia->cod_puesto }}</span>
+                    </div>
+                @endif
             </div>
             <div class="row mt-3">
                 <div class="col-md-12">

@@ -60,7 +60,7 @@
                 </div>
                 <div class="row mt-2">
                     
-                    <div class="form-group col-md-3 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
+                    <div class="form-group col-md-2 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
                         <label for="id_estado_inicial" class="control-label">Estado inicial</label>
                         <select class="form-control" required id="id_estado_inicial" name="id_estado_inicial">
                             @foreach ($estados as $estado)
@@ -77,7 +77,7 @@
                         <input class="form-control"  name="val_responsable" type="text" id="val_responsable" value="{{ old('val_responsable', optional($tipo)->val_responsable) }}" maxlength="200" placeholder="Enter val_responsable here...">
                         {!! $errors->first('val_responsable', '<p class="help-block">:message</p>') !!}
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-1">
                         <label for="id_tipo_salas" class="control-label">ID en salas</label>
                         <input class="form-control"  name="id_tipo_salas" type="text" id="id_tipo_salas" value="{{ old('id_tipo_salas', optional($tipo)->id_tipo_salas) }}" maxlength="200" placeholder="Enter id_tipo_salas here...">
                         {!! $errors->first('id_tipo_salas', '<p class="help-block">:message</p>') !!}
@@ -87,15 +87,25 @@
                         <input class="form-control"  name="id_tipo_externo" type="text" id="id_tipo_externo" value="{{ old('id_tipo_externo', optional($tipo)->id_tipo_externo) }}" maxlength="200" placeholder="Enter id_tipo_externo here...">
                         {!! $errors->first('id_tipo_externo', '<p class="help-block">:message</p>') !!}
                     </div>
-                    <div class="form-group col-md-1" style="margin-top: 7px; ">
+                    <div class="form-group col-md-1">
                         <label for="val_color">Color</label><br>
                         <input type="color" autocomplete="off" name="val_color" id="val_color"  class="form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
                     </div>
-                    <div class="form-group col-md-1 mt-2" style="margin-left: 10px">
+                    <div class="form-group col-md-1" style="margin-left: 10px">
                         <div class="form-group">
                             <label>Icono</label><br>
                             <button type="button"  role="iconpicker"  data-selectedClass="btn-warning"   data-unselectedClass="btn-primary"  name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-placement="bottom"  class="btn btn-light iconpicker" data-iconset-version="5.3.1_pro" data-search="true" data-rows="10" @desktop data-cols="20" @elsedesktop data-cols="8" @enddesktop data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
                         </div>
+                    </div>
+                    <div class="form-group col-md-2 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
+                        <label for="id_estado_inicial" class="control-label">Aplica a</label>
+                        <select class="form-control" required id="mca_aplica" name="mca_aplica">
+                            <option value="I" {{ old('mca_aplica', optional($tipo)->mca_aplica) == 'I' ? 'selected' : '' }}>Incidencias</option>
+                            <option value="S" {{ old('mca_aplica', optional($tipo)->mca_aplica) == 'S' ? 'selected' : '' }}>Solicitudes</option>
+                            <option value="A" {{ old('mca_aplica', optional($tipo)->mca_aplica) == 'A' ? 'selected' : '' }}>Ambos</option>
+                        </select>
+                            
+                        {!! $errors->first('id_estado_inicial', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
 

@@ -4,6 +4,8 @@ use App\Models\incidencias;
 use App\Models\incidencias_acciones;
 use App\Models\users;
 
+$entidad=$inc->id_puesto==0?'solicitud':'incidencia';
+
 //$inc=incidencias::find(3);
 $accion=incidencias_acciones::where('id_incidencia',$inc->id_incidencia)->orderby('num_accion','desc')->first();
 $puesto=DB::table('puestos')
@@ -32,7 +34,7 @@ $usuario=users::find($accion->id_usuario);
 
 @section('cuerpo')
     <p style="font-size: 14px; line-height: 160%;"> </p>
-    <p style="font-size: 14px; line-height: 160%;">{{ $usuario->name }} ( <a href="mailto:{{ $usuario->email }}"> {{ $usuario->email }} </a> ) ha añadido una accion a la incidencia [{{ $inc->id_incidencia }}] {{ $inc->des_incidencia }}</p></p>
+    <p style="font-size: 14px; line-height: 160%;">{{ $usuario->name }} ( <a href="mailto:{{ $usuario->email }}"> {{ $usuario->email }} </a> ) ha añadido una accion a la {{ $entidad }} [{{ $inc->id_incidencia }}] {{ $inc->des_incidencia }}</p></p>
     <br>
     <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:18px"><strong>{!! $accion->des_accion !!}</strong></p>
     <p><br></p>
@@ -45,6 +47,12 @@ $usuario=users::find($accion->id_usuario);
               <a href="{{ $inc->url_detalle_incidencia }}" target="_blank"  rel="noopener noreferrer" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:'Rubik',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #805997; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; 80px; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                 <span style="display:block;padding:10px 20px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px;">Ver detalle</span></strong></span>
               </a>
+        </div>
+    @else
+        <div class="v-text-align" align="left">
+            <a href="{{url('/incidencias/show',$inc->id_incidencia) }}" target="_blank"  rel="noopener noreferrer" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:'Rubik',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #805997; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; 80px; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
+            <span style="display:block;padding:10px 20px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px;">Ver detalle</span></strong></span>
+            </a>
         </div>
     @endif
 @endsection

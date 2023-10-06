@@ -42,7 +42,8 @@ class incidencias_tipos extends Model
                   'list_tipo_puesto',
                   'id_tipo_externo',
                   'id_tipo_salas',
-                  'val_responsable'
+                  'val_responsable',
+                  'mca_aplica',
                   
               ];
 

@@ -14,6 +14,7 @@ if (isset($accion)){
 } else {
     $nombre_usuario="Se ";
 }
+$entidad=$inc->id_puesto==0?'solicitud':'incidencia';
 $puesto=DB::table('puestos')
 ->join('edificios','puestos.id_edificio','edificios.id_edificio')
 ->join('plantas','puestos.id_planta','plantas.id_planta')
@@ -35,7 +36,7 @@ $puesto=DB::table('puestos')
 
 @section('titulo')
     <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 20px; line-height: 48px;"><img align="left" border="0" src="{{ url('img/green_check.png') }}" alt="" title="" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 50px;max-width: 50px;" width="50" class="v-src-width v-src-max-width"/>
-    <span style="margin-top: 30px; font-weight: bold">&nbsp;&nbsp;&nbsp;Cierre de incidencia</span></span></p>
+    <span style="margin-top: 30px; font-weight: bold">&nbsp;&nbsp;&nbsp;Cierre de {{ $entidad }}</span></span></p>
 @endsection
 
 @section('cuerpo')
@@ -53,6 +54,12 @@ $puesto=DB::table('puestos')
               <a href="{{ $inc->url_detalle_incidencia }}" target="_blank"  rel="noopener noreferrer" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:'Rubik',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #805997; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; 80px; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                 <span style="display:block;padding:10px 20px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px;">Ver detalle</span></strong></span>
               </a>
+        </div>
+    @else
+        <div class="v-text-align" align="left">
+            <a href="{{url('/incidencias/show',$inc->id_incidencia) }}" target="_blank"  rel="noopener noreferrer" class="v-size-width" style="box-sizing: border-box;display: inline-block;font-family:'Rubik',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #805997; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; 80px; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
+            <span style="display:block;padding:10px 20px;line-height:120%;"><strong><span style="font-size: 14px; line-height: 16.8px;">Ver detalle</span></strong></span>
+            </a>
         </div>
     @endif
 @endsection

@@ -38,4 +38,9 @@ $entidad=$incidencia->id_puesto==0?'solicitud':'incidencia';
 			$(this).next('label').html(fileName);
 			//$('.custom-file-label').html(fileName);
 		});
+        $('#id_estado').change(function(){
+            var id_estado = $(this).val();
+            var txt_estado= $(this).find('option:selected').text();
+            $('#des_accion').val('---> Cambiado estado a '+txt_estado);
+        });
 </script>

@@ -1,7 +1,15 @@
 @extends('layout')
 
 
+@php
+	if($pagina=='solicitudes'){
+		$singular='solicitud';
+	}
+	else{
+		$singular='incidencia';
+	}
 
+@endphp
 
 @section('styles')
 <link href="{{url('/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
@@ -40,7 +48,7 @@
 	<div class="col-md-2 text-end">
 		@if(checkPermissions(['Incidencias'],['C']))
 		<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="#nueva-incidencia" id="btn_nueva_incidencia" class="btn btn-success" data-toggle="modal" title="Nueva incidencia">
+				<a href="#nueva-incidencia" id="btn_nueva_incidencia" class="btn btn-success"  title="Nueva incidencia">
 				<i class="fa fa-plus-square pt-2" style="font-size: 20px" aria-hidden="true"></i>
 				<span>Nueva</span>
 			</a>
@@ -55,14 +63,19 @@
 	<div class="col-12">
 		<div class="card">
 			<div class="card-header">
-				<h3 class="card-title">Incidencias</h3>
+				<h3 class="card-title" style="text-transform: capitalize;">{{ $pagina }}</h3>
 			</div>
-			<form method="post" name="form_puestos" id="formbuscador" action="{{ url('/incidencias') }}" class="form-horizontal ajax-filter ml-3 mt-2">
+			<form method="post" name="form_puestos" id="formbuscador" action="{{ url($pagina) }}" class="form-horizontal ajax-filter ml-3 mt-2">
 				@csrf
 				<input type="hidden" name="document" value="pantalla">
 				<input type="hidden" name="output" value="pantalla">
 				@if($mostrar_filtros==1)
-					@include('resources.combos_filtro',[$hide=['est_mark'=>1,'tip_mark'=>1],$show=['proc'=>1]])
+					@if($pagina=='solicitudes')
+						@include('resources.combos_filtro',[$hide=['est_mark'=>1,'tip_mark'=>1,'edi'=>1,'pla'=>1,'tag'=>1,'pue'=>1,'tip'=>1,'est'=>1],$show=['proc'=>1]])
+					@else
+						@include('resources.combos_filtro',[$hide=['est_mark'=>1,'tip_mark'=>1,'proc'=>1]])
+					@endif
+					
 				@endif
 				@if(!isset($open))
 					<div class="row">
@@ -83,73 +96,69 @@
 				@endif
 			</form>
 			<div class="card-body">
-				{{-- <div id="all_toolbar">
-					<div class="input-group">
-						<input type="text" class="form-control pull-left" id="fechas" name="fechas" style="height: 40px; width: 200px" value="{{ $f1->format('d/m/Y').' - '.$f2->format('d/m/Y') }}">
-						<span class="btn input-group-text btn-secondary"  style="height: 40px"><i class="fas fa-calendar mt-1"></i></span>
-						<button id="btn-toggle" class="btn btn-secondary float-right ml-3 add-tooltip" title="Cambiar vista tabla/tarjetas"><i class="fal fa-table"></i> | <i class="fal fa-credit-card-blank mt-1"></i></button>
-					</div>
-				</div> --}}
-				<table id="tabla"  
-					data-toggle="table" 
-					data-mobile-responsive="true"
-					data-locale="es-ES"
-					data-search="true"
-					data-show-columns="true"
-					data-show-columns-toggle-all="true"
-					data-page-list="[5, 10, 20, 30, 40, 50]"
-					data-page-size="50"
-					data-pagination="true" 
-					data-show-toggle="true"
-					data-show-button-text="true"
-					data-toolbar="#all_toolbar"
-					>
-					<thead>
-						<tr>
-							<th data-sortable="true">Id</th>
-							<th data-sortable="true">Tipo</th>
-							<th data-sortable="true">Puesto</th>
-							<th data-sortable="true">Edificio</th>
-							<th data-sortable="true">Planta</th>
-							<th data-sortable="true">Fecha</th>
-							<th data-sortable="true">Situacion</th>
-							<th style="width: 30%" data-sortable="true">Incidencia</th>
-						</tr>
-					</thead>
-					<tbody  id="myFilter">
-					@include('incidencias.fill_tabla_incidencias')
-					</tbody>
-				</table>
-
-				<h3 class="mt-3">Solicitudes</h3>
-				<table id="tabla_solicitudes"  
-					data-toggle="table" 
-					data-mobile-responsive="true"
-					data-locale="es-ES"
-					data-search="true"
-					data-show-columns="true"
-					data-show-columns-toggle-all="true"
-					data-page-list="[5, 10, 20, 30, 40, 50]"
-					data-page-size="50"
-					data-pagination="true" 
-					data-show-toggle="true"
-					data-show-button-text="true"
-					data-toolbar="#all_toolbar"
-					>
-					<thead>
-						<tr>
-							<th data-sortable="true">Id</th>
-							<th data-sortable="true">Tipo</th>
-							<th data-sortable="true">Fecha</th>
-							<th data-sortable="true">Usuario</th>
-							<th data-sortable="true">Situacion</th>
-							<th style="width: 30%" data-sortable="true">Solicitud</th>
-						</tr>
-					</thead>
-					<tbody  id="myFilter">
-					@include('incidencias.fill_tabla_solicitudes')
-					</tbody>
-				</table>
+				@if($pagina=='incidencias')
+					<table id="tabla"  
+						data-toggle="table" 
+						data-mobile-responsive="true"
+						data-locale="es-ES"
+						data-search="true"
+						data-show-columns="true"
+						data-show-columns-toggle-all="true"
+						data-page-list="[5, 10, 20, 30, 40, 50]"
+						data-page-size="50"
+						data-pagination="true" 
+						data-show-toggle="true"
+						data-show-button-text="true"
+						data-toolbar="#all_toolbar"
+						>
+						<thead>
+							<tr>
+								<th data-sortable="true">Id</th>
+								<th data-sortable="true">Tipo</th>
+								<th data-sortable="true">Puesto</th>
+								<th data-sortable="true">Edificio</th>
+								<th data-sortable="true">Planta</th>
+								<th data-sortable="true">Fecha</th>
+								<th data-sortable="true">Situacion</th>
+								<th style="width: 30%" data-sortable="true">Incidencia</th>
+							</tr>
+						</thead>
+						<tbody  id="myFilter">
+						@include('incidencias.fill_tabla_incidencias')
+						</tbody>
+					</table>
+				@endif
+				@if($pagina=='solicitudes')
+					<h3 class="mt-3">Solicitudes</h3>
+					<table id="tabla_solicitudes"  
+						data-toggle="table" 
+						data-mobile-responsive="true"
+						data-locale="es-ES"
+						data-search="true"
+						data-show-columns="true"
+						data-show-columns-toggle-all="true"
+						data-page-list="[5, 10, 20, 30, 40, 50]"
+						data-page-size="50"
+						data-pagination="true" 
+						data-show-toggle="true"
+						data-show-button-text="true"
+						data-toolbar="#all_toolbar"
+						>
+						<thead>
+							<tr>
+								<th data-sortable="true">Id</th>
+								<th data-sortable="true">Tipo</th>
+								<th data-sortable="true">Fecha</th>
+								<th data-sortable="true">Usuario</th>
+								<th data-sortable="true">Situacion</th>
+								<th style="width: 30%" data-sortable="true">Solicitud</th>
+							</tr>
+						</thead>
+						<tbody  id="myFilter">
+						@include('incidencias.fill_tabla_solicitudes')
+						</tbody>
+					</table>
+				@endif
 			</div>
 		</div>
 
@@ -168,7 +177,7 @@
 				<div class="modal-header">
 					
 					<div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-					<h1 class="modal-title text-nowrap">Cerrar incidencia</h1>
+					<h1 class="modal-title text-nowrap">Cerrar {{ $singular }}</h1>
 					<button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
 						<span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
 					</button>
@@ -215,7 +224,7 @@
 			<div class="modal-header">
                 
                 <div><img src="/img/Mosaic_brand_20.png" class="float-right"></div>
-                <h1 class="modal-title text-nowrap">Nueva incidencia</h1>
+                <h1 class="modal-title text-nowrap">Nueva {{ $singular }}</h1>
                 <button type="button" class="close btn" data-dismiss="modal" onclick="cerrar_modal()" aria-label="Close">
                     <span aria-hidden="true"><i class="fa-solid fa-circle-x fa-2x"></i></span>
                 </button>
@@ -245,12 +254,13 @@
 					</select>
 					{!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
 				</div>
-				<div class="form-group col-md-12 mt-3">
-					
-					<input type="checkbox" class="form-check-input" name="no_puesto" id="no_puesto"> 
-					<label for="no_puesto" class="control-label">Solicitud no asociada a un puesto concreto</label>
-					{!! $errors->first('no_puesto', '<p class="help-block">:message</p>') !!}
-			</div>
+				@if($pagina=="solicitudes")
+					<div class="form-group col-md-12 mt-3">
+						<input type="checkbox" class="form-check-input" name="no_puesto" id="no_puesto"> 
+						<label for="no_puesto" class="control-label">Solicitud no asociada a un puesto concreto</label>
+						{!! $errors->first('no_puesto', '<p class="help-block">:message</p>') !!}
+					</div>
+				@endif
 		</div>
 	</div>
 </div>
@@ -262,13 +272,12 @@
 	<script>
 
 	var lista_ficheros=new Array(0);
-
-	@if($tipo??'normal'=='mis')
+	
+	@if(($tipo??'normal')=='mis')
 		$('.mioficina').addClass('active active-sub');
-		$('.mis_incidencias').addClass('active');
+		$('.mis_{{ $pagina }}').addClass('active');
 	@else
-		$('.mantenimiento').addClass('active active-sub');
-		$('.incidencias').addClass('active');
+		$('.{{ $pagina }}').addClass('active');
 	@endif
 
 	$('#btn-toggle').click(function(){
@@ -451,12 +460,20 @@
 			$('#editorCAM').load("{{ url('incidencias/create') }}/"+0+'/{{ $tipo }}', function(){
 				animateCSS('#editorCAM','bounceInRight');
 				$('.modal').modal('hide');
+				$('#referer').val("{{$pagina}}");
 			});
 		}
 	})
 
 	$('#btn_nueva_incidencia').click(function(e){
-		$('#no_puesto').prop('checked',false);
+		if("{{$pagina}}"=="solicitudes"){
+			$('#no_puesto').click();
+			
+		} else {
+			$('#no_puesto').prop('checked',false);
+			$("#nueva-incidencia").modal('show');
+		}
+		
 	})
 	
 	@if(isset($open))

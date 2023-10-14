@@ -1,6 +1,6 @@
 
     @php
-        $entidad=$incidencia->id_puesto==0?'solicitud':'incidencia';
+        $entidad=($incidencia->id_puesto??0)==0?'solicitud':'incidencia';
     @endphp
     
     <div class="card">

@@ -1,6 +1,7 @@
 accessibility:
   icons:
     - accessible-icon
+    - address-card
     - audio-description
     - audio-description-slash
     - braille
@@ -91,6 +92,7 @@ alert:
 alphabet:
   icons:
     - a
+    - address-card
     - b
     - c
     - circle-a
@@ -184,6 +186,7 @@ animals:
     - crow
     - deer
     - deer-rudolph
+    - dinosaur
     - dog
     - dog-leashed
     - dolphin
@@ -216,6 +219,7 @@ animals:
     - pig
     - rabbit
     - rabbit-running
+    - raccoon
     - ram
     - sheep
     - shield-cat
@@ -243,12 +247,14 @@ arrows:
     - angles-left
     - angles-right
     - angles-up
+    - angles-up-down
     - arrow-down
     - arrow-down-1-9
     - arrow-down-9-1
     - arrow-down-a-z
     - arrow-down-arrow-up
     - arrow-down-big-small
+    - arrow-down-from-arc
     - arrow-down-from-dotted-line
     - arrow-down-from-line
     - arrow-down-left
@@ -269,11 +275,14 @@ arrows:
     - arrow-down-wide-short
     - arrow-down-z-a
     - arrow-left
+    - arrow-left-from-arc
     - arrow-left-from-line
     - arrow-left-long
     - arrow-left-long-to-line
+    - arrow-left-to-arc
     - arrow-left-to-line
     - arrow-pointer
+    - arrow-progress
     - arrow-right
     - arrow-right-arrow-left
     - arrow-right-from-arc
@@ -313,6 +322,7 @@ arrows:
     - arrow-up-short-wide
     - arrow-up-small-big
     - arrow-up-square-triangle
+    - arrow-up-to-arc
     - arrow-up-to-dotted-line
     - arrow-up-to-line
     - arrow-up-triangle-square
@@ -413,6 +423,7 @@ arrows:
     - right-from-bracket
     - right-from-line
     - right-left
+    - right-left-large
     - right-long
     - right-long-to-line
     - right-to-bracket
@@ -452,6 +463,8 @@ arrows:
     - square-up
     - square-up-left
     - square-up-right
+    - swap
+    - swap-arrows
     - turn-down
     - turn-down-left
     - turn-down-right
@@ -474,6 +487,7 @@ arrows:
 astronomy:
   icons:
     - alien
+    - binoculars
     - cat-space
     - comet
     - eclipse
@@ -646,6 +660,7 @@ buildings:
     - landmark
     - landmark-dome
     - landmark-flag
+    - lighthouse
     - monument
     - mosque
     - mountain-city
@@ -682,6 +697,7 @@ business:
   icons:
     - address-book
     - address-card
+    - arrow-progress
     - arrows-spin
     - arrows-to-dot
     - arrows-to-eye
@@ -712,8 +728,11 @@ business:
     - chart-line
     - chart-line-down
     - chart-line-up
+    - chart-line-up-down
     - chart-pie
     - chart-pie-simple
+    - chart-pie-simple-circle-currency
+    - chart-pie-simple-circle-dollar
     - chart-pyramid
     - chart-simple
     - chart-simple-horizontal
@@ -767,6 +786,7 @@ business:
     - keynote
     - lamp-desk
     - landmark
+    - laptop-binary
     - laptop-file
     - list-check
     - list-dropdown
@@ -968,10 +988,15 @@ charts-diagrams:
     - chart-line
     - chart-line-down
     - chart-line-up
+    - chart-line-up-down
     - chart-mixed
+    - chart-mixed-up-circle-currency
+    - chart-mixed-up-circle-dollar
     - chart-network
     - chart-pie
     - chart-pie-simple
+    - chart-pie-simple-circle-currency
+    - chart-pie-simple-circle-dollar
     - chart-pyramid
     - chart-radar
     - chart-scatter
@@ -996,6 +1021,9 @@ charts-diagrams:
     - diagram-subtask
     - diagram-successor
     - diagram-venn
+    - display-chart-up
+    - display-chart-up-circle-currency
+    - display-chart-up-circle-dollar
     - file-chart-column
     - file-chart-pie
     - square-kanban
@@ -1076,6 +1104,7 @@ clothing-fashion:
     - glasses
     - glasses-round
     - graduation-cap
+    - hat-beach
     - hat-cowboy
     - hat-cowboy-side
     - hat-santa
@@ -1132,6 +1161,7 @@ coding:
     - bug
     - bug-slash
     - circle-nodes
+    - cloud-binary
     - code
     - code-branch
     - code-commit
@@ -1153,9 +1183,15 @@ coding:
     - folder
     - folder-open
     - font-awesome
+    - gear
+    - gear-code
+    - gear-complex
+    - gear-complex-code
     - gears
+    - head-side-gear
     - key-skeleton-left-right
     - keyboard
+    - laptop-binary
     - laptop-code
     - laptop-mobile
     - merge
@@ -1304,12 +1340,15 @@ communication:
     - poo
     - quote-left
     - quote-right
+    - right-left-large
     - square-envelope
     - square-phone
     - square-phone-flip
     - square-phone-hangup
     - square-quote
     - square-rss
+    - subtitles
+    - subtitles-slash
     - symbols
     - thought-bubble
     - tower-cell
@@ -1337,6 +1376,7 @@ connectivity:
     - cloud-xmark
     - ethernet
     - globe
+    - globe-pointer
     - house-signal
     - link-horizontal
     - link-horizontal-slash
@@ -1436,6 +1476,7 @@ design:
     - circle-nodes
     - circle-quarter-stroke
     - circle-three-quarters-stroke
+    - circles-overlap
     - clone
     - columns-3
     - compass-drafting
@@ -1471,6 +1512,11 @@ design:
     - grid-4
     - grid-5
     - grid-dividers
+    - grid-round
+    - grid-round-2
+    - grid-round-2-plus
+    - grid-round-4
+    - grid-round-5
     - highlighter
     - highlighter-line
     - icons
@@ -1585,6 +1631,7 @@ devices-hardware:
     - keyboard-left
     - laptop
     - laptop-arrow-down
+    - laptop-binary
     - laptop-file
     - laptop-mobile
     - laptop-slash
@@ -1721,6 +1768,7 @@ editing:
     - eye-dropper-half
     - eye-slash
     - gallery-thumbnails
+    - gear
     - grid
     - grid-2
     - grid-2-plus
@@ -1728,6 +1776,11 @@ editing:
     - grid-5
     - grid-dividers
     - grid-horizontal
+    - grid-round
+    - grid-round-2
+    - grid-round-2-plus
+    - grid-round-4
+    - grid-round-5
     - grip
     - grip-dots
     - grip-dots-vertical
@@ -2066,6 +2119,7 @@ files:
     - file-circle-xmark
     - file-code
     - file-csv
+    - file-doc
     - file-excel
     - file-exclamation
     - file-export
@@ -2087,6 +2141,7 @@ files:
     - file-video
     - file-word
     - file-xmark
+    - file-zip
     - file-zipper
     - files
     - floppy-disk
@@ -2184,6 +2239,8 @@ film-video:
     - star-sharp
     - star-sharp-half
     - star-sharp-half-stroke
+    - subtitles
+    - subtitles-slash
     - ticket
     - tower-broadcast
     - tower-cell
@@ -2289,6 +2346,7 @@ food-beverage:
     - jar
     - jar-wheat
     - jug
+    - jug-bottle
     - lemon
     - lobster
     - lollipop
@@ -2473,6 +2531,8 @@ gaming:
     - mushroom
     - nesting-dolls
     - paw-claws
+    - person-dress-fairy
+    - person-fairy
     - person-pinball
     - pickaxe
     - pinata
@@ -2679,6 +2739,7 @@ household:
   icons:
     - air-conditioner
     - arrow-up-from-water-pump
+    - bag-seedling
     - bath
     - bed
     - bed-bunk
@@ -2686,6 +2747,9 @@ household:
     - bed-front
     - bell
     - bell-on
+    - bin-bottles
+    - bin-bottles-recycle
+    - bin-recycle
     - blanket
     - blanket-fire
     - blender
@@ -2751,6 +2815,7 @@ household:
     - house-user
     - jar
     - jar-wheat
+    - jug-bottle
     - jug-detergent
     - kitchen-set
     - knife
@@ -3198,6 +3263,7 @@ logistics:
     - clipboard-list
     - clipboard-question
     - conveyor-belt
+    - conveyor-belt-arm
     - conveyor-belt-boxes
     - conveyor-belt-empty
     - crate-empty
@@ -3207,6 +3273,7 @@ logistics:
     - forklift
     - gas-pump
     - gas-pump-slash
+    - gear-complex
     - gears
     - hand-holding-box
     - hands-holding-diamond
@@ -3341,6 +3408,7 @@ maps:
     - lemon
     - life-ring
     - lightbulb
+    - lighthouse
     - location-arrow
     - location-check
     - location-crosshairs
@@ -3366,6 +3434,7 @@ maps:
     - martini-glass-empty
     - money-bill
     - money-bill-1
+    - monument
     - motorcycle
     - mountain-sun
     - mug-saucer
@@ -3410,6 +3479,8 @@ maps:
     - street-view
     - suitcase
     - suitcase-medical
+    - swap
+    - swap-arrows
     - tag
     - tags
     - taxi
@@ -3462,6 +3533,7 @@ maritime:
     - fish-cooked
     - fish-fins
     - fishing-rod
+    - lighthouse
     - lobster
     - narwhal
     - otter
@@ -3491,15 +3563,21 @@ marketing:
     - bullseye-arrow
     - bullseye-pointer
     - chart-mixed
+    - chart-mixed-up-circle-currency
+    - chart-mixed-up-circle-dollar
     - chart-simple
     - chart-simple-horizontal
     - comment-dollar
     - comments-dollar
+    - display-chart-up
+    - display-chart-up-circle-currency
+    - display-chart-up-circle-dollar
     - envelope-open-dollar
     - envelope-open-text
     - envelopes-bulk
     - filter-circle-dollar
     - gift-card
+    - globe-pointer
     - group-arrows-rotate
     - hundred-points
     - lightbulb
@@ -3507,6 +3585,7 @@ marketing:
     - lightbulb-cfl-on
     - lightbulb-dollar
     - lightbulb-exclamation
+    - lightbulb-gear
     - lightbulb-on
     - lightbulb-slash
     - magnifying-glass-arrow-right
@@ -3634,6 +3713,8 @@ media-playback:
     - sliders
     - sliders-up
     - stop
+    - subtitles
+    - subtitles-slash
     - up-right-and-down-left-from-center
     - volume
     - volume-high
@@ -3688,6 +3769,7 @@ medical-health:
     - files-medical
     - fire-flame-simple
     - flask
+    - flask-gear
     - flask-round-potion
     - flask-vial
     - folder-medical
@@ -3816,8 +3898,13 @@ money:
     - chart-line
     - chart-line-down
     - chart-mixed
+    - chart-mixed-up-circle-currency
+    - chart-mixed-up-circle-dollar
     - chart-pie
     - chart-pie-simple
+    - chart-pie-simple-circle-currency
+    - chart-pie-simple-circle-dollar
+    - chf-sign
     - circle-dollar
     - circle-dollar-to-slot
     - circle-euro
@@ -3835,6 +3922,9 @@ money:
     - credit-card-blank
     - credit-card-front
     - cruzeiro-sign
+    - display-chart-up
+    - display-chart-up-circle-currency
+    - display-chart-up-circle-dollar
     - dollar-sign
     - dong-sign
     - ethereum
@@ -4042,6 +4132,7 @@ music-audio:
 nature:
   icons:
     - acorn
+    - bag-seedling
     - bench-tree
     - binoculars
     - bug
@@ -4338,6 +4429,7 @@ science:
     - fire-flame-curved
     - fire-flame-simple
     - flask
+    - flask-gear
     - flask-round-poison
     - flask-round-potion
     - flask-vial
@@ -4372,6 +4464,7 @@ science-fiction:
     - atom-simple
     - book-journal-whills
     - cat-space
+    - cloud-binary
     - drone
     - drone-front
     - explosion
@@ -4379,6 +4472,7 @@ science-fiction:
     - galactic-republic
     - galactic-senate
     - hand-spock
+    - head-side-gear
     - jedi
     - jedi-order
     - old-republic
@@ -4544,6 +4638,7 @@ shapes:
     - circle-star
     - circle-three-quarters
     - circle-three-quarters-stroke
+    - circles-overlap
     - cloud
     - clover
     - club
@@ -4741,6 +4836,7 @@ social:
     - user-crown
     - user-group
     - user-group-crown
+    - user-group-simple
     - user-plus
     - users
     - video
@@ -4832,6 +4928,7 @@ sports-fitness:
     - person-biking-mountain
     - person-hiking
     - person-running
+    - person-running-fast
     - person-skating
     - person-ski-jumping
     - person-skiing
@@ -4979,6 +5076,7 @@ time:
     - calendar-plus
     - calendar-range
     - calendar-star
+    - calendar-users
     - calendar-week
     - calendar-xmark
     - calendars
@@ -5220,6 +5318,7 @@ travel-hotel:
     - fireplace
     - flux-capacitor
     - fork-knife
+    - hat-beach
     - heat
     - horse-saddle
     - hot-tub-person
@@ -5344,6 +5443,7 @@ users-people:
     - head-side-brain
     - head-side-cough
     - head-side-cough-slash
+    - head-side-gear
     - head-side-goggles
     - head-side-headphones
     - head-side-heart
@@ -5400,8 +5500,10 @@ users-people:
     - person-dots-from-line
     - person-dress
     - person-dress-burst
+    - person-dress-fairy
     - person-dress-simple
     - person-drowning
+    - person-fairy
     - person-falling
     - person-falling-burst
     - person-from-portal
@@ -5417,6 +5519,7 @@ users-people:
     - person-rays
     - person-rifle
     - person-running
+    - person-running-fast
     - person-seat
     - person-seat-reclined
     - person-shelter
@@ -5466,6 +5569,7 @@ users-people:
     - user-graduate
     - user-group
     - user-group-crown
+    - user-group-simple
     - user-hair
     - user-hair-buns
     - user-hair-long

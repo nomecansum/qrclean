@@ -419,6 +419,13 @@ Route::group(['middleware' => 'auth'], function () {
         
     });
 
+    Route::group(['prefix' => 'solicitudes'], function () {
+        Route::get('/',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@index'])->name('solicitudes.index');
+        Route::post('/',['middleware'=>'permissions:["Incidencias"],["R"]','uses'=>'IncidenciasController@search'])->name('solicitudes.search');
+        Route::get('/mis_solicitudes',['middleware'=>'permissions:["Incidencias > Mis incidencias"],["R"]','uses'=>'IncidenciasController@mis_incidencias'])->name('solicitudes.mis_solicitudes');
+        Route::get('/create/{puesto}/{embed?}','IncidenciasController@nueva_incidencia')->name('solicitudes.nueva');
+    });
+
     ////////////////////ENCUESTAS PARA PUESTOS////////////////////
     Route::group(['prefix' => 'encuestas'], function () {
         Route::get('/',['middleware'=>'permissions:["Encuestas"],["R"]', 'uses' => 'EncuestasController@index'])->name('encuestas.index');

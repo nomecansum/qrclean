@@ -119,6 +119,15 @@
   }
 }
 
+@mixin fa-icon-sharp-light($fa-var) {
+  @extend %fa-icon;
+  @extend .fa-sharp-light;
+
+  &::before {
+    content: unquote("\"#{ $fa-var }\"");
+  }
+}
+
 @mixin fa-icon-brands($fa-var) {
   @extend %fa-icon;
   @extend .fa-brands;

@@ -15,7 +15,7 @@
         {{ csrf_field() }}
             <div class="row">
                 <input type="hidden" name="id_puesto" value="{{ $puesto->id_puesto }}">
-                <input type="hidden" name="referer" value="{{ $referer }}">
+                <input type="hidden" name="referer" id="referer" value="{{ $referer }}">
                 <input type="hidden" name="adjuntos[]" id="adjuntos" value="">
                 <input type="hidden" name="procedencia" value="web"></input>
                 <input type="hidden" name="tipo" value="{{ $tipo }}"></input>

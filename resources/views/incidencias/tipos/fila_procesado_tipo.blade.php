@@ -26,6 +26,22 @@
                                 <label for="txt_destinos" class="control-label">Destinos <span style="font-size: 9px">(separados por ; )</span></label>
                                 <textarea class="form-control tocado" name="txt_destinos" type="text" id="txt_destinos" value="" maxlength="65535" placeholder="Enter Destinos here..." rows="4">{{ old('txt_destinos', optional($tipo)->txt_destinos) }}</textarea>
                                 {!! $errors->first('val_txt_destinosurl', '<p class="help-block">:message</p>') !!}
+                                <div class="row mb-2">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input name="mca_abriente"  id="mca_abriente{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_abriente)&&$tipo->mca_abriente=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
+                                            <label class="form-check-label"  for="mca_abriente{{$tipo->id_proceso}}">Notificar al usario creador</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input name="mca_implicados"  id="mca_implicados{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_implicados)&&$tipo->mca_implicados=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
+                                            <label class="form-check-label"  for="mca_implicados{{$tipo->id_proceso}}">Notificar a todos los implicados</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
                             </div>
                         @break
                     @case("P")

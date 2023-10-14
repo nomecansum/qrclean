@@ -190,6 +190,13 @@
 									<label class="form-check-label"  for="mca_mail_apertura_incidencia">Mail de apertura de incidencia</label>
 								</div>
 							</div>
+
+							<div class="col-md-3 mt-1">
+								<div class="form-check pt-2">
+									<input name="mca_solicitudes"  id="mca_solicitudes" title="Determina si para este cliente se quiere que se mande el mail de cortesia que acredita la apertura de una incidencia al usuario abriente" value="S" {{ isset($config->mca_solicitudes)&&$config->mca_solicitudes=='S'?'checked':'' }} class="form-check-input add-tooltip" type="checkbox">
+									<label class="form-check-label"  for="mca_mail_apertura_incidencia">Gestion de solicitudes</label>
+								</div>
+							</div>
 							
 						</div>
 

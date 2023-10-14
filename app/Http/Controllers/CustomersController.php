@@ -107,6 +107,7 @@ class CustomersController extends Controller
             $config->mca_mostrar_datos_fijos=$r->mca_mostrar_datos_fijos??'N';
             $config->mca_spotlinker_salas=$r->mca_spotlinker_salas??'N';
             $config->mca_mail_apertura_incidencia=$r->mca_mail_apertura_incidencia??'N';
+            $config->mca_solicitudes=$r->mca_solicitudes??'N';
             $config->theme_name=$this->esquema_colores($r);
             
             $config->save();
@@ -167,6 +168,7 @@ class CustomersController extends Controller
             $config->mca_incidencia_scan=$r->mca_incidencia_scan??'N';
             $config->mca_incidencia_reserva=$r->mca_incidencia_reserva??'N';
             $config->mca_mail_apertura_incidencia=$r->mca_mail_apertura_incidencia??'N';
+            $config->mca_solicitudes=$r->mca_solicitudes??'N';
             
             $config->theme_name=$this->esquema_colores($r);
             $config->save();

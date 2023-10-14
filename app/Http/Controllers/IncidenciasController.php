@@ -123,7 +123,7 @@ class IncidenciasController extends Controller
         $fhasta=clone($f2);
         $fhasta=$fhasta->addDay();
         $incidencias=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
@@ -132,6 +132,7 @@ class IncidenciasController extends Controller
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
                 if (!isAdmin()) {
@@ -185,9 +186,16 @@ class IncidenciasController extends Controller
             ->get();
         $mostrar_graficos=1;
         $mostrar_filtros=1;
-        $titulo_pagina="Gestión de incidencias";
+        if(\Request::route()->getName()=='incidencias.index'){
+            $titulo_pagina="Gestión de incidencias";
+            $pagina="incidencias";
+        } else {
+            $titulo_pagina="Gestión de solicitudes";
+            $pagina="solicitudes";
+        }
+        
         $tipo='embed';
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo','solicitudes'));
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo','solicitudes','pagina'));
     }
 
     public function mis_incidencias($f1=0,$f2=0){
@@ -196,7 +204,7 @@ class IncidenciasController extends Controller
         $fhasta=clone($f2);
         $fhasta=$fhasta->addDay();
         $incidencias=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
@@ -206,6 +214,7 @@ class IncidenciasController extends Controller
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
@@ -260,9 +269,15 @@ class IncidenciasController extends Controller
             ->get();
         $mostrar_graficos=0;
         $mostrar_filtros=0;
-        $titulo_pagina="Mis incidencias";
+        if(\Request::route()->getName()=='incidencias.mis_incidencias'){
+            $titulo_pagina="Mis incidencias";
+            $pagina="incidencias";
+        } else {
+            $titulo_pagina="Mis solicitudes";
+            $pagina="solicitudes";
+        }
         $tipo='mis';
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo','solicitudes'));
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo','solicitudes','pagina'));
     }
     
     //BUSCAR INCIDENCIAS
@@ -365,7 +380,7 @@ class IncidenciasController extends Controller
         $lista_puestos=$puestos->pluck('id_puesto')->toArray();
 
         $incidencias=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','estados_incidencias.id_estado_salas as id_estado_salas','causas_cierre.des_causa')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','estados_incidencias.id_estado_salas as id_estado_salas','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
             ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
@@ -375,6 +390,7 @@ class IncidenciasController extends Controller
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos.id_cliente',Auth::user()->id_cliente);
@@ -411,17 +427,77 @@ class IncidenciasController extends Controller
                 }
             })
             ->orderby('fec_apertura','desc')
+            ->where('incidencias.id_puesto','>',0)
+            ->get();
+
+        $solicitudes=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','estados_incidencias.id_estado_salas as id_estado_salas','causas_cierre.des_causa','users.name')
+            ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+            ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
+            ->join('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->join('clientes','incidencias.id_cliente','clientes.id_cliente')
+            ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('incidencias.id_cliente',Auth::user()->id_cliente);
+                }
+            })
+            ->where('incidencias.id_puesto',0)
+            ->whereBetween('fec_apertura',[Carbon::parse($f1),Carbon::parse($f2)])
+            ->where(function($q) use($r){
+                if($r->ac=='C'){
+                    $q->wherenotnull('fec_cierre');
+                }
+                if($r->ac=='A'){
+                    $q->wherenull('fec_cierre');
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->cliente) {
+                    $q->WhereIn('incidencias.id_cliente',$r->cliente);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->estado_inc) {
+                    $q->whereIn('incidencias.id_estado',$r->estado_inc);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->procedencia) {
+                    $q->whereIn('incidencias.val_procedencia',$r->procedencia);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tipoinc) {
+                    $q->whereIn('incidencias.id_tipo_incidencia',$r->tipoinc);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->user) {
+                    $q->whereIn('incidencias.id_usuario_apertura',$r->user);
+                }
+            })
+            ->orderby('fec_apertura','desc')
             ->get();
         $f1=Carbon::parse($f1);
         $f2=Carbon::parse($f2);
         $mostrar_graficos=1;
         $mostrar_filtros=1;
-        $titulo_pagina="Ver incidencias";
+        if(\Request::route()->getName()=='incidencias.search'){
+            $titulo_pagina="Ver incidencias";
+            $pagina="incidencias";
+            $template='incidencias.fill_tabla_incidencias';
+        } else {
+            $titulo_pagina="Ver solicitudes";
+            $pagina="solicitudes";
+            $template='incidencias.fill_tabla_solicitudes';
+        }
 
         if ($r->wantsJson()) {
             return $incidencias;
         } else {
-            return view('incidencias.fill_tabla_incidencias',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina'));
+            return view($template,compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','pagina','solicitudes'));
         }
         
     }
@@ -653,6 +729,12 @@ class IncidenciasController extends Controller
                 } else {
                     $url_vuelta='incidencias';
                 }
+            } else if($r->referer=='solicitudes'){
+                if($r->tipo??'normal'=='mis'){
+                    $url_vuelta='solicitudes/mis_solicitudes';
+                } else {
+                    $url_vuelta='solicitudes';
+                }
             } else {
                 $url_vuelta='/';
             }
@@ -699,6 +781,11 @@ class IncidenciasController extends Controller
         $incidencia=incidencias::find($r->id_incidencia);
         $tipo=incidencias_tipos::find($incidencia->id_tipo_incidencia);
         $procedencia=$r->procedencia??'web';
+        if($incidencia->id_puesto==0){
+            $cosa="Solicitud";
+        } else {
+            $cosa="Incidencia";
+        }
         try{    
             
             if(isset($r->adjuntos) and is_array($r->adjuntos)){
@@ -753,10 +840,10 @@ class IncidenciasController extends Controller
             }
             $accion->save();
             $this->post_procesado_incidencia($incidencia,$accion_postprocesado,$procedencia);
-            savebitacora("Añadida accion para la incidencia ".$r->id_incidencia,"Incidencias","add_accion","OK");
+            savebitacora("Añadida accion para la ".$cosa." ".$r->id_incidencia,"Incidencias","add_accion","OK");
             return [
-                'title' => "Añadir accion a la incidencia",
-                'message' => "Añadida accion para la incidencia ".$r->id_incidencia,
+                'title' => "Añadir accion a la ".$cosa." ".$r->id_incidencia,
+                'message' => "Añadida accion para la ".$cosa." ".$r->id_incidencia,
                 //'url' => url($url_vuelta)
                 'result'=>'ok',
                 'timestamp'=>Carbon::now(),
@@ -829,12 +916,58 @@ class IncidenciasController extends Controller
 
                     case 'M':  //Mandar e-mail
                         $to_email = $p->txt_destinos;
+                        //Ahora vamos a ver si se ha marcado para que se envie al usuario abriente o a los afectados.
+                        $abriente=DB::table('users')
+                            ->where('id',$inc->id_usuario_apertura)
+                            ->pluck('email');
+
+                        $implicados=DB::table('users')
+                            ->join('incidencias_acciones','users.id','incidencias_acciones.id_usuario')
+                            ->where('id_incidencia',$inc->id_incidencia)
+                            ->pluck('email')
+                            ->toarray();
+
+                        
+
                         Log::info("Iniciando postprocesado MAIL de incidencia ".$inc->id_incidencia);
-                        Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto,$momento) {
+                        //Si se han marcado las casillas de enviar al abriente o a los afectados, vamos a ver quienes son
+                        //y los añadimos al to_email
+                        if($p->mca_abriente=='S'){
+                            $to_email=$to_email.';'.$abriente;
+                        }
+                        if($p->mca_implicados=='S'){
+                            foreach($implicados as $i){
+                                $to_email=$to_email.';'.$i;
+                            }
+                        }
+                        //Ahora adaptamos el subject en funncion de si es incidnecia o solicitud
+                        if($inc->id_puesto==0){
+                            $subject='Solicitud #'.$inc->id_incidencia.' de '.$tipo->des_tipo_incidencia;
+                        } else {
+                            $subject='Incidencia #'.$inc->id_incidencia.'en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta;
+                        }
+
+                        //Y le añadimos al subject indicacion de en que estado esta
+                        switch($momento){
+                            case 'C':
+                                $subject.=' (Abierta)';
+                                break;
+                            case 'A':
+                                $subject.=' (Nueva accion/estado)';
+                                break;
+                            case 'F':
+                                $subject.=' (Finalizada)';
+                                break;
+                            case 'R':
+                                $subject.=' (Reapertura)';
+                                break;
+                        }
+
+                        Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto,$momento,$subject) {
                             if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
-                                $message->to(explode(';','nomecansum@gmail.com'), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                                $message->to('nomecansum@gmail.com')->subject($subject.' '.count(explode(';',$to_email)).' destinatarios');
                             } else {
-                                $message->to(explode(';',$to_email), '')->subject('Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta);
+                                $message->to(explode(';',$to_email), '')->subject($subject);
                             }
                             $message->from(config('mail.from.address'),config('mail.from.name'));
                             if($momento=='C'){
@@ -858,6 +991,7 @@ class IncidenciasController extends Controller
                                 }
                             }
                         });
+
                         break;
                     case 'P': //HTTP Post
                     case 'U': //HTTP Put
@@ -1002,33 +1136,6 @@ class IncidenciasController extends Controller
             }
         }
         $inc->save();
-        if(config_cliente('mca_mail_apertura_incidencia')=='S' && $momento=='C'){
-           //Enviamos mail al uusario abriente
-           if($inc->id_puesto!=0){
-            $asunto='Incidencia en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta;
-            } else {
-                $asunto='Nueva solicitud '.$tipo->des_tipo_incidencia;
-            }
-            $to_email = $usuario_abriente->email;
-            Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto, $usuario_abriente,$asunto) {
-                if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
-                    $message->to(explode(';','nomecansum@gmail.com'), '')->subject($asunto);
-                } else {
-                    $message->to(explode(';',$usuario_abriente->email), '')->subject($asunto);
-                }
-                $message->from(config('mail.from.address'),config('mail.from.name'));
-                if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
-                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
-                    $message->attachData($adj1,$inc->img_attach1);
-                }
-                if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
-                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
-                    $message->attachData($adj2,$inc->img_attach2);
-                }
-            });
-        }
-        
-        
 
     }
 
@@ -1072,7 +1179,7 @@ class IncidenciasController extends Controller
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->wherein('puestos.id_cliente',clientes());
+                $q->wherein('incidencias.id_cliente',clientes());
             })
             ->where('incidencias.id_incidencia',$id)
             ->first();
@@ -1130,12 +1237,19 @@ class IncidenciasController extends Controller
             $puesto->mca_incidencia='N';
             $puesto->id_estado=$incidencia->id_estado_vuelta_puesto;
             $puesto->save();
-            savebitacora('Incidencia ['.$incidencia->id_incidencia.'] '.$incidencia->des_incidencia.' borrada',"Incidencias","delete","OK");
-            return redirect()->route('incidencias.index')->with('success_message', 'Incidencia ['.$id.'] '.$incidencia->des_incidencia.' borrada.');
+            if($incidencia->id_puesto==0){
+                $destino="solicitud";
+                $cosa="Solicitud";
+            } else {
+                $destino="incidencia";
+                $cosa="Incidencia";
+            }
+            savebitacora($cosa.' ['.$incidencia->id_incidencia.'] '.$incidencia->des_incidencia.' borrada',"Incidencias","delete","OK");
+            return redirect()->route($destino.'.index')->with('success_message', $cosa.' ['.$id.'] '.$incidencia->des_incidencia.' borrada.');
         } catch (\Throwable $exception) {
-            savebitacora('ERROR: Ocurrio un error borrando la incidencia ['.$incidencia->id_incidencia.'] '.$exception->getMessage() ,"Incidencias","delete","ERROR");
+            savebitacora('ERROR: Ocurrio un error borrando la '.$cosa.' ['.$incidencia->id_incidencia.'] '.$exception->getMessage() ,"Incidencias","delete","ERROR");
             return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Ocurrio un error al borrar la incidencia ['.$id.'] '.mensaje_excepcion($exception)]);
+                ->withErrors(['unexpected_error' => 'Ocurrio un error al borrar la '.$cosa.' ['.$id.'] '.mensaje_excepcion($exception)]);
         }
     }
 
@@ -1384,6 +1498,8 @@ class IncidenciasController extends Controller
         $tipo->mca_web=isset($r->mca_web)?'S':'N';
         $tipo->mca_salas=isset($r->mca_salas)?'S':'N';
         $tipo->mca_scan=isset($r->mca_scan)?'S':'N';
+        $tipo->mca_implicados=isset($r->mca_implicados)?'S':'N';
+        $tipo->mca_abriente=isset($r->mca_abriente)?'S':'N';
         $tipo->save();
         savebitacora('Modificada accion de postprocesado para el tipo de incidencia ['.$tipo->id_tipo_incidencia.'] momento '.$tipo->val_momento,"Incidencias","add_postprocesado","OK");
         return [

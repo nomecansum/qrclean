@@ -102,7 +102,7 @@
 </div>
 
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($hide['est_inc']) && $hide['est_inc']==1) ? 'display: none' : ''  }}">
-    <label>Estado incidencia</label>
+    <label>Estado {{ $singular??'incidencia' }}</label>
     <div class="input-group select2-bootstrap-append">
         <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="estado_inc[]" id="multi-estado_inc" >
             @foreach(estados_incidencias::where(function($q) {
@@ -120,7 +120,7 @@
 </div>
 
 <div class="form-group  col-md-12 mt-3" style="{{ (isset($hide['tip_inc']) && $hide['tip_inc']==1) ? 'display: none' : ''  }}">
-    <label>Tipo incidencia</label>
+    <label>Tipo {{ $singular??'incidencia' }}</label>
     <div class="input-group select2-bootstrap-append">
         <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipoinc[]" id="multi-tipoinc" >
             @foreach(incidencias_tipos::where(function($q) {

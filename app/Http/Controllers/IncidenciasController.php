@@ -965,9 +965,11 @@ class IncidenciasController extends Controller
 
                         Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto,$momento,$subject) {
                             if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
+                                Log::debug('modo mail debug '.$to_email);
                                 $message->to('nomecansum@gmail.com')->subject($subject.' '.count(explode(';',$to_email)).' destinatarios');
                             } else {
-                                $message->to(explode(';',$to_email), '')->subject($subject);
+                                Log::debug('modo mail pro '.$to_email);
+                                $message->to($to_email, '')->subject($subject);
                             }
                             $message->from(config('mail.from.address'),config('mail.from.name'));
                             if($momento=='C'){

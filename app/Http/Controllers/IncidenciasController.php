@@ -566,6 +566,14 @@ class IncidenciasController extends Controller
         $titulo_pagina=$incidencias->first()->des_incidencia??'';
         $tipo='embed';
 
+        if($incidencias->count()>0){
+            $titulo_pagina="Ver incidencia";
+            $pagina="incidencias";
+        } else {
+            $titulo_pagina="Ver solicitud";
+            $pagina="solicitudes";
+        }
+
         return view('incidencias.index',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','open','tipo','solicitudes'));
     }
 

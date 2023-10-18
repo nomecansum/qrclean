@@ -970,7 +970,7 @@ class IncidenciasController extends Controller
                                 $message->to('nomecansum@gmail.com')->subject($subject.' '.count(explode(';',$to_email)).' destinatarios');
                             } else {
                                 Log::debug('modo mail pro '.$to_email);
-                                $message->to($to_email, '')->subject($subject);
+                                $message->to(explode(';',$to_email), '')->subject($subject);
                             }
                             $message->from(config('mail.from.address'),config('mail.from.name'));
                             if($momento=='C'){

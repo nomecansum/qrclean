@@ -919,7 +919,8 @@ class IncidenciasController extends Controller
                         //Ahora vamos a ver si se ha marcado para que se envie al usuario abriente o a los afectados.
                         $abriente=DB::table('users')
                             ->where('id',$inc->id_usuario_apertura)
-                            ->pluck('email');
+                            ->first()
+                            ->email;
 
                         $implicados=DB::table('users')
                             ->join('incidencias_acciones','users.id','incidencias_acciones.id_usuario')

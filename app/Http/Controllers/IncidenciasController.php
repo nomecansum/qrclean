@@ -574,7 +574,7 @@ class IncidenciasController extends Controller
             $pagina="solicitudes";
         }
 
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','open','tipo','solicitudes'));
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','open','tipo','solicitudes','pagina'));
     }
 
     //USUARIOS ABRIR INCIDENCIAS

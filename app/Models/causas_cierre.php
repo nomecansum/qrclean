@@ -39,7 +39,8 @@ class causas_cierre extends Model
                   'val_color',
                   'val_icono',
                   'mca_default',
-                  'id_causa_externo'
+                  'id_causa_externo',
+                  'mca_aplica'
               ];
 
     /**

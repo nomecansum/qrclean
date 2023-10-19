@@ -86,6 +86,7 @@
                             <th>ID</th>
                             <th></th>
                             <th>Nombre</th>
+                            <th>Aplica</th>
                             @admin @desktop<th>Cliente</th>@enddesktop @endadmin
                             <th></th>
                         </tr>
@@ -96,6 +97,20 @@
                             <td>{{ $tipo->des_estado }}</td>
                             <td class="text-center"><i class="{{ $tipo->val_icono }} fa-2x" style="color:{{ $tipo->val_color }}"></i></td>
                             <td>{{ $tipo->des_estado }}</td>
+                            <td>
+                                @switch($tipo->mca_aplica)
+                                    @case('A')
+                                        Ambos
+                                        @break
+                                    @case('S')
+                                        Solicitudes
+                                        @break
+                                    @case('I')
+                                        Incidencias
+                                        @break
+                                    @default
+                                @endswitch
+                            </td>
                             @admin @desktop<td>{{ $tipo->nom_cliente }}</td>@enddesktop @endadmin
                             <td style="position: relative">
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">

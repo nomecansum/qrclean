@@ -97,15 +97,15 @@
                             <button type="button"  role="iconpicker"  data-selectedClass="btn-warning"   data-unselectedClass="btn-primary"  name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-placement="bottom"  class="btn btn-light iconpicker" data-iconset-version="5.3.1_pro" data-search="true" data-rows="10" @desktop data-cols="20" @elsedesktop data-cols="8" @enddesktop data-search-text="Buscar..." value="{{isset($tipo->val_icono)?$tipo->val_icono:''}}"></button>
                         </div>
                     </div>
-                    <div class="form-group col-md-2 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
-                        <label for="id_estado_inicial" class="control-label">Aplica a</label>
+                    <div class="form-group col-md-2 {{ $errors->has('mca_aplica') ? 'has-error' : '' }}">
+                        <label for="mca_aplica" class="control-label">Aplica a</label>
                         <select class="form-control" required id="mca_aplica" name="mca_aplica">
                             <option value="I" {{ old('mca_aplica', optional($tipo)->mca_aplica) == 'I' ? 'selected' : '' }}>Incidencias</option>
                             <option value="S" {{ old('mca_aplica', optional($tipo)->mca_aplica) == 'S' ? 'selected' : '' }}>Solicitudes</option>
                             <option value="A" {{ old('mca_aplica', optional($tipo)->mca_aplica) == 'A' ? 'selected' : '' }}>Ambos</option>
                         </select>
                             
-                        {!! $errors->first('id_estado_inicial', '<p class="help-block">:message</p>') !!}
+                        {!! $errors->first('mca_aplica', '<p class="help-block">:message</p>') !!}
                     </div>
                 </div>
 
@@ -140,6 +140,7 @@
                     <div class="col-md-3 ">
 
                         <div class="input-group mt-2">
+                            <label class="pt-2 mr-2 font-bold">Momento</label>
                             <select class="form-control col-md-2 float-left" required id="val_momento" name="val_momento">
                                     <option value="C">Creacion</option>
                                     <option value="A">Accion</option>

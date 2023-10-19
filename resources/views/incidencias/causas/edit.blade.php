@@ -71,6 +71,16 @@
                         <input class="form-control" name="id_causa_externo" type="text" id="id_causa_externo" value="{{ old('id_causa_externo', optional($causa)->id_causa_externo) }}" maxlength="200" placeholder="Enter id_causa_externo here...">
                         {!! $errors->first('id_causa_externo', '<p class="help-block">:message</p>') !!}
                     </div>
+                    <div class="form-group col-md-2 {{ $errors->has('mca_aplica') ? 'has-error' : '' }}">
+                        <label for="mca_aplica" class="control-label">Aplica a</label>
+                        <select class="form-control" required id="mca_aplica" name="mca_aplica">
+                            <option value="I" {{ old('mca_aplica', optional($causa)->mca_aplica) == 'I' ? 'selected' : '' }}>Incidencias</option>
+                            <option value="S" {{ old('mca_aplica', optional($causa)->mca_aplica) == 'S' ? 'selected' : '' }}>Solicitudes</option>
+                            <option value="A" {{ old('mca_aplica', optional($causa)->mca_aplica) == 'A' ? 'selected' : '' }}>Ambos</option>
+                        </select>
+                            
+                        {!! $errors->first('mca_aplica', '<p class="help-block">:message</p>') !!}
+                    </div>
                     @if(isAdmin())
                     <div class="col-md-2 p-t-30">
                         <div class="form-check">

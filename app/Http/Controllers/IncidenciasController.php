@@ -1153,8 +1153,16 @@ class IncidenciasController extends Controller
     //FORMULARIO DE CIERRE DE INCIDENCIA
     public function form_cierre($id){
         validar_acceso_tabla($id,'incidencias');
+        $incidencia=incidencias::find($id);
         $causas_cierre=DB::table('causas_cierre')
             ->where('id_cliente',Auth::user()->id_cliente)
+            ->where(function($q) use($incidencia){
+                if($incidencia->id_puesto!=0){
+                    $q->wherein('causas_cierre.mca_aplica',['I','A']);
+                } else {
+                    $q->wherein('causas_cierre.mca_aplica',['S','A']);
+                }
+            })
             ->get();
         return view('incidencias.fill-form-cerrar',compact('id','causas_cierre'));
     }
@@ -1169,6 +1177,13 @@ class IncidenciasController extends Controller
                 $q->where('estados_incidencias.id_cliente',$incidencia->id_cliente);
                 if(config_cliente('mca_mostrar_datos_fijos')=='S'){
                     $q->orwhere('estados_incidencias.mca_fijo','S');
+                }
+            })
+            ->where(function($q) use($incidencia){
+                if($incidencia->id_puesto!=0){
+                    $q->wherein('estados_incidencias.mca_aplica',['I','A']);
+                } else {
+                    $q->wherein('estados_incidencias.mca_aplica',['S','A']);
                 }
             })
             ->orderby('des_estado')

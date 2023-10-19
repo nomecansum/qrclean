@@ -41,7 +41,8 @@ class estados_incidencias extends Model
                   'mca_cierre',
                   'id_estado_salas',
                   'id_estado_externo',
-                  'mca_defecto'
+                  'mca_defecto',
+                  'mca_aplica'
               ];
 
     /**

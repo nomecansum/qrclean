@@ -74,7 +74,7 @@
                 </li>
                 @endif
                 @if(checkPermissions(['Incidencias > Mis incidencias'],['R']))<li class="incidencias  nav-item"><a href="/incidencias/mis_incidencias" class="nav-link mininav-toggle collapsed"><i class="fa-light fa-exclamation-triangle fs-5 me-2"></i> <span class="nav-label mininav-content"> Mis incidencias</span></a></li> @endif
-                @if(checkPermissions(['Solicitudes> Mis solicitudes'],['R']))<li class="  nav-item"><a href="/solicitudes/mis_solicitudes" class="text-nowrap nav-link mininav-toggle collapsed mis_solicitudes"><i class="fa-light fa-clipboard-question"></i> Mis solicitudes</a></li> @endif
+                @if(checkPermissions(['Solicitudes> Mis solicitudes'],['R']))<li class="  nav-item"><a href="/solicitudes/mis_solicitudes" class="text-nowrap nav-link mininav-toggle collapsed mis_solicitudes"><i class="fa-light fs-5 me-2 fa-clipboard-question"></i> Mis solicitudes</a></li> @endif
 
                 @if(checkPermissions(['Reservas puestos'],['R']))<li class="reservas_puestos nav-item"><a href="/reservas" class="nav-link mininav-toggle collapsed"><i class="fa-light fa-calendar-day fs-5 me-2"></i><span class="nav-label mininav-content">  Reservas</span></a></li> @endif
                 @if(checkPermissions(['Reservas salas'],['R']) && session('CL')['mca_salas']=='S')<li class="reservas_salas nav-item"><a href="/salas/reservas" class="nav-link mininav-toggle collapsed"><i class="fad fa-users-class fs-5 me-2"></i><span class="nav-label mininav-content">  Salas</span></a></li> @endif

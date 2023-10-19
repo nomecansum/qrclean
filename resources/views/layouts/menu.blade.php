@@ -100,7 +100,7 @@
                         @if(checkPermissions(['Mapa puestos'],['R']))<li class="  nav-item"><a href="/puestos/mapa"  class="text-nowrap nav-link mapa"><i class="fad fa-th"></i> Mapa</a></li> @endif
                         @if(checkPermissions(['Compañeros'],['R']))<li class="  nav-item"><a href="/puestos/compas"  class="text-nowrap nav-link compas"><i class="fa-duotone fa-users"></i> Mis compañeros</a></li> @endif
                         @if(checkPermissions(['Salas'],['R']) && session('CL')['mca_salas']=='S')<li class=" text-nowrap nav-item"><a href="/salas" class="text-nowrap nav-link salas"><i class="fa-light fa-users-class"></i> Salas reunion</a></li> @endif
-                        @if(checkPermissions(['Solicitudes> Mis solicitudes'],['R']))<li class="  nav-item"><a href="/solicitudes/mis_solicitudes" class="text-nowrap nav-link mis_solicitudes"><i class="fa-light fa-clipboard-question"></i> Mis solicitudes</a></li> @endif
+                        @if(checkPermissions(['Solicitudes> Mis solicitudes'],['R']))<li class="  nav-item"><a href="/solicitudes/mis_solicitudes" class="text-nowrap nav-link mis_solicitudes"><i class="fa-light fa-clipboard-question  fs-5 me-2"></i> Mis solicitudes</a></li> @endif
                         @if(checkPermissions(['Incidencias > Mis incidencias'],['R']))<li class="  nav-item"><a href="/incidencias/mis_incidencias" class="text-nowrap nav-link mis_incidencias"><i class="fa-light fa-exclamation-triangle"></i> Mis incidencias</a></li> @endif
                     </ul>
                 </li>

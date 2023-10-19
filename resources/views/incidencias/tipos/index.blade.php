@@ -87,8 +87,8 @@
                             <th>Nombre</th>
                             <th>Tipos</th>
                             @admin<th> Procesado </th>@endadmin
-                            @admin @desktop<th>Cliente</th>@enddesktop @endadmin
                             <th>Aplica a</th>
+                            @admin @desktop<th>Cliente</th>@enddesktop @endadmin
                             <th>Responsable</th>
                             
                         </tr>

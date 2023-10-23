@@ -2,8 +2,15 @@ Inicio de la tarea programada [38]App\Console\Commands\sincronizarWorkdayGeneral
 GET https://wd3-services1.myworkday.com/ccx/service/customreport2/generaliespana/ISU_INT_PUESTOS/CR_Workers_Information_Integracion_Puestos
 Datos de workday recibidos
 Procesando DEPARTAMENTOS
+Departamento creado: INSURANCE
+Departamento creado: CANAL AGENTES EN DESARROLLO - CATALUNYA
 Actualizando jerarquia de departamentos
+Departamento actualizado: INSURANCE
+Departamento actualizado: CLAIMS
+Departamento actualizado: CANAL AGENTES EN DESARROLLO - CATALUNYA
+Departamento actualizado: UNDERWRITING
 Procesando CECOS
+Colectivo creado: 17600 AGENTES DESARROLLO CATALUNYA
 Procesando USUARIOS
 Usuario actualizado: GEMMA GALVEZ MORENO [1]
 Usuario actualizado: IBAN GOMEZ VELA [31]
@@ -263,12 +270,21 @@ No se ha encontrado el puesto PED-00-WS-027 para el usuario alberto.gmatarredona
 Usuario actualizado: ALBERTO GARCIA-MATARREDONA SERRANO [1]
 No se ha encontrado el puesto PED-00-WS-042 para el usuario ferran.vilar@generali.com
 Usuario actualizado: FERRAN VILAR SOLER [1]
+No se ha encontrado el puesto PED-00-WS-051 para el usuario luis.ramos@generali.com
+Usuario creado: LUIS RAMOS CARBALLO
+No se ha encontrado el puesto PED-00-WS-054 para el usuario josea.uriz@generali.com
+Usuario actualizado: JOSE A URIZ TOME [1]
 No se ha encontrado el puesto PED-00-WS-057 para el usuario jordi.soler@generali.com
 Usuario actualizado: JORDI SOLER SOLER [1]
 No se ha encontrado el puesto PED-00-WS-038 para el usuario fcojavier.menendez@generali.com
 Usuario actualizado: FCO. JAVIER MENENDEZ AMAGO [31]
 No se ha encontrado el puesto PED-00-WS-031 para el usuario joaquin.blazquez@generali.com
 Usuario actualizado: JOAQUIN BLAZQUEZ MURILLO [1]
+No se ha encontrado el puesto PED-00-WS-055 para el usuario josemanuel.nunez@generali.com
+Usuario actualizado: JOSE MANUEL NUÑEZ GENARO [1]
+No se ha encontrado el puesto PED-00-WS-039 para el usuario gabriel.arpe@generali.com
+Usuario actualizado: CESAR GABRIEL ARPE . [1]
+Usuario actualizado: CONCEPCION LORENZO RODRIGUEZ [1]
 No se ha encontrado el puesto PED-00-WS-059 para el usuario tomas.gonzalez@generali.com
 Usuario actualizado: TOMAS GONZALEZ MARTINEZ [1]
 No se ha encontrado el puesto PED-00-WS-032 para el usuario ramon.rosell@generali.com
@@ -286,6 +302,8 @@ Usuario actualizado: FRANCESC GUTIERREZ PUJOL [1]
 No se ha encontrado el puesto PED-00-WS-045 para el usuario cristina.santana@generali.com
 Usuario actualizado: CRISTINA SANTANA ROMERO [1]
 Usuario actualizado: INMACULADA NOVELL COLILLES [1]
+No se ha encontrado el puesto PED-00-WS-034 para el usuario joan.santamaria@generali.com
+Usuario actualizado: JOAN SANTAMARIA PLAZA [1]
 Usuario actualizado: FRANCISCA GARRIDO SOLE [1]
 No se ha encontrado el puesto PED-00-WS-050 para el usuario david.rueda@generali.com
 Usuario actualizado: DAVID RUEDA REGUILL [1]
@@ -432,6 +450,8 @@ Usuario actualizado: ANTONIO CAAMAÑO TRAVESSET [1]
 Usuario actualizado: XAVIER PERALS RODON [1]
 Usuario actualizado: MARINA PONSETI MUNTANER [1]
 Usuario actualizado: SUSANA SAEZ DE TEJADA ORDOÑEZ [1]
+No se ha encontrado el puesto PED-00-WS-035 para el usuario veronicamaria.perona@generali.com
+Usuario creado: VERONICA MARIA PERONA GONZALEZ
 Usuario actualizado: INGRID FORTUÑO PEÑARRUBIA [1]
 Usuario actualizado: SANDRA CARBONERO DE SAN FRANCISCO [1]
 Usuario actualizado: JORGE JAVIER FERRER VILLACAMPA [1]
@@ -474,19 +494,25 @@ Usuario actualizado: CLARA GESTI FABREGA [1]
 Usuario actualizado: MAXIMILIANO ERNESTO PEON  [1]
 Usuario actualizado: ALEX CARRERAS RUIZ [1]
 Usuario actualizado: FRANCESC JOSEP BORRELL ALLUE [1]
+No se ha encontrado el puesto WS-046 para el usuario ezequiel.santos@generali.com
 Usuario actualizado: EZEQUIEL SANTOS GOMEZ [1]
 Usuario actualizado: VICTOR COLODRO BALEA [1]
 Usuario actualizado: BERTA BLANCH VERGES [1]
 Usuario actualizado: NEREA CAMACHO SEVILLA [1]
 Usuario actualizado: LAURA MUÑOZ FUENTES [1]
+Usuario creado: ARNAU PUIGDEMONT MONLLOR
 Usuario actualizado: MARC ROIG MUNDO [1]
 Usuario actualizado: EDGAR XAVIER MARTIN FERNANDES [1]
 Usuario no creado, no tiene email: HUGO ARANDA SANCHEZ
 Usuario actualizado: OT DE LA VARGA IBORRA [1]
 Usuario actualizado: MANUEL DOMENECH LOPEZ [1]
+Usuario creado: MARC PONS MORELL
+Usuario creado: JOSEP SEBASTIA BENITO
+Usuario creado: JOSE PEREZ HERNANDEZ
+Usuario no creado, no tiene email: ALBERT VILA BELTRAN
+Usuario no creado, no tiene email: JAN GALIOT PEREZ
 Usuario no creado, no tiene email: ISMAEL TITO HERRERA
 Usuario no creado, no tiene email: ELVIS LARA CANAZA
-Usuario no creado, no tiene email: LUISA REYES IGLESIAS
 Usuario no creado, no tiene email: DAVID AGUILERA MARTINEZ
 Usuario no creado, no tiene email: CRISTINA BARASTEGUI BAGET
 Actualizando supervisores
@@ -763,34 +789,41 @@ No se ha encontrado usuario para asignar supervisor: CARLOS AMARGOS CARRERAS -> 
 FRANCISCO JAVIER SERNA BALLARIN -> CARLOS AMARGOS CARRERAS
 JOSE ANGEL BURGOS GARCIA -> M.OLGA ORDOVAS TORRALBA
 JAVIER LOPEZ RODRIGUEZ -> ANDRES RAMOS VEGA
+No se ha encontrado usuario para asignar supervisor: PERE GAVALDA MONTSERRAT -> PERE GAVALDA MONTSERRAT
 JAVIER LOPEZ RODRIGUEZ -> PERE GAVALDA MONTSERRAT
 JAUME MESTRES ALEU -> MARTA JIMENEZ HERNANDO
 RAMIRO BARRAL TEMES -> ALBERTO GARCIA-MATARREDONA SERRANO
 JAVIER LOPEZ RODRIGUEZ -> FERRAN VILAR SOLER
-JAVIER LOPEZ RODRIGUEZ -> JORDI SOLER SOLER
+PERE GAVALDA MONTSERRAT -> LUIS RAMOS CARBALLO
+PERE GAVALDA MONTSERRAT -> JOSE A URIZ TOME
+PERE GAVALDA MONTSERRAT -> JORDI SOLER SOLER
 No se ha encontrado usuario para asignar supervisor: FCO. JAVIER MENENDEZ AMAGO -> FCO. JAVIER MENENDEZ AMAGO
 JAVIER LOPEZ RODRIGUEZ -> FCO. JAVIER MENENDEZ AMAGO
 JOSE JAVIER SANCHEZ MARTINEZ -> JOAQUIN BLAZQUEZ MURILLO
-JAVIER LOPEZ RODRIGUEZ -> TOMAS GONZALEZ MARTINEZ
+PERE GAVALDA MONTSERRAT -> JOSE MANUEL NUÑEZ GENARO
+FCO. JAVIER MENENDEZ AMAGO -> CESAR GABRIEL ARPE .
+JOSE JAVIER SANCHEZ MARTINEZ -> CONCEPCION LORENZO RODRIGUEZ
+PERE GAVALDA MONTSERRAT -> TOMAS GONZALEZ MARTINEZ
 JOSE JAVIER SANCHEZ MARTINEZ -> RAMON ROSELL CASTILLO
 JOSE LUIS GARCIA RODRIGUEZ -> IVAN SANTISTEBAN VERCHER
 No se ha encontrado usuario para asignar supervisor: JOSE JAVIER SANCHEZ MARTINEZ -> JOSE JAVIER SANCHEZ MARTINEZ
 JAVIER LOPEZ RODRIGUEZ -> JOSE JAVIER SANCHEZ MARTINEZ
 JAVIER LOPEZ RODRIGUEZ -> RUBEN PALA BARREDA
 RAMIRO BARRAL TEMES -> ANNA ALFONSO MARQUEZ
-JAVIER LOPEZ RODRIGUEZ -> JORDI BACARDIT GORDO
+PERE GAVALDA MONTSERRAT -> JORDI BACARDIT GORDO
 SONIA SANTOS SEÑOR -> LLORENC ALTIMIR BAULENAS
 JOSE JAVIER SANCHEZ MARTINEZ -> FRANCESC GUTIERREZ PUJOL
 JAVIER LOPEZ RODRIGUEZ -> CRISTINA SANTANA ROMERO
 SONIA SANTOS SEÑOR -> INMACULADA NOVELL COLILLES
+JOSE JAVIER SANCHEZ MARTINEZ -> JOAN SANTAMARIA PLAZA
 IRENE CUENCA MEJIAS -> FRANCISCA GARRIDO SOLE
 JAVIER LOPEZ RODRIGUEZ -> DAVID RUEDA REGUILL
 No se ha encontrado usuario para asignar supervisor: GUILLERMO MAÑA GILABERT -> GUILLERMO MAÑA GILABERT
 JAVIER LOPEZ RODRIGUEZ -> GUILLERMO MAÑA GILABERT
-JAVIER LOPEZ RODRIGUEZ -> ENRIC MAS GUYAL
+PERE GAVALDA MONTSERRAT -> ENRIC MAS GUYAL
 JORDI GINESTA MARQUES -> M.EULALIA ALSINA RIBO
-JAVIER LOPEZ RODRIGUEZ -> JAVIER CANALDA ROPALS
-JAVIER LOPEZ RODRIGUEZ -> LLUISA BLANCH ARMENGOL
+PERE GAVALDA MONTSERRAT -> JAVIER CANALDA ROPALS
+PERE GAVALDA MONTSERRAT -> LLUISA BLANCH ARMENGOL
 No se ha encontrado usuario para asignar supervisor: JAVIER LOPEZ RODRIGUEZ -> JAVIER LOPEZ RODRIGUEZ
 RAMIRO BARRAL TEMES -> JAVIER LOPEZ RODRIGUEZ
 BEATRIZ FERNANDEZ IZQUIERDO -> LAURA GASSO MORERA
@@ -935,6 +968,7 @@ JAVIER MUÑOZ MOZO -> ANTONIO CAAMAÑO TRAVESSET
 JOSE MANUEL CANO AGUILAR -> XAVIER PERALS RODON
 IVAN GARCIA BALASTEGUI -> MARINA PONSETI MUNTANER
 ROSARIO ORELLANA ZAMORANO -> SUSANA SAEZ DE TEJADA ORDOÑEZ
+JOSE JAVIER SANCHEZ MARTINEZ -> VERONICA MARIA PERONA GONZALEZ
 SILVIA FARRACES DELGADO -> INGRID FORTUÑO PEÑARRUBIA
 JOSE LUIS GARCIA RODRIGUEZ -> SANDRA CARBONERO DE SAN FRANCISCO
 FRANCESC GRIMALT SANTACANA -> JORGE JAVIER FERRER VILLACAMPA
@@ -978,16 +1012,15 @@ JOSE MARIA COSANO COSANO -> MAXIMILIANO ERNESTO PEON
 MARIA DEL PILAR BURGOS GUERRERO -> ALEX CARRERAS RUIZ
 MARIA DEL PILAR BURGOS GUERRERO -> FRANCESC JOSEP BORRELL ALLUE
 JAVIER MUÑOZ MOZO -> EZEQUIEL SANTOS GOMEZ
-HUGO OJER MEDRANO -> VICTOR COLODRO BALEA
+ANGEL ARRANZ GUTIERREZ -> VICTOR COLODRO BALEA
 BENITO RUIZ GASCON -> LAURA MUÑOZ FUENTES
+BENITO RUIZ GASCON -> JOSEP SEBASTIA BENITO
 No se ha encontrado usuario para asignar supervisor:  -> JOSE LUIS GARCIA RODRIGUEZ
 No se ha encontrado usuario para asignar supervisor:  -> JOSE ANTONIO MATEOS MORO
 No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
 No se ha encontrado usuario para asignar supervisor:  -> MANUEL YAGUE MAGDALENA
 No se ha encontrado usuario para asignar supervisor:  -> NOEL ROJO DE LUQUE
 No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
-No se ha encontrado usuario para asignar supervisor:  -> GONZALO BALADO LIÑARES
-No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN
 No se ha encontrado usuario para asignar supervisor:  -> JORDI ROCA PIELLA
 No se ha encontrado usuario para asignar supervisor:  -> JUANA FORTUNY LOPEZ
 No se ha encontrado usuario para asignar supervisor:  -> CARMEN BOCERO CANENCIA

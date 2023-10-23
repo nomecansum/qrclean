@@ -89,8 +89,8 @@ class sincronizarWorkdayGenerali extends Command
                     "name": "id_edificio",
                     "tipo": "list",
                     "multiple": true,
-                    "list": "BARCELONA-PEDROSA|BARCELONA TORRECERD\u00C1",
-                    "values": "BARCELONA-PEDROSA|BARCELONA TORRECERD\u00C1",
+                    "list": "BARCELONA-PEDROSA|BARCELONA TORRECERD\u00C1|MADRID - MANUEL GOMEZ MORENO|MADRID - CENTRAL",
+                    "values": "BARCELONA-PEDROSA|BARCELONA TORRECERD\u00C1|MADRID - MANUEL GOMEZ MORENO|MADRID - CENTRAL",
                     "required": true
                 },
                 {
@@ -483,6 +483,10 @@ class sincronizarWorkdayGenerali extends Command
                         //Caso pedrosa<->torrecerda
                         if($tarea->clientes==5 && $edificio==101){
                             $edificio=41;
+                        }
+                        //Caso madrid central<->MGM
+                        if($tarea->clientes==5 && $edificio==97){
+                            $edificio=92;
                         }
                         $departamento=null;
                         for($i=5;$i>0;$i--){

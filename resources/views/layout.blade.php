@@ -120,20 +120,22 @@
 
         <!-- HEADER -->
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <header class="header">
-            @if(Auth::check())
-                @include('layouts.topbar')
-            @endif
-            @include('flash::message')
-            
-        </header>
+        @if(!isset($error_cuenta_no_activada))
+            <header class="header">
+                @if(Auth::check())
+                    @include('layouts.topbar')
+                @endif
+                @include('flash::message')
+                
+            </header>
+        @endif
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <!-- END - HEADER -->
+        <!-- END - HEADER ->
 
         <!-- MAIN NAVIGATION -->
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        @if(Auth::check())
+        @if(Auth::check() && !isset($error_cuenta_no_activada))
             @if(Auth::user()->nivel_acceso>=10)
                 @include('layouts.menu')
             @endif
@@ -147,9 +149,11 @@
 
         <!-- SIDEBAR -->
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <aside class="sidebar">
-            @include('layouts.aside')
-        </aside>
+        @if(!isset($error_cuenta_no_activada))
+            <aside class="sidebar">
+                @include('layouts.aside')
+            </aside>
+        @endif
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <!-- END - SIDEBAR -->
 

@@ -2,30 +2,232 @@ Inicio de la tarea programada [38]App\Console\Commands\sincronizarWorkdayGeneral
 GET https://wd3-services1.myworkday.com/ccx/service/customreport2/generaliespana/ISU_INT_PUESTOS/CR_Workers_Information_Integracion_Puestos
 Datos de workday recibidos
 Procesando DEPARTAMENTOS
-Departamento creado: INSURANCE
-Departamento creado: CANAL AGENTES EN DESARROLLO - CATALUNYA
+Departamento creado: TERRITORIAL NORTE
+Departamento creado: CENTRO DE SERVICIO AL MEDIADOR - NORTE
 Actualizando jerarquia de departamentos
-Departamento actualizado: INSURANCE
-Departamento actualizado: CLAIMS
-Departamento actualizado: CANAL AGENTES EN DESARROLLO - CATALUNYA
-Departamento actualizado: UNDERWRITING
+Departamento actualizado: TERRITORIAL NORTE
+Departamento actualizado: CENTRO DE SERVICIO AL MEDIADOR - NORTE
 Procesando CECOS
-Colectivo creado: 17600 AGENTES DESARROLLO CATALUNYA
+Colectivo creado: 14200 OPERACIONES  NORTE
 Procesando USUARIOS
+No se ha encontrado el puesto MGM-09-WS-002 para el usuario elena.carrasco@generali.com
+Usuario actualizado: ELENA CARRASCO ALMAGRO [1]
 Usuario actualizado: GEMMA GALVEZ MORENO [1]
 Usuario actualizado: IBAN GOMEZ VELA [31]
+Usuario actualizado: SANTIAGO GARCIA SANCHIS [31]
+Usuario actualizado: FRANCISCO ANTONIO POVEDA FERNANDEZ [31]
+Usuario actualizado: ALEJANDRO RODRIGUEZ LAFUENTE [1]
+Usuario actualizado: PRUDENCIO ESCOLAR GUTIERREZ [1]
+Usuario actualizado: LUIS ALBERTO MAÑAS GRIJALVO [1]
+Usuario actualizado: OLGA DEL VAL MARTINEZ [1]
+Usuario actualizado: MONICA MARTIN SAEZ [1]
+Usuario actualizado: MARIA JESUS MARCHAL GALLEGO [1]
+Usuario actualizado: LUIS ENRIQUE MUñOZ LUENGO [1]
+Usuario actualizado: JOSE GUILLERMO CALDERON ANDRES [31]
+Usuario actualizado: LAURA GARBAYO PEREZ [1]
+Usuario actualizado: BEATRIZ SANZ MONTARELO [1]
+Usuario actualizado: JAVIER MARQUES CABRERO [31]
+Usuario actualizado: PATRICIA PAULA FUENTES MARTINEZ [1]
+Usuario actualizado: ALEXANDRE RUBIO ORTUZAR [31]
+Usuario actualizado: ALICIA GARCES PARRAS [1]
+Usuario actualizado: ANDRES GARCIA VILLEGAS [1]
+Usuario actualizado: ANDA-DIANA LUPULESCU . [31]
+Usuario actualizado: M. DE LOS ANGELES NIETO MATADOR [31]
+Usuario actualizado: CARMEN GRAO GARASA [31]
+Usuario actualizado: ESTHER HURTADO GUERRERO [31]
+Usuario actualizado: EVA MARIA RODRIGUEZ RODRIGUEZ [1]
+Usuario actualizado: ALEJANDRO ORTIN RAMON [1]
+Usuario actualizado: ANA ROSA ANDRES CALVO [1]
+Usuario actualizado: AITANA PARRAGA GONZALEZ [1]
+Usuario actualizado: MARIA NIEVES PARRILLA RUBIO [31]
+Usuario actualizado: ALBERTO DE JUANA IZQUIERDO [31]
+Usuario actualizado: ROCIO PEREZ KINDELAN [1]
+Usuario actualizado: JONATHAN FERNANDEZ SOTO [1]
+Usuario actualizado: FATIMA MIRANDA GARCIA [1]
+Usuario actualizado: LETICIA MENENDEZ PORRAS [1]
+Usuario actualizado: BEATRIZ ALONSO DEL VALLE [1]
+Usuario actualizado: VIRGINIA VILLAR CASTILLO [1]
+Usuario actualizado: CARLOS MENDEZ ESTEVEZ [1]
+Usuario actualizado: MARIA DEL CARMEN FREIRE CANCELAS [1]
+Usuario actualizado: ANA BELEN TORRIJOS OREJON [1]
+Usuario actualizado: MARIA MAR CASAS GARCIA [1]
+Usuario actualizado: FRANCISCO MIRANDA HERRERO [1]
+Usuario actualizado: MARIA JESUS MARTIN VARGAS [1]
+Usuario actualizado: LUCIA RODRIGUEZ MORENO [1]
+Usuario actualizado: ANA MARIA HERMOSO DE MENA [1]
+Usuario actualizado: JAVIER LAS HERAS SAUNDERS [31]
+Usuario actualizado: HECTOR MARTIN MARTIN [31]
+Usuario actualizado: LUCIA FIORELLA SANTULLO GARCIA [1]
+Usuario actualizado: BEATRIZ GARCIA CAÑEDO-ARGUELLES [1]
+Usuario actualizado: SALVADOR VALLE SANCHEZ [1]
+Usuario actualizado: RAFAEL RETAMOSA VILLACIEROS [1]
+Usuario actualizado: RODRIGO MENENDEZ CALVO [1]
+Usuario actualizado: PATRICIA ESTEBAN CORTES [31]
+Usuario actualizado: MONICA ZARCA GARCIA [1]
+Usuario actualizado: MARTA VALLES PORRAS [1]
+Usuario actualizado: VERONICA DOMINGUEZ CASARES [1]
+Usuario actualizado: FELIX LOPEZ CAÑADAS [1]
+Usuario actualizado: SAMUEL DIEZ ALONSO [1]
+Usuario actualizado: OSCAR ZORNOZA DE TORRES [31]
+Usuario actualizado: MIRUNA ANDRADA CIOTU . [1]
+Usuario actualizado: MIRIAM MARIN PLAZA [1]
+Usuario actualizado: ENRIQUE LAMPREAVE CRISTINO [1]
+Usuario actualizado: MARIA JOSE CARAZO MORALES [1]
+Usuario actualizado: VICTOR DANIEL GONZALEZ RIVERO [31]
+No se ha encontrado el puesto 0 para el usuario jm.gutierrez@cajamarsegurosgenerales.es
+Usuario actualizado: JOSE MANUEL GUTIERREZ GALAN [1]
+No se ha encontrado el puesto 0 para el usuario david.palomino@cajamarsegurosgenerales.es
+Usuario actualizado: DAVID PALOMINO MARTIN [1]
+No se ha encontrado el puesto 0 para el usuario fgarcia@cajamarsegurosgenerales.es
+Usuario actualizado: FERNANDO GARCIA BORREGO [1]
+Usuario actualizado: PABLO DIEZ LEON [1]
+Usuario actualizado: ROCIO PUERTA CHACON [31]
+Usuario actualizado: FRANCISCO JAVIER VIANA CASADO [31]
+Usuario actualizado: NOELIA AUTERO GARCIA [1]
+Usuario actualizado: ALICIA TADEO RIÑON [1]
+Usuario actualizado: SANTIAGO SANCHEZ FERNANDEZ [1]
+Usuario actualizado: RAQUEL TURIEL FERNANDEZ [1]
+Usuario actualizado: CINTIA JIMENEZ MEDINA [1]
+Usuario actualizado: SARA MUÑOZ SOTOMAYOR [1]
+Usuario actualizado: VICTOR DANIEL GONZALEZ RIVERO [31]
+Usuario actualizado: FERNANDO GARCIA BORREGO [31]
+Usuario actualizado: PILAR ANGOLOTI HERGUETA [1]
+Usuario actualizado: MARIA JESUS ESCALONA BELINCHON [1]
+Usuario actualizado: SILVIA DEL REY HERNANDEZ [1]
+Usuario actualizado: CRISTINA ROMERO CARRERA [31]
+Usuario actualizado: JOSE ANTONIO GONZALEZ MORENO [1]
+Usuario actualizado: ROBERTO PAVON BONILLA [31]
+Usuario actualizado: BEATRIZ NUÑEZ PICAZO [1]
+Usuario actualizado: ROSA MARIA TORRES RODRIGUEZ [1]
+Usuario actualizado: OLGA YESENIA ANDRADE ENDARA [1]
+Usuario actualizado: ANA ELENA BARQUILLA JIMENEZ [1]
+Usuario actualizado: PATRICIA EXPOSITO MARTINEZ [1]
+Usuario actualizado: MARIA ISABEL DEL CERRO RECIO [1]
+Usuario actualizado: PELAYO GUTIERREZ TEIRA [31]
+Usuario actualizado: IGNACIO SOLSONA PIERA [1]
+Usuario actualizado: KAREM VANESSA D'UNIAM RIOS [1]
+Usuario actualizado: FRANCISCO ROMAN LOPEZ RUIZ [31]
+Usuario actualizado: MARIA DEL CARMEN ACOSTA MORUNO [1]
+Usuario actualizado: JESUS ALONSO MELGAR [1]
+Usuario actualizado: MARIA ALEJANDRA MATA DUFOURT [1]
+Usuario actualizado: SALVADOR SARABIA BARQUERO [1]
+Usuario actualizado: SUSANA MONTERO REGUILON [1]
+Usuario actualizado: MARTA GARRE PEREZ-ALBERT [1]
+Usuario actualizado: ALMUDENA CAYETANO PEREZ [1]
+Usuario actualizado: AFRICA SERRANO LLORENTE [1]
+Usuario actualizado: OIHANE FORONDA ALONSO [1]
+Usuario actualizado: FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN [31]
+Usuario actualizado: CARMEN LOPEZ ARRANZ [1]
+Usuario actualizado: CARMEN BAÑUELOS LINARES [1]
+Usuario actualizado: MARIA GRACIA GALLEGO LOPEZ [1]
+Usuario actualizado: SUSANA MELENDI MONTES [31]
+Usuario actualizado: VALENTIN JUSTO NAVARRO MARTINEZ-RAPOSO [1]
+No se ha encontrado el puesto MGM-09-WS-004 para el usuario alvaro.martin@generali.com
+Usuario actualizado: ALVARO MARTIN ISABEL [1]
+No se ha encontrado el puesto MGM-09-WS-001 para el usuario paloma.martinalbo@generali.com
+Usuario actualizado: MARIA PALOMA MARTIN-ALBO TERCERO [1]
+No se ha encontrado el puesto MGM-12-SWS-005 para el usuario alfonso.bujanda@generali.com
+Usuario actualizado: ALFONSO BUJANDA CASTILLO [31]
+Usuario actualizado: JAVIER FERNANDEZ CONRADI [1]
+Usuario actualizado: FRANCISCO JAVIER NAVARRO ALONSO [1]
+Usuario actualizado: MARIA GEMA CORROS RUIZ [1]
+Usuario actualizado: BEATRIZ CARBONERAS AZURMENDI [1]
+Usuario actualizado: MARIANA CAMPILLO HERNANDO DE LARRAMENDI [31]
+Usuario actualizado: FERNANDO LAZARO RODRIGUEZ [31]
+Usuario actualizado: YOLANDA LOPEZ BLAS [1]
+Usuario actualizado: JUAN CARLOS GARCIA ORDOÑEZ [1]
+Usuario actualizado: CLARA PRIETO SIERRA [1]
+Usuario actualizado: JUAN CARLOS MATA MORALES [31]
+Usuario actualizado: NURIA IBAÑEZ CARRASCO [31]
+Usuario actualizado: GARBIÑE GALINDO MOTA [31]
+Usuario actualizado: IVAN GONZALEZ GOMEZ [31]
+Usuario actualizado: EDUARDO RAMOS PEREZ [31]
+Usuario actualizado: DANIEL PANADERO ZURRO [1]
+Usuario actualizado: KENYA ZAID GUILLEN PARRA [31]
+Usuario actualizado: JAVIER ALBERTO COSTAGUTA FERREYRA [31]
+Usuario actualizado: RAQUEL FERNANDEZ DEL CAMPO MEDINA [1]
+Usuario actualizado: ROSARIO AMELIA FERNANDEZ-RAMOS OCA [31]
+Usuario actualizado: ENRIQUE RIEGO MIEDES [31]
 Usuario actualizado: ANA BELEN PEREZ LOARTE [1]
 Usuario actualizado: IVAN GARCIA BALASTEGUI [31]
 Usuario actualizado: LAURA CASTELLA CARRABINA [31]
+Usuario actualizado: JUAN JOSE RODAJO MARTIN [1]
+Usuario actualizado: AMALIA GONZALEZ-LLANOS LOPEZ [31]
+Usuario actualizado: NATANAEL LAGUNA NARANJO [1]
+Usuario actualizado: LLUIS OBIOLS CALOPA [31]
+Usuario actualizado: MARIA ESMERALDA VENTURA MARTINO [1]
+Usuario actualizado: MARTA ESPARZA GARCIA [31]
+Usuario actualizado: ADRIAN DIAZ DE ILARRAZA BOZAL [31]
+Usuario actualizado: DANIEL FERNANDEZ BAUTISTA [31]
+Usuario actualizado: ALVARO MORILLAS HERNANDEZ [1]
+Usuario actualizado: LAURA GRANADA AMADOR [1]
+Usuario actualizado: ANA MELGAREJO RIBEIRA [1]
+Usuario actualizado: FRANCISCO JOSE MORENO GARCIA DE CONSUEGRA [1]
+Usuario actualizado: JORGE CECILIA GONZALEZ [1]
 Usuario actualizado: ALEJANDRO PUEYO MUÑOZ [59]
 Usuario actualizado: EMILIO FELIPE LISON CASTAN [1]
 Usuario actualizado: JORGE BEROT HIDALGO [1]
 Usuario actualizado: CEFERINO CANEDA ALVAREZ [1]
+Usuario actualizado: JORGE CHERTA ECHAURI [31]
+Usuario actualizado: ALESSANDRO BARBAGALLO . [1]
+Usuario actualizado: FEDERICA RIZZO . [31]
+Usuario actualizado: GUSTAVO PEDROSA LAGO [1]
+Usuario actualizado: CARMEN BOCERO CANENCIA [31]
+Usuario actualizado: ADRIAN GARCIA BALDERAS [31]
+Usuario actualizado: ANA TERESA GUERRERO GOMEZ [1]
+Usuario actualizado: YINGZHEN WU  [1]
+Usuario actualizado: JOSE IGNACIO CARRASCAL DIEZ [1]
+Usuario actualizado: EDUARDO ALONSO ALONSO [1]
+Usuario actualizado: ALVARO BLASCO GARCIA [31]
+Usuario actualizado: MANUEL CRESPO ZAMORANO [1]
+Usuario actualizado: MARIA INES CARDO FERNANDEZ [1]
+Usuario actualizado: STEFANO ZANCAN . [31]
+Usuario actualizado: CLAUDIO DE MATTEO . [1]
+Usuario actualizado: CRISTINA JIMENEZ JIMENEZ [1]
+Usuario actualizado: CARLOS MONZON RODRIGUEZ [1]
+Usuario actualizado: ALFONSO ACEBES GARCIA [31]
+Usuario actualizado: MARTI JO RUIZ [31]
+Usuario actualizado: JOSE LUIS MIR HERNANDEZ [1]
+Usuario actualizado: ELENA RUBALCABA SANCHEZ [1]
+Usuario actualizado: NURIA GARCIA LOZANO [31]
+Usuario actualizado: LAURA ISABEL RUBIO JIMENEZ [1]
 Usuario actualizado: MARIA DEL ROSARIO RODRIGO GONZALEZ [1]
 Usuario actualizado: ISIDORO DOMINGUEZ DOMINGUEZ [1]
 Usuario actualizado: XAVIER SENTIS JUNCOSA [1]
 Usuario actualizado: MARTA GONZALVO MARTI [1]
 Usuario actualizado: FRANCESC REGAS PONS [31]
+Usuario actualizado: ANGEL HORCAJO PLATAS [1]
+Usuario actualizado: SILVIA HERNANDEZ GARCIA [1]
+Usuario actualizado: JOSE CARLOS NUÑEZ GALAN [1]
+Usuario actualizado: LAURA PARDO ALCAIDE [1]
+Usuario actualizado: MARISOL ALVAREZ JORT [1]
+Usuario actualizado: MIGUEL ANGEL ALCAIDE MARTIN [1]
+Usuario actualizado: SUSANA MARIA PASAN CHAS [1]
+Usuario actualizado: ASUNCION ORTIZ SANCHEZ [1]
+Usuario actualizado: JORDI GIRO BRUGUE [1]
+Usuario actualizado: ALICIA RUBIO MEDINA [1]
+Usuario actualizado: MARIA ELENA MORILLO PRADILLO [1]
+Usuario actualizado: RICARDO FERNANDEZ DOMINGUEZ [1]
+Usuario actualizado: PEDRO ANGEL FERNANDEZ JIMENEZ [1]
+Usuario actualizado: JUAN MANUEL MORILLO PRADILLO [1]
+Usuario actualizado: JOSE LUIS SORIA REAL [31]
+Usuario actualizado: JAVIER PASCUAL HERRANZ [1]
+Usuario actualizado: MARIA ASUNCION LUQUE RETANA [1]
+Usuario actualizado: MARIA ASCENSION GARCIA CALVO [1]
+Usuario actualizado: JUAN LUIS MENDEZ DE VIGO LLORENS [1]
+Usuario actualizado: ANA ISABEL GARCIA BORRELLA [1]
+Usuario actualizado: JESUS ALMONACID SANCHEZ [1]
+Usuario actualizado: MARIA LUISA LOPEZ RUIZ DEL PORTAL [1]
+Usuario actualizado: GERMAN PASCUAL GARCIA [1]
+Usuario actualizado: FELIX MONTERO GALLEGO [1]
+Usuario actualizado: MARIA DEL CARMEN GALINDO CARRILLO [1]
+Usuario actualizado: MARINA RITORE BRU [1]
+Usuario actualizado: ELVIRA GONZALEZ MORENO [1]
+Usuario actualizado: JESUS RAMON CRESPO BENITO [31]
+No se ha encontrado el puesto MGM-06-WS- 104 para el usuario jose.leonardo@generali.com
+Usuario actualizado: JOSE LEONARDO GARCíA-VELASCO [1]
+Usuario actualizado: MARIA TERESA FERNANDEZ GARRIDO [1]
+Usuario actualizado: MARIA BELEN PALOMO CASCON [1]
 Usuario actualizado: SILVIA SANTAMARIA COBACHO [1]
 Usuario actualizado: ENRIQUE DEWISME VILLA [31]
 Usuario actualizado: MONICA CABALLERO RUIZ [1]
@@ -79,6 +281,7 @@ Usuario actualizado: MARCOS RUIZ ESCOLANO [1]
 Usuario actualizado: JOSE FERNANDEZ NUÑEZ [1]
 Usuario actualizado: ESTER MIREYA SURRIBAS SOBRINO [1]
 Usuario actualizado: IRIS OLIVES CURTO [1]
+Usuario actualizado: DIEGO DE MENDOZA FERNANDEZ [1]
 Usuario actualizado: ANA MARIA PALAU LANERO [1]
 Usuario actualizado: DIDAC SOLERNOU SANCHEZ [1]
 Usuario actualizado: NURIA SEPULVEDA MOLINA [1]
@@ -109,30 +312,21 @@ Usuario actualizado: MIGUEL CANO RODRIGUEZ [1]
 Usuario actualizado: ALESSANDRO GIRARDI PORTABALES [1]
 Usuario actualizado: FRANCESC XAVIER MONRAS VIDIELLA [59]
 Usuario actualizado: MARIA NURIA MARTINEZ TASCON [1]
-No se ha encontrado el puesto PED-03-WS-113 para el usuario miguel.pastor@generali.com
 Usuario actualizado: MIGUEL PASTOR BARRAGAN [31]
-No se ha encontrado el puesto PED-03-WS-111 para el usuario manuel.sanchez@generali.com
 Usuario actualizado: MANUEL SANCHEZ ERTA [1]
 Usuario actualizado: LIDIA RUIZ ROMERO [1]
-No se ha encontrado el puesto PED-03-WS-112 para el usuario sandra.sanisidoro@generali.com
 Usuario actualizado: SANDRA SAN ISIDORO AMARILLA [1]
-No se ha encontrado el puesto PED-03-WS-114 para el usuario carmen.larios@generali.com
 Usuario actualizado: MARIA DEL CARMEN LARIOS MARTINEZ [1]
-No se ha encontrado el puesto PED-03-WS-110 para el usuario gloria.niubo@generali.com
 Usuario actualizado: GLORIA GEMA NIUBO SABATER [1]
 Usuario actualizado: MARIA DEL MAR LOPEZ ORTEGA [1]
-No se ha encontrado el puesto PED-03-WS-111 para el usuario manuela.jimenez@generali.com
 Usuario actualizado: MANUELA JIMENEZ MARQUEZ [1]
-No se ha encontrado el puesto PED-03-WS-114 para el usuario laura.munoz@generali.com
 Usuario actualizado: LAURA MUÑOZ RAMOS [1]
 Usuario actualizado: ELENA LOPEZ HIGUERAS [1]
 Usuario actualizado: VANESSA RECASENS BODI [1]
 Usuario actualizado: MIREIA TORRES BERTRAN [1]
-No se ha encontrado el puesto PED-03-WS-112 para el usuario noemi.caro@generali.com
 Usuario actualizado: NOEMI CARO LOZANO [1]
 Usuario actualizado: NURIA MADRID DE LA TORRE [1]
 Usuario actualizado: JUAN CARLOS PEREZ MUÑOZ [1]
-No se ha encontrado el puesto PED-03-WS-109 para el usuario alejandro.garcia@generali.com
 Usuario actualizado: ALEX GARCIA HORTELANO [31]
 No se ha encontrado el puesto SALA QUIET para el usuario carlos.andreu@generali.com
 Usuario actualizado: CARLOS ANDREU BOFILL [1]
@@ -143,13 +337,103 @@ Usuario actualizado: ANNA MONTALBAN TURON [1]
 Usuario actualizado: NURIA VENTURA CANO [1]
 Usuario actualizado: MIGUEL MUÑOZ RODRIGUEZ [1]
 Usuario actualizado: VERONICA GONZALEZ PAEZ [1]
-No se ha encontrado el puesto PED-03-WS-110 para el usuario emma.canueto@generali.com
 Usuario actualizado: EMMA CAÑUETO RODRIGUEZ [1]
 Usuario actualizado: YOLANDA LOPEZ CARRASCO [1]
 Usuario actualizado: CARLOS BAUTISTA COLADO [1]
 Usuario actualizado: M. MONTSERRAT MORENO LUPIAÑEZ [1]
 Usuario actualizado: MARIA DEL PILAR BURGOS GUERRERO [31]
+Usuario actualizado: PEDRO MORALES ARROYO [31]
+Usuario actualizado: ELENA VINAGRE SURGA [1]
+Usuario actualizado: BEATRIZ SANZ JUEZ [31]
+Usuario actualizado: MARIA ESTRELLA MARTINEZ RODRIGUEZ [1]
+Usuario actualizado: MERCEDES VILLANUEVA DIAZ [1]
+Usuario actualizado: SANDRA DAGANZO SIERRO [1]
+Usuario actualizado: ROCIO GONZALEZ ALONSO [31]
+Usuario actualizado: MARIA CARMEN SANCHEZ JALIANO [1]
+Usuario actualizado: ISABEL REINA PIEDRABUENA [1]
+Usuario actualizado: MARTA BRAVO POZO [1]
+Usuario actualizado: MARIA ESPERANZA GUTIERREZ SILVA [1]
+Usuario actualizado: JOSE LUIS FERNANDEZ TOBALO [1]
+Usuario actualizado: MARIA ACEDO DOMINGUEZ [31]
+Usuario actualizado: VERONICA DELGADO RAMOS [1]
+Usuario actualizado: MARIA DEL CARMEN DE RUZ SUAREZ [31]
+Usuario actualizado: LUISA PINILLA MELO [1]
+Usuario actualizado: JULIAN IGNACIO FERNANDEZ TAPIA [1]
+Usuario actualizado: FRANCISCO JAVIER GONZALEZ VALERO [1]
+Usuario actualizado: DOLORES NIETO SEGURA [1]
+Usuario actualizado: FULGENCIO PASCUAL GARCIA MUÑOZ [31]
+Usuario actualizado: SILVIA FERNANDEZ SANTIAGO [1]
+Usuario actualizado: RAUL TORRES POLO [1]
+Usuario actualizado: MARIA TERESA VINDEL NOVAL [1]
+Usuario actualizado: OLIMPIA DE LA CHICA PEREZ [1]
+Usuario actualizado: MARIA TERESA ALVAREZ RODRIGUEZ [31]
+Usuario actualizado: GINES MATEO MURCIANO [1]
+Usuario actualizado: CARLOS MEDIAVILLA GONZALEZ [1]
+Usuario actualizado: JESUS UCENDO BERNAL [31]
+Usuario actualizado: CAROLINA PEREZ-AMOR MARTINEZ [31]
+Usuario actualizado: JUAN JESUS JIMENEZ PINO [1]
+Usuario actualizado: RAUL AVIS BARQUILLA [31]
+Usuario actualizado: JOSE FELIPE BENITO PEÑA [1]
+Usuario actualizado: PATRICIA ESTEVES GRANDA [1]
+Usuario actualizado: JUAN IGNACIO LOPEZ RAMIREZ [1]
+No se ha encontrado el puesto MGM-06-WS-91 para el usuario esther.felix@generali.com
+Usuario actualizado: ESTHER FELIX DELGADO [1]
 Usuario actualizado: PETRONELA FLORINA STANICA . [1]
+Usuario actualizado: MARIA ISABEL FETER MORALES [1]
+Usuario actualizado: BLANCA CAMARERO GARCIA [31]
+Usuario actualizado: NATIVIDAD RUIZ-MORON PEREZ [1]
+Usuario actualizado: MERCEDES MARIA SANCHEZ REYES [1]
+Usuario actualizado: LORENA ROMERO HERNANDEZ [1]
+Usuario actualizado: MARIA DURAN ALARCON [1]
+Usuario actualizado: M.PILAR ESTEPA NOVELLA [1]
+Usuario actualizado: ZOE LOPEZ VAQUERO [1]
+Usuario actualizado: RUT SANCHEZ LANZA [1]
+Usuario actualizado: MONICA MORENO PRIETO [31]
+Usuario actualizado: NURIA CASTRO BALSERA [1]
+Usuario actualizado: NOELIA GARCIA-CUEVAS LOPEZ [1]
+Usuario actualizado: CRISTINA ORTIZ TORRES [1]
+Usuario actualizado: ELISABETS SALGADO RODRIGUEZ [1]
+Usuario actualizado: ALBA FERRERA FERNANDEZ [1]
+Usuario actualizado: CRISTINA DE LA CASA OCAÑA [1]
+Usuario actualizado: CRISTINA GARCIA-ORTIZ GARCIA [1]
+Usuario actualizado: JORDI CUARTERO VALLS [1]
+Usuario actualizado: ELENA MARTIN DE LA ROSA [1]
+Usuario actualizado: JOSEFA RODRIGUEZ MUELAS [1]
+Usuario actualizado: MARIA ELENA VILLANUEVA DIAZ [1]
+Usuario actualizado: ALICIA REDONDO BUENO [1]
+Usuario actualizado: CRISTINA MARIA DEL PALACIO MARTINEZ [1]
+Usuario actualizado: ANA MARIA GONZALO RUIZ [1]
+Usuario actualizado: MARIA CRUZ IZQUIERDO PACHECO [1]
+Usuario actualizado: ANA CARMEN CARRETERO INIESTA [1]
+Usuario actualizado: MARIA JOSE VAAMONDE CALVO [1]
+Usuario actualizado: SILVIA FERNANDEZ GALAN [31]
+Usuario actualizado: OCTAVIO DIEZ DIEZ [1]
+Usuario actualizado: LIDIA DE DIEGO ALONSO [31]
+Usuario actualizado: CRISTINA INIESTA BLANCO [1]
+Usuario actualizado: JOSE ANTONIO GUTIERREZ FERNANDEZ [1]
+Usuario actualizado: ELENA MARIA MURIEL HERNANDEZ [1]
+Usuario actualizado: BELEN ESPERANZA ROJAS [1]
+Usuario actualizado: FRANCISCO JESUS LOPEZ-BARAJAS MESA [1]
+Usuario actualizado: ANGELICA PARRALO MENESES [1]
+Usuario actualizado: IGNACIO JOSE DOMINGUEZ HERNANDEZ [1]
+Usuario actualizado: VERONICA RODRIGUEZ AMARILLA [1]
+Usuario actualizado: ALVARO PEREZ DIEZ [1]
+Usuario actualizado: JOSE LUIS MONFORTE LOPEZ [1]
+Usuario actualizado: MARIA MERCEDES QUILEZ CANO [1]
+Usuario actualizado: NATALIA MARTINEZ HERNANDEZ [1]
+Usuario actualizado: JORGE MOYANO CABRERA [1]
+Usuario actualizado: MERCEDES MONTERO ASENSIO [1]
+Usuario actualizado: ALICIA CUPEIRO DOMINGO [1]
+Usuario actualizado: SARA GARCIA MERINO [1]
+Usuario actualizado: GEMA MANGUAN IGLESIAS [1]
+Usuario actualizado: JOAQUINA SANCHEZ MARTIN [1]
+Usuario actualizado: PILAR IZQUIERDO FERNANDEZ [1]
+Usuario actualizado: MARTA BROGERAS AVELLANOSA [1]
+Usuario actualizado: ANA MATILDE LOPEZ GONZALEZ [1]
+Usuario actualizado: ALBERTO BOADA UREÑA [1]
+Usuario actualizado: MERCEDES CUENCA ALCAZAR [1]
+Usuario actualizado: MERCEDES ORTIZ BLAZQUEZ [1]
+Usuario actualizado: CARMEN HUESCAR PARRAGA [31]
 Usuario actualizado: CARLOS CALPE NAVARRO [59]
 Usuario actualizado: MERCE CLOTET SERRA [1]
 Usuario actualizado: SOFIA PEREZ DIAZ [1]
@@ -194,6 +478,11 @@ Usuario actualizado: RUBEN LUQUE GARCIA [1]
 Usuario actualizado: SANTIAGO DE LA TORRE RAMIREZ [31]
 Usuario actualizado: URSULA CUEVAS LOPEZ [1]
 Usuario actualizado: MARIA GLORIA LACORT MEDINA [31]
+Usuario actualizado: JUAN CARLOS GOMEZ PASCUAL [31]
+Usuario actualizado: ROSANGELA CRETARA BALDUQUE [1]
+Usuario actualizado: ANGEL DE PAZ CARRILLO [31]
+Usuario actualizado: ESTEFANIA MAGAZ VELASCO [1]
+Usuario actualizado: FABIO NOTARSTEFANO . [1]
 Usuario actualizado: ISABEL MASO SERRANO [1]
 Usuario actualizado: MARTIN JESUS AVILA MANCEBO [1]
 Usuario actualizado: SONIA GARCIA LOPEZ [1]
@@ -207,13 +496,56 @@ Usuario actualizado: MARIA LUCILA PEREA ESCUDERO [1]
 Usuario actualizado: DAVID DAZA PUENTE [1]
 Usuario actualizado: LAURA FONT DURAN [1]
 Usuario actualizado: DESIREE VIDAL COMAS [1]
+Usuario actualizado: VANESSA GARCIA SANCHEZ [1]
+Usuario actualizado: ELENA GARCIA LLORENTE [31]
+Usuario actualizado: MARIANO SANCHEZ DEL HOYO [1]
+Usuario actualizado: MARTA SEGURA MARTIN [1]
 Usuario actualizado: JOSE MARIA ROMERO DE TEJADA MUNTANER [31]
+Usuario actualizado: EDUARDO MENDOZA MUÑOZ [1]
+Usuario actualizado: MARTA PEREA ORTEGA [1]
+Usuario actualizado: DANIEL BORRAS CHAVARRIAS [31]
+Usuario actualizado: LUCIA BARBON FERNANDEZ [31]
+Usuario actualizado: MARTA GONZALEZ LEON [1]
+Usuario actualizado: ALBERTO ROJO MORO [31]
+Usuario actualizado: ANGEL ARRANZ GUTIERREZ [31]
+Usuario actualizado: MARIA DOLORES ABOITIZ MANOVEL [1]
+Usuario actualizado: MARIA DOLORES CABELLO DE LOS COBOS NARVAEZ [31]
+Usuario actualizado: BERNARDO GONZALEZ GONZALEZ [31]
+Usuario actualizado: JACOBO DE LA SANT CARRASCO BAHAMONDE [1]
+Usuario actualizado: ERNESTO ANASTASIO IGARTUA [31]
+Usuario actualizado: ABDEL AGUSTIN DIAZ RIVERA [1]
+Usuario actualizado: NATALIA VELA MARIONNET [1]
+Usuario actualizado: ANDREA LLORACH LOURENCO [1]
+Usuario actualizado: HUGO OJER MEDRANO [31]
+Usuario actualizado: EMMA ABELLA BARRERA [1]
+Usuario actualizado: PEDRO SALGADO JORDAN [1]
+Usuario actualizado: MIGUEL ANGEL RIBERA MOLES [31]
+Usuario actualizado: MARIA VIRGINIA CASTRO BALZA [1]
+Usuario actualizado: MONICA GRANO DE ORO GARCIA [1]
+Usuario actualizado: JOSEP MARIA ROCA LLORCA [31]
+Usuario actualizado: ANDRES LOPERA ESCOLANO [31]
+Usuario actualizado: JONATHAN ISIDRO ALAMO SANCHEZ [1]
+Usuario actualizado: MARIA VICTORIA FERNANDEZ GIL [1]
+Usuario actualizado: JUAN LUIS FRESNEDA CLEMENT [1]
+Usuario actualizado: JORGE ANTONIO FERNANDEZ SANTIN [31]
+Usuario actualizado: CRISTINA SANCHEZ GOMEZ [1]
+Usuario actualizado: IGNACIO LUENGO FERRADAS [1]
 Usuario actualizado: RAMON GUIRADO GICH [1]
 Usuario actualizado: XAVIER SOLA CURIA [31]
 Usuario actualizado: ORIOL LUCIA CODINA [1]
 Usuario actualizado: M. MAGDALENA PONS PONS [1]
 Usuario actualizado: GERMAN FONT FERRER [1]
 Usuario actualizado: ENRIQUE MUÑOZ MENDEZ [59]
+Usuario actualizado: VERONICA GONCALVES HIDALGO [1]
+Usuario actualizado: JOSE ENRIQUE COLLADO GARCIA-LAJARA [1]
+Usuario actualizado: GERMAN RENEDO SANTOS [1]
+Usuario actualizado: ROSARIO URBANO PRADA [1]
+Usuario actualizado: YOLANDA AGUADO ACEVEDO [1]
+Usuario actualizado: PEDRO VALDIVIA TSCHOPP [31]
+Usuario actualizado: JAVIER LANZA GARCIA [1]
+Usuario actualizado: JUAN ANTONIO RACIONERO JAEN [1]
+Usuario actualizado: FRANCISCO JAVIER SERNA BALLARIN [31]
+Usuario actualizado: JOSE ANGEL BURGOS GARCIA [31]
 Usuario actualizado: SUSANA NAVARRO MARTINEZ [1]
 Usuario actualizado: JORDI GINESTA MARQUES [31]
 Usuario actualizado: MARIA ISABEL MARROQUIN BAUTISTA [1]
@@ -222,6 +554,29 @@ Usuario actualizado: ORIOL LOPEZ GOMEZ [1]
 Usuario actualizado: JORDI PINTO LONGAS [1]
 Usuario actualizado: JOSE ANTONIO PEREZ MESTRES [1]
 Usuario actualizado: PEDRO FONT BORIA [1]
+Usuario actualizado: MARIA CARMEN MARTIN ORTEGA [1]
+Usuario actualizado: MARIA TERESA MORENO DIAZ [1]
+Usuario actualizado: SONIA PEÑA HERRANZ [1]
+Usuario actualizado: CRISTINA CEBRIAN FERNANDEZ [1]
+Usuario actualizado: DANIEL RODRIGUEZ SANCHEZ [1]
+Usuario actualizado: MARIA BELEN FERRERAS MARTIN [1]
+Usuario actualizado: JAVIER GARCIA ACEITUNO [31]
+Usuario actualizado: RAQUEL GUERRA MUNILLA [1]
+Usuario actualizado: NURIA GONZALEZ RUBIANO [1]
+Usuario actualizado: ALFREDO RUBIO ALONSO [1]
+Usuario actualizado: PATRICIA GONZALEZ GUERRA [31]
+Usuario actualizado: MARIA SOLEDAD HERNANDO CASALENGUA [1]
+Usuario actualizado: RAQUEL PINEDA DELGADO [31]
+Usuario actualizado: PATRICIA MIRANDA PELAZ [31]
+Usuario actualizado: ENRIQUE LORENTE RAMOS [31]
+Usuario actualizado: GONZALO DE LA VIESCA LANZA [1]
+Usuario actualizado: IGNACIO MARTIN-CONSUEGRA DIEZ [31]
+Usuario actualizado: PATRICIA FERNANDEZ MARTINEZ [31]
+Usuario actualizado: ROSA GONZALEZ DE FRUTOS [31]
+Usuario actualizado: ISMAEL DE LOS SANTOS BELLO [31]
+Usuario actualizado: MANUEL ARRUFAT CASTELO [1]
+Usuario actualizado: SARA RISCO CAJA [1]
+Usuario actualizado: REBECA GARCIA GONZALEZ [1]
 Usuario actualizado: MAITE RODRIGUEZ MARMOL [31]
 Usuario actualizado: LUIS PALACIOS GARCIA [1]
 Usuario actualizado: ANTONIO FUNES RUIZ [1]
@@ -232,13 +587,43 @@ Usuario actualizado: SONIA SANAHUJA AIGUADE [1]
 Usuario actualizado: SILVIA ADROGUER RAMOS [1]
 Usuario actualizado: PABLO RODRIGUEZ TEATINO [31]
 Usuario actualizado: MANUEL ENRIQUE REBULL VIVANCOS [1]
+Usuario actualizado: JOSE MARIA CARDO GARCIA [1]
 Usuario actualizado: MARIA TERESA MOR PARIS [1]
 Usuario actualizado: NARCISA ROMAN MONGE [1]
 Usuario actualizado: M.YOLANDA CRESPO REVILLA [1]
 Usuario actualizado: EVA MARIA MORENO ROMERO [1]
 Usuario actualizado: LAURA LOPEZ GOMEZ [1]
 Usuario actualizado: JORDI BLANCH VALLMITJANA [1]
+Usuario actualizado: DAVID BLANCO YAÑEZ [1]
+Usuario actualizado: FRANCISCO JAVIER SARRAIS GRAU [1]
+Usuario actualizado: MANUEL RICARDO SANCHEZ GONZALEZ [1]
 Usuario actualizado: LUIS AGUILAR SOLA [1]
+Usuario actualizado: MARIA DEL PILAR LORENZO PRADA [1]
+Usuario actualizado: ANTONIA ARRIETA RUIZ [1]
+Usuario actualizado: IRENE CUENCA MEJIAS [31]
+Usuario actualizado: BENITO RUIZ GASCON [31]
+Usuario actualizado: MARIA PILAR CARRO SUAREZ [1]
+Usuario actualizado: ROBERTO ELENA CORDOBA [1]
+Usuario actualizado: MARIA ROSARIO GOMEZ IGLESIAS [1]
+Usuario actualizado: LAURA MONTENEGRO BALLESTEROS [1]
+Usuario actualizado: NAZARET MARIA SANCHEZ GONZALEZ [1]
+Usuario actualizado: SERGIO PARADES LOPEZ [1]
+Usuario actualizado: FRANCISCO JAVIER BORDERIAS LATAS [1]
+Usuario actualizado: JOSE ANTONIO MATEOS MORO [31]
+Usuario actualizado: LUIS GONZALEZ RECIO [31]
+Usuario actualizado: MARTA ISABEL DE ANDRES SANJUAN [1]
+Usuario actualizado: BORJA PLANELLES HERRERO [1]
+Usuario actualizado: RAQUEL DEL POZO HERVAS [1]
+Usuario actualizado: FABIAN TALAVERA GOMEZ [1]
+Usuario actualizado: ADOLFO MOLINA PLAZA [1]
+Usuario actualizado: FRANCISCO JOSE CAMPOS AVILA [1]
+Usuario actualizado: MARIA CLOTILDE MUÑOZ LOPEZ [1]
+Usuario actualizado: ANA MARIA YEPES MARTINEZ [1]
+Usuario actualizado: MARIA EMILIA MOLLA MERINO [1]
+Usuario actualizado: VIRGINIA GARCIA DE LA PEÑA [1]
+Usuario actualizado: HECTOR GARCIA ABOIN [1]
+Usuario actualizado: ALARCOS VELASCO FERNANDEZ [1]
+Usuario actualizado: M.DEL MAR DOMENECH MARTIN [1]
 Usuario actualizado: JOSE LUIS GARCIA RODRIGUEZ [31]
 Usuario actualizado: CARLOS RAMOS MORENO [1]
 Usuario actualizado: MIGUEL CAMPAÑA FERNANDEZ [1]
@@ -246,10 +631,40 @@ Usuario actualizado: MONTSERRAT MONTERO RODRIGUEZ [1]
 Usuario actualizado: GERARDO SOBRINO ALMUNIA [1]
 Usuario actualizado: TEOFILA CECILIA MOLINA CAMPOS [1]
 Usuario actualizado: ANTONIO NUÑEZ TOVAR [1]
+Usuario actualizado: FCO. JAVIER ANGOSTO GOMIS [1]
+Usuario actualizado: LUIS DE QUEROL VILA [31]
 Usuario actualizado: SONIA ZAGUIRRE PARADELO [1]
+Usuario actualizado: MARIA ASUNCION GAROZ DIAZ [1]
+Usuario actualizado: JORGE SANTOLAYA FORGAS [1]
+Usuario actualizado: JUAN JOSE PADIN VALLECILLO [1]
+Usuario actualizado: CARMEN MARIA JIMENEZ FERREIRA [1]
+Usuario actualizado: JUAN ANTONIO GUTIERREZ BARRANCO [1]
+Usuario actualizado: BEATRIZ MARTIN LOPEZ [31]
+Usuario actualizado: SANDRA GARCIA SILVA [1]
+Usuario actualizado: MARIA GEMMA ANDRES LLORENTE [1]
+Usuario actualizado: DIANA DURAN DE LA FUENTE [1]
+Usuario actualizado: MARIA DEL CARMEN MONTORO ZAPATA [1]
+Usuario actualizado: IRENE ALCARAZ MAESTRE [1]
+Usuario actualizado: MARIA JESUS PRIETO FERNANDEZ [1]
+Usuario actualizado: SILVIA PUERTA HERRERA [1]
+Usuario actualizado: SILVIA BLANCO LOPEZ [1]
+Usuario actualizado: TALIA JAEN FERNANDEZ [1]
+Usuario actualizado: PABLO DIEZ GARCIA [1]
+Usuario actualizado: ALFONSO COTS PALTOR [31]
 Usuario actualizado: MARIA LUCIA MORATE LOZANO [1]
+Usuario actualizado: ALICIA BRAVO CUBAS [1]
+Usuario actualizado: ALBERTO RIOBELLO MARTIN [1]
+Usuario actualizado: CATALINA PERELLO LLULL [1]
+Usuario actualizado: NICOLASA RETAMOSA CAMARENA [1]
+Usuario actualizado: ROCIO RAMOS CLEMENTE [1]
+Usuario actualizado: MARIA ELENA CASTRO RODRIGUEZ [1]
 Usuario actualizado: MANUEL CARVAJAL ALJARO [4]
 Usuario actualizado: JOAN ROSELLO CASTELLS [1]
+Usuario actualizado: YOLANDA FLORES MARTINEZ [1]
+Usuario actualizado: CRISTINA SOLANO GOMEZ [1]
+Usuario actualizado: JESUS GOMEZ MENGUAL [1]
+Usuario actualizado: VICTOR GUILLERMO NIETO CONESA [31]
+Usuario actualizado: JESUS FERNANDEZ SANCHEZ [31]
 Usuario actualizado: JUAN MIGUEL PRATTKE FRAGA [1]
 Usuario actualizado: FERNANDO FUMANAL ALBAS [1]
 Usuario actualizado: ANDRES BANDRES BAILO [1]
@@ -258,7 +673,18 @@ Usuario actualizado: ANA CANO SANCHEZ [1]
 Usuario actualizado: XAVIER MIRANDA LOPEZ [1]
 Usuario actualizado: JULIAN CAMILO RAMIREZ LOPEZ [1]
 Usuario actualizado: JOSE A. GUERRERO IZQUIERDO [31]
-No se ha encontrado el puesto PED-03-O&M-001 para el usuario carlos.amargos@generali.com
+Usuario actualizado: PEDRO MARIA SANTAMARIA MUÑIZ [31]
+Usuario actualizado: PEDRO PABLO SANCHEZ GOMEZ [1]
+Usuario actualizado: JUAN ANTONIO LOPEZ PASTOR [1]
+Usuario actualizado: OSCAR LLORENTE PINILLA [1]
+Usuario actualizado: SARA MORIENTE MORAGA [1]
+Usuario actualizado: PEDRO VICTOR BENAC EARLE [1]
+Usuario actualizado: ROBERTO BLANCO GOMEZ [63]
+Usuario actualizado: ZOE BOYERO IGLESIAS [1]
+Usuario actualizado: LETICIA MORENO FERNANDEZ [31]
+Usuario actualizado: M. ASUNCION LORENZO TORRES [1]
+Usuario actualizado: MIGUEL MARTIN LLORENTE [1]
+Usuario actualizado: ANA SOTO ELEZCANO [1]
 Usuario actualizado: CARLOS AMARGOS CARRERAS [59]
 Usuario actualizado: M.OLGA ORDOVAS TORRALBA [1]
 No se ha encontrado el puesto PED-00-WS-044 para el usuario andres.ramos@generali.com
@@ -271,7 +697,7 @@ Usuario actualizado: ALBERTO GARCIA-MATARREDONA SERRANO [1]
 No se ha encontrado el puesto PED-00-WS-042 para el usuario ferran.vilar@generali.com
 Usuario actualizado: FERRAN VILAR SOLER [1]
 No se ha encontrado el puesto PED-00-WS-051 para el usuario luis.ramos@generali.com
-Usuario creado: LUIS RAMOS CARBALLO
+Usuario actualizado: LUIS RAMOS CARBALLO [1]
 No se ha encontrado el puesto PED-00-WS-054 para el usuario josea.uriz@generali.com
 Usuario actualizado: JOSE A URIZ TOME [1]
 No se ha encontrado el puesto PED-00-WS-057 para el usuario jordi.soler@generali.com
@@ -313,15 +739,51 @@ Usuario actualizado: ENRIC MAS GUYAL [31]
 Usuario actualizado: M.EULALIA ALSINA RIBO [1]
 Usuario actualizado: JAVIER CANALDA ROPALS [1]
 Usuario actualizado: LLUISA BLANCH ARMENGOL [1]
+Usuario actualizado: MARIA DEL MAR LOPEZ DE LACALLE FERNANDEZ [1]
+Usuario actualizado: ALEJANDRO DEL PRADO ALVAREZ [1]
+Usuario actualizado: FELIX DOMINGO PEREGRINA [1]
+Usuario actualizado: JAIME RODRIGUEZ NOGALES [1]
+Usuario actualizado: JOSE ANDREO NICOLAS [1]
+Usuario actualizado: SANDRA RODRIGUEZ ALVAREZ [1]
+Usuario actualizado: JAVIER BARRANCO GALLEGO [1]
+Usuario actualizado: ROBERTO DIAZ VIANA [1]
+Usuario actualizado: AMPARO GARRIDO MARTINEZ [1]
+Usuario actualizado: RAMIRO BARRAL TEMES [31]
 Usuario actualizado: JAVIER LOPEZ RODRIGUEZ [1]
+No se ha encontrado el puesto 0 para el usuario joseluis.casaus@generali.com
+Usuario actualizado: JOSE LUIS CASAUS HAZAÑAS [1]
+No se ha encontrado el puesto 0 para el usuario enrique.rodriguez@generali.com
+Usuario actualizado: ENRIQUE RODRIGUEZ RODRIGUEZ [1]
+Usuario actualizado: ALVARO ALGUACIL LUQUE [1]
+Usuario actualizado: ALBERTO OGANDO GARCIA [31]
+Usuario actualizado: MONICA CHAVERNAS TEJEDOR [1]
+Usuario actualizado: MARIA PATRICIA CABAL BRISO-MONTIANO [31]
+Usuario actualizado: MARIA ELENA JIMENEZ SANABRIA [1]
+Usuario actualizado: DIANA LODIN VELAZQUEZ [31]
+Usuario actualizado: ELENA FERRE AGUILERA [1]
+Usuario actualizado: AIDA ALVAREZ RODRIGUEZ [1]
+Usuario actualizado: CRISTINA ZARZA ALVAREZ [31]
+Usuario actualizado: OSCAR VILLAR RONCERO [1]
+Usuario actualizado: PAULA EGIDO CONDE [1]
+Usuario actualizado: SARA GARCIA GOMEZ [1]
+Usuario actualizado: BEATRIZ FERNANDEZ IZQUIERDO [31]
+Usuario actualizado: MARTA LORENZO LOPEZ [1]
+Usuario actualizado: FRANCISCO JAVIER ZUBICOA MIQUELEIZ [31]
 No se ha encontrado el puesto PED-00-WS-029 para el usuario laura.gasso@generali.com
 Usuario actualizado: LAURA GASSO MORERA [1]
 No se ha encontrado el puesto PED-00-WS-020 para el usuario gabriel.costa@generali.com
 Usuario actualizado: GABRIEL COSTA JUSTE [72]
+Usuario actualizado: ROBERTO GONZALEZ PALOMO [1]
+Usuario actualizado: NURIA ESTHER VILA CAMINO [1]
+Usuario actualizado: JESUS MARIA VILLALBA AGUILERA [1]
+Usuario actualizado: FRANCESC GIRALT CANADELL [31]
 No se ha encontrado el puesto PED-00-WS-026 para el usuario david.grau@generali.com
 Usuario actualizado: DAVID GRAU ESTELLES [1]
+Usuario actualizado: ANA ISABEL GALINDO AHIJADO [1]
 No se ha encontrado el puesto PED-00-WS-024 para el usuario elisabet.gutierrez@generali.com
 Usuario actualizado: ELISABET GUTIERREZ BONILLO [1]
+Usuario actualizado: CRISTINA GADEA REMACHA [1]
+Usuario actualizado: ANA SANCHEZ PALLARES [1]
 Usuario actualizado: JULIA DI NAPOLI PINILLOS [1]
 Usuario actualizado: NOEL ROJO DE LUQUE [59]
 Usuario actualizado: OSCAR PABLO TUSET [59]
@@ -433,6 +895,8 @@ Usuario actualizado: JORGE SANZ ALONSO [1]
 Usuario actualizado: ANDRES FELIPE DE LA ROCHE GUTIERREZ [1]
 Usuario actualizado: MARCOS RUIZ TARIN [1]
 Usuario actualizado: JORDI TORNE RIBALTA [1]
+Usuario actualizado: JORGE GARCIA GARCIA [31]
+Usuario actualizado: IZASKUN DIEGO ALLENDE [1]
 Usuario actualizado: JUANA FORTUNY LOPEZ [59]
 Usuario actualizado: JORDI ROCA PIELLA [31]
 Usuario actualizado: NEUS PIÑOL MERINO [1]
@@ -445,96 +909,650 @@ Usuario actualizado: ESTHER LALANA VIDALLER [31]
 Usuario actualizado: YOLANDA MILLA PEREZ [1]
 Usuario actualizado: ANTONIO CRUZ RENTERO [1]
 Usuario actualizado: JOSEP MARIA FERRER FERRER [31]
+Usuario actualizado: ALESSIA MEZQUITA PRIETO [1]
+Usuario actualizado: EVA ALBALA BACHOT [1]
+Usuario actualizado: MAURICIO CANAL MARTINEZ [31]
+Usuario actualizado: MIGUEL CARLOS DE LAS RIVAS GONZALEZ DEL REY [1]
+Usuario actualizado: MARIA DEL SOL GONZALEZ ALONSO [1]
+No se ha encontrado el puesto MGM-07-WS-08 para el usuario miguel.alvarez@generali.com
+Usuario actualizado: MIGUEL ALVAREZ BAEZ [1]
+Usuario actualizado: JOSE BENITEZ MORON [31]
+Usuario actualizado: LORENA GARCIA LOPEZ [1]
+Usuario actualizado: CLAUDIA PAPAGNA . [31]
+Usuario actualizado: MARIA JOSE LLANOS OGINO [31]
+Usuario actualizado: VICTOR LUIS GIL ABAD [1]
+Usuario actualizado: EDUARDO FRANCISCO RODRIGUEZ GARCIA [1]
+Usuario actualizado: CAROLINA PASCUAL NIETO [1]
+Usuario actualizado: MIGUEL ROMERO SANZ [1]
+Usuario actualizado: ISMAEL MARTIN CORRAL [1]
+Usuario actualizado: JOSE MANUEL GUTIERREZ GALAN [31]
+Usuario actualizado: DAVID PALOMINO MARTIN [31]
 Usuario actualizado: NOELIA GARCIA JULIAN [1]
+Usuario actualizado: LETICIA ENCINAS RUANO [1]
+Usuario actualizado: JAVIER CASILLAS PEREZ [1]
 Usuario actualizado: ANTONIO CAAMAÑO TRAVESSET [1]
+Usuario actualizado: JOSE MANUEL GARCIA ROJO DIAZ GUERRA [1]
+Usuario actualizado: SARA MATEOS GOMEZ [1]
+Usuario actualizado: URKO MIRAVALLES BARBA [1]
+Usuario actualizado: IVAN CANCHO MERINO [1]
+Usuario actualizado: DIANA ARRUABARRENA DE PAZ [1]
 Usuario actualizado: XAVIER PERALS RODON [1]
+Usuario actualizado: ELENA MARIA PIESCHACON PEREZ [1]
+Usuario actualizado: BEATRIZ CANO SANTANA [31]
+Usuario actualizado: IGNACIO GARCIA JIMENEZ [1]
 Usuario actualizado: MARINA PONSETI MUNTANER [1]
+Usuario actualizado: ESTRELLA LOPEZ MORANTE [1]
 Usuario actualizado: SUSANA SAEZ DE TEJADA ORDOÑEZ [1]
+Usuario actualizado: JOAQUIN ESPALLARGAS BARRIO [1]
 No se ha encontrado el puesto PED-00-WS-035 para el usuario veronicamaria.perona@generali.com
-Usuario creado: VERONICA MARIA PERONA GONZALEZ
+Usuario actualizado: VERONICA MARIA PERONA GONZALEZ [1]
+Usuario actualizado: MARIA SARACHAGA AYESTARAN [1]
+Usuario actualizado: CAROLINA GONZALO MOLINA [1]
+No se ha encontrado el puesto MGM-09-WS-003 para el usuario florencia.lavera@generali.com
+Usuario actualizado: FLORENCIA LAVERA . [1]
 Usuario actualizado: INGRID FORTUÑO PEÑARRUBIA [1]
+Usuario actualizado: GABRIEL MENDEZ PINTO [1]
+No se ha encontrado el puesto MGM-08-TWS-093 para el usuario diego.palacios@generali.com
+Usuario actualizado: DIEGO PALACIOS GONZALEZ [1]
+Usuario actualizado: MARÍA MORENO BAEZA [1]
+Usuario actualizado: MERCEDES ORTS ANCOCHEA [1]
+Usuario actualizado: CARMEN MARIA ROMERO DIAZ [1]
 Usuario actualizado: SANDRA CARBONERO DE SAN FRANCISCO [1]
+Usuario actualizado: ALEJANDRA MESEGUER BLASCO [1]
+Usuario actualizado: ELENA LOPEZ OLIVA [1]
+Usuario actualizado: LEIRE MONTOYA ELIZALDE [1]
+Usuario actualizado: ANA CLARISSA CUEVAS ARTHUR [1]
 Usuario actualizado: JORGE JAVIER FERRER VILLACAMPA [1]
+Usuario actualizado: ALVARO HERVAS SAUCEDO [1]
+Usuario actualizado: ALVARO MONTERO MARTINEZ [1]
 Usuario actualizado: JUDITH BERNAL MARQUEZ [1]
+Usuario actualizado: ELENA MORATE PECHARROMAN [1]
+Usuario actualizado: GUILLERMO FRUTOS REQUENA [1]
+Usuario actualizado: JOSE ALVADO HERNANDEZ [1]
+Usuario actualizado: ALICIA FUENTES DIAZ [4]
+Usuario actualizado: MIGUEL ANGEL RIVERA DIAZ [31]
+Usuario actualizado: GIORGIA RINALDONI . [1]
+Usuario actualizado: JESUS RAMIRO CARRASCO [1]
+Usuario actualizado: MANUEL LEZAMA-LEGUIZAMON ACHA [1]
+Usuario actualizado: ALEJANDRO APARICIO SANZ [1]
+Usuario actualizado: LUCIA SANSANO MARTIN [1]
+Usuario actualizado: PATRICIA RESTEGUI COMPOSTIZO [1]
+Usuario actualizado: LEONOR ELIZABETH PACHECO ULACIO [1]
+Usuario actualizado: INMACULADA MORENO CANO [1]
+Usuario actualizado: SARA DE FRUTOS NOGALES [1]
+Usuario actualizado: ELENA LOPEZ CERRO [1]
+Usuario actualizado: ADRIÁN CÁRNICAS MAROTO [1]
+Usuario actualizado: JAVIER ABELLAN CABRERA [1]
+Usuario actualizado: MANUEL OCAÑA DIEZ DE LA TORRE [1]
+Usuario actualizado: MANUEL ARRATE CRIADO [1]
+Usuario actualizado: ROCÍO PEÑA GUTIERREZ-OJANGUREN [1]
 Usuario actualizado: DAVID GONZALEZ DIAZ [1]
+Usuario actualizado: SARAY QUINTAS LAGO [1]
+Usuario actualizado: DAVID VILLARINO GONZALEZ [1]
+Usuario actualizado: AINHOA MÉNDEZ LÓPEZ [1]
+Usuario actualizado: GONZALO MARTÍN VALCAYO [1]
+Usuario actualizado: GUILLERMO VICENTE SÁNCHEZ MARTÍNEZ [1]
 Usuario actualizado: IVAN ANTOLIN PEIRO [1]
+Usuario actualizado: CRISTINA SAIZ GARCIA [1]
+Usuario actualizado: JUAN JOSE PARREÑO TOLEDANO [1]
+Usuario actualizado: SANTIAGO MURILLO MARTINEZ [1]
+Usuario actualizado: BEGOÑA LESSMEISTER PASCUAL [1]
+Usuario actualizado: AINARA SALDAÑA ARIAS [1]
+Usuario actualizado: CLAUDIA MORALES GARCIA [1]
+Usuario actualizado: MARIA DOLORES MALLA SIERRA [1]
+Usuario actualizado: LORENZO MARTINEZ JIMENEZ [1]
+Usuario actualizado: TERESA FERNANDEZ DE LASCOITI GONZALEZ-PINTO [1]
 Usuario actualizado: IVAN GARCIA SANCHEZ [1]
 Usuario actualizado: MIREIA GARCIA NEBOT [1]
 Usuario actualizado: IRENE PAVON RODRIGUEZ [1]
+Usuario actualizado: MANUELA CERESI  [1]
+Usuario actualizado: MARIO HERNANDEZ PEREZ [1]
 Usuario actualizado: CARLES TERRAZA BADIA [1]
+Usuario actualizado: DIEGO MARTINEZ SANCHEZ [1]
+Usuario actualizado: WISAM MOUCH CHAMLAL [1]
+Usuario actualizado: SILVIA GIMENO ALONSO [1]
+Usuario actualizado: MARIA DEL ROSARIO FERNANDEZ GONZALEZ [1]
 Usuario actualizado: JULIA COMPAÑO QUEROL [1]
+Usuario actualizado: CARLOS SANCHEZ SANCHEZ [1]
 Usuario actualizado: DAVID SIMON CAPARROS [1]
 Usuario actualizado: JOAQUIM BOCHACA MATEO [1]
+Usuario actualizado: ALBA VILLAFRANCA TORO [1]
+Usuario actualizado: MARIA HIDALGO CABEZAS [1]
+Usuario actualizado: MATTEO DRAGHI  [31]
+Usuario actualizado: LAURA CANDEL VALDERRAMA [31]
 Usuario actualizado: DANIEL SANCHEZ NAVARRO [1]
+Usuario actualizado: YOLANDA RODRIGUEZ PASCUAL [1]
+Usuario actualizado: LUCIA LAGUNA ELOLA-OLASO [1]
+Usuario actualizado: ERIC MAS MONCUSI [1]
+Usuario actualizado: LAURA MARIA MENDEZ MILLAN [1]
+Usuario actualizado: MARIA SONIA HERNÁNDEZ SEVILLA [1]
 Usuario actualizado: PABLO SEBASTIAN BUGALLO NAVARRIA [1]
+Usuario actualizado: DANIEL ALONSO ARTEAGA [1]
+Usuario actualizado: ANDREA FUENTES RIVERO [1]
+Usuario actualizado: ASIER GOIKOETXEA AURRE [1]
 Usuario actualizado: DANIEL BASCUÑAN PABLOS [1]
 Usuario actualizado: ALEJANDRO ASCON GARRIDO [1]
+Usuario actualizado: MARIA TURIEL RODAO [1]
+Usuario actualizado: BIANCA DAVALCIUC TRAISTARU [1]
 Usuario actualizado: ELLIOT JOAN FERRAND BIJL [1]
 Usuario actualizado: PAU TURAL GIL [1]
+Usuario actualizado: NATALIA BUENO VALDIVIELSO [1]
+Usuario actualizado: CECILIA SEGOVIANO GUILARTE [1]
+Usuario actualizado: ALVARO MARTIN SANCHEZ [1]
 Usuario actualizado: ALEX MARCED MARTINEZ [1]
+Usuario actualizado: ESTHER NIELFA MARRERO [1]
 Usuario actualizado: ALVARO MARTINEZ BARRIOCANAL [1]
 Usuario actualizado: AURA VICTORIA RAVELO IDROGO [1]
 Usuario actualizado: BORJA IRAOLA AJURIA [1]
 Usuario actualizado: ANA MARIA GARRIS CUBA [1]
 Usuario actualizado: NOELIA CAMARGO FERNANDEZ [1]
+Usuario actualizado: ENRIQUE BOENTE MARTINEZ [1]
+Usuario actualizado: RAKESH WADHWA  [31]
+Usuario actualizado: IRENE MURIEL CASADO JIMENEZ [1]
+Usuario actualizado: LUCIA BAREÑO ORTIZ-ECHAGÜE [1]
+Usuario actualizado: JOSE MARIA PEDRAJA GUTIERREZ [1]
+Usuario actualizado: GUILLERMO GUTIERREZ CUENCA [1]
+Usuario actualizado: LAURA ARAUJO REDONDO [1]
+Usuario actualizado: ALVARO ZUNZUNEGUI SUAREZ [1]
+Usuario actualizado: GUILLERMO DEL PINO BARRAGAN [1]
+Usuario actualizado: CRISTINA TAMARIT CRESPO [1]
+Usuario actualizado: MONICA BALENCIAGA SAEZ DE IBARRA [1]
+Usuario actualizado: SANTIAGO VACAS ROMERA [1]
+Usuario actualizado: JOSE MANUEL GUILLEN SAEZ [1]
 Usuario actualizado: RUTH CANO LOPEZ [1]
 Usuario actualizado: JOSE MARIA GOMEZ HERNANDEZ [1]
+Usuario actualizado: ANA MARIA LATORRE ITURRE [1]
+Usuario actualizado: SARA VIVAS RECIO [1]
+Usuario actualizado: RAQUEL BEDIA HERNANDEZ [1]
+Usuario actualizado: XIAOLONG FAN  [1]
+Usuario actualizado: JOSE CARLOS MORENO RODRIGUEZ [1]
+Usuario actualizado: CARLA MON MAROTO [1]
+Usuario actualizado: VICENTE CASTILLO GALERA [1]
+Usuario actualizado: NATALIA SLEIMAN GUTIERREZ [1]
+Usuario actualizado: EVA ESTEBAN GARCIA [1]
+Usuario actualizado: IRINA PIETSCH PANIAGUA [1]
+Usuario actualizado: IRENE NUÑEZ XIFRE [1]
+Usuario actualizado: ALEJANDRO RODRIGUEZ VIÑAS [1]
+Usuario actualizado: GUSTAVO PERDOMO SEQUERA [1]
+Usuario actualizado: PAULA MARTIN HERNANDEZ [1]
+Usuario actualizado: AITOR SERENO DE LA GALA [1]
+Usuario actualizado: NATALIA PRIETO MOYA [1]
+Usuario actualizado: EVA TOME GARRIDO [1]
+Usuario actualizado: LUIGI GEOVANNY BRITO JIMENEZ [1]
 Usuario actualizado: JUDIT BITRIA GONZALEZ [1]
+Usuario actualizado: ANA MARIA RODERO MARTINEZ [1]
+Usuario actualizado: MARIA ANTONIA MEDINA BLASCO [1]
+Usuario actualizado: LARA DUEÑAS GALAJARES [1]
+Usuario actualizado: ELENA MARTIN BENITO [1]
+Usuario actualizado: MARIA BELEN GAY LLAVE [1]
+Usuario actualizado: ANDRES ERNESTO CORTELLUCCI  [1]
+Usuario actualizado: TANIA DONOSO PABLOS [1]
+Usuario actualizado: ANA MONICA ESCRIVA FORT [1]
+Usuario actualizado: BEATRIZ BADOS OTAZU [1]
+Usuario actualizado: DIEGO MARTINS BENITEZ [1]
 Usuario actualizado: JAVIER ALAMINOS MEMBRIVES [1]
+Usuario actualizado: MARIA PUY FERNANDEZ VIDAURRETA [1]
+Usuario actualizado: MANUEL VILLEGAS RUBIO [1]
 Usuario actualizado: PAULA VILA CORTINA [1]
+Usuario actualizado: PATRICIA GALDOS FERNANDEZ [1]
 Usuario actualizado: BEATRIZ SANCHEZ DIAZ [1]
+Usuario actualizado: ESTEBAN SANCHEZ SANZ [1]
+Usuario actualizado: SANTIAGO HERMIDA SANTOS [1]
+Usuario actualizado: ISABEL BONILLA SANCHEZ [1]
+Usuario actualizado: IÑIGO BERMEJO BATANERO [1]
+Usuario actualizado: LUCIA FRAILE MORERA [1]
+Usuario actualizado: ALVARO BELTRAN DE HEREDIA REVUELTA [1]
 Usuario actualizado: CARLOS PARRA URDA [1]
 Usuario actualizado: JUAN CARLOS SEGURA GARCIA [1]
+Usuario actualizado: PAULA ALVAREZ ANDONEGUI [1]
+Usuario actualizado: ANA DERLY MARTINEZ GOMEZ [1]
+Usuario actualizado: BORJA GOMEZ HERNANDEZ [1]
+Usuario actualizado: MIGUEL ANGEL NOGUERA SEGADO [1]
+Usuario actualizado: INES CRIADO LOPEZ [1]
+Usuario actualizado: CLAUDIA GARCIA ESPINOSA [1]
+Usuario actualizado: ESTHER LAURA GONZALEZ MEDINA [1]
+Usuario actualizado: DANIEL FERNANDEZ LORENZO [1]
+Usuario actualizado: ANA GALVEZ UGENA [1]
+Usuario actualizado: GLORIA RODRIGUEZ LOPEZ [1]
+Usuario actualizado: GUILLERMO MENDEZ GONZALEZ [1]
+Usuario actualizado: LUIS VILARIÑO LEON [1]
+Usuario actualizado: JAVIER GONZALEZ MENDEZ [1]
+Usuario actualizado: REBECA JIMENEZ RAMOS [1]
+Usuario actualizado: FLORA DE CARLO  [1]
+Usuario actualizado: DANIEL CARRION ENGRA [1]
+Usuario actualizado: JAVIER PINILLA GUTIERREZ [1]
+Usuario actualizado: JAIME GARCIA SALCEDO [1]
+Usuario actualizado: ALVARO AFONSO TAÑO [1]
+Usuario actualizado: MANUEL RUIZ BLANCA [1]
+No se ha encontrado el puesto 0 para el usuario mariairene.hernandez@generali.com
+Usuario actualizado: MARIA IRENE HERNANDEZ CARBALLO [1]
 Usuario actualizado: ZAIRA MUÑOZ SANCHEZ [1]
+Usuario actualizado: ALEJANDRO FERNANDEZ ORDUÑEZ [1]
+Usuario actualizado: JAVIER VEGA ECIJA [1]
+Usuario actualizado: GONZALO ESPEJO PEREZ [1]
+Usuario actualizado: JORGE MATUK GEIGNER [1]
+Usuario actualizado: JOSE ANGEL RUIZ FRANCONETTI [1]
+Usuario actualizado: ISABEL ANÓS POBLACION [1]
+Usuario actualizado: DAVID GALLEGO TERCERO [1]
+Usuario actualizado: XINGYAO PAN  [1]
 Usuario actualizado: BONIFACIO BOHELI IDJABE [1]
+Usuario actualizado: LAURA PEREZ COBO [1]
 Usuario actualizado: GINA JULIANA SEGOVIA ARARAT [1]
+Usuario actualizado: MERCEDES HERNANDEZ MARTIN [1]
+Usuario actualizado: FABIO SALGADO MARTIN [1]
+Usuario actualizado: RODRIGO PEDRERO MIÑAMBRES [1]
+Usuario actualizado: GUILLERMO AMENGUAL GIARDIN [1]
+Usuario actualizado: YOUSSEF EL AYADI EL AYADI [1]
+Usuario actualizado: LAURA RODRIGUEZ GARCIA [1]
 Usuario actualizado: ELENA CARPIO ROBLES [1]
+No se ha encontrado el puesto MGM-07-SWS-098 para el usuario ignacio.mas@generali.com
+Usuario actualizado: IGNACIO MAS CANDELA [1]
+Usuario actualizado: EDUARD PLANASDEMUNT COBO [1]
+Usuario actualizado: MANUEL AGUILAR SANJURJO [1]
+Usuario actualizado: EDUARDO ENRIQUE GONZALEZ MALCA [1]
+Usuario actualizado: JAVIER CASTRO GIL [1]
+Usuario actualizado: MARIO ABBATE  [1]
+Usuario actualizado: EDWARD FERNANDO CHAVEZ ORTIZ [1]
+Usuario actualizado: LUIS ALBERTO NOVELLA PASTOR [1]
+Usuario actualizado: ANGELA ROMERO GIL [1]
+Usuario actualizado: ALBERTO MANSO ALONSO [1]
+Usuario actualizado: JORGE LAZARO MAGAN [1]
 Usuario actualizado: DANIEL CAMPOY COMABASOSA [1]
+No se ha encontrado el puesto MGM-07-WS-98 para el usuario marta.luengo@generali.com
+Usuario actualizado: MARTA LUENGO RUIZ [1]
+Usuario actualizado: PATRICIA PEREZ SANCHEZ [1]
+Usuario actualizado: ROCIO HERROJO PAZ [1]
+Usuario actualizado: SARA SANTISTEBAN RIVAS [1]
+Usuario actualizado: ANA JIMENEZ PEREZ [1]
+Usuario actualizado: PAULA MUÑOZ VARAS [1]
+Usuario actualizado: JULNERY GODOY CHACON [1]
+Usuario actualizado: VERONICA GARCIA AGUADO [1]
+Usuario actualizado: HECTOR MUÑOZ GARCIA [1]
+Usuario actualizado: VIVIANA GAVIDIA NARVAEZ [1]
+Usuario actualizado: MAVI NARCISA ARIAS CARRERA [1]
 Usuario actualizado: CLARA GESTI FABREGA [1]
+Usuario actualizado: ERICA DEL ROCIO GOMEZ VANEGAS [1]
+Usuario actualizado: CARLOS ROMERO FRANCO [1]
+Usuario actualizado: CARLOS LOSADA ALVAREZ [1]
+Usuario actualizado: ALEJANDRO RIO GARCIA [1]
+Usuario actualizado: CECILIA GARCIA CUELLAR [1]
+Usuario actualizado: MILAGROS STEFANY DEZA DIAZ [1]
+Usuario actualizado: MARTA RODRIGO RUIZ [1]
+Usuario actualizado: MARINA BRAVO BATALLA [1]
 Usuario actualizado: MAXIMILIANO ERNESTO PEON  [1]
+Usuario actualizado: ROBERTO FERNANDEZ BARAJAS [1]
+Usuario actualizado: ENRIQUE COLOMER MAYOLA [1]
+Usuario actualizado: SAMUEL MARQUEZ DIAZ [1]
+Usuario actualizado: JAVIER LOPEZ CADIERNO [1]
+Usuario actualizado: REMUS MIHAI TANASE  [1]
+Usuario actualizado: BELEN DEL RIEGO TASCON [1]
+Usuario actualizado: SONIA RUBIO RUIZ [1]
+Usuario actualizado: VERONICA GARCIA MARCO [1]
 Usuario actualizado: ALEX CARRERAS RUIZ [1]
+Usuario actualizado: FLORENCIA DEMONTE  [1]
+Usuario actualizado: PABLO OJEDA HIGUERA [1]
+Usuario actualizado: CRISTINA DIAZ REDONDO [1]
+Usuario actualizado: ANA MARIA JIMENEZ GARROBO [1]
+Usuario actualizado: MARIA CARMEN RAMIREZ ESCOBEDO [1]
 Usuario actualizado: FRANCESC JOSEP BORRELL ALLUE [1]
+Usuario actualizado: LAURA PACHECO SÁNCHEZ [1]
+Usuario actualizado: ORLANDO DIAZ CLAVERO [1]
+Usuario actualizado: AGUSTIN DURAN MATEOS [1]
+Usuario actualizado: DANIEL VIEIRA PUMAR [1]
+Usuario actualizado: FEDERICO SPOERER GONZALEZ [1]
 No se ha encontrado el puesto WS-046 para el usuario ezequiel.santos@generali.com
 Usuario actualizado: EZEQUIEL SANTOS GOMEZ [1]
+Usuario actualizado: ALEJANDRO ROLDAN ORTIZ [1]
+Usuario actualizado: CHAIMAE MEHRI HMAIDOUCH [1]
+Usuario actualizado: BRANDON ALEXIS MAMANI CLAROS [1]
+Usuario actualizado: AIDA SANCHEZ BERZAL [1]
+Usuario actualizado: SERGIO GARCIA CARVAJAL [1]
+Usuario actualizado: LAURA ALONSO DE LA CRUZ [1]
 Usuario actualizado: VICTOR COLODRO BALEA [1]
+Usuario actualizado: JAVIER DIAZ JIMENEZ [1]
+Usuario actualizado: CARLOS ESCUDERO SEGURA [1]
+Usuario actualizado: SOFIA VICTORIA PASARIN  [1]
+Usuario actualizado: BORJA LOPEZ CAMBARA [1]
+Usuario actualizado: PEDRO DAVID CAÑAS LOPEZ [1]
 Usuario actualizado: BERTA BLANCH VERGES [1]
 Usuario actualizado: NEREA CAMACHO SEVILLA [1]
+Usuario actualizado: CONSTANZA INES RUSSO  [1]
 Usuario actualizado: LAURA MUÑOZ FUENTES [1]
-Usuario creado: ARNAU PUIGDEMONT MONLLOR
+Usuario no creado, no tiene email: VICTOR BAEZA GINER
+Usuario no creado, no tiene email: NATALIA SERRANO RONCERO
+Usuario actualizado: RODRIGO SAEZ DEL BARRIO [1]
+Usuario actualizado: DANIEL ROCAMORA GARCIA [1]
+Usuario actualizado: IGNACIO GONZALEZ ZATARAIN [1]
+Usuario actualizado: ARNAU PUIGDEMONT MONLLOR [1]
 Usuario actualizado: MARC ROIG MUNDO [1]
 Usuario actualizado: EDGAR XAVIER MARTIN FERNANDES [1]
 Usuario no creado, no tiene email: HUGO ARANDA SANCHEZ
+Usuario actualizado: MARTA MUÑOZ SANZ [1]
+Usuario actualizado: DIEGO SANTOS ALEMANY [1]
+Usuario actualizado: JAVIER TORRES ROMERA [1]
+Usuario actualizado: ANA ALVAREZ MARTIN [1]
+Usuario actualizado: MARTA DE LA FUENTE MARTINEZ [1]
 Usuario actualizado: OT DE LA VARGA IBORRA [1]
+Usuario no creado, no tiene email: SILVIA DEL DEDO ARIZMENDI
+Usuario actualizado: ANA MARIA RIVERA ARMADA [1]
 Usuario actualizado: MANUEL DOMENECH LOPEZ [1]
-Usuario creado: MARC PONS MORELL
-Usuario creado: JOSEP SEBASTIA BENITO
-Usuario creado: JOSE PEREZ HERNANDEZ
+Usuario actualizado: CARLOS SANCHEZ PEREZ [1]
+Usuario actualizado: PABLO MORENO MARTIN [1]
+Usuario actualizado: MARC PONS MORELL [1]
+Usuario actualizado: JOSEP SEBASTIA BENITO [1]
+Usuario no creado, no tiene email: LORENA LEON BASCONES
+Usuario no creado, no tiene email: VICTOR CARVAJAL GARCIA
+Usuario actualizado: YAGO SANTILLANA MARTINEZ [1]
+Usuario no creado, no tiene email: SARA ORGAZ GARCIA
+Usuario actualizado: EVA MARQUÉS NICOLÁS [1]
+Usuario actualizado: JOSE PEREZ HERNANDEZ [1]
 Usuario no creado, no tiene email: ALBERT VILA BELTRAN
+Usuario no creado, no tiene email: VICTORIA CARRERA JIMENEZ
+Usuario no creado, no tiene email: TERESA FERNANDEZ MUÑOZ
+Usuario actualizado: AGUSTIN GIL MARIN [1]
+Usuario no creado, no tiene email: AITOR CHAMORRO ARIAS
+Usuario no creado, no tiene email: DOMENICA TAMAYO GARCIA
+Usuario no creado, no tiene email: IRENE CASAMAYOR LUJAN
+Usuario no creado, no tiene email: PEDRO BAZ FRESNO
+Usuario no creado, no tiene email: FRANCISCO JAVIER ROJAS RODRIGUEZ
+Usuario actualizado: JIAQI CHEN  [1]
+Usuario no creado, no tiene email: IRENE GARCIA FELIPE
+Usuario no creado, no tiene email: TERESA HERRERA BECARES
 Usuario no creado, no tiene email: JAN GALIOT PEREZ
+Usuario no creado, no tiene email: JOSE MANUEL BARRAL MORCILLO
+Usuario no creado, no tiene email: CARLOS VALLS ARENAS
+Usuario no creado, no tiene email: CATERINA FERRER GENOVART
+Usuario no creado, no tiene email: LUIS POVES ARJONA
+Usuario no creado, no tiene email: GABRIEL PONS FONTOIRA
+Usuario no creado, no tiene email: JORGE SEVILLA NUÑEZ
+Usuario actualizado: JUAN TOMAS SANCHEZ YUSTE [1]
+Usuario actualizado: ESTEFANIE CARRIEL VELASQUEZ [1]
+Usuario actualizado: MARIA EVA SAMANTHA GIMENO CERVERA [1]
+Usuario no creado, no tiene email: LUCIA VAZQUEZ PERIAGO
+Usuario actualizado: DANIEL GONZALEZ PALANCO [1]
+Usuario no creado, no tiene email: MARTINA CASAL SANTOS
+Usuario no creado, no tiene email: GUILLERMO GARCIA-PANASCO QUESADA
+Usuario actualizado: INES SALCEDO CARDENAL [1]
+Usuario creado: MARIA JOSE QUESADA RIVERIEGO
+Usuario creado: FRANCISCO GINES RODRIGUEZ PELEGRIN
+Usuario no creado, no tiene email: VERONICA SIEGLER MARTINEZ
 Usuario no creado, no tiene email: ISMAEL TITO HERRERA
+Usuario no creado, no tiene email: BEATRIZ SANCHEZ ALISTE
 Usuario no creado, no tiene email: ELVIS LARA CANAZA
+Usuario no creado, no tiene email: JUDIT VERGARA MOLINA
+Usuario no creado, no tiene email: JOSE ANTONIO DELGADO SANCHEZ
+Usuario no creado, no tiene email: MIGUEL ANGEL TORRES PEÑA
+Usuario no creado, no tiene email: MARCOS FERRIN ALONSO
+Usuario no creado, no tiene email: MARCOS PERAL OLIVEIRA
+Usuario actualizado: GABRIELA NOVOA PINTO [1]
+Usuario no creado, no tiene email: MARIA JOSE ARNEDO LOPEZ
+Usuario no creado, no tiene email: BLANCA LYLLYANA GARCIA DUQUE
+Usuario no creado, no tiene email: LUCAS LOPEZ PEREZ
+Usuario no creado, no tiene email: SANDRA GUIJARRO CHAUMEL
+Usuario no creado, no tiene email: SARAH NAVARRO ARECHAVALA
+Usuario no creado, no tiene email: RAMON NOVILLO MANZANERO
+Usuario no creado, no tiene email: MOUSTAMED BELHAJ 
+Usuario no creado, no tiene email: ORIANA LOPEZ DOMINGUEZ
+Usuario no creado, no tiene email: ADRIAN HERNANDEZ GARZON
+Usuario no creado, no tiene email: DAVID DE LA FUENTE GARGANTILLA
+Usuario no creado, no tiene email: ALBERTO SANZ SANCHEZ
 Usuario no creado, no tiene email: DAVID AGUILERA MARTINEZ
+Usuario no creado, no tiene email: PAU RIERA GUARDIA
 Usuario no creado, no tiene email: CRISTINA BARASTEGUI BAGET
+Usuario no creado, no tiene email: BELEN GARCIA LIJO
+Usuario no creado, no tiene email: NURIA PEÑAS GOMEZ
+Usuario no creado, no tiene email: MARCELA ESCOBAR TRUJILLO
 Actualizando supervisores
+CARLOS ESCUDERO SEGURA -> ELENA CARRASCO ALMAGRO
 CARLOS AMARGOS CARRERAS -> GEMMA GALVEZ MORENO
 No se ha encontrado usuario para asignar supervisor: IBAN GOMEZ VELA -> IBAN GOMEZ VELA
 JOSE MARIA ROMERO DE TEJADA MUNTANER -> IBAN GOMEZ VELA
+No se ha encontrado usuario para asignar supervisor: SANTIAGO GARCIA SANCHIS -> SANTIAGO GARCIA SANCHIS
+JORGE GARCIA GARCIA -> SANTIAGO GARCIA SANCHIS
+No se ha encontrado usuario para asignar supervisor: FRANCISCO ANTONIO POVEDA FERNANDEZ -> FRANCISCO ANTONIO POVEDA FERNANDEZ
+SANTIAGO GARCIA SANCHIS -> FRANCISCO ANTONIO POVEDA FERNANDEZ
+SANTIAGO GARCIA SANCHIS -> ALEJANDRO RODRIGUEZ LAFUENTE
+SANTIAGO GARCIA SANCHIS -> PRUDENCIO ESCOLAR GUTIERREZ
+SANTIAGO GARCIA SANCHIS -> LUIS ALBERTO MAÑAS GRIJALVO
+FRANCISCO ANTONIO POVEDA FERNANDEZ -> OLGA DEL VAL MARTINEZ
+ELENA GARCIA LLORENTE -> MONICA MARTIN SAEZ
+ELENA GARCIA LLORENTE -> MARIA JESUS MARCHAL GALLEGO
+PEDRO VALDIVIA TSCHOPP -> LUIS ENRIQUE MUñOZ LUENGO
+No se ha encontrado usuario para asignar supervisor: JOSE GUILLERMO CALDERON ANDRES -> JOSE GUILLERMO CALDERON ANDRES
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> JOSE GUILLERMO CALDERON ANDRES
+MARIA NIEVES PARRILLA RUBIO -> LAURA GARBAYO PEREZ
+JAVIER MARQUES CABRERO -> BEATRIZ SANZ MONTARELO
+No se ha encontrado usuario para asignar supervisor: JAVIER MARQUES CABRERO -> JAVIER MARQUES CABRERO
+JAVIER MARQUES CABRERO -> PATRICIA PAULA FUENTES MARTINEZ
+No se ha encontrado usuario para asignar supervisor: ALEXANDRE RUBIO ORTUZAR -> ALEXANDRE RUBIO ORTUZAR
+JAVIER MARQUES CABRERO -> ALEXANDRE RUBIO ORTUZAR
+ALEXANDRE RUBIO ORTUZAR -> ALICIA GARCES PARRAS
+ANDA-DIANA LUPULESCU . -> ANDRES GARCIA VILLEGAS
+No se ha encontrado usuario para asignar supervisor: ANDA-DIANA LUPULESCU . -> ANDA-DIANA LUPULESCU .
+JAVIER MARQUES CABRERO -> ANDA-DIANA LUPULESCU .
+ROSA GONZALEZ DE FRUTOS -> M. DE LOS ANGELES NIETO MATADOR
+SANTIAGO DE LA TORRE RAMIREZ -> CARMEN GRAO GARASA
+ROSA GONZALEZ DE FRUTOS -> ESTHER HURTADO GUERRERO
+ALFONSO COTS PALTOR -> EVA MARIA RODRIGUEZ RODRIGUEZ
+JAVIER LAS HERAS SAUNDERS -> ALEJANDRO ORTIN RAMON
+ENRIQUE LORENTE RAMOS -> ANA ROSA ANDRES CALVO
+NURIA IBAÑEZ CARRASCO -> AITANA PARRAGA GONZALEZ
+No se ha encontrado usuario para asignar supervisor: MARIA NIEVES PARRILLA RUBIO -> MARIA NIEVES PARRILLA RUBIO
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> MARIA NIEVES PARRILLA RUBIO
+JOSE BENITEZ MORON -> ALBERTO DE JUANA IZQUIERDO
+ENRIQUE LORENTE RAMOS -> ROCIO PEREZ KINDELAN
+ISMAEL DE LOS SANTOS BELLO -> JONATHAN FERNANDEZ SOTO
+LUIS GONZALEZ RECIO -> FATIMA MIRANDA GARCIA
+ISMAEL DE LOS SANTOS BELLO -> LETICIA MENENDEZ PORRAS
+ALESSIA MEZQUITA PRIETO -> BEATRIZ ALONSO DEL VALLE
+LUIS GONZALEZ RECIO -> VIRGINIA VILLAR CASTILLO
+ISMAEL DE LOS SANTOS BELLO -> CARLOS MENDEZ ESTEVEZ
+ISMAEL DE LOS SANTOS BELLO -> MARIA DEL CARMEN FREIRE CANCELAS
+MARIA JOSE LLANOS OGINO -> ANA BELEN TORRIJOS OREJON
+ISMAEL DE LOS SANTOS BELLO -> MARIA MAR CASAS GARCIA
+ISMAEL DE LOS SANTOS BELLO -> FRANCISCO MIRANDA HERRERO
+ISMAEL DE LOS SANTOS BELLO -> MARIA JESUS MARTIN VARGAS
+ISMAEL DE LOS SANTOS BELLO -> LUCIA RODRIGUEZ MORENO
+ISMAEL DE LOS SANTOS BELLO -> ANA MARIA HERMOSO DE MENA
+No se ha encontrado usuario para asignar supervisor: JAVIER LAS HERAS SAUNDERS -> JAVIER LAS HERAS SAUNDERS
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> JAVIER LAS HERAS SAUNDERS
+No se ha encontrado usuario para asignar supervisor: HECTOR MARTIN MARTIN -> HECTOR MARTIN MARTIN
+MARIA NIEVES PARRILLA RUBIO -> HECTOR MARTIN MARTIN
+JAVIER MARQUES CABRERO -> LUCIA FIORELLA SANTULLO GARCIA
+HECTOR MARTIN MARTIN -> BEATRIZ GARCIA CAÑEDO-ARGUELLES
+JAVIER LAS HERAS SAUNDERS -> SALVADOR VALLE SANCHEZ
+JAVIER LAS HERAS SAUNDERS -> RAFAEL RETAMOSA VILLACIEROS
+JAVIER LAS HERAS SAUNDERS -> RODRIGO MENENDEZ CALVO
+No se ha encontrado usuario para asignar supervisor: PATRICIA ESTEBAN CORTES -> PATRICIA ESTEBAN CORTES
+CARMEN BOCERO CANENCIA -> PATRICIA ESTEBAN CORTES
+PATRICIA ESTEBAN CORTES -> MONICA ZARCA GARCIA
+PATRICIA ESTEBAN CORTES -> MARTA VALLES PORRAS
+PATRICIA ESTEBAN CORTES -> VERONICA DOMINGUEZ CASARES
+CLAUDIA PAPAGNA . -> FELIX LOPEZ CAÑADAS
+CLAUDIA PAPAGNA . -> SAMUEL DIEZ ALONSO
+No se ha encontrado usuario para asignar supervisor: OSCAR ZORNOZA DE TORRES -> OSCAR ZORNOZA DE TORRES
+LUIS GONZALEZ RECIO -> MIRUNA ANDRADA CIOTU .
+OSCAR ZORNOZA DE TORRES -> MIRIAM MARIN PLAZA
+OSCAR ZORNOZA DE TORRES -> ENRIQUE LAMPREAVE CRISTINO
+OSCAR ZORNOZA DE TORRES -> MARIA JOSE CARAZO MORALES
+CRISTINA ROMERO CARRERA -> PABLO DIEZ LEON
+No se ha encontrado usuario para asignar supervisor: ROCIO PUERTA CHACON -> ROCIO PUERTA CHACON
+FERNANDO GARCIA BORREGO -> ROCIO PUERTA CHACON
+No se ha encontrado usuario para asignar supervisor: FRANCISCO JAVIER VIANA CASADO -> FRANCISCO JAVIER VIANA CASADO
+JOSE MANUEL GUTIERREZ GALAN -> FRANCISCO JAVIER VIANA CASADO
+FRANCISCO JAVIER VIANA CASADO -> NOELIA AUTERO GARCIA
+FRANCISCO JAVIER VIANA CASADO -> ALICIA TADEO RIÑON
+ROBERTO PAVON BONILLA -> SANTIAGO SANCHEZ FERNANDEZ
+ROBERTO PAVON BONILLA -> RAQUEL TURIEL FERNANDEZ
+ROBERTO PAVON BONILLA -> CINTIA JIMENEZ MEDINA
+DAVID PALOMINO MARTIN -> SARA MUÑOZ SOTOMAYOR
+VICTOR DANIEL GONZALEZ RIVERO -> VICTOR DANIEL GONZALEZ RIVERO
+FERNANDO GARCIA BORREGO -> FERNANDO GARCIA BORREGO
+CRISTINA ROMERO CARRERA -> PILAR ANGOLOTI HERGUETA
+CRISTINA ROMERO CARRERA -> MARIA JESUS ESCALONA BELINCHON
+CRISTINA ROMERO CARRERA -> SILVIA DEL REY HERNANDEZ
+No se ha encontrado usuario para asignar supervisor: CRISTINA ROMERO CARRERA -> CRISTINA ROMERO CARRERA
+FERNANDO GARCIA BORREGO -> CRISTINA ROMERO CARRERA
+JOSE MANUEL GUTIERREZ GALAN -> JOSE ANTONIO GONZALEZ MORENO
+No se ha encontrado usuario para asignar supervisor: ROBERTO PAVON BONILLA -> ROBERTO PAVON BONILLA
+DAVID PALOMINO MARTIN -> ROBERTO PAVON BONILLA
+ROBERTO PAVON BONILLA -> BEATRIZ NUÑEZ PICAZO
+ROBERTO PAVON BONILLA -> ROSA MARIA TORRES RODRIGUEZ
+ROBERTO PAVON BONILLA -> OLGA YESENIA ANDRADE ENDARA
+PELAYO GUTIERREZ TEIRA -> ANA ELENA BARQUILLA JIMENEZ
+ROBERTO PAVON BONILLA -> PATRICIA EXPOSITO MARTINEZ
+PELAYO GUTIERREZ TEIRA -> MARIA ISABEL DEL CERRO RECIO
+No se ha encontrado usuario para asignar supervisor: PELAYO GUTIERREZ TEIRA -> PELAYO GUTIERREZ TEIRA
+DAVID PALOMINO MARTIN -> PELAYO GUTIERREZ TEIRA
+PELAYO GUTIERREZ TEIRA -> IGNACIO SOLSONA PIERA
+PELAYO GUTIERREZ TEIRA -> KAREM VANESSA D'UNIAM RIOS
+No se ha encontrado usuario para asignar supervisor: FRANCISCO ROMAN LOPEZ RUIZ -> FRANCISCO ROMAN LOPEZ RUIZ
+DAVID PALOMINO MARTIN -> FRANCISCO ROMAN LOPEZ RUIZ
+FRANCISCO ROMAN LOPEZ RUIZ -> MARIA DEL CARMEN ACOSTA MORUNO
+FRANCISCO ROMAN LOPEZ RUIZ -> JESUS ALONSO MELGAR
+MIGUEL ANGEL RIVERA DIAZ -> MARIA ALEJANDRA MATA DUFOURT
+MIGUEL ANGEL RIVERA DIAZ -> SALVADOR SARABIA BARQUERO
+MIGUEL ANGEL RIVERA DIAZ -> SUSANA MONTERO REGUILON
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> MARTA GARRE PEREZ-ALBERT
+DIANA LODIN VELAZQUEZ -> ALMUDENA CAYETANO PEREZ
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> AFRICA SERRANO LLORENTE
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> OIHANE FORONDA ALONSO
+No se ha encontrado usuario para asignar supervisor: FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> CARMEN LOPEZ ARRANZ
+SUSANA MELENDI MONTES -> CARMEN BAÑUELOS LINARES
+SUSANA MELENDI MONTES -> MARIA GRACIA GALLEGO LOPEZ
+No se ha encontrado usuario para asignar supervisor: SUSANA MELENDI MONTES -> SUSANA MELENDI MONTES
+JAVIER LAS HERAS SAUNDERS -> SUSANA MELENDI MONTES
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> VALENTIN JUSTO NAVARRO MARTINEZ-RAPOSO
+CARLOS ESCUDERO SEGURA -> ALVARO MARTIN ISABEL
+CARLOS ESCUDERO SEGURA -> MARIA PALOMA MARTIN-ALBO TERCERO
+No se ha encontrado usuario para asignar supervisor: ALFONSO BUJANDA CASTILLO -> ALFONSO BUJANDA CASTILLO
+ROSARIO AMELIA FERNANDEZ-RAMOS OCA -> ALFONSO BUJANDA CASTILLO
+ALFONSO BUJANDA CASTILLO -> JAVIER FERNANDEZ CONRADI
+No se ha encontrado usuario para asignar supervisor: FRANCISCO JAVIER NAVARRO ALONSO -> FRANCISCO JAVIER NAVARRO ALONSO
+MARIANA CAMPILLO HERNANDO DE LARRAMENDI -> FRANCISCO JAVIER NAVARRO ALONSO
+ALFONSO BUJANDA CASTILLO -> MARIA GEMA CORROS RUIZ
+ALFONSO BUJANDA CASTILLO -> BEATRIZ CARBONERAS AZURMENDI
+No se ha encontrado usuario para asignar supervisor: MARIANA CAMPILLO HERNANDO DE LARRAMENDI -> MARIANA CAMPILLO HERNANDO DE LARRAMENDI
+No se ha encontrado usuario para asignar supervisor: FERNANDO LAZARO RODRIGUEZ -> FERNANDO LAZARO RODRIGUEZ
+MARIANA CAMPILLO HERNANDO DE LARRAMENDI -> FERNANDO LAZARO RODRIGUEZ
+FERNANDO LAZARO RODRIGUEZ -> YOLANDA LOPEZ BLAS
+JUAN CARLOS MATA MORALES -> JUAN CARLOS GARCIA ORDOÑEZ
+JUAN CARLOS MATA MORALES -> CLARA PRIETO SIERRA
+No se ha encontrado usuario para asignar supervisor: JUAN CARLOS MATA MORALES -> JUAN CARLOS MATA MORALES
+JOSE MANUEL GUTIERREZ GALAN -> JUAN CARLOS MATA MORALES
+No se ha encontrado usuario para asignar supervisor: NURIA IBAÑEZ CARRASCO -> NURIA IBAÑEZ CARRASCO
+NURIA IBAÑEZ CARRASCO -> GARBIÑE GALINDO MOTA
+No se ha encontrado usuario para asignar supervisor: IVAN GONZALEZ GOMEZ -> IVAN GONZALEZ GOMEZ
+KENYA ZAID GUILLEN PARRA -> IVAN GONZALEZ GOMEZ
+No se ha encontrado usuario para asignar supervisor: EDUARDO RAMOS PEREZ -> EDUARDO RAMOS PEREZ
+NURIA IBAÑEZ CARRASCO -> EDUARDO RAMOS PEREZ
+PATRICIA RESTEGUI COMPOSTIZO -> DANIEL PANADERO ZURRO
+No se ha encontrado usuario para asignar supervisor: KENYA ZAID GUILLEN PARRA -> KENYA ZAID GUILLEN PARRA
+No se ha encontrado usuario para asignar supervisor: JAVIER ALBERTO COSTAGUTA FERREYRA -> JAVIER ALBERTO COSTAGUTA FERREYRA
+KENYA ZAID GUILLEN PARRA -> JAVIER ALBERTO COSTAGUTA FERREYRA
+JAVIER ALBERTO COSTAGUTA FERREYRA -> RAQUEL FERNANDEZ DEL CAMPO MEDINA
+No se ha encontrado usuario para asignar supervisor: ROSARIO AMELIA FERNANDEZ-RAMOS OCA -> ROSARIO AMELIA FERNANDEZ-RAMOS OCA
+No se ha encontrado usuario para asignar supervisor: ENRIQUE RIEGO MIEDES -> ENRIQUE RIEGO MIEDES
+JORGE ANTONIO FERNANDEZ SANTIN -> ENRIQUE RIEGO MIEDES
 LAURA CASTELLA CARRABINA -> ANA BELEN PEREZ LOARTE
 No se ha encontrado usuario para asignar supervisor: IVAN GARCIA BALASTEGUI -> IVAN GARCIA BALASTEGUI
 ENRIQUE RIEGO MIEDES -> IVAN GARCIA BALASTEGUI
 No se ha encontrado usuario para asignar supervisor: LAURA CASTELLA CARRABINA -> LAURA CASTELLA CARRABINA
 ENRIQUE RIEGO MIEDES -> LAURA CASTELLA CARRABINA
+LAURA CASTELLA CARRABINA -> JUAN JOSE RODAJO MARTIN
+No se ha encontrado usuario para asignar supervisor: AMALIA GONZALEZ-LLANOS LOPEZ -> AMALIA GONZALEZ-LLANOS LOPEZ
+ENRIQUE RIEGO MIEDES -> AMALIA GONZALEZ-LLANOS LOPEZ
+AMALIA GONZALEZ-LLANOS LOPEZ -> NATANAEL LAGUNA NARANJO
+No se ha encontrado usuario para asignar supervisor: LLUIS OBIOLS CALOPA -> LLUIS OBIOLS CALOPA
+FRANCISCO JAVIER SERNA BALLARIN -> LLUIS OBIOLS CALOPA
+DANIEL FERNANDEZ BAUTISTA -> MARIA ESMERALDA VENTURA MARTINO
+No se ha encontrado usuario para asignar supervisor: MARTA ESPARZA GARCIA -> MARTA ESPARZA GARCIA
+JORGE ANTONIO FERNANDEZ SANTIN -> MARTA ESPARZA GARCIA
+No se ha encontrado usuario para asignar supervisor: ADRIAN DIAZ DE ILARRAZA BOZAL -> ADRIAN DIAZ DE ILARRAZA BOZAL
+JUAN CARLOS GOMEZ PASCUAL -> ADRIAN DIAZ DE ILARRAZA BOZAL
+No se ha encontrado usuario para asignar supervisor: DANIEL FERNANDEZ BAUTISTA -> DANIEL FERNANDEZ BAUTISTA
+JORGE ANTONIO FERNANDEZ SANTIN -> DANIEL FERNANDEZ BAUTISTA
+DANIEL FERNANDEZ BAUTISTA -> ALVARO MORILLAS HERNANDEZ
+ANGEL ARRANZ GUTIERREZ -> LAURA GRANADA AMADOR
+DANIEL FERNANDEZ BAUTISTA -> ANA MELGAREJO RIBEIRA
+DANIEL FERNANDEZ BAUTISTA -> FRANCISCO JOSE MORENO GARCIA DE CONSUEGRA
+DANIEL FERNANDEZ BAUTISTA -> JORGE CECILIA GONZALEZ
 No se ha encontrado usuario para asignar supervisor: ALEJANDRO PUEYO MUÑOZ -> ALEJANDRO PUEYO MUÑOZ
 JORGE ANTONIO FERNANDEZ SANTIN -> ALEJANDRO PUEYO MUÑOZ
 ALEJANDRO PUEYO MUÑOZ -> EMILIO FELIPE LISON CASTAN
 ALEJANDRO PUEYO MUÑOZ -> JORGE BEROT HIDALGO
 ALEJANDRO PUEYO MUÑOZ -> CEFERINO CANEDA ALVAREZ
+No se ha encontrado usuario para asignar supervisor: JORGE CHERTA ECHAURI -> JORGE CHERTA ECHAURI
+NURIA IBAÑEZ CARRASCO -> JORGE CHERTA ECHAURI
+MARTI JO RUIZ -> ALESSANDRO BARBAGALLO .
+No se ha encontrado usuario para asignar supervisor: FEDERICA RIZZO . -> FEDERICA RIZZO .
+JUAN CARLOS GOMEZ PASCUAL -> FEDERICA RIZZO .
+JOSE LUIS SORIA REAL -> GUSTAVO PEDROSA LAGO
+No se ha encontrado usuario para asignar supervisor: CARMEN BOCERO CANENCIA -> CARMEN BOCERO CANENCIA
+JORGE GARCIA GARCIA -> CARMEN BOCERO CANENCIA
+NURIA IBAÑEZ CARRASCO -> ADRIAN GARCIA BALDERAS
+NURIA IBAÑEZ CARRASCO -> ANA TERESA GUERRERO GOMEZ
+No se ha encontrado usuario para asignar supervisor: YINGZHEN WU  -> YINGZHEN WU 
+EDUARDO RAMOS PEREZ -> YINGZHEN WU 
+ALVARO BLASCO GARCIA -> JOSE IGNACIO CARRASCAL DIEZ
+ALVARO BLASCO GARCIA -> EDUARDO ALONSO ALONSO
+No se ha encontrado usuario para asignar supervisor: ALVARO BLASCO GARCIA -> ALVARO BLASCO GARCIA
+EDUARDO RAMOS PEREZ -> ALVARO BLASCO GARCIA
+ALVARO BLASCO GARCIA -> MANUEL CRESPO ZAMORANO
+ALVARO BLASCO GARCIA -> MARIA INES CARDO FERNANDEZ
+No se ha encontrado usuario para asignar supervisor: STEFANO ZANCAN . -> STEFANO ZANCAN .
+ALFONSO ACEBES GARCIA -> CLAUDIO DE MATTEO .
+EDUARDO RAMOS PEREZ -> CRISTINA JIMENEZ JIMENEZ
+EDUARDO RAMOS PEREZ -> CARLOS MONZON RODRIGUEZ
+No se ha encontrado usuario para asignar supervisor: ALFONSO ACEBES GARCIA -> ALFONSO ACEBES GARCIA
+STEFANO ZANCAN . -> ALFONSO ACEBES GARCIA
+No se ha encontrado usuario para asignar supervisor: MARTI JO RUIZ -> MARTI JO RUIZ
+NURIA IBAÑEZ CARRASCO -> MARTI JO RUIZ
+NURIA GARCIA LOZANO -> JOSE LUIS MIR HERNANDEZ
+NURIA GARCIA LOZANO -> ELENA RUBALCABA SANCHEZ
+No se ha encontrado usuario para asignar supervisor: NURIA GARCIA LOZANO -> NURIA GARCIA LOZANO
+MARTI JO RUIZ -> NURIA GARCIA LOZANO
+NURIA GARCIA LOZANO -> LAURA ISABEL RUBIO JIMENEZ
 FRANCESC REGAS PONS -> MARIA DEL ROSARIO RODRIGO GONZALEZ
 FRANCESC REGAS PONS -> ISIDORO DOMINGUEZ DOMINGUEZ
 FRANCESC REGAS PONS -> XAVIER SENTIS JUNCOSA
 FRANCESC REGAS PONS -> MARTA GONZALVO MARTI
 No se ha encontrado usuario para asignar supervisor: FRANCESC REGAS PONS -> FRANCESC REGAS PONS
 MARTI JO RUIZ -> FRANCESC REGAS PONS
+NURIA GARCIA LOZANO -> ANGEL HORCAJO PLATAS
+ALVARO AFONSO TAÑO -> SILVIA HERNANDEZ GARCIA
+JOSEP MARIA ROCA LLORCA -> JOSE CARLOS NUÑEZ GALAN
+NURIA IBAÑEZ CARRASCO -> LAURA PARDO ALCAIDE
+JOSE LUIS SORIA REAL -> MARISOL ALVAREZ JORT
+JOSE LUIS SORIA REAL -> MIGUEL ANGEL ALCAIDE MARTIN
+NURIA GARCIA LOZANO -> SUSANA MARIA PASAN CHAS
+BEATRIZ MARTIN LOPEZ -> ASUNCION ORTIZ SANCHEZ
+FRANCESC REGAS PONS -> JORDI GIRO BRUGUE
+FRANCESC REGAS PONS -> ALICIA RUBIO MEDINA
+FRANCESC REGAS PONS -> MARIA ELENA MORILLO PRADILLO
+FRANCESC REGAS PONS -> RICARDO FERNANDEZ DOMINGUEZ
+FRANCESC REGAS PONS -> PEDRO ANGEL FERNANDEZ JIMENEZ
+JOSE LUIS SORIA REAL -> JUAN MANUEL MORILLO PRADILLO
+No se ha encontrado usuario para asignar supervisor: JOSE LUIS SORIA REAL -> JOSE LUIS SORIA REAL
+MARTI JO RUIZ -> JOSE LUIS SORIA REAL
+ANGEL DE PAZ CARRILLO -> JAVIER PASCUAL HERRANZ
+ENRIQUE LORENTE RAMOS -> MARIA ASUNCION LUQUE RETANA
+ANGEL DE PAZ CARRILLO -> MARIA ASCENSION GARCIA CALVO
+ANGEL DE PAZ CARRILLO -> JUAN LUIS MENDEZ DE VIGO LLORENS
+BEATRIZ SANZ JUEZ -> ANA ISABEL GARCIA BORRELLA
+JESUS RAMON CRESPO BENITO -> JESUS ALMONACID SANCHEZ
+JESUS RAMON CRESPO BENITO -> MARIA LUISA LOPEZ RUIZ DEL PORTAL
+JESUS RAMON CRESPO BENITO -> GERMAN PASCUAL GARCIA
+JESUS RAMON CRESPO BENITO -> FELIX MONTERO GALLEGO
+JESUS RAMON CRESPO BENITO -> MARIA DEL CARMEN GALINDO CARRILLO
+JESUS RAMON CRESPO BENITO -> MARINA RITORE BRU
+JESUS RAMON CRESPO BENITO -> ELVIRA GONZALEZ MORENO
+No se ha encontrado usuario para asignar supervisor: JESUS RAMON CRESPO BENITO -> JESUS RAMON CRESPO BENITO
+CARLOS AMARGOS CARRERAS -> JESUS RAMON CRESPO BENITO
+JESUS RAMON CRESPO BENITO -> JOSE LEONARDO GARCíA-VELASCO
+JESUS RAMON CRESPO BENITO -> MARIA TERESA FERNANDEZ GARRIDO
+JESUS RAMON CRESPO BENITO -> MARIA BELEN PALOMO CASCON
 ENRIQUE MUÑOZ MENDEZ -> SILVIA SANTAMARIA COBACHO
 No se ha encontrado usuario para asignar supervisor: ENRIQUE DEWISME VILLA -> ENRIQUE DEWISME VILLA
 ENRIQUE MUÑOZ MENDEZ -> ENRIQUE DEWISME VILLA
@@ -596,6 +1614,7 @@ ALFONSO AGUERA CANDELA -> MARCOS RUIZ ESCOLANO
 ALFONSO AGUERA CANDELA -> JOSE FERNANDEZ NUÑEZ
 ROSARIO ORELLANA ZAMORANO -> ESTER MIREYA SURRIBAS SOBRINO
 ROSARIO ORELLANA ZAMORANO -> IRIS OLIVES CURTO
+M. ROSARIO LOPEZ SOBRINO -> DIEGO DE MENDOZA FERNANDEZ
 M. ROSARIO LOPEZ SOBRINO -> ANA MARIA PALAU LANERO
 ROSARIO ORELLANA ZAMORANO -> DIDAC SOLERNOU SANCHEZ
 ROSARIO ORELLANA ZAMORANO -> NURIA SEPULVEDA MOLINA
@@ -626,7 +1645,7 @@ JAUME MESTRES ALEU -> LUIS FAMILIAR XAUDARO
 IVAN GARCIA BALASTEGUI -> JUAN ANTONIO DE LOS SANTOS MORGADO
 No se ha encontrado usuario para asignar supervisor: JOSE MANUEL CANO AGUILAR -> JOSE MANUEL CANO AGUILAR
 ENRIQUE MUÑOZ MENDEZ -> JOSE MANUEL CANO AGUILAR
-RAQUEL LAYOLA VIGON -> MIGUEL CANO RODRIGUEZ
+PEDRO MORALES ARROYO -> MIGUEL CANO RODRIGUEZ
 JOSE MANUEL CANO AGUILAR -> ALESSANDRO GIRARDI PORTABALES
 No se ha encontrado usuario para asignar supervisor: FRANCESC XAVIER MONRAS VIDIELLA -> FRANCESC XAVIER MONRAS VIDIELLA
 CARLOS AMARGOS CARRERAS -> FRANCESC XAVIER MONRAS VIDIELLA
@@ -662,19 +1681,122 @@ MIGUEL PASTOR BARRAGAN -> CARLOS BAUTISTA COLADO
 MARIA DEL PILAR BURGOS GUERRERO -> M. MONTSERRAT MORENO LUPIAÑEZ
 No se ha encontrado usuario para asignar supervisor: MARIA DEL PILAR BURGOS GUERRERO -> MARIA DEL PILAR BURGOS GUERRERO
 FRANCESC XAVIER MONRAS VIDIELLA -> MARIA DEL PILAR BURGOS GUERRERO
+No se ha encontrado usuario para asignar supervisor: PEDRO MORALES ARROYO -> PEDRO MORALES ARROYO
+CARLOS AMARGOS CARRERAS -> PEDRO MORALES ARROYO
+BEATRIZ SANZ JUEZ -> ELENA VINAGRE SURGA
+No se ha encontrado usuario para asignar supervisor: BEATRIZ SANZ JUEZ -> BEATRIZ SANZ JUEZ
+LUIS DE QUEROL VILA -> BEATRIZ SANZ JUEZ
+BEATRIZ SANZ JUEZ -> MARIA ESTRELLA MARTINEZ RODRIGUEZ
+BEATRIZ SANZ JUEZ -> MERCEDES VILLANUEVA DIAZ
+BEATRIZ SANZ JUEZ -> SANDRA DAGANZO SIERRO
+BEATRIZ SANZ JUEZ -> ROCIO GONZALEZ ALONSO
+BEATRIZ SANZ JUEZ -> MARIA CARMEN SANCHEZ JALIANO
+BEATRIZ SANZ JUEZ -> ISABEL REINA PIEDRABUENA
+BEATRIZ SANZ JUEZ -> MARTA BRAVO POZO
+BEATRIZ SANZ JUEZ -> MARIA ESPERANZA GUTIERREZ SILVA
+BEATRIZ SANZ JUEZ -> JOSE LUIS FERNANDEZ TOBALO
+BEATRIZ SANZ JUEZ -> MARIA ACEDO DOMINGUEZ
+MARIA DEL CARMEN DE RUZ SUAREZ -> VERONICA DELGADO RAMOS
+No se ha encontrado usuario para asignar supervisor: MARIA DEL CARMEN DE RUZ SUAREZ -> MARIA DEL CARMEN DE RUZ SUAREZ
+PATRICIA GONZALEZ GUERRA -> MARIA DEL CARMEN DE RUZ SUAREZ
+PATRICIA GONZALEZ GUERRA -> LUISA PINILLA MELO
+CARLOS CALPE NAVARRO -> JULIAN IGNACIO FERNANDEZ TAPIA
+LUIS DE QUEROL VILA -> FRANCISCO JAVIER GONZALEZ VALERO
+LUIS DE QUEROL VILA -> DOLORES NIETO SEGURA
+No se ha encontrado usuario para asignar supervisor: FULGENCIO PASCUAL GARCIA MUÑOZ -> FULGENCIO PASCUAL GARCIA MUÑOZ
+LUIS DE QUEROL VILA -> FULGENCIO PASCUAL GARCIA MUÑOZ
+RAUL AVIS BARQUILLA -> SILVIA FERNANDEZ SANTIAGO
+MARIA TERESA ALVAREZ RODRIGUEZ -> RAUL TORRES POLO
+PEDRO MORALES ARROYO -> MARIA TERESA VINDEL NOVAL
+MARIA TERESA ALVAREZ RODRIGUEZ -> OLIMPIA DE LA CHICA PEREZ
+No se ha encontrado usuario para asignar supervisor: MARIA TERESA ALVAREZ RODRIGUEZ -> MARIA TERESA ALVAREZ RODRIGUEZ
+CAROLINA PEREZ-AMOR MARTINEZ -> MARIA TERESA ALVAREZ RODRIGUEZ
+MARIA TERESA ALVAREZ RODRIGUEZ -> GINES MATEO MURCIANO
+JESUS UCENDO BERNAL -> CARLOS MEDIAVILLA GONZALEZ
+No se ha encontrado usuario para asignar supervisor: JESUS UCENDO BERNAL -> JESUS UCENDO BERNAL
+FULGENCIO PASCUAL GARCIA MUÑOZ -> JESUS UCENDO BERNAL
+No se ha encontrado usuario para asignar supervisor: CAROLINA PEREZ-AMOR MARTINEZ -> CAROLINA PEREZ-AMOR MARTINEZ
+LUIS DE QUEROL VILA -> CAROLINA PEREZ-AMOR MARTINEZ
+PEDRO MARIA SANTAMARIA MUÑIZ -> JUAN JESUS JIMENEZ PINO
+No se ha encontrado usuario para asignar supervisor: RAUL AVIS BARQUILLA -> RAUL AVIS BARQUILLA
+CAROLINA PEREZ-AMOR MARTINEZ -> RAUL AVIS BARQUILLA
+PEDRO MORALES ARROYO -> JOSE FELIPE BENITO PEÑA
+BLANCA CAMARERO GARCIA -> PATRICIA ESTEVES GRANDA
+BLANCA CAMARERO GARCIA -> JUAN IGNACIO LOPEZ RAMIREZ
+JESUS RAMON CRESPO BENITO -> ESTHER FELIX DELGADO
 MARIA GLORIA LACORT MEDINA -> PETRONELA FLORINA STANICA .
+JESUS UCENDO BERNAL -> MARIA ISABEL FETER MORALES
+No se ha encontrado usuario para asignar supervisor: BLANCA CAMARERO GARCIA -> BLANCA CAMARERO GARCIA
+FULGENCIO PASCUAL GARCIA MUÑOZ -> BLANCA CAMARERO GARCIA
+BLANCA CAMARERO GARCIA -> NATIVIDAD RUIZ-MORON PEREZ
+BLANCA CAMARERO GARCIA -> MERCEDES MARIA SANCHEZ REYES
+MONICA MORENO PRIETO -> LORENA ROMERO HERNANDEZ
+BLANCA CAMARERO GARCIA -> MARIA DURAN ALARCON
+BLANCA CAMARERO GARCIA -> M.PILAR ESTEPA NOVELLA
+PEDRO MORALES ARROYO -> ZOE LOPEZ VAQUERO
+LAURA CANDEL VALDERRAMA -> RUT SANCHEZ LANZA
+No se ha encontrado usuario para asignar supervisor: MONICA MORENO PRIETO -> MONICA MORENO PRIETO
+FULGENCIO PASCUAL GARCIA MUÑOZ -> MONICA MORENO PRIETO
+MONICA MORENO PRIETO -> NURIA CASTRO BALSERA
+LIDIA DE DIEGO ALONSO -> NOELIA GARCIA-CUEVAS LOPEZ
+SILVIA FERNANDEZ GALAN -> CRISTINA ORTIZ TORRES
+SILVIA FERNANDEZ GALAN -> ELISABETS SALGADO RODRIGUEZ
+SILVIA FERNANDEZ GALAN -> ALBA FERRERA FERNANDEZ
+LIDIA DE DIEGO ALONSO -> CRISTINA DE LA CASA OCAÑA
+MARIA TERESA ALVAREZ RODRIGUEZ -> CRISTINA GARCIA-ORTIZ GARCIA
+MARIA TERESA ALVAREZ RODRIGUEZ -> JORDI CUARTERO VALLS
+SILVIA FERNANDEZ GALAN -> ELENA MARTIN DE LA ROSA
+SILVIA FERNANDEZ GALAN -> JOSEFA RODRIGUEZ MUELAS
+JESUS UCENDO BERNAL -> MARIA ELENA VILLANUEVA DIAZ
+JESUS UCENDO BERNAL -> ALICIA REDONDO BUENO
+LIDIA DE DIEGO ALONSO -> CRISTINA MARIA DEL PALACIO MARTINEZ
+MARIA TERESA ALVAREZ RODRIGUEZ -> ANA MARIA GONZALO RUIZ
+SILVIA FERNANDEZ GALAN -> MARIA CRUZ IZQUIERDO PACHECO
+JESUS UCENDO BERNAL -> ANA CARMEN CARRETERO INIESTA
+JESUS UCENDO BERNAL -> MARIA JOSE VAAMONDE CALVO
+No se ha encontrado usuario para asignar supervisor: SILVIA FERNANDEZ GALAN -> SILVIA FERNANDEZ GALAN
+FULGENCIO PASCUAL GARCIA MUÑOZ -> SILVIA FERNANDEZ GALAN
+MARIA TERESA ALVAREZ RODRIGUEZ -> OCTAVIO DIEZ DIEZ
+No se ha encontrado usuario para asignar supervisor: LIDIA DE DIEGO ALONSO -> LIDIA DE DIEGO ALONSO
+FULGENCIO PASCUAL GARCIA MUÑOZ -> LIDIA DE DIEGO ALONSO
+SILVIA FERNANDEZ GALAN -> CRISTINA INIESTA BLANCO
+MARIA TERESA ALVAREZ RODRIGUEZ -> JOSE ANTONIO GUTIERREZ FERNANDEZ
+SILVIA FERNANDEZ GALAN -> ELENA MARIA MURIEL HERNANDEZ
+SILVIA FERNANDEZ GALAN -> BELEN ESPERANZA ROJAS
+SILVIA FERNANDEZ GALAN -> FRANCISCO JESUS LOPEZ-BARAJAS MESA
+BLANCA CAMARERO GARCIA -> ANGELICA PARRALO MENESES
+LIDIA DE DIEGO ALONSO -> IGNACIO JOSE DOMINGUEZ HERNANDEZ
+SILVIA FERNANDEZ GALAN -> VERONICA RODRIGUEZ AMARILLA
+LIDIA DE DIEGO ALONSO -> ALVARO PEREZ DIEZ
+MARIA TERESA ALVAREZ RODRIGUEZ -> JOSE LUIS MONFORTE LOPEZ
+LIDIA DE DIEGO ALONSO -> MARIA MERCEDES QUILEZ CANO
+BLANCA CAMARERO GARCIA -> NATALIA MARTINEZ HERNANDEZ
+LUIS DE QUEROL VILA -> JORGE MOYANO CABRERA
+MARIA GLORIA LACORT MEDINA -> MERCEDES MONTERO ASENSIO
+MONICA MORENO PRIETO -> ALICIA CUPEIRO DOMINGO
+CARMEN HUESCAR PARRAGA -> SARA GARCIA MERINO
+JESUS RAMON CRESPO BENITO -> GEMA MANGUAN IGLESIAS
+SILVIA FERNANDEZ GALAN -> JOAQUINA SANCHEZ MARTIN
+MARIA GLORIA LACORT MEDINA -> PILAR IZQUIERDO FERNANDEZ
+CARMEN HUESCAR PARRAGA -> MARTA BROGERAS AVELLANOSA
+CARMEN HUESCAR PARRAGA -> ANA MATILDE LOPEZ GONZALEZ
+JESUS RAMON CRESPO BENITO -> ALBERTO BOADA UREÑA
+CARMEN HUESCAR PARRAGA -> MERCEDES CUENCA ALCAZAR
+CARMEN HUESCAR PARRAGA -> MERCEDES ORTIZ BLAZQUEZ
+No se ha encontrado usuario para asignar supervisor: CARMEN HUESCAR PARRAGA -> CARMEN HUESCAR PARRAGA
+CARLOS CALPE NAVARRO -> CARMEN HUESCAR PARRAGA
 No se ha encontrado usuario para asignar supervisor: CARLOS CALPE NAVARRO -> CARLOS CALPE NAVARRO
 CARLOS AMARGOS CARRERAS -> CARLOS CALPE NAVARRO
 ALESSIA MEZQUITA PRIETO -> MERCE CLOTET SERRA
-MAURICIO CANAL MARTINEZ -> SOFIA PEREZ DIAZ
+SONIA SANTOS SEÑOR -> SOFIA PEREZ DIAZ
 CARLOS CALPE NAVARRO -> ALBERT PRAT NOGUÉ
 ROSARIO ORELLANA ZAMORANO -> BEATRIZ SOLANO DOMINGUEZ
 MARIA GLORIA LACORT MEDINA -> ESTHER CABALLERO I NADAL
 MARIA GLORIA LACORT MEDINA -> MARIA ISABEL LEGAZ JURADO
 MAURICIO CANAL MARTINEZ -> SILVIA CRISTINA COMIN DURBAN
-MAURICIO CANAL MARTINEZ -> ADELA GALLART GIRONES
+MARIA GLORIA LACORT MEDINA -> ADELA GALLART GIRONES
 No se ha encontrado usuario para asignar supervisor: GONZALO BALADO LIÑARES -> GONZALO BALADO LIÑARES
-FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> GONZALO BALADO LIÑARES
+ROSA GONZALEZ DE FRUTOS -> GONZALO BALADO LIÑARES
 No se ha encontrado usuario para asignar supervisor: SONIA SANTOS SEÑOR -> SONIA SANTOS SEÑOR
 GONZALO BALADO LIÑARES -> SONIA SANTOS SEÑOR
 ANGELA GAMEZ TORIBIO -> MARIA EULALIA PIÑERO NARANJO
@@ -712,6 +1834,12 @@ GONZALO BALADO LIÑARES -> SANTIAGO DE LA TORRE RAMIREZ
 ANGELA GAMEZ TORIBIO -> URSULA CUEVAS LOPEZ
 No se ha encontrado usuario para asignar supervisor: MARIA GLORIA LACORT MEDINA -> MARIA GLORIA LACORT MEDINA
 CARLOS CALPE NAVARRO -> MARIA GLORIA LACORT MEDINA
+No se ha encontrado usuario para asignar supervisor: JUAN CARLOS GOMEZ PASCUAL -> JUAN CARLOS GOMEZ PASCUAL
+JUAN CARLOS GOMEZ PASCUAL -> ROSANGELA CRETARA BALDUQUE
+No se ha encontrado usuario para asignar supervisor: ANGEL DE PAZ CARRILLO -> ANGEL DE PAZ CARRILLO
+NURIA IBAÑEZ CARRASCO -> ANGEL DE PAZ CARRILLO
+FEDERICA RIZZO . -> ESTEFANIA MAGAZ VELASCO
+FEDERICA RIZZO . -> FABIO NOTARSTEFANO .
 CAROLINA BOU PADILLA -> ISABEL MASO SERRANO
 CAROLINA BOU PADILLA -> MARTIN JESUS AVILA MANCEBO
 CAROLINA BOU PADILLA -> SONIA GARCIA LOPEZ
@@ -727,8 +1855,53 @@ IBAN GOMEZ VELA -> MARIA LUCILA PEREA ESCUDERO
 IBAN GOMEZ VELA -> DAVID DAZA PUENTE
 IBAN GOMEZ VELA -> LAURA FONT DURAN
 IBAN GOMEZ VELA -> DESIREE VIDAL COMAS
+MARIA EVA SAMANTHA GIMENO CERVERA -> VANESSA GARCIA SANCHEZ
+No se ha encontrado usuario para asignar supervisor: ELENA GARCIA LLORENTE -> ELENA GARCIA LLORENTE
+JORGE GARCIA GARCIA -> ELENA GARCIA LLORENTE
+MARIA EVA SAMANTHA GIMENO CERVERA -> MARIANO SANCHEZ DEL HOYO
+MARIA EVA SAMANTHA GIMENO CERVERA -> MARTA SEGURA MARTIN
 No se ha encontrado usuario para asignar supervisor: JOSE MARIA ROMERO DE TEJADA MUNTANER -> JOSE MARIA ROMERO DE TEJADA MUNTANER
 JUAN CARLOS GOMEZ PASCUAL -> JOSE MARIA ROMERO DE TEJADA MUNTANER
+BERNARDO GONZALEZ GONZALEZ -> EDUARDO MENDOZA MUÑOZ
+LUCIA BARBON FERNANDEZ -> MARTA PEREA ORTEGA
+No se ha encontrado usuario para asignar supervisor: DANIEL BORRAS CHAVARRIAS -> DANIEL BORRAS CHAVARRIAS
+JUAN CARLOS GOMEZ PASCUAL -> DANIEL BORRAS CHAVARRIAS
+No se ha encontrado usuario para asignar supervisor: LUCIA BARBON FERNANDEZ -> LUCIA BARBON FERNANDEZ
+DANIEL BORRAS CHAVARRIAS -> LUCIA BARBON FERNANDEZ
+No se ha encontrado usuario para asignar supervisor: MARTA GONZALEZ LEON -> MARTA GONZALEZ LEON
+DANIEL BORRAS CHAVARRIAS -> MARTA GONZALEZ LEON
+No se ha encontrado usuario para asignar supervisor: ALBERTO ROJO MORO -> ALBERTO ROJO MORO
+DANIEL BORRAS CHAVARRIAS -> ALBERTO ROJO MORO
+No se ha encontrado usuario para asignar supervisor: ANGEL ARRANZ GUTIERREZ -> ANGEL ARRANZ GUTIERREZ
+JUAN CARLOS GOMEZ PASCUAL -> ANGEL ARRANZ GUTIERREZ
+ERNESTO ANASTASIO IGARTUA -> MARIA DOLORES ABOITIZ MANOVEL
+No se ha encontrado usuario para asignar supervisor: MARIA DOLORES CABELLO DE LOS COBOS NARVAEZ -> MARIA DOLORES CABELLO DE LOS COBOS NARVAEZ
+ANGEL ARRANZ GUTIERREZ -> MARIA DOLORES CABELLO DE LOS COBOS NARVAEZ
+No se ha encontrado usuario para asignar supervisor: BERNARDO GONZALEZ GONZALEZ -> BERNARDO GONZALEZ GONZALEZ
+ANGEL ARRANZ GUTIERREZ -> BERNARDO GONZALEZ GONZALEZ
+BERNARDO GONZALEZ GONZALEZ -> JACOBO DE LA SANT CARRASCO BAHAMONDE
+No se ha encontrado usuario para asignar supervisor: ERNESTO ANASTASIO IGARTUA -> ERNESTO ANASTASIO IGARTUA
+ANGEL ARRANZ GUTIERREZ -> ERNESTO ANASTASIO IGARTUA
+BERNARDO GONZALEZ GONZALEZ -> ABDEL AGUSTIN DIAZ RIVERA
+BERNARDO GONZALEZ GONZALEZ -> NATALIA VELA MARIONNET
+BERNARDO GONZALEZ GONZALEZ -> ANDREA LLORACH LOURENCO
+ANGEL ARRANZ GUTIERREZ -> HUGO OJER MEDRANO
+ANGEL ARRANZ GUTIERREZ -> EMMA ABELLA BARRERA
+ADRIAN DIAZ DE ILARRAZA BOZAL -> PEDRO SALGADO JORDAN
+No se ha encontrado usuario para asignar supervisor: MIGUEL ANGEL RIBERA MOLES -> MIGUEL ANGEL RIBERA MOLES
+JOSEP MARIA ROCA LLORCA -> MARIA VIRGINIA CASTRO BALZA
+JOSEP MARIA ROCA LLORCA -> MONICA GRANO DE ORO GARCIA
+No se ha encontrado usuario para asignar supervisor: JOSEP MARIA ROCA LLORCA -> JOSEP MARIA ROCA LLORCA
+MIGUEL ANGEL RIBERA MOLES -> JOSEP MARIA ROCA LLORCA
+No se ha encontrado usuario para asignar supervisor: ANDRES LOPERA ESCOLANO -> ANDRES LOPERA ESCOLANO
+MIGUEL ANGEL RIBERA MOLES -> ANDRES LOPERA ESCOLANO
+ANDRES LOPERA ESCOLANO -> JONATHAN ISIDRO ALAMO SANCHEZ
+ANDRES LOPERA ESCOLANO -> MARIA VICTORIA FERNANDEZ GIL
+ANDRES LOPERA ESCOLANO -> JUAN LUIS FRESNEDA CLEMENT
+No se ha encontrado usuario para asignar supervisor: JORGE ANTONIO FERNANDEZ SANTIN -> JORGE ANTONIO FERNANDEZ SANTIN
+JORGE GARCIA GARCIA -> JORGE ANTONIO FERNANDEZ SANTIN
+ENRIQUE RIEGO MIEDES -> CRISTINA SANCHEZ GOMEZ
+LAURA CANDEL VALDERRAMA -> IGNACIO LUENGO FERRADAS
 XAVIER SOLA CURIA -> RAMON GUIRADO GICH
 No se ha encontrado usuario para asignar supervisor: XAVIER SOLA CURIA -> XAVIER SOLA CURIA
 JORGE ANTONIO FERNANDEZ SANTIN -> XAVIER SOLA CURIA
@@ -737,6 +1910,18 @@ XAVIER SOLA CURIA -> M. MAGDALENA PONS PONS
 LAURA CASTELLA CARRABINA -> GERMAN FONT FERRER
 No se ha encontrado usuario para asignar supervisor: ENRIQUE MUÑOZ MENDEZ -> ENRIQUE MUÑOZ MENDEZ
 CARLOS AMARGOS CARRERAS -> ENRIQUE MUÑOZ MENDEZ
+LAURA CANDEL VALDERRAMA -> VERONICA GONCALVES HIDALGO
+LAURA CANDEL VALDERRAMA -> JOSE ENRIQUE COLLADO GARCIA-LAJARA
+ISMAEL DE LOS SANTOS BELLO -> GERMAN RENEDO SANTOS
+LAURA CANDEL VALDERRAMA -> ROSARIO URBANO PRADA
+ISMAEL DE LOS SANTOS BELLO -> YOLANDA AGUADO ACEVEDO
+No se ha encontrado usuario para asignar supervisor: PEDRO VALDIVIA TSCHOPP -> PEDRO VALDIVIA TSCHOPP
+JORGE GARCIA GARCIA -> PEDRO VALDIVIA TSCHOPP
+LAURA CANDEL VALDERRAMA -> JAVIER LANZA GARCIA
+DANIEL FERNANDEZ BAUTISTA -> JUAN ANTONIO RACIONERO JAEN
+No se ha encontrado usuario para asignar supervisor: FRANCISCO JAVIER SERNA BALLARIN -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor: JOSE ANGEL BURGOS GARCIA -> JOSE ANGEL BURGOS GARCIA
+FRANCISCO JAVIER SERNA BALLARIN -> JOSE ANGEL BURGOS GARCIA
 JORDI GINESTA MARQUES -> SUSANA NAVARRO MARTINEZ
 No se ha encontrado usuario para asignar supervisor: JORDI GINESTA MARQUES -> JORDI GINESTA MARQUES
 JOSE ANGEL BURGOS GARCIA -> JORDI GINESTA MARQUES
@@ -746,6 +1931,34 @@ JORDI GINESTA MARQUES -> ORIOL LOPEZ GOMEZ
 ALEJANDRO PUEYO MUÑOZ -> JORDI PINTO LONGAS
 JORDI GINESTA MARQUES -> JOSE ANTONIO PEREZ MESTRES
 JORDI GINESTA MARQUES -> PEDRO FONT BORIA
+JOSE ANGEL BURGOS GARCIA -> MARIA CARMEN MARTIN ORTEGA
+JAVIER GARCIA ACEITUNO -> MARIA TERESA MORENO DIAZ
+BENITO RUIZ GASCON -> SONIA PEÑA HERRANZ
+JAVIER GARCIA ACEITUNO -> CRISTINA CEBRIAN FERNANDEZ
+JAVIER GARCIA ACEITUNO -> DANIEL RODRIGUEZ SANCHEZ
+JAVIER GARCIA ACEITUNO -> MARIA BELEN FERRERAS MARTIN
+No se ha encontrado usuario para asignar supervisor: JAVIER GARCIA ACEITUNO -> JAVIER GARCIA ACEITUNO
+JOSE ANGEL BURGOS GARCIA -> JAVIER GARCIA ACEITUNO
+JOSE ANGEL BURGOS GARCIA -> RAQUEL GUERRA MUNILLA
+JOSE ANGEL BURGOS GARCIA -> NURIA GONZALEZ RUBIANO
+RAQUEL PINEDA DELGADO -> ALFREDO RUBIO ALONSO
+No se ha encontrado usuario para asignar supervisor: PATRICIA GONZALEZ GUERRA -> PATRICIA GONZALEZ GUERRA
+LUIS DE QUEROL VILA -> PATRICIA GONZALEZ GUERRA
+RAQUEL PINEDA DELGADO -> MARIA SOLEDAD HERNANDO CASALENGUA
+No se ha encontrado usuario para asignar supervisor: RAQUEL PINEDA DELGADO -> RAQUEL PINEDA DELGADO
+ROSARIO AMELIA FERNANDEZ-RAMOS OCA -> RAQUEL PINEDA DELGADO
+ENRIQUE LORENTE RAMOS -> PATRICIA MIRANDA PELAZ
+No se ha encontrado usuario para asignar supervisor: ENRIQUE LORENTE RAMOS -> ENRIQUE LORENTE RAMOS
+JOSE MARIA COSANO COSANO -> GONZALO DE LA VIESCA LANZA
+ENRIQUE LORENTE RAMOS -> IGNACIO MARTIN-CONSUEGRA DIEZ
+FRANCISCO JAVIER SERNA BALLARIN -> PATRICIA FERNANDEZ MARTINEZ
+No se ha encontrado usuario para asignar supervisor: ROSA GONZALEZ DE FRUTOS -> ROSA GONZALEZ DE FRUTOS
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> ROSA GONZALEZ DE FRUTOS
+No se ha encontrado usuario para asignar supervisor: ISMAEL DE LOS SANTOS BELLO -> ISMAEL DE LOS SANTOS BELLO
+LLUIS OBIOLS CALOPA -> ISMAEL DE LOS SANTOS BELLO
+BENITO RUIZ GASCON -> MANUEL ARRUFAT CASTELO
+IRENE CUENCA MEJIAS -> SARA RISCO CAJA
+ISMAEL DE LOS SANTOS BELLO -> REBECA GARCIA GONZALEZ
 No se ha encontrado usuario para asignar supervisor: MAITE RODRIGUEZ MARMOL -> MAITE RODRIGUEZ MARMOL
 LLUIS OBIOLS CALOPA -> MAITE RODRIGUEZ MARMOL
 MAITE RODRIGUEZ MARMOL -> LUIS PALACIOS GARCIA
@@ -753,29 +1966,99 @@ MAITE RODRIGUEZ MARMOL -> ANTONIO FUNES RUIZ
 MAITE RODRIGUEZ MARMOL -> ESTHER MANZANO TREMOSA
 MAITE RODRIGUEZ MARMOL -> M. TERESA ALVAREZ EGEA
 MAITE RODRIGUEZ MARMOL -> JUAN C. BECERRA GOMEZ
-ISMAEL DE LOS SANTOS BELLO -> SONIA SANAHUJA AIGUADE
-ISMAEL DE LOS SANTOS BELLO -> SILVIA ADROGUER RAMOS
+RAMIRO BARRAL TEMES -> SONIA SANAHUJA AIGUADE
+PERE GAVALDA MONTSERRAT -> SILVIA ADROGUER RAMOS
 JORDI ROCA PIELLA -> PABLO RODRIGUEZ TEATINO
-LLUIS OBIOLS CALOPA -> MANUEL ENRIQUE REBULL VIVANCOS
-IRENE CUENCA MEJIAS -> MARIA TERESA MOR PARIS
-IRENE CUENCA MEJIAS -> NARCISA ROMAN MONGE
-LLUIS OBIOLS CALOPA -> M.YOLANDA CRESPO REVILLA
-LLUIS OBIOLS CALOPA -> EVA MARIA MORENO ROMERO
-LLUIS OBIOLS CALOPA -> LAURA LOPEZ GOMEZ
-LLUIS OBIOLS CALOPA -> JORDI BLANCH VALLMITJANA
-LLUIS OBIOLS CALOPA -> LUIS AGUILAR SOLA
+ISMAEL DE LOS SANTOS BELLO -> MANUEL ENRIQUE REBULL VIVANCOS
+ISMAEL DE LOS SANTOS BELLO -> JOSE MARIA CARDO GARCIA
+ISMAEL DE LOS SANTOS BELLO -> MARIA TERESA MOR PARIS
+ISMAEL DE LOS SANTOS BELLO -> NARCISA ROMAN MONGE
+ISMAEL DE LOS SANTOS BELLO -> M.YOLANDA CRESPO REVILLA
+ISMAEL DE LOS SANTOS BELLO -> EVA MARIA MORENO ROMERO
+ISMAEL DE LOS SANTOS BELLO -> LAURA LOPEZ GOMEZ
+ISMAEL DE LOS SANTOS BELLO -> JORDI BLANCH VALLMITJANA
+JAVIER GARCIA ACEITUNO -> DAVID BLANCO YAÑEZ
+LUIS GONZALEZ RECIO -> FRANCISCO JAVIER SARRAIS GRAU
+SANTIAGO DE LA TORRE RAMIREZ -> MANUEL RICARDO SANCHEZ GONZALEZ
+ISMAEL DE LOS SANTOS BELLO -> LUIS AGUILAR SOLA
+MARIA JOSE LLANOS OGINO -> MARIA DEL PILAR LORENZO PRADA
+IRENE CUENCA MEJIAS -> ANTONIA ARRIETA RUIZ
+No se ha encontrado usuario para asignar supervisor: IRENE CUENCA MEJIAS -> IRENE CUENCA MEJIAS
+LLUIS OBIOLS CALOPA -> IRENE CUENCA MEJIAS
+No se ha encontrado usuario para asignar supervisor: BENITO RUIZ GASCON -> BENITO RUIZ GASCON
+LLUIS OBIOLS CALOPA -> BENITO RUIZ GASCON
+BENITO RUIZ GASCON -> MARIA PILAR CARRO SUAREZ
+BENITO RUIZ GASCON -> ROBERTO ELENA CORDOBA
+DANIEL FERNANDEZ BAUTISTA -> MARIA ROSARIO GOMEZ IGLESIAS
+MAITE RODRIGUEZ MARMOL -> LAURA MONTENEGRO BALLESTEROS
+BENITO RUIZ GASCON -> NAZARET MARIA SANCHEZ GONZALEZ
+DANIEL FERNANDEZ BAUTISTA -> SERGIO PARADES LOPEZ
+MAITE RODRIGUEZ MARMOL -> FRANCISCO JAVIER BORDERIAS LATAS
+No se ha encontrado usuario para asignar supervisor: JOSE ANTONIO MATEOS MORO -> JOSE ANTONIO MATEOS MORO
+FRANCISCO JAVIER SERNA BALLARIN -> JOSE ANTONIO MATEOS MORO
+No se ha encontrado usuario para asignar supervisor: LUIS GONZALEZ RECIO -> LUIS GONZALEZ RECIO
+JOSE ANTONIO MATEOS MORO -> LUIS GONZALEZ RECIO
+CLAUDIA PAPAGNA . -> MARTA ISABEL DE ANDRES SANJUAN
+LUIS GONZALEZ RECIO -> BORJA PLANELLES HERRERO
+LUIS GONZALEZ RECIO -> RAQUEL DEL POZO HERVAS
+LUIS GONZALEZ RECIO -> FABIAN TALAVERA GOMEZ
+LUIS GONZALEZ RECIO -> ADOLFO MOLINA PLAZA
+LUIS GONZALEZ RECIO -> FRANCISCO JOSE CAMPOS AVILA
+LUIS GONZALEZ RECIO -> MARIA CLOTILDE MUÑOZ LOPEZ
+LUIS GONZALEZ RECIO -> ANA MARIA YEPES MARTINEZ
+SANTIAGO DE LA TORRE RAMIREZ -> MARIA EMILIA MOLLA MERINO
+LUIS GONZALEZ RECIO -> VIRGINIA GARCIA DE LA PEÑA
+LUIS GONZALEZ RECIO -> HECTOR GARCIA ABOIN
+LUIS GONZALEZ RECIO -> ALARCOS VELASCO FERNANDEZ
+LUIS GONZALEZ RECIO -> M.DEL MAR DOMENECH MARTIN
 No se ha encontrado usuario para asignar supervisor: JOSE LUIS GARCIA RODRIGUEZ -> JOSE LUIS GARCIA RODRIGUEZ
 JOSE ANTONIO MATEOS MORO -> JOSE LUIS GARCIA RODRIGUEZ
-ISMAEL DE LOS SANTOS BELLO -> CARLOS RAMOS MORENO
+IRENE CUENCA MEJIAS -> CARLOS RAMOS MORENO
 JOSE LUIS GARCIA RODRIGUEZ -> MIGUEL CAMPAÑA FERNANDEZ
 JOSE LUIS GARCIA RODRIGUEZ -> MONTSERRAT MONTERO RODRIGUEZ
 JOSE LUIS GARCIA RODRIGUEZ -> GERARDO SOBRINO ALMUNIA
 JOSE LUIS GARCIA RODRIGUEZ -> TEOFILA CECILIA MOLINA CAMPOS
 JOSE LUIS GARCIA RODRIGUEZ -> ANTONIO NUÑEZ TOVAR
+JOSE GUILLERMO CALDERON ANDRES -> FCO. JAVIER ANGOSTO GOMIS
+No se ha encontrado usuario para asignar supervisor: LUIS DE QUEROL VILA -> LUIS DE QUEROL VILA
+CARLOS AMARGOS CARRERAS -> LUIS DE QUEROL VILA
 BEATRIZ SANZ JUEZ -> SONIA ZAGUIRRE PARADELO
-ALBERTO DE JUANA IZQUIERDO -> MARIA LUCIA MORATE LOZANO
+PEDRO MORALES ARROYO -> MARIA ASUNCION GAROZ DIAZ
+PEDRO MORALES ARROYO -> JORGE SANTOLAYA FORGAS
+BEATRIZ MARTIN LOPEZ -> JUAN JOSE PADIN VALLECILLO
+JESUS RAMON CRESPO BENITO -> CARMEN MARIA JIMENEZ FERREIRA
+BEATRIZ MARTIN LOPEZ -> JUAN ANTONIO GUTIERREZ BARRANCO
+No se ha encontrado usuario para asignar supervisor: BEATRIZ MARTIN LOPEZ -> BEATRIZ MARTIN LOPEZ
+PEDRO MORALES ARROYO -> BEATRIZ MARTIN LOPEZ
+BEATRIZ MARTIN LOPEZ -> SANDRA GARCIA SILVA
+BEATRIZ MARTIN LOPEZ -> MARIA GEMMA ANDRES LLORENTE
+JESUS RAMON CRESPO BENITO -> DIANA DURAN DE LA FUENTE
+BEATRIZ MARTIN LOPEZ -> MARIA DEL CARMEN MONTORO ZAPATA
+BEATRIZ MARTIN LOPEZ -> IRENE ALCARAZ MAESTRE
+BEATRIZ MARTIN LOPEZ -> MARIA JESUS PRIETO FERNANDEZ
+BEATRIZ MARTIN LOPEZ -> SILVIA PUERTA HERRERA
+BEATRIZ MARTIN LOPEZ -> SILVIA BLANCO LOPEZ
+OSCAR PABLO TUSET -> TALIA JAEN FERNANDEZ
+No se ha encontrado usuario para asignar supervisor: PABLO DIEZ GARCIA -> PABLO DIEZ GARCIA
+JAVIER MARQUES CABRERO -> PABLO DIEZ GARCIA
+No se ha encontrado usuario para asignar supervisor: ALFONSO COTS PALTOR -> ALFONSO COTS PALTOR
+ALEXANDRE RUBIO ORTUZAR -> ALFONSO COTS PALTOR
+PEDRO MORALES ARROYO -> MARIA LUCIA MORATE LOZANO
+ALEXANDRE RUBIO ORTUZAR -> ALICIA BRAVO CUBAS
+ALFONSO COTS PALTOR -> ALBERTO RIOBELLO MARTIN
+JAVIER MARQUES CABRERO -> CATALINA PERELLO LLULL
+ROBERTO BLANCO GOMEZ -> NICOLASA RETAMOSA CAMARENA
+ROBERTO BLANCO GOMEZ -> ROCIO RAMOS CLEMENTE
+VICTOR GUILLERMO NIETO CONESA -> MARIA ELENA CASTRO RODRIGUEZ
 VICTOR GUILLERMO NIETO CONESA -> MANUEL CARVAJAL ALJARO
 VICTOR GUILLERMO NIETO CONESA -> JOAN ROSELLO CASTELLS
+VICTOR GUILLERMO NIETO CONESA -> YOLANDA FLORES MARTINEZ
+VICTOR GUILLERMO NIETO CONESA -> CRISTINA SOLANO GOMEZ
+VICTOR GUILLERMO NIETO CONESA -> JESUS GOMEZ MENGUAL
+No se ha encontrado usuario para asignar supervisor: VICTOR GUILLERMO NIETO CONESA -> VICTOR GUILLERMO NIETO CONESA
+JESUS FERNANDEZ SANCHEZ -> VICTOR GUILLERMO NIETO CONESA
+No se ha encontrado usuario para asignar supervisor: JESUS FERNANDEZ SANCHEZ -> JESUS FERNANDEZ SANCHEZ
+FRANCISCO JAVIER SERNA BALLARIN -> JESUS FERNANDEZ SANCHEZ
 JOSE A. GUERRERO IZQUIERDO -> JUAN MIGUEL PRATTKE FRAGA
 BEATRIZ MARTIN LOPEZ -> FERNANDO FUMANAL ALBAS
 JOSE A. GUERRERO IZQUIERDO -> ANDRES BANDRES BAILO
@@ -785,6 +2068,21 @@ BEATRIZ MARTIN LOPEZ -> XAVIER MIRANDA LOPEZ
 JOSE A. GUERRERO IZQUIERDO -> JULIAN CAMILO RAMIREZ LOPEZ
 No se ha encontrado usuario para asignar supervisor: JOSE A. GUERRERO IZQUIERDO -> JOSE A. GUERRERO IZQUIERDO
 JESUS FERNANDEZ SANCHEZ -> JOSE A. GUERRERO IZQUIERDO
+No se ha encontrado usuario para asignar supervisor: PEDRO MARIA SANTAMARIA MUÑIZ -> PEDRO MARIA SANTAMARIA MUÑIZ
+JESUS FERNANDEZ SANCHEZ -> PEDRO MARIA SANTAMARIA MUÑIZ
+PEDRO MARIA SANTAMARIA MUÑIZ -> PEDRO PABLO SANCHEZ GOMEZ
+PEDRO MARIA SANTAMARIA MUÑIZ -> JUAN ANTONIO LOPEZ PASTOR
+BEATRIZ FERNANDEZ IZQUIERDO -> OSCAR LLORENTE PINILLA
+BENITO RUIZ GASCON -> SARA MORIENTE MORAGA
+LUIS GONZALEZ RECIO -> PEDRO VICTOR BENAC EARLE
+No se ha encontrado usuario para asignar supervisor: ROBERTO BLANCO GOMEZ -> ROBERTO BLANCO GOMEZ
+JESUS FERNANDEZ SANCHEZ -> ROBERTO BLANCO GOMEZ
+ROBERTO BLANCO GOMEZ -> ZOE BOYERO IGLESIAS
+No se ha encontrado usuario para asignar supervisor: LETICIA MORENO FERNANDEZ -> LETICIA MORENO FERNANDEZ
+JESUS FERNANDEZ SANCHEZ -> LETICIA MORENO FERNANDEZ
+BEATRIZ MARTIN LOPEZ -> M. ASUNCION LORENZO TORRES
+ROBERTO BLANCO GOMEZ -> MIGUEL MARTIN LLORENTE
+RAMIRO BARRAL TEMES -> ANA SOTO ELEZCANO
 No se ha encontrado usuario para asignar supervisor: CARLOS AMARGOS CARRERAS -> CARLOS AMARGOS CARRERAS
 FRANCISCO JAVIER SERNA BALLARIN -> CARLOS AMARGOS CARRERAS
 JOSE ANGEL BURGOS GARCIA -> M.OLGA ORDOVAS TORRALBA
@@ -816,7 +2114,7 @@ JOSE JAVIER SANCHEZ MARTINEZ -> FRANCESC GUTIERREZ PUJOL
 JAVIER LOPEZ RODRIGUEZ -> CRISTINA SANTANA ROMERO
 SONIA SANTOS SEÑOR -> INMACULADA NOVELL COLILLES
 JOSE JAVIER SANCHEZ MARTINEZ -> JOAN SANTAMARIA PLAZA
-IRENE CUENCA MEJIAS -> FRANCISCA GARRIDO SOLE
+ISMAEL DE LOS SANTOS BELLO -> FRANCISCA GARRIDO SOLE
 JAVIER LOPEZ RODRIGUEZ -> DAVID RUEDA REGUILL
 No se ha encontrado usuario para asignar supervisor: GUILLERMO MAÑA GILABERT -> GUILLERMO MAÑA GILABERT
 JAVIER LOPEZ RODRIGUEZ -> GUILLERMO MAÑA GILABERT
@@ -824,12 +2122,53 @@ PERE GAVALDA MONTSERRAT -> ENRIC MAS GUYAL
 JORDI GINESTA MARQUES -> M.EULALIA ALSINA RIBO
 PERE GAVALDA MONTSERRAT -> JAVIER CANALDA ROPALS
 PERE GAVALDA MONTSERRAT -> LLUISA BLANCH ARMENGOL
+ELENA GARCIA LLORENTE -> MARIA DEL MAR LOPEZ DE LACALLE FERNANDEZ
+JOSE ANGEL BURGOS GARCIA -> ALEJANDRO DEL PRADO ALVAREZ
+SANTIAGO GARCIA SANCHIS -> FELIX DOMINGO PEREGRINA
+DANIEL FERNANDEZ BAUTISTA -> JAIME RODRIGUEZ NOGALES
+MARIA JOSE LLANOS OGINO -> JOSE ANDREO NICOLAS
+SANTIAGO GARCIA SANCHIS -> SANDRA RODRIGUEZ ALVAREZ
+ISMAEL DE LOS SANTOS BELLO -> JAVIER BARRANCO GALLEGO
+LUIS GONZALEZ RECIO -> ROBERTO DIAZ VIANA
+JAVIER GARCIA ACEITUNO -> AMPARO GARRIDO MARTINEZ
+No se ha encontrado usuario para asignar supervisor: RAMIRO BARRAL TEMES -> RAMIRO BARRAL TEMES
+JORGE GARCIA GARCIA -> RAMIRO BARRAL TEMES
 No se ha encontrado usuario para asignar supervisor: JAVIER LOPEZ RODRIGUEZ -> JAVIER LOPEZ RODRIGUEZ
 RAMIRO BARRAL TEMES -> JAVIER LOPEZ RODRIGUEZ
+SANTIAGO DE LA TORRE RAMIREZ -> JOSE LUIS CASAUS HAZAÑAS
+SANTIAGO DE LA TORRE RAMIREZ -> ENRIQUE RODRIGUEZ RODRIGUEZ
+NURIA GARCIA LOZANO -> ALVARO ALGUACIL LUQUE
+No se ha encontrado usuario para asignar supervisor: ALBERTO OGANDO GARCIA -> ALBERTO OGANDO GARCIA
+MARIA PATRICIA CABAL BRISO-MONTIANO -> MONICA CHAVERNAS TEJEDOR
+No se ha encontrado usuario para asignar supervisor: MARIA PATRICIA CABAL BRISO-MONTIANO -> MARIA PATRICIA CABAL BRISO-MONTIANO
+ALBERTO OGANDO GARCIA -> MARIA PATRICIA CABAL BRISO-MONTIANO
+CRISTINA ZARZA ALVAREZ -> MARIA ELENA JIMENEZ SANABRIA
+No se ha encontrado usuario para asignar supervisor: DIANA LODIN VELAZQUEZ -> DIANA LODIN VELAZQUEZ
+ALBERTO OGANDO GARCIA -> DIANA LODIN VELAZQUEZ
+DIANA LODIN VELAZQUEZ -> ELENA FERRE AGUILERA
+DIANA LODIN VELAZQUEZ -> AIDA ALVAREZ RODRIGUEZ
+No se ha encontrado usuario para asignar supervisor: CRISTINA ZARZA ALVAREZ -> CRISTINA ZARZA ALVAREZ
+ALBERTO OGANDO GARCIA -> CRISTINA ZARZA ALVAREZ
+BEATRIZ FERNANDEZ IZQUIERDO -> OSCAR VILLAR RONCERO
+ALBERTO OGANDO GARCIA -> PAULA EGIDO CONDE
+MARIA PATRICIA CABAL BRISO-MONTIANO -> SARA GARCIA GOMEZ
+No se ha encontrado usuario para asignar supervisor: BEATRIZ FERNANDEZ IZQUIERDO -> BEATRIZ FERNANDEZ IZQUIERDO
+ALBERTO OGANDO GARCIA -> BEATRIZ FERNANDEZ IZQUIERDO
+CRISTINA ZARZA ALVAREZ -> MARTA LORENZO LOPEZ
+No se ha encontrado usuario para asignar supervisor: FRANCISCO JAVIER ZUBICOA MIQUELEIZ -> FRANCISCO JAVIER ZUBICOA MIQUELEIZ
+ALBERTO OGANDO GARCIA -> FRANCISCO JAVIER ZUBICOA MIQUELEIZ
 BEATRIZ FERNANDEZ IZQUIERDO -> LAURA GASSO MORERA
 ALBERTO OGANDO GARCIA -> GABRIEL COSTA JUSTE
+FRANCISCO JAVIER ZUBICOA MIQUELEIZ -> ROBERTO GONZALEZ PALOMO
+FRANCISCO JAVIER ZUBICOA MIQUELEIZ -> NURIA ESTHER VILA CAMINO
+ALBERTO OGANDO GARCIA -> JESUS MARIA VILLALBA AGUILERA
+No se ha encontrado usuario para asignar supervisor: FRANCESC GIRALT CANADELL -> FRANCESC GIRALT CANADELL
+JORGE GARCIA GARCIA -> FRANCESC GIRALT CANADELL
 FRANCESC GIRALT CANADELL -> DAVID GRAU ESTELLES
+PABLO DIEZ GARCIA -> ANA ISABEL GALINDO AHIJADO
 BEATRIZ FERNANDEZ IZQUIERDO -> ELISABET GUTIERREZ BONILLO
+MARIA PATRICIA CABAL BRISO-MONTIANO -> CRISTINA GADEA REMACHA
+BEATRIZ FERNANDEZ IZQUIERDO -> ANA SANCHEZ PALLARES
 NOEL ROJO DE LUQUE -> JULIA DI NAPOLI PINILLOS
 No se ha encontrado usuario para asignar supervisor: NOEL ROJO DE LUQUE -> NOEL ROJO DE LUQUE
 FRANCISCO JAVIER SERNA BALLARIN -> NOEL ROJO DE LUQUE
@@ -947,6 +2286,8 @@ DANIEL CANO NAVARRO -> JORGE SANZ ALONSO
 DANIEL CANO NAVARRO -> ANDRES FELIPE DE LA ROCHE GUTIERREZ
 DANIEL CANO NAVARRO -> MARCOS RUIZ TARIN
 DANIEL CANO NAVARRO -> JORDI TORNE RIBALTA
+No se ha encontrado usuario para asignar supervisor: JORGE GARCIA GARCIA -> JORGE GARCIA GARCIA
+PATRICIA ESTEBAN CORTES -> IZASKUN DIEGO ALLENDE
 No se ha encontrado usuario para asignar supervisor: JUANA FORTUNY LOPEZ -> JUANA FORTUNY LOPEZ
 CARMEN BOCERO CANENCIA -> JUANA FORTUNY LOPEZ
 No se ha encontrado usuario para asignar supervisor: JORDI ROCA PIELLA -> JORDI ROCA PIELLA
@@ -963,72 +2304,418 @@ ESTHER LALANA VIDALLER -> YOLANDA MILLA PEREZ
 ESTHER LALANA VIDALLER -> ANTONIO CRUZ RENTERO
 No se ha encontrado usuario para asignar supervisor: JOSEP MARIA FERRER FERRER -> JOSEP MARIA FERRER FERRER
 JUANA FORTUNY LOPEZ -> JOSEP MARIA FERRER FERRER
-IRENE CUENCA MEJIAS -> NOELIA GARCIA JULIAN
+No se ha encontrado usuario para asignar supervisor: ALESSIA MEZQUITA PRIETO -> ALESSIA MEZQUITA PRIETO
+CARMEN BOCERO CANENCIA -> ALESSIA MEZQUITA PRIETO
+MARIA JOSE LLANOS OGINO -> EVA ALBALA BACHOT
+No se ha encontrado usuario para asignar supervisor: MAURICIO CANAL MARTINEZ -> MAURICIO CANAL MARTINEZ
+ALESSIA MEZQUITA PRIETO -> MAURICIO CANAL MARTINEZ
+ALESSIA MEZQUITA PRIETO -> MIGUEL CARLOS DE LAS RIVAS GONZALEZ DEL REY
+ALESSIA MEZQUITA PRIETO -> MARIA DEL SOL GONZALEZ ALONSO
+CLAUDIA PAPAGNA . -> MIGUEL ALVAREZ BAEZ
+No se ha encontrado usuario para asignar supervisor: JOSE BENITEZ MORON -> JOSE BENITEZ MORON
+ALVARO BLASCO GARCIA -> LORENA GARCIA LOPEZ
+No se ha encontrado usuario para asignar supervisor: CLAUDIA PAPAGNA . -> CLAUDIA PAPAGNA .
+CARMEN BOCERO CANENCIA -> CLAUDIA PAPAGNA .
+No se ha encontrado usuario para asignar supervisor: MARIA JOSE LLANOS OGINO -> MARIA JOSE LLANOS OGINO
+CARMEN BOCERO CANENCIA -> MARIA JOSE LLANOS OGINO
+ENRIQUE RIEGO MIEDES -> VICTOR LUIS GIL ABAD
+MARIA JOSE LLANOS OGINO -> EDUARDO FRANCISCO RODRIGUEZ GARCIA
+MARIA JOSE LLANOS OGINO -> CAROLINA PASCUAL NIETO
+CARMEN BOCERO CANENCIA -> MIGUEL ROMERO SANZ
+MARIA JOSE LLANOS OGINO -> ISMAEL MARTIN CORRAL
+JOSE MANUEL GUTIERREZ GALAN -> JOSE MANUEL GUTIERREZ GALAN
+DAVID PALOMINO MARTIN -> DAVID PALOMINO MARTIN
+ISMAEL DE LOS SANTOS BELLO -> NOELIA GARCIA JULIAN
+NURIA GARCIA LOZANO -> LETICIA ENCINAS RUANO
+FRANCISCO JAVIER ZUBICOA MIQUELEIZ -> JAVIER CASILLAS PEREZ
 JAVIER MUÑOZ MOZO -> ANTONIO CAAMAÑO TRAVESSET
+ALEXANDRE RUBIO ORTUZAR -> JOSE MANUEL GARCIA ROJO DIAZ GUERRA
+MARIA DEL CARMEN DE RUZ SUAREZ -> SARA MATEOS GOMEZ
+ROCIO PUERTA CHACON -> URKO MIRAVALLES BARBA
+MARIA JOSE LLANOS OGINO -> IVAN CANCHO MERINO
+OSCAR ZORNOZA DE TORRES -> DIANA ARRUABARRENA DE PAZ
 JOSE MANUEL CANO AGUILAR -> XAVIER PERALS RODON
+MIGUEL ANGEL RIBERA MOLES -> ELENA MARIA PIESCHACON PEREZ
+JAVIER MARQUES CABRERO -> BEATRIZ CANO SANTANA
+ENRIQUE RIEGO MIEDES -> IGNACIO GARCIA JIMENEZ
 IVAN GARCIA BALASTEGUI -> MARINA PONSETI MUNTANER
+GONZALO MARTÍN VALCAYO -> ESTRELLA LOPEZ MORANTE
 ROSARIO ORELLANA ZAMORANO -> SUSANA SAEZ DE TEJADA ORDOÑEZ
+MARIA EVA SAMANTHA GIMENO CERVERA -> JOAQUIN ESPALLARGAS BARRIO
 JOSE JAVIER SANCHEZ MARTINEZ -> VERONICA MARIA PERONA GONZALEZ
+LETICIA MORENO FERNANDEZ -> MARIA SARACHAGA AYESTARAN
+BENITO RUIZ GASCON -> CAROLINA GONZALO MOLINA
+CARLOS ESCUDERO SEGURA -> FLORENCIA LAVERA .
 SILVIA FARRACES DELGADO -> INGRID FORTUÑO PEÑARRUBIA
+FRANCESC GIRALT CANADELL -> GABRIEL MENDEZ PINTO
+ROBERTO BLANCO GOMEZ -> DIEGO PALACIOS GONZALEZ
+ANGEL ARRANZ GUTIERREZ -> MARÍA MORENO BAEZA
+MARIANA CAMPILLO HERNANDO DE LARRAMENDI -> MERCEDES ORTS ANCOCHEA
+MARIA DOLORES CABELLO DE LOS COBOS NARVAEZ -> CARMEN MARIA ROMERO DIAZ
 JOSE LUIS GARCIA RODRIGUEZ -> SANDRA CARBONERO DE SAN FRANCISCO
+FRANCISCO JAVIER NAVARRO ALONSO -> ALEJANDRA MESEGUER BLASCO
+MARIA NIEVES PARRILLA RUBIO -> ELENA LOPEZ OLIVA
+ROCIO PUERTA CHACON -> LEIRE MONTOYA ELIZALDE
+OSCAR ZORNOZA DE TORRES -> ANA CLARISSA CUEVAS ARTHUR
 FRANCESC GRIMALT SANTACANA -> JORGE JAVIER FERRER VILLACAMPA
+ISMAEL DE LOS SANTOS BELLO -> ALVARO HERVAS SAUCEDO
+ANGEL DE PAZ CARRILLO -> ALVARO MONTERO MARTINEZ
 ALEJANDRO PUEYO MUÑOZ -> JUDITH BERNAL MARQUEZ
+BEATRIZ FERNANDEZ IZQUIERDO -> ELENA MORATE PECHARROMAN
+MARTA GONZALEZ LEON -> GUILLERMO FRUTOS REQUENA
+MARTI JO RUIZ -> JOSE ALVADO HERNANDEZ
+VICTOR GUILLERMO NIETO CONESA -> ALICIA FUENTES DIAZ
+No se ha encontrado usuario para asignar supervisor: MIGUEL ANGEL RIVERA DIAZ -> MIGUEL ANGEL RIVERA DIAZ
+DAVID PALOMINO MARTIN -> MIGUEL ANGEL RIVERA DIAZ
+ALVARO AFONSO TAÑO -> GIORGIA RINALDONI .
+JORGE CHERTA ECHAURI -> JESUS RAMIRO CARRASCO
+BERNARDO GONZALEZ GONZALEZ -> MANUEL LEZAMA-LEGUIZAMON ACHA
+SANTIAGO GARCIA SANCHIS -> ALEJANDRO APARICIO SANZ
+MAURICIO CANAL MARTINEZ -> LUCIA SANSANO MARTIN
+No se ha encontrado usuario para asignar supervisor: PATRICIA RESTEGUI COMPOSTIZO -> PATRICIA RESTEGUI COMPOSTIZO
+KENYA ZAID GUILLEN PARRA -> PATRICIA RESTEGUI COMPOSTIZO
+ROBERTO PAVON BONILLA -> LEONOR ELIZABETH PACHECO ULACIO
+ROBERTO PAVON BONILLA -> INMACULADA MORENO CANO
+RAQUEL PINEDA DELGADO -> SARA DE FRUTOS NOGALES
+FRANCISCO ANTONIO POVEDA FERNANDEZ -> ELENA LOPEZ CERRO
+ENRIQUE LORENTE RAMOS -> ADRIÁN CÁRNICAS MAROTO
+JUAN CARLOS GOMEZ PASCUAL -> JAVIER ABELLAN CABRERA
+ALBERTO ROJO MORO -> MANUEL OCAÑA DIEZ DE LA TORRE
+ENRIQUE LORENTE RAMOS -> MANUEL ARRATE CRIADO
+RAQUEL PINEDA DELGADO -> ROCÍO PEÑA GUTIERREZ-OJANGUREN
 JOSE MARIA COSANO COSANO -> DAVID GONZALEZ DIAZ
+ROBERTO PAVON BONILLA -> SARAY QUINTAS LAGO
+No se ha encontrado usuario para asignar supervisor: DAVID VILLARINO GONZALEZ -> DAVID VILLARINO GONZALEZ
+KENYA ZAID GUILLEN PARRA -> DAVID VILLARINO GONZALEZ
+LETICIA MORENO FERNANDEZ -> AINHOA MÉNDEZ LÓPEZ
+No se ha encontrado usuario para asignar supervisor: GONZALO MARTÍN VALCAYO -> GONZALO MARTÍN VALCAYO
+KENYA ZAID GUILLEN PARRA -> GONZALO MARTÍN VALCAYO
+JOSEP MARIA ROCA LLORCA -> GUILLERMO VICENTE SÁNCHEZ MARTÍNEZ
 MANUEL YAGUE MAGDALENA -> IVAN ANTOLIN PEIRO
+JUAN CARLOS MATA MORALES -> CRISTINA SAIZ GARCIA
+NURIA GARCIA LOZANO -> JUAN JOSE PARREÑO TOLEDANO
+ALEXANDRE RUBIO ORTUZAR -> SANTIAGO MURILLO MARTINEZ
+ENRIQUE LORENTE RAMOS -> BEGOÑA LESSMEISTER PASCUAL
+MARIA JOSE LLANOS OGINO -> AINARA SALDAÑA ARIAS
+JOSEP MARIA ROCA LLORCA -> CLAUDIA MORALES GARCIA
+LUCIA BARBON FERNANDEZ -> MARIA DOLORES MALLA SIERRA
+ADRIAN DIAZ DE ILARRAZA BOZAL -> LORENZO MARTINEZ JIMENEZ
+BEATRIZ FERNANDEZ IZQUIERDO -> TERESA FERNANDEZ DE LASCOITI GONZALEZ-PINTO
 JAVIER MUÑOZ MOZO -> IVAN GARCIA SANCHEZ
 CAROLINA BOU PADILLA -> MIREIA GARCIA NEBOT
 ALEJANDRO PUEYO MUÑOZ -> IRENE PAVON RODRIGUEZ
+MARTA GONZALEZ LEON -> MANUELA CERESI 
+JAVIER LAS HERAS SAUNDERS -> MARIO HERNANDEZ PEREZ
 OSCAR PABLO TUSET -> CARLES TERRAZA BADIA
+RAUL AVIS BARQUILLA -> DIEGO MARTINEZ SANCHEZ
+FRANCESC REGAS PONS -> WISAM MOUCH CHAMLAL
+FRANCESC REGAS PONS -> SILVIA GIMENO ALONSO
+BLANCA CAMARERO GARCIA -> MARIA DEL ROSARIO FERNANDEZ GONZALEZ
 ALEJANDRO PUEYO MUÑOZ -> JULIA COMPAÑO QUEROL
+JAVIER MARQUES CABRERO -> CARLOS SANCHEZ SANCHEZ
 JOSE MANUEL CANO AGUILAR -> DAVID SIMON CAPARROS
 JOSE MARIA COSANO COSANO -> JOAQUIM BOCHACA MATEO
+ANDA-DIANA LUPULESCU . -> ALBA VILLAFRANCA TORO
+MARTA GONZALEZ LEON -> MARIA HIDALGO CABEZAS
+No se ha encontrado usuario para asignar supervisor: MATTEO DRAGHI  -> MATTEO DRAGHI 
+STEFANO ZANCAN . -> MATTEO DRAGHI 
+No se ha encontrado usuario para asignar supervisor: LAURA CANDEL VALDERRAMA -> LAURA CANDEL VALDERRAMA
+JORGE ANTONIO FERNANDEZ SANTIN -> LAURA CANDEL VALDERRAMA
 JOSE LUIS GARCIA RODRIGUEZ -> DANIEL SANCHEZ NAVARRO
+BEATRIZ SANZ JUEZ -> YOLANDA RODRIGUEZ PASCUAL
+JOSE MANUEL GUTIERREZ GALAN -> LUCIA LAGUNA ELOLA-OLASO
+PATRICIA RESTEGUI COMPOSTIZO -> ERIC MAS MONCUSI
+MARTA ESPARZA GARCIA -> LAURA MARIA MENDEZ MILLAN
+BENITO RUIZ GASCON -> MARIA SONIA HERNÁNDEZ SEVILLA
 ANGELA GAMEZ TORIBIO -> PABLO SEBASTIAN BUGALLO NAVARRIA
+ALBERTO ROJO MORO -> DANIEL ALONSO ARTEAGA
+CLAUDIA PAPAGNA . -> ANDREA FUENTES RIVERO
+JAVIER MARQUES CABRERO -> ASIER GOIKOETXEA AURRE
 FRANCESC GRIMALT SANTACANA -> DANIEL BASCUÑAN PABLOS
 ISOLINA SANCHEZ LOPEZ -> ALEJANDRO ASCON GARRIDO
+OSCAR ZORNOZA DE TORRES -> MARIA TURIEL RODAO
+LAURA CASTELLA CARRABINA -> BIANCA DAVALCIUC TRAISTARU
 JAVIER MUÑOZ MOZO -> ELLIOT JOAN FERRAND BIJL
 JAVIER MUÑOZ MOZO -> PAU TURAL GIL
+ALEXANDRE RUBIO ORTUZAR -> NATALIA BUENO VALDIVIELSO
+FERNANDO LAZARO RODRIGUEZ -> CECILIA SEGOVIANO GUILARTE
+ALVARO BLASCO GARCIA -> ALVARO MARTIN SANCHEZ
 VERONICA JIMENEZ PERELLO -> ALEX MARCED MARTINEZ
+ALFONSO BUJANDA CASTILLO -> ESTHER NIELFA MARRERO
 FRANCESC GRIMALT SANTACANA -> ALVARO MARTINEZ BARRIOCANAL
 JAVIER MUÑOZ MOZO -> AURA VICTORIA RAVELO IDROGO
 EUGENI MARTINEZ MILLET -> BORJA IRAOLA AJURIA
 JOSE LUIS GARCIA RODRIGUEZ -> ANA MARIA GARRIS CUBA
 JAVIER MUÑOZ MOZO -> NOELIA CAMARGO FERNANDEZ
+ANDRES LOPERA ESCOLANO -> ENRIQUE BOENTE MARTINEZ
+MARIA DEL CARMEN DE RUZ SUAREZ -> IRENE MURIEL CASADO JIMENEZ
+ERNESTO ANASTASIO IGARTUA -> LUCIA BAREÑO ORTIZ-ECHAGÜE
+LUCIA BARBON FERNANDEZ -> JOSE MARIA PEDRAJA GUTIERREZ
+ALVARO AFONSO TAÑO -> GUILLERMO GUTIERREZ CUENCA
+FRANCISCO ANTONIO POVEDA FERNANDEZ -> LAURA ARAUJO REDONDO
+MARIANA CAMPILLO HERNANDO DE LARRAMENDI -> ALVARO ZUNZUNEGUI SUAREZ
+JAVIER ALBERTO COSTAGUTA FERREYRA -> GUILLERMO DEL PINO BARRAGAN
+JOSE GUILLERMO CALDERON ANDRES -> CRISTINA TAMARIT CRESPO
+PABLO DIEZ GARCIA -> MONICA BALENCIAGA SAEZ DE IBARRA
+LUCIA BARBON FERNANDEZ -> SANTIAGO VACAS ROMERA
+MARIA DOLORES CABELLO DE LOS COBOS NARVAEZ -> JOSE MANUEL GUILLEN SAEZ
 ANGELA GAMEZ TORIBIO -> RUTH CANO LOPEZ
 JAVIER MUÑOZ MOZO -> JOSE MARIA GOMEZ HERNANDEZ
+LETICIA MORENO FERNANDEZ -> ANA MARIA LATORRE ITURRE
+BEATRIZ FERNANDEZ IZQUIERDO -> SARA VIVAS RECIO
+BEATRIZ FERNANDEZ IZQUIERDO -> RAQUEL BEDIA HERNANDEZ
+IVAN GONZALEZ GOMEZ -> XIAOLONG FAN 
+JOSE GUILLERMO CALDERON ANDRES -> JOSE CARLOS MORENO RODRIGUEZ
+GONZALO MARTÍN VALCAYO -> CARLA MON MAROTO
+NURIA GARCIA LOZANO -> VICENTE CASTILLO GALERA
+GONZALO MARTÍN VALCAYO -> NATALIA SLEIMAN GUTIERREZ
+ELENA GARCIA LLORENTE -> EVA ESTEBAN GARCIA
+CRISTINA ROMERO CARRERA -> IRINA PIETSCH PANIAGUA
+OSCAR ZORNOZA DE TORRES -> IRENE NUÑEZ XIFRE
+BENITO RUIZ GASCON -> ALEJANDRO RODRIGUEZ VIÑAS
+BENITO RUIZ GASCON -> GUSTAVO PERDOMO SEQUERA
+DAVID VILLARINO GONZALEZ -> PAULA MARTIN HERNANDEZ
+JAVIER MARQUES CABRERO -> AITOR SERENO DE LA GALA
+AMALIA GONZALEZ-LLANOS LOPEZ -> NATALIA PRIETO MOYA
+LAURA CANDEL VALDERRAMA -> EVA TOME GARRIDO
+PATRICIA RESTEGUI COMPOSTIZO -> LUIGI GEOVANNY BRITO JIMENEZ
 ALEJANDRO PUEYO MUÑOZ -> JUDIT BITRIA GONZALEZ
+ROBERTO PAVON BONILLA -> ANA MARIA RODERO MARTINEZ
+MARIA DOLORES CABELLO DE LOS COBOS NARVAEZ -> MARIA ANTONIA MEDINA BLASCO
+BEATRIZ MARTIN LOPEZ -> LARA DUEÑAS GALAJARES
+YINGZHEN WU  -> ELENA MARTIN BENITO
+FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN -> MARIA BELEN GAY LLAVE
+MARTA GONZALEZ LEON -> ANDRES ERNESTO CORTELLUCCI 
+ANGEL ARRANZ GUTIERREZ -> TANIA DONOSO PABLOS
+DAVID VILLARINO GONZALEZ -> ANA MONICA ESCRIVA FORT
+LUCIA BARBON FERNANDEZ -> BEATRIZ BADOS OTAZU
+ANGEL ARRANZ GUTIERREZ -> DIEGO MARTINS BENITEZ
 JAVIER MUÑOZ MOZO -> JAVIER ALAMINOS MEMBRIVES
+RAUL AVIS BARQUILLA -> MARIA PUY FERNANDEZ VIDAURRETA
+LUIS GONZALEZ RECIO -> MANUEL VILLEGAS RUBIO
 ERNESTO ANASTASIO IGARTUA -> PAULA VILA CORTINA
+LUCIA BARBON FERNANDEZ -> PATRICIA GALDOS FERNANDEZ
 OSCAR PABLO TUSET -> BEATRIZ SANCHEZ DIAZ
+CARLOS ESCUDERO SEGURA -> ESTEBAN SANCHEZ SANZ
+ROSA GONZALEZ DE FRUTOS -> SANTIAGO HERMIDA SANTOS
+SANTIAGO DE LA TORRE RAMIREZ -> ISABEL BONILLA SANCHEZ
+MARTA ESPARZA GARCIA -> IÑIGO BERMEJO BATANERO
+ALFONSO ACEBES GARCIA -> LUCIA FRAILE MORERA
+ERNESTO ANASTASIO IGARTUA -> ALVARO BELTRAN DE HEREDIA REVUELTA
 JOSE MARIA COSANO COSANO -> CARLOS PARRA URDA
 JAVIER MUÑOZ MOZO -> JUAN CARLOS SEGURA GARCIA
+ENRIQUE LORENTE RAMOS -> PAULA ALVAREZ ANDONEGUI
+JUAN CARLOS MATA MORALES -> ANA DERLY MARTINEZ GOMEZ
+FRANCISCO JAVIER VIANA CASADO -> BORJA GOMEZ HERNANDEZ
+ELENA GARCIA LLORENTE -> MIGUEL ANGEL NOGUERA SEGADO
+LUCIA BARBON FERNANDEZ -> INES CRIADO LOPEZ
+LUCIA BARBON FERNANDEZ -> CLAUDIA GARCIA ESPINOSA
+SUSANA MELENDI MONTES -> ESTHER LAURA GONZALEZ MEDINA
+ALVARO BLASCO GARCIA -> DANIEL FERNANDEZ LORENZO
+DAVID VILLARINO GONZALEZ -> ANA GALVEZ UGENA
+JAVIER MARQUES CABRERO -> GLORIA RODRIGUEZ LOPEZ
+LUCIA BARBON FERNANDEZ -> GUILLERMO MENDEZ GONZALEZ
+ALFONSO COTS PALTOR -> LUIS VILARIÑO LEON
+JAVIER MARQUES CABRERO -> JAVIER GONZALEZ MENDEZ
+ALVARO BLASCO GARCIA -> REBECA JIMENEZ RAMOS
+ALVARO BLASCO GARCIA -> FLORA DE CARLO 
+HECTOR MARTIN MARTIN -> DANIEL CARRION ENGRA
+GONZALO MARTÍN VALCAYO -> JAVIER PINILLA GUTIERREZ
+GONZALO MARTÍN VALCAYO -> JAIME GARCIA SALCEDO
+No se ha encontrado usuario para asignar supervisor: ALVARO AFONSO TAÑO -> ALVARO AFONSO TAÑO
+MARTI JO RUIZ -> ALVARO AFONSO TAÑO
+JAVIER MUÑOZ MOZO -> MANUEL RUIZ BLANCA
+ROBERTO BLANCO GOMEZ -> MARIA IRENE HERNANDEZ CARBALLO
 ESTHER LALANA VIDALLER -> ZAIRA MUÑOZ SANCHEZ
+RAUL AVIS BARQUILLA -> ALEJANDRO FERNANDEZ ORDUÑEZ
+LUCIA BARBON FERNANDEZ -> JAVIER VEGA ECIJA
+HECTOR MARTIN MARTIN -> GONZALO ESPEJO PEREZ
+ENRIQUE LORENTE RAMOS -> JORGE MATUK GEIGNER
+ADRIAN DIAZ DE ILARRAZA BOZAL -> JOSE ANGEL RUIZ FRANCONETTI
+FEDERICA RIZZO . -> ISABEL ANÓS POBLACION
+ANGEL DE PAZ CARRILLO -> DAVID GALLEGO TERCERO
+LAURA CASTELLA CARRABINA -> XINGYAO PAN 
 JORDI GINESTA MARQUES -> BONIFACIO BOHELI IDJABE
+ADRIAN DIAZ DE ILARRAZA BOZAL -> LAURA PEREZ COBO
 JOSEP MARIA FERRER FERRER -> GINA JULIANA SEGOVIA ARARAT
+ANGEL ARRANZ GUTIERREZ -> MERCEDES HERNANDEZ MARTIN
+ANGEL ARRANZ GUTIERREZ -> FABIO SALGADO MARTIN
+GONZALO MARTÍN VALCAYO -> RODRIGO PEDRERO MIÑAMBRES
+ANGEL ARRANZ GUTIERREZ -> GUILLERMO AMENGUAL GIARDIN
+JAVIER MARQUES CABRERO -> YOUSSEF EL AYADI EL AYADI
+ALESSIA MEZQUITA PRIETO -> LAURA RODRIGUEZ GARCIA
 ALEJANDRO PUEYO MUÑOZ -> ELENA CARPIO ROBLES
+MATTEO DRAGHI  -> IGNACIO MAS CANDELA
+YINGZHEN WU  -> EDUARD PLANASDEMUNT COBO
+PEDRO VALDIVIA TSCHOPP -> MANUEL AGUILAR SANJURJO
+AMALIA GONZALEZ-LLANOS LOPEZ -> EDUARDO ENRIQUE GONZALEZ MALCA
+ENRIQUE RIEGO MIEDES -> JAVIER CASTRO GIL
+MATTEO DRAGHI  -> MARIO ABBATE 
+BENITO RUIZ GASCON -> EDWARD FERNANDO CHAVEZ ORTIZ
+VICTOR GUILLERMO NIETO CONESA -> LUIS ALBERTO NOVELLA PASTOR
+PABLO DIEZ GARCIA -> ANGELA ROMERO GIL
+ANGEL DE PAZ CARRILLO -> ALBERTO MANSO ALONSO
+BENITO RUIZ GASCON -> JORGE LAZARO MAGAN
 MAITE RODRIGUEZ MARMOL -> DANIEL CAMPOY COMABASOSA
+JOSE GUILLERMO CALDERON ANDRES -> MARTA LUENGO RUIZ
+ALVARO AFONSO TAÑO -> PATRICIA PEREZ SANCHEZ
+ROBERTO BLANCO GOMEZ -> ROCIO HERROJO PAZ
+FRANCESC GIRALT CANADELL -> SARA SANTISTEBAN RIVAS
+MARTA GONZALEZ LEON -> ANA JIMENEZ PEREZ
+SILVIA FERNANDEZ GALAN -> PAULA MUÑOZ VARAS
+SILVIA FERNANDEZ GALAN -> JULNERY GODOY CHACON
+FRANCISCO ROMAN LOPEZ RUIZ -> VERONICA GARCIA AGUADO
+ALEXANDRE RUBIO ORTUZAR -> HECTOR MUÑOZ GARCIA
+FRANCISCO JAVIER NAVARRO ALONSO -> VIVIANA GAVIDIA NARVAEZ
+OSCAR ZORNOZA DE TORRES -> MAVI NARCISA ARIAS CARRERA
 MARTA ESPARZA GARCIA -> CLARA GESTI FABREGA
+ISMAEL DE LOS SANTOS BELLO -> ERICA DEL ROCIO GOMEZ VANEGAS
+ISMAEL DE LOS SANTOS BELLO -> CARLOS ROMERO FRANCO
+ALVARO AFONSO TAÑO -> CARLOS LOSADA ALVAREZ
+FERNANDO LAZARO RODRIGUEZ -> ALEJANDRO RIO GARCIA
+ROBERTO PAVON BONILLA -> CECILIA GARCIA CUELLAR
+BENITO RUIZ GASCON -> MILAGROS STEFANY DEZA DIAZ
+CLAUDIA PAPAGNA . -> MARTA RODRIGO RUIZ
+DANIEL FERNANDEZ BAUTISTA -> MARINA BRAVO BATALLA
 JOSE MARIA COSANO COSANO -> MAXIMILIANO ERNESTO PEON 
+CLAUDIA PAPAGNA . -> ROBERTO FERNANDEZ BARAJAS
+ADRIAN DIAZ DE ILARRAZA BOZAL -> ENRIQUE COLOMER MAYOLA
+BENITO RUIZ GASCON -> SAMUEL MARQUEZ DIAZ
+ANGEL ARRANZ GUTIERREZ -> JAVIER LOPEZ CADIERNO
+ALVARO AFONSO TAÑO -> REMUS MIHAI TANASE 
+LUCIA BARBON FERNANDEZ -> BELEN DEL RIEGO TASCON
+YINGZHEN WU  -> SONIA RUBIO RUIZ
+LIDIA DE DIEGO ALONSO -> VERONICA GARCIA MARCO
 MARIA DEL PILAR BURGOS GUERRERO -> ALEX CARRERAS RUIZ
+PABLO DIEZ GARCIA -> FLORENCIA DEMONTE 
+LAURA CANDEL VALDERRAMA -> PABLO OJEDA HIGUERA
+ALVARO BLASCO GARCIA -> CRISTINA DIAZ REDONDO
+ISMAEL DE LOS SANTOS BELLO -> ANA MARIA JIMENEZ GARROBO
+ISMAEL DE LOS SANTOS BELLO -> MARIA CARMEN RAMIREZ ESCOBEDO
 MARIA DEL PILAR BURGOS GUERRERO -> FRANCESC JOSEP BORRELL ALLUE
+ISMAEL DE LOS SANTOS BELLO -> LAURA PACHECO SÁNCHEZ
+ANGEL ARRANZ GUTIERREZ -> ORLANDO DIAZ CLAVERO
+IVAN GONZALEZ GOMEZ -> AGUSTIN DURAN MATEOS
+LUCIA BARBON FERNANDEZ -> DANIEL VIEIRA PUMAR
+ALFONSO BUJANDA CASTILLO -> FEDERICO SPOERER GONZALEZ
 JAVIER MUÑOZ MOZO -> EZEQUIEL SANTOS GOMEZ
+ALVARO BLASCO GARCIA -> ALEJANDRO ROLDAN ORTIZ
+ISMAEL DE LOS SANTOS BELLO -> CHAIMAE MEHRI HMAIDOUCH
+ISMAEL DE LOS SANTOS BELLO -> BRANDON ALEXIS MAMANI CLAROS
+ALBERTO ROJO MORO -> AIDA SANCHEZ BERZAL
+ALEXANDRE RUBIO ORTUZAR -> SERGIO GARCIA CARVAJAL
+ISMAEL DE LOS SANTOS BELLO -> LAURA ALONSO DE LA CRUZ
 ANGEL ARRANZ GUTIERREZ -> VICTOR COLODRO BALEA
+ISMAEL DE LOS SANTOS BELLO -> JAVIER DIAZ JIMENEZ
+ALVARO BLASCO GARCIA -> SOFIA VICTORIA PASARIN 
+DANIEL FERNANDEZ BAUTISTA -> BORJA LOPEZ CAMBARA
+JAVIER MUÑOZ MOZO -> PEDRO DAVID CAÑAS LOPEZ
+FRANCISCO JAVIER VIANA CASADO -> CONSTANZA INES RUSSO 
 BENITO RUIZ GASCON -> LAURA MUÑOZ FUENTES
+ANGEL DE PAZ CARRILLO -> MARTA DE LA FUENTE MARTINEZ
 BENITO RUIZ GASCON -> JOSEP SEBASTIA BENITO
+MARTA GONZALEZ LEON -> AGUSTIN GIL MARIN
+ISMAEL DE LOS SANTOS BELLO -> JUAN TOMAS SANCHEZ YUSTE
+ISMAEL DE LOS SANTOS BELLO -> ESTEFANIE CARRIEL VELASQUEZ
+No se ha encontrado usuario para asignar supervisor: MARIA EVA SAMANTHA GIMENO CERVERA -> MARIA EVA SAMANTHA GIMENO CERVERA
+JUAN CARLOS GOMEZ PASCUAL -> MARIA EVA SAMANTHA GIMENO CERVERA
+JOSE GUILLERMO CALDERON ANDRES -> MARIA JOSE QUESADA RIVERIEGO
+No se ha encontrado usuario para asignar supervisor:  -> BENITO RUIZ GASCON
+No se ha encontrado usuario para asignar supervisor:  -> LLUIS OBIOLS CALOPA
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
 No se ha encontrado usuario para asignar supervisor:  -> JOSE LUIS GARCIA RODRIGUEZ
 No se ha encontrado usuario para asignar supervisor:  -> JOSE ANTONIO MATEOS MORO
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> LETICIA MORENO FERNANDEZ
+No se ha encontrado usuario para asignar supervisor:  -> JESUS FERNANDEZ SANCHEZ
 No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
 No se ha encontrado usuario para asignar supervisor:  -> MANUEL YAGUE MAGDALENA
 No se ha encontrado usuario para asignar supervisor:  -> NOEL ROJO DE LUQUE
 No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> BLANCA CAMARERO GARCIA
+No se ha encontrado usuario para asignar supervisor:  -> FULGENCIO PASCUAL GARCIA MUÑOZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> SILVIA FERNANDEZ GALAN
+No se ha encontrado usuario para asignar supervisor:  -> FULGENCIO PASCUAL GARCIA MUÑOZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> SILVIA FERNANDEZ GALAN
+No se ha encontrado usuario para asignar supervisor:  -> FULGENCIO PASCUAL GARCIA MUÑOZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER AGUIRRE DE CARCER ERASUN
+No se ha encontrado usuario para asignar supervisor:  -> MARIA EVA SAMANTHA GIMENO CERVERA
+No se ha encontrado usuario para asignar supervisor:  -> JUAN CARLOS GOMEZ PASCUAL
+MAITE RODRIGUEZ MARMOL -> GABRIELA NOVOA PINTO
+No se ha encontrado usuario para asignar supervisor:  -> LIDIA DE DIEGO ALONSO
+No se ha encontrado usuario para asignar supervisor:  -> FULGENCIO PASCUAL GARCIA MUÑOZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> BLANCA CAMARERO GARCIA
+No se ha encontrado usuario para asignar supervisor:  -> FULGENCIO PASCUAL GARCIA MUÑOZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> BEATRIZ SANZ JUEZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> LIDIA DE DIEGO ALONSO
+No se ha encontrado usuario para asignar supervisor:  -> FULGENCIO PASCUAL GARCIA MUÑOZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> SILVIA FERNANDEZ GALAN
+No se ha encontrado usuario para asignar supervisor:  -> FULGENCIO PASCUAL GARCIA MUÑOZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> ROBERTO PAVON BONILLA
+No se ha encontrado usuario para asignar supervisor:  -> DAVID PALOMINO MARTIN
+No se ha encontrado usuario para asignar supervisor:  -> VICTOR DANIEL GONZALEZ RIVERO
+No se ha encontrado usuario para asignar supervisor:  -> ISMAEL DE LOS SANTOS BELLO
+No se ha encontrado usuario para asignar supervisor:  -> LLUIS OBIOLS CALOPA
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> ROBERTO BLANCO GOMEZ
+No se ha encontrado usuario para asignar supervisor:  -> JESUS FERNANDEZ SANCHEZ
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> BENITO RUIZ GASCON
+No se ha encontrado usuario para asignar supervisor:  -> LLUIS OBIOLS CALOPA
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> BENITO RUIZ GASCON
+No se ha encontrado usuario para asignar supervisor:  -> LLUIS OBIOLS CALOPA
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> ISMAEL DE LOS SANTOS BELLO
+No se ha encontrado usuario para asignar supervisor:  -> LLUIS OBIOLS CALOPA
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
 No se ha encontrado usuario para asignar supervisor:  -> JORDI ROCA PIELLA
 No se ha encontrado usuario para asignar supervisor:  -> JUANA FORTUNY LOPEZ
 No se ha encontrado usuario para asignar supervisor:  -> CARMEN BOCERO CANENCIA
 No se ha encontrado usuario para asignar supervisor:  -> JORGE GARCIA GARCIA
+No se ha encontrado usuario para asignar supervisor:  -> LUIS GONZALEZ RECIO
+No se ha encontrado usuario para asignar supervisor:  -> JOSE ANTONIO MATEOS MORO
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
 No se ha encontrado usuario para asignar supervisor:  -> JORDI ROCA PIELLA
 No se ha encontrado usuario para asignar supervisor:  -> JUANA FORTUNY LOPEZ
 No se ha encontrado usuario para asignar supervisor:  -> CARMEN BOCERO CANENCIA
 No se ha encontrado usuario para asignar supervisor:  -> JORGE GARCIA GARCIA
+No se ha encontrado usuario para asignar supervisor:  -> JOSE MANUEL GUTIERREZ GALAN
+No se ha encontrado usuario para asignar supervisor:  -> VICTOR DANIEL GONZALEZ RIVERO
+No se ha encontrado usuario para asignar supervisor:  -> SILVIA FERNANDEZ GALAN
+No se ha encontrado usuario para asignar supervisor:  -> FULGENCIO PASCUAL GARCIA MUÑOZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
+No se ha encontrado usuario para asignar supervisor:  -> BLANCA CAMARERO GARCIA
+No se ha encontrado usuario para asignar supervisor:  -> FULGENCIO PASCUAL GARCIA MUÑOZ
+No se ha encontrado usuario para asignar supervisor:  -> LUIS DE QUEROL VILA
+No se ha encontrado usuario para asignar supervisor:  -> CARLOS AMARGOS CARRERAS
+No se ha encontrado usuario para asignar supervisor:  -> FRANCISCO JAVIER SERNA BALLARIN
 Fin de la tarea programada [38]App\Console\Commands\sincronizarWorkdayGenerali
 Fin de la tarea App\Console\Commands\sincronizarWorkdayGenerali
 Fin de la tarea php [38] Sincronizacion WORKDAY

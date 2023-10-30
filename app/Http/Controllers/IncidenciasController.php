@@ -1214,6 +1214,17 @@ class IncidenciasController extends Controller
             ->join('users','incidencias_acciones.id_usuario','users.id')
             ->where('id_incidencia',$id)
             ->get();
+        if($incidencia==null){
+            $e=new \stdClass;
+            $e->mensaje="La incidencia que intenta ver no existe";
+            $e->titulo="Incidencia no encontrada";
+            $e->code=404;
+            $e->icono="fas fa-exclamation-triangle";
+            $e->grande="Error";
+            $e->mensaje_largo="";
+            return view('errors.generic_include',compact('e'));
+            //return redirect()->route('incidencias.index')->with('error_message', 'Incidencia no encontrada');
+        }
         if(strpos($_SERVER['REQUEST_URI'],'/show/')){
             return view('incidencias.show',compact('incidencia','acciones'));
         } else {

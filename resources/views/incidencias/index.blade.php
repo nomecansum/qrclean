@@ -37,7 +37,6 @@
 <script src="{{url('plugins')}}/amcharts4/themes/kelly.js"></script>
 <script src="{{url('plugins')}}/amcharts4/lang/es_ES.js"></script>
 
-
 <div class="row botones_accion">
 	<div class="col-md-4">
 

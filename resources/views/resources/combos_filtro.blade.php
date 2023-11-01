@@ -359,11 +359,13 @@
 
     $('#multi-cliente').change(function(event) {
         $('#loadfilter').show();
-        $('.multi2').empty();
+       
+        console.log('cambio de cliente');
         $.post('{{url('/filters/loadedificios')}}', {_token:'{{csrf_token()}}',cliente:$(this).val()}, function(data, textStatus, xhr) {
             console.log('cliente');
             console.log(data);
             cliente="";
+            $('#multi-edificio').empty();
             $.each(data.edificios, function(index, val) {
                 if(cliente!=val.id_cliente){
                     $('#multi-edificio').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -374,6 +376,7 @@
 
             cliente_c="";
             edificio_c="";
+            $('#multi-planta').empty();
             $.each(data.plantas, function(index, val) {
                 if(cliente_c!=val.id_cliente){
                     $('#multi-planta').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -389,6 +392,7 @@
             cliente_c="";
             edificio_c="";
             planta_c="";
+            $('#multi-puesto').empty();
             $.each(data.puestos, function(index, val) {
                 if(cliente_c!=val.id_cliente){
                     $('#multi-puesto').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -407,6 +411,7 @@
             $('#loadfilter').hide();
 
             tag_c="";
+            $('#multi-tag').empty();
             $.each(data.tags, function(index, val) {
                 if(tag_c!=val.id_cliente){
                     $('#multi-tag').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -416,6 +421,7 @@
             });
 
             dep_c="";
+            $('#multi-departamentos').empty();
             $.each(data.departamentos, function(index, val) {
                 if(dep_c!=val.id_cliente){
                     $('#multi-departamentos').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -426,6 +432,7 @@
             $('#loadfilter').hide();
 
             perf_c="";
+            $('#multi-perfiles').empty();
             $.each(data.perfiles, function(index, val) {
                 if(perf_c!=val.id_cliente){
                     $('#multi-perfiles').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -436,6 +443,7 @@
             $('#loadfilter').hide();
 
             turno_c="";
+            $('#multi-turnos').empty();
             $.each(data.turnos, function(index, val) {
                 if(turno_c!=val.id_cliente){
                     $('#multi-turnos').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -446,6 +454,7 @@
             $('#loadfilter').hide();
 
             tipo_c="";
+            $('#multi-tipo').empty();
             $.each(data.tipos, function(index, val) {
                 if(tipo_c!=val.id_cliente){
                     $('#multi-tipo').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -456,6 +465,7 @@
             $('#loadfilter').hide();
 
             tipo_u="";
+            $('#multi-user').empty();
             $.each(data.users, function(index, val) {
                 if(tipo_u!=val.id_cliente){
                     $('#multi-user').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -466,6 +476,7 @@
             $('#loadfilter').hide();
 
             tipo_s="";
+            $('#multi-supervisor').empty();
             $.each(data.supervisores, function(index, val) {
                 if(tipo_s!=val.id_cliente){
                     $('#multi-supervisor').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -476,6 +487,7 @@
             $('#loadfilter').hide();
 
             colectivo_c="";
+            $('#multi-colectivos').empty();
             $.each(data.colectivos, function(index, val) {
                 if(colectivo_c!=val.id_cliente){
                     $('#multi-colectivos').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -486,6 +498,7 @@
             $('#loadfilter').hide();
 
             zona_c="";
+            $('#multi-zonas').empty();
             $.each(data.zonas, function(index, val) {
                 if(zona_c!=val.id_cliente){
                     $('#multi-zonas').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -496,6 +509,7 @@
             $('#loadfilter').hide();
 
             grupo_c="";
+            $('#multi-grupos').empty();
             $.each(data.grupos, function(index, val) {
                 if(grupo_c!=val.id_cliente){
                     $('#multi-grupos').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -506,6 +520,7 @@
             $('#loadfilter').hide();
 
             contrata_c="";
+            $('#multi-contratas').empty();
             $.each(data.contratas, function(index, val) {
                 if(contrata_c!=val.id_cliente){
                     $('#multi-contratas').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -516,6 +531,7 @@
             $('#loadfilter').hide();
 
             plan_c="";
+            $('#multi-planes').empty();
             $.each(data.planes, function(index, val) {
                 if(plan_c!=val.id_cliente){
                     $('#multi-planes').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -532,11 +548,12 @@
 
     $('#multi-edificio').change(function(event) {
         $('#loadfilter').show();
-        $('#multi-planta').empty();
-        $('#multi-puesto').empty();
+        
+       
        $.post('{{url('/filters/loadplantas')}}', {_token:'{{csrf_token()}}',centros:$(this).val(),cliente:$('#multi-cliente').val(),edificio:$('#multi-edificio').val()}, function(data, textStatus, xhr) {
             cliente_e="";
             edificio_e="";
+            $('#multi-planta').empty();
             $.each(data.plantas, function(index, val) {
                 if(cliente_e!=val.id_cliente){
                     $('#multi-planta').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -552,6 +569,7 @@
             cliente_e="";
             edificio_e="";
             planta_e="";
+            $('#multi-puesto').empty();
             $.each(data.puestos, function(index, val) {
                 if(cliente_e!=val.id_cliente){
                     $('#multi-puesto').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -569,6 +587,7 @@
             });
             $('#loadfilter').hide();
             
+            $('#multi-zonas').empty();
             $.each(data.zonas, function(index, val) {
                 if(cliente_z!=val.id_cliente){
                     $('#multi-zonas').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -591,11 +610,11 @@
 
     $('#multi-planta').change(function(event) {
         $('#loadfilter').show();
-        $('#multi-puesto').empty();
         $.post('{{url('/filters/loadpuestos')}}', {_token:'{{csrf_token()}}',centros:$(this).val(),cliente:$('#multi-cliente').val(),edificio:$('#multi-edificio').val(),planta:$('#multi-planta').val()}, function(data, textStatus, xhr) {
             cliente_p="";
             edificio_p="";
             planta_p="";
+            $('#multi-puesto').empty();
             $.each(data.puestos, function(index, val) {
                 if(cliente_p!=val.id_cliente){
                     $('#multi-puesto').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');
@@ -616,6 +635,7 @@
             cliente_z="";
             edificio_z="";
             planta_z="";
+            $('#multi-zonas').empty();
             $.each(data.zonas, function(index, val) {
                 if(cliente_z!=val.id_cliente){
                     $('#multi-zonas').append('<optgroup label="'+val.nom_cliente+'"></optgroup>');

@@ -52,12 +52,13 @@ class CombosController extends Controller
                 ->get(),
 
             "plantas" => DB::table('plantas')
-                    ->select('clientes.id_cliente','clientes.nom_cliente','edificios.id_edificio','edificios.des_edificio','plantas.id_planta','plantas.des_planta')
+                    ->select('clientes.id_cliente','clientes.nom_cliente','edificios.id_edificio','edificios.des_edificio','plantas.id_planta','plantas.des_planta','plantas.num_orden')
                     ->join('clientes','clientes.id_cliente','plantas.id_cliente')
                     ->join('edificios','edificios.id_edificio','plantas.id_edificio')
                     ->whereIn('clientes.id_cliente',$r->cliente)
                     ->orderby('clientes.nom_cliente')
-                    ->orderby('des_planta')
+                    ->orderby('des_edificio')
+                    ->orderby('plantas.num_orden')
                     ->get(),
 
             "puestos" => DB::table('puestos')

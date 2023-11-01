@@ -31,10 +31,10 @@ class ReservasController extends Controller
             SELECT
             date_format(val_fecha,'%Y-%m-%d') as fecha
         FROM festivos
-        WHERE (FIND_IN_SET(CONVERT(IFNULL(". $ubicacion_usuario->id_prov.",-1),char), cod_provincia ) <> 0
-            OR FIND_IN_SET(CONVERT(IFNULL(". $ubicacion_usuario->cod_pais.",-1),char), cod_pais) <> 0
-            OR FIND_IN_SET(CONVERT(IFNULL(". $ubicacion_usuario->cod_region.",-1),char), cod_region) <> 0
-            OR (FIND_IN_SET(CONVERT(IFNULL(". $ubicacion_usuario->id_edificio.",-1),char),cod_centro) <> 0  OR (IFNULL(cod_centro,0) = 0))
+        WHERE (FIND_IN_SET(CONVERT(IFNULL(". ($ubicacion_usuario->id_prov??0).",-1),char), cod_provincia ) <> 0
+            OR FIND_IN_SET(CONVERT(IFNULL(". ($ubicacion_usuario->cod_pais??0).",-1),char), cod_pais) <> 0
+            OR FIND_IN_SET(CONVERT(IFNULL(". ($ubicacion_usuario->cod_region??0).",-1),char), cod_region) <> 0
+            OR (FIND_IN_SET(CONVERT(IFNULL(". ($ubicacion_usuario->id_edificio??0).",-1),char),cod_centro) <> 0  OR (IFNULL(cod_centro,0) = 0))
             OR mca_nacional='S') 
             AND val_fecha>subdate(curdate(), (day(curdate())-1))
             AND id_cliente=".Auth::user()->id_cliente.";");
@@ -138,7 +138,10 @@ class ReservasController extends Controller
         $f1=Carbon::parse($fecha);
         $tipos = DB::table('puestos_tipos')
             ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
-            ->wherein('puestos_tipos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos))
+            ->where(function($q){
+                $q->wherein('puestos_tipos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos));
+                $q->orwherein('puestos_tipos.id_tipo_puesto',config('app.tipo_puesto_publico'));
+            })
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('puestos_tipos.id_cliente',Auth::user()->id_cliente);
@@ -171,6 +174,7 @@ class ReservasController extends Controller
             ->select('plantas.*')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
+            ->orwhere('plantas.mca_publica','S')
             ->get();
 
         $reserva->id_planta=0;
@@ -221,8 +225,10 @@ class ReservasController extends Controller
 
         $plantas_usuario=DB::table('plantas_usuario')
             ->select('plantas.*')
-            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
+            ->leftjoin('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
+            ->orwhere('plantas.mca_publica','S')
+            ->unique()
             ->get();
 
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
@@ -234,14 +240,20 @@ class ReservasController extends Controller
 
     public function comprobar_puestos(Request $r){
 
-        $plantas_usuario=DB::table('plantas_usuario')
+        $plantas_usuario=DB::table('plantas')
+            ->leftjoin('plantas_usuario','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
-            ->pluck('id_planta')
+            ->orwhere('plantas.mca_publica','S')
+            ->pluck('plantas.id_planta')
+            ->unique()
             ->toArray();
 
         $edificios_usuario=DB::table('plantas')
-            ->join('plantas_usuario','plantas_usuario.id_planta','plantas.id_planta')
-            ->where('plantas_usuario.id_usuario',Auth::user()->id)
+            ->leftjoin('plantas_usuario','plantas_usuario.id_planta','plantas.id_planta')
+            ->where(function($q){
+                $q->where('plantas_usuario.id_usuario',Auth::user()->id);
+                $q->orwhere('plantas.mca_publica','S');
+            })
             ->pluck('id_edificio')
             ->unique()
             ->toArray();
@@ -370,7 +382,11 @@ class ReservasController extends Controller
                     $q->where('puestos.id_tipo_puesto',$r->tipo_puesto);
                 }
             })
-            ->wherein('puestos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos))
+            ->where(function($q){
+                $q->wherein('puestos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos));
+                $q->orwherein('puestos.id_tipo_puesto',config('app.tipo_puesto_publico'));
+            })
+            
             ->where(function($q) use($intervalo){
                 if(session('CL')['mca_reserva_horas']=='S'){
                     $q->where('puestos.max_horas_reservar','>=',$intervalo);

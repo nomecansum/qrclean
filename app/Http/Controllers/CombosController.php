@@ -339,14 +339,19 @@ class CombosController extends Controller
     public function combo_plantas_usuario($id_edificio){
 
         $plantas=DB::table('plantas')
-            ->join('plantas_usuario','plantas.id_planta','plantas_usuario.id_planta')
-            ->where('plantas_usuario.id_usuario',Auth::user()->id)
+            ->select('plantas.id_planta','plantas.des_planta')
+            ->leftjoin('plantas_usuario','plantas.id_planta','plantas_usuario.id_planta')
+            ->where(function($q){
+                $q->where('plantas_usuario.id_usuario',Auth::user()->id);
+                $q->orwhere('plantas.mca_publica','S');
+            })
             ->where('id_edificio',$id_edificio)
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('plantas.id_cliente',Auth::user()->id_cliente);
                 } 
             })
+            ->distinct()
             ->get();
         return view('resources.combo_plantas',compact('plantas'));
     }

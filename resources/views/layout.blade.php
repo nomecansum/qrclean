@@ -63,7 +63,10 @@
     @include('layouts.styles')
     {{-- Onesignal SDK --}}
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" defer></script>
-    @laravelPWA
+    @if(!config('app.debug'))
+        @laravelPWA
+    @endif
+   
 </head>
 
 <body class="in-out-back {{ clase_body() }}" {!! image_body() !!}>

@@ -52,7 +52,16 @@
                 {!! $errors->first('id_edificio', '<p class="help-block">:message</p>') !!}
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12 p-t-20">
+                <div class="form-check">
+                    <input  name="mca_publica"  id="mca_publica" value="S" {{ $plantas->mca_publica=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                    <label class="form-check-label" for="mca_publica">Planta de acceso libre</label>
+                </div>
+            </div>
+        </div>
     </div>
+    
     <div class="col-md-6 text-center b-all rounded">
         <div class="col-md-12" >
             <div class="form-group  {{ $errors->has('img_plano') ? 'has-error' : '' }}" style="padding-top: 50px">
@@ -70,6 +79,7 @@
             Plano de la planta<br>
         </div>
     </div>
+    
 </div>
 <script type="application/javascript">
     $('input[type="file"]').change(function(e){

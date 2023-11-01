@@ -103,7 +103,9 @@ class PlantasController extends Controller
                 //$file->move($path,$img_planta);
                 $data['img_plano']=$img_planta;
             }
-            plantas::create($data);
+            $pl=plantas::create($data);
+            $pl->mca_publica=isset($request->mca_publica)?"S":"N";
+            $pl->save();
             savebitacora('Planta '.$request->des_planta. ' creada',"Plantas","store","OK");
             return [
                 'title' => "Plantas",
@@ -171,6 +173,9 @@ class PlantasController extends Controller
             } 
             $plantas = plantas::findOrFail($id);
             $plantas->update($data);
+
+            $plantas->mca_publica=isset($request->mca_publica)?"S":"N";
+            $plantas->save();
             savebitacora('Planta '.$request->des_planta. ' actualizada',"Plantas","update","OK");
             return [
                 'title' => "Plantas",

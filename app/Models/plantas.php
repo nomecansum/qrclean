@@ -50,7 +50,8 @@ class plantas extends Model
                   'posiciones',
                   'width',
                   'zonas',
-                  'factor_transp'
+                  'factor_transp',
+                  'mca_publica'
               ];
 
     /**

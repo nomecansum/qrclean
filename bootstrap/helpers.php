@@ -1614,7 +1614,7 @@ function estadefiesta($id,$fecha_inicio,$fecha_fin=null,$comprobar_reserva_festi
     // primero buscamos todas las pertenencias del usuario
 
     $pertenencias=DB::table('users')
-        ->select('provincias.id_prov as id_provincia','provincias.cod_pais','provincias.cod_region','edificios.id_edificio','users.id_cliente','niveles_acceso.mca_reservar_sabados','niveles_acceso.mca_reservar_domingos','niveles_acceso.mca_reservar_festivos')
+        ->selectraw("ifnull(provincias.id_prov,0) as id_provincia,ifnull(provincias.cod_pais,0) as cod_pais,ifnull(provincias.cod_region,0) as cod_region,ifnull(edificios.id_edificio,0) as id_edificio,users.id_cliente,niveles_acceso.mca_reservar_sabados,niveles_acceso.mca_reservar_domingos,niveles_acceso.mca_reservar_festivos")
         ->leftjoin('edificios','users.id_edificio','edificios.id_edificio')
         ->leftjoin('niveles_acceso','users.cod_nivel','niveles_acceso.cod_nivel')
         ->leftjoin('provincias','edificios.id_provincia','provincias.id_prov')

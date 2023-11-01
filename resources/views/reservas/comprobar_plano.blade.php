@@ -118,6 +118,7 @@
                 if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
                     $q->wherein('id_planta',$plantas_usuario??[]);
                 }
+                $q->orwhere('plantas.mca_publica','S');
             })
             ->where(function($q) use($id_planta){
                 if($id_planta && $id_planta!=0){

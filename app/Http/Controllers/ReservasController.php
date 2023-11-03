@@ -228,7 +228,7 @@ class ReservasController extends Controller
             ->leftjoin('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
             ->orwhere('plantas.mca_publica','S')
-            ->unique()
+            ->distinct()
             ->get();
 
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);

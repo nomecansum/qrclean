@@ -115,7 +115,7 @@
 											</div>
 										</td>
 										<td  class="text-center">
-											{{ $cuenta->where('cod_nivel',$nivel->cod_nivel)->count() }}
+											{{ $cuenta->where('cod_nivel',$nivel->cod_nivel)->first()->cuenta??0 }}
 										</td>
 			                			<td style="position: relative;">
                                             @if(($nivel->mca_fijo=='S' && isAdmin()) || $nivel->id_cliente==Auth::user()->id_cliente)

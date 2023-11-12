@@ -125,6 +125,12 @@
                             <label for="mca_checkin" class="form-check-label">Funcion de check-in</label>
                         </div>
                     </div>
+                    <div class="col-md-3 p-t-20 mt-2">
+                        <div class="form-check pt-1">
+                            <input name="mca_antelacion_obligatoria"  id="mca_antelacion_obligatoria" value="S" {{ $tipo->mca_antelacion_obligatoria=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
+                            <label for="mca_antelacion_obligatoria" class="form-check-label">Antelacion obligatoria</label>
+                        </div>
+                    </div>
                 </div>
                 
                 

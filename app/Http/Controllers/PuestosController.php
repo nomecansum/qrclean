@@ -608,6 +608,7 @@ class PuestosController extends Controller
                 $tipo->mca_reserva_multiple=$r->mca_reserva_multiple??'N';
                 $tipo->mca_checkin=$r->mca_checkin??'N';
                 $tipo->mca_fijo=$r->mca_fijo??'N';
+                $tipo->mca_antelacion_obligatoria=$r->mca_antelacion_obligatoria??'N';
                 $tipo->save();
             }
             //Slots de reserva

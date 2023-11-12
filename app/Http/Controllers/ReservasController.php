@@ -257,7 +257,12 @@ class ReservasController extends Controller
             ->pluck('id_edificio')
             ->unique()
             ->toArray();
-            
+       
+        $usuario=DB::table('users')
+            ->join('niveles_acceso','niveles_acceso.cod_nivel','users.cod_nivel')
+            ->where('users.id',Auth::user()->id)
+            ->first();
+
         //dd($r->all());
         $f = explode(' - ',$r->fechas);
         $f1 = adaptar_fecha($f[0]);
@@ -354,7 +359,7 @@ class ReservasController extends Controller
         }
 
         $puestos=DB::table('puestos')
-            ->select('puestos.*','puestos.width as puesto_width', 'puestos.height as puesto_height','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','puestos_tipos.val_dias_antelacion')
+            ->select('puestos.*','puestos.width as puesto_width', 'puestos.height as puesto_height','edificios.*','plantas.*','clientes.*','estados_puestos.des_estado','estados_puestos.val_color as color_estado','estados_puestos.hex_color', 'puestos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','puestos_tipos.val_dias_antelacion','puestos_tipos.mca_antelacion_obligatoria')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -417,6 +422,8 @@ class ReservasController extends Controller
                     }
                 }
             })
+
+           
             //Indica si se quiere ver en el gestor de reservas todos los puestos, viendo cuales estan reservados y cuales no, o solo los disponibles segun los criterios dados D: Solo disponibles, T: Todos
             ->where(function($q) use($puestos_usuarios,$puestos_nomiperfil,$puestos_reservados){
                 if(config_cliente('mca_mostrar_puestos_reservas')=='D'){
@@ -472,7 +479,14 @@ class ReservasController extends Controller
                 //log::debug("fecha ".$fecha_comparacion." | Dias antelacion ".$dias_antelacion." dias | Fecha limite ".$fecha_limite." ");
                 if(($fecha_limite<$fecha_comparacion)){
                     //Log::debug("quito puesto ".$pa->id_puesto." por antelacion");
-                    $puestos->where('id_puesto',$pa->id_puesto)->first()->quitar=true;
+                    $puesto_quitar=$puestos->where('id_puesto',$pa->id_puesto)->first();
+                    if (($usuario->mca_saltarse_antelacion=='N') || ($puesto_quitar->mca_antelacion_obligatoria=='S')) //Si el usuario no tiene permiso para saltarse la antelacion o el puesto tiene la antelacion obligatoria, quitamos el puesto
+                    {
+                        //dump("entro ".$pa->cod_puesto." por antelacion " . $usuario->mca_saltarse_antelacion. " - " . $puesto_quitar->mca_antelacion_obligatoria);
+                        $puesto_quitar->quitar=true;
+                    }
+
+                    
                 }
             }
         }

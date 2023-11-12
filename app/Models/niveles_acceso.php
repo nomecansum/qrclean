@@ -42,7 +42,8 @@ class niveles_acceso extends Model
                   'mca_liberar_auto',
                   'mca_reservar_sabados',
                   'mca_reservar_domingos',
-                  'mca_reservar_festivos'
+                  'mca_reservar_festivos',
+                  'mca_saltarse_antelacion',
               ];
 
     /**

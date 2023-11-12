@@ -48,7 +48,8 @@ class puestos_tipos extends Model
                   'mca_reserva_masiva',
                   'mca_reserva_multiple',
                   'mca_checkin',
-                  'mca_publico'
+                  'mca_publico',
+                  'mca_antelacion_obligatoria',
               ];
 
     /**

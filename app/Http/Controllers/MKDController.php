@@ -64,6 +64,7 @@ class MKDController extends Controller
     
     public function plano($planta,$token,$view="plano"){
 
+        return null
         //Buscamos el usuario por el token
         $user=DB::table('users')->where('token_acceso',$token)->first();
         if(!$user){

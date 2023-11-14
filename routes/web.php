@@ -275,6 +275,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
+    Route::group(['prefix' => 'bloqueo'], function () {
+        Route::get('/',['middleware'=>'permissions:["Bloqueo de puestos"],["R"]', 'uses' => 'PuestosController@index_bloqueo'])->name('bloqueos.index');
+        Route::post('/save',['middleware'=>'permissions:["Bloqueo de puestos"],["W"]', 'uses' => 'PuestosController@bloqueo_save']);
+        Route::get('/edit/{id?}',['middleware'=>'permissions:["Bloqueo de puestos"],["C"]', 'uses' => 'PuestosController@bloqueo_edit']);
+        Route::get('/delete/{id?}',['middleware'=>'permissions:["Bloqueo de puestos"],["D"]', 'uses' => 'PuestosController@bloqueo_delete']);
+        
+
+    });
+
     ////////////////////GESTION DE TAGS////////////////////
     Route::group(['prefix' => 'tags'], function () {
         Route::get('/',['middleware'=>'permissions:["Tags"],["R"]', 'uses' => 'TagsController@index'])->name('tags.index');

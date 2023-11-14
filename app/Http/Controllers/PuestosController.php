@@ -15,6 +15,7 @@ use App\Models\users;
 use App\Models\puestos_tipos;
 use App\Models\salas;
 use App\Models\config_clientes;
+use App\Models\bloqueos;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,7 @@ use stdClass;
 
 class PuestosController extends Controller
 {
-    //
+    ////////////////BASICAS DE PUEESTOS
     public function index(){
 
         $puestos=DB::table('puestos')
@@ -584,6 +585,9 @@ class PuestosController extends Controller
         $config->save();
     }
 
+
+    ///////////////////TIPOS DE SPUESTOS/////////////////////
+
     public function tipos_edit($id=0){
         if($id==0){
             $tipo=new puestos_tipos();
@@ -663,43 +667,7 @@ class PuestosController extends Controller
         }
     }
 
-    public function accion_estado(Request $r){
-
-        $puestos=DB::table('puestos')
-        ->where(function($q){
-            if (!isAdmin()) {
-                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
-            } else {
-                $q->where('puestos.id_cliente',session('CL')['id_cliente']);
-            }
-        })
-        ->wherein('id_puesto',$r->lista_id)
-        ->get();
-
-        $e=DB::table('estados_puestos')->where('id_estado',$r->estado)->first();
-
-        foreach($puestos as $puesto){
-            $p=puestos::find($puesto->id_puesto);
-            $p->id_estado=$r->estado;
-            $p->fec_ult_estado=Carbon::now();
-            if($r->estado==1){
-                $p->id_usuario_usando=null;
-            }
-            $p->save();
-            //Lo añadimos al log
-            logpuestos::create(['id_puesto'=>$puesto->id_puesto,'id_estado'=>$r->estado,'id_user'=>Auth::user()->id,'fecha'=>Carbon::now()]);
-            
-        }
-
-        savebitacora('Cambio de puestos '.implode(",",$r->lista_id). ' a estado '.$r->estado,"Puestos","accion_estado","OK");
-        return [
-            'title' => "Puestos",
-            'mensaje' => count($r->lista_id).' puestos actualizados a '.$e->des_estado,
-            'label'=>$e->des_estado,
-            'color'=>$e->val_color,
-            'url' => url('puestos')
-        ];
-    }
+////////////////////////VISUALIZACION DE PUESTOS EN LA WEB //////////////////////////////
 
     public function mapa(Request $r){
 
@@ -1041,6 +1009,8 @@ class PuestosController extends Controller
         $puesto->save();
     }
 
+
+    ///////////////////////ACCIONES SOBRE PUESTOS///////////////////////////
     public function ronda_limpieza(Request $r){
         //Primero asegurarnos de que tiene acceso para los puestos
         if($r->tip_ronda=='L')
@@ -1290,4 +1260,117 @@ class PuestosController extends Controller
         ];
     }
     
+    
+    public function accion_estado(Request $r){
+
+        $puestos=DB::table('puestos')
+        ->where(function($q){
+            if (!isAdmin()) {
+                $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+            } else {
+                $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+            }
+        })
+        ->wherein('id_puesto',$r->lista_id)
+        ->get();
+
+        $e=DB::table('estados_puestos')->where('id_estado',$r->estado)->first();
+
+        foreach($puestos as $puesto){
+            $p=puestos::find($puesto->id_puesto);
+            $p->id_estado=$r->estado;
+            $p->fec_ult_estado=Carbon::now();
+            if($r->estado==1){
+                $p->id_usuario_usando=null;
+            }
+            $p->save();
+            //Lo añadimos al log
+            logpuestos::create(['id_puesto'=>$puesto->id_puesto,'id_estado'=>$r->estado,'id_user'=>Auth::user()->id,'fecha'=>Carbon::now()]);
+            
+        }
+
+        savebitacora('Cambio de puestos '.implode(",",$r->lista_id). ' a estado '.$r->estado,"Puestos","accion_estado","OK");
+        return [
+            'title' => "Puestos",
+            'mensaje' => count($r->lista_id).' puestos actualizados a '.$e->des_estado,
+            'label'=>$e->des_estado,
+            'color'=>$e->val_color,
+            'url' => url('puestos')
+        ];
+    }
+
+    /////////////////////////////BLOQUEO DE PUESTIOS//////////////////////
+    //FUncion para mostrar la lista de bloqueos
+    public function index_bloqueo(){
+
+        $bloqueos=DB::table('bloqueo_programado')
+            ->join('clientes','bloqueo_programado.id_cliente','clientes.id_cliente')
+            ->leftjoin('users','bloqueo_programado.usu_audit','users.id')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('bloqueo_programado.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('bloqueo_programado.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->get();
+
+        $turnos=DB::table('turnos')
+            ->join('clientes','turnos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('turnos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('turnos.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->get();
+
+        $puestos=DB::table('puestos')
+            ->join('bloqueo_puestos','puestos.id_puesto','bloqueo_puestos.id_puesto')
+            ->join('bloqueo_programado','bloqueo_programado.id_bloqueo','bloqueo_puestos.id_bloqueo')
+            ->join('clientes','bloqueo_programado.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('bloqueo_programado.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('bloqueo_programado.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->get();
+
+        return view('puestos.bloqueo.index',compact('puestos','turnos','bloqueos'));
+    }
+
+    //Mostrar el editor del bloqueo
+    public function bloqueo_edit($id=0){
+        if($id==0){
+            $tipo=new bloqueos();
+        } else {
+            $tipo = bloqueos::findorfail($id);
+        }
+        $Clientes =lista_clientes()->pluck('nom_cliente','id_cliente')->all();
+        $puestos=DB::table('puestos')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('puestos.id_cliente',Auth::user()->id_cliente);
+                } else {
+                    $q->where('puestos.id_cliente',session('CL')['id_cliente']);
+                }
+            })
+            ->get();
+
+        $turnos=DB::table('turnos')
+            ->where('turnos.id_cliente',Auth::user()->id_cliente)
+            ->get();
+
+        $puestos_bloqueados=DB::table('bloqueo_puestos')
+            ->join('puestos','puestos.id_puesto','bloqueo_puestos.id_puesto')
+            ->join('bloqueo_programado','bloqueo_programado.id_bloqueo','bloqueo_puestos.id_bloqueo')
+            ->where('bloqueo_programado.id_bloqueo',$id)
+            ->get();
+
+        return view('puestos.bloqueo.edit', compact('tipo','Clientes','puestos','turnos','puestos_bloqueados','id'));
+    }
 }

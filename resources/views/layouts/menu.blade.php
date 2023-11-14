@@ -239,6 +239,7 @@
                                 @if(checkPermissions(['Tipos de puesto'],['R']))<li class="  text-nowrap ml-2 nav-item" ><a href="/puestos/tipos" class="nav-link puestostipos"><i class="fa-light fa-desktop-alt"></i> Tipos de puesto</a></li> @endif
                                 @if(checkPermissions(['Tags'],['R']))<li class="  text-nowrap ml-2 nav-item"><a href="/tags" class="nav-link"> <i class="fa-light fa-tags tags"></i> Tags</a></li> @endif
                                 @if(checkPermissions(['Encuestas'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/encuestas" class="nav-link"><i class="fa-light fa-poll-h encuestas"></i> Encuestas</a></li> @endif
+                                @if(checkPermissions(['Bloqueo de puestos'],['R']))<li class=" text-nowrap ml-2 nav-item"><a href="/bloqueo" class="nav-link"><i class="fa-light fa-lock"></i> Bloqueo de puestos</a></li> @endif
                             </ul>
                         </li>
                         <li class="nav-item has-sub ">

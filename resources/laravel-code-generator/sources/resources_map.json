@@ -293,5 +293,15 @@
         "model-name": "trabajos_programacion",
         "resource-file": "trabajos_programacions.json",
         "table-name": "trabajos_programacion"
+    },
+    {
+        "model-name": "bloqueos",
+        "resource-file": "bloqueos.json",
+        "table-name": "bloqueo_programado"
+    },
+    {
+        "model-name": "bloqueo_puestos",
+        "resource-file": "bloqueo_puestos.json",
+        "table-name": "bloqueo_puestos"
     }
 ]

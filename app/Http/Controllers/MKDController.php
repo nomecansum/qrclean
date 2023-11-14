@@ -68,7 +68,7 @@ class MKDController extends Controller
         $user=DB::table('users')->where('token_acceso',$token)->first();
         if(!$user){
             $mensaje="No tiene permiso para ver esa informacion";
-            return view('genericas.error',compact('mensaje'));
+            return $mensaje;
         } else {
             $id_usuario=$user->id;
             Auth::loginUsingId($id_usuario);

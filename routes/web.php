@@ -548,7 +548,7 @@ Route::group(['middleware' => 'auth'], function () {
 
      ////////////////////////////   CONFIGURACION DE SEÑALETICA  ////////////////////////////////
     Route::group(['prefix' => 'MKD'], function () {
-        Route::get('/','MKDController@index');
+        // Route::get('/','MKDController@index');
         Route::post('/gen_config','MKDController@gen_config');
     });
 

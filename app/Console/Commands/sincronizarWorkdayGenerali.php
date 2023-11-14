@@ -229,16 +229,23 @@ class sincronizarWorkdayGenerali extends Command
             $dato=new users();
             $dato->cod_nivel=$nivel->cod_nivel;
             $dato->nivel_acceso=$nivel->val_nivel_acceso;
+            $dato->tipos_puesto_admitidos="311,396,411";
         }
-        $dato->name=$nombre;
-        $dato->id_cliente=$cliente;
-        $dato->sync_at=Carbon::now();
-        $dato->id_usuario_externo=$id_externo;
-        $dato->id_departamento=$departamento;
-        $dato->email=$email;
-        $dato->id_edificio=$edificio;
-        $dato->password=Str::random(40);
-        $dato->save();
+        try{
+            $dato->name=$nombre;
+            $dato->id_cliente=$cliente;
+            $dato->sync_at=Carbon::now();
+            $dato->id_usuario_externo=$id_externo;
+            $dato->id_departamento=$departamento;
+            $dato->email=$email;
+            $dato->id_edificio=$edificio;
+            $dato->password=Str::random(40);
+            $dato->save();
+        } catch (\Exception $e){
+            Log::error('Error al insertar usuario '.$nombre.' '.$email.' '.$e->getMessage());
+            log_tarea('Error al insertar usuario '.$nombre.' '.$email.' '.$e->getMessage(),$id_tarea,'error');
+        }
+        
         $dato=users::where('email',$email)->first();
         //Colectivos
         $esta_colectivo=DB::table('colectivos_usuarios')->where('cod_colectivo',$colectivo)->where('id_usuario',$dato->id)->first();

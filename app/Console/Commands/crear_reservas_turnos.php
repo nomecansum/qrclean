@@ -23,7 +23,7 @@ class crear_reservas_turnos extends Command
      *
      * @var string
      */
-    protected $signature = 'task:crear_reservas_turnos {id?} {origen=C} {--queue}'; //todas las tareas se tienen que llamar task:NOMBRE
+    protected $signature = 'task:crear_reservas_turnos {id?} {origen=C} {--queue} {--emp=}'; //todas las tareas se tienen que llamar task:NOMBRE
 
     /**
      * The console command description.
@@ -227,6 +227,7 @@ class crear_reservas_turnos extends Command
     public function handle()
     {
         $this->escribelog_comando('info','Inicio de la tarea programada ['.$this->argument('id').']'.__CLASS__);
+
         //Sacamos los parametros de la tarea
         $tarea=tareas::find($this->argument('id'));
         $parametros=json_decode($tarea->val_parametros);
@@ -240,6 +241,8 @@ class crear_reservas_turnos extends Command
         $mca_enviar_email=valor($parametros,"mca_enviar_email");
         $mca_orden_estricto=valor($parametros,"mca_orden_estricto");
         $mca_ultimas_reservas=valor($parametros,"mca_ultimas_reservas");
+        $empleado_concreto=$this->option('emp');
+
 
        
         $timezone=users::find($tarea->usu_audit)->val_timezone;
@@ -280,6 +283,11 @@ class crear_reservas_turnos extends Command
             ->wherenotnull('users.list_puestos_preferidos')
             ->orderby('users.list_puestos_preferidos','desc')
             ->distinct()
+            ->where(function($q) use ($empleado_concreto){
+                if (isset($empleado_concreto)){
+                    $q->where('users.id',$empleado_concreto);
+                }
+            })
             ->get();
 
         $usuarios=$usuarios->transform(function($item,$key) use($mca_ultimas_reservas){

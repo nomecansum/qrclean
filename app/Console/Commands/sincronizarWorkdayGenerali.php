@@ -64,23 +64,6 @@ class sincronizarWorkdayGenerali extends Command
     }
     
     static function params(){
-        // {
-        //     "label": "Edificio",
-        //     "name": "id_edificio",
-        //     "tipo": "list_db",
-        //     "multiple": true,
-        //     "sql": "SELECT DISTINCT \n
-        //                 `edificios`.`des_edificio` as id, \n
-        //                 concat(\'[\',nom_cliente,\'] - \',`edificios`.`des_edificio`) as nombre  \n
-        //             FROM \n
-        //                 `edificios` \n
-        //                 INNER JOIN `clientes` ON (`edificios`.`id_cliente` = `clientes`.`id_cliente`) \n
-        //             WHERE \n
-        //             `edificios`.`id_cliente` in('.sincronizarWorkdayGenerali::clientes().')  \n
-        //             ORDER BY 2",
-        //     "required": true,
-        //     "buscar": true
-        // },
         $params='{
             "parametros":[
                 
@@ -310,7 +293,7 @@ class sincronizarWorkdayGenerali extends Command
             {
                 $id_puesto=$datos_puesto->id_puesto;
                 //Ahopra a ponerselo en las preferencias de reservas
-                $ya_esta=collect($puestos_preferidos)->where('id',$id_puesto)->first();
+                $ya_esta=collect($puestos_preferidos)->where('tipo','pu')->where('id',$id_puesto)->first();
                 if(!isset($ya_esta)){
                     $encontrado=false;
                     foreach($puestos_preferidos as $key=>$p){
@@ -327,6 +310,31 @@ class sincronizarWorkdayGenerali extends Command
                         $nuevo->icono="<i class=\"fa-solid fa-chair-office\"></i> Puesto  ";
                         $nuevo->workday=true;
                         array_splice($puestos_preferidos,$key,0,[$nuevo]);
+                    }
+
+                    //Ahora por si acaso, a cada uno le añadimos por defecto la  planta del puesto que tiene asignado para el caso de que no tenga puesto
+                }
+                
+
+                if(isset($planta)){
+                    $ya_esta=collect($puestos_preferidos)->where('tipo','pl')->where('id',$planta)->first();
+                    if(!isset($ya_esta)){
+                        $encontrado=false;
+                        foreach($puestos_preferidos as $key=>$p){
+                            if($p->tipo=='pl' && $p->id==$planta){
+                            $encontrado=true;
+                            }
+                        }
+                        if(!$encontrado){
+                            $nuevo=new \stdClass();
+                            $nuevo->id=$planta;
+                            $nuevo->tipo='pl';
+                            $nuevo->text=$txt_planta;
+                            $nuevo->color="rgb(252, 193, 74)";
+                            $nuevo->icono="<i class=\"fa-solid fa-layer-group\"></i> Planta  ";
+                            $nuevo->workday=true;
+                            array_splice($puestos_preferidos,$key,0,[$nuevo]);
+                        }
                     }
                 }
                 $dato->list_puestos_preferidos=json_encode($puestos_preferidos);

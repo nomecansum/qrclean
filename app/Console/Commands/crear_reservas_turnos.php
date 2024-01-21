@@ -340,6 +340,14 @@ class crear_reservas_turnos extends Command
                 //A ver que tipos de puesto tiene asignados el usuario
                 $tipos_usuario=explode(",",$user->tipos_puesto_admitidos);
                 $tipos_usuario=array_intersect($id_tipo_puesto,$tipos_usuario);
+                //Ordenamos lis tipos que tiene el usuario por prioridad
+                $tipos_usuario=DB::table('puestos_tipos')
+                    ->select('puestos_tipos.id_tipo_puesto')
+                    ->join('clientes','clientes.id_cliente','puestos_tipos.id_cliente')
+                    ->wherein('puestos_tipos.id_tipo_puesto',$tipos_usuario)
+                    ->orderby('puestos_tipos.val_prioridad_auto','asc')
+                    ->pluck('puestos_tipos.id_tipo_puesto')
+                    ->toArray();
                 foreach($tipos_usuario as $tipo){
                     $tipopuesto=puestos_tipos::find($tipo);
                     $this->escribelog_comando('debug','Procesando tipo ['.$tipopuesto->id_tipo_puesto.'] '.$tipopuesto->des_tipo_puesto);

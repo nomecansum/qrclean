@@ -140,6 +140,7 @@ return [
 
     'AWS_URL'=>env('AWS_URL','/'),
     'url_asset_mail'=>'https://spotdesking.spotlinker.com/',
+    'tipo_puesto_trabajo_unico'=>[311,392,401],  //Indica que estos tipos son exclyyentes entr si en las reervas automaticas
     'tipo_puesto_parking'=>[2,221,271,131],
     'tipo_puesto_sala'=>[4,281,191,397,398,400],
     'tipo_puesto_publico'=>[396,411], 

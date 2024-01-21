@@ -327,7 +327,7 @@ class crear_reservas_turnos extends Command
             $usuarios_iteracion=$usuarios->wherenotnull('plantas');
             $iteraciones[]=['usuarios'=>$usuarios_iteracion,'tipo_it'=>'plantas'];
         } else {
-            $iteraciones=[['usuarios'=>$usuarios,'tipo'=>'todos']];
+            $iteraciones=[['usuarios'=>$usuarios,'tipo_it'=>'todos']];
         }
 
         //Ahora iteramos en cada uno de los grupos de iteracion que hemos creado
@@ -474,26 +474,42 @@ class crear_reservas_turnos extends Command
                                 }
 
                                 if($p!==null){
-                                    //Puesto disponible, reservar
-                                    $this->escribelog_comando('notice','Reservando puesto '.$p.' para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'));
-                                    $reserva=new reservas();
-                                    $reserva->id_usuario=$user->id;
-                                    $reserva->id_cliente=$cliente;
-                                    $reserva->id_puesto=$p;
-                                    $reserva->fec_reserva=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$slot->hora_inicio.':00');
-                                    $reserva->fec_fin_reserva=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$slot->hora_fin.':00');
-                                    $reserva->save();
-                                    if($mca_enviar_email===true){
-                                        enviar_mail_reserva($reserva->id_reserva,'N','Tarea de creacion de reservas');
+                                    //Primero comprobaoms si ya tiene una reserva de un puesto de tipo que sea excluyente con el puesto que le vamos a asignar
+                                    $tipos_excluyentes=config('app.tipo_puesto_trabajo_unico');
+                                    $ya_tiene=DB::table('reservas')
+                                        ->join('puestos','puestos.id_puesto','reservas.id_puesto')
+                                        ->join('puestos_tipos','puestos_tipos.id_tipo_puesto','puestos.id_tipo_puesto')
+                                        ->where('id_usuario',$user->id)
+                                        ->where('fec_reserva','>=',Carbon::parse($fecha)->format('Y-m-d').' '.$slot->hora_inicio.':00')
+                                        ->where('fec_fin_reserva','<=',Carbon::parse($fecha)->format('Y-m-d').' '.$slot->hora_fin.':00')
+                                        ->wherein('puestos.id_tipo_puesto',$tipos_excluyentes)
+                                        ->first();
+                                    
+
+                                    if($ya_tiene==null){
+                                        //Puesto disponible, reservar
+                                        $this->escribelog_comando('notice','Reservando puesto '.$p.' para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'));
+                                        $reserva=new reservas();
+                                        $reserva->id_usuario=$user->id;
+                                        $reserva->id_cliente=$cliente;
+                                        $reserva->id_puesto=$p;
+                                        $reserva->fec_reserva=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$slot->hora_inicio.':00');
+                                        $reserva->fec_fin_reserva=Carbon::parse(Carbon::parse($fecha)->format('Y-M-d').' '.$slot->hora_fin.':00');
+                                        $reserva->save();
+                                        if($mca_enviar_email===true){
+                                            enviar_mail_reserva($reserva->id_reserva,'N','Tarea de creacion de reservas');
+                                        }
+                                        $this->escribelog_comando('debug','Reserva realizada');
+                                    } else {
+                                        $this->escribelog_comando('error','El usuario '.$user->name.' ya tiene una reserva en la fecha '.$fecha->format('d/m').' de un puesto '.$ya_tiene->des_tipo_puesto.' que es excluyente con el puesto que se le quiere asignar');
+                                        savebitacora('El usuario '.$user->name.' ya tiene una reserva en la fecha '.$fecha->format('d/m').' de un puesto '.$ya_tiene->des_tipo_puesto.' que es excluyente con el puesto que se le quiere asignar','Tareas','Tarea de creacion de reservas','error',$user->id);
                                     }
-                                    $this->escribelog_comando('debug','Reserva realizada');
                                     break; //<-- Aqui se sale del bucle de slots porque ya tenemos puesto reservado
                                 } else {
                                     $this->escribelog_comando('error','No se ha encontrado un puesto del tipo ['.$tipopuesto->des_tipo_puesto.'] para crear la reserva para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'));
                                     savebitacora('No se ha encontrado un puesto del tipo ['.$tipopuesto->des_tipo_puesto.'] para crear la reserva para el usuario '.$user->name.' en la fecha '.$fecha->format('d/m'),'Tareas','Tarea de creacion de reservas','error',$user->id);
                                 }
                             }
-                            
                         }
                     }
                 }

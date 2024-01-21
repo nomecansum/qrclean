@@ -57,7 +57,7 @@
 
                     <div class="d-flex justify-content-between mt-4">
                         <a href="{{ route('password.request') }}" class="btn-link text-decoration-none">Olvide mi password</a> 
-                        <a href="{{ route('register') }}" class="btn-link text-decoration-none">Registro</a>
+                        {{-- <a href="{{ route('register') }}" class="btn-link text-decoration-none">Registro</a> --}}
                     </div>
 
                     <div class="d-flex align-items-center justify-content-between border-top pt-3 mt-3">

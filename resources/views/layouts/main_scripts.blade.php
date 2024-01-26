@@ -619,6 +619,11 @@
         $('.modal').modal('hide');
     }
 
+
+    function scrollToTop() {
+        window.scrollTo(0, 0);
+    }
+
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
     //Si tenemos el menu pequeño, para poner pequeño el icono de usuario

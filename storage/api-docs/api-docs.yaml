@@ -647,6 +647,72 @@ paths:
                                   type: string
                                 id_usuario_ext: 
                                   type: string
+                    solicitudes: 
+                      type: array
+                      items: 
+                        type: object
+                        properties: 
+                          id_incidencia: 
+                            type: integer
+                            format: int32
+                          id_externo: 
+                            type: string
+                            format: nullable
+                          id_incidencia_salas: 
+                            type: string
+                            format: nullable
+                          des_incidencia: 
+                            type: string
+                          txt_incidencia: 
+                            type: string
+                          fec_apertura: 
+                            type: string
+                          fec_cierre: 
+                            type: string
+                          id_tipo_incidencia: 
+                            type: integer
+                            format: int32
+                          id_puesto: 
+                            type: integer
+                            format: int32
+                          id_causa_cierre: 
+                            type: integer
+                            format: int32
+                          comentario_cierre: 
+                            type: string
+                          id_estado: 
+                            type: string
+                            format: nullable
+                          id_usuario_apertura: 
+                            type: integer
+                            format: int32
+                          id_usuario_ext: 
+                            type: string
+                          val_presupuesto: 
+                            type: string
+                          val_proyecto: 
+                            type: string
+                          val_importe: 
+                            type: string
+                          acciones: 
+                            type: array
+                            items: 
+                              type: object
+                              properties: 
+                                id_accion: 
+                                  type: integer
+                                  format: int32
+                                des_accion: 
+                                  type: string
+                                fec_accion: 
+                                  type: string
+                                id_usuario: 
+                                  type: integer
+                                  format: int32
+                                mca_resuelve: 
+                                  type: string
+                                id_usuario_ext: 
+                                  type: string
                 type: object
         400:
           description: 'Error en la peticion'

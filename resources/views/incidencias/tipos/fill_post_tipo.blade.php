@@ -214,13 +214,6 @@ En las peticiones se pueden utilizar los siguientes comodines que serán sustitu
 </div>
 
 <script>
-    $('#btn_nueva').click(function(){
-        $.get("{{ url('/incidencias/tipos/add_procesado',$id) }}/{{ $momento }}",function(){
-            $('#divacciones').load("{{ url('/incidencias/tipos/postprocesado',$id) }}/{{ $momento }}");
-        });
-        $
-    });  
-
     $('.btn_borrar_accion').click(function(){
         $.get("{{ url('/incidencias/tipos/fila_postprocesado/delete') }}/"+$(this).data('id'),function(data){
             $('#fila'+data.id).remove();

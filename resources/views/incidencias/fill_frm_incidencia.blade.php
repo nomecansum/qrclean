@@ -26,6 +26,7 @@
                         {!! $errors->first('des_incidencia', '<p class="help-block">:message</p>') !!}
                     </div>
                 @endif
+                
                 <div class="form-group col-md-4 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">
                     <label for="id_tipo_incidencia" class="control-label">Tipo</label>
                     <select class="form-control" required id="id_tipo_incidencia" name="id_tipo_incidencia">
@@ -35,6 +36,18 @@
                     </select>
                     
                 </div>   
+                {{-- Si es una solicitud, pondremos el campo de proyecto y el de presupuesto --}}
+                @if($puesto->id_puesto==0)
+                <div class="form-group col-md-2 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">
+                    <label for="val_presupuesto" class="control-label">Presupuesto</label>
+                    <input class="form-control"  name="val_presupuesto" type="text" id="val_presupuesto"  maxlength="200" >
+                </div>
+                <div class="form-group col-md-2 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">
+                    <label for="val_proyecto" class="control-label">Proyecto</label>
+                    <input class="form-control"  name="val_proyecto" type="text" id="val_proyecto"  maxlength="200" >
+                </div>
+                @endif
+                
             </div>
             @if((isset($config->val_layout_incidencias) && ($config->val_layout_incidencias=='D' || $config->val_layout_incidencias=='A')) || (!isset($config->val_layout_incidencias)))
             <div class="row">
@@ -69,8 +82,8 @@
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
     window.Laravel = {!! json_encode([
-				'csrfToken' => csrf_token(),
-			]) !!};
+        'csrfToken' => csrf_token(),
+    ]) !!};
 			
     $('#btn_guardar').click(function(){
         $('#spinner').show();

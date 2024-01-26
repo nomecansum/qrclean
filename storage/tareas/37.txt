@@ -11,6 +11,7 @@ No hay sala asociada para el puesto o la sala no esta asociada a una sala de spo
 No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17692
 No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17689
 No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17692
+No hay sala asociada para el puesto o la sala no esta asociada a una sala de spotlinker salas puesto ->17195
 Iniciando proceso de sincronizacion de ID de incidencias
 Fin de la tarea App\Console\Commands\sincroIncidenciasSalas
 Fin de la tarea php [37] Sincronizacion de incidencias con salas

@@ -144,6 +144,7 @@
                             <select class="form-control col-md-2 float-left" required id="val_momento" name="val_momento">
                                     <option value="C">Creacion</option>
                                     <option value="A">Accion</option>
+                                    <option value="E">Estado</option>
                                     <option value="F">Cierre</option>
                                     <option value="R">Reapertura</option>
                             </select>
@@ -300,8 +301,13 @@
             $('#import_momento').val($('#val_momento').val());
             $('#importar-post-incidencia').modal('show');
         }
-
     });
+
+    $('#btn_nueva').click(function(){
+        $.get("{{ url('/incidencias/tipos/add_procesado',$id) }}/"+$('#val_momento').val(),function(){
+            $('#divacciones').load("{{ url('/incidencias/tipos/postprocesado',$id) }}/"+$('#val_momento').val());
+        });
+    });  
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 

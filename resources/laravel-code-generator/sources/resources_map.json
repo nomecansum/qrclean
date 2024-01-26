@@ -135,11 +135,6 @@
         "table-name": "causas_cierre"
     },
     {
-        "model-name": "incidencias_postprocesado",
-        "resource-file": "incidencias_postprocesados.json",
-        "table-name": "incidencias_postprocesado"
-    },
-    {
         "model-name": "estados_incidencias",
         "resource-file": "estados_incidencias.json",
         "table-name": "estados_incidencias"
@@ -303,5 +298,10 @@
         "model-name": "bloqueo_puestos",
         "resource-file": "bloqueo_puestos.json",
         "table-name": "bloqueo_puestos"
+    },
+    {
+        "model-name": "incidencias_postprocesado",
+        "resource-file": "incidencias_postprocesados.json",
+        "table-name": "incidencias_postprocesado"
     }
 ]

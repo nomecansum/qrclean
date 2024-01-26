@@ -14,6 +14,7 @@
         <div class="col-md-1 btn_critical btn_filtro"  data-tipo="critical" style="color:#ff0000"></div>
         <div class="col-md-1 btn_alert btn_filtro"  data-tipo="alert" style="color:#ff9f1a"></div>
         <div class="col-md-1 btn_user btn_filtro"  data-tipo="user" style="color:#7cc0d0"></div>
+        <div class="col-md-1 btn_notice btn_filtro"  data-tipo="notice" style="color:#447a9c"></div>
     </div>
     <table class="table">
         @foreach($log as $l)
@@ -80,6 +81,7 @@
         $('.btn_critical').html('Critical: {{ $critical??0 }}');
         $('.btn_alert').html('Alert: {{ $alert??0 }}');
         $('.btn_user').html('User: {{ $user??0 }}');
+        $('.btn_notice').html('Notice: {{ $notice??0 }}');
     });
 
     $('.btn_filtro').click(function(){

@@ -325,8 +325,7 @@ class APIController extends Controller
 
 
             $respuesta=app('App\Http\Controllers\IncidenciasController')->search($r);
-            //dd($respuesta);
-            $incidencias = $respuesta->map(function ($item, $key) {
+            $incidencias = $respuesta["incidencias"]->map(function ($item, $key) {
                 $acciones=DB::table('incidencias_acciones')
                     ->select('id_accion','des_accion','fec_accion','id_usuario','mca_resuelve','users.id_usuario_externo as id_usuario_ext')
                     ->join('users','users.id','incidencias_acciones.id_usuario')
@@ -350,11 +349,39 @@ class APIController extends Controller
                     'acciones' => $acciones,
                 ];
             });
+            $solicitudes = $respuesta["solicitudes"]->map(function ($item, $key) {
+                $acciones=DB::table('incidencias_acciones')
+                    ->select('id_accion','des_accion','fec_accion','id_usuario','mca_resuelve','users.id_usuario_externo as id_usuario_ext')
+                    ->join('users','users.id','incidencias_acciones.id_usuario')
+                    ->where('id_incidencia',$item->id_incidencia)
+                    ->get();
+                return [
+                    'id_incidencia' => $item->id_incidencia,
+                    'id_incidencia_externo' => $item->id_incidencia_externo,
+                    'id_incidencia_salas' => $item->id_incidencia_salas,
+                    'des_incidencia' => $item->des_incidencia,
+                    'txt_incidencia' => $item->txt_incidencia,
+                    'fec_apertura' => $item->fec_apertura,
+                    'fec_cierre' => $item->fec_cierre,
+                    'id_tipo_incidencia' => $item->id_tipo_incidencia,
+                    'id_puesto' => $item->id_puesto,
+                    'id_causa_cierre' => $item->id_causa_cierre,
+                    'comentario_cierre' => $item->comentario_cierre,
+                    'id_estado' => $item->id_estado,
+                    'id_usuario_apertura' => $item->id_usuario_apertura,
+                    'id_usuario_ext' => users::find($item->id_usuario_apertura)->id_usuario_externo,
+                    'val_presupuesto' => $item->val_presupuesto,
+                    'val_proyecto' => $item->val_proyecto,
+                    'val_importe' => $item->val_importe,
+                    'acciones' => $acciones,
+                ];
+            });
             savebitacora('Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","OK"); 
             return response()->json([
                 'result'=>'ok',
                 'timestamp'=>Carbon::now(),
-                'incidencias' => $incidencias]);
+                'incidencias' => $incidencias,
+                'solicitudes' => $solicitudes]);
         }catch (\Throwable $e) {
             savebitacora('ERROR Solicitud de listado de incidencias '.json_encode($r->all()),"API","get_incidents","ERROR"); 
             return $this->respuesta_error('ERROR Solicitud de listado de incidencias '.$e->getMessage(),$e->getCode()!=0?$e->getCode():400);

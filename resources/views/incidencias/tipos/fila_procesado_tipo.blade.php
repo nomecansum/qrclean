@@ -20,6 +20,21 @@
                 {!! $errors->first('tip_metodo', '<p class="help-block">:message</p>') !!}
             </div>
             <div class="col-md-8">
+                @if($momento=='E')
+                {{-- Cuando haya un cambio de estado, se debe mostrar el combo de los estados que se pueden seleccionar. --}}
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="id_estado" class="control-label" style="text-align: left">Cuando cambie al estado:</label>
+                            <select class="form-control" required id="id_estado" name="id_estado">
+                            @foreach ($estados as $estado)
+                                <option value="{{ $estado->id_estado }}" {{ $estado->id_estado==$tipo->id_estado?'selected':'' }}>
+                                    {{ $estado->des_estado }}
+                                </option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endif
                 @switch($tipo->tip_metodo)
                     @case("M")
                             <div class="form-group col-md-12 {{ $errors->has('txt_destinos') ? 'has-error' : '' }}">
@@ -37,6 +52,12 @@
                                         <div class="form-check">
                                             <input name="mca_implicados"  id="mca_implicados{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_implicados)&&$tipo->mca_implicados=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
                                             <label class="form-check-label"  for="mca_implicados{{$tipo->id_proceso}}">Notificar a todos los implicados</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input name="mca_responsable"  id="mca_responsable{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_responsable)&&$tipo->mca_responsable=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
+                                            <label class="form-check-label"  for="mca_responsable{{$tipo->id_proceso}}">Notificar al responsable del creador</label>
                                         </div>
                                     </div>
                                 </div>
@@ -102,7 +123,7 @@
     
             </div>
             <div class="col-md-1 nowrap mt-4">
-                <a href="javascript:void(0)"  class="btn btn-xs btn-info btn_save add-tooltip w-100"  id="btn_editar{{ $tipo->id_proceso }}" title="Editar tipo" data-id="{{ $tipo->id_proceso }}" style="display: none"> <span class="fa fa-save" aria-hidden="true" ></span> Guardar</a>
+                <a href="javascript:void(0)"  class="btn btn-xs btn-info btn_save add-tooltip w-100"  id="btn_editar{{ $tipo->id_proceso }}" title="Guardar" data-id="{{ $tipo->id_proceso }}" style="display: none"> <span class="fa fa-save" aria-hidden="true" ></span> Guardar</a>
                 <a href="javascript:void(0)"  class="btn btn-xs btn-danger add-tooltip btn_borrar_accion w-100" data-id="{{$tipo->id_proceso}}" title="Borrar tipo"  ><span class="fa fa-trash" aria-hidden="true"></span> Borrar</a>
             </div>
         </div>
@@ -166,7 +187,8 @@
 			toast_error(JSON.parse(e.responseText))
 		})
         .done((data)=>{
-			toast_ok(data.mensaje);
+            console.log(data.mensaje);
+			toast_ok("Postprocesado de incidencia",$( '#val_momento option:selected' ).text()+': '+data.mensaje);
             $('#btn_editar'+data.id).hide();
 		});
     });

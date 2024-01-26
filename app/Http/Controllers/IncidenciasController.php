@@ -495,7 +495,7 @@ class IncidenciasController extends Controller
         }
 
         if ($r->wantsJson()) {
-            return $incidencias;
+            return ["incidencias"=>$incidencias,"solicitudes"=>$solicitudes];
         } else {
             return view($template,compact('incidencias','f1','f2','puestos','r','mostrar_graficos','mostrar_filtros','titulo_pagina','pagina','solicitudes'));
         }
@@ -726,6 +726,9 @@ class IncidenciasController extends Controller
             $inc->id_incidencia_salas=$r->id_incidencia_salas??null;
             $inc->id_incidencia_externo=$r->id_incidencia_externo??null;
             $inc->url_detalle_incidencia=$data['url_detalle_incidencia']??null;
+            $inc->val_presupuesto=$r->val_presupuesto??null;
+            $inc->val_proyecto=$r->val_proyecto??null;
+            $inc->val_importe=$r->val_imnporte??null;
             $inc->save();
 
             //Marcamos el puesto como chungo
@@ -788,6 +791,7 @@ class IncidenciasController extends Controller
         $accion_postprocesado="A";
         $incidencia=incidencias::find($r->id_incidencia);
         $tipo=incidencias_tipos::find($incidencia->id_tipo_incidencia);
+        $cambio_estado=null;
         $procedencia=$r->procedencia??'web';
         if($incidencia->id_puesto==0){
             $cosa="Solicitud";
@@ -828,6 +832,8 @@ class IncidenciasController extends Controller
                 $datos_estado=estados_incidencias::find($r->id_estado);
                 if($r->id_estado!=$incidencia->id_estado){
                     $accion->id_estado=$r->id_estado;
+                    $cambio_estado=$r->id_estado;
+                    $accion_postprocesado="E";
                 }
                 if($datos_estado->mca_cierre=='S'){
                     $accion->mca_resuelve='S';
@@ -847,7 +853,7 @@ class IncidenciasController extends Controller
                 
             }
             $accion->save();
-            $this->post_procesado_incidencia($incidencia,$accion_postprocesado,$procedencia);
+            $this->post_procesado_incidencia($incidencia,$accion_postprocesado,$procedencia,$cambio_estado);
             savebitacora("Añadida accion para la ".$cosa." ".$r->id_incidencia,"Incidencias","add_accion","OK");
             return [
                 'title' => "Añadir accion a la ".$cosa." ".$r->id_incidencia,
@@ -894,7 +900,7 @@ class IncidenciasController extends Controller
 
     //PROCESADO DE INCIDENCIAS->ENVIARLA A TERCEROS SISTEMAS
 
-    public function post_procesado_incidencia($inc,$momento,$procedencia){
+    public function post_procesado_incidencia($inc,$momento,$procedencia,$estado=null){
         $tipo=incidencias_tipos::find($inc->id_tipo_incidencia);
         $usuario_abriente=users::find($inc->id_usuario_apertura);
         $puesto=DB::table('puestos')
@@ -907,8 +913,11 @@ class IncidenciasController extends Controller
         $postprocesado=DB::table('incidencias_postprocesado')
             ->where('id_tipo_incidencia',$tipo->id_tipo_incidencia)
             ->where('val_momento',$momento)
+            ->when($estado,function($q) use($estado){
+                $q->where('id_estado',$estado);
+            })
             ->get();
-        
+    
         
         foreach($postprocesado as $p){
             Log::debug('Postprocesado ['.$p->id_proceso.']'.$p->tip_metodo. ' prodecencia: '.$procedencia);
@@ -927,8 +936,7 @@ class IncidenciasController extends Controller
                         //Ahora vamos a ver si se ha marcado para que se envie al usuario abriente o a los afectados.
                         $abriente=DB::table('users')
                             ->where('id',$inc->id_usuario_apertura)
-                            ->first()
-                            ->email;
+                            ->first();
 
                         $implicados=DB::table('users')
                             ->join('incidencias_acciones','users.id','incidencias_acciones.id_usuario')
@@ -936,18 +944,30 @@ class IncidenciasController extends Controller
                             ->pluck('email')
                             ->toarray();
 
+                        if($abriente->id_usuario_supervisor!=null){
+                            $supervisor=DB::table('users')
+                                ->where('id',$abriente->id_usuario_supervisor)
+                                ->first()
+                                ->email;
+                        } else {
+                            $supervisor=null;
+                        }
+
                         
 
                         Log::info("Iniciando postprocesado MAIL de incidencia ".$inc->id_incidencia);
                         //Si se han marcado las casillas de enviar al abriente o a los afectados, vamos a ver quienes son
                         //y los añadimos al to_email
                         if($p->mca_abriente=='S'){
-                            $to_email=$to_email.';'.$abriente;
+                            $to_email=$to_email.';'.$abriente->email;
                         }
                         if($p->mca_implicados=='S'){
                             foreach($implicados as $i){
                                 $to_email=$to_email.';'.$i;
                             }
+                        }
+                        if($p->mca_responsable=='S' &&  $supervisor!=null){
+                            $to_email=$to_email.';'.$supervisor->email;
                         }
                         //Ahora adaptamos el subject en funncion de si es incidnecia o solicitud
                         if($inc->id_puesto==0){
@@ -966,6 +986,9 @@ class IncidenciasController extends Controller
                                 break;
                             case 'F':
                                 $subject.=' (Finalizada)';
+                                break;
+                            case 'E':
+                                $subject.=' (Cambio de estado)';
                                 break;
                             case 'R':
                                 $subject.=' (Reapertura)';
@@ -1482,9 +1505,21 @@ class IncidenciasController extends Controller
 
     public function edit_postprocesado($id,$momento){
 
+        $tipo=incidencias_tipos::findorfail($id);
         $data=DB::table('incidencias_postprocesado')->where('id_tipo_incidencia',$id)->where('val_momento',$momento)->get();
+        $estados = DB::table('estados_incidencias')
+            ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
+            ->where(function($q){
+                $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('estados_incidencias.mca_fijo','S');
+                }
+            })
+            ->wherein('estados_incidencias.mca_aplica',[$tipo->mca_aplica,'A'])
+            ->orderby('des_estado')
+        ->get();
 
-        return view('incidencias.tipos.fill_post_tipo', compact('data','id','momento'));
+        return view('incidencias.tipos.fill_post_tipo', compact('data','id','momento','estados'));
     }
 
     public function add_postprocesado($id,$momento){
@@ -1503,7 +1538,18 @@ class IncidenciasController extends Controller
         $tipo->tip_metodo=$metodo;
         $tipo->val_momento=$momento;
         $tipo->save();
-        return view('incidencias.tipos.fila_procesado_tipo', compact('tipo','id','momento'));
+        $estados = DB::table('estados_incidencias')
+            ->join('clientes','clientes.id_cliente','estados_incidencias.id_cliente')
+            ->where(function($q){
+                $q->where('estados_incidencias.id_cliente',Auth::user()->id_cliente);
+                if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                    $q->orwhere('estados_incidencias.mca_fijo','S');
+                }
+            })
+            ->wherein('estados_incidencias.mca_aplica',[$tipo->mca_aplica,'A'])
+            ->orderby('des_estado')
+        ->get();
+        return view('incidencias.tipos.fila_procesado_tipo', compact('tipo','id','momento','estados'));
     }
 
     public function del_fila_postprocesado($id){
@@ -1537,6 +1583,8 @@ class IncidenciasController extends Controller
         $tipo->mca_scan=isset($r->mca_scan)?'S':'N';
         $tipo->mca_implicados=isset($r->mca_implicados)?'S':'N';
         $tipo->mca_abriente=isset($r->mca_abriente)?'S':'N';
+        $tipo->mca_responsable=isset($r->mca_responsable)?'S':'N';
+        $tipo->id_estado=$r->id_estado??null;
         $tipo->save();
         savebitacora('Modificada accion de postprocesado para el tipo de incidencia ['.$tipo->id_tipo_incidencia.'] momento '.$tipo->val_momento,"Incidencias","add_postprocesado","OK");
         return [

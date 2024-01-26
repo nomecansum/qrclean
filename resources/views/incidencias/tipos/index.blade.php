@@ -128,6 +128,12 @@
                                         @case('F')
                                             Cierre:
                                             @break
+                                        @case('E')
+                                            Estado:
+                                            @break
+                                        @case('R')
+                                            Reapertura:
+                                            @break
                                         @default
                                     @endswitch
                                     {{-- S: SMS
@@ -249,6 +255,7 @@
             $('#editorCAM').load("{{ url('/incidencias/tipos/edit/') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
             });
+            $(window).scrollTop(0);
         }
 
         function del(id){

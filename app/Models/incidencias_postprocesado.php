@@ -33,21 +33,23 @@ class incidencias_postprocesado extends Model
      * @var array
      */
     protected $fillable = [
+                  'id_estado',
                   'id_tipo_incidencia',
-                  'tip_metodo',
-                  'val_url',
-                  'param_url',
-                  'val_body',
-                  'val_header',
-                  'val_respuesta',
-                  'txt_destinos',
+                  'mca_abriente',
                   'mca_api',
-                  'mca_web',
+                  'mca_implicados',
+                  'mca_responsable',
                   'mca_salas',
                   'mca_scan',
+                  'mca_web',
+                  'param_url',
+                  'tip_metodo',
+                  'txt_destinos',
+                  'val_body',
+                  'val_header',
                   'val_momento',
-                  'mca_abriente',
-                  'mca_implicados'
+                  'val_respuesta',
+                  'val_url'
               ];
 
     /**

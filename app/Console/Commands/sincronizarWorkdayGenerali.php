@@ -314,6 +314,27 @@ class sincronizarWorkdayGenerali extends Command
 
                     //Ahora por si acaso, a cada uno le añadimos por defecto la  planta del puesto que tiene asignado para el caso de que no tenga puesto
                 }
+
+            
+                //Ahora por si acaso, a cada uno le añadimos por defecto la poosibilidad de usar el tipo de puesto que tiene reservado.
+                if(isset($id_puesto)){
+                    //Buscamos el tipo de puesto
+                    $tipo_puesto=DB::table('puestos')->where('id_puesto',$id_puesto)->first();
+                    
+                    //Ahora se lo añadimos al usuario
+                    $tmpusuario=users::find($id);
+                    if(isset($tmpusuario)){
+                        $tipos_usuario=$tmpusuario->tipos_puesto_admitidos;
+                        $tipos_usuario=explode(",",$tipos_usuario);
+                        
+                        if(!in_array($tipo_puesto->id_tipo_puesto,$tipos_usuario)){
+                            $tipos_usuario[]=$tipo_puesto->id_tipo_puesto;
+                            $tipos_usuario=implode(",",$tipos_usuario);
+                            $tmpusuario->tipos_puesto_admitidos=$tipos_usuario;
+                            $tmpusuario->save();
+                        }
+                    }
+                }
                 
 
                 if(isset($planta)){

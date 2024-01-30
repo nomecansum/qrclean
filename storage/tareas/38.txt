@@ -1215,7 +1215,7 @@ Usuario no creado, no tiene email: SARA ORGAZ GARCIA
 Usuario actualizado: EVA MARQUÉS NICOLÁS [1]
 Usuario actualizado: JOSE PEREZ HERNANDEZ [1]
 Usuario no creado, no tiene email: ALBERT VILA BELTRAN
-Usuario creado: VICTORIA CARRERA JIMENEZ
+Usuario actualizado: VICTORIA CARRERA JIMENEZ [1]
 Usuario no creado, no tiene email: TERESA FERNANDEZ MUÑOZ
 Usuario actualizado: AGUSTIN GIL MARIN [1]
 Usuario no creado, no tiene email: AITOR CHAMORRO ARIAS
@@ -1227,7 +1227,7 @@ Usuario actualizado: JIAQI CHEN  [1]
 Usuario no creado, no tiene email: IRENE GARCIA FELIPE
 Usuario no creado, no tiene email: TERESA HERRERA BECARES
 Usuario no creado, no tiene email: JAN GALIOT PEREZ
-Usuario no creado, no tiene email: JOSE MANUEL BARRAL MORCILLO
+Usuario creado: JOSE MANUEL BARRAL MORCILLO
 Usuario no creado, no tiene email: CARLOS VALLS ARENAS
 Usuario no creado, no tiene email: CATERINA FERRER GENOVART
 Usuario no creado, no tiene email: LUIS POVES ARJONA
@@ -1265,7 +1265,7 @@ Usuario actualizado: MARIO JOSE GONZALEZ SIERRA [1]
 Usuario actualizado: FRANCISCO JAVIER ACERO HERNANDEZ [1]
 Usuario actualizado: LAURA PEREZ LOPEZ [1]
 Usuario actualizado: ALBERTO RODRIGO GONZALEZ [1]
-Usuario creado: BORJA DIAZ LARA
+Usuario actualizado: BORJA DIAZ LARA [1]
 Usuario no creado, no tiene email: VERONICA SIEGLER MARTINEZ
 Usuario no creado, no tiene email: ISMAEL TITO HERRERA
 Usuario no creado, no tiene email: BEATRIZ SANCHEZ ALISTE

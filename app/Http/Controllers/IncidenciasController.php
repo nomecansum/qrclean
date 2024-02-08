@@ -932,7 +932,7 @@ class IncidenciasController extends Controller
                         break;
 
                     case 'M':  //Mandar e-mail
-                        $to_email = $p->txt_destinos;
+                        $to_email = explode(";",$p->txt_destinos);
                         //Ahora vamos a ver si se ha marcado para que se envie al usuario abriente o a los afectados.
                         $abriente=DB::table('users')
                             ->where('id',$inc->id_usuario_apertura)
@@ -942,7 +942,7 @@ class IncidenciasController extends Controller
                             ->join('incidencias_acciones','users.id','incidencias_acciones.id_usuario')
                             ->where('id_incidencia',$inc->id_incidencia)
                             ->pluck('email')
-                            ->toarray();
+                            ->toarray(); 
 
                         if($abriente->id_usuario_supervisor!=null){
                             $supervisor=DB::table('users')
@@ -959,16 +959,22 @@ class IncidenciasController extends Controller
                         //Si se han marcado las casillas de enviar al abriente o a los afectados, vamos a ver quienes son
                         //y los añadimos al to_email
                         if($p->mca_abriente=='S'){
-                            $to_email=$to_email.';'.$abriente->email;
+                            $to_email[]=$abriente->email;
                         }
                         if($p->mca_implicados=='S'){
                             foreach($implicados as $i){
-                                $to_email=$to_email.';'.$i;
+                                $to_email[]=$i;
                             }
                         }
                         if($p->mca_responsable=='S' &&  $supervisor!=null){
-                            $to_email=$to_email.';'.$supervisor->email;
+                            $to_email[]=$supervisor->email;
                         }
+                        //Por ultimo, quitamos los duplicados y limpiamos si hubiera algun nulo y  los pasamos a string
+                        $to_email=array_unique($to_email);
+                        $to_email=array_filter($to_email);
+                        $to_email=implode(";",$to_email);
+                        Log::debug('Destinatarios '.$to_email);
+
                         //Ahora adaptamos el subject en funncion de si es incidnecia o solicitud
                         if($inc->id_puesto==0){
                             $subject='Solicitud #'.$inc->id_incidencia.' de '.$tipo->des_tipo_incidencia;

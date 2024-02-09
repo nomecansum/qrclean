@@ -915,6 +915,7 @@ class IncidenciasController extends Controller
             ->where('val_momento',$momento)
             ->when($estado,function($q) use($estado){
                 $q->where('id_estado',$estado);
+                $q->orwhere('id_estado',-1);
             })
             ->get();
     

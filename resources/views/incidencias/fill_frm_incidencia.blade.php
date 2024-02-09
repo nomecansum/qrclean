@@ -40,7 +40,7 @@
                 @if($puesto->id_puesto==0)
                 <div class="form-group col-md-2 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">
                     <label for="val_presupuesto" class="control-label">Presupuesto</label>
-                    <input class="form-control"  name="val_presupuesto" type="text" id="val_presupuesto"  maxlength="200" >
+                    <input class="form-control"  name="val_presupuesto" type="number" step="any"  id="val_presupuesto"  maxlength="200" >
                 </div>
                 <div class="form-group col-md-2 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">
                     <label for="val_proyecto" class="control-label">Proyecto</label>

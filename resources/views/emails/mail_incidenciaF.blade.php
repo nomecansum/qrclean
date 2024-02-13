@@ -31,7 +31,7 @@ $puesto=DB::table('puestos')
 @endsection
 
 @section('saludo')
-    Hola {{$usuario->name??''}}!
+    Hola!
 @endsection
 
 @section('titulo')

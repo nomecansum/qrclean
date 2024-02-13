@@ -23,7 +23,7 @@ $entidad=$inc->id_puesto==0?'solicitud':'incidencia';
 @endsection
 
 @section('saludo')
-    Hola {{$usuario->name}}!
+    Hola!
 @endsection
 
 @section('titulo')

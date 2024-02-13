@@ -23,7 +23,7 @@ $usuario=users::find($inc->id_usuario_apertura);
 @endsection
 
 @section('saludo')
-    Hola {{$usuario->name}}!
+    Hola!
 @endsection
 
 @section('titulo')

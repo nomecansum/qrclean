@@ -913,7 +913,7 @@ class IncidenciasController extends Controller
         $postprocesado=DB::table('incidencias_postprocesado')
             ->where('id_tipo_incidencia',$tipo->id_tipo_incidencia)
             ->where('val_momento',$momento)
-            ->when($estado,function($q) use($estado){
+            ->when(($estado && $momento=='E'),function($q) use($estado){
                 $q->where(function($q2) use($estado){
                     $q2->where('id_estado',$estado);
                     $q2->orwhere('id_estado',-1);
@@ -1010,7 +1010,7 @@ class IncidenciasController extends Controller
                                 $message->to('nomecansum@gmail.com')->subject($subject.' '.count(explode(';',$to_email)).' destinatarios');
                             } else {
                                 Log::debug('modo mail pro '.$to_email);
-                                $message->to(explode(';',$to_email), '')->subject($subject);
+                                $message->bcc(explode(';',$to_email), '')->subject($subject);
                             }
                             $message->from(config('mail.from.address'),config('mail.from.name'));
                             if($momento=='C'){

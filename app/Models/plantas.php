@@ -51,7 +51,8 @@ class plantas extends Model
                   'width',
                   'zonas',
                   'factor_transp',
-                  'mca_publica'
+                  'mca_publica',
+                  'tipo_vista'
               ];
 
     /**

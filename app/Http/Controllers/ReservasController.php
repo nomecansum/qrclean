@@ -383,9 +383,7 @@ class ReservasController extends Controller
                 }
             })
             ->where(function($q) use($r){
-                if($r->tipo_puesto>0){
-                    $q->where('puestos.id_tipo_puesto',$r->tipo_puesto);
-                }
+                $q->where('puestos.id_tipo_puesto',$r->tipo_puesto??0);
             })
             ->where(function($q){
                 $q->wherein('puestos.id_tipo_puesto',explode(",",Auth::user()->tipos_puesto_admitidos));

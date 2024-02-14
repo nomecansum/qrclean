@@ -431,7 +431,7 @@ class ImportController extends Controller
                     ]);
                 } else {
                     if (!$esta){
-                        dump('Error con el puesto '.$item->cod_puesto);
+                        dump('Error con el puesto '.$item->cod_puesto, 'tipo', $tipo, 'edificio', $edificio, 'planta', $planta);
                     }
                     
                 }

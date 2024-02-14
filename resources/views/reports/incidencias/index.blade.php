@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title')
-    <h1 class="page-header text-overflow pad-no">Informe de incidencias</h1>
+    <h1 class="page-header text-overflow pad-no">Informe de incidencias y solicitudes</h1>
 @endsection
 
 @section('styles')
@@ -31,7 +31,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{url('/')}}" class="link-light">Home </a> </li>
 		<li class="breadcrumb-item">Informes</li>
-        <li class="breadcrumb-item">Informe de incidencias</li>
+        <li class="breadcrumb-item">Informe de incidencias y solicitudes</li>
     </ol>
 @endsection
 @section('content')
@@ -47,7 +47,7 @@
 @endphp
 <div class="card">
 	<div class="card-header">
-		<h3 class="card-title">Informe de incidencias</h3>
+		<h3 class="card-title">Informe de incidencias y solicitudes</h3>
 		<span class="float-right" id="spin" style="display: none"><img src="{{ url('/img/loading.gif') }}" style="height: 25px;">LOADING</span>
 	</div>
 	<div class="card-body">
@@ -61,7 +61,7 @@
 						@include('resources.combo_fechas')
 						
 					</div>
-					<div class="col-md-3" style="padding-left: 15px">
+					<div class="col-md-2" style="padding-left: 15px">
 						<div class="form-group">
 							<label>Situacion</label>
 							<select class="form-control" id="ac" name="ac">
@@ -71,7 +71,7 @@
 							</select>
 						</div>
 					</div>
-					<div class="col-md-3" style="padding-left: 15px">
+					<div class="col-md-2" style="padding-left: 15px">
 						<div class="form-group">
 							<label>Origen</label>
 							<select class="form-control" id="or" name="or">
@@ -98,13 +98,13 @@
 <div class="table m-t-40 overflow-hidden table-vcenter">
 
 	@include('resources.informes_imprimir_resumen')
-	<table class="table table-sm" style="font-size: 12px; background-color: #fff;">
+	<table class="table" style="font-size: 12px; background-color: #fff;" id="table_informe">
 		<tbody id="myFilter" >
 		</tbody>
 	</table>
 </div>
 @php
-    $nombre_empresa = "Informe de trabajos planificados" . " ";
+    $nombre_empresa = "Informe de incidencias y solicitudes" . " ";
     $___cl = \DB::table('clientes')->where('id_cliente',Auth::user()->id_cliente)->first();
     if(isset($___cl) && ($___cl->nom_cliente))
         $nombre_empresa .= $___cl->nom_cliente;

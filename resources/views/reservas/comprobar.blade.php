@@ -66,52 +66,30 @@
     <div class="card-body">
         @php
         
-            $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('des_planta','id_planta')->sortby('des_planta');
+            $plantas=$puestos->where('id_edificio',$e->id_edificio)->pluck('id_planta')->unique()->toArray();
+            $plantas=DB::table('plantas')->wherein('id_planta',$plantas)->get();
         @endphp
-        @foreach($plantas as $key=>$value)
-            <a id="planta{{ $key }}">
-            <h3 class=" w-100 bg-gray rounded">PLANTA {{ $value }}</h3>
-            @php
-                $puestos_planta=$puestos->where('id_planta',$key);
-            @endphp
-            <div class="d-flex flex-wrap">
-                @foreach($puestos_planta as $puesto)
-                @php
-                    $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();
-                    $asignado_usuario=$asignados_usuarios->where('id_puesto',$puesto->id_puesto)->first();
-                    $asignado_otroperfil=$asignados_nomiperfil->where('id_puesto',$puesto->id_puesto)->first();
-                    $asignado_miperfil=$asignados_miperfil->where('id_puesto',$puesto->id_puesto)->first();
-                    $cuadradito=\App\Classes\colorPuestoRes::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"P",$r->fechas);
-                    $es_reserva="Reservas";
-                    if(isMobile()){
-                        $puesto->factor_puestow=15;
-                        $puesto->factor_puestoh=15;
-                        $puesto->factor_letra=2.8;
-                    } else {
-                        $puesto->factor_puestow=3.7;
-                        $puesto->factor_puestoh=3.7;
-                        $puesto->factor_letra=0.8;
-                    }
-                @endphp
-                   
-
-                    @if(session('CL')['modo_visualizacion_puestos']=='C')
-                    <div class="text-center font-bold rounded add-tooltip align-middle puesto_parent flpuesto puesto_parent draggable {{  $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }} mr-2 mb-2" id="puesto{{ $puesto->id_puesto }}" title="@if(isadmin()) #{{ $puesto->id_puesto }} @endif{!!  nombrepuesto($puesto) ." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-opacity="{{ $cuadradito['transp']  }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puestow }}vw ; width: {{ $puesto->factor_puestow }}vw; background-color: {{  $cuadradito['color'] }}; color: {{  $cuadradito['font_color'] }}; {{  $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
-                        <span class="h-100 align-middle text-center puesto_child" style="font-size: {{ $puesto->factor_letra }}vw; color:#666">{{ $puesto->des_puesto }}</span>
-                        @include('resources.adornos_iconos_puesto')
+        @foreach($plantas as $pl)
+       
+            @if($pl->tipo_vista=='M' || $pl->tipo_vista==null)
+                <a id="planta{{ $pl->id_planta }}">
+                <h3 class=" w-100 bg-gray rounded">PLANTA {{ $pl->des_planta }}</h3>
+                @include('reservas.fill-mosaico')
+                </a>
+            @endif
+            @if($pl->tipo_vista=='P')
+                <a id="planta{{ $pl->id_planta }}">
+                    <div class="card border-dark mb-3">
+                        <div class="card-header bg-gray">
+                            <h3 >{{ $pl->des_planta }}</h3>
+                        </div>
+                        <div class="card-body  card_plano">
+                            @include('reservas.fill-plano')
+                        </div>
                     </div>
-                    @else
-                    <div class="text-center rounded add-tooltip align-middle flpuesto puesto_parent draggable {{  $cuadradito['clase_disp'] }} {{ $puesto->id_puesto==$id_puesto_edit?'disponible':'' }} " id="puesto{{ $puesto->id_puesto }}" title="{!!  nombrepuesto($puesto) ." \r\n ".$cuadradito['title'] !!}" data-id="{{ $puesto->id_puesto }}" data-puesto="{{ $puesto->cod_puesto }}" data-planta="{{ $value }}" style="height: {{ $puesto->factor_puestow }}vw ; width: {{ $puesto->factor_puestow }}vw; color: {{ $cuadradito['font_color'] }}; {{ $cuadradito['borde'] }}; opacity: {{ $cuadradito['transp']  }}">
-                        <span class="h-100 align-middle text-center puesto_child" style="font-size: {{ $puesto->factor_letra }}vw; ; color:#666">
-                            <i class="{{ $puesto->icono_tipo??'' }} fa-2x" style="color: {{ $puesto->color_tipo??'' }}"></i><br>
-                            {{ $puesto->des_puesto }}</span>
-                        {{--  @include('resources.adornos_iconos_puesto')  --}}
-                    </div>
-                    @endif
                     
-                @endforeach
-            </div>
-            </a>
+                </a>
+            @endif
         @endforeach
     </div>
 </div>

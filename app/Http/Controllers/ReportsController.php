@@ -1206,71 +1206,126 @@ class ReportsController extends Controller
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
-        $informe=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+        if($r->or=='I'){
+            $informe=DB::table('incidencias')
+                ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+                ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
+                ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
+                ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+                ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
+                ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+                ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
+                ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+                ->join('plantas','puestos.id_planta','plantas.id_planta')
+                ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+                ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
+                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+                ->where(function($q){
+                    $q->wherein('puestos.id_cliente',clientes());
+                })
+                ->where(function($q) use($r){
+                    if ($r->cliente) {
+                        $q->WhereIn('puestos.id_cliente',$r->cliente);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->edificio) {
+                        $q->WhereIn('puestos.id_edificio',$r->edificio);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->planta) {
+                        $q->whereIn('puestos.id_planta',$r->planta);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->tipo) {
+                        $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->user) {
+                        $q->whereIn('incidencias.id_usuario_apertura',$r->user);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->or) {
+                    if($r->or=='I'){
+                            $q->where('incidencias.id_puesto','<>',0);
+                    } else {
+                            $q->where('incidencias.id_puesto',0);
+                    }
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->tags) {
+                        if($r->andor){//Busqueda con AND
+                            $puestos_tags=DB::table('tags_puestos')
+                                ->select('id_puesto')
+                                ->wherein('id_tag',$r->tags)
+                                ->groupby('id_puesto')
+                                ->havingRaw('count(id_tag)='.count($r->tags))
+                                ->pluck('id_puesto')
+                                ->toarray();
+                            $q->whereIn('puestos.id_puesto',$puestos_tags);
+                        } else { //Busqueda con OR
+                            $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                            $q->whereIn('puestos.id_puesto',$puestos_tags); 
+                        }
+                    }
+                })
+                ->whereBetween('fec_apertura',[Carbon::parse($f1),Carbon::parse($f2)])
+                ->where(function($q) use($r){
+                    if($r->ac=='C'){
+                        $q->wherenotnull('fec_cierre');
+                    }
+                    if($r->ac=='A'){
+                        $q->wherenull('fec_cierre');
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->estado_inc) {
+                        $q->whereIn('incidencias.id_estado',$r->estado_inc);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->procedencia) {
+                        $q->whereIn('incidencias.val_procedencia',$r->procedencia);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->tipoinc) {
+                        $q->whereIn('incidencias.id_tipo_incidencia',$r->tipoinc);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->user) {
+                        $q->whereIn('incidencias.id_usuario_apertura',$r->user);
+                    }
+                })
+                ->orderby('fec_apertura','desc')
+                ->get();
+        } else { //Solicitudes, no llevan puesto
+            $informe=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
-            ->selectraw("(select count(*) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
+            ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
             ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
-            ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
-            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
-            ->join('plantas','puestos.id_planta','plantas.id_planta')
-            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
             ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
-            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->join('clientes','incidencias.id_cliente','clientes.id_cliente')
             ->where(function($q){
-                $q->wherein('puestos.id_cliente',clientes());
+                $q->wherein('incidencias.id_cliente',clientes());
             })
             ->where(function($q) use($r){
                 if ($r->cliente) {
-                    $q->WhereIn('puestos.id_cliente',$r->cliente);
-                }
-            })
-            ->where(function($q) use($r){
-                if ($r->edificio) {
-                    $q->WhereIn('puestos.id_edificio',$r->edificio);
-                }
-            })
-            ->where(function($q) use($r){
-                if ($r->planta) {
-                    $q->whereIn('puestos.id_planta',$r->planta);
-                }
-            })
-            ->where(function($q) use($r){
-                if ($r->tipo) {
-                    $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
+                    $q->WhereIn('incidencias.id_cliente',$r->cliente);
                 }
             })
             ->where(function($q) use($r){
                 if ($r->user) {
                     $q->whereIn('incidencias.id_usuario_apertura',$r->user);
-                }
-            })
-            ->where(function($q) use($r){
-                if ($r->or) {
-                   if($r->or=='I'){
-                        $q->where('incidencias.id_puesto','<>',0);
-                   } else {
-                        $q->where('incidencias.id_puesto',0);
-                   }
-                }
-            })
-            ->where(function($q) use($r){
-                if ($r->tags) {
-                    if($r->andor){//Busqueda con AND
-                        $puestos_tags=DB::table('tags_puestos')
-                            ->select('id_puesto')
-                            ->wherein('id_tag',$r->tags)
-                            ->groupby('id_puesto')
-                            ->havingRaw('count(id_tag)='.count($r->tags))
-                            ->pluck('id_puesto')
-                            ->toarray();
-                        $q->whereIn('puestos.id_puesto',$puestos_tags);
-                    } else { //Busqueda con OR
-                        $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
-                        $q->whereIn('puestos.id_puesto',$puestos_tags); 
-                    }
                 }
             })
             ->whereBetween('fec_apertura',[Carbon::parse($f1),Carbon::parse($f2)])
@@ -1302,10 +1357,9 @@ class ReportsController extends Controller
                     $q->whereIn('incidencias.id_usuario_apertura',$r->user);
                 }
             })
-            ->whereBetween('fec_apertura',[$f1,$f2])
-            ->wherenull('incidencias.fec_cierre')
             ->orderby('fec_apertura','desc')
             ->get();
+        }
 
         
 

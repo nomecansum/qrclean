@@ -73,7 +73,7 @@
 
 @foreach($clientes as $cliente)
 	@if($r->output=="pdf" || $r->output=="excel")
-		<table class="table table-bordered table-condensed table-hover table-informes table-striped" style="font-size: 12px; " >
+		<table class="table table-bordered table-condensed table-hover table-informes table-striped" style="font-size: 12px; " id="tabla_informe" >
 			<tbody>
 	@endif
 	@php
@@ -97,22 +97,24 @@
 		</tbody>
 	@endif
 
-	<tr>
-		<th>Fecha</th>
-		<th>Tipo</th>
-		<th>Usuario</th>
-		<th>Espacio</th>
-		<th>Estado</th>
-		<th>Tiempo</th>
-		<th>Ult. actividad</th>
-		<th>Acciones</th>
-	</tr>
+	<thead>
+		<tr>
+			<th>Fecha</th>
+			<th>Tipo</th>
+			<th>Usuario</th>
+			@if($r->or=='I')<th>Espacio</th>@endif
+			<th>Estado</th>
+			<th>Tiempo</th>
+			<th>Ult. actividad</th>
+			<th>Acciones</th>
+		</tr>
+	</thead>
 	@foreach ($inf as $dato)
 		<tr>
 			<td>@if($r->output!="excel"){!! beauty_fecha($dato->fec_apertura) !!} @else {{ Carbon::parse($dato->fec_apertura)->format('d/m/Y H:i') }} @endif</td>
 			<td>{{ $dato->des_tipo_incidencia }}</td>
 			<td>{{ $dato->name }}</td>
-			<td>{{ $dato->cod_puesto }}</td>
+			@if($r->or=='I')<td>{{ $dato->cod_puesto }}</td>@endif
 			<td>{{ $dato->fec_cierre==null?'Abierta':'Cerrada' }}</td>
 			<td>{{ Carbon::now()->diffforHumans(Carbon::parse($dato->fec_apertura), CarbonInterface::DIFF_ABSOLUTE) }}</td>
 			<td>{!! $dato->fec_audit==null?'':beauty_fecha($dato->fec_audit) !!}</td>

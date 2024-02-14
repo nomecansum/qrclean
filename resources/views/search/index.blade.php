@@ -55,7 +55,9 @@
                     @else
                         {!! icono_nombre($usuario->name,40,14) !!}
                     @endif
-                    {{ $usuario->name }} <span class="font-14 text-muted">{{ count(clientes())>1?"[".$usuario->nom_cliente."]":"" }}</a></span></li>
+                    {{ $usuario->name }} <span class="font-14 text-muted">{{ count(clientes())>1?"[".$usuario->nom_cliente."]":"" }}</a></span>
+                    @if (checkPermissions(['ReLogin'],["R"]) && $usuario->nivel_acceso<=Auth::user()->nivel_acceso)<span class="text-end"><a href="{{url('relogin',$usuario->id)}}" class="btn btn-xs btn-warning ><i class="fa fa-user" ></i> Suplantar</a></span>@endif
+                </li>
             @endforeach
             </ul>
         </div>

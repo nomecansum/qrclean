@@ -128,18 +128,25 @@
             ->get();
         @endphp
         @foreach($plantas as $pl)
-            <a id="planta{{ $pl->id_planta }}">
-                <div class="card border-dark mb-3">
-                    <div class="card-header bg-gray">
-                        <h3 >{{ $pl->des_planta }}</h3>
+            @if($pl->tipo_vista=='P' || $pl->tipo_vista==null)
+                <a id="planta{{ $pl->id_planta }}">
+                    <div class="card border-dark mb-3">
+                        <div class="card-header bg-gray">
+                            <h3 >{{ $pl->des_planta }}</h3>
+                        </div>
+                        <div class="card-body  card_plano">
+                            @include('reservas.fill-plano')
+                        </div>
                     </div>
-                    <div class="card-body  card_plano">
-                        @include('reservas.fill-plano')
-                    </div>
-                </div>
-                
-                
-            </a>
+                    
+                </a>
+            @endif
+            @if($pl->tipo_vista=='M')
+                <a id="planta{{ $pl->id_planta }}">
+                <h3 class=" w-100 bg-gray rounded">PLANTA {{ $pl->des_planta }}</h3>
+                @include('reservas.fill-mosaico')
+                </a>
+            @endif
         @endforeach
     </div>
 </div>

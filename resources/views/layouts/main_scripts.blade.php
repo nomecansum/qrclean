@@ -405,7 +405,7 @@
             }
 
             if (tipo == 'pantalla') {
-                console.log(data);
+                //console.log(data);
                 $('#myFilter').html(data);
                 //$('#divfiltro').toggle();
             }

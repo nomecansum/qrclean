@@ -1189,6 +1189,194 @@ class ReportsController extends Controller
         }
     }
 
+      ////////////////INFORME DE INCIDENCIAS ///////////////////////
+      public function incidencias_index(){
+        return view('reports.incidencias.index');
+    }
+
+    public function incidencias(Request $r){
+        
+        //PARAMETROS DE ENTRADA COMUNES, USUARIO Y FECHAS
+        if(isset($r->cod_usuario))
+            Auth::loginUsingId($r->cod_usuario);
+        $f = explode(' - ',$r->fechas);
+        $f1 = adaptar_fecha($f[0]);
+        $f2 = adaptar_fecha($f[1]);
+
+        ///////////////////////////
+        ///CONTENIDO DEL INFORME///
+        ///////////////////////////
+        $informe=DB::table('incidencias')
+            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+            ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
+            ->selectraw("(select count(*) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
+            ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
+            ->leftjoin('causas_cierre','incidencias.id_causa_cierre','causas_cierre.id_causa_cierre')
+            ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
+            ->join('puestos','incidencias.id_puesto','puestos.id_puesto')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('plantas','puestos.id_planta','plantas.id_planta')
+            ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
+            ->leftjoin('users','incidencias.id_usuario_apertura','users.id')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                $q->wherein('puestos.id_cliente',clientes());
+            })
+            ->where(function($q) use($r){
+                if ($r->cliente) {
+                    $q->WhereIn('puestos.id_cliente',$r->cliente);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->edificio) {
+                    $q->WhereIn('puestos.id_edificio',$r->edificio);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->planta) {
+                    $q->whereIn('puestos.id_planta',$r->planta);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tipo) {
+                    $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->user) {
+                    $q->whereIn('incidencias.id_usuario_apertura',$r->user);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->or) {
+                   if($r->or=='I'){
+                        $q->where('incidencias.id_puesto','<>',0);
+                   } else {
+                        $q->where('incidencias.id_puesto',0);
+                   }
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tags) {
+                    if($r->andor){//Busqueda con AND
+                        $puestos_tags=DB::table('tags_puestos')
+                            ->select('id_puesto')
+                            ->wherein('id_tag',$r->tags)
+                            ->groupby('id_puesto')
+                            ->havingRaw('count(id_tag)='.count($r->tags))
+                            ->pluck('id_puesto')
+                            ->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags);
+                    } else { //Busqueda con OR
+                        $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags); 
+                    }
+                }
+            })
+            ->whereBetween('fec_apertura',[Carbon::parse($f1),Carbon::parse($f2)])
+            ->where(function($q) use($r){
+                if($r->ac=='C'){
+                    $q->wherenotnull('fec_cierre');
+                }
+                if($r->ac=='A'){
+                    $q->wherenull('fec_cierre');
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->estado_inc) {
+                    $q->whereIn('incidencias.id_estado',$r->estado_inc);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->procedencia) {
+                    $q->whereIn('incidencias.val_procedencia',$r->procedencia);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tipoinc) {
+                    $q->whereIn('incidencias.id_tipo_incidencia',$r->tipoinc);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->user) {
+                    $q->whereIn('incidencias.id_usuario_apertura',$r->user);
+                }
+            })
+            ->whereBetween('fec_apertura',[$f1,$f2])
+            ->wherenull('incidencias.fec_cierre')
+            ->orderby('fec_apertura','desc')
+            ->get();
+
+        
+
+
+        $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+        ///////////////////////////////////////////////////
+        ///////////SALIDA DEL INFORME/////////////////////
+        //Para añadir a los nomres de fichero y hacerlos un poco mas unicos
+        //dd($r->all());
+        $nombre_informe="Informe Actividad de usuarios";
+        $cliente=clientes::find($r->id_cliente);
+        $rango_safe=str_replace(" - ","_",$r->fechas);
+        $rango_safe=str_replace("/","",$rango_safe);
+        $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
+        $usuario = users::find($r->cod_usuario)??Auth::user()->id;;
+        $view='reports.incidencias.filter';
+
+
+        switch($r->output){
+            case "pantalla":
+                if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe,  'executionTime' => $executionTime));
+                } else {  //Navegacion
+                    return view($view,compact('informe','r','executionTime'))->render();
+                }
+
+            break;
+
+            case "pdf":
+                $orientation = $r->orientation == 'h' ? 'landscape' : 'portrait';
+                $pdf = PDF::loadView($view,compact('informe','r','executionTime'));
+                $pdf->setPaper('legal', $orientation);
+                $filename = str_replace(' ', '_', $prepend . '_' . $nombre_informe . '.pdf');
+                $fichero = storage_path() . "/exports/" . $filename;
+
+                if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                    try{
+                        $pdf->save($fichero);
+						$this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                    } catch(\Exception $e){
+                        Log::error('Error generando PDF '.$e->getMessage());
+                    }
+
+                } else {  //Navegacion
+                    try{
+                        return $pdf->download($filename);
+                    } catch(\Exception $e){
+                        Log::error('Error generando PDF '.$e->getMessage());
+                        flash("Error al solicitar el informe: afine los filtros para evitar grandes cargas de datos al navegador (".mensaje_excepcion($e) . ")")->error();  
+                        return redirect()->back()->withInput();
+                    }
+                }
+
+            break;
+
+            case "excel":
+                $filename = str_replace(' ', '_', $prepend.'_'.$nombre_informe.'.xlsx');
+                $fichero = storage_path()."/exports/".$filename;
+				libxml_use_internal_errors(true); //para quitar los errores de libreria
+                if(isset($r->email_schedule) && $r->email_schedule == 1) { //Programado
+                    Excel::store(new ExportExcel($view, compact('informe','r','executionTime')),$filename,'exports');
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                } else {  //Navegacion
+                    return Excel::download(new ExportExcel($view,compact('informe','r','executionTime')),$filename);
+                }
+            break;
+        }
+    }
+
+
+
     //////////////////////INFORMES PROGRAMADOS ////////////////////////////////
     //Crear nuevo informe programado
     public function programar_informe(Request $r){

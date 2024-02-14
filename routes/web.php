@@ -514,6 +514,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/estado_usu',['middleware' => 'permissions:["Informes > Estado usuarios"],["R"]', 'uses' => 'ReportsController@estado_usu_index']);
 	    Route::post('/estado_usu/filter',['middleware' => 'permissions:["Informes > Estado usuarios"],["R"]', 'uses' => 'ReportsController@estado_usu']);
 
+        Route::get('/incidencias',['middleware' => 'permissions:["Informes > Incidencias"],["R"]', 'uses' => 'ReportsController@incidencias_index']);
+	    Route::post('/incidencias/filter',['middleware' => 'permissions:["Informes > Incidencias"],["R"]', 'uses' => 'ReportsController@incidencias']);
+
         Route::get('program/{id}', ['middleware' => 'permissions:["Informes programados"],["R"]', 'uses' => 'ReportsController@reportFromEmail']);
 		
 	});

@@ -955,9 +955,6 @@ class IncidenciasController extends Controller
                         } else {
                             $supervisor=null;
                         }
-
-                        
-
                         Log::info("Iniciando postprocesado MAIL de incidencia ".$inc->id_incidencia);
                         //Si se han marcado las casillas de enviar al abriente o a los afectados, vamos a ver quienes son
                         //y los añadimos al to_email
@@ -977,14 +974,12 @@ class IncidenciasController extends Controller
                         $to_email=array_filter($to_email);
                         $to_email=implode(";",$to_email);
                         Log::debug('Destinatarios '.$to_email);
-
                         //Ahora adaptamos el subject en funncion de si es incidnecia o solicitud
                         if($inc->id_puesto==0){
                             $subject='Solicitud #'.$inc->id_incidencia.' de '.$tipo->des_tipo_incidencia;
                         } else {
                             $subject='Incidencia #'.$inc->id_incidencia.'en puesto '.$puesto->cod_puesto.' '.$puesto->des_edificio.' - '.$puesto->des_planta;
                         }
-
                         //Y le añadimos al subject indicacion de en que estado esta
                         switch($momento){
                             case 'C':
@@ -1003,7 +998,6 @@ class IncidenciasController extends Controller
                                 $subject.=' (Reapertura)';
                                 break;
                         }
-
                         Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto,$momento,$subject) {
                             if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
                                 Log::debug('modo mail debug '.$to_email);
@@ -1034,7 +1028,6 @@ class IncidenciasController extends Controller
                                 }
                             }
                         });
-
                         break;
                     case 'P': //HTTP Post
                     case 'U': //HTTP Put

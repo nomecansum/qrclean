@@ -150,10 +150,10 @@
                         @if(checkPermissions(['Tipos de incidencia'],['D']) && ( $tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="button" id="boton_submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
-                <hr class="mt-5 mb-5">
-                <div class="row bg-gray mt-4">
-                    <div class="col-md-3 pt-3">
-                        <h5>Postprocesado de la incidencia<h5>
+                <hr class="mt-5 mb-5" >
+                <div class="row bg-gray mt-4 expandir" data-div="divacciones">
+                    <div class="col-md-3 pt-3" style="cursor: pointer">
+                        <h5>Postprocesado de la incidencia [{{ $postprocesados->count() }}]<i class="fas fa-caret-right text-info"></i><h5>
                     </div>
                     <div class="col-md-3 ">
 
@@ -167,7 +167,7 @@
                                     <option value="R">Reapertura</option>
                             </select>
                             <a href="#nueva-incidencia" id="btn_nueva" class="btn btn-success text-white" data-toggle="modal" title="Nueva accion" style="padding-top: 0.25rem">
-                                <i class="fa fa-plus-square pt-2"aria-hidden="true"></i>
+                                <i class="fa fa-plus-square pt-2 notocar"aria-hidden="true"></i>
                                 <span>Nueva</span>
                             </a>
                         </div>                        
@@ -184,7 +184,7 @@
                                 @endforeach
                             </select>
                             <a href="#nueva-incidencia" id="btn_importar" class="btn btn-secondary text-white" data-toggle="modal" title="Nueva accion" style="padding-top: 0.5rem">
-                                <i class="fa-solid fa-cloud-arrow-down"></i>
+                                <i class="fa-solid fa-cloud-arrow-down notocar"></i>
                                 <span>Importar</span>
                             </a>
                         </div>  
@@ -194,8 +194,8 @@
                 </div>
                 
 
-                <div class="row b-all rounded">
-                    <div class="col-md-12" id="divacciones"></div>
+                <div class="row b-all rounded"  >
+                    <div class="col-md-12" id="divacciones" style="display:none"></div>
                 </div>
                 
 
@@ -329,6 +329,10 @@
 
     document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
+    $('.expandir').click(function(){
+        $('#'+$(this).data('div')).toggle();
+        $(this).find('i').not('.notocar').toggleClass('fas fa-caret-right fas fa-caret-down');
+    })
     
     </script>
     @include('layouts.scripts_panel')

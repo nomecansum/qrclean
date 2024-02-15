@@ -1510,7 +1510,8 @@ class IncidenciasController extends Controller
             })
             ->orderby('des_nivel_acceso')
             ->get();
-        return view('incidencias.tipos.edit', compact('tipo','Clientes','id','estados','tipos','tipos_incidencia','perfiles'));
+        $postprocesados=DB::table('incidencias_postprocesado')->where('id_tipo_incidencia',$id)->get();
+        return view('incidencias.tipos.edit', compact('tipo','Clientes','id','estados','tipos','tipos_incidencia','perfiles','postprocesados'));
     }
 
     public function tipos_save(Request $r){

@@ -251,6 +251,8 @@ class eventos extends Command
             $acciones=DB::table('eventos_acciones')->where('cod_regla',$evento->cod_regla)->wherenotnull('nom_accion')->get();
             //Iteraciones de la regla
             $iteraciones=DB::table('eventos_acciones')->where('cod_regla',$evento->cod_regla)->wherenotnull('nom_accion')->pluck('val_iteracion')->unique()->toArray();
+            //Primero vamos q quitar de la iteracion aquellos que se hayan arreglado en alguna de las anteriores
+            DB::table('eventos_evolucion_id')->where('cod_regla',$evento->cod_regla)->wherenotin('id',$resultado->lista_id)->delete();
             //Y sacamos la iteracion en que que esta cada ID
             $evolucion=DB::table('eventos_evolucion_id')->where('cod_regla',$evento->cod_regla)->get();
             $ya_estan=$evolucion->pluck('id')->toArray();
@@ -268,11 +270,36 @@ class eventos extends Command
                     //Si no, los ID que ya estan en la iteracion anterior
                     $ids_para_la_iteracion=$evolucion->where('val_iteracion',$iteracion-1)->pluck('id')->toArray();
                 }
+               
+                
+                //Primero vamos a revisar la lista de los que estan esperando para este evento, si hay alguno que ya no sale en el comando (implica que esta arreglado) lo quitamos de la lista de espera
+                //Esto va gobernado por el campo mca_recuperar_antes
+                if($evento->mca_recuperar_antes=='S'){
+                    $aborrar=DB::table('eventos_noactuar')
+                        ->where('cod_regla',$evento->cod_regla)
+                        ->where('fecha','>',Carbon::now())
+                        ->wherenotin('id',$resultado->lista_id)
+                        ->pluck('id')
+                        ->toarray();
+                    if(count($aborrar))
+                    {
+                        $this->log_evento('Recuperados: '.count($aborrar).' de la lista no molestar, porque ya aparecen como correctos: '.implode(',',$aborrar),$evento->cod_regla,'warning');
+                    }
+                    
+                    DB::table('eventos_noactuar')
+                        ->where('cod_regla',$evento->cod_regla)
+                        ->where('fecha','>',Carbon::now())
+                        ->wherenotin('id',$resultado->lista_id)
+                        ->delete();
+                } 
                 //ID sobre los que no hay que actuar porque estan en espera(descompresion :-)
                 $lista_ids_en_espera=DB::table('eventos_noactuar')->where('cod_regla',$evento->cod_regla)->where('fecha','>',Carbon::now())->pluck('id')->unique()->toArray();
+
                 //Los quitamos de la lista a procesar
                 $ids_para_la_iteracion=array_diff($ids_para_la_iteracion,$lista_ids_en_espera);
-                $this->log_evento('Descontados: '.count($lista_ids_en_espera).' en estado no molestar, quedan '.count( $ids_para_la_iteracion).' id para procesar',$evento->cod_regla,'notice');
+                if(count($lista_ids_en_espera)>0){
+                    $this->log_evento('Descontados: '.count($lista_ids_en_espera).' en estado no molestar, quedan '.count( $ids_para_la_iteracion).' id para procesar',$evento->cod_regla,'warning');
+                }
                 foreach($acciones_iteracion as $accion){
                     $acciones_no_ejecutar=[];
                     $lista_ids_procesar=array_values($ids_para_la_iteracion);
@@ -285,7 +312,6 @@ class eventos extends Command
                                     include(resource_path('views/events/acciones').'/'.$accion->nom_accion);
                                     //Ejecutamos la funcion principal de cada accion
                                     $result_accion=$func_accion($accion,$resultado,$campos,$id,$output);
-                                    
                                     //Como norma general, la funcion de la accion devolvera null, en caso de devolver otra cosa será para evitar que se vuelva a ejecutar en esa iteracion (notificaciones) o porque se va a rellenar la lista de id (evaluar regla )
                                     if(isset($result_accion['no_ejecutar_mas']) && $result_accion['no_ejecutar_mas']==true){
                                         $acciones_no_ejecutar[]=$accion->cod_accion;
@@ -297,7 +323,6 @@ class eventos extends Command
                                         $ids_para_la_iteracion=$lista_ids_procesar;
                                         $resultado=$result_accion['resultado'];
                                         $campos=$result_accion['campos'];
-                                        
                                     }
                                     //Se elimina la funcion por si hay mas acciones en la misma regla
                                     unset($func_accion);
@@ -335,12 +360,12 @@ class eventos extends Command
                             } else if($evento->tip_nomolestar=='D'){
                                 $fecha_noactuar=Carbon::now()->addDays($evento->nomolestar);
                             } else if($evento->tip_nomolestar=='M'){
-                                $fecha_noactuar=Carbon::now()->addMonths($evento->nomolestar);
+                                $fecha_noactuar=Carbon::now()->addMinutes($evento->nomolestar);
                             } else if($evento->tip_nomolestar=='Y'){
                                 $fecha_noactuar=Carbon::now()->addYears($evento->nomolestar);
                             }
-                            // 
-                            if($evento->nomolestar>0 && config('app.debug_eventos')==false){
+                            // && config('app.debug_eventos')==false
+                            if($evento->nomolestar>0 ){
                                 DB::table('eventos_noactuar')->insert([
                                     "cod_regla"=>$evento->cod_regla,
                                     "id"=>$id,

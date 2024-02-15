@@ -69,7 +69,7 @@
 </table>
 <div class="row">
     <div class="col-md-12">
-        <div id="chartdiv" style="width:100%; height:300px;  ml-0"></div>
+        <div id="chartdiv" style="width:100%; height:300px;  ml-0" class="ml-0"></div>
     </div>
 </div>
 <div class="row">
@@ -91,7 +91,7 @@
             </div> --}}
             <div class="card-body">
                 Tipo de incidencia
-                <div id="chartdiv_incidencias" style="width:100%;  ml-0"></div>
+                <div id="chartdiv_incidencias" style="width:100%; height: 400px " ></div>
         
             </div>
         </div>
@@ -152,7 +152,7 @@
         <div class="card">
             <div class="card-body">
                 Estado de incidencia
-                <div id="chartdiv_incidencias2" style="width:100%;  ml-0"></div>
+                <div id="chartdiv_incidencias2" style="width:100%; height: 400px " class="ml-0"></div>
         
             </div>
         </div>

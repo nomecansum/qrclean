@@ -282,7 +282,8 @@ class IncidenciasController extends Controller
             $pagina="solicitudes";
         }
         $tipo='mis';
-        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo','solicitudes','pagina'));
+        $r=new Request();
+        return view('incidencias.index',compact('incidencias','f1','f2','puestos','mostrar_graficos','mostrar_filtros','titulo_pagina','tipo','solicitudes','pagina','r'));
     }
     
     //BUSCAR INCIDENCIAS

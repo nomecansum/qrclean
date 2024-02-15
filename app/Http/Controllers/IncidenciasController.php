@@ -892,6 +892,7 @@ class IncidenciasController extends Controller
                 'title' => "Añadir accion a la ".$cosa." ".$r->id_incidencia,
                 'message' => "Añadida accion para la ".$cosa." ".$r->id_incidencia,
                 //'url' => url($url_vuelta)
+                'id' => $r->id_incidencia,
                 'result'=>'ok',
                 'timestamp'=>Carbon::now(),
             ];

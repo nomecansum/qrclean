@@ -63,7 +63,7 @@ $entidad=$incidencia->id_puesto==0?'solicitud':'incidencia';
 			,
 			dictResponseError: 'Error while uploading file!',
 			headers: {
-				'X-CSRF-TOKEN': Laravel.csrfToken
+				'X-CSRF-TOKEN': "{{ csrf_token() }}"
 			},
 			init: function() {
 				dzClosure = this; // Makes sure that 'this' is understood inside the functions below.

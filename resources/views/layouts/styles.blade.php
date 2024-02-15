@@ -9,7 +9,7 @@
     }
 
     .btn_todos{
-        max-height: 45px !important;
+        max-height: 55px !important;
     }
 
     .bg-yellow{

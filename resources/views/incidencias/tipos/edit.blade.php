@@ -111,6 +111,24 @@
 
                 <div class="row mt-2">
                     <div class="form-group  col-md-12" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
+                        <label>Perfiles que lo pueden ver</label>
+                        <div class="input-group select2-bootstrap-append">
+                            <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="list_perfiles_ver[]" id="multi-tipo" >
+                                @php
+                                    $perfiles_tipo=explode(",",$tipo->list_perfiles_ver);
+                                @endphp
+                                @foreach($perfiles as $tp)
+                                    <option value="{{ $tp->cod_nivel }}" {{ in_array($tp->cod_nivel,$perfiles_tipo)?'selected':'' }}>{{ $tp->des_nivel_acceso }}</option>
+                                @endforeach
+                            </select>
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary select-all btn_todos" data-select="multi-estado"  type="button" style="margin-left:-10px; height: 52px"><i class="fad fa-check-double"></i> todos</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="form-group  col-md-12" style="{{ (isset($hide['tip']) && $hide['tip']==1) ? 'display: none' : ''  }}">
                         <label>Tipo de puesto</label>
                         <div class="input-group select2-bootstrap-append">
                             <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tipos_puesto[]" id="multi-tipo" >
@@ -122,13 +140,13 @@
                                 @endforeach
                             </select>
                             <div class="input-group-btn">
-                                <button class="btn btn-primary select-all btn_todos" data-select="multi-estado"  type="button" style="margin-left:-10px; height: 45px"><i class="fad fa-check-double"></i> todos</button>
+                                <button class="btn btn-primary select-all btn_todos" data-select="multi-estado"  type="button" style="margin-left:-10px; height: 52px"><i class="fad fa-check-double"></i> todos</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-12 text-end">
+                    <div class="col-md-12 text-end mt-5">
                         @if(checkPermissions(['Tipos de incidencia'],['D']) && ( $tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess())))<input class="btn btn-primary" type="button" id="boton_submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>

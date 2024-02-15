@@ -142,6 +142,11 @@ class IncidenciasController extends Controller
                     $q->where('puestos.id_cliente',session('CL')['id_cliente']);
                 }
             })
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                } 
+            })
             ->whereBetween('fec_apertura',[$f1,$fhasta])
             ->wherenull('incidencias.fec_cierre')
             ->orderby('fec_apertura','desc')
@@ -162,6 +167,11 @@ class IncidenciasController extends Controller
                 } else {
                     $q->where('incidencias.id_cliente',session('CL')['id_cliente']);
                 }
+            })
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                } 
             })
             ->where('incidencias.id_puesto',0)
             ->whereBetween('fec_apertura',[$f1,$fhasta])
@@ -435,6 +445,11 @@ class IncidenciasController extends Controller
                     $q->whereIn('incidencias.id_usuario_apertura',$r->user);
                 }
             })
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                } 
+            })
             ->orderby('fec_apertura','desc')
             ->where('incidencias.id_puesto','>',0)
             ->get();
@@ -487,6 +502,11 @@ class IncidenciasController extends Controller
                 if ($r->user) {
                     $q->whereIn('incidencias.id_usuario_apertura',$r->user);
                 }
+            })
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->whereraw("FIND_IN_SET(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                } 
             })
             ->orderby('fec_apertura','desc')
             ->get();
@@ -1472,7 +1492,24 @@ class IncidenciasController extends Controller
             })
             ->orderby('des_tipo_incidencia')
             ->get();
-        return view('incidencias.tipos.edit', compact('tipo','Clientes','id','estados','tipos','tipos_incidencia'));
+        $perfiles = DB::table('niveles_acceso')
+            ->join('clientes','clientes.id_cliente','niveles_acceso.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()) {
+                    $q->where('niveles_acceso.id_cliente',Auth::user()->id_cliente);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('niveles_acceso.mca_fijo','S');
+                    }
+                } else {
+                    $q->where('niveles_acceso.id_cliente',session('CL')['id_cliente']);
+                    if(config_cliente('mca_mostrar_datos_fijos')=='S'){
+                        $q->orwhere('niveles_acceso.mca_fijo','S');
+                    }
+                }
+            })
+            ->orderby('des_nivel_acceso')
+            ->get();
+        return view('incidencias.tipos.edit', compact('tipo','Clientes','id','estados','tipos','tipos_incidencia','perfiles'));
     }
 
     public function tipos_save(Request $r){
@@ -1483,6 +1520,7 @@ class IncidenciasController extends Controller
                 $tipo=incidencias_tipos::find($r->id);
                 $tipo->update($r->all());
                 $tipo->list_tipo_puesto=isset($r->tipos_puesto)?implode(",",$r->tipos_puesto):null;
+                $tipo->list_perfiles_ver=isset($r->list_perfiles_ver)?implode(",",$r->list_perfiles_ver):null;
                 $tipo->save();
                 
             }

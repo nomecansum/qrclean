@@ -39,7 +39,7 @@
             
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <label for="id_edificio" class="control-label">Edificio</label>
                 <select class="form-control" required id="id_edificio" name="id_edificio">
                         <option value="" style="display: none;" {{ old('id_edificio', optional($plantas)->id_edificio ?: '') == '' ? 'selected' : '' }} disabled selected>Enter id edificio here...</option>
@@ -51,9 +51,19 @@
                 </select>
                 {!! $errors->first('id_edificio', '<p class="help-block">:message</p>') !!}
             </div>
+            <div class="col-md-4">
+                <label for="tipo_vista" class="control-label">Tipo de vista</label>
+                <select class="form-control" required id="tipo_vista" name="tipo_vista">
+                        <option value="" style="display: none;" {{ old('tipo_vista', optional($plantas)->tipo_vista ?: '') == '' ? 'selected' : '' }} disabled selected>Enter tipo_vista here...</option>
+                        <option value="" {{ old('tipo_vista', optional($plantas)->tipo_vista) == null? 'selected' : '' }}>Cualquiera</option>
+                        <option value="M" {{ old('tipo_vista', optional($plantas)->tipo_vista) == 'M' ? 'selected' : '' }}>Mosaico</option>
+                        <option value="P" {{ old('tipo_vista', optional($plantas)->tipo_vista) == 'P' ? 'selected' : '' }}>Plano</option>
+                </select>
+                {!! $errors->first('tipo_vista', '<p class="help-block">:message</p>') !!}
+            </div>
         </div>
         <div class="row">
-            <div class="col-md-12 p-t-20">
+            <div class="col-md-10 p-t-20">
                 <div class="form-check">
                     <input  name="mca_publica"  id="mca_publica" value="S" {{ old('mca_publica', optional($plantas)->mca_publica ?: 'N')=='S'?'checked':'' }} class="form-check-input" type="checkbox">
                     <label class="form-check-label" for="mca_publica">Planta de acceso libre</label>
@@ -61,6 +71,7 @@
             </div>
         </div>
     </div>
+
     
     <div class="col-md-6 text-center b-all rounded">
         <div class="col-md-12" >

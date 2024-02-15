@@ -73,7 +73,7 @@
                     data-search="true"
                     data-show-columns="true"
                     data-show-columns-toggle-all="true"
-                    data-page-list="[5, 10, 20, 30, 40, 50]"
+                    data-page-list="[5, 10, 20, 30, 40, 50, 100]"
                     data-page-size="50"
                     data-pagination="true" 
                     data-buttons-class="secondary"
@@ -89,7 +89,7 @@
                             @admin<th> Procesado </th>@endadmin
                             <th>Aplica a</th>
                             @admin @desktop<th>Cliente</th>@enddesktop @endadmin
-                            <th>Responsable</th>
+                            <th>Visible para</th>
                             
                         </tr>
                     </thead>
@@ -191,8 +191,16 @@
                             </td>
                             @endadmin
                             @admin @desktop<td>{{ $tipo->nom_cliente }}</td>@enddesktop @endadmin
-                            <td style="position: relative">
-                                {{ $tipo->val_responsable }}
+                            <td style="position: relative" style="width:15%">
+                                {{-- Vamos a pone una lista de los pefriles que pueden ver este tipo de incidencia, sacada del campo list_perfiles_ver del tipo y de la tabla de perfiles para los literales --}}
+                                @php
+                                    $perfiles=DB::table('niveles_acceso')->whereIn('cod_nivel',explode(',',$tipo->list_perfiles_ver))->get();
+                                @endphp
+                                <ul style="list-style:none;position: absolute;right: 0;top: 0;">
+                                    @foreach ($perfiles as $perfil)
+                                        <li><i class="fa-solid fa-user" style="color: {{ genColorCodeFromText($perfil->des_nivel_acceso) }}"></i> {{ $perfil->des_nivel_acceso }}</li>
+                                    @endforeach
+                                </ul>
                                 <div class="pull-right floating-like-gmail mt-3" style="width: 400px;">
                                     <div class="btn-group btn-group pull-right ml-1" role="group">
                                         {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tipo->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}

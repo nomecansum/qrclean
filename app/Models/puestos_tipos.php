@@ -50,6 +50,7 @@ class puestos_tipos extends Model
                   'mca_checkin',
                   'mca_publico',
                   'mca_antelacion_obligatoria',
+                  'list_pefiles_ver'
               ];
 
     /**

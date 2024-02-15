@@ -229,6 +229,7 @@ class PlantasController extends Controller
                 'id_cliente' => 'nullable',
                 'id_edificio' => 'nullable', 
                 'num_orden' => 'required', 
+                'tipo_vista' => 'nullable|string|min:0|max:1',
         ];
         
         $data = $request->validate($rules);

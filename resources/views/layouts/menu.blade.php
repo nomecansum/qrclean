@@ -106,11 +106,11 @@
                 </li>
                 @endif
             </ul>
-            @if(checkPermissions(['Mantenimiento','Limpieza','Trabajos menu servicios'],['R']))
+            @if(checkPermissions(['Mantenimiento','Limpieza','Trabajos menu servicios','Menu servicios'],['R']))
             <h6 class="mainnav__caption mt-5 px-3 fw-bold">Servicios</h6>
             <ul class="mainnav__menu nav flex-column">
 
-                @if(checkPermissions(['Solicitudes'],['R']) && session('CL')['mca_solicitudes']=='S')
+                @if(checkPermissions(['Menu Solicitudes'],['R']) && session('CL')['mca_solicitudes']=='S')
                     <li class="nav-item">
                         <a href="{{ url('/solicitudes') }}" class="nav-link mininav-toggle collapsed solicitudes"><i class="fa-light fa-clipboard-question fs-5 me-2"></i>
                             <span class="nav-label mininav-content"> Solicitudes</span>
@@ -118,7 +118,7 @@
                     </li>    
                 @endif
 
-                @if(checkPermissions(['Incidencias'],['R']))
+                @if(checkPermissions(['Menu Incidencias'],['R']))
                     <li class="nav-item">
                         <a href="{{ url('/incidencias') }}" class="nav-link mininav-toggle collapsed incidencias"><i class="fa-light fa-exclamation-triangle fs-5 me-2"></i>
                             <span class="nav-label mininav-content"> Incidencias</span>

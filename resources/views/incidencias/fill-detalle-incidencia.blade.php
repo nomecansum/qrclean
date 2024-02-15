@@ -180,6 +180,15 @@
                 <!--===================================================-->
                 <!-- End Timeline -->
             </div>
+            <div class="pull-right mt-3" style="width: 100%;">
+                <div class="btn-group btn-group float-end ml-1" role="group">
+                    @if (!isset($incidencia->fec_cierre) && checkPermissions(['Incidencias > Accion'],["W"]))<a href="#accion-incidencia" title="Acciones incidencia" data-toggle="modal" class="btn btn-xs btn-warning add-tooltip btn-accion" data-desc="{{ $incidencia->des_incidencia}}" data-id="{{ $incidencia->id_incidencia}}" id="boton-accion{{ $incidencia->id_incidencia }}" onclick="accion_incidencia({{ $incidencia->id_incidencia}})"><span class="fad fa-plus pt-1" aria-hidden="true"></span> Accion</a>@endif
+                    @if (!isset($incidencia->fec_cierre) && checkPermissions(['Incidencias > Cerrar'],["W"]))<a href="#cerrar-incidencia" title="Cerrar incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-cierre" data-desc="{{ $incidencia->des_incidencia}}" data-id="{{ $incidencia->id_incidencia}}" id="boton-cierre{{ $incidencia->id_incidencia }}" onclick="cierre_incidencia({{ $incidencia->id_incidencia}})"><span class="fad fa-thumbs-up pt-1" aria-hidden="true"></span> Cerrar</a>@endif
+                    @if (isset($incidencia->fec_cierre) && checkPermissions(['Incidencias > Reabrir'],["W"]))<a href="#reabrir-incidencia" title="Reabrir incidencia" data-toggle="modal" class="btn btn-xs btn-success add-tooltip btn-reabrir" data-desc="{{ $incidencia->des_incidencia}}" data-id="{{ $incidencia->id_incidencia}}" id="boton-reabrir{{ $incidencia->id_incidencia }}" onclick="reabrir_incidencia({{ $incidencia->id_incidencia}})"><i class="fad fa-external-link-square-alt"></i> Reabrir</a>@endif
+                    @if (checkPermissions(['Incidencias'],["D"]))<a href="#eliminar-incidencia-{{$incidencia->id_incidencia}}" title="Borrar incidencia" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip " onclick="$('#eliminar-incidencia-{{$incidencia->id_incidencia}}').modal('show')"><span class="fa fa-trash pt-1" aria-hidden="true"></span> Del</a>@endif
+                    {{--  @if (checkPermissions(['Clientes'],["D"]))<a href="#eliminar-Cliente-{{$inc->id_incidencia}}" data-toggle="modal" class="btn btn-xs btn-danger">¡Borrado completo!</a>@endif  --}}
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="modal_img_accion">

@@ -245,9 +245,13 @@
            
 
             try{//Si tenemos defiinda la funcion de despues
-                animateCSS('.editor','fadeOut',$('.editor').hide());
                 post_form_ajax(data);
-            } catch(e){}
+                animateCSS('.editor','fadeOut',$('.editor').hide());
+                
+            } catch(e){
+                console.log('Error en  post_form_ajax() ');
+                console.log(e);
+            }
 
             setTimeout(()=>{
                 if(data.url=="reload()"){

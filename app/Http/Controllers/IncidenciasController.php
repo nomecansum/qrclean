@@ -312,6 +312,8 @@ class IncidenciasController extends Controller
             ->where(function($q) use($r){
                 if ($r->cliente) {
                     $q->WhereIn('puestos.id_cliente',$r->cliente);
+                } else {
+                    $q->Where('puestos.id_cliente',Auth::user()->id_cliente);
                 }
             })
             ->where(function($q) use($r){

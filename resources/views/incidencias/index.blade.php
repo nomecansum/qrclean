@@ -202,7 +202,7 @@
 	</form>
 </div>
 <div class="modal fade" id="accion-incidencia">
-	<form method="POST" action="{{ url('/incidencias/accion') }}" accept-charset="UTF-8" class="form-horizontal form-ajax" enctype="multipart/form-data">	
+	<form method="POST" action="{{ url('/incidencias/accion') }}" accept-charset="UTF-8" class="form-horizontal form-ajax form_accion" enctype="multipart/form-data">	
 		@csrf
 		<input type="hidden" name="adjuntos[]" id="adjuntos" value="">
 		<div class="modal-dialog modal-md">
@@ -344,14 +344,12 @@
 					// formData.append("enviar_email", $("#enviar_email").is(':checked'));
 					console.log(formData)
 				});
-				
 				//send all the form data along with the files:
 				this.on("sendingmultiple", function(data, xhr, formData) {
 					console.log("multiple")
 				});
 
 				this.on("drop", function(event) {
-					
 				});
 
 				this.on("removedfile", function(event) {
@@ -392,10 +390,13 @@
 	})
 
 	function post_form_ajax(data){
+		console.log('post form ajax');
+		console.log(data);
 		$('#cell'+data.id).removeClass('bg-pink');
 		$('#cell'+data.id).addClass('bg-success');
 		$('#cell'+data.id).html('Cerrada');
 		$('#boton-cierre'+data.id).hide();
+		edit(data.id);
 	}
    
    function cierre_incidencia(id){

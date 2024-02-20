@@ -984,8 +984,7 @@ class IncidenciasController extends Controller
                         if($abriente->id_usuario_supervisor!=null){
                             $supervisor=DB::table('users')
                                 ->where('id',$abriente->id_usuario_supervisor)
-                                ->first()
-                                ->email;
+                                ->first();
                         } else {
                             $supervisor=null;
                         }

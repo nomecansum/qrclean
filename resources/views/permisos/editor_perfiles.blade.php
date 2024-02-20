@@ -37,7 +37,7 @@
                 <div class="form-group col-md-3">
                     <label>Homepage</label>
                     <select  name="home_page" class="form-control" id="hh">
-                        <option value="" selected=""></option>
+                        {{-- <option value="" selected=""></option> --}}
                         @foreach ($homepages as $h)
                             <option value="{{$h}}" {{ isset($n) && old('id_cliente', optional($n)->home_page) == $h? 'selected' : '' }}>{{$h}}</option>
                         @endforeach

@@ -1003,6 +1003,20 @@ class IncidenciasController extends Controller
                         if($p->mca_responsable=='S' &&  $supervisor!=null){
                             $to_email[]=$supervisor->email;
                         }
+                        //Si se ha marcado la opcion de enviar a todos los de los perfiles que tienen visibilidad del tipo de incidencia
+                        //vamos a ver quienes son y los añadimos al to_email
+                        if($p->mca_perfiles=='S'){
+                            $perfiles=explode(",",$tipo->list_perfiles_ver);
+                            $usuarios=DB::table('users')
+                                ->whereIn('cod_nivel',$perfiles)
+                                ->where('id_cliente',$inc->id_cliente)
+                                ->pluck('email')
+                                ->toarray();
+                            foreach($usuarios as $u){
+                                $to_email[]=$u;
+                            }
+                        }
+
                         //Por ultimo, quitamos los duplicados y limpiamos si hubiera algun nulo y  los pasamos a string
                         $to_email=array_unique($to_email);
                         $to_email=array_filter($to_email);
@@ -1044,22 +1058,41 @@ class IncidenciasController extends Controller
                             $message->from(config('mail.from.address'),config('mail.from.name'));
                             if($momento=='C'){
                                 if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
-                                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach1);
-                                    $message->attachData($adj1,$inc->img_attach1);
-                                }     
+                                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$inc->img_attach1);
+                                    if($adj1!==null){
+                                        $message->attachData($adj1,$inc->img_attach1);
+                                    }  else {
+                                        Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach1);
+                                    }
+                                }
                                 if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
-                                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$inc->img_attach2);
-                                    $message->attachData($adj2,$inc->img_attach2);
+                                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$inc->img_attach2);
+                                    if($adj2!==null){
+                                        $message->attachData($adj2,$inc->img_attach2);
+                                    } else {
+                                        Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach2);
+                                    }
+                                    //$message->attachData($adj2,$inc->img_attach2);
                                 }
                             } else if($momento=='A'){
                                 $accion=incidencias_acciones::where('id_incidencia',$inc->id_incidencia)->orderBy('id_accion','desc')->first();
                                 if($accion->img_attach1!==null && strlen($accion->img_attach1)>5){
-                                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$accion->img_attach1);
-                                    $message->attachData($adj1,$accion->img_attach1);
-                                }     
+                                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$accion->img_attach1);
+                                    if($adj1!==null){
+                                        $message->attachData($adj1,$inc->img_attach1);
+                                    }  else {
+                                        Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach1);
+                                    }
+                                    //$message->attachData($adj1,$accion->img_attach1);
+                                }
                                 if($accion->img_attach2!==null && strlen($accion->img_attach2)>5){
-                                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$puesto->id_cliente.'/'.$accion->img_attach2);
-                                    $message->attachData($adj2,$accion->img_attach2);
+                                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$accion->img_attach2);
+                                    if($adj2!==null){
+                                        $message->attachData($adj2,$inc->img_attach2);
+                                    } else {
+                                        Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach2);
+                                    }
+                                    //$message->attachData($adj2,$accion->img_attach2);
                                 }
                             }
                         });
@@ -1202,7 +1235,7 @@ class IncidenciasController extends Controller
                         break;
                 }
             } catch(\Throwable $e){
-                Log::error("Postprocesado de incidencia ".$inc->id_incidencia." ERROR: ".$e->getMessage());
+                Log::error("Postprocesado de incidencia ".$inc->id_incidencia." ERROR: ".$e->getMessage()." ".$e->getLine()." ".$e->getFile()." ".$e->getTraceAsString()." ".$e->getCode()." ".$e->getPrevious());
                 //dump($e);
             }
         }

@@ -229,6 +229,7 @@ class ReservasController extends Controller
             ->where('id_usuario',Auth::user()->id)
             ->orwhere('plantas.mca_publica','S')
             ->distinct()
+            ->orderby('plantas.num_orden')
             ->get();
 
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);

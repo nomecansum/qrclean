@@ -393,10 +393,12 @@
 	function post_form_ajax(data){
 		console.log('post form ajax');
 		console.log(data);
-		$('#cell'+data.id).removeClass('bg-pink');
-		$('#cell'+data.id).addClass('bg-success');
-		$('#cell'+data.id).html('Cerrada');
-		$('#boton-cierre'+data.id).hide();
+		if(data.cierre=='S'){
+			$('#cell'+data.id).removeClass('bg-pink');
+			$('#cell'+data.id).addClass('bg-success');
+			$('#cell'+data.id).html('Cerrada');
+			$('#boton-cierre'+data.id).hide();
+		}
 		edit(data.id);
 	}
    

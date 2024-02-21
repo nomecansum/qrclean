@@ -202,17 +202,31 @@ class sincronizarWorkdayGenerali extends Command
     }
 
     static function insertar_usu($id,$nombre,$cliente,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno,$puesto,$planta,$id_tarea){
+        //Estos son los datos basicos que se pondran a cualquier usuario, plantas y tipos de puesto que todos tienen que tener
+        $plantas_fijas=[751,771,781,791];
+        $tipos_puesto_fijos=[311,396,411,421];
+
         if($id!=null){
             $dato=users::find($id);
             if($nivel->val_nivel_acceso>$dato->val_nivel_acceso){
                 $dato->cod_nivel=$nivel->cod_nivel;
                 $dato->nivel_acceso=$nivel->val_nivel_acceso;
+                //Compromaos si el usuario tiene los tipos de puesto que tiene que tener, si no los tiene, se los añadimos
+                $tipos_usuario=$dato->tipos_puesto_admitidos;
+                $tipos_usuario=explode(",",$tipos_usuario);
+                foreach($tipos_puesto_fijos as $tipo_puesto_fijo){
+                    if(!in_array($tipo_puesto_fijo,$tipos_usuario)){
+                        $tipos_usuario[]=$tipo_puesto_fijo;
+                    }
+                }
+                $tipos_usuario=implode(",",$tipos_usuario);
+                $dato->tipos_puesto_admitidos=$tipos_usuario;
             }
         } else {
             $dato=new users();
             $dato->cod_nivel=$nivel->cod_nivel;
             $dato->nivel_acceso=$nivel->val_nivel_acceso;
-            $dato->tipos_puesto_admitidos="311,396,411";
+            $dato->tipos_puesto_admitidos="311,396,411,421";
         }
         try{
             $dato->name=$nombre;
@@ -265,6 +279,13 @@ class sincronizarWorkdayGenerali extends Command
                 if(!isset($esta)){
                     DB::table('plantas_usuario')->insert(['id_planta'=>$planta,'id_usuario'=>$dato->id]);
                 }
+                //Aqui vamos a comprobar si el usuario tiene las plantas que hemos puesto como por defecto para todos y si le falta alguna, la añadimos
+                foreach($plantas_fijas as $planta_fija){
+                    $esta=DB::table('plantas_usuario')->where('id_usuario',$dato->id)->where('id_planta',$planta_fija)->first();
+                    if(!isset($esta)){
+                        DB::table('plantas_usuario')->insert(['id_planta'=>$planta_fija,'id_usuario'=>$dato->id]);
+                    }
+                }   
             }
             
         }

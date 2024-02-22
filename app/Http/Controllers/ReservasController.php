@@ -171,13 +171,12 @@ class ReservasController extends Controller
             ->get();
 
         $plantas_usuario=DB::table('plantas_usuario')
-            ->select('plantas.id_planta','plantas.des_planta','plantas.id_edificio','plantas.mca_publica')
+            ->select('plantas.*')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
             ->get();
 
         $plantas_publicas=DB::table('plantas')
-            ->select('plantas.id_planta','plantas.des_planta','plantas.id_edificio','plantas.mca_publica')
             ->where('mca_publica','S')
             ->where('id_cliente',Auth::user()->id_cliente)
             ->get();

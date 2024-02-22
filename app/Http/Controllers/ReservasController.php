@@ -133,7 +133,7 @@ class ReservasController extends Controller
     }
 
     public function create($fecha){
-        ini_set('memory_limit', '-1');
+        //ini_set('memory_limit', '-1');
         $reserva=new reservas;
         $f1=Carbon::parse($fecha);
         $tipos = DB::table('puestos_tipos')
@@ -164,6 +164,7 @@ class ReservasController extends Controller
             ->get();
         //Primero comprobamos si tiene una reserva para ese dia
         $misreservas=DB::table('reservas')
+            ->select('reservas.*','puestos.des_puesto','puestos_tipos.val_icono','puestos_tipos.val_color','puestos_tipos.des_tipo_puesto')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->whereraw("date(fec_reserva)='".$f1->format('Y-m-d')."'")
@@ -171,7 +172,7 @@ class ReservasController extends Controller
             ->get();
 
         $plantas_usuario=DB::table('plantas_usuario')
-            ->select('plantas.*')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
             ->orwhere('plantas.mca_publica','S')

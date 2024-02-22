@@ -174,14 +174,25 @@ class ReservasController extends Controller
             ->select('plantas.*')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
-            ->orwhere('plantas.mca_publica','S')
+            ->get();
+
+        $plantas_publicas=DB::table('plantas')
+            ->where('mca_publica','S')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+
+        $plantas_usuario=$plantas_usuario->merge($plantas_publicas);
+
+        $edificios_usuario=DB::table('plantas')
+            ->leftjoin('plantas_usuario','plantas_usuario.id_planta','plantas.id_planta')
+            ->wherein('plantas.id_planta',$plantas_usuario->pluck('id_planta')->toarray())
             ->get();
 
         $reserva->id_planta=0;
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
         $perfil_usuario=niveles_acceso::find(Auth::user()->cod_nivel);
 
-        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario'));
+        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario','edificios_usuario'));
     }
 
     public function edit($id){
@@ -225,38 +236,48 @@ class ReservasController extends Controller
 
         $plantas_usuario=DB::table('plantas_usuario')
             ->select('plantas.*')
-            ->leftjoin('plantas','plantas.id_planta','plantas_usuario.id_planta')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
-            ->orwhere('plantas.mca_publica','S')
-            ->distinct()
-            ->orderby('plantas.num_orden')
+            ->get();
+
+        $plantas_publicas=DB::table('plantas')
+            ->where('mca_publica','S')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+
+        $plantas_usuario=$plantas_usuario->merge($plantas_publicas);
+
+        $edificios_usuario=DB::table('plantas')
+            ->leftjoin('plantas_usuario','plantas_usuario.id_planta','plantas.id_planta')
+            ->wherein('plantas.id_planta',$plantas_usuario->pluck('id_planta')->toarray())
             ->get();
 
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
         $perfil_usuario=niveles_acceso::find(Auth::user()->cod_nivel);
         $edit=$reserva->id_reserva;
 
-        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario','edit'));
+        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario','edit','edificios_usuario'));
     }
 
     public function comprobar_puestos(Request $r){
 
-        $plantas_usuario=DB::table('plantas')
-            ->leftjoin('plantas_usuario','plantas.id_planta','plantas_usuario.id_planta')
+        $plantas_usuario=DB::table('plantas_usuario')
+            ->select('plantas.*')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
-            ->orwhere('plantas.mca_publica','S')
-            ->pluck('plantas.id_planta')
-            ->unique()
-            ->toArray();
+            ->get();
+
+        $plantas_publicas=DB::table('plantas')
+            ->where('mca_publica','S')
+            ->where('id_cliente',Auth::user()->id_cliente)
+            ->get();
+
+        $plantas_usuario=$plantas_usuario->merge($plantas_publicas);
 
         $edificios_usuario=DB::table('plantas')
             ->leftjoin('plantas_usuario','plantas_usuario.id_planta','plantas.id_planta')
-            ->where(function($q){
-                $q->where('plantas_usuario.id_usuario',Auth::user()->id);
-                $q->orwhere('plantas.mca_publica','S');
-            })
+            ->weherein('plantas.id_planta',$plantas_usuario->pluck('id_planta')->toarray())
             ->pluck('id_edificio')
-            ->unique()
             ->toArray();
        
         $usuario=DB::table('users')

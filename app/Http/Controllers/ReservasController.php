@@ -133,7 +133,7 @@ class ReservasController extends Controller
     }
 
     public function create($fecha){
-        
+        ini_set('memory_limit', '-1');
         $reserva=new reservas;
         $f1=Carbon::parse($fecha);
         $tipos = DB::table('puestos_tipos')

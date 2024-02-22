@@ -14,6 +14,5 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/users/tema', 
         '/next_cron',   
-        '*'
     ];
 }

@@ -164,7 +164,7 @@ class ReservasController extends Controller
             ->get();
         //Primero comprobamos si tiene una reserva para ese dia
         $misreservas=DB::table('reservas')
-            ->select('reservas.*','puestos.des_puesto','puestos_tipos.val_icono','puestos_tipos.val_color','puestos_tipos.des_tipo_puesto')
+            ->select('reservas.*','puestos.des_puesto','puestos_tipos.val_icono','puestos_tipos.val_color','puestos_tipos.des_tipo_puesto','puestos.cod_puesto','puestos.id_planta')
             ->join('puestos','puestos.id_puesto','reservas.id_puesto')
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->whereraw("date(fec_reserva)='".$f1->format('Y-m-d')."'")

@@ -104,12 +104,12 @@
             </div>
         </div>
         <div class="card-body tab-content">
-            @if(session('CL')['val_editor_reservas']=='R' || session('CL')['val_editor_reservas']=='T')
+            @if(isset(session('CL')['val_editor_reservas']) && (session('CL')['val_editor_reservas']=='R' || session('CL')['val_editor_reservas']=='T'))
                 <div id="div_rapido" class="tab-pane fade active show" role="tabpanel" aria-labelledby="rapido-tab">
                     @include('reservas.fill_editor_reserva_rapido')
                 </div>
             @endif
-            @if(session('CL')['val_editor_reservas']=='A' || session('CL')['val_editor_reservas']=='T')
+            @if(!isset(session('CL')['val_editor_reservas']) || (isset(session('CL')['val_editor_reservas']) && (session('CL')['val_editor_reservas']=='A' || session('CL')['val_editor_reservas']=='T')))
                 <div id="div_avanzado" class="tab-pane fade" role="tabpanel" aria-labelledby="avanzado-tab">
                     @include('reservas.fill_editor_reserva_avanzado')
                 </div>
@@ -154,8 +154,6 @@
         </div>
     </div>
  </div>
-
- 
  <script>
 
     //$('#frm_contador').on('submit',form_ajax_submit);
@@ -364,7 +362,7 @@
 
     var picker = new Litepicker({
         element: document.getElementById( "fechas" ),
-        singleMode: false,
+        @if(session('perfil')->mca_reservar_rango_fechas=='N')singleMode: true @else singleMode: false @endif,
         @desktop numberOfMonths: 2, @elsedesktop numberOfMonths: 1, @enddesktop
         @desktop numberOfColumns: 2, @elsedesktop numberOfColumns: 1, @enddesktop
         autoApply: true,

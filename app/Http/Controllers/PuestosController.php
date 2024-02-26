@@ -623,6 +623,7 @@ class PuestosController extends Controller
                         $slot=new stdClass;
                         $slot->hora_inicio=$value;
                         $slot->hora_fin=$r->hora_fin[$key];
+                        $slot->etiqueta=$r->etiqueta[$key];
                         $slots[]=$slot;
                     }
                 }

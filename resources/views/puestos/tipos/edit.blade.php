@@ -161,6 +161,10 @@
                                         <label for="">Fin</label><br>
                                         <input type="time" autocomplete="off"  name="hora_fin[]"  class="form-control fin" value="{{ $slot->hora_fin }}" />
                                     </div>
+                                    <div>
+                                        <label for="">Etiqueta</label><br>
+                                        <input type="text" autocomplete="off"  name="etiqueta[]"  class="form-control" value="{{ $slot->etiqueta??'' }}" />
+                                    </div>
                                 </div>
                                 @endforeach
                             @endif
@@ -179,6 +183,10 @@
                                     <div>
                                         <label for="">Fin</label><br>
                                         <input type="time" autocomplete="off"  name="hora_fin[]"  class="form-control fin" value="" />
+                                    </div>
+                                    <div>
+                                        <label for="">Etiqueta</label><br>
+                                        <input type="text" autocomplete="off"  name="etiqueta[]"  class="form-control" value="" />
                                     </div>
                                 </div>  
                             </div>

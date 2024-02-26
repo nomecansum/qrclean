@@ -291,6 +291,7 @@ class UsersController extends Controller
 
         //Para los puestos preferidos del usuario
         $puestos=DB::table('puestos')
+            ->select('puestos.id_puesto','puestos.id_edificio','puestos.id_planta','puestos.des_puesto','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado','clientes.nom_cliente','puestos.cod_puesto')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -303,11 +304,13 @@ class UsersController extends Controller
             ->get();
 
         $plantas=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.id_edificio','plantas.des_planta')
             ->where('plantas.id_cliente',$users->id_cliente)
             ->orderby('plantas.id_planta')
             ->get();
 
         $plantas_usuario=DB::table('plantas_usuario')
+            ->select('plantas.id_planta','plantas.id_edificio','plantas.des_planta','edificios.des_edificio')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->join('edificios','plantas.id_edificio','edificios.id_edificio')
             ->join('plantas_zonas','plantas.id_planta','plantas_zonas.id_planta')

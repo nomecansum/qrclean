@@ -175,14 +175,29 @@ class ReservasController extends Controller
             ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
-            ->orwhere('plantas.mca_publica','S')
+            ->get();
+
+        $plantas_publicas=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
+            ->where('mca_publica','S')
+            ->get();
+
+        $plantas_usuario=$plantas_usuario->merge($plantas_publicas);
+
+        
+        $edificios_usuario=DB::table('plantas')
+            ->select('edificios.id_edificio','edificios.des_edificio')
+            ->leftjoin('edificios','edificios.id_edificio','plantas.id_edificio')
+            ->wherein('plantas.id_planta',array_unique($plantas_usuario->pluck('id_planta')->toarray()))
+            ->where('edificios.id_cliente',Auth::user()->id_cliente)
+            ->distinct()
             ->get();
 
         $reserva->id_planta=0;
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
         $perfil_usuario=niveles_acceso::find(Auth::user()->cod_nivel);
 
-        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario'));
+        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario','edificios_usuario'));
     }
 
     public function edit($id){
@@ -225,40 +240,54 @@ class ReservasController extends Controller
             ->get();
 
         $plantas_usuario=DB::table('plantas_usuario')
-            ->select('plantas.*')
-            ->leftjoin('plantas','plantas.id_planta','plantas_usuario.id_planta')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
-            ->orwhere('plantas.mca_publica','S')
-            ->distinct()
-            ->orderby('plantas.num_orden')
             ->get();
+
+        $plantas_publicas=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
+            ->where('mca_publica','S')
+            ->get();
+
+        $plantas_usuario=$plantas_usuario->merge($plantas_publicas);
+
+        $edificios_usuario=DB::table('plantas')
+            ->select('edificios.id_edificio','edificios.des_edificio')
+            ->leftjoin('edificios','edificios.id_edificio','plantas.id_edificio')
+            ->wherein('plantas.id_planta',array_unique($plantas_usuario->pluck('id_planta')->toarray()))
+            ->where('edificios.id_cliente',Auth::user()->id_cliente)
+            ->distinct()
+            ->get();
+       
+
 
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
         $perfil_usuario=niveles_acceso::find(Auth::user()->cod_nivel);
         $edit=$reserva->id_reserva;
 
-        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario','edit'));
+        return view('reservas.edit',compact('reserva','f1','tipos','misreservas','plantas_usuario','festivos_usuario','perfil_usuario','edit','edificios_usuario'));
     }
 
     public function comprobar_puestos(Request $r){
 
-        $plantas_usuario=DB::table('plantas')
-            ->leftjoin('plantas_usuario','plantas.id_planta','plantas_usuario.id_planta')
+        $plantas_usuario=DB::table('plantas_usuario')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
-            ->orwhere('plantas.mca_publica','S')
-            ->pluck('plantas.id_planta')
-            ->unique()
-            ->toArray();
+            ->get();
+
+        $plantas_publicas=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
+            ->where('mca_publica','S')
+            ->get();
+
+        $plantas_usuario=$plantas_usuario->merge($plantas_publicas)->pluck('id_planta')->toarray();
 
         $edificios_usuario=DB::table('plantas')
-            ->leftjoin('plantas_usuario','plantas_usuario.id_planta','plantas.id_planta')
-            ->where(function($q){
-                $q->where('plantas_usuario.id_usuario',Auth::user()->id);
-                $q->orwhere('plantas.mca_publica','S');
-            })
-            ->pluck('id_edificio')
-            ->unique()
-            ->toArray();
+            ->leftjoin('edificios','edificios.id_edificio','plantas.id_edificio')
+            ->wherein('plantas.id_planta',$plantas_usuario)
+            ->get();
        
         $usuario=DB::table('users')
             ->join('niveles_acceso','niveles_acceso.cod_nivel','users.cod_nivel')
@@ -524,19 +553,15 @@ class ReservasController extends Controller
             ->select('id_edificio','des_edificio')
             ->selectraw("(select count(id_planta) from plantas where id_edificio=edificios.id_edificio) as plantas")
             ->selectraw("(select count(id_puesto) from puestos where id_edificio=edificios.id_edificio) as puestos")
-            ->where(function($q){
-                if (!isAdmin()) {
-                    $q->where('edificios.id_cliente',Auth::user()->id_cliente);
-                } else {
-                    $q->where('edificios.id_cliente',session('CL')['id_cliente']);
-                }
-            })
+            ->where('edificios.id_cliente',Auth::user()->id_cliente)
             ->where(function($q) use($edificios_usuario){
                 if(session('CL') && session('CL')['mca_restringir_usuarios_planta']=='S'){
-                    $q->wherein('edificios.id_edificio',$edificios_usuario??[]);
+                    $q->wherein('edificios.id_edificio',array_unique($edificios_usuario->pluck('id_edificio')->toArray())??[]);
                 }
             })
             ->where('id_edificio',$r->edificio)
+            ->orderby('des_edificio')
+            ->distinct()
             ->get();
 
         $tipo_vista=$r->tipo;
@@ -1119,5 +1144,33 @@ class ReservasController extends Controller
         $slots=collect(json_decode($tipo->slots_reserva))->sortby('hora_inicio');
 
         return view ('reservas.fill_slots_reserva',compact('slots','tipo','reserva'));
+    }
+
+    public function plantas_tipo($id){
+        $plantas_usuario=DB::table('plantas_usuario')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
+            ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
+            ->where('id_usuario',Auth::user()->id)
+            ->get();
+
+        $plantas_publicas=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
+            ->where('mca_publica','S')
+            ->get();
+
+        $plantas_usuario=$plantas_usuario->merge($plantas_publicas)->pluck('id_planta')->toarray();
+
+        $edificios_usuario=DB::table('plantas')
+            ->select('edificios.id_edificio','edificios.des_edificio')
+            ->selectraw('ifnull(count(distinct(plantas.id_planta)),0) as cuenta')
+            ->selectraw('group_concat(distinct(plantas.id_planta)) as plantas')
+            ->join('edificios','edificios.id_edificio','plantas.id_edificio')
+            ->join('puestos','puestos.id_planta','plantas.id_planta')
+            ->where('puestos.id_tipo_puesto',$id)
+            ->wherein('plantas.id_planta',$plantas_usuario)
+            ->groupby('edificios.id_edificio','edificios.des_edificio')
+            ->get();
+
+        return $edificios_usuario;
     }
 }

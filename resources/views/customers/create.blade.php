@@ -305,6 +305,14 @@
 									<option value="H" {{ isset($config->mca_tipo_antelacion)&&$config->mca_tipo_antelacion=='H'?'selected':'' }}>Desde la hora min</option>
 								</select>
 							</div>
+							<div class="form-group col-md-2" id="tipo_editor">
+								<label for="val_editor_reservas"   class="add-tooltip" title="Determina que tipo de formulario se presenta al usuario al hacer una reserva: Avanzado con todas las opciones, Rapido con botones para tipo y planta o ambos con un selector en la parte superior para poder cambiar entre uno y otro">Editor de reservas</label><br>
+								<select name="val_editor_reservas" id="val_editor_reservas" class="form-control" style="width: 100%">
+									<option value="A" {{ isset($config->val_editor_reservas)&&$config->val_editor_reservas=='A'?'selected':'' }}>Avanzado</option>
+									<option value="R" {{ isset($config->val_editor_reservas)&&$config->val_editor_reservas=='R'?'selected':'' }}>Rapido</option>
+									<option value="T" {{ isset($config->val_editor_reservas)&&$config->val_editor_reservas=='T'?'selected':'' }}>Ambos</option>
+								</select>
+							</div>
 
 						</div>
 

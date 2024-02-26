@@ -79,13 +79,36 @@
             @endif
             <div class="row mt-3">
                 <div class="col-md-6">
-                    @if($incidencia->img_attach1)
-                        <img onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}')" src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}" style="width: 100%">
+                    @if(isset($incidencia->img_attach1)  && $incidencia->img_attach1!='')
+                        <a class="link_imagen" 
+                        @if(str_contains(get_mime_type($incidencia->img_attach1),'image')>0) onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}')"@endif 
+                        href="@if(str_contains(get_mime_type($incidencia->img_attach1),'image')>0) #modal_img_accion @else {{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }} @endif" 
+                        data-toggle="modal" data-src="" >
+                        @if(str_contains(get_mime_type($incidencia->img_attach1),'image')>0)
+                            <img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}" style="height: 100px"> 
+                        @else <i class="fa-solid fa-file"></i> {{ $incidencia->img_attach1 }} 
+                        @endif
+                        </a>
                     @endif
+                    
+
+                    {{-- @if($incidencia->img_attach1 && str_contains(get_mime_type($incidencia->img_attach1),'.image')>0)
+                        <img onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}')" src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}" style="width: 100%">
+                    @endif --}}
                 </div>
                 <div class="col-md-6">
-                    @if($incidencia->img_attach2)
+                    {{-- @if($incidencia->img_attach2)
                         <img onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach1) }}')" src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach2) }}" style="width: 100%">
+                    @endif --}}
+                    @if(isset($incidencia->img_attach2)  && $incidencia->img_attach2!='' && $incidencia->img_attach2!='')
+                        <a class="link_imagen" 
+                            @if(str_contains(get_mime_type($incidencia->img_attach2),'image')>0) onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach2) }}')" @endif 
+                            href="@if(str_contains(get_mime_type($incidencia->img_attach2),'image')>0) #modal_img_accion @else {{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach2) }} @endif" 
+                            data-toggle="modal" data-src="" >
+                            @if(str_contains(get_mime_type($incidencia->img_attach2),'image')>0)
+                                <img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$incidencia->img_attach2) }}" style="height: 100px">
+                            @else <i class="fa-solid fa-file"></i> {{ $incidencia->img_attach2 }} 
+                            @endif</a>
                     @endif
                 </div>
             </div>
@@ -136,8 +159,27 @@
                                 <span class="btn-link">{{ $accion->name }}</span> <i>{{ $accion->des_accion }}</i>
                                 <br>
                                 <div class="float-right">
-                                    @if(isset($accion->img_attach1)  && $accion->img_attach1!='')<a class="link_imagen" onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}')" href="#modal_img_accion" data-toggle="modal" data-src="" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" style="height: 100px"></a>@endif
-                                    @if(isset($accion->img_attach2)  && $accion->img_attach2!='')<a class="link_imagen" onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}')" href="#modal_img_accion" data-toggle="modal" data-src="" ><img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" style="height: 100px"></a>@endif
+                                    @if(isset($accion->img_attach1)  && $accion->img_attach1!='')
+                                        <a class="link_imagen" 
+                                        @if(str_contains(get_mime_type($accion->img_attach1),'image')>0) onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}')"@endif 
+                                        href="@if(str_contains(get_mime_type($accion->img_attach1),'image')>0) #modal_img_accion @else {{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }} @endif" 
+                                        data-toggle="modal" data-src="" >
+                                        @if(str_contains(get_mime_type($accion->img_attach1),'image')>0)
+                                            <img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach1) }}" style="height: 100px"> 
+                                        @else <i class="fa-solid fa-file"></i> {{ $accion->img_attach1 }} 
+                                        @endif
+                                        </a>
+                                    @endif
+                                    @if(isset($accion->img_attach2)  && $accion->img_attach2!='' && $accion->img_attach2!='')
+                                        <a class="link_imagen" 
+                                            @if(str_contains(get_mime_type($accion->img_attach2),'image')>0) onclick="ampliar('{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}')" @endif 
+                                            href="@if(str_contains(get_mime_type($accion->img_attach2),'image')>0) #modal_img_accion @else {{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }} @endif" 
+                                            data-toggle="modal" data-src="" >
+                                            @if(str_contains(get_mime_type($accion->img_attach2),'image')>0)
+                                                <img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" style="height: 100px">
+                                            @else <i class="fa-solid fa-file"></i> {{ $accion->img_attach2 }} 
+                                            @endif</a>
+                                    @endif
                                 </div>
                             </div>
                             @if(isset($accion->id_estado))

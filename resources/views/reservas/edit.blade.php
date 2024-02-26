@@ -75,119 +75,87 @@
         </div>
     </div>
 @endif
-
+ 
 <div class="card" id="editor">
     
     <div class="card">
-        <div class="card-body">
-            <div class="card-header toolbar">
-                <div class="toolbar-start">
-                    <h5 class="m-0">Reserva de puesto</h5>
+        <div class="card-header toolbar">
+            <div class="toolbar-start">
+                <h5 class="m-0">Reserva de puesto</h5>
+            </div>
+            <div class="toolbar-end">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-pills card-header-pills" role="tablist">
+                    @if(session('CL')['val_editor_reservas']=='R' || session('CL')['val_editor_reservas']=='T')
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#div_rapido" type="button" id="btn_rapida" role="tab" aria-controls="rapido" aria-selected="true">Reserva rápida</button>
+                    </li>
+                    @endif
+                    @if(session('CL')['val_editor_reservas']=='A' || session('CL')['val_editor_reservas']=='T')
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#div_avanzado" type="button"  id="btn_avanzada"  role="tab" aria-controls="avanzado" aria-selected="false">Avanzado</button>
+                    </li>    
+                    @endif            
+                </ul>
+                <button type="button" class="btn-close btn-close-card">
+                    <span class="visually-hidden">Close the card</span>
+                </button>
+            </div>
+        </div>
+        <div class="card-body tab-content">
+            @if(session('CL')['val_editor_reservas']=='R' || session('CL')['val_editor_reservas']=='T')
+                <div id="div_rapido" class="tab-pane fade active show" role="tabpanel" aria-labelledby="rapido-tab">
+                    @include('reservas.fill_editor_reserva_rapido')
                 </div>
-                <div class="toolbar-end">
-                    <button type="button" class="btn-close btn-close-card">
-                        <span class="visually-hidden">Close the card</span>
-                    </button>
+            @endif
+            @if(session('CL')['val_editor_reservas']=='A' || session('CL')['val_editor_reservas']=='T')
+                <div id="div_avanzado" class="tab-pane fade" role="tabpanel" aria-labelledby="avanzado-tab">
+                    @include('reservas.fill_editor_reserva_avanzado')
+                </div>
+            @endif
+            <div class="row mt-2">
+                @if(session('CL')['mca_reserva_horas']=='S')
+                <div class="form-group col-md-7" id="slider" style="padding-left: 30px; padding-right: 30px"  style="display: none">
+                    <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>] <span id="obs" class="text-info"></span></label>
+                    <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
+                </div>
+                @endif
+                <div class="form-group col-md-12"  id="slots" style="display: none">
+                
+                </div>
+                <div class="form-group col-md-5" id="div_tags" style="display: none">
+                    <label>Tags
+                        <input id="andor" name="andor" type="checkbox">
+                        <span id="andor-field" class="label label-info">OR</span>
+                    </label>
+                    <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tags[]" id="multi-tag" >
+                        @foreach(DB::table('tags')->where('id_cliente',Auth::user()->id_cliente)->get() as $tag)
+                            <option value="{{ $tag->id_tag}}">{{ $tag->nom_tag }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
-            <form  action="{{url('reservas/save')}}" method="POST" name="frm_contador" id="frm_contador" class="form-ajax">
-                <div class="row">
-                    <input type="hidden" name="id_reserva" value="{{ $reserva->id_reserva }}">
-                    <input type="hidden" name="id_cliente" value="{{ $reserva->id_cliente }}">
-                    <input type="hidden" id="id_puesto" name="id_puesto" value="">
-                    <input type="hidden" id="des_puesto_form" name="des_puesto" value="">
-                    <input type="hidden" name="tipo_vista" id="tipo_vista" value="{{ Auth::user()->val_vista_puestos??'comprobar' }}">
-                    <input type="hidden" name="hora_inicio" id="hora_inicio" value="{{ isset($reserva->fec_reserva)?Carbon\Carbon::parse($reserva->fec_reserva)->format('H:i'):'00:00' }}">
-                    <input type="hidden" name="hora_fin" id="hora_fin" value="{{ isset($reserva->fec_fin_reserva)?Carbon\Carbon::parse($reserva->fec_fin_reserva)->format('H:i'):'23:59' }}">
-                    {{csrf_field()}}
-                    <div class="form-group col-md-4">
-                        <label for="fechas">Fecha</label>
-                        {{--  <div class="input-group">
-                            <input type="text" class="form-control pull-left singledate" id="fechas" name="fechas" style="width: 180px" value="{{ $f1->format('d/m/Y')}}">
-                            <span class="btn input-group-text btn-secondary datepickerbutton" disabled  style="height: 33px"><i class="fas fa-calendar mt-1"></i></span>
-                        </div>  --}}
-                        <div class="input-group">
-                            <input type="text" class="form-control pull-left" id="fechas" autocomplete="off" name="fechas" style="" value="{{ $f1->format('d/m/Y').' - '.$f1->format('d/m/Y') }}">
-                            <span class="btn input-group-text btn-secondary btn_calendario"   style="height: 40px"><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
-                        </div>
-
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="id_edificio"><i class="fad fa-building"></i> Edificio</label>
-                        <select name="id_edificio" id="id_edificio" class="form-control">
-                            @foreach(DB::table('edificios')->where('id_cliente',Auth::user()->id_cliente)->get() as $edificio)
-                                <option value="{{ $edificio->id_edificio}}" {{ $reserva->id_edificio==$edificio->id_edificio?'selected':'' }}>{{ $edificio->des_edificio }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="planta"><i class="fad fa-layer-group"></i> Planta</label>
-                        <select name="id_planta" id="id_planta" class="form-control">
-                            <option value="0">Cualquiera</option>
-                            @foreach($plantas_usuario as $p)
-                                <option value="{{ $p->id_planta}}" {{ $reserva->id_planta!=0?($reserva->id_planta==$p->id_planta?'selected':''):($p->id_planta==session('planta_pref')?'selected':'') }}>{{ $p->des_planta }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="id_usuario">Tipo de puesto</label>
-                        <select name="id_tipo_puesto" id="id_tipo_puesto" class="form-control">
-                            <option value="0">Cualquiera</option>
-                            {{-- <option value="">Seleccione un tipo de puesto</option> --}}
-                            @foreach($tipos as $t)
-                                <option value="{{ $t->id_tipo_puesto}}" {{ isset($reserva->id_tipo_puesto)&&$reserva->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }} data-observaciones="{{ $t->observaciones }}" data-slots="{{ $t->slots_reserva }}">{{ $t->des_tipo_puesto }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+            <div class="row" id="btn_add_calendario" style="display:none">
+                <div class="d-flex">
                     
-                    
-                   
-                    
+                    <div class="form-check form-switch">
+                        <input id="_dm-dbInvisibleMode" class="form-check-input" type="checkbox"  name="mca_ical"  id="mca_ical" value="S">
+                    </div>
+                    <label class="form-check-label h6 mt-1" for="_dm-dbInvisibleMode">Añadir a mi calendario</label>
                 </div>
-                <div class="row mt-2">
-                    @if(session('CL')['mca_reserva_horas']=='S')
-                    <div class="form-group col-md-7" id="slider" style="padding-left: 30px; padding-right: 30px">
-                        <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>] <span id="obs" class="text-info"></span></label>
-                        <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
-                    </div>
-                    @endif
-                    <div class="form-group col-md-7"  id="slots" style="display: none">
-                    
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label>Tags
-                            <input id="andor" name="andor" type="checkbox">
-                            <span id="andor-field" class="label label-info">OR</span>
-                        </label>
-                        <select class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple" name="tags[]" id="multi-tag" >
-                            @foreach(DB::table('tags')->where('id_cliente',Auth::user()->id_cliente)->get() as $tag)
-                                <option value="{{ $tag->id_tag}}">{{ $tag->nom_tag }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+            </div>
+        
+            <div class="row">
+                <div class="col-md-12" id="detalles_reserva">
+        
                 </div>
-                <div class="row">
-                    <div class="d-flex">
-                        
-                        <div class="form-check form-switch">
-                            <input id="_dm-dbInvisibleMode" class="form-check-input" type="checkbox"  name="mca_ical"  id="mca_ical" value="S">
-                        </div>
-                        <label class="form-check-label h6 mt-1" for="_dm-dbInvisibleMode">Añadir a mi calendario</label>
-                    </div>
-                </div>
-            
-                <div class="row">
-                    <div class="col-md-12" id="detalles_reserva">
-
-                    </div>
-                </div>
-                
-                
-            </form>
+            </div>
         </div>
     </div>
  </div>
 
+ 
  <script>
 
     //$('#frm_contador').on('submit',form_ajax_submit);
@@ -198,7 +166,10 @@
             $('#id_planta').prepend("<option value='0'>Cualquiera</option>")
         });
         comprobar_puestos();
-        
+        var slots=false;
+        var tipo_seleccionado=0;
+        var edificio_rapido=0;
+        var planta_rapida=0;
     })
 
     var changeCheckbox = document.getElementById('andor'), changeField = document.getElementById('andor-field');
@@ -309,9 +280,87 @@
         });
     }
 
+    function comprobar_rapida(){
+        //console.log($('#fechas').val());
+        $plantas=[];
+        $('.btn_planta').each(function(){
+            if($(this).is(':checked')){
+               
+                $plantas.push($(this).val());
+                $('#id_planta').val($plantas);
+            }
+        })
+        $('.btn_tipo_puesto').each(function(){
+            if($(this).is(':checked')){
+                $('#id_tipo_puesto').val($(this).val());
+            }
+        })
+
+        console.log($('#id_planta').val(),$('#id_tipo_puesto').val());
+        $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fechas: $('#fechas').val(),edificio:edificio_rapido,tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val(),id_planta:planta_rapida,tags:$('#multi-tag').val(),andor:$('#andor').is(':checked'),'id_reserva':{{ $edit??0 }}}, function(data, textStatus, xhr) {
+            $('#detalles_reserva').html(data);
+        });
+    }
+
     $('#id_edificio, #id_tipo_puesto, #id_planta, #multi-tag').change(function(){
       comprobar_puestos();
-    })
+    });
+
+    function mostrar_datos_reserva_rapida(){
+        
+        console.log(slots);
+        if(slots==true){
+            $('#slots').load('{{ url('reservas/slots') }}/'+tipo_seleccionado+"/{{ $reserva->id_reserva??0 }}", function(){
+                $('#slots').show();
+                $('#slider').hide();
+            });
+            console.log("cambio a slots")
+        } else {
+            $('#slider').show();
+            $('#slots').hide();
+            console.log("cambio a slider")
+        }
+        comprobar_rapida();
+    }
+
+    $('.btn_tipo_puesto').click(function(){
+        //Primero comprobamos si el tipo tiene mas de una planta
+        slots=$(this).data('slots')!=0?true:false;
+        $('#slots').hide();
+        $('#slider').hide();
+        tipo_seleccionado=$(this).val();
+        $.get('{{ url('reservas/plantas_tipo') }}/'+$(this).val(), function(data) {
+            $('.btn_planta').prop('checked',false);
+            $('.div_plantas').hide();
+            $('#detalles_reserva').empty();
+            planta_rapida=0;
+            if(data.length>1){
+                $('.div_plantas').show();
+                $('.btn_planta').prop('checked',false);
+                $('.btn_planta').hide();
+                $('.lbl_planta').hide();
+                //Vamos a mostrar solo las plantas que tocan
+                data.forEach(function(item){
+                    
+                    var array = item.plantas.split(",");
+                    array.forEach(function(p){
+                        $('#btnplanta'+p).show();
+                        $('#btnplanta'+p).next().show();
+                    })
+                })
+               
+                edificio_rapido=0;
+            } else {
+                edificio_rapido=data[0].id_edificio;
+                mostrar_datos_reserva_rapida();
+            }
+        });
+    });
+    $('.btn_planta').click(function(){
+        edificio_rapido=$(this).data('edificio');
+        planta_rapida=$(this).data('planta');
+        mostrar_datos_reserva_rapida();
+    });
 
     var picker = new Litepicker({
         element: document.getElementById( "fechas" ),
@@ -460,5 +509,24 @@
     $('#tablares').bootstrapTable();
     @endmobile
 
+
+    $('#btn_rapida').click(function(){
+        $('#div_tags').hide();
+        $('#btn_add_calendario').hide();
+        $('#slots').removeClass('col-md-7');
+        $('#slots').addClass('col-md-12');
+    })
+    $('#btn_avanzada').click(function(){
+        $('#div_tags').show();
+        $('#btn_add_calendario').show();
+        $('#slots').removeClass('col-md-12');
+        $('#slots').addClass('col-md-7');
+    })
+
+    @if(session('CL')['val_editor_reservas']=='R' || session('CL')['val_editor_reservas']=='T')
+        $('#btn_rapida').click();
+    @else
+        $('#btn_avanzada').click();
+    @endif
 
  </script>

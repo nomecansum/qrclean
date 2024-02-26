@@ -67,6 +67,7 @@ class config_clientes extends Model
                   'mca_tipo_antelacion',
                   'config_print_qr_ferias',
                   'mca_solicitudes',
+                  'val_editor_reservas',
               ];
 
     /**

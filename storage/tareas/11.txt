@@ -1,5 +1,6 @@
+Error en la tarea programada: SQLSTATE[08004] [1040] Too many connections (Connection: mysql_local, SQL: select * from `tareas_programadas` where `mca_activa` = S)
 Inicio de la tarea programada [11]App\Console\Commands\taskejemplo
 YO estuve aqui
 Fin de la tarea App\Console\Commands\taskejemplo
-Fin de la tarea php [11] Tarea de control del proceso del scheduler
-Tarea [11] Tarea de control del proceso del scheduler se ha ejecutado correctamente. Resp: 
+Fin de la tarea php [11] Tarea de control del scheduler
+Tarea [11] Tarea de control del scheduler se ha ejecutado correctamente. Resp: 

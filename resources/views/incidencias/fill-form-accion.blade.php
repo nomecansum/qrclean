@@ -53,7 +53,7 @@ $entidad=$incidencia->id_puesto==0?'solicitud':'incidencia';
 			addRemoveLinks: true,
 			maxFilesize: 15,
 			autoProcessQueue: true,
-			acceptedFiles: 'image/*,video/*',
+			acceptedFiles: 'image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation',
 			dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg"><i class="fa fa-caret-right text-danger"></i> Arrastre archivos <span class="font-xs">para subirlos</span></span><span>&nbsp&nbsp<h4 class="display-inline"> (O haga Click)</h4></span>',
 			dictResponseError: 'Error subiendo fichero!',
 			dictDefaultMessage :

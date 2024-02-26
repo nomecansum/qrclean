@@ -49,16 +49,22 @@
                                             <label class="form-check-label"  for="mca_abriente{{$tipo->id_proceso}}">Notificar al usario creador</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-check">
                                             <input name="mca_implicados"  id="mca_implicados{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_implicados)&&$tipo->mca_implicados=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
                                             <label class="form-check-label"  for="mca_implicados{{$tipo->id_proceso}}">Notificar a todos los implicados</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-check">
                                             <input name="mca_responsable"  id="mca_responsable{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_responsable)&&$tipo->mca_responsable=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
                                             <label class="form-check-label"  for="mca_responsable{{$tipo->id_proceso}}">Notificar al responsable del creador</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input name="mca_responsable"  id="mca_responsable{{$tipo->id_proceso}}" value="S" {{ isset($tipo->mca_perfiles)&&$tipo->mca_perfiles=='S'?'checked':'' }} class="form-check-input tocado" type="checkbox">
+                                            <label class="form-check-label"  for="mca_responsable{{$tipo->id_proceso}}">Notificar los perfiles que pueden ver</label>
                                         </div>
                                     </div>
                                 </div>

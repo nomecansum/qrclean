@@ -1673,6 +1673,7 @@ class IncidenciasController extends Controller
         $tipo->mca_implicados=isset($r->mca_implicados)?'S':'N';
         $tipo->mca_abriente=isset($r->mca_abriente)?'S':'N';
         $tipo->mca_responsable=isset($r->mca_responsable)?'S':'N';
+        $tipo->mca_perfiles=isset($r->mca_perfiles)?'S':'N';
         $tipo->id_estado=$r->id_estado??null;
         $tipo->save();
         savebitacora('Modificada accion de postprocesado para el tipo de incidencia ['.$tipo->id_tipo_incidencia.'] momento '.$tipo->val_momento,"Incidencias","add_postprocesado","OK");

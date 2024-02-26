@@ -57,3 +57,5 @@
     </tr>
     
 @endforeach
+
+@include('incidencias.fill_graficos_tabla_incidencias', ['incidencias' => $solicitudes, 'mostrar_graficos' => 1])

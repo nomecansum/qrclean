@@ -362,7 +362,7 @@
 
     var picker = new Litepicker({
         element: document.getElementById( "fechas" ),
-        @if(session('perfil')->mca_reservar_rango_fechas=='N')singleMode: true @else singleMode: false @endif,
+        @if(isset(session('perfil')->mca_reservar_rango_fechas) && session('perfil')->mca_reservar_rango_fechas=='N')singleMode: true @else singleMode: false @endif,
         @desktop numberOfMonths: 2, @elsedesktop numberOfMonths: 1, @enddesktop
         @desktop numberOfColumns: 2, @elsedesktop numberOfColumns: 1, @enddesktop
         autoApply: true,

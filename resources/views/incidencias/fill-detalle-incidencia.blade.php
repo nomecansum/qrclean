@@ -42,7 +42,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-md-12">
-                    {!! $incidencia->txt_incidencia !!}
+                    <pre>{!! $incidencia->txt_incidencia !!}</pre>
                 </div>
             </div>
             @if(isset($incidencia->fec_cierre))
@@ -156,7 +156,8 @@
                         </div>
                         <div class="tl-content card border-light">
                             <div class="card-body">
-                                <span class="btn-link">{{ $accion->name }}</span> <i>{{ $accion->des_accion }}</i>
+                                <span class="btn-link">{{ $accion->name }}</span> <i>
+                                    <pre>{{ $accion->des_accion }}</i></pre>
                                 <br>
                                 <div class="float-right">
                                     @if(isset($accion->img_attach1)  && $accion->img_attach1!='')

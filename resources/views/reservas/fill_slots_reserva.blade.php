@@ -11,7 +11,7 @@
 @foreach($period as $date)
     {{-- $date->dayOfWeek --}}
     @foreach($slots as $slot)
-        @if($date->dayOfWeek==$slot->dia_semana || $slot->dia_semana==-1)
+        @if(($date->dayOfWeek-1)==$slot->dia_semana || $slot->dia_semana==-1)
             <a class="btn btn-default slot @if($primero) btn1 @endif @if((isset($reserva) && Carbon\Carbon::parse($reserva->fec_reserva)->format('H:i')==$slot->hora_inicio && Carbon\Carbon::parse($reserva->fec_fin_reserva)->format('H:i')==$slot->hora_fin ) ) btn-info   @endif btn_slot" href="javascript:void(0)" data-inicio="{{ $slot->hora_inicio }}" data-fin="{{ $slot->hora_fin }}">
                 {{ $slot->hora_inicio  }} <i class="fa-solid fa-right"></i> {{ $slot->hora_fin }} <br> {{ $slot->etiqueta??'' }} <br> @if($num_dias>1)({{ $slot->dia_semana!=-1?$dias[$slot->dia_semana]:$dias[$date->format('w')] }}) @endif
             </a>

@@ -204,8 +204,8 @@
                                         <label for="">Dia semana</label><br>
                                         <select name="dia_semana[]" id="dia_semana" class="form-control control">
                                             <option value="-1">-</option>
-                                            @for ($i = 1; $i < 8; $i++)
-                                                <option value="{{$i}}">{{$dias[$i-1]}}</option> 
+                                            @for ($i = 0; $i < 6; $i++)
+                                                <option value="{{$i}}">{{$dias[$i]}}</option> 
                                             @endfor
                                             
                                         </select>

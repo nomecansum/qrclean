@@ -585,8 +585,13 @@ class ReservasController extends Controller
 
     public function save(Request $r){
         $f = explode(' - ',$r->fechas);
-        $f1 = adaptar_fecha($f[0]);
-        $f2 = adaptar_fecha($f[1]);
+        if(count($f)==1){
+            $f1 = adaptar_fecha($f[0]);
+            $f2=$f1;
+        } else {
+            $f1 = adaptar_fecha($f[0]);
+            $f2 = adaptar_fecha($f[1]);
+        }
         $mensajes_error=[];
         
         $puesto=puestos::find($r->id_puesto);

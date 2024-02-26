@@ -120,21 +120,25 @@ class PermissionsController extends Controller
 		}
         else
         {
-            DB::table('secciones_perfiles')
-            ->where('id_perfil',$n->cod_nivel)
-            ->delete();
-
-            $padre = DB::table('secciones_perfiles')->where('id_perfil',1)->get();
-            foreach($padre as $p){
-                DB::table('secciones_perfiles')->insert([
-                    'id_seccion' => $p->id_seccion,
-                    'id_perfil' => $n->cod_nivel,
-                    'mca_read' => $p->mca_read,
-                    'mca_write' => $p->mca_write,
-                    'mca_create' => $p->mca_create,
-                    'mca_delete' => $p->mca_delete,
-                ]);
-            }
+            if($r->id==0)
+			{
+				DB::table('secciones_perfiles')
+				->where('id_perfil',$n->cod_nivel)
+				->delete();
+	
+				$padre = DB::table('secciones_perfiles')->where('id_perfil',1)->get();
+				foreach($padre as $p){
+					DB::table('secciones_perfiles')->insert([
+						'id_seccion' => $p->id_seccion,
+						'id_perfil' => $n->cod_nivel,
+						'mca_read' => $p->mca_read,
+						'mca_write' => $p->mca_write,
+						'mca_create' => $p->mca_create,
+						'mca_delete' => $p->mca_delete,
+					]);
+				}
+			}
+			
         }
 		savebitacora("Creaado perfil ".$r->des_nivel_acceso,'Permisos',"profilesSave","OK");
 		return [

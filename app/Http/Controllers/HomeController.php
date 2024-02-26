@@ -742,11 +742,23 @@ class HomeController extends Controller
     }
 
     public function reset_perfil_admin(){
-        $secciones=DB::table('secciones')->get();
+        $secciones=DB::table('secciones')->wherenotin('cod_seccion',[121])->get();
         DB::table('secciones_perfiles')->where('id_perfil',5)->delete();
         foreach($secciones as $seccion){
             DB::table('secciones_perfiles')->insert([
                 'id_perfil'=>5,
+                'id_seccion'=>$seccion->cod_seccion,
+                'mca_read'=>1,
+                'mca_write'=>1,
+                'mca_create'=>1,
+                'mca_delete'=>1
+            ]);
+        }
+        $secciones=DB::table('secciones')->wherenotin('cod_seccion',[121,90,131,361,])->get();
+        DB::table('secciones_perfiles')->where('id_perfil',4)->delete();
+        foreach($secciones as $seccion){
+            DB::table('secciones_perfiles')->insert([
+                'id_perfil'=>4,
                 'id_seccion'=>$seccion->cod_seccion,
                 'mca_read'=>1,
                 'mca_write'=>1,

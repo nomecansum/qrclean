@@ -1,3 +1,4 @@
+<h4>{{ Carbon\Carbon::parse($f1)->format('d/m/Y') }}</h4>
 <h6>Tipo de puesto</h6>
 <div class="mb-4 d-flex flex-wrap gap-2">
     <!-- Button groups with radio button -->

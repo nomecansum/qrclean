@@ -324,7 +324,7 @@
     });
 
     function mostrar_datos_reserva_rapida(obj){
-        refrescar_slots($(this));
+        refrescar_slots(obj);
         comprobar_rapida();
     }
 
@@ -395,7 +395,8 @@
             picker.on('selected', (date1, date2) => {
                 var selected = $('#id_tipo_puesto').find('option:selected');
                 tipo_seleccionado=selected.val();
-                refrescar_slots(selected);
+                console.log(tipo_seleccionado);
+                refrescar_slots($('#id_tipo_puesto'));
                 comprobar_puestos();
             });
         }

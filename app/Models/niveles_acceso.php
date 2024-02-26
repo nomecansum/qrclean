@@ -44,6 +44,7 @@ class niveles_acceso extends Model
                   'mca_reservar_domingos',
                   'mca_reservar_festivos',
                   'mca_saltarse_antelacion',
+                  'mca_reservar_rango_fechas',
               ];
 
     /**

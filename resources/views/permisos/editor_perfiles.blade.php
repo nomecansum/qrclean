@@ -101,6 +101,12 @@
                         <label class="form-check-label" for="mca_saltarse_antelacion">Saltarse antelacion reserva</label>
                     </div>
                 </div>
+                <div class="col-md-2 p-b-20">
+                    <div class="form-check pt-2">
+                        <input name="mca_reservar_rango_fechas"  id="mca_reservar_rango_fechas" value="S" {{ isset($n) && $n->mca_reservar_rango_fechas=='S'?'checked':'' }} class="form-check-input" type="checkbox">
+                        <label class="form-check-label" for="mca_reservar_rango_fechas">Rango de fechas en reservas</label>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12 text-end">

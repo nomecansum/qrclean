@@ -41,7 +41,7 @@
             <label for="id_usuario">Tipo de puesto</label>
             <select name="id_tipo_puesto" id="id_tipo_puesto" class="form-control">
                 {{-- <option value="0">Cualquiera</option> --}}
-                <option value="">Seleccione un tipo de puesto</option>
+                <option value="0">Seleccione un tipo de puesto</option>
                 @foreach($tipos as $t)
                     <option value="{{ $t->id_tipo_puesto}}" {{ isset($reserva->id_tipo_puesto)&&$reserva->id_tipo_puesto==$t->id_tipo_puesto?'selected':'' }} data-observaciones="{{ $t->observaciones }}" data-slots="{{ $t->slots_reserva }}">{{ $t->des_tipo_puesto }}</option>
                 @endforeach

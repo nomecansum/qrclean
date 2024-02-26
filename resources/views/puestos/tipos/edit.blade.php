@@ -1,4 +1,6 @@
-
+@php
+    $dias=['LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO','DOMINGO'];
+@endphp
 <style type="text/css">
     .popover {
         z-index: 100000;
@@ -165,6 +167,16 @@
                                         <label for="">Etiqueta</label><br>
                                         <input type="text" autocomplete="off"  name="etiqueta[]"  class="form-control" value="{{ $slot->etiqueta??'' }}" />
                                     </div>
+                                    <div>
+                                        <label for="">Dia semana</label><br>
+                                        <select name="dia_semana[]" id="dia_semana" class="form-control control">
+                                            <option value="-1" {{ isset($slot->dia_semana) && $slot->dia_semana==-1?'selected':'' }}>-</option>
+                                            @for ($i = 0; $i < 6; $i++)
+                                                <option value="{{$i}}" {{ isset($slot->dia_semana) && $slot->dia_semana!=-1 && $slot->dia_semana==$i?'selected':'' }}>{{$dias[$i]}}</option> 
+                                            @endfor
+                                            
+                                        </select>
+                                    </div>
                                 </div>
                                 @endforeach
                             @endif
@@ -187,6 +199,16 @@
                                     <div>
                                         <label for="">Etiqueta</label><br>
                                         <input type="text" autocomplete="off"  name="etiqueta[]"  class="form-control" value="" />
+                                    </div>
+                                    <div>
+                                        <label for="">Dia semana</label><br>
+                                        <select name="dia_semana[]" id="dia_semana" class="form-control control">
+                                            <option value="-1">-</option>
+                                            @for ($i = 1; $i < 8; $i++)
+                                                <option value="{{$i}}">{{$dias[$i-1]}}</option> 
+                                            @endfor
+                                            
+                                        </select>
                                     </div>
                                 </div>  
                             </div>

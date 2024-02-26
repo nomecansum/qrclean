@@ -296,8 +296,13 @@ class ReservasController extends Controller
 
         //dd($r->all());
         $f = explode(' - ',$r->fechas);
-        $f1 = adaptar_fecha($f[0]);
-        $f2 = adaptar_fecha($f[1]);
+        if(count($f)==1){
+            $f1 = adaptar_fecha($f[0]);
+            $f2=$f1;
+        } else {
+            $f1 = adaptar_fecha($f[0]);
+            $f2 = adaptar_fecha($f[1]);
+        }
         //Intervalo en minutos entre las dos hora en cualquier dia
         $h1=Carbon::parse($f1.' '.$r->hora_inicio);
         $h2=Carbon::parse($f1.' '.$r->hora_fin);
@@ -1138,12 +1143,20 @@ class ReservasController extends Controller
         }
     }
 
-    public function slots($id,$id_reserva){
-        $tipo=puestos_tipos::find($id);
-        $reserva=reservas::find($id_reserva);
+    public function slots(Request $r){
+        $tipo=puestos_tipos::find($r->id);
+        $reserva=reservas::find($r->id_reserva);
         $slots=collect(json_decode($tipo->slots_reserva))->sortby('hora_inicio');
+        $f = explode(' - ',$r->fechas);
+        if(count($f)==1){
+            $f1 = adaptar_fecha($f[0]);
+            $f2=$f1;
+        } else {
+            $f1 = adaptar_fecha($f[0]);
+            $f2 = adaptar_fecha($f[1]);
+        }
 
-        return view ('reservas.fill_slots_reserva',compact('slots','tipo','reserva'));
+        return view ('reservas.fill_slots_reserva',compact('slots','tipo','reserva','r','f1','f2'));
     }
 
     public function plantas_tipo($id){

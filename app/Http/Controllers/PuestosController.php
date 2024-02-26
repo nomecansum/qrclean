@@ -624,6 +624,7 @@ class PuestosController extends Controller
                         $slot->hora_inicio=$value;
                         $slot->hora_fin=$r->hora_fin[$key];
                         $slot->etiqueta=$r->etiqueta[$key];
+                        $slot->dia_semana=$r->dia_semana[$key];
                         $slots[]=$slot;
                     }
                 }

@@ -381,7 +381,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/puestos_usuario/{id}/{desde}/{hasta}',['middleware'=>'permissions:["Reservas"],["W"]','uses'=>'ReservasController@puestos_usuario'])->name('reservas.puestos_usuario_post');
         Route::get('/cancelar_puesto/{id}',['middleware'=>'permissions:["Reservas"],["D"]','uses'=>'ReservasController@cancelar_reserva_puesto'])->name('reservas.cancelar_reserva_puesto');
         Route::post('/reservas_multiples_admin',['middleware'=>'permissions:["Reservas"],["W"]','uses'=>'ReservasController@reservas_multiples_admin'])->name('reservas.reservas_multiples_admin');
-        Route::get('/slots/{id}/{id_reserva}',['middleware'=>'permissions:["Reservas"],["D"]','uses'=>'ReservasController@slots'])->name('reservas.slots');
+        Route::post('/slots',['middleware'=>'permissions:["Reservas"],["D"]','uses'=>'ReservasController@slots'])->name('reservas.slots');
         Route::get('/plantas_tipo/{id}',['middleware'=>'permissions:["Reservas"],["R"]','uses'=>'ReservasController@plantas_tipo'])->name('reservas.plantas_tipo');
     });
 

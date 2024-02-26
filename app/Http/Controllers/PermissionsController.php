@@ -72,6 +72,7 @@ class PermissionsController extends Controller
 					'mca_reservar_domingos' => isset($r->mca_reservar_domingos)?'S':'N',
 					'mca_reservar_festivos' => isset($r->mca_reservar_festivos)?'S':'N',
 					'mca_saltarse_antelacion' => isset($r->mca_saltarse_antelacion)?'S':'N',
+					'mca_reservar_rango_fechas' => isset($r->mca_reservar_rango_fechas)?'S':'N',
 					'home_page' => $r->home_page
 				]
 			);
@@ -92,6 +93,7 @@ class PermissionsController extends Controller
 					'mca_reservar_domingos' => isset($r->mca_reservar_domingos)?'S':'N',
 					'mca_reservar_festivos' => isset($r->mca_reservar_festivos)?'S':'N',
 					'mca_saltarse_antelacion' => isset($r->mca_saltarse_antelacion)?'S':'N',
+					'mca_reservar_rango_fechas' => isset($r->mca_reservar_rango_fechas)?'S':'N',
 					'home_page' => $r->home_page
 				]
 			);

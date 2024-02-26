@@ -190,23 +190,33 @@
         picker.show();
     })
 
-    $('#id_tipo_puesto').change(function(){
+    function refrescar_slots(obj){
+        var selected = obj.find('option:selected');
         $('#obs').html();
-        var selected = $(this).find('option:selected');
-        $('#obs').html("<i class='fa fa-info-circle'></i> "+selected.data('observaciones'));
-        if(selected.data('slots')!=""){
-            $('#slots').load('{{ url('reservas/slots') }}/'+$(this).val()+"/{{ $reserva->id_reserva??0 }}", function(){
+        if(typeof selected.data('observaciones') !== "undefined"){
+            $('#obs').html("<i class='fa fa-info-circle'></i> "+selected.data('observaciones'));
+        }
+        console.log(selected.data('slots'));
+        if(tipo_seleccionado!=0 && selected.data('slots')!="" && typeof selected.data('slots') !== "undefined"){
+            $.post('{{url('/reservas/slots')}}', {_token: '{{csrf_token()}}',fechas: $('#fechas').val(),reserva:{{ $reserva->id_reserva??0 }},id: tipo_seleccionado}, function(data, textStatus, xhr) {
+                $('#slots').html(data);
                 console.log("cambio a slots")
                 $('#slots').show();
                 $('#slider').hide();
             });
+            // $('#slots').load('{{ url('reservas/slots') }}/'+$(this).val()+"/{{ $reserva->id_reserva??0 }}/"+$('#fechas').val(), function(){
+                
+            // });
         } else {
             $('#slider').show();
             $('#slots').hide();
             console.log("cambio a slider")
         }
-        
-        console.log(selected.data('slots'));
+    }
+
+    $('#id_tipo_puesto').change(function(){
+        tipo_seleccionado=$(this).val();
+        refrescar_slots($(this));
     })
 
     $('#id_edificio').change(function(){
@@ -301,23 +311,22 @@
     }
 
     $('#id_edificio, #id_tipo_puesto, #id_planta, #multi-tag').change(function(){
-      comprobar_puestos();
+      
+      
+      //Y ahora vemos si hay que refrescar los slots
+      var selected = $('#id_tipo_puesto').find('option:selected');
+      tipo_seleccionado=selected.val();
+      refrescar_slots(selected);
+      console.log(tipo_seleccionado);
+      if(tipo_seleccionado!=0 && tipo_seleccionado!=null){
+        comprobar_puestos();
+      }
     });
 
-    function mostrar_datos_reserva_rapida(){
+    function mostrar_datos_reserva_rapida(obj){
         
         console.log(slots);
-        if(slots==true){
-            $('#slots').load('{{ url('reservas/slots') }}/'+tipo_seleccionado+"/{{ $reserva->id_reserva??0 }}", function(){
-                $('#slots').show();
-                $('#slider').hide();
-            });
-            console.log("cambio a slots")
-        } else {
-            $('#slider').show();
-            $('#slots').hide();
-            console.log("cambio a slider")
-        }
+        refrescar_slots($(this));
         comprobar_rapida();
     }
 
@@ -327,6 +336,8 @@
         $('#slots').hide();
         $('#slider').hide();
         tipo_seleccionado=$(this).val();
+        $('#id_tipo_puesto').val($(this).val());
+        refrescar_slots($(this));
         $.get('{{ url('reservas/plantas_tipo') }}/'+$(this).val(), function(data) {
             $('.btn_planta').prop('checked',false);
             $('.div_plantas').hide();
@@ -350,7 +361,7 @@
                 edificio_rapido=0;
             } else {
                 edificio_rapido=data[0].id_edificio;
-                mostrar_datos_reserva_rapida();
+                mostrar_datos_reserva_rapida($(this));
             }
         });
     });
@@ -384,6 +395,9 @@
         },
         setup: (picker) => {
             picker.on('selected', (date1, date2) => {
+                var selected = $('#id_tipo_puesto').find('option:selected');
+                tipo_seleccionado=selected.val();
+                refrescar_slots(selected);
                 comprobar_puestos();
             });
         }

@@ -324,8 +324,6 @@
     });
 
     function mostrar_datos_reserva_rapida(obj){
-        
-        console.log(slots);
         refrescar_slots($(this));
         comprobar_rapida();
     }
@@ -337,7 +335,7 @@
         $('#slider').hide();
         tipo_seleccionado=$(this).val();
         $('#id_tipo_puesto').val($(this).val());
-        refrescar_slots($(this));
+        refrescar_slots($('#id_tipo_puesto'));
         $.get('{{ url('reservas/plantas_tipo') }}/'+$(this).val(), function(data) {
             $('.btn_planta').prop('checked',false);
             $('.div_plantas').hide();
@@ -368,7 +366,7 @@
     $('.btn_planta').click(function(){
         edificio_rapido=$(this).data('edificio');
         planta_rapida=$(this).data('planta');
-        mostrar_datos_reserva_rapida();
+        mostrar_datos_reserva_rapida($('#id_tipo_puesto'));
     });
 
     var picker = new Litepicker({

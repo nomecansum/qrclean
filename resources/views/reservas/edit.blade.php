@@ -321,7 +321,7 @@
       var selected = $('#id_tipo_puesto').find('option:selected');
       tipo_seleccionado=selected.val();
       refrescar_slots(selected);
-      console.log(tipo_seleccionado);
+      //console.log(tipo_seleccionado);
       if(tipo_seleccionado!=0 && tipo_seleccionado!=null){
         comprobar_puestos();
       }
@@ -369,6 +369,8 @@
     });
     $('.btn_planta').click(function(){
         edificio_rapido=$(this).data('edificio');
+        //console.log(edificio_rapido);
+        $('#id_edificio').val($(this).data('edificio'));
         planta_rapida=$(this).data('planta');
         mostrar_datos_reserva_rapida($('#id_tipo_puesto'));
     });

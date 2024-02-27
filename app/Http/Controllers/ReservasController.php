@@ -176,6 +176,7 @@ class ReservasController extends Controller
             ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
+            ->orderby('plantas.num_orden')
             ->get();
 
         $plantas_publicas=DB::table('plantas')

@@ -160,6 +160,7 @@ class ReservasController extends Controller
                     $q->wherenotin('puestos_tipos.id_tipo_puesto',config('app.tipo_puesto_sala'));
                 }
             })
+            ->orderby('num_orden')
             ->orderby('id_tipo_puesto')
             ->get();
         //Primero comprobamos si tiene una reserva para ese dia

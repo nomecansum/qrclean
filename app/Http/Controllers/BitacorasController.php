@@ -29,7 +29,7 @@ class BitacorasController extends Controller
                     $q->where('clientes.id_cliente',session('CL')['id_cliente']);
                 }
             })
-            ->where('fecha','>=',Carbon::now()->subDays(10))
+            ->where('fecha','>=',Carbon::now()->subDays(2))
             ->orderby('fecha','desc')
             ->get();
         

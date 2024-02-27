@@ -14,7 +14,10 @@
         background-color: #f2dede !important;
     }
 
-    
+    .preformatted {
+        font-family: monospace;
+        white-space: pre;
+    }
 
 </style>
 @if(count($misreservas)>0)
@@ -117,7 +120,7 @@
             <div class="row mt-2">
                 @if(session('CL')['mca_reserva_horas']=='S')
                 <div class="form-group col-md-7" id="slider" style="padding-left: 30px; padding-right: 30px"  style="display: none">
-                    <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>] <span id="obs" class="text-info"></span></label>
+                    <label for="hora-range-drg"><i class="fad fa-clock"></i> Horas [<span id="horas_rango"></span>] </label>
                     <div id="hora-range-drg" style="margin-top: 40px"></div><span id="hora-range-val" style="display: none"></span>
                 </div>
                 @endif
@@ -136,6 +139,7 @@
                     </select>
                 </div>
             </div>
+            <span id="obs" class="text-info preformatted"></span>
             <div class="row" id="btn_add_calendario" style="display:none">
                 <div class="d-flex">
                     

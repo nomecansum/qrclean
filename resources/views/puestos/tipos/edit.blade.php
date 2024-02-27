@@ -101,6 +101,10 @@
                         <label for="max_usos">Tiempo antelac.(dias)</label><br>
                         <input type="number" autocomplete="off" name="val_dias_antelacion" id="val_dias_antelacion" style="width: 120px" min="0" max="365"  class="form-control" value="{{$tipo->val_dias_antelacion}}" />
                     </div>
+                    <div class="form-group col-md-2">
+                        <label for="max_usos">Num. orden</label><br>
+                        <input type="number" autocomplete="off" name="num_orden" id="num_orden" style="width: 120px" min="0" max="40"  class="form-control" value="{{$tipo->num_orden}}" />
+                    </div>
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-3 p-t-20 mt-2">
@@ -221,7 +225,9 @@
                 <div class="row ">
                     <div class="form-group col-md-12">
                         <label for="des_tipo_puesto" class="control-label">Observaciones</label>
-                        <input class="form-control" name="observaciones" type="text" id="observaciones" value="{{ old('observaciones', optional($tipo)->observaciones) }}" maxlength="200" placeholder="Enter observaciones here...">
+                        <textarea class="form-control" name="observaciones" type="text" id="observaciones" >
+                            {{ old('observaciones', optional($tipo)->observaciones) }}
+                        </textarea>
                         
                     </div>
                 </div>

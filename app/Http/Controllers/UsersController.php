@@ -1844,6 +1844,9 @@ class UsersController extends Controller
             ->get();
         $asignado_miperfil=null;
         $asignado_otroperfil=null;
+        if($asignado_usuario->count()==0){
+            $asignado_usuario=null;
+        }
 
         if(!$reservas->isempty()){
             $mispuestos=DB::table('puestos')

@@ -154,7 +154,7 @@
                             {!! icono_nombre($accion->name,32,14) !!}
                             @endif
                         </div>
-                        <div class="tl-content card border-light">
+                        <div class="tl-content card border-light" id="accion{{ $accion->id_accion }}">
                             <div class="card-body">
                                 <span class="btn-link">{{ $accion->name }}</span> <i>
                                     <pre>{{ $accion->des_accion }}</i></pre>
@@ -180,6 +180,10 @@
                                                 <img  src="{{ Storage::disk(config('app.img_disk'))->url('uploads/incidencias/'.$incidencia->id_cliente.'/'.$accion->img_attach2) }}" style="height: 100px">
                                             @else <i class="fa-solid fa-file"></i> {{ $accion->img_attach2 }} 
                                             @endif</a>
+                                    @endif
+                                    {{-- Boton de borrar accion solo superadmin --}}
+                                    @if(isAdmin())
+                                        <a href="javascript:void(0)" data-accion="{{ $accion->id_accion }}" class="link-del_accion"><i class="fa-solid fa-trash float-end text-danger"></i></a>
                                     @endif
                                 </div>
                             </div>
@@ -264,5 +268,19 @@
 
         document.querySelectorAll( ".btn-close-card" ).forEach( el => el.addEventListener( "click", (e) => el.closest( ".card" ).remove()) );
 
+        $('.link-del_accion').click(function(){
+            var id_accion=$(this).data('accion');
+            var id_incidencia={{ $incidencia->id_incidencia }};
+            var url="{{ route('incidencias.del_accion') }}";
+            var token="{{ csrf_token() }}";
+            var data={id_accion:id_accion,id_incidencia:id_incidencia,_token:token};
+            $.post(url,data,function(data){
+                $('#accion'+id_accion).remove();
+                if(data.error)toast_error(data.title,data.message);
+                else
+                toast_ok(data.title,data.message);
+            });
+            $('#accion'+id_accion).remove();
+        });
     </script>
     @include('layouts.scripts_panel')

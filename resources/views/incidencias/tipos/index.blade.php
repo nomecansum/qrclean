@@ -205,7 +205,8 @@
                                     <div class="btn-group btn-group pull-right ml-1" role="group">
                                         {{-- <a href="#"  class="btn btn-primary btn_editar add-tooltip thumb"  title="Ver planta" data-id="{{ $tipo->id_edificio }}"> <span class="fa fa-eye" aria-hidden="true"></span></a> --}}
                                         <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_tipo_incidencia }})" title="Editar tipo" data-id="{{ $tipo->id_tipo_incidencia }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>
-                                        @if(checkPermissions(['Estados de incidencia'],['D']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess())))<a href="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" onclick="del({{ $tipo->id_tipo_incidencia }})" data-target="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif
+                                        @if(checkPermissions(['Tipos de incidencia'],['D']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess())))<a href="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" onclick="del({{ $tipo->id_tipo_incidencia }})" data-target="#eliminar-planta-{{$tipo->id_tipo_incidencia}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif
+                                        @if(checkPermissions(['Tipos de incidencia'],['C'])) <a href="#"  class="btn btn-xs btn-secondary btn_clonar add-tooltip" onclick="clonar({{ $tipo->id_tipo_incidencia }})" title="Clonar tipo" data-id="{{ $tipo->id_tipo_incidencia }}"> <span class="fa fa-copy pt-1" aria-hidden="true"></span> Clone</a>@endif
                                     </div>
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$tipo->id_tipo_incidencia}}" style="display: none;">
@@ -268,6 +269,10 @@
 
         function del(id){
             $('#eliminar-planta-'+id).modal('show');
+        }
+
+        function clonar(id){
+            get_ajax("{{ url('/incidencias/tipos/clone/') }}"+"/"+id);
         }
 
 

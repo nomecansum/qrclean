@@ -105,6 +105,7 @@
                                     <div class="btn-group btn-group pull-right ml-1" role="group">
                                         @if(checkPermissions(['Tipos de puesto'],['W'])) <a href="#"  class="btn btn-xs btn-info btn_editar add-tooltip" onclick="editar({{ $tipo->id_tipo_puesto }})" title="Editar tipo" data-id="{{ $tipo->id_tipo_puesto }}"> <span class="fa fa-pencil pt-1" aria-hidden="true"></span> Edit</a>@endif
                                         @if(checkPermissions(['Tipos de puesto'],['D']) && ($tipo->mca_fijo=='N' || ($tipo->mca_fijo=='S' && fullAccess())))  <a href="#eliminar-planta-{{$tipo->id_tipo_puesto}}" onclick="del({{ $tipo->id_tipo_puesto }})"  data-target="#eliminar-planta-{{$tipo->id_tipo_puesto}}" title="Borrar tipo" data-toggle="modal" class="btn btn-xs btn-danger add-tooltip btn_del"><span class="fa fa-trash" aria-hidden="true"></span> Del </a>@endif
+                                        @if(checkPermissions(['Tipos de puesto'],['C'])) <a href="#"  class="btn btn-xs btn-secondary btn_clonar add-tooltip" onclick="clonar({{ $tipo->id_tipo_puesto }})" title="Clonar tipo" data-id="{{ $tipo->id_tipo_puesto }}"> <span class="fa fa-copy pt-1" aria-hidden="true"></span> Clone</a>@endif
                                     </div>
                                 </div>
                                 <div class="modal fade" id="eliminar-planta-{{$tipo->id_tipo_puesto}}" style="display: none;">
@@ -161,6 +162,10 @@
             $('#editorCAM').load("{{ url('/puestos/tipos/edit/') }}"+"/"+id, function(){
                 animateCSS('#editorCAM','bounceInRight');
             });
+        }
+
+        function clonar(id){
+            get_ajax("{{ url('/puestos/tipos/clone/') }}"+"/"+id);
         }
 
         function del(id){

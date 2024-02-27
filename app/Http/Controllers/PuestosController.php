@@ -669,6 +669,31 @@ class PuestosController extends Controller
         }
     }
 
+    public function tipos_clone($id){
+    try{   
+        //Copia del tipo de puesto
+        $tipo = puestos_tipos::findorfail($id);
+        $nuevo_tipo=$tipo->replicate();
+        $nuevo_tipo->des_tipo_puesto=$tipo->des_tipo_puesto.' (Copia)';
+        $nuevo_tipo->save();
+
+        
+        savebitacora('Tipo de puesto clonado '.$nuevo_tipo->des_tipo_puesto,"Puestos","tipos_clone","OK");
+       return [
+            'title' => "Tipos de puesto",
+            'message' => 'Tipo de puesto '.$nuevo_tipo->des_tipo_puesto. ' clonado con exito',
+            'reload' => true
+        ];
+        } catch (\Throwable $exception) {
+            savebitacora('ERROR: Ocurrio un error clonando tipo de puesto '.$nuevo_tipo->des_tipo_puesto.' '.$exception->getMessage() ,"Pûestos","tipos_clone","ERROR");
+            return [
+                'title' => "Tipos de puesto",
+                'error' => 'ERROR: Ocurrio un error clonando el tipo de puesto '.$nuevo_tipo->des_tipo_puesto.' '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+       }
+    }
+
 ////////////////////////VISUALIZACION DE PUESTOS EN LA WEB //////////////////////////////
 
     public function mapa(Request $r){

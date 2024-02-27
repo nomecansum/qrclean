@@ -1,6 +1,5 @@
 @php
     $puestos_usu=\App\Http\Controllers\UsersController::mis_puestos(auth()->user()->id);
-    
     $mispuestos= $puestos_usu['mispuestos'];
     $reservas= $puestos_usu['reservas'];
     $asignado_usuario= $puestos_usu['asignado_usuario'];
@@ -30,9 +29,10 @@
                     $puesto->factor_letra=1;
                 }
                 $reserva=$reservas->where('id_puesto',$puesto->id_puesto)->first();
-                $asignado_usuario->name=auth()->user()->name;
+                if (isset($asignado_usuario))
+                    $asignado_usuario->name=auth()->user()->name;
                 $cuadradito=\App\Classes\colorPuesto::colores($reserva, $asignado_usuario, $asignado_miperfil,$asignado_otroperfil,$puesto,"home",Carbon\Carbon::now()->format('d/m/Y'));
-                if($asignado_usuario->where('id_puesto',$puesto->id_puesto)->count()>0){
+                if(isset($asignado_usuario) && $asignado_usuario->where('id_puesto',$puesto->id_puesto)->count()>0){
                     $es_asignado=true;
                 } else {
                     $es_asignado=false;

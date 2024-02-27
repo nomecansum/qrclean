@@ -73,7 +73,7 @@ if (isset($r->fechas)){
         <div class="card-header cursor-pointer" style="padding-top: 10px" id="headfiltro" >
             <span class="mt-3 ml-2 font-18"><i class="fad fa-filter"></i> Filtro</span>
         </div>
-        <div class="card-body" id="divfiltro" style="display:none" >
+        <div class="card-body" id="divfiltro" @if(!isset($r))style="display:none" @endif>
             <form name="frm_busca_bitacora" method="POST" action="{{ url('bitacoras/search') }}">
                 {{ csrf_field() }}
                 <div class="row">

@@ -933,6 +933,36 @@ class IncidenciasController extends Controller
 
 	}
 
+    public function del_accion(Request $r){
+        try{
+            $accion=incidencias_acciones::find($r->id_accion);
+            $incidencia=incidencias::find($accion->id_incidencia);
+            if($incidencia->id_puesto==0){
+                $cosa="Solicitud";
+            } else {
+                $cosa="Incidencia";
+            }
+            $accion->delete();
+
+            savebitacora("Borrada accion para la ".$cosa." ".$r->id_incidencia,"Incidencias","del_accion","OK");
+            return [
+                'title' => "Borrar accion a la ".$cosa." ".$r->id_incidencia,
+                'message' => "Borrada accion para la ".$cosa." ".$r->id_incidencia,
+                'id' => $r->id_incidencia,
+                'result'=>'ok',
+                'timestamp'=>Carbon::now(),
+            ];
+        } catch (\Exception $e) {
+            savebitacora('ERROR: Ocurrio un error borrando la accion '.$e->getMessage() ,"Incidencias","del_accion","ERROR");
+            return [
+                'title' => "Borrar accion",
+                'error' => 'ERROR: Ocurrio un error borrando la accion '.$e->getMessage(),
+                'result'=>'error',
+                'timestamp'=>Carbon::now(),
+            ];
+        } 
+    }
+
     //PROCESADO DE INCIDENCIAS->ENVIARLA A TERCEROS SISTEMAS
 
     public function post_procesado_incidencia($inc,$momento,$procedencia,$estado=null){
@@ -1706,6 +1736,38 @@ class IncidenciasController extends Controller
             'message'=>'Postprocesado copiado '.count($datos).' acciones copiadas',
             'id' => $r->tipo_destino,
         ];
+    }
+
+    public function tipos_clone($id){
+       
+        //Copia del tipo de puesto
+        $tipo = incidencias_tipos::findorfail($id);
+        $nuevo_tipo=$tipo->replicate();
+        $nuevo_tipo->des_tipo_incidencia=$tipo->des_tipo_incidencia.' (Copia)';
+        $nuevo_tipo->save();
+
+        //Y ahora copiamos los registros de postprocesado de incidencia
+        $postprocesado=DB::table('incidencias_postprocesado')->where('id_tipo_incidencia',$id)->get();
+        foreach($postprocesado as $p){
+            $registro=incidencias_postprocesado::find($p->id_proceso);
+            $nuevo_registro=$registro->replicate();
+            $nuevo_registro->id_tipo_incidencia=$nuevo_tipo->id_tipo_incidencia;
+            $nuevo_registro->save();
+        }
+        savebitacora('Tipo de puesto clonado '.$nuevo_tipo->des_tipo_incidencia,"Puestos","tipos_clone","OK");
+       return [
+            'title' => "Tipos de incidencia",
+            'message' => 'Tipo de incidencia '.$nuevo_tipo->des_tipo_incidencia. ' clonado con exito',
+            'reload' => true,
+        ];
+        try{ } catch (\Throwable $exception) {
+            savebitacora('ERROR: Ocurrio un error clonando tipo de incidencia '.$nuevo_tipo->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","tipos_clone","ERROR");
+            return [
+                'title' => "Tipos de incidencia",
+                'error' => 'ERROR: Ocurrio un error clonando el tipo de incidencia '.$nuevo_tipo->des_tipo_incidencia.' '.$exception->getMessage(),
+                //'url' => url('sections')
+            ];
+       }
     }
 
 

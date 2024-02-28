@@ -1722,7 +1722,7 @@ class IncidenciasController extends Controller
         } else {
             incidencias_postprocesado::where('id_tipo_incidencia',$r->tipo_destino)->where('val_momento',$r->momento)->delete();
             $datos=incidencias_postprocesado::where('id_tipo_incidencia',$r->tipo_origen)->where('val_momento',$r->momento)->get();
-            savebitacora('Copiada informacion de postprocesado para la incidencia ['.$tipo->id_tipo_incidencia.'] momento '.$tipo->val_momento,"Incidencias","add_postprocesado","OK");
+            savebitacora('Copiada informacion de postprocesado para la incidencia ['.$r->tipo_origen.'] momento '.$r->tipo_destino,"Incidencias","add_postprocesado","OK");
             $detalles=' momento '.$r->momento;
         }
         foreach($datos as $dato){

@@ -96,8 +96,6 @@
 	@if($r->output=="pdf" || $r->output=="excel")
 		</tbody>
 	@endif
-
-
 		<tr>
 			<th>ID</th>
 			<th>Fecha</th>
@@ -107,6 +105,7 @@
 			<th>Estado</th>
 			<th>Tiempo</th>
 			<th>Ult. actividad</th>
+			<th>Estado</th>
 			<th>Acciones</th>
 		</tr>
 
@@ -120,6 +119,7 @@
 			<td>{{ $dato->fec_cierre==null?'Abierta':'Cerrada' }}</td>
 			<td>{{ Carbon::now()->diffforHumans(Carbon::parse($dato->fec_apertura), CarbonInterface::DIFF_ABSOLUTE) }}</td>
 			<td>{!! $dato->fec_audit==null?'':beauty_fecha($dato->fec_audit) !!}</td>
+			<td>{{ $dato->estado_incidencia }}</td>
 			<td>{{ $dato->num_acciones }}</td>
 		</tr>
 		

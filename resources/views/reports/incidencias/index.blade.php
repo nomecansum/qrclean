@@ -55,7 +55,7 @@
 			<form action="{{url('/reports/incidencias/filter')}}" method="POST" class="ajax-filter">
 				{{csrf_field()}}
 				<input type="hidden" value="{{Auth::user()->id_cliente}}" name="id_cliente">
-				@include('resources.combos_filtro',[$hide=['est'=>1,'head'=>1,'btn'=>1,'usu'=>0,'est_inc'=>1,'tip_mark'=>1, 'pue'=>1],$show=[]])
+				@include('resources.combos_filtro',[$hide=['est'=>1,'head'=>1,'btn'=>1,'usu'=>0,'est_inc'=>0,'tip_mark'=>1, 'pue'=>1],$show=[]])
 				<div class="row">
 					<div class="col-md-4 mb-3">
 						@include('resources.combo_fechas')

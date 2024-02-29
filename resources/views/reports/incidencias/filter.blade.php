@@ -97,8 +97,9 @@
 		</tbody>
 	@endif
 
-	<thead>
+
 		<tr>
+			<th>ID</th>
 			<th>Fecha</th>
 			<th>Tipo</th>
 			<th>Usuario</th>
@@ -108,9 +109,10 @@
 			<th>Ult. actividad</th>
 			<th>Acciones</th>
 		</tr>
-	</thead>
+
 	@foreach ($inf as $dato)
 		<tr>
+			<td>{{ $dato->id_incidencia }}</td>
 			<td>@if($r->output!="excel"){!! beauty_fecha($dato->fec_apertura) !!} @else {{ Carbon::parse($dato->fec_apertura)->format('d/m/Y H:i') }} @endif</td>
 			<td>{{ $dato->des_tipo_incidencia }}</td>
 			<td>{{ $dato->name }}</td>

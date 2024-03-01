@@ -502,6 +502,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/puestos',['middleware' => 'permissions:["Informes > Uso de puestos"],["R"]', 'uses' => 'ReportsController@puestos_index']);
 	    Route::post('/puestos/filter',['middleware' => 'permissions:["Informes > Uso de puestos"],["R"]', 'uses' => 'ReportsController@puestos']);
 
+        Route::get('/puestosxtipo',['middleware' => 'permissions:["Informes > Puestos por tipo"],["R"]', 'uses' => 'ReportsController@puestosxtipo_index']);
+	    Route::post('/puestosxtipo/filter',['middleware' => 'permissions:["Informes > Puestos por tipo"],["R"]', 'uses' => 'ReportsController@puestosxtipo']);
+
         Route::get('/canceladas',['middleware' => 'permissions:["Informes > Reservas canceladas"],["R"]', 'uses' => 'ReportsController@canceladas_index']);
 	    Route::post('/canceladas/filter',['middleware' => 'permissions:["Informes > Reservas canceladas"],["R"]', 'uses' => 'ReportsController@canceladas']);
 

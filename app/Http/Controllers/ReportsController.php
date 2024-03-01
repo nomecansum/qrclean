@@ -390,6 +390,151 @@ class ReportsController extends Controller
         }
     }
 
+        ///////////////INFORME DE PUESTOS POR TIPO /////////////////
+        public function puestosxtipo_index(){
+            return view('reports.puestos_por_tipo.index');
+        }
+    
+        public function puestosxtipo(Request $r){
+            
+            //PARAMETROS DE ENTRADA COMUNES, USUARIO Y FECHAS
+            if(isset($r->cod_usuario))
+                Auth::loginUsingId($r->cod_usuario);
+            $f = explode(' - ',$r->fechas);
+            $f1 = adaptar_fecha($f[0]);
+            $f2 = adaptar_fecha($f[1]);
+    
+            ///////////////////////////
+            ///CONTENIDO DEL INFORME///
+            ///////////////////////////
+            $informe=DB::table('puestos')
+            ->select('clientes.nom_cliente','clientes.id_cliente','puestos_tipos.id_tipo_puesto','puestos_tipos.des_tipo_puesto','puestos_tipos.val_color as color_puesto','puestos_tipos.val_icono as icono_tipo','puestos_tipos.val_color as color_tipo','edificios.des_edificio')
+            ->selectraw('count(puestos.id_puesto) as total_puestos')
+            ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
+            ->join('edificios','puestos.id_edificio','edificios.id_edificio')
+            ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+            ->where(function($q){
+                if (!isAdmin()){
+                    $q->WhereIn('clientes.id_cliente',clientes());
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->cliente) {
+                    $q->WhereIn('puestos.id_cliente',$r->cliente);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->edificio) {
+                    $q->WhereIn('puestos.id_edificio',$r->edificio);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->planta) {
+                    $q->whereIn('puestos.id_planta',$r->planta);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->puesto) {
+                    $q->whereIn('puestos.id_puesto',$r->puesto);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tipo) {
+                    $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
+                }
+            })
+            ->where(function($q) use($r){
+                if ($r->tags) {
+                    if($r->andor){//Busqueda con AND
+                        $puestos_tags=DB::table('tags_puestos')
+                            ->select('id_puesto')
+                            ->wherein('id_tag',$r->tags)
+                            ->groupby('id_puesto')
+                            ->havingRaw('count(id_tag)='.count($r->tags))
+                            ->pluck('id_puesto')
+                            ->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags);
+                    } else { //Busqueda con OR
+                        $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                        $q->whereIn('puestos.id_puesto',$puestos_tags);
+                    }
+                }
+            })
+            ->where(function($q){
+                if (isSupervisor(Auth::user()->id)) {
+                    $puestos_usuario=DB::table('puestos_usuario_supervisor')->where('id_usuario',Auth::user()->id)->pluck('id_puesto')->toArray();
+                    $q->wherein('puestos.id_puesto',$puestos_usuario);
+                }
+            })
+            ->groupby('clientes.nom_cliente','clientes.id_cliente','puestos_tipos.des_tipo_puesto','puestos_tipos.val_color','puestos_tipos.val_icono','puestos_tipos.val_color','edificios.des_edificio','puestos_tipos.id_tipo_puesto')
+            ->get();
+    
+    
+            $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
+            ///////////////////////////////////////////////////
+            ///////////SALIDA DEL INFORME/////////////////////
+            //Para añadir a los nomres de fichero y hacerlos un poco mas unicos
+            //dd($r->all());
+            $nombre_informe="Informe de puestos por tipo";
+            $cliente=clientes::find($r->id_cliente);
+            $rango_safe=str_replace(" - ","_",$r->fechas);
+            $rango_safe=str_replace("/","",$rango_safe);
+            $prepend=$r->cod_cliente."_".$cliente->nom_cliente."_".$rango_safe."_";
+            $usuario = users::find($r->cod_usuario)??Auth::user()->id;;
+            $view='reports.puestos_por_tipo.filter';
+    
+    
+            switch($r->output){
+                case "pantalla":
+                    if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                        $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe, "r" => $r,'executionTime' => $executionTime));
+                    } else {  //Navegacion
+                        return view($view,compact('informe','r','executionTime'))->render();
+                    }
+    
+                break;
+    
+                case "pdf":
+                    $orientation = $r->orientation == 'h' ? 'landscape' : 'portrait';
+                    $pdf = PDF::loadView($view,compact('informe','r','executionTime'));
+                    $pdf->setPaper('legal', $orientation);
+                    $filename = str_replace(' ', '_', $prepend . '_' . $nombre_informe . '.pdf');
+                    $fichero = storage_path() . "/exports/" . $filename;
+    
+                    if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
+                        try{
+                            $pdf->save($fichero);
+                            $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                        } catch(\Exception $e){
+                            Log::error('Error generando PDF '.$e->getMessage());
+                        }
+    
+                    } else {  //Navegacion
+                        try{
+                            return $pdf->download($filename);
+                        } catch(\Exception $e){
+                            Log::error('Error generando PDF '.$e->getMessage());
+                            flash("Error al solicitar el informe: afine los filtros para evitar grandes cargas de datos al navegador (".mensaje_excepcion($e) . ")")->error();  
+                            return redirect()->back()->withInput();
+                        }
+                    }
+    
+                break;
+    
+                case "excel":
+                    $filename = str_replace(' ', '_', $prepend.'_'.$nombre_informe.'.xlsx');
+                    $fichero = storage_path()."/exports/".$filename;
+                    libxml_use_internal_errors(true); //para quitar los errores de libreria
+                    if(isset($r->email_schedule) && $r->email_schedule == 1) { //Programado
+                        Excel::store(new ExportExcel($view, compact('informe','r','executionTime')),$filename,'exports');
+                        $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
+                    } else {  //Navegacion
+                        return Excel::download(new ExportExcel($view,compact('informe','r','executionTime')),$filename);
+                    }
+                break;
+            }
+        }
+
     ///////////////INFORME DE RESERVAS CANCELADAS /////////////////
     public function canceladas_index(){
         return view('reports.canceladas.index');

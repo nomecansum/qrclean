@@ -29,7 +29,7 @@
                 
                 <div class="form-group col-md-4 {{ $errors->has('id_tipo_incidencia') ? 'has-error' : '' }}">
                     <label for="id_tipo_incidencia" class="control-label">Tipo</label>
-                    <select class="form-control" required id="id_tipo_incidencia" name="id_tipo_incidencia">
+                    <select class="form-control select2" required id="id_tipo_incidencia" name="id_tipo_incidencia">
                         @foreach ($tipos as $tipo)
                             <option value="{{ $tipo->id_tipo_incidencia }}">{{ $tipo->des_tipo_incidencia }}</option>
                         @endforeach
@@ -162,5 +162,9 @@
             });
         }
     });
+
+    $('.select2').select2({
+		width: '100%'
+	});
 
 </script>

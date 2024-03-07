@@ -107,6 +107,8 @@
             var chart_inci2 = am4core.create("chartdiv_incidencias2", am4charts.PieChart);
         
             chart_inci2.legend = new am4charts.Legend();
+            chart_inci2.legend.maxHeight = 150;
+            chart_inci2.legend.scrollable = true;
             
             // Add data
             chart_inci2.data = {!! json_encode($datos_quesito) !!};

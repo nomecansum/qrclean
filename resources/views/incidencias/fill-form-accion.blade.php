@@ -21,7 +21,7 @@ $entidad=$incidencia->id_puesto==0?'solicitud':'incidencia';
 <div class="row">
     <div class="form-group col-md-12 {{ $errors->has('id_estado_inicial') ? 'has-error' : '' }}">
         <label for="id_estado" class="control-label" style="text-align: left">Poner la {{ $entidad }} en estado</label>
-        <select class="form-control" required id="id_estado" name="id_estado">
+        <select class="form-control select2" required id="id_estado" name="id_estado">
             @foreach ($estados as $estado)
                 <option value="{{ $estado->id_estado }}" {{ $estado->id_estado==$incidencia->id_estado?'selected':'' }} data-cierre="{{ $estado->mca_cierre }}">
                     {{ $estado->des_estado }}
@@ -122,5 +122,9 @@ $entidad=$incidencia->id_puesto==0?'solicitud':'incidencia';
 				console.log(lista_ficheros);
 			});
 		}
+	});
+
+	$('.select2').select2({
+		width: '100%'
 	});
 </script>

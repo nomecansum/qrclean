@@ -306,24 +306,76 @@ class ReportsController extends Controller
                 $q->wherein('puestos.id_puesto',$puestos_usuario);
             }
         })
+        ->where('puestos.id_puesto','<>',0)
         ->get();
 
         $lista_puestos=$informe->pluck('id_puesto')->unique();
-
         $usos=DB::table('log_cambios_estado')
-            ->wherein('id_puesto',$lista_puestos)
+            ->join('puestos','log_cambios_estado.id_puesto','puestos.id_puesto')
+            ->select('puestos.id_puesto','id_cliente','log_cambios_estado.id_estado')
+            ->selectraw('count(log_cambios_estado.id_puesto) as cuenta')
+            ->wherein('puestos.id_puesto',$lista_puestos)
             ->wherebetween('log_cambios_estado.fecha',[$f1,$f2])
+            ->groupby('puestos.id_puesto','id_cliente','log_cambios_estado.id_estado')
             ->get();
+        foreach($informe as $i){
+            $i->usado=$usos->where('id_estado',2)->where('id_puesto',$i->id_puesto)->first()->cuenta??null;
+            $i->disponible=$usos->where('id_estado',1)->where('id_puesto',$i->id_puesto)->first()->cuenta??null;
+            $i->limpieza=$usos->where('id_estado',3)->where('id_puesto',$i->id_puesto)->first()->cuenta??null;
+            $i->cambios=$usos->where('id_puesto',$i->id_puesto)->first()->cuenta??null;
+        }
 
         $reservas=DB::table('reservas')
+            ->select('id_puesto','id_cliente')
+            ->selectraw('count(id_puesto) as cuenta')
             ->wherein('id_puesto',$lista_puestos)
             ->wherebetween('fec_reserva',[$f1,$f2])
+            ->groupby('id_puesto','id_cliente')
             ->get();
 
-        $incidencias=DB::table('incidencias')
+        $reservas_usadas=DB::table('reservas')
+            ->select('id_puesto','id_cliente')
+            ->selectraw('count(id_puesto) as cuenta')
+            ->wherein('id_puesto',$lista_puestos)
+            ->wherebetween('fec_reserva',[$f1,$f2])
+            ->where('fec_utilizada','<>',null)
+            ->groupby('id_puesto','id_cliente')
+            ->get();
+
+        $reservas_anuladas=DB::table('reservas')
+            ->select('id_puesto','id_cliente')
+            ->selectraw('count(id_puesto) as cuenta')
+            ->wherein('id_puesto',$lista_puestos)
+            ->wherebetween('fec_reserva',[$f1,$f2])
+            ->where('mca_anulada','S')
+            ->groupby('id_puesto','id_cliente')
+            ->get();
+        foreach($informe as $i){
+            $i->reservas=$reservas->where('id_puesto',$i->id_puesto)->first()->cuenta??null;
+            $i->reservas_usadas=$reservas_usadas->where('id_puesto',$i->id_puesto)->first()->cuenta??null;
+            $i->reservas_anuladas=$reservas_anuladas->where('id_puesto',$i->id_puesto)->first()->cuenta??null;
+        }
+
+        $incidencias_abiertas=DB::table('incidencias')
+            ->select('id_puesto','id_cliente')
+            ->selectraw('count(id_incidencia) as cuenta')
             ->wherein('id_puesto',$lista_puestos)
             ->wherebetween('fec_apertura',[$f1,$f2])
+            ->groupby('id_puesto','id_cliente')
             ->get();
+        
+        $incidencias_cerradas=DB::table('incidencias')
+            ->select('id_puesto','id_cliente')
+            ->selectraw('count(id_incidencia) as cuenta')
+            ->wherein('id_puesto',$lista_puestos)
+            ->wherebetween('fec_apertura',[$f1,$f2])
+            ->where('fec_cierre','<>',null)
+            ->groupby('id_puesto','id_cliente')
+            ->get();
+        foreach($informe as $i){
+            $i->incidencias_abiertas=$incidencias_abiertas->where('id_puesto',$i->id_puesto)->first()->cuenta??null;
+            $i->incidencias_cerradas=$incidencias_cerradas->where('id_puesto',$i->id_puesto)->first()->cuenta??null;
+        }
 
         $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
         ///////////////////////////////////////////////////
@@ -342,16 +394,16 @@ class ReportsController extends Controller
         switch($r->output){
             case "pantalla":
                 if(isset($r->email_schedule) && $r->email_schedule == 1){ //Programado
-                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe, "r" => $r, "usos" => $usos, "reservas" => $reservas, "incidencias" => $incidencias,'executionTime' => $executionTime));
+                    $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, null, $view, array("informe" => $informe, "r" => $r,'executionTime' => $executionTime));
                 } else {  //Navegacion
-                    return view($view,compact('informe','usos','reservas','r','incidencias','executionTime'))->render();
+                    return view($view,compact('informe','r','executionTime'))->render();
                 }
 
             break;
 
             case "pdf":
                 $orientation = $r->orientation == 'h' ? 'landscape' : 'portrait';
-                $pdf = PDF::loadView($view,compact('informe','usos','reservas','r','incidencias','executionTime'));
+                $pdf = PDF::loadView($view,compact('informe','r','executionTime'));
                 $pdf->setPaper('legal', $orientation);
                 $filename = str_replace(' ', '_', $prepend . '_' . $nombre_informe . '.pdf');
                 $fichero = storage_path() . "/exports/" . $filename;
@@ -381,10 +433,10 @@ class ReportsController extends Controller
                 $fichero = storage_path()."/exports/".$filename;
 				libxml_use_internal_errors(true); //para quitar los errores de libreria
                 if(isset($r->email_schedule) && $r->email_schedule == 1) { //Programado
-                    Excel::store(new ExportExcel($view, compact('informe','usos','reservas','r','incidencias','executionTime')),$filename,'exports');
+                    Excel::store(new ExportExcel($view, compact('informe','r','executionTime')),$filename,'exports');
                     $this->enviar_fichero_email($r, $nombre_informe, $usuario, $prepend, $fichero);
                 } else {  //Navegacion
-                    return Excel::download(new ExportExcel($view,compact('informe','usos','reservas','r','incidencias','executionTime')),$filename);
+                    return Excel::download(new ExportExcel($view,compact('informe','r','executionTime')),$filename);
                 }
             break;
         }

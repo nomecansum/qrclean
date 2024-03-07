@@ -124,7 +124,8 @@ $entidad=$incidencia->id_puesto==0?'solicitud':'incidencia';
 		}
 	});
 
-	// $('.select2').select2({
-	// 	width: '100%'
-	// });
+	$('.select2').select2({
+		width: '100%',
+		dropdownParent: $("#accion-incidencia")
+	});
 </script>

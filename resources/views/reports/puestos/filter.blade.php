@@ -99,36 +99,37 @@
 	</tr>
 	@foreach ($inf as $puesto)
 		@php
-			$usado=$usos->where('id_puesto',$puesto->id_puesto)->where('id_estado',2);
-			$disponible=$usos->where('id_puesto',$puesto->id_puesto)->where('id_estado',1);
-			$limpieza=$usos->where('id_puesto',$puesto->id_puesto)->where('id_estado',6);
-			$cambios=$usos->where('id_puesto',$puesto->id_puesto);
-			$inc_abiertas=$incidencias->where('id_puesto',$puesto->id_puesto)->wherenull('fec_cierre');
-			$inc_cerradas=$incidencias->where('id_puesto',$puesto->id_puesto)->wherenotnull('fec_cierre');
-			$inc_total=$incidencias->where('id_puesto',$puesto->id_puesto);
-			$res_total=$reservas->where('id_puesto',$puesto->id_puesto);
-			$res_anuladas=$reservas->where('id_puesto',$puesto->id_puesto)->where('mca_anulada','S');
-			$res_usadas=$reservas->where('id_puesto',$puesto->id_puesto)->wherenotnull('fec_utilizada');
+			// $usado=$usos->where('id_puesto',$puesto->id_puesto)->where('id_estado',2);
+			// $disponible=$usos->where('id_puesto',$puesto->id_puesto)->where('id_estado',1);
+			// $limpieza=$usos->where('id_puesto',$puesto->id_puesto)->where('id_estado',6);
+			// $cambios=$usos->where('id_puesto',$puesto->id_puesto);
+			// $inc_abiertas=$incidencias_abiertas->where('id_puesto',$puesto->id_puesto)->wherenull('fec_cierre');
+			// $inc_cerradas=$incidencias_cerradas->where('id_puesto',$puesto->id_puesto)->wherenotnull('fec_cierre');
+			// //$inc_total=$inc_abiertas->cuenta+$inc_cerradas->cuenta;
+			// $res_total=$reservas->where('id_puesto',$puesto->id_puesto);
+			// $res_anuladas=$reservas_anuladas->where('id_puesto',$puesto->id_puesto);
+			// $res_usadas=$reservas_usadas->where('id_puesto',$puesto->id_puesto);
 		@endphp	
-		@if($cambios->count()>0 || $res_total->count()>0 || $inc_total->count()>0)
+		{{-- @if($cambios->sum()>0 || $res_total->sum()>0 || $inc_total->sum()>0) --}}
 			<tr class="text-center">
 				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>
 					@isset($puesto->icono_tipo)
 						<i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i>
 					@endisset
-					{{ $puesto->cod_puesto }}</td>
-				<td>{{ $usado->count() }}</td>
-				<td>{{ $disponible->count() }}</td>
-				<td>{{ $limpieza->count() }}</td>
-				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $cambios->count() }}</td>
-				<td>{{ $inc_abiertas->count() }}</td>
-				<td>{{ $inc_cerradas->count() }}</td>
-				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $inc_total->count() }}</td>
-				<td>{{ $res_usadas->count()-$res_anuladas->count() }}</td>
-				<td>{{ $res_anuladas->count() }}</td>
-				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $res_total->count() }}</td>
+					{{ $puesto->cod_puesto }}
+				</td>
+				<td>{{ $puesto->usado }}</td>
+				<td>{{ $puesto->disponible }}</td>
+				<td>{{ $puesto->limpieza }}</td>
+				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $puesto->cambios }}</td>
+				<td>{{ $puesto->incidencias_abiertas }}</td>
+				<td>{{ $puesto->incidencias_cerradas }}</td>
+				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ ($puesto->incidencias_abiertas??0+$puesto->incidencias_cerradas??0)==0?'':$puesto->incidencias_abiertas??0+$puesto->incidencias_cerradas??0 }}</td>
+				<td>{{ $puesto->reservas_usadas }}</td>
+				<td>{{ $puesto->reservas_anuladas }}</td>
+				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $puesto->reservas }}</td> 
 			</tr>
-		@endif
+		{{-- @endif --}}
 	@endforeach
 	@if($r->output=="pdf" || $r->output=="excel")
 		</tbody>

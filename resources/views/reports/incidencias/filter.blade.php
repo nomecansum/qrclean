@@ -107,6 +107,11 @@
 			<th>Ult. actividad</th>
 			<th>Estado</th>
 			<th>Acciones</th>
+			@if($r->or=='S')
+				<th>Proyecto</th>
+				<th>Prevision</th>
+				<th>Importe final</th>
+			@endif
 		</tr>
 
 	@foreach ($inf as $dato)
@@ -114,13 +119,19 @@
 			<td>{{ $dato->id_incidencia }}</td>
 			<td>@if($r->output!="excel"){!! beauty_fecha($dato->fec_apertura) !!} @else {{ Carbon::parse($dato->fec_apertura)->format('d/m/Y H:i') }} @endif</td>
 			<td>{{ $dato->des_tipo_incidencia }}</td>
-			<td>{{ $dato->name }}</td>
+			<td>{{ $dato->name }} <br> @if($r->or=='S') <a href="mailto:{{ $dato->email }}">{{ $dato->email }}</a>@endif</td>
 			@if($r->or=='I')<td>{{ $dato->cod_puesto }}</td>@endif
 			<td>{{ $dato->fec_cierre==null?'Abierta':'Cerrada' }}</td>
 			<td>{{ Carbon::now()->diffforHumans(Carbon::parse($dato->fec_apertura), CarbonInterface::DIFF_ABSOLUTE) }}</td>
 			<td>{!! $dato->fec_audit==null?'':beauty_fecha($dato->fec_audit) !!}</td>
 			<td>{{ $dato->estado_incidencia }}</td>
 			<td>{{ $dato->num_acciones }}</td>
+			@if($r->or=='S')
+				<td>{{ $dato->val_proyecto }}</td>
+				<td>{{ $dato->val_presupuesto }}</td>
+				<td>{{ $dato->val_importe }}</td>
+			@endif
+
 		</tr>
 		
 	@endforeach

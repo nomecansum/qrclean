@@ -1353,7 +1353,7 @@ class ReportsController extends Controller
         ///////////////////////////
         if($r->or=='I'){
             $informe=DB::table('incidencias')
-                ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+                ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name','users.email')
                 ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
                 ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
                 ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
@@ -1452,7 +1452,7 @@ class ReportsController extends Controller
                 ->get();
         } else { //Solicitudes, no llevan puesto
             $informe=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name','users.email')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')

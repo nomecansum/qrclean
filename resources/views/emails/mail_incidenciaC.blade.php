@@ -43,6 +43,7 @@ $usuario=users::find($inc->id_usuario_apertura);
     @endif
     <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong>Fecha:</strong> {!! beauty_fecha($inc->fec_apertura)!!}</p>
     <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong>Descripción:</strong>  {{ $inc->des_incidencia }} {!! $inc->txt_incidencia !!}</p>
+    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong>Proyecto:</strong>  {{ $inc->val_proyecto }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Previsión importe:</strong>  {{ $inc->val_presupuesto }} </p>
     <p style="font-size: 14px; line-height: 160%;"><br />Le enviamos esta notificacion como comprobante de la apertura de dicha {{ $entidad }} </p>
 @endsection
 

@@ -1,6 +1,6 @@
 <input type="hidden" name="id_incidencia" value="{{ $id }}"></input>
 <input type="hidden" name="procedencia" value="web"></input>
-<h5>Causa de cierre</h5>
+<label>Causa de cierre</label>
 <ul>
     @foreach($causas_cierre as $causa)
     <div class="radio">
@@ -10,5 +10,10 @@
     </div>
     @endforeach
 </ul>
-<h5>Comentario de cierre</h5>
+<div class="form-group col-md-4 {{ $errors->has('val_importe') ? 'has-error' : '' }}">
+    <label for="val_presupuesto" class="control-label">Importe final (€)</label>
+    <input class="form-control"  name="val_importe" type="number" step="any"  id="val_importe"  maxlength="200" >
+</div>
+
+<label>Comentario de cierre</label>
 <textarea class="form-control" name="comentario_cierre" type="text" id="comentario_cierre" value="" rows="4"></textarea>

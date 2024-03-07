@@ -38,6 +38,16 @@
                     <div class="col-md-3">
                         <span class="font-bold">Puesto: </span><span>{{ $incidencia->cod_puesto }}</span>
                     </div>
+                @else
+                    <div class="col-md-3">
+                        @if($incidencia->val_presupuesto!=null)<span class="font-bold">Previsión importe: </span><span>{{ $incidencia->val_presupuesto }} €</span>@endif
+                    </div>
+                    <div class="col-md-3">
+                        @if($incidencia->val_importe!=null)<span class="font-bold">Importe final: </span><span>{{ $incidencia->val_importe }} €</span>@endif
+                    </div>
+                    <div class="col-md-3">
+                        <span class="font-bold">Proyecto: </span><span>{{ $incidencia->val_proyecto }}</span>
+                    </div>
                 @endif
             </div>
             <div class="row mt-3">

@@ -46,6 +46,7 @@ $puesto=DB::table('puestos')
     <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:18px"><strong>{!! $inc->comentario_cierre !!}</strong></p>
     <p><br></p>
     <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong>Fecha:</strong> {!! beauty_fecha($inc->fec_cierre)!!}</p>
+    <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><strong>Proyecto:</strong>  {{ $inc->val_proyecto }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Previsión importe:</strong>  {{ $inc->val_presupuesto }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>Importe final:</strong>  {{ $inc->val_importe }}</p>
 @endsection
 
 @section('enlace')

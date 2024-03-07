@@ -53,7 +53,10 @@ class incidencias extends Model
                   'url_detalle_incidencia',
                   'val_procedencia',
                   'val_prioridad',
-                  'fec_audit'
+                  'fec_audit',
+                  'val_importe',
+                  'val_presupuesto',
+                  'val_proyecto',
               ];
 
     /**

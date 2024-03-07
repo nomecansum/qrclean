@@ -872,6 +872,7 @@ class IncidenciasController extends Controller
                     $accion->mca_resuelve='S';
                     $incidencia->comentario_cierre=$r->des_accion;
                     $incidencia->fec_cierre=Carbon::now();
+                    $incidencia->val_importe=$r->val_importe??null;
                     $incidencia->id_usuario_cierre=$r->id_usuario??Auth::user()->id;
                     $accion_postprocesado="F";
                     //Actualizamos el puesto para que deje ed estar en estado de "con incidencia"
@@ -1422,6 +1423,7 @@ class IncidenciasController extends Controller
             $inc->comentario_cierre=$r->comentario_cierre;
             $inc->fec_cierre=Carbon::now();
             $inc->id_usuario_cierre=Auth::user()->id;
+            $inc->val_importe=$r->val_importe??null;
             $inc->save();
             $puesto=puestos::find($inc->id_puesto);
             $puesto->mca_incidencia='N';
@@ -1915,7 +1917,5 @@ class IncidenciasController extends Controller
             return back()->withInput();
         }
     }
-
-    
 
 }

@@ -313,9 +313,9 @@ class ReservasController extends Controller
         $puestos_reservados=[];
         $period = CarbonPeriod::create($f1,$f2);
         foreach($period as $p){
-            $fec_desde=Carbon::parse($p->format('Y-m-d').' '.$r->hora_inicio);
-            $fec_hasta=Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin);
-            // dd($fec_desde.' - '.$fec_hasta);
+            $fec_desde=Carbon::parse($p->format('Y-m-d').' '.$r->hora_inicio)->addsecond(); //Añadimos un segundo para que no coincida con la hora de fin de otra reserva contigua en el caso de slots
+            $fec_hasta=Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin)->subsecond(); //Y aqui lo mismo, pero quitando  por ser el fin
+             // dd($fec_desde.' - '.$fec_hasta);
             $reservas=DB::table('reservas')
                 ->join('puestos','puestos.id_puesto','reservas.id_puesto')
                 ->join('users','reservas.id_usuario','users.id')
@@ -607,7 +607,7 @@ class ReservasController extends Controller
             $fec_hasta=Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin);
             //Si en el perfil le hemos puesto que pude reservar varios puestos del tipo no comprobamos si ya estaba pillado
             
-            if((session('NIV')["mca_reserva_multiple"]=='N' || $tipopuesto->mca_reserva_multiple=='N') && Auth::user()->mca_reserva_multiple=='N')
+            if((session('NIV')["mca_reserva_multiple"]=='N' || $tipopuesto->mca_reserva_multiple=='N' || ($tipopuesto->mca_reserva_multiple=='U' && Auth::user()->mca_reserva_multiple=='N')))
             {
                  //Primero comprobamos si tiene una reserva para ese dia de ese tipo de puesto
                 $reservas=DB::table('reservas')

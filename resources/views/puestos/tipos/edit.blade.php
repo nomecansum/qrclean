@@ -105,6 +105,14 @@
                         <label for="max_usos">Num. orden</label><br>
                         <input type="number" autocomplete="off" name="num_orden" id="num_orden" style="width: 120px" min="0" max="40"  class="form-control" value="{{$tipo->num_orden}}" />
                     </div>
+                    <div class="form-group col-md-2">
+                        <label for="mca_reserva_multiple" class="control-label">Reserva multiple</label>
+                        <select class="form-control" required id="mca_reserva_multiple" name="mca_reserva_multiple">
+                                <option value="N" {{ $tipo->mca_reserva_multiple == 'N' ? 'selected' : '' }}>No</option>
+                                <option value="S" {{ $tipo->mca_reserva_multiple == 'S' ? 'selected' : '' }}>Si</option>
+                                <option value="U" {{ $tipo->mca_reserva_multiple == 'U' ? 'selected' : '' }}>Solo si lo permite el usuario</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-3 p-t-20 mt-2">
@@ -119,12 +127,13 @@
                             <label for="mca_reserva_masiva" class="form-check-label">Permitir reserva supervisores</label>
                         </div>
                     </div>
-                    <div class="col-md-3 p-t-20 mt-2">
+                    
+                    {{-- <div class="col-md-3 p-t-20 mt-2">
                         <div class="form-check pt-1">
                             <input name="mca_reserva_multiple"  id="mca_reserva_multiple" value="S" {{ $tipo->mca_reserva_multiple=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
                             <label for="mca_reserva_multiple" class="form-check-label">Reserva multiple</label>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-3 p-t-20 mt-2">
                         <div class="form-check pt-1">
                             <input name="mca_checkin"  id="mca_checkin" value="S" {{ $tipo->mca_checkin=='S'?'checked':'' }}  class="form-check-input" type="checkbox">

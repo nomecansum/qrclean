@@ -23,7 +23,9 @@
         <td>{{ $inc->name }}</td>
         <td>@if(isset($inc->fec_cierre)) <div class="bg-success text-xs text-white text-center rounded b-all" style="padding: 5px" id="cell{{$inc->id_incidencia}}">Cerrada</div> @else  <div class="bg-pink  text-xs text-white text-center rounded b-all"  style="padding: 5px" id="cell{{$inc->id_incidencia}}">Abierta </div>@endif</td>  
         <td>{{ Carbon::now()->diffforHumans(Carbon::parse($inc->fec_apertura), CarbonInterface::DIFF_ABSOLUTE) }}</td>
-        <td>{!! $inc->fec_audit==null?'':beauty_fecha($inc->fec_audit) !!}</td>
+        <td>{!! $inc->fec_audit==null?'':beauty_fecha($inc->fec_audit) !!}<br>
+            <span  style="font-size:12px; font-style: italic; ">{{ $inc->estado_incidencia }}</span>
+        </td>
         <td>{{ $inc->num_acciones }}</td>
         <td style="position: relative; vertical-align: middle" class="pt-2">
             {{ $descripcion}}

@@ -32,6 +32,6 @@
     })
     @if(!isset($reserva))
         $('.btn1').addClass('btn-info');
-        $('.slot.btn1').click();
+        //$('.slot.btn1').click();
     @endif
 </script>

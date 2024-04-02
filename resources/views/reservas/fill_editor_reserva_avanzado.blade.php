@@ -23,7 +23,7 @@
         <div class="form-group col-md-3">
             <label for="id_edificio"><i class="fad fa-building"></i> Edificio</label>
             <select name="id_edificio" id="id_edificio" class="form-control">
-                @foreach(DB::table('edificios')->where('id_cliente',Auth::user()->id_cliente)->get() as $edificio)
+                @foreach($edificios_usuario as $edificio)
                     <option value="{{ $edificio->id_edificio}}" {{ $reserva->id_edificio==$edificio->id_edificio?'selected':'' }}>{{ $edificio->des_edificio }}</option>
                 @endforeach
             </select>

@@ -197,25 +197,31 @@
     function refrescar_slots(obj){
         var selected = obj.find('option:selected');
         $('#obs').html();
-        if(typeof selected.data('observaciones') !== "undefined"){
+        if(typeof selected.data('observaciones')!== "undefined" && selected.data('observaciones')!=="" ){
             $('#obs').html("<i class='fa fa-info-circle'></i> "+selected.data('observaciones'));
         }
         console.log(selected.data('slots'));
-        if(tipo_seleccionado!=0 && selected.data('slots')!="" && typeof selected.data('slots') !== "undefined"){
-            $.post('{{url('/reservas/slots')}}', {_token: '{{csrf_token()}}',fechas: $('#fechas').val(),reserva:{{ $reserva->id_reserva??0 }},id: tipo_seleccionado}, function(data, textStatus, xhr) {
-                $('#slots').html(data);
-                console.log("cambio a slots")
-                $('#slots').show();
-                $('#slider').hide();
-            });
-            // $('#slots').load('{{ url('reservas/slots') }}/'+$(this).val()+"/{{ $reserva->id_reserva??0 }}/"+$('#fechas').val(), function(){
-                
-            // });
-        } else {
-            $('#slider').show();
+        if(tipo_seleccionado==0){
+            $('#slider').hide();
             $('#slots').hide();
-            console.log("cambio a slider")
+        } else {
+            if(selected.data('slots')!="" && typeof selected.data('slots') !== "undefined"){
+                $.post('{{url('/reservas/slots')}}', {_token: '{{csrf_token()}}',fechas: $('#fechas').val(),reserva:{{ $reserva->id_reserva??0 }},id: tipo_seleccionado}, function(data, textStatus, xhr) {
+                    $('#slots').html(data);
+                    console.log("cambio a slots")
+                    $('#slots').show();
+                    $('#slider').hide();
+                });
+                // $('#slots').load('{{ url('reservas/slots') }}/'+$(this).val()+"/{{ $reserva->id_reserva??0 }}/"+$('#fechas').val(), function(){
+                    
+                // });
+            } else {
+                $('#slider').show();
+                $('#slots').hide();
+                console.log("cambio a slider")
+            }
         }
+        
     }
 
     $('#id_tipo_puesto').change(function(){
@@ -286,14 +292,14 @@
     });
 
     function comprobar_puestos(){
-        //console.log($('#fechas').val());
+        console.log("comprobar");
         $.post('{{url('/reservas/comprobar')}}', {_token: '{{csrf_token()}}',fechas: $('#fechas').val(),edificio:$('#id_edificio').val(),tipo: $('#tipo_vista').val(), hora_inicio: $('#hora_inicio').val(),hora_fin: $('#hora_fin').val(), tipo_puesto: $('#id_tipo_puesto').val(),id_planta:$('#id_planta').val(),tags:$('#multi-tag').val(),andor:$('#andor').is(':checked'),'id_reserva':{{ $edit??0 }}}, function(data, textStatus, xhr) {
             $('#detalles_reserva').html(data);
         });
     }
 
     function comprobar_rapida(){
-        //console.log($('#fechas').val());
+        console.log("comprobar rapida");
         $plantas=[];
         $('.btn_planta').each(function(){
             if($(this).is(':checked')){
@@ -320,15 +326,16 @@
       //Y ahora vemos si hay que refrescar los slots
       var selected = $('#id_tipo_puesto').find('option:selected');
       tipo_seleccionado=selected.val();
+      console.log("seleccionado "+tipo_seleccionado);
       refrescar_slots(selected);
-      //console.log(tipo_seleccionado);
+      
       if(tipo_seleccionado!=0 && tipo_seleccionado!=null){
         comprobar_puestos();
       }
     });
 
     function mostrar_datos_reserva_rapida(obj){
-        refrescar_slots(obj);
+        //refrescar_slots(obj);
         comprobar_rapida();
     }
 
@@ -345,31 +352,41 @@
             $('.div_plantas').hide();
             $('#detalles_reserva').empty();
             planta_rapida=0;
-            if(data.length>1){
-                $('.div_plantas').show();
-                $('.btn_planta').prop('checked',false);
-                $('.btn_planta').hide();
-                $('.lbl_planta').hide();
-                //Vamos a mostrar solo las plantas que tocan
-                data.forEach(function(item){
-                    
-                    var array = item.plantas.split(",");
-                    array.forEach(function(p){
-                        $('#btnplanta'+p).show();
-                        $('#btnplanta'+p).next().show();
-                    })
-                })
-               
-                edificio_rapido=0;
+            if(data.length==0){
+                //No hay nada para ti
+                $('#slider').hide();
+                $('#slots').hide();
+                $('#tit_planta').hide();
+
             } else {
-                edificio_rapido=data[0].id_edificio;
-                mostrar_datos_reserva_rapida($(this));
+                if(data.length>1){
+                    $('#tit_planta').show();
+                    $('.div_plantas').show();
+                    $('.btn_planta').prop('checked',false);
+                    $('.btn_planta').hide();
+                    $('.lbl_planta').hide();
+                    //Vamos a mostrar solo las plantas que tocan
+                    data.forEach(function(item){
+                        
+                        var array = item.plantas.split(",");
+                        array.forEach(function(p){
+                            $('#btnplanta'+p).show();
+                            $('#btnplanta'+p).next().show();
+                        })
+                    })
+                
+                    edificio_rapido=0;
+                } else {
+                    edificio_rapido=data[0].id_edificio;
+                    mostrar_datos_reserva_rapida($(this));
+                }
             }
+            
         });
     });
     $('.btn_planta').click(function(){
         edificio_rapido=$(this).data('edificio');
-        //console.log(edificio_rapido);
+        //console.log("btnplantaclick");
         $('#id_edificio').val($(this).data('edificio'));
         planta_rapida=$(this).data('planta');
         mostrar_datos_reserva_rapida($('#id_tipo_puesto'));

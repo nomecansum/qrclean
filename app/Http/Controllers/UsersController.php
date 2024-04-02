@@ -26,6 +26,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use stdClass;
+use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
@@ -808,6 +809,7 @@ class UsersController extends Controller
             ->orderby('name')
             ->get();
         $plantas=DB::table('plantas')
+            ->join('edificios','plantas.id_edificio','edificios.id_edificio')
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('plantas.id_cliente',Auth::user()->id_cliente);
@@ -916,7 +918,11 @@ class UsersController extends Controller
                 case 'add':
                     foreach($r->id_usuario as $user){
                         foreach($r->plantas as $dato){
-                            DB::table('plantas_usuario')->insert(['id_usuario'=>$user, 'id_planta'=>$dato]);
+                            try{
+                                DB::table('plantas_usuario')->insert(['id_usuario'=>$user, 'id_planta'=>$dato]);
+                            } catch (\Throwable $exception) { 
+                                Log::debug('El usuario '.$user.' ya tenia la planta');
+                            }
                         }
                     }
                     break;
@@ -1955,17 +1961,22 @@ class UsersController extends Controller
     }
 
     public function setzoom($id,$zoom,$mobile){
-        $users=users::find($id);
-        if($mobile==1){
-            $users->zoom_mobile=$zoom;
-        }else{
-            $users->zoom_desktop=$zoom;
+        try{
+            $users=users::find($id);
+            if($mobile==1){
+                $users->zoom_mobile=$zoom;
+            }else{
+                $users->zoom_desktop=$zoom;
+            }
+            $users->save();
+            return [
+                'result' => "OK",
+                'data' => $id
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error al hacer setzoom '.$e->getMessage());
         }
-        $users->save();
-        return [
-            'result' => "OK",
-            'data' => $id
-        ];
+        
     }
 
     public function enviar_recordatorio_asignacion(Request $r){

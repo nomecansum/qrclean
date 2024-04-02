@@ -12,7 +12,8 @@
     <!-- END : Button groups with radio button -->
 </div>
 
-<h6>Planta</h6>
+
+<h6 id="tit_planta">Planta</h6>
 
 
 @foreach($edificios_usuario as $e)

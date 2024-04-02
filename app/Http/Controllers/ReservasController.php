@@ -176,17 +176,9 @@ class ReservasController extends Controller
             ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
             ->join('plantas','plantas.id_planta','plantas_usuario.id_planta')
             ->where('id_usuario',Auth::user()->id)
-            ->orderby('plantas.num_orden')
             ->get();
 
-        $plantas_publicas=DB::table('plantas')
-            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
-            ->where('mca_publica','S')
-            ->get();
 
-        $plantas_usuario=$plantas_usuario->merge($plantas_publicas);
-
-        
         $edificios_usuario=DB::table('plantas')
             ->select('edificios.id_edificio','edificios.des_edificio')
             ->leftjoin('edificios','edificios.id_edificio','plantas.id_edificio')
@@ -194,6 +186,14 @@ class ReservasController extends Controller
             ->where('edificios.id_cliente',Auth::user()->id_cliente)
             ->distinct()
             ->get();
+
+        $plantas_publicas=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
+            ->where('mca_publica','S')
+            ->wherein('plantas.id_edificio',$edificios_usuario->pluck('id_edificio')->toArray())
+            ->get();
+
+        $plantas_usuario=$plantas_usuario->merge($plantas_publicas);
 
         $reserva->id_planta=0;
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
@@ -247,12 +247,6 @@ class ReservasController extends Controller
             ->where('id_usuario',Auth::user()->id)
             ->get();
 
-        $plantas_publicas=DB::table('plantas')
-            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
-            ->where('mca_publica','S')
-            ->get();
-
-        $plantas_usuario=$plantas_usuario->merge($plantas_publicas);
 
         $edificios_usuario=DB::table('plantas')
             ->select('edificios.id_edificio','edificios.des_edificio')
@@ -261,7 +255,14 @@ class ReservasController extends Controller
             ->where('edificios.id_cliente',Auth::user()->id_cliente)
             ->distinct()
             ->get();
-       
+
+        $plantas_publicas=DB::table('plantas')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
+            ->where('mca_publica','S')
+            ->wherein('plantas.id_edificio',$edificios_usuario->pluck('id_edificio')->toArray())
+            ->get();
+
+        $plantas_usuario=$plantas_usuario->merge($plantas_publicas);
 
 
         $festivos_usuario=$this->festivos_usuario(Auth::user()->id);
@@ -279,18 +280,28 @@ class ReservasController extends Controller
             ->where('id_usuario',Auth::user()->id)
             ->get();
 
+        $edificios_usuario=DB::table('plantas')
+            ->select('edificios.id_edificio','edificios.des_edificio')
+            ->leftjoin('edificios','edificios.id_edificio','plantas.id_edificio')
+            ->wherein('plantas.id_planta',array_unique($plantas_usuario->pluck('id_planta')->toarray()))
+            ->where('edificios.id_cliente',Auth::user()->id_cliente)
+            ->distinct()
+            ->get();
+
+       
+
         $plantas_publicas=DB::table('plantas')
             ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
             ->where('mca_publica','S')
+            ->wherein('plantas.id_edificio',$edificios_usuario->pluck('id_edificio')->toArray())
             ->get();
+
+        
+
 
         $plantas_usuario=$plantas_usuario->merge($plantas_publicas)->pluck('id_planta')->toarray();
 
-        $edificios_usuario=DB::table('plantas')
-            ->leftjoin('edificios','edificios.id_edificio','plantas.id_edificio')
-            ->wherein('plantas.id_planta',$plantas_usuario)
-            ->get();
-       
+
         $usuario=DB::table('users')
             ->join('niveles_acceso','niveles_acceso.cod_nivel','users.cod_nivel')
             ->where('users.id',Auth::user()->id)
@@ -1173,13 +1184,24 @@ class ReservasController extends Controller
             ->where('id_usuario',Auth::user()->id)
             ->get();
 
+        //Aqui sacamos solo los edificios en los que tiene alguna planta o las publicas del edificio al que pertenece el pollo
+        $edificios_usuario=DB::table('plantas')
+            ->select('edificios.id_edificio','edificios.des_edificio')
+            ->leftjoin('edificios','edificios.id_edificio','plantas.id_edificio')
+            ->wherein('plantas.id_planta',array_unique($plantas_usuario->pluck('id_planta')->toarray()))
+            ->where('edificios.id_cliente',Auth::user()->id_cliente)
+            ->distinct()
+            ->get();
+
         $plantas_publicas=DB::table('plantas')
             ->select('plantas.id_planta','plantas.des_planta','plantas.num_orden','plantas.id_edificio','plantas.mca_publica')
             ->where('mca_publica','S')
+            ->wherein('plantas.id_edificio',$edificios_usuario->pluck('id_edificio')->toArray())
             ->get();
 
         $plantas_usuario=$plantas_usuario->merge($plantas_publicas)->pluck('id_planta')->toarray();
 
+        //Ahora volvermos a construir el recordset de edificios de acuerdo a como lo necesitamos para la respuesta
         $edificios_usuario=DB::table('plantas')
             ->select('edificios.id_edificio','edificios.des_edificio')
             ->selectraw('ifnull(count(distinct(plantas.id_planta)),0) as cuenta')

@@ -248,7 +248,7 @@
                 </label><br>
                 <select  name="plantas[]" multiple="" class="form-control  select2_modal" style="width: 100%" id="plantas">
                     @foreach ($plantas as $pl)
-                        <option  value="{{$pl->id_planta}}">{{$pl->des_planta}}</option>
+                        <option  value="{{$pl->id_planta}}">[]{{ $pl->des_edificio }}] {{$pl->des_planta}}</option>
                     @endforeach
                 </select>
             </div>

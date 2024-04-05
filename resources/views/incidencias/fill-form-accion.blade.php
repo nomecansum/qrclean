@@ -34,10 +34,24 @@ $entidad=$incidencia->id_puesto==0?'solicitud':'incidencia';
 </div>
 <div class="row" id="row_importe" style="display:none">
 	<div class="form-group col-md-4 {{ $errors->has('val_importe') ? 'has-error' : '' }}">
-		<label for="val_presupuesto" class="control-label">Importe final (€)</label>
+		<label for="val_importe" class="control-label">Importe final (€)</label>
 		<input class="form-control"  name="val_importe" type="number" step="any"  id="val_importe"  maxlength="200" >
 	</div>
 </div>
+
+@if($incidencia->id_puesto==0)
+	<div class="row">
+		<div class="form-group col-md-4 {{ $errors->has('val_presupuesto') ? 'has-error' : '' }}">
+			<label for="val_presupuesto" class="control-label">Previsión importe (€)</label>
+			<input class="form-control"  name="val_presupuesto" type="number" step="any" value="{{ $incidencia->val_presupuesto }}"  id="val_presupuesto"  maxlength="200" >
+		</div>
+		<div class="form-group col-md-8 {{ $errors->has('val_proyecto') ? 'has-error' : '' }}">
+			<label for="val_proyecto" class="control-label">Proyecto</label>
+			<input class="form-control"  name="val_proyecto" type="text" id="val_proyecto" value="{{ $incidencia->val_proyecto }}"  maxlength="200" >
+		</div>
+	</div>
+@endif
+
 <script>
 	$('input[type="file"]').change(function(e){
 		var fileName = e.target.files[0].name;

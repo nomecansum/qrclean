@@ -1331,8 +1331,11 @@ class PuestosController extends Controller
     public function index_bloqueo(){
 
         $bloqueos=DB::table('bloqueo_programado')
+            ->select('bloqueo_programado.*','clientes.nom_cliente','users.name','turnos.des_turno')
+            ->selectraw("(select count(id_puesto) from bloqueo_puestos where id_bloqueo=bloqueo_programado.id_bloqueo) as puestos")
             ->join('clientes','bloqueo_programado.id_cliente','clientes.id_cliente')
             ->leftjoin('users','bloqueo_programado.usu_audit','users.id')
+            ->leftjoin('turnos','bloqueo_programado.id_turno','turnos.id_turno')
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->where('bloqueo_programado.id_cliente',Auth::user()->id_cliente);
@@ -1399,5 +1402,145 @@ class PuestosController extends Controller
             ->get();
 
         return view('puestos.bloqueo.edit', compact('tipo','Clientes','puestos','turnos','puestos_bloqueados','id'));
+    }
+
+    //Guardar los datos del bloqueo en la table bloqueo_programado
+    public function bloqueo_save(Request $r){
+        try{
+            $fechas=explode(" - ",$r->fechas);
+            $fec_inicio=Carbon::parse(adaptar_fecha($fechas[0]));
+            $fec_fin=Carbon::parse(adaptar_fecha($fechas[1]));
+            if(isset($r->estado)){
+                $list_estados=implode(",",$r->estado);
+            }
+            if(isset($r->edificio)){
+                $list_edificios=implode(",",$r->edificio);
+            }
+            if(isset($r->planta)){
+                $list_plantas=implode(",",$r->planta);
+            }
+            if(isset($r->tags)){
+                $list_tags=implode(",",$r->tags);
+            }
+            if(isset($r->puesto)){
+                $list_puestos=implode(",",$r->puesto);
+            }
+            if(isset($r->tipo)){
+                $list_tipos=implode(",",$r->tipo);
+            }
+            if($r->id_bloqueo==0){
+                $bloqueo=bloqueos::create([
+                    'id_cliente'=>$r->cliente,
+                    'des_motivo'=>$r->des_motivo,
+                    'fec_inicio'=>$fec_inicio,
+                    'fec_fin'=>$fec_fin,
+                    'id_turno'=>$r->id_turno,
+                    'usu_audit'=>Auth::user()->id,
+                    'fec_audit'=>Carbon::now(),
+                    'list_estados'=>$list_estados??null,
+                    'list_edificios'=>$list_edificios??null,
+                    'list_plantas'=>$list_plantas??null,
+                    'list_tags'=>$list_tags??null,
+                    'list_puestos'=>$list_puestos??null,
+                    'list_tipos'=>$list_tipos??null
+
+                ]);
+            } else {
+                $bloqueo=bloqueos::find($r->id_bloqueo);
+                $bloqueo->id_cliente=$r->cliente;
+                $bloqueo->des_motivo=$r->des_motivo;
+                $bloqueo->id_turno=$r->id_turno;
+                $bloqueo->fec_inicio=$fec_inicio;
+                $bloqueo->fec_fin=$fec_fin;
+                $bloqueo->usu_audit=Auth::user()->id;
+                $bloqueo->list_estados=$list_estados??null;
+                $bloqueo->list_edificios=$list_edificios??null;
+                $bloqueo->list_plantas=$list_plantas??null;
+                $bloqueo->list_tags=$list_tags??null;
+                $bloqueo->list_puestos=$list_puestos??null;
+                $bloqueo->list_tipos=$list_tipos??null;
+                $bloqueo->save();
+            }
+
+            //Ahora los puestos hay que obtenerlos como  resultado de filtrar la tabla de puestos pode los daos de edificio, planta, tag, tipo de puesto y puesto en concreto
+            $puestos=DB::table('puestos')
+                ->select('puestos.id_puesto','puestos.cod_puesto')
+                ->join('clientes','puestos.id_cliente','clientes.id_cliente')
+                ->where(function($q){
+                    $q->wherein('puestos.id_cliente',clientes());
+                })
+                ->where(function($q) use($r){
+                    if ($r->cliente) {
+                        $q->Where('puestos.id_cliente',$r->cliente);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->edificio) {
+                        $q->WhereIn('puestos.id_edificio',$r->edificio);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->planta) {
+                        $q->whereIn('puestos.id_planta',$r->planta);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->puesto) {
+                        $q->whereIn('puestos.id_puesto',$r->puesto);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->estado) {
+                        $q->whereIn('puestos.id_estado',$r->estado);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->tipo) {
+                        $q->whereIn('puestos.id_tipo_puesto',$r->tipo);
+                    }
+                })
+                ->where(function($q) use($r){
+                    if ($r->tags) {
+                        if($r->andor){//Busqueda con AND
+                            $puestos_tags=DB::table('tags_puestos')
+                                ->select('id_puesto')
+                                ->wherein('id_tag',$r->tags)
+                                ->groupby('id_puesto')
+                                ->havingRaw('count(id_tag)='.count($r->tags))
+                                ->pluck('id_puesto')
+                                ->toarray();
+                            $q->whereIn('puestos.id_puesto',$puestos_tags);
+                        } else { //Busqueda con OR
+                            $puestos_tags=DB::table('tags_puestos')->wherein('id_tag',$r->tags)->pluck('id_puesto')->toarray();
+                            $q->whereIn('puestos.id_puesto',$puestos_tags); 
+                        }
+                    }
+                })
+                ->pluck('id_puesto')
+                ->toarray();
+            //Primero borramos los puestos que ya no esten
+            DB::table('bloqueo_puestos')->where('id_bloqueo',$bloqueo->id_bloqueo)->delete();
+
+            //Ahora insertamos los nuevos
+            foreach($puestos as $key=>$p){
+                DB::table('bloqueo_puestos')->insert([
+                    'id_bloqueo'=>$bloqueo->id_bloqueo,
+                    'id_puesto'=>$p
+                ]);
+            }
+            savebitacora('Bloqueo de puestos '.$r->des_bloqueo.' creado para '.count($puestos).' puestos',"Puestos","bloqueo_save","OK");
+            return [
+                'title' => "Bloqueo de puestos",
+                'message' => 'Bloqueo de puestos '.$r->des_bloqueo.' creado para '.count($puestos).' puestos',
+                'url' => url('bloqueo')
+            ];
+        } catch(\Throwable $e){
+            savebitacora('ERROR: Ocurrio un error creando el bloqueo '.$r->des_bloqueo.' '.mensaje_excepcion($e),"Puestos","bloqueo_save","ERROR");
+            return [
+                'title' => "Bloqueo de puestos",
+                'error' => 'ERROR: Ocurrio un error creando el bloqueo '.$r->des_bloqueo.' '.mensaje_excepcion($e),
+                //'url' => url('sections')
+            ];
+        }
     }
 }

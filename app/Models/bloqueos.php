@@ -37,7 +37,14 @@ class bloqueos extends Model
                   'fec_fin',
                   'fec_inicio',
                   'id_turno',
-                  'usu_audit'
+                  'usu_audit',
+                  'id_cliente',
+                  'list_plantas',
+                  'list_edificios',
+                  'list_puestos',
+                  'list_tags',
+                  'list_estados',
+                  'list_tipos'
               ];
 
     /**
@@ -55,48 +62,6 @@ class bloqueos extends Model
     protected $casts = [];
     
 
-    /**
-     * Set the fec_fin.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setFecFinAttribute($value)
-    {
-        $this->attributes['fec_fin'] = !empty($value) ? \DateTime::createFromFormat('j/n/Y g:i A', $value) : null;
-    }
 
-    /**
-     * Set the fec_inicio.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setFecInicioAttribute($value)
-    {
-        $this->attributes['fec_inicio'] = !empty($value) ? \DateTime::createFromFormat('j/n/Y g:i A', $value) : null;
-    }
-
-    /**
-     * Get fec_fin in array format
-     *
-     * @param  string  $value
-     * @return array
-     */
-    public function getFecFinAttribute($value)
-    {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
-    }
-
-    /**
-     * Get fec_inicio in array format
-     *
-     * @param  string  $value
-     * @return array
-     */
-    public function getFecInicioAttribute($value)
-    {
-        return \DateTime::createFromFormat($this->getDateFormat(), $value)->format('j/n/Y g:i A');
-    }
 
 }

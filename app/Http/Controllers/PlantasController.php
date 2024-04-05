@@ -29,7 +29,7 @@ class PlantasController extends Controller
     public function index()
     {
         $plantasObjects=DB::table('plantas')
-            ->select('plantas.id_planta','plantas.des_planta','plantas.img_plano','edificios.des_edificio','clientes.nom_cliente','clientes.id_cliente')
+            ->select('plantas.id_planta','plantas.des_planta','plantas.img_plano','edificios.des_edificio','clientes.nom_cliente','clientes.id_cliente','plantas.abreviatura')
             ->join('clientes','clientes.id_cliente','plantas.id_cliente')
             ->join('edificios','edificios.id_edificio','plantas.id_edificio')
             ->where(function($q){

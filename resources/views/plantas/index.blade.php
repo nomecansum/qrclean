@@ -91,6 +91,7 @@
                             <th data-sortable="true" >Edificio</th>
                             @admin @desktop<th data-sortable="true">Cliente</th>@enddesktop @endadmin
                             <th class="text-center">Puestos</th>
+                            <th class="text-center">Abr</th>
                             <th class="text-center">Zonas</th>
                             <th class="text-center">Plano</th>
                         </tr>
@@ -107,6 +108,7 @@
                             <td>{{ $plantas->des_edificio }}</td>
                             @admin @desktop<td>{{ $plantas->nom_cliente }}</td>@enddesktop @endadmin
                             <td class="text-center">{{ $cnt_puestos->cnt_puestos??0 }}</td>
+                            <td class="text-center">{{ $plantas->abreviatura }}</td>
                             <td class="text-center">{{ $cnt_zonas->cnt_zonas??0 }}</td>
                             <td class="text-center" style="position: relative">@if(isset($plantas->img_plano))<img src="{{ Storage::disk(config('app.img_disk'))->url('img/plantas/'.$plantas->img_plano) }}" style="height: 50px; position: absoluite">@endif
                             

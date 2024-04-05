@@ -483,6 +483,8 @@ class ReservasController extends Controller
                     $q->wherenotin('puestos.id_puesto',$puestos_reservados);
                 }
             })
+            //Ocultar los puestos invisibles
+            ->where('puestos.id_estado','<>',8)
             //Ocultar de reserva los puestos que tengan incidencias
             ->where(function($q){
                 if(session('CL')['mca_incidencia_reserva']=='N'){
@@ -495,6 +497,8 @@ class ReservasController extends Controller
             ->orderby('plantas.des_planta')
             ->orderby('puestos.des_puesto')
             ->get();
+
+
 
         //Ahora vamos a ver quepuestos no pueden ser reservados porque no cumplen la regla de maxima antelacion
         $festivos=collect(estadefiesta(Auth::user()->id,Carbon::now(),Carbon::parse($f2)->addDay(),0));
@@ -526,17 +530,51 @@ class ReservasController extends Controller
                
                 $fecha_comparacion=Carbon::parse($p->format('Y-m-d'))->addminutes($min_inicial);
                 $fecha_limite=Carbon::now()->setTimezone(Auth::user()->val_timezone)->addDays($dias_antelacion);
-                //log::debug("fecha ".$fecha_comparacion." | Dias antelacion ".$dias_antelacion." dias | Fecha limite ".$fecha_limite." ");
+                log::debug("fecha ".$fecha_comparacion." | Dias antelacion ".$dias_antelacion." dias | Fecha limite ".$fecha_limite." ");
                 if(($fecha_limite<$fecha_comparacion)){
-                    //Log::debug("quito puesto ".$pa->id_puesto." por antelacion");
+                    Log::debug("quito puesto ".$pa->id_puesto." por antelacion");
                     $puesto_quitar=$puestos->where('id_puesto',$pa->id_puesto)->first();
                     if (($usuario->mca_saltarse_antelacion=='N') || ($puesto_quitar->mca_antelacion_obligatoria=='S')) //Si el usuario no tiene permiso para saltarse la antelacion o el puesto tiene la antelacion obligatoria, quitamos el puesto
                     {
-                        //dump("entro ".$pa->cod_puesto." por antelacion " . $usuario->mca_saltarse_antelacion. " - " . $puesto_quitar->mca_antelacion_obligatoria);
+                        Log::debug("entro ".$pa->cod_puesto." por antelacion " . $usuario->mca_saltarse_antelacion. " - " . $puesto_quitar->mca_antelacion_obligatoria);
                         $puesto_quitar->quitar=true;
                     }
-
-                    
+                }
+            }
+            //{"dia":["1","2","5"],"hora_inicio":["08:00","08:00","08:00"],"hora_fin":["19:00","19:00","19:59"],"mod_semana":["-1","-1","1"]}
+            //Ahora vamos a ver si hay algun bloqueo programado que aplique en la fecha que estamos comprobando y el turno correspondiente
+            $bloqueos=DB::table('bloqueo_programado')
+                ->where('id_cliente',Auth::user()->id_cliente)
+                ->where('fec_inicio','<=',$p->endOfDay())
+                ->where('fec_fin','>=',$p->startOfDay())
+                ->get();
+            $bloqueos_aplicar=[];
+            foreach($bloqueos as $b){
+                $turno=$b->id_turno;
+                $dias_turno=DB::table('turnos')
+                    ->where('id_turno',$turno)
+                    ->where('id_cliente',Auth::user()->id_cliente)
+                    ->first();
+                if(isset($dias_turno) && $dias_turno->dias_semana!=null){
+                    $dias=json_decode($dias_turno->dias_semana)->dia;
+                    if(isset($dias)){
+                        $dia_semana=$p->dayOfWeek;
+                        if(in_array($dia_semana,$dias)){
+                            $bloqueos_aplicar[]=$b->id_bloqueo;    
+                        }
+                    }
+                }
+            }
+            //Y ahora recorremos los puestos que tenemos para ver los que estan bloqueados para ese dia y por tanto no se pueden reservar
+            $puestos_bloquear=DB::table('bloqueo_puestos')
+                ->wherein('id_bloqueo',$bloqueos_aplicar)
+                ->pluck('id_puesto')
+                ->toarray();
+            //Lista unica
+            $puestos_bloquear=array_unique($puestos_bloquear);
+            foreach($puestos as $puesto){
+                if(in_array($puesto->id_puesto,$puestos_bloquear)){
+                    $puesto->quitar=true;
                 }
             }
         }
@@ -614,8 +652,8 @@ class ReservasController extends Controller
         }
         $period = CarbonPeriod::create($f1,$f2);
         foreach($period as $p){
-            $fec_desde=Carbon::parse($p->format('Y-m-d').' '.$r->hora_inicio);
-            $fec_hasta=Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin);
+            $fec_desde=Carbon::parse($p->format('Y-m-d').' '.$r->hora_inicio)->addsecond(); //Añadimos un segundo para que no coincida con la hora de fin de otra reserva contigua en el caso de slots
+            $fec_hasta=Carbon::parse($p->format('Y-m-d').' '.$r->hora_fin)->subsecond(); //Y aqui lo mismo, pero quitando  por ser el fin
             //Si en el perfil le hemos puesto que pude reservar varios puestos del tipo no comprobamos si ya estaba pillado
             
             if((session('NIV')["mca_reserva_multiple"]=='N' || $tipopuesto->mca_reserva_multiple=='N' || ($tipopuesto->mca_reserva_multiple=='U' && Auth::user()->mca_reserva_multiple=='N')))
@@ -711,7 +749,6 @@ class ReservasController extends Controller
                     }
                 })
                 ->first();
-
             if($ya_esta){//Ya esta pillado
                 $mensajes_error[]='El puesto no esta disponible en el horario ['.beauty_fecha($fec_desde).' - '.beauty_fecha($fec_hasta).'] elija otro'.chr(13);
             }

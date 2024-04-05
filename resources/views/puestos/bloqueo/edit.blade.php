@@ -11,9 +11,9 @@
             <div class="toolbar-start">
                 <h5 class="m-0">
                     @if($id==0)
-                        Nuevo tipo de puesto
+                        Nuevo bloqueo programado de puestos
                     @else
-                        Editar tipo de puesto
+                        Editar bloqueo programado de puestos
                     @endif
                 </h5>
             </div>
@@ -33,25 +33,20 @@
                     @endforeach
                 </ul>
             @endif
-            <form method="POST" action="{{ url('/puestos/tipos/save') }}" id="edit_tipos_puesto_form" name="edit_tipos_puesto_form" accept-charset="UTF-8" class="form-horizontal form-ajax">
+            <form method="POST" action="{{ url('/bloqueo/save') }}" id="edit_bloqueo_form" name="edit_bloqueo_form" accept-charset="UTF-8" class="form-horizontal form-ajax">
             {{ csrf_field() }}
                 <div class="row mt-2">
-                        <input type="hidden" name="id" value="{{ $id }}">
-                        <div class="form-group col-md-10 {{ $errors->has('des_tipo_puesto') ? 'has-error' : '' }}">
-                            <label for="des_tipo_puesto" class="control-label">Nombre</label>
-                            <input class="form-control" required name="des_tipo_puesto" type="text" id="dedes_tipo_puestos_edificio" value="{{ old('des_tipo_puesto', optional($tipo)->des_tipo_puesto) }}" maxlength="200" placeholder="Enter nombre here...">
-                            {!! $errors->first('des_tipo_puesto', '<p class="help-block">:message</p>') !!}
-                        </div>
-                        <div class="form-group col-md-2 {{ $errors->has('abreviatura') ? 'has-error' : '' }}">
-                            <label for="abreviatura" class="control-label">Alias</label>
-                            <input class="form-control" name="abreviatura" type="text" id="abreviatura_edificio" value="{{ old('abreviatura', optional($tipo)->abreviatura) }}" maxlength="200" placeholder="Enter abreviatura here...">
-                            {!! $errors->first('abreviatura', '<p class="help-block">:message</p>') !!}
-                        </div>
+                    <input type="hidden" name="id_bloqueo" value="{{ $id }}">
+                    <div class="form-group col-md-12 {{ $errors->has('des_motivo') ? 'has-error' : '' }}">
+                        <label for="des_motivo" class="control-label">Motivo</label>
+                        <input class="form-control" required name="des_motivo" type="text" id="des_motivo" value="{{ old('des_motivo', optional($tipo)->des_motivo) }}" maxlength="200" placeholder="Enter nombre here...">
+                        {!! $errors->first('des_motivo', '<p class="help-block">:message</p>') !!}
+                    </div>
                 </div>
                 <div class="row mt-2">
                     <div class="form-group col-md-4 {{ $errors->has('id_cliente') ? 'has-error' : '' }}">
                         <label for="id_cliente" class="control-label">Cliente</label>
-                        <select class="form-control" required id="id_cliente" name="id_cliente">
+                        <select class="form-control" required id="multi-cliente" name="cliente">
                             @foreach ($Clientes as $key => $Cliente)
                                 <option value="{{ $key }}" {{ old('id_cliente', optional($tipo)->id_cliente) == $key||$id==0 && $key==session('CL')['id_cliente'] ? 'selected' : '' }}>
                                     {{ $Cliente }}
@@ -61,145 +56,28 @@
                             
                         {!! $errors->first('id_cliente', '<p class="help-block">:message</p>') !!}
                     </div>
-                    <div class="form-group col-md-1">
-                        <label for="val_color">Color</label><br>
-                        <input type="color" autocomplete="off" name="val_color" id="val_color"  class="form-control" value="{{isset($tipo->val_color)?$tipo->val_color:App\Classes\RandomColor::one(['luminosity' => 'bright'])}}" />
+                    <div class="form-group col-md-4">
+                        <label for="id_turno">Turno</label>
+                        <select name="id_turno" id="id_turno"  class="form-control">
+                            <option value="0">Cualquiera</option>
+                            @foreach($turnos as $dato)
+                            <option value="{{ $dato->id_turno}}" {{$tipo->id_turno==$dato->id_turno?'selected':''}}>{{ $dato->des_turno }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    
-                    <div class="form-group col-md-1" style="margin-left: 10px">
-                        <div class="form-group">
-                            <label>Icono</label><br>
-                            <button type="button"  role="iconpicker" required name="val_icono"  id="val_icono" data-iconset="fontawesome5"  data-iconset-version="5.3.1_pro"  class="btn btn-light iconpicker" data-align="right" data-placement="inline" data-search="true" data-rows="10" @desktop data-cols="20" @elsedesktop data-cols="8" @enddesktop data-search-text="Buscar..."></button>
+                    <div class="form-group col-md-4" >
+                        <label>Fechas </label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control pull-left rangepicker" id="fechas" name="fechas" value="{{  Carbon\Carbon::parse($tipo->fec_inicio)->format('d/m/Y').' - '.Carbon\Carbon::parse($tipo->fec_fin)->format('d/m/Y') }}">
+                            <span class="btn input-group-text btn-secondary btn_fechas" ><i class="fas fa-calendar mt-1"></i> <i class="fas fa-arrow-right"></i> <i class="fas fa-calendar mt-1"></i></span>
                         </div>
                     </div>
-                    @if(isAdmin())
-                    <div class="col-md-1 p-t-30 ">
-                        <div class="form-check">
-                            <input name="mca_fijo"  id="mca_fijo" value="S" {{ $tipo->mca_fijo=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
-                            <label for="mca_fijo" class="form-check-label">Fijo</label>
-                        </div>
+                    <div class="row">
+                        @include('resources.combos_filtro',[$hide=['cli'=>1,'head'=>1,'btn'=>1,'usu'=>1,'est_inc'=>1,'tip_mark'=>1, 'tip_inc'=>1]])
                     </div>
-                    @endif
-                </div>
-                <div class="row mt-2">
-                    
-                    <div class="form-group col-md-2">
-                        <label for="max_usos">Cortesia (min)</label><br>
-                        <input type="number" autocomplete="off" name="hora_liberar" id="hora_liberar" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->hora_liberar??config_cliente('hora_liberar_puestos',$tipo->id_cliente)}}" />
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="max_usos">Tiempo limpieza(min)</label><br>
-                        <input type="number" autocomplete="off" name="val_tiempo_limpieza" id="val_tiempo_limpieza" style="width: 120px" min="0" max="1440"  class="form-control" value="{{$tipo->val_tiempo_limpieza}}" />
-                    </div>
-                    <div class="form-group col-md-2" >
-                        <label for="max_usos">Usos simultaneo</label><br>
-                        <input type="number" autocomplete="off" min="1" max="20" style="width: 100px"  name="max_usos" id="max_usos"  class="form-control" value="{{isset($tipo->max_usos)?$tipo->max_usos:1}}" />
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="max_usos">Tiempo antelac.(dias)</label><br>
-                        <input type="number" autocomplete="off" name="val_dias_antelacion" id="val_dias_antelacion" style="width: 120px" min="0" max="365"  class="form-control" value="{{$tipo->val_dias_antelacion}}" />
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-3 p-t-20 mt-2">
-                        <div class="form-check pt-1">
-                            <input name="mca_liberar_auto"  id="mca_liberar_auto" value="S" {{ $tipo->mca_liberar_auto=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
-                            <label for="mca_liberar_auto" class="form-check-label">Liberar reservas AUTO</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3 p-t-20 mt-2">
-                        <div class="form-check pt-1">
-                            <input name="mca_reserva_masiva"  id="mca_reserva_masiva" value="S" {{ $tipo->mca_reserva_masiva=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
-                            <label for="mca_reserva_masiva" class="form-check-label">Permitir reserva supervisores</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3 p-t-20 mt-2">
-                        <div class="form-check pt-1">
-                            <input name="mca_reserva_multiple"  id="mca_reserva_multiple" value="S" {{ $tipo->mca_reserva_multiple=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
-                            <label for="mca_reserva_multiple" class="form-check-label">Reserva multiple</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3 p-t-20 mt-2">
-                        <div class="form-check pt-1">
-                            <input name="mca_checkin"  id="mca_checkin" value="S" {{ $tipo->mca_checkin=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
-                            <label for="mca_checkin" class="form-check-label">Funcion de check-in</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3 p-t-20 mt-2">
-                        <div class="form-check pt-1">
-                            <input name="mca_antelacion_obligatoria"  id="mca_antelacion_obligatoria" value="S" {{ $tipo->mca_antelacion_obligatoria=='S'?'checked':'' }}  class="form-check-input" type="checkbox">
-                            <label for="mca_antelacion_obligatoria" class="form-check-label">Antelacion obligatoria</label>
-                        </div>
-                    </div>
-                </div>
-                
-                
-
-                
-                <div class="card panel-bordered">
-                    <div class="card-header">
-                        <div class="form-group">
-                            <div class="form-check pt-2">
-                                <input  name="mca_slots"   id="mca_slots" value="S" {{ isset($tipo->slots_reserva)?'checked':'' }}  class="form-check-input" type="checkbox">
-                                <label for="mca_slots" class="form-check-label">Slots de reserva</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body bg-gray-light" id="body_slots" style="{{ !isset($tipo->slots_reserva)?'display:none':'' }}">
-                        <div class="row d-flex flex-wrap" id="slots">
-                            @if(isset($tipo->slots_reserva))
-                                @php
-                                    $tipo->slots_reserva=json_decode($tipo->slots_reserva);
-                                @endphp
-                                @foreach($tipo->slots_reserva as $slot)
-                                <div class="form-group text-center p-10 col-md-2 b-all rounded" style="margin-left: 5px; margin-right: 5px">
-                                    <div>
-                                        <label for="">Inicio</label><br>
-                                        <input type="time" autocomplete="off"   name="hora_inicio[]"  class="form-control hora_inicio" value="{{ $slot->hora_inicio }}" />
-                                    </div>
-                                    <div>
-                                        <label for="">Fin</label><br>
-                                        <input type="time" autocomplete="off"  name="hora_fin[]"  class="form-control fin" value="{{ $slot->hora_fin }}" />
-                                    </div>
-                                </div>
-                                @endforeach
-                            @endif
-                            <div class="form-group text-center p-10 col-md-1 rounded" style="margin-left: 10px; border: 1px dashed #ddd" id="div_nuevo" >
-                                <div class="text-muted p-t-30">
-                                    <label for="">Nuevo</label><br>
-                                    <a href="#" class="add_nuevo"><i class="fa-solid fa-circle-plus fa-3x"></i></a>
-                                </div>
-                            </div> 
-                            <div style="display: none" id="editor_nuevo">
-                                <div class="form-group text-center p-10 col-md-2 b-all rounded" style="margin-left: 5px; margin-right: 5px">
-                                    <div>
-                                        <label for="">Inicio</label><br>
-                                        <input type="time" autocomplete="off"   name="hora_inicio[]"  class="form-control hora_inicio" value="" />
-                                    </div>
-                                    <div>
-                                        <label for="">Fin</label><br>
-                                        <input type="time" autocomplete="off"  name="hora_fin[]"  class="form-control fin" value="" />
-                                    </div>
-                                </div>  
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
-
-                <div class="row ">
-                    <div class="form-group col-md-12">
-                        <label for="des_tipo_puesto" class="control-label">Observaciones</label>
-                        <input class="form-control" name="observaciones" type="text" id="observaciones" value="{{ old('observaciones', optional($tipo)->observaciones) }}" maxlength="200" placeholder="Enter observaciones here...">
-                        
-                    </div>
-                </div>
-                
-
                 <div class="form-group mt-3">
                     <div class="col-md-12 text-end">
-                        @if(checkPermissions(['Tipos de puesto'],['W']) && ($tipo->mca_fijo!='S' || ($tipo->mca_fijo=='S' && fullAccess()))) <input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
+                        @if(checkPermissions(['Bloqueo de puestos'],['W'])) <input class="btn btn-primary" type="submit" value="Guardar">@else <span class="bg-warning">Usted no puede modificar este dato</span>@endif
                     </div>
                 </div>
             </form>
@@ -207,7 +85,72 @@
         </div>
     </div>
 
+    @yield('scripts2')
+
     <script>
+    //Ponemos los valores seleccionados que tengan los select2
+    $(document).ready(function() {
+       //console.log($("#multi-planta"));
+         $('#multi-cliente').select2().val({{ old('id_cliente', optional($tipo)->id_cliente) }});
+       $('#multi-cliente').change();
+       $('.scroll-top').click();
+       s=setTimeout('end_update_filtros()',2000);
+      
+    });
+
+    // function end_update_filtros(entidad){
+    //     console.log('end update '+entidad)
+    //     $('#multi-planta').select2().val(61,);
+    //    //$('#multi-planta').trigger('change');
+    //    console.log($('#multi-planta').select2().val());
+    // }
+    function end_update_filtros(entidad){
+        //window.scrollTo(0,0);
+        console.log('end_update');
+        string="{{ $tipo->list_edificios }}"
+        var arr = string.split(',');
+        $('#multi-edificio').select2().val(arr);
+
+        string="{{ $tipo->list_plantas }}"
+        var arr = string.split(',');
+        $('#multi-planta').select2().val(arr);
+
+        string="{{ $tipo->list_puestos }}"
+        var arr = string.split(',');
+        $('#multi-puesto').select2().val(arr);
+
+        string="{{ $tipo->list_tags }}"
+        var arr = string.split(',');
+        $('#multi-tag').select2().val(arr);
+
+        string="{{ $tipo->list_tipos }}"
+        var arr = string.split(',');
+        $('#multi-tipo').select2().val(arr);
+
+        string="{{ $tipo->list_estados}}"
+        var arr = string.split(',');
+        $('#multi-estado').select2().val(arr);
+
+        $('#multi-edificio').select2().val();
+        $('#multi-planta').select2().val();
+        $('#multi-puesto').select2().val();
+        $('#multi-tag').select2().val();
+        $('#multi-tipo').select2().val();
+        $('#multi-estado').select2().val();
+
+        
+    }
+
+    $(".select2").select2({
+        placeholder: "Seleccione",
+        allowClear: true,
+        width: "90%",
+    });
+
+    $('.btn_fechas').click(function(){
+        rangepicker.show();
+    })
+
     $('.form-ajax').submit(form_ajax_submit);
 
     //$('#frm_contador').on('submit',form_ajax_submit);
@@ -239,6 +182,28 @@
         if(hora_inicio>hora_fin){
             toast_warning('Hora incorrecta','La hora de inicio no puede ser mayor a la hora de fin');
             $(this).val(hora_inicio.add(1,'hours').format('H:m'));
+        }
+    });
+
+    var rangepicker = new Litepicker({
+        element: document.getElementById( "fechas" ),
+        singleMode: false,
+        @desktop numberOfMonths: 2, @elsedesktop numberOfMonths: 1, @enddesktop
+        @desktop numberOfColumns: 2, @elsedesktop numberOfColumns: 1, @enddesktop
+        autoApply: true,
+        format: 'DD/MM/YYYY',
+        lang: "es-ES",
+        tooltipText: {
+            one: "day",
+            other: "days"
+        },
+        tooltipNumber: (totalDays) => {
+            return totalDays - 1;
+        },
+        setup: (rangepicker) => {
+            rangepicker.on('selected', (date1, date2) => {
+                //comprobar_puestos();
+            });
         }
     });
 

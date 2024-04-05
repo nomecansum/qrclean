@@ -2,7 +2,14 @@
     @php
         $entidad=($incidencia->id_puesto??0)==0?'solicitud':'incidencia';
     @endphp
-    
+    <style type="text/css">
+        .detalle_incidencia{
+            display: inline-block;
+        }
+        pre {
+            white-space: pre-wrap;
+        }
+    </style>
     <div class="card">
         <div class="card-header toolbar">
             <div class="toolbar-start">
@@ -52,7 +59,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-md-12">
-                    <pre>{!! $incidencia->txt_incidencia !!}</pre>
+                    <pre class="detalle_incidencia">{!! $incidencia->txt_incidencia !!}</pre>
                 </div>
             </div>
             @if(isset($incidencia->fec_cierre))

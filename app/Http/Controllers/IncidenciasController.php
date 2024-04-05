@@ -445,9 +445,13 @@ class IncidenciasController extends Controller
                     $q->whereIn('incidencias.id_usuario_apertura',$r->user);
                 }
             })
-            ->where(function($q){
+            ->where(function($q) use($r){
                 if (!isAdmin()) {
-                    $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                    if($r->tipo_vista=='mis'){
+                        $q->where('incidencias.id_usuario_apertura',Auth::user()->id);
+                    } else {
+                        $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                    }
                 } 
             })
             ->orderby('fec_apertura','desc')
@@ -503,9 +507,13 @@ class IncidenciasController extends Controller
                     $q->whereIn('incidencias.id_usuario_apertura',$r->user);
                 }
             })
-            ->where(function($q){
+            ->where(function($q) use($r){
                 if (!isAdmin()) {
-                    $q->whereraw("FIND_IN_SET(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                    if($r->tipo_vista=='mis'){
+                        $q->where('incidencias.id_usuario_apertura',Auth::user()->id);
+                    } else {
+                        $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                    }
                 } 
             })
             ->orderby('fec_apertura','desc')
@@ -793,7 +801,7 @@ class IncidenciasController extends Controller
                     'result'=>'ok',
                     'timestamp'=>Carbon::now(),
                 ];
-            } catch(\Exception $exception){
+            } catch(\Throwable $exception){
                 savebitacora('ERROR: Ocurrio un error en el postprocesado de '.$destipo.' del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(). ' La incidencia se ha registrado correctamente pero no se ha podido procesar la accion de notificacion programada' ,"Incidencias","save","ERROR");
                 //dump($exception);
                 return [
@@ -808,14 +816,14 @@ class IncidenciasController extends Controller
             
             } catch (\Throwable $exception) {
 
-            savebitacora('ERROR: Ocurrio un error creando '.$destipo.' del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage() ,"Incidencias","save","ERROR");
-            return [
-                'title' => "Crear ".$destipo." en puesto ".$puesto->cod_puesto,
-                'error' => 'ERROR: Ocurrio un error creando '.$destipo.' del tipo'.$tipo->des_tipo_incidencia.' '.$exception->getMessage(),
-                //'url' => url('sections')
-                'result'=>'error',
-                'timestamp'=>Carbon::now(),
-            ];
+                savebitacora('ERROR: Ocurrio un error creando '.$destipo.' del tipo '.$exception->getMessage() ,"Incidencias","save","ERROR");
+                return [
+                    'title' => "Crear ".$destipo." en puesto ".$puesto->cod_puesto,
+                    'error' => 'ERROR: Ocurrio un error creando '.$destipo.' del tipo '.$exception->getMessage(),
+                    //'url' => url('sections')
+                    'result'=>'error',
+                    'timestamp'=>Carbon::now(),
+                ];
         } 
     }
 
@@ -882,6 +890,8 @@ class IncidenciasController extends Controller
                     $puesto->save();
 
                 }
+                $incidencia->val_presupuesto=$r->val_presupuesto??null;
+                $incidencia->val_proyecto=$r->val_proyecto??null;
                 $incidencia->id_estado=$r->id_estado;
                 $incidencia->save();
                 

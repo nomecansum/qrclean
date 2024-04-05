@@ -586,7 +586,9 @@
                 $('#multi-puesto').append('<option value="'+val.id_puesto+'">'+val.cod_puesto+'</option>');
             });
             $('#loadfilter').hide();
-            
+            cliente_z="";
+            edificio_z="";
+            planta_z="";
             $('#multi-zonas').empty();
             $.each(data.zonas, function(index, val) {
                 if(cliente_z!=val.id_cliente){

@@ -26,6 +26,10 @@ class CombosController extends Controller
                 ->pluck('id_cliente');
             }
         }
+         //PAra el caso de que el cliente venga como valor discreto y no como array
+         if (!is_array($r->cliente)) {
+            $r->cliente=[$r->cliente];
+        }
         return $r;
     }
     
@@ -40,6 +44,7 @@ class CombosController extends Controller
         $supervisores_perfil=DB::table('secciones_perfiles')->where('id_seccion',$permiso)->get()->pluck('id_perfil')->unique();
 
         $supervisores_usuario=DB::table('permisos_usuarios')->where('id_seccion',$permiso)->get()->pluck('id_usuario')->unique();
+
 
         return
         [
@@ -199,6 +204,8 @@ class CombosController extends Controller
             $r->edificio=DB::table('edificios')->wherein('id_edificio',$r->edificio)->wherein('id_cliente',$r->cliente)->pluck('id_edificio');
         }
 
+        
+
         return
         [
             "plantas" => DB::table('plantas')
@@ -242,6 +249,7 @@ class CombosController extends Controller
     public function loadpuestos(Request $r){
 
         $r=$this->filtro_clientes($r);
+
         if (!$r->edificio) {
             $r->edificio=DB::table('edificios')->wherein('id_cliente',$r->cliente)->pluck('id_edificio');
         } else{
@@ -253,6 +261,8 @@ class CombosController extends Controller
         } else{
             $r->planta=DB::table('plantas')->wherein('id_planta',$r->planta)->wherein('id_cliente',$r->cliente)->pluck('id_planta');
         }
+
+       
 
         return
         [

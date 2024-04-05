@@ -83,7 +83,7 @@
                             <th>ID</th>
                             <th>Inicio</th>
                             <th>Fin</th>
-                            <th>Turnos</th>
+                            <th>Turno</th>
                             <th>Puestos</th>
                             <th>Creado</th>
                             @admin @desktop<th>Cliente</th>@enddesktop @endadmin
@@ -96,8 +96,8 @@
                             <td>{{ $bl->id_bloqueo }}</td>
                             <td>{{ $bl->fec_inicio }}</td>
                             <td>{{ $bl->fec_fin }}</td>
-                            <td>{{ $bl->list_turnos }}</td>
-                            <td></td>
+                            <td>{{ $bl->id_turno==0?'Cualquiera':$bl->des_turno }}</td>
+                            <td>{{ $bl->puestos }}</td>
                             <td>{{ $bl->name }}</td>
                             @admin @desktop<td>{{ $bl->nom_cliente }}</td>@enddesktop @endadmin
 

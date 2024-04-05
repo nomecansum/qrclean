@@ -13,6 +13,7 @@
 
 @section('styles')
 <link href="{{url('/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
+
 @endsection
 
 @section('title')

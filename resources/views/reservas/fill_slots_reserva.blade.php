@@ -28,7 +28,7 @@
         $('#hora_fin').val($(this).data('fin'));
         $('.btn_slot').removeClass('btn-info');
         $(this).addClass('btn-info');
-        comprobar_puestos();  
+        comprobar_rapida();  
     })
     @if(!isset($reserva))
         $('.btn1').addClass('btn-info');

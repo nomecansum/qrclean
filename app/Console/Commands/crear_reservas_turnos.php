@@ -428,7 +428,7 @@ class crear_reservas_turnos extends Command
                                     foreach($puestos_usuario as $puesto){
                                         switch ($puesto->tipo) {   //ul,pu,pl,zo
                                             case 'ul':  //Ultimas 20 reservas. Se cogen las ultimas 20 reservas del tipo de puesto y se selecciona el mas usado
-                                                if($mca_ultimas_reservas){
+                                                if($mca_ultimas_reservas==true){
                                                     $ultimas_reservas=DB::table('reservas')
                                                         ->select('reservas.id_puesto')
                                                         ->join('puestos','puestos.id_puesto','reservas.id_puesto')
@@ -439,6 +439,7 @@ class crear_reservas_turnos extends Command
                                                         ->get();
                                                     $ultimas_reservas=$ultimas_reservas->countBy('id_puesto')->sortDesc();
                                                     $p=collect(array_intersect($puestos_disponibles->pluck('id_puesto')->toArray(),$ultimas_reservas->keys()->toArray()))->first();
+                                                    $this->escribelog_comando('Se coge el puesto '.$p.' para '.$user->name.' porque es el mas usado en las ultimas 20 reservas');
                                                 }
 
                                             case 'pu':  //Puestos preferidos. Se selecciona el puesto que esta en la lista de puestos preferidos

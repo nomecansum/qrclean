@@ -2,6 +2,9 @@
     $tipo_ronda='L';   
 @endphp
 
+@include('home.avisos')
+
+
 @if(Auth::user()->id_contrata!=null)
     @php
         $datos_contrata=DB::table('contratas')->where('id_contrata',Auth::user()->id_contrata)->first();

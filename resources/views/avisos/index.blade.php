@@ -65,6 +65,7 @@
 					<tr>
 						<th data-width="5%"  data-sortable="true" >ID</th>
 						<th></th>
+						<th data-sortable="true"  style="width: 80%" >Titulo</th>
 						<th data-sortable="true"  style="width: 80%" >Texto</th>
 						<th data-width="250" data-sortable="true"  >Cliente</th>
 						<th data-width="1%" data-sortable="true"  >Activo</th>
@@ -73,6 +74,7 @@
 						<th data-width="1%" data-sortable="true"  >Perfiles</th>
 						<th data-width="1%" data-sortable="true"  >Turnos</th>
 						<th data-width="1%" data-sortable="true"  >Edificios</th>
+						<th data-width="1%" data-sortable="true"  >Tipo Puesto</th>
 						<th data-width="80" data-sortable="true" style="width: 1%" class="text-center" >Plantas</th>
 					</tr>
 				</thead>
@@ -83,6 +85,7 @@
 						<tr class="hover-this">
 							<td>{{$dato->id_aviso}}</td>
 							<td class="text-center"><i class="{{ $dato->val_icono }} fa-2x" style="color:{{ $dato->val_color }}"></i></td>
+							<td>{{ $dato->val_titulo }}</td>
 							<td>{!!  $dato->txt_aviso !!}</td>
 							<td>{{ $dato->nom_cliente }}</td>
 							<td class="text-center">
@@ -94,23 +97,27 @@
 							<td>{!! beauty_fecha($dato->fec_fin) !!}</td>
 							<td>
 								@foreach(DB::table('niveles_acceso')->wherein('cod_nivel',explode(',',$dato->val_perfiles))->get() as $nivel)
-									<span class="badge badge-info">{{ $nivel->des_nivel_acceso }}</span>
+									<li class="badge bg-info">{{ $nivel->des_nivel_acceso }}</li>
 								@endforeach
 							</td>
 							<td>
 								@foreach(DB::table('turnos')->wherein('id_turno',explode(',',$dato->val_turnos))->get() as $turno)
-									<span class="badge badge-info">{{ $turno->des_turno }}</span>
+									<li class="badge bg-info">{{ $turno->des_turno }}</li>
 								@endforeach
 							</td>
 							<td>
 								@foreach(DB::table('edificios')->wherein('id_edificio',explode(',',$dato->val_edificios))->get() as $edificio)
-									<span class="badge badge-info">{{ $edificio->des_edificio }}</span>
+									<li class="badge  bg-info">{{ $edificio->des_edificio }}</li>
 								@endforeach
 							</td>
-
+							<td>
+								@foreach(DB::table('puestos_tipos')->wherein('id_tipo_puesto',explode(',',$dato->val_tipo_puesto))->where('id_tipo_puesto','>',0)->get() as $tipo)
+									<li class="badge  bg-info">{{ $tipo->des_tipo_puesto }}</li>
+								@endforeach
+							</td>
 							<td style="position: relative;" class="text-center">
 								@foreach(DB::table('plantas')->wherein('id_planta',explode(',',$dato->val_plantas))->get() as $planta)
-									<span class="badge badge-info">{{ $planta->des_planta }}</span>
+									<li class="badge bg-info">{{ $planta->des_planta }}</li>
 								@endforeach
 								
 								<div class="pull-right floating-like-gmail mt-3" style="width: 400px;">

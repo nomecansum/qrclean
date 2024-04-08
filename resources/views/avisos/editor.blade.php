@@ -37,6 +37,11 @@
             {{ csrf_field() }}
                 <div class="row mt-2">
                     <input type="hidden" name="id_aviso" value="{{ $id }}">
+                    <div class="form-group col-md-10 {{ $errors->has('val_titulo') ? 'has-error' : '' }}">
+                        <label for="val_titulo" class="control-label">Nombre</label>
+                        <input class="form-control" required name="val_titulo" type="text" id="val_titulo" value="{{ old('val_titulo', optional($aviso)->val_titulo) }}" maxlength="200" placeholder="Enter nombre here...">
+                        {!! $errors->first('val_titulo', '<p class="help-block">:message</p>') !!}
+                    </div>
                     <div class="form-group col-md-12 {{ $errors->has('txt_aviso') ? 'has-error' : '' }}">
                         <label for="txt_aviso" class="control-label">Texto</label>
                         <textarea  class="textarea_editor form-control" name="txt_aviso" id="txt_aviso" rows="6" style="height: 200px;">
@@ -84,7 +89,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    @include('resources.combos_filtro',[$hide=['cli'=>1,'head'=>1,'btn'=>1,'usu'=>1,'est_inc'=>1,'tip_mark'=>1, 'tip_inc'=>1,'tag'=>1,'tip'=>1,'pue'=>1,'est'=>1],$show=['perfil'=>1,'tur'=>1]])
+                    @include('resources.combos_filtro',[$hide=['cli'=>1,'head'=>1,'btn'=>1,'usu'=>1,'est_inc'=>1,'tip_mark'=>1, 'tip_inc'=>1,'tag'=>1,'pue'=>1,'est'=>1],$show=['perfil'=>1,'tur'=>1]])
                 </div>
                 <div class="form-group mt-3">
                     <div class="col-md-12 text-end">
@@ -131,36 +136,31 @@
     function end_update_filtros(entidad){
         //window.scrollTo(0,0);
         console.log('end_update');
-        string="{{ $aviso->list_edificios }}"
+        string="{{ $aviso->val_edificios }}"
         var arr = string.split(',');
         $('#multi-edificio').select2().val(arr);
 
-        string="{{ $aviso->list_plantas }}"
+        string="{{ $aviso->val_plantas }}"
         var arr = string.split(',');
         $('#multi-planta').select2().val(arr);
 
-        string="{{ $aviso->list_puestos }}"
+        string="{{ $aviso->val_perfiles }}"
         var arr = string.split(',');
-        $('#multi-puesto').select2().val(arr);
+        $('#multi-perfiles').select2().val(arr);
 
-        string="{{ $aviso->list_tags }}"
+        string="{{ $aviso->val_turnos }}"
         var arr = string.split(',');
-        $('#multi-tag').select2().val(arr);
+        $('#multi-turnos').select2().val(arr);
 
-        string="{{ $aviso->list_tipos }}"
+        string="{{ $aviso->val_tipo_puesto }}"
         var arr = string.split(',');
         $('#multi-tipo').select2().val(arr);
 
-        string="{{ $aviso->list_estados}}"
-        var arr = string.split(',');
-        $('#multi-estado').select2().val(arr);
-
         $('#multi-edificio').select2().val();
         $('#multi-planta').select2().val();
-        $('#multi-puesto').select2().val();
-        $('#multi-tag').select2().val();
+        $('#multi-perfiles').select2().val();
+        $('#multi-turnos').select2().val();
         $('#multi-tipo').select2().val();
-        $('#multi-estado').select2().val();
 
         
     }

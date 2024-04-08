@@ -44,6 +44,8 @@ class avisos extends Model
                   'val_turnos',
                   'val_edificios',
                   'val_plantas',
+                  'val_tipo_puesto',
+                  'val_titulo'
               ];
 
     /**

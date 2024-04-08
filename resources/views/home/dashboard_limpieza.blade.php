@@ -4,6 +4,8 @@
 
 @include('home.accesos_directos')
 
+@include('home.avisos')
+
 @include('home.puesto_asignado')
 
 @include('home.kpi_grafico_puestos')

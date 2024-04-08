@@ -45,29 +45,35 @@ class AvisosController extends Controller
         if ($r->id_aviso == 0) {
             $aviso = new avisos();
         } else {
-            $aviso = avisos::find($r->id);
+            $aviso = avisos::find($r->id_aviso);
         }
 
-        dd($aviso);
+        
         // Asignar los valores del formulario al aviso
         $aviso->txt_aviso = $r->txt_aviso;
+        $aviso->val_titulo = $r->val_titulo;
         $aviso->val_color = $r->val_color;
         $aviso->val_icono = $r->val_icono;
         $aviso->mca_activo = $r->mca_activo??'S';
-        $aviso->val_edificios = isset($r->val_edificios)?implode(",", $r->val_edificios):null;
-        $aviso->val_plantas = isset($r->val_plantas)?implode(",", $r->val_plantas):null;
-        $aviso->val_perfiles = isset($r->val_perfiles)?implode(",", $r->val_perfiles):null;
-        $aviso->val_turnos = isset($r->val_turnos)?implode(",", $r->val_turnos):null;
+        $aviso->val_edificios = isset($r->edificio)?implode(",", $r->edificio):null;
+        $aviso->val_plantas = isset($r->planta)?implode(",", $r->planta):null;
+        $aviso->val_perfiles = isset($r->cod_nivel)?implode(",", $r->cod_nivel):null;
+        $aviso->val_turnos = isset($r->id_turno)?implode(",", $r->id_turno):null;
+        $aviso->val_tipo_puesto = isset($r->tipo)?implode(",", $r->tipo):null;
         $aviso->id_cliente=(int)$r->cliente;
         $aviso->fec_inicio=$fec_inicio;
-        $aviso->fec_fin=$fec_fin;
+        $aviso->fec_fin=Carbon::parse($fec_fin)->endOfDay();
         // Asigna aquí más campos si los necesitas
 
         // Guardar el aviso
         $aviso->save();
 
         // Redirigir al usuario a la página de avisos con un mensaje de éxito
-        return redirect()->route('avisos.index')->with('success', 'Aviso guardado con éxito');
+        return [
+            'title' => "Avisos",
+            'message' => 'Aviso guardado',
+            'url' => url('avisos')
+        ];
     }
 
 }

@@ -284,6 +284,7 @@
                         <li class="nav-item has-sub ">
                             <a href="#" class="mininav-toggle nav-link collapsed menu_utilidades"><i class="fa-light fa-screwdriver-wrench fs-5 me-2"></i> Utilidades</a>
                             <ul class="mininav-content nav collapse">
+                                @if(checkPermissions(['Avisos'],['R']))<li class=" nav-item"><a href="/avisos" class="text-nowrap nav-link avisos"> <i class="fa-light fa-sign-hanging"></i> Avisos</a></li> @endif
                                 @if(checkPermissions(['Tareas programadas'],['R']))<li class=" nav-item"><a href="/tasks" class="text-nowrap nav-link tareas_programadas"> <i class="fa-light fa-timer"></i> Tareas programadas</a></li> @endif
                                 @if (checkPermissions(['Eventos'],["R"]))<li class=" nav-item"><a href="{{url('/events')}}" class="nav-link eventos"><i class="fa-light fa-engine"></i> Eventos</a></li>@endif
                                 @if(checkPermissions(['Señaletica'],['R']))<li class=" nav-item"><a href="/MKD" class="nav-link mkd"><i class="fa-light fa-sign"></i> Señaletica</a></li> @endif

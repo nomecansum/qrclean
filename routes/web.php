@@ -343,6 +343,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('delete/{id}',['middleware'=>'permissions:["Colectivos"],["D"]', 'uses' => 'CollectiveController@delete']);
     });
 
+        ////////////////////////////   AVISOS   ////////////////////////////////
+    Route::group(['prefix' => 'avisos'], function () {
+        Route::get('/',['middleware'=>'permissions:["Avisos"],["R"]', 'uses' => 'AvisosController@index'])->name('avisos.index');
+        Route::get('create',['middleware'=>'permissions:["Avisos"],["W"]', 'uses' => 'AvisosController@edit']);
+        Route::post('save',['middleware'=>'permissions:["Avisos"],["W"]', 'uses' => 'AvisosController@save']);
+        Route::get('edit/{id}',['middleware'=>'permissions:["Avisos"],["C"]', 'uses' => 'AvisosController@edit']);
+        Route::post('update/{id}',['middleware'=>'permissions:["Avisos"],["C"]', 'uses' => 'AvisosController@update']);
+        Route::get('delete/{id}',['middleware'=>'permissions:["Avisos"],["D"]', 'uses' => 'AvisosController@delete']);
+    });
+
     ////////////////////RONDAS DE LIMPIEZA Y MANTENIMIENTO////////////////////
     Route::group(['prefix' => 'rondas'], function () {
         Route::get('/view/{id}/{print}', 'LimpiezaController@view')->name('rondas.view');

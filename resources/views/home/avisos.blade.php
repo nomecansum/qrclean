@@ -60,13 +60,15 @@
         $avisos=[];
     }
 @endphp
-@foreach ($avisos as $aviso)
+@if(isset($avisos) && count($avisos)>0)
+    @foreach ($avisos as $aviso)
     <div class="card @if(!$loop->last) mb-3 @endif">
         <div class="card-body">
             <h1  style="color: {{ $aviso->val_color }}"><i class="{{ $aviso->val_icono }}"></i> {{ $aviso->val_titulo }}</h1>
             <h3>
-               {!! $aviso->txt_aviso !!}
+            {!! $aviso->txt_aviso !!}
             </h3>
         </div>
     </div>
-@endforeach
+    @endforeach
+@endif

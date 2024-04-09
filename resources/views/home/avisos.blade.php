@@ -1,6 +1,8 @@
 @php
     //Sacamos los avisos en funcion de los detos del usuario y la parametrizacion del aviso
+    try{
 
+    
     $turnos= DB::table('turnos_usuarios')
         ->select('turnos_usuarios.id_turno')
         ->where('turnos_usuarios.id_usuario',Auth::user()->id)
@@ -54,6 +56,9 @@
         ->where('avisos.mca_activo','S')
         ->orderby('avisos.id_aviso','desc')
         ->get();
+    } catch (\Throwable $e) {
+        $avisos=[];
+    }
 @endphp
 @foreach ($avisos as $aviso)
     <div class="card @if(!$loop->last) mb-3 @endif">

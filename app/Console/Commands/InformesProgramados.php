@@ -57,8 +57,8 @@ class InformesProgramados extends Command
                     "name": "val_cola",
                     "tipo": "list",
                     "multiple": false,
-                    "list": "Todos,Grandes,Medianos,Pequeños",
-                    "values": "0,L,M,S",
+                    "list": "Todos|Grandes|Medianos|Pequeños",
+                    "values": "0|L|M|S",
                     "required": false
                 }
             ]

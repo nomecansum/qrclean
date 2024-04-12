@@ -270,7 +270,7 @@
     
                 </div>
                 <div class="modal-footer">
-                     <button type="submit" class="btn btn-info btn_submit" >{{trans('strings.edit')}}</button>
+                     <button type="submit" class="btn btn-info btn_submit" >{{trans('strings.save')}}</button>
                     <button type="button" data-dismiss="modal" class="btn btn-warning close" onclick="cerrar_modal()">Cancelar</button>
                 </div>
             </div>

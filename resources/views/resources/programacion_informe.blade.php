@@ -111,7 +111,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     
-                                    <label>{{ __('reports.destinatarios') }}</label>
+                                    <label>{{ __('reports.destinatarios') }} (Enter para añadir e-mail)</label>
                                     <input type="text" class="edit_tag typeahead" data-role="tagsinput" id="list_usuarios" name="list_usuarios" placeholder="{{ __('reports.addadir_usuarios') }}" size="17" value="{{ $inf->list_usuarios??'' }}">
                                     {{-- <select required class="form-control select2 select2-filtro select2-multiple" multiple="multiple" name="list_usuarios[]" id="multi-usuarios">
                                        

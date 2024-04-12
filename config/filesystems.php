@@ -49,6 +49,11 @@ return [
             'url' => env('APP_URL').'/',
         ],
         
+        'exports' => [
+            'driver' => 'local',
+            'root' => storage_path('app'),
+            'url' => env('APP_URL').'/',
+        ],
 
         'public' => [
             'driver' => 'local',

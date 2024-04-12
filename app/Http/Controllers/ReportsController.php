@@ -36,10 +36,11 @@ class ReportsController extends Controller
             try{
                 $resp = \Mail::send(empty($plantilla) ? 'email.mail_informe_programado' : $plantilla, $datos_informe, function ($m) use ($prepend, $r, $fichero, $nombre_informe, $recipient) {
                     $m->from(config('mail.from.address'), config('app.name'));
-                    if (config('app.manolo')){
-                        $m->to("nomecansum@gmail.com");
+                    if(config('app.env')=='local' || config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
+                        Log::debug('Capturado email para '.$recipient);
+                        $m->to('nomecansum@gmail.com')->subject($prepend.' '.$nombre_informe);
                     } else {
-                        $m->to(config('app.debug') ? "desarrollo@cuco360.com" : $recipient);
+                        $m->to($recipient);
                     }
                     $m->subject($prepend.' '.$nombre_informe);
                     if(!empty($fichero)) //adjuntamos si existe

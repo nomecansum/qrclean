@@ -533,7 +533,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/incidencias',['middleware' => 'permissions:["Informes > Incidencias"],["R"]', 'uses' => 'ReportsController@incidencias_index']);
 	    Route::post('/incidencias/filter',['middleware' => 'permissions:["Informes > Incidencias"],["R"]', 'uses' => 'ReportsController@incidencias']);
 
+        Route::get('/reservas_slots',['middleware' => 'permissions:["Informes > Reservas slots"],["R"]', 'uses' => 'ReportsController@reservas_slots_index']);
+	    Route::post('/reservas_slots/filter',['middleware' => 'permissions:["Informes > Reservas slots"],["R"]', 'uses' => 'ReportsController@reservas_slots']);
+
         Route::get('program/{id}', ['middleware' => 'permissions:["Informes programados"],["R"]', 'uses' => 'ReportsController@reportFromEmail']);
+
+       
 		
 	});
 

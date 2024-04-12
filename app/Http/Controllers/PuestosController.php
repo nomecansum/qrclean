@@ -61,6 +61,7 @@ class PuestosController extends Controller
             ->orderby('edificios.id_edificio')
             ->orderby('plantas.id_planta')
             ->orderby('puestos.cod_puesto')
+            ->wherenull('puestos_asignados.fec_hasta')
             ->paginate(50);
 
 
@@ -188,6 +189,7 @@ class PuestosController extends Controller
             ->orderby('edificios.id_edificio')
             ->orderby('plantas.id_planta')
             ->orderby('puestos.cod_puesto')
+            ->wherenull('puestos_asignados.fec_hasta')
             ->paginate(1000);
         return view('puestos.fill-tabla',compact('puestos','r'));
     }
@@ -629,6 +631,9 @@ class PuestosController extends Controller
                     }
                 }
                 $tipo->slots_reserva=$slots;
+                if($slots==[]){
+                    $tipo->slots_reserva=null;
+                }
                 $tipo->save();
             }
 

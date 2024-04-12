@@ -29,22 +29,28 @@ class ReportsController extends Controller
 
         //hacemos merge de todos los datos
         $datos_informe = array_merge($datos_informe, ['usuario' => $usuario->nom_usuario, 'str_informe' => $prepend.' '.$nombre_informe, 'r' => $r]);
-
+        log::debug("Enviando por mail informe : ".$plantilla . " a " . json_encode($destinatarios));
         foreach ($destinatarios as $recipient)
         {
             //Log::info("Email para " . $recipient);
-            $resp = \Mail::send(empty($plantilla) ? 'email.mail_informe_programado' : $plantilla, $datos_informe, function ($m) use ($prepend, $r, $fichero, $nombre_informe, $recipient) {
-                $m->from(config('mail.from.address'), config('app.name'));
-                if (config('app.manolo')){
-                    $m->to("nomecansum@gmail.com");
-                } else {
-                    $m->to(config('app.debug') ? "desarrollo@cuco360.com" : $recipient);
-                }
-                $m->subject($prepend.' '.$nombre_informe);
-                if(!empty($fichero)) //adjuntamos si existe
-                    $m->attach($fichero);
-            });
-            //Log::info($resp);
+            try{
+                $resp = \Mail::send(empty($plantilla) ? 'email.mail_informe_programado' : $plantilla, $datos_informe, function ($m) use ($prepend, $r, $fichero, $nombre_informe, $recipient) {
+                    $m->from(config('mail.from.address'), config('app.name'));
+                    if (config('app.manolo')){
+                        $m->to("nomecansum@gmail.com");
+                    } else {
+                        $m->to(config('app.debug') ? "desarrollo@cuco360.com" : $recipient);
+                    }
+                    $m->subject($prepend.' '.$nombre_informe);
+                    if(!empty($fichero)) //adjuntamos si existe
+                        $m->attach($fichero);
+                });
+                log::notice("Mail enviado a " . $recipient); 
+            } catch(\Exception $e){
+                Log::error('Error enviando email '.$e->getMessage());
+                return new Error(Mail::failures());
+            }
+            
         }
         if(!empty($fichero)) //borramos si existe
             file::delete($fichero);
@@ -69,6 +75,7 @@ class ReportsController extends Controller
         $f1 = adaptar_fecha($f[0]);
         $f2 = adaptar_fecha($f[1]);
 
+        log::debug("Solicitado informe de asignacion de usuarios: ".json_encode($r->all()));
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
@@ -246,6 +253,7 @@ class ReportsController extends Controller
         $f1 = adaptar_fecha($f[0]);
         $f2 = adaptar_fecha($f[1]);
 
+        log::debug("Solicitado informe de estado de puestos: ".json_encode($r->all()));
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
@@ -600,7 +608,8 @@ class ReportsController extends Controller
         $f = explode(' - ',$r->fechas);
         $f1 = adaptar_fecha($f[0]);
         $f2 = adaptar_fecha($f[1]);
-
+        
+        log::debug("Solicitado informe de reservas canceladas: ".json_encode($r->all()));
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
@@ -749,7 +758,7 @@ class ReportsController extends Controller
         $f = explode(' - ',$r->fechas);
         $f1 = adaptar_fecha($f[0]);
         $f2 = adaptar_fecha($f[1]);
-
+        log::debug("Solicitado informe de ferias: ".json_encode($r->all()));
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
@@ -848,6 +857,7 @@ class ReportsController extends Controller
         $f1 = adaptar_fecha($f[0]);
         $f2 = adaptar_fecha($f[1]);
 
+        log::debug("Solicitado informe de heatmap: ".json_encode($r->all()));
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
@@ -1067,7 +1077,7 @@ class ReportsController extends Controller
         $f = explode(' - ',$r->fechas);
         $f1 = adaptar_fecha($f[0]);
         $f2 = adaptar_fecha($f[1]);
-
+        log::debug("Solicitado informe de trabajos: ".json_encode($r->all()));
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
@@ -1231,6 +1241,7 @@ class ReportsController extends Controller
         if(isset($r->cod_usuario))
             Auth::loginUsingId($r->cod_usuario);
 
+        log::debug("Solicitado informe de stado de usuarios: ".json_encode($r->all()));
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
@@ -1400,6 +1411,7 @@ class ReportsController extends Controller
         $f1 = adaptar_fecha($f[0]);
         $f2 = adaptar_fecha($f[1]);
 
+        log::debug("Solicitado informe de incidencias con parametros: ".json_encode($r->all()));
         ///////////////////////////
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
@@ -1566,7 +1578,7 @@ class ReportsController extends Controller
         ///////////SALIDA DEL INFORME/////////////////////
         //Para añadir a los nomres de fichero y hacerlos un poco mas unicos
         //dd($r->all());
-        $nombre_informe="Informe Actividad de usuarios";
+        $nombre_informe="Informe de incidencias y solicitudes";
         $cliente=clientes::find($r->id_cliente);
         $rango_safe=str_replace(" - ","_",$r->fechas);
         $rango_safe=str_replace("/","",$rango_safe);
@@ -1697,6 +1709,7 @@ class ReportsController extends Controller
             $inf->val_intervalo = $r->val_intervalo;
             $inf->fec_inicio = adaptar_fecha($r->val_fecha);
             $inf->list_usuarios = $r->list_usuarios;
+            $inf->cod_usuario = Auth::user()->id;
             $inf->save();
             return [
                 'title' => "Informes programados",

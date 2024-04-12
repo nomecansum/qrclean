@@ -110,9 +110,9 @@ class GeneraInforme implements ShouldQueue
                     $f2=Carbon::Now()->subDays($informe->dia_hasta);
                 break;
                 default:
-                    $date = explode(" - ",$r->rango);
-                    $f1 = adaptar_fecha($date[0]);
-                    $f2 = adaptar_fecha($date[1]);
+                    $date = explode(" - ",$r->fechas);
+                    $f1 = Carbon::parse(adaptar_fecha($date[0]));
+                    $f2 = Carbon::parse(adaptar_fecha($date[1]));
                 break;
             }
             $rango=$f1->format('d/m/Y')." - ".$f2->format('d/m/Y');
@@ -121,10 +121,9 @@ class GeneraInforme implements ShouldQueue
 
             Log::debug('Construido request');
             //Por ultimo, obtenemos los email de los destinatarios del correo
-            $usuarios=usuarios::find(explode(",",$informe->list_usuarios))->pluck('dir_email')->toArray();
+            $usuarios=explode(",",$informe->list_usuarios);
             $r->query->add(['destinatarios' => $usuarios]);
             //Siguiente, calculamos la proxima vez que se ejecutara el informe en base al parametro de val_intervalo
-
             Log::debug('Intervalo '.$informe->val_intervalo);
             if(strpos($informe->val_intervalo,"Y")!==false){//Anual
                 $fec_prox_ejecucion=Carbon::now()->addYear();

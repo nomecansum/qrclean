@@ -155,17 +155,17 @@
                                             $datos=json_decode($datos);
                                         @endphp
                                         <tr class="bg-light-inverse" id="detalle_{{$i->cod_informe_programado}}" style="display: none">
-                                            <td colspan="2" class="border-right-0 pl-5" data-toggle="mytooltip" data-placement="right" @isset($datos->document)title="{{ $datos->document }}@endisset @isset($datos->orientation){{$datos->orientation=='V'?'vertical':'horizontal'}}@endisset" >
-                                                @isset($datos->document)
-                                                    @switch($datos->document)
+                                            <td colspan="2" class="border-right-0 pl-5 text-start" data-toggle="mytooltip" data-placement="right" @isset($datos->document)title="{{ $datos->document }}@endisset @isset($datos->orientation){{$datos->orientation=='V'?'vertical':'horizontal'}}@endisset" >
+                                                @isset($datos->output)
+                                                    @switch($datos->output)
                                                         @case("pantalla")
-                                                                <i class="mdi mdi-monitor mdi-36px"></i> Pantalla
+                                                        <i class="fa-solid fa-desktop"></i> Pantalla
                                                             @break
                                                         @case("pdf")
-                                                            <i class="mdi mdi-file-pdf mdi-36px"></i> PDF
+                                                        <i class="fa-solid fa-file-pdf"></i> PDF
                                                             @break
                                                         @case("excel")
-                                                            <i class="mdi mdi-file-excel mdi-36px"></i> Excel
+                                                        <i class="fa-solid fa-file-excel"></i> Excel
                                                             @break
                                                         @default
                                                     @endswitch
@@ -174,27 +174,27 @@
                                                 @isset($datos->orientation)
                                                     @switch($datos->orientation)
                                                         @case("v")
-                                                                <i class="mdi mdi-crop-landscape mdi-36px"></i> Horizontal
+                                                            <i class="fa-regular fa-rectangle"></i> Horizontal
                                                             @break
                                                         @case("h")
-                                                            <i class="mdi mdi-crop-portrait mdi-36px"></i> Vertical
+                                                        <i class="fa-regular fa-rectangle-vertical"></i> Vertical
                                                             @break
                                                         @default
                                                     @endswitch
                                                 @endisset
                                             </td>
-                                            <td colspan="2" class="border-right-0 border-left-0">
+                                            <td colspan="2" class="border-right-0 border-left-0  text-start">
                                                 <h4>Destinatarios</h4>
-                                                @foreach(DB::table('users')->wherein('id',explode(",",$i->list_usuarios))->get() as $u)
-                                                    <li>{{$u->name}} ({{$u->email}})</li>
+                                                @foreach(explode(",",$i->list_usuarios) as $u)
+                                                    <li> ({{$u}})</li>
                                                 @endforeach
                                             </td>
-                                            <td colspan="5" class="border-right-0 border-left-0">
+                                            <td colspan="5" class="border-right-0 border-left-0  text-start">
                                                 <h4>Detalles</h4>
-                                                @isset($datos->clientes)
-                                                    <i class="mdi mdi-briefcase"></i><b>Empresas:</b>
+                                                @isset($datos->cliente)
+                                                    <i class="fa-solid fa-buildings"></i><b>Clientes:</b>
                                                         <ul>
-                                                            @foreach(DB::table('clientes')->wherein('id_cliente',(array)$datos->clientes)->get() as $c)
+                                                            @foreach(DB::table('clientes')->wherein('id_cliente',(array)$datos->cliente)->get() as $c)
                                                                 <li style="font-size:14px">{{$c->nom_cliente}}</li>
                                                             @endforeach
                                                         </ul>
@@ -202,8 +202,8 @@
                                                 @endisset
 
                                                 @isset($datos->edificios)
-                                                    <i class="mdi mdi-store"></i><b>Centros: </b>
-                                                        <ul>
+                                                <i class="fa-solid fa-shop"></i><b>Edificios: </b>
+                                                        <ul class="text-start">
                                                             @foreach(DB::table('edificios')->wherein('id_edificio',(array)$datos->centros)->get() as $c)
                                                             <li style="font-size:14px">{{$c->des_centro}}</li>
                                                             @endforeach

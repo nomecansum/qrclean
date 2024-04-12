@@ -101,7 +101,7 @@ class InformesProgramados extends Command
        Log::debug('Buscando informes programados');
         // $informes=DB::table('cug_informes_programados')->where('fec_prox_ejecucion','<=',Carbon::now())->dd();
         // dd($informes);
-        $informes=informes_programados::where('fec_prox_ejecucion','<=',Carbon::now());
+        $informes=informes_programados::where('fec_prox_ejecucion','<=',Carbon::now())->orwhere('fec_prox_ejecucion',null);
         Log::debug('Encontrados '.$informes->count().' Informes para ejecutar');
         if($tarea->clientes!=''){
             $informes->wherein('cod_cliente',explode(",",$tarea->clientes));

@@ -1656,7 +1656,7 @@ class ReportsController extends Controller
         ///CONTENIDO DEL INFORME///
         ///////////////////////////
         $informe=DB::table('puestos')
-            ->select('puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','clientes.nom_cliente','clientes.id_cliente','puestos.id_edificio','puestos.id_tipo_puesto')
+            ->select('puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','clientes.nom_cliente','clientes.id_cliente','puestos.id_edificio','puestos.id_tipo_puesto','puestos.id_estado')
             ->join('puestos_tipos','puestos.id_tipo_puesto','puestos_tipos.id_tipo_puesto')
             ->join('clientes','puestos.id_cliente','clientes.id_cliente')
             ->wherenotnull('puestos_tipos.slots_reserva')

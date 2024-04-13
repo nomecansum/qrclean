@@ -107,7 +107,7 @@
 				@php
 					$datos_edificio=\App\Models\edificios::find($edificio);
 					$inf=$informe->where('id_cliente',$cliente)->where('id_edificio',$edificio);
-					$aforo_max=$inf->where('id_tipo_puesto',$tipo)->count();
+					$aforo_max=$inf->where('id_tipo_puesto',$tipo)->wherenotin('id_estado',config('app.estados_puestos_no'))->count();
 					$slots=Collect(json_decode($datos_tipo->slots_reserva));
 					$diasemana=Carbon::parse($fecha)->dayOfWeek;
 					$slots=$slots->where('dia_semana',$diasemana-1)->sortby('hora_inicio');
@@ -118,7 +118,7 @@
 					<th  class="text-bold text-center">{{ $datos_tipo->des_tipo_puesto }}</th>
 					<th  class="text-center" >Aforo Max</th>
 					@foreach($slots as $slot)
-						<th class="text-center">{{ $slot->hora_inicio }} - {{ $slot->hora_fin }}<br>{{ $slot->etiqueta }}</th>
+						<th class="text-center">{{ $slot->hora_inicio }} - {{ $slot->hora_fin }}<br>{{ $slot->etiqueta??'' }}</th>
 					@endforeach
 					{{-- Y ahora rellenaremos con celdas vacios hasta el maximo de slots --}}
 					@for($i=0;$i<($max_slots-$slots->count());$i++)
@@ -152,25 +152,7 @@
 
 	@foreach ($inf as $puesto)
 		
-		
-			{{-- <tr class="text-center">
-				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>
-					@isset($puesto->icono_tipo)
-						<i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i>
-					@endisset
-					{{ $puesto->cod_puesto }}
-				</td>
-				<td>{{ $puesto->usado }}</td>
-				<td>{{ $puesto->disponible }}</td>
-				<td>{{ $puesto->limpieza }}</td>
-				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $puesto->cambios }}</td>
-				<td>{{ $puesto->incidencias_abiertas }}</td>
-				<td>{{ $puesto->incidencias_cerradas }}</td>
-				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ ($puesto->incidencias_abiertas??0+$puesto->incidencias_cerradas??0)==0?'':$puesto->incidencias_abiertas??0+$puesto->incidencias_cerradas??0 }}</td>
-				<td>{{ $puesto->reservas_usadas }}</td>
-				<td>{{ $puesto->reservas_anuladas }}</td>
-				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $puesto->reservas }}</td> 
-			</tr> --}}
+
 
 	@endforeach
 	@if($r->output=="pdf" || $r->output=="excel")
@@ -182,5 +164,5 @@
 <script>
 	$('#resumen_informe').html(" {{ $cnt_fechas }} Dias | {{ $filas }} Filas  | {{ round($executionTime,2) }} seg ");
 	$('#request_orig').val('{!! json_encode($r->all()) !!}');
-	$('#controller').val('puestos');
+	$('#controller').val('reservas_slots');
 </script>

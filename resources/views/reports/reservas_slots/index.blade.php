@@ -62,7 +62,7 @@
 	</table>
 </div>
 @php
-    $nombre_empresa = "Informe de uso de puestos" . " ";
+    $nombre_empresa = "Informe  de reservas por slot de tiempo" . " ";
     $___cl = \DB::table('clientes')->where('id_cliente',Auth::user()->id_cliente)->first();
     if(isset($___cl) && ($___cl->nom_cliente))
         $nombre_empresa .= $___cl->nom_cliente;
@@ -75,7 +75,7 @@
 <script>
 	document.title = '{{$nombre_empresa}}';
 	$('.informes').addClass('active active-sub');
-    $('.inf_puestos').addClass('active');
+    $('.inf_reservas_slots').addClass('active');
 
 </script>
 @endsection

@@ -145,6 +145,7 @@ return [
     'tipo_puesto_sala'=>[4,281,191,397,398,400],
     'tipo_puesto_publico'=>[396,411], 
     'id_usuario_spotlinker_salas'=>1832,
+    'estados_puestos_no'=>[4,5,7,8],
     'id_usuario_tareas'=>1860,
     'url_base_api_salas'=>env('URL_BASE_API_SALAS','https://salas-test.spotlinker.com/puestos_api/'),
     'token_api_salas'=>env('TOKEN_API_SALAS',''),

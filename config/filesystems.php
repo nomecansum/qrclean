@@ -51,8 +51,8 @@ return [
         
         'exports' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
-            'url' => env('APP_URL').'/',
+            'root' => storage_path('exports'),
+            'url' => env('APP_URL').'/exports',
         ],
 
         'public' => [

@@ -33,8 +33,9 @@ class ReportsController extends Controller
         foreach ($destinatarios as $recipient)
         {
             //Log::info("Email para " . $recipient);
+            $datos_mail=array('prepend' => $prepend, 'r' => $r, 'fichero' => $fichero, 'nombre_informe' => $nombre_informe, 'plantilla' => $plantilla, 'datos_informe' => $datos_informe, 'recipient' => $recipient);
             try{
-                $resp = \Mail::send(empty($plantilla) ? 'email.mail_informe_programado' : $plantilla, $datos_informe, function ($m) use ($prepend, $r, $fichero, $nombre_informe, $recipient) {
+                $resp = \Mail::send(empty($plantilla) ? 'emails.mail_informe_programado' : $plantilla, $datos_mail, function ($m) use ($prepend, $r, $fichero, $nombre_informe, $recipient) {
                     $m->from(config('mail.from.address'), config('app.name'));
                     if(config('app.env')=='local' || config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
                         Log::debug('Capturado email para '.$recipient);
@@ -49,7 +50,6 @@ class ReportsController extends Controller
                 log::notice("Mail enviado a " . $recipient); 
             } catch(\Exception $e){
                 Log::error('Error enviando email '.$e->getMessage());
-                return new Error(Mail::failures());
             }
             
         }
@@ -1658,6 +1658,7 @@ class ReportsController extends Controller
         $programado->val_periodo=$r->fechas_prog;
         $programado->val_intervalo=$r->val_intervalo;
         $programado->cod_cliente=Auth::user()->id_cliente;
+        $programado->cod_usuario=Auth::user()->id;
         $programado->controller=$r->controller;
         $programado->save();
 

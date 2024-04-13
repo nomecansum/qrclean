@@ -237,7 +237,7 @@
                             $index=0;
                         @endphp
                         @foreach($lista as $item)                               {{-- Si es un valor sencillo --}}                                           {{-- Si es un valor multiple --}}
-                            <option value="{{ $valores[$index]}}" {{ (isset($p->value) && $valores[$index]==$p->value) || (isset($p->value) && is_array ($p->value) && in_array($valores[$index],$p->value))===true?'selected':'' }}>{{ $item}} {{ isset($p->value) && $valores[$index]==$p->value?'selected':'' }}</option>
+                            <option value="{{ $valores[$index]}}" {{ (isset($p->value) && $valores[$index]==$p->value) || (isset($p->value) && is_array ($p->value) && in_array($valores[$index],$p->value))===true?'selected':'' }}>{{ $item}} </option>
                             @php $index++; @endphp
                         @endforeach
                     </select>

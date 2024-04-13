@@ -1,5 +1,6 @@
 @php
 	use Carbon\Carbon;
+	use Carbon\CarbonPeriod;
 	($total = 0); 
 	$clientes=$informe->pluck('id_cliente')->unique();
 	$usuarios=$informe->pluck('id_user')->unique();
@@ -10,6 +11,19 @@
 	$date = explode(" - ",$r->fechas);
 	$f1 = adaptar_fecha($date[0]);
 	$f2 = adaptar_fecha($date[1]);
+	$edificios=$informe->pluck('id_edificio')->unique();
+	$periodo = CarbonPeriod::create(Carbon::parse($f1), Carbon::parse($f2));
+	$tipos_puestos=$informe->pluck('id_tipo_puesto')->unique();
+	//Vamos a calcular el numero maximo de slots por dia de la semana que determinara el maximo de columnas de la tabla
+	$max_slots=0;
+	foreach($tipos_puestos as $tipo){
+		$datos_tipo=\App\Models\puestos_tipos::find($tipo);
+		for($i=0;$i<7;$i++){
+			$slots=Collect(json_decode($datos_tipo->slots_reserva));
+			$slots=$slots->where('dia_semana',$i);
+			$max_slots=max($max_slots,$slots->count());
+		}
+	}
 @endphp
 @if($r->output=="pdf" || (isset($r->email_schedule)&&$r->email_schedule==1))
 <style type="text/css">
@@ -78,40 +92,68 @@
 			</td>
 		</tr>
 	@endif
-	<tr class="font-bold">
-		<td></td>
-		<td colspan="4" class="text-center" @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Cambios de estado</td>
-		<td colspan="3" class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Incidencias</td>
-		<td colspan="3" class="text-center"  @if($r->output=="excel") style="text-align: center; background-color: #cccccc; font-size: 16px; font-weight: bold" @endif>Reservas</td>
-	</tr>
-	<tr class="text-center font-bold">
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Puesto</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Check-in</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Check-out</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Limpieza</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Total</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Abiertas</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Cerradas</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Total</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Utilizadas</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Anuladas</td>
-		<td @if($r->output=="excel") style="text-align: center; background-color: #fde9d9; " @endif>Total</td>
-	</tr>
+	@foreach($periodo as $fecha)	
+		<tr>
+			<td colspan="11">
+				<h4 class="text-muted text-center"><h3>Dia {!! beauty_fecha($fecha,0) !!}</h3></h4>
+			</td>
+		</tr>
+		@foreach($tipos_puestos as $tipo)
+			@php
+				$datos_tipo=\App\Models\puestos_tipos::find($tipo);
+				
+			@endphp
+			@foreach($edificios as $edificio)
+				@php
+					$datos_edificio=\App\Models\edificios::find($edificio);
+					$inf=$informe->where('id_cliente',$cliente)->where('id_edificio',$edificio);
+					$aforo_max=$inf->where('id_tipo_puesto',$tipo)->count();
+					$slots=Collect(json_decode($datos_tipo->slots_reserva));
+					$diasemana=Carbon::parse($fecha)->dayOfWeek;
+					$slots=$slots->where('dia_semana',$diasemana-1)->sortby('hora_inicio');
+					$total_reservas=0;
+					$total_aforo=0;
+				@endphp
+				<tr>
+					<th  class="text-bold text-center">{{ $datos_tipo->des_tipo_puesto }}</th>
+					<th  class="text-center" >Aforo Max</th>
+					@foreach($slots as $slot)
+						<th class="text-center">{{ $slot->hora_inicio }} - {{ $slot->hora_fin }}<br>{{ $slot->etiqueta }}</th>
+					@endforeach
+					{{-- Y ahora rellenaremos con celdas vacios hasta el maximo de slots --}}
+					@for($i=0;$i<($max_slots-$slots->count());$i++)
+						<th></th>
+					@endfor
+					<th  class="text-center" >Total reservas</th>
+				</tr>
+				<tr>
+					<td  class="text-end">{{ $datos_edificio->abreviatura }}</td>
+					<td  class="text-center">{{ $aforo_max }}</td>
+					@foreach($slots as $slot)
+						@php
+							$total_aforo+=$aforo_max;
+							$fecha=Carbon::parse($fecha)->format('Y-m-d');
+							$cnt_reservas=$reservas->where('id_tipo_puesto',$tipo)->where('id_edificio',$edificio)->where('fec_reserva',Carbon::parse($fecha.' '.$slot->hora_inicio))->count();
+							$total_reservas+=$cnt_reservas;
+						@endphp
+						<td class="text-center">{{ $cnt_reservas }}</td>
+					@endforeach
+					{{-- Y ahora rellenaremos con celdas vacios hasta el maximo de slots --}}
+					@for($i=0;$i<($max_slots-$slots->count());$i++)
+						<td class="text-center">-</td>
+					@endfor
+					<td  class="text-center">{{ $total_reservas }}</td>
+				</tr>
+			@endforeach
+		@endforeach
+	@endforeach
+
+	
+
 	@foreach ($inf as $puesto)
-		@php
-			// $usado=$usos->where('id_puesto',$puesto->id_puesto)->where('id_estado',2);
-			// $disponible=$usos->where('id_puesto',$puesto->id_puesto)->where('id_estado',1);
-			// $limpieza=$usos->where('id_puesto',$puesto->id_puesto)->where('id_estado',6);
-			// $cambios=$usos->where('id_puesto',$puesto->id_puesto);
-			// $inc_abiertas=$incidencias_abiertas->where('id_puesto',$puesto->id_puesto)->wherenull('fec_cierre');
-			// $inc_cerradas=$incidencias_cerradas->where('id_puesto',$puesto->id_puesto)->wherenotnull('fec_cierre');
-			// //$inc_total=$inc_abiertas->cuenta+$inc_cerradas->cuenta;
-			// $res_total=$reservas->where('id_puesto',$puesto->id_puesto);
-			// $res_anuladas=$reservas_anuladas->where('id_puesto',$puesto->id_puesto);
-			// $res_usadas=$reservas_usadas->where('id_puesto',$puesto->id_puesto);
-		@endphp	
-		{{-- @if($cambios->sum()>0 || $res_total->sum()>0 || $inc_total->sum()>0) --}}
-			<tr class="text-center">
+		
+		
+			{{-- <tr class="text-center">
 				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>
 					@isset($puesto->icono_tipo)
 						<i class="{{ $puesto->icono_tipo }} fa-2x" style="color: {{ $puesto->color_tipo }}"></i>
@@ -128,8 +170,8 @@
 				<td>{{ $puesto->reservas_usadas }}</td>
 				<td>{{ $puesto->reservas_anuladas }}</td>
 				<td @if($r->output=="excel") style="background-color: #bbbbbb; font-weight: 400" @endif>{{ $puesto->reservas }}</td> 
-			</tr>
-		{{-- @endif --}}
+			</tr> --}}
+
 	@endforeach
 	@if($r->output=="pdf" || $r->output=="excel")
 		</tbody>

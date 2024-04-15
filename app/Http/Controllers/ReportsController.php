@@ -1862,6 +1862,7 @@ class ReportsController extends Controller
             $inf->fec_inicio = adaptar_fecha($r->val_fecha);
             $inf->list_usuarios = $r->list_usuarios;
             $inf->cod_usuario = Auth::user()->id;
+            $inf->fec_prox_ejecucion=null;
             $inf->save();
             return [
                 'title' => "Informes programados",

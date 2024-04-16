@@ -897,6 +897,8 @@ class IncidenciasController extends Controller
                 
             }
             $accion->save();
+            $incidencia->fec_audit=Carbon::now();
+            $incidencia->save();
             $this->post_procesado_incidencia($incidencia,$accion_postprocesado,$procedencia,$cambio_estado);
             savebitacora("Añadida accion para la ".$cosa." ".$r->id_incidencia,"Incidencias","add_accion","OK");
             return [

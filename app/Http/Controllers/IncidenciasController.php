@@ -145,6 +145,7 @@ class IncidenciasController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                    $q->orwhereraw("incidencias.id_usuario_apertura in (select id from users where id_usuario_supervisor=".Auth::user()->id.")");
                 } 
             })
             ->whereBetween('fec_apertura',[$f1,$fhasta])
@@ -171,6 +172,7 @@ class IncidenciasController extends Controller
             ->where(function($q){
                 if (!isAdmin()) {
                     $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                    $q->orwhereraw("incidencias.id_usuario_apertura in (select id from users where id_usuario_supervisor=".Auth::user()->id.")");
                 } 
             })
             ->where('incidencias.id_puesto',0)
@@ -451,6 +453,7 @@ class IncidenciasController extends Controller
                         $q->where('incidencias.id_usuario_apertura',Auth::user()->id);
                     } else {
                         $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                        $q->orwhereraw("incidencias.id_usuario_apertura in (select id from users where id_usuario_supervisor=".Auth::user()->id.")");
                     }
                 } 
             })
@@ -513,6 +516,7 @@ class IncidenciasController extends Controller
                         $q->where('incidencias.id_usuario_apertura',Auth::user()->id);
                     } else {
                         $q->whereraw("find_in_set(".Auth::user()->cod_nivel.",incidencias_tipos.list_perfiles_ver) or incidencias_tipos.list_perfiles_ver is null");
+                        $q->orwhereraw("incidencias.id_usuario_apertura in (select id from users where id_usuario_supervisor=".Auth::user()->id.")");
                     }
                 } 
             })

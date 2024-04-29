@@ -404,12 +404,13 @@ class UsersController extends Controller
 
             $users->update($data);
 
+     
             //Añadimos los usuarios supervisados
-            if(isset($request->lista_id)){
+            if(isset($request->lista_usuarios_supervisados)){
                 DB::table('users')->where('id_usuario_supervisor',$id)->update([
                     'id_usuario_supervisor'=>null
                 ]);
-                foreach($request->lista_id as $id_supervisado){
+                foreach($request->lista_usuarios_supervisados as $id_supervisado){
                     DB::table('users')->where('id',$id_supervisado)->update([
                         'id_usuario_supervisor'=>$id
                     ]);
@@ -628,7 +629,7 @@ class UsersController extends Controller
             'sso_override'=>'nullable',
             'lista_zonas'=>'nullable',
             'mca_reserva_multiple'=>'nullable',
-            'img_usuario' => 'nullable|max:10000|mimes:image/jpeg,image/png,image/jpg,image/gif,image/svg',
+            'img_usuario' => 'nullable|max:10000|mimes:jpg,jpeg,png,bmp,tiff,svg',
         ];
 
 

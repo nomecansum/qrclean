@@ -66,7 +66,7 @@ class colorPuestoRes
                 'color'=>"LightCoral",
                 'font_color'=>"#fff",
                 'clase_disp'=>"",
-                'title'=>"Reservado por ".$reserva->name." para hoy ".$horas_reserva,
+                'title'=>session('CL')['mca_mostrar_nombre_usando']=='S'?"Reservado por ".$reserva->name." para hoy ".$horas_reserva:"Reservado para hoy ".$horas_reserva,
                 'borde'=>"border: ".$tam_borde."px solid ".$borde.";",
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>0.8
@@ -79,7 +79,7 @@ class colorPuestoRes
                 'color'=>"#f2cb07",
                 'font_color'=>"#fff",
                 'clase_disp'=>"",
-                'title'=>"Puesto permanentemente asignado a ".$asignado_usuario->name,
+                'title'=>session('CL')['mca_mostrar_nombre_usando']=='S'?"Puesto permanentemente asignado a ".$asignado_usuario->name:"Puesto permanentemente asignado",
                 'borde'=>"border: ".$tam_borde." solid #ff9f1a;",
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>0.8
@@ -91,7 +91,7 @@ class colorPuestoRes
                 'color'=>"#e8c468",
                 'font_color'=>"#fff",
                 'clase_disp'=>"",
-                'title'=>"Puesto reservado para  ".$asignado_otroperfil->des_nivel_acceso,
+                'title'=>session('CL')['mca_mostrar_nombre_usando']=='S'?"Puesto reservado para ".$asignado_otroperfil->des_nivel_acceso:"Puesto reservado",
                 'borde'=>"",
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>0.8
@@ -103,7 +103,7 @@ class colorPuestoRes
                 'color'=>"#dff9d2",
                 'font_color'=>"#05688f",
                 'clase_disp'=>"disponible",
-                'title'=>"Puesto reservado para  ".$asignado_miperfil->des_nivel_acceso,
+                'title'=>session('CL')['mca_mostrar_nombre_usando']=='S'?"Puesto reservado para ".$asignado_miperfil->des_nivel_acceso:"Puesto reservado",
                 'borde'=>"border: ".$tam_borde." solid #05688f;",
                 'border-radius'=>$puesto->factor_puestor."px",
                 "transp"=>1

@@ -397,7 +397,7 @@
                                             <div class="col-md-8">
                                                 <div class="form-group">
                                                     <label>Usuarios a los que supervisa</label><br>
-                                                    <select name="lista_id[]" id="lista_id" class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple">
+                                                    <select name="lista_usuarios_supervisados[]" id="lista_usuarios_supervisados" class="select2 select2-filtro mb-2 select2-multiple form-control" multiple="multiple">
                                                         <option value=""></option>
                                                         @foreach ($usuarios_supervisables as $c)
                                                             <option {{ in_array($c->id,$usuarios_supervisados) ? 'selected' : ''}} value="{{$c->id}}">{{$c->name}}</option>

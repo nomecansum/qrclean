@@ -34,7 +34,7 @@ $usuario=users::find($accion->id_usuario);
 
 @section('cuerpo')
     <p style="font-size: 14px; line-height: 160%;"> </p>
-    <p style="font-size: 14px; line-height: 160%;">{{ $usuario->name }} ( <a href="mailto:{{ $usuario->email }}"> {{ $usuario->email }} </a> ) ha modificado el estado a {{ DB::table('estados_incidencias')->where('id_estado',$inc->id_estado)->first()->des_estado }} en la {{ $entidad }} <i>[{{ $inc->id_incidencia }}] {{ $inc->des_incidencia!==null?"$inc->des_incidencia":$inc->txt_incidencia  }} </i></p></p>
+    <p style="font-size: 14px; line-height: 160%;">{{ $usuario->name }} ( <a href="mailto:{{ $usuario->email }}"> {{ $usuario->name }} </a> ) ha modificado el estado a {{ DB::table('estados_incidencias')->where('id_estado',$inc->id_estado)->first()->des_estado }} en la {{ $entidad }} <i>[{{ $inc->id_incidencia }}] {{ $inc->des_incidencia!==null?"$inc->des_incidencia":$inc->txt_incidencia  }} </i></p></p>
     <br>
     <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:18px"><strong>{!! $accion->des_accion !!}</strong></p>
     <p><br></p>

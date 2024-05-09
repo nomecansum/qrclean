@@ -123,7 +123,7 @@ class IncidenciasController extends Controller
         $fhasta=clone($f2);
         $fhasta=$fhasta->addDay();
         $incidencias=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+            ->select('incidencias.*','incidencias_tipos.des_tipo_incidencia','incidencias_tipos.list_tipo_puesto','incidencias_tipos.val_icono','incidencias_tipos.val_color','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.id_edificio','edificios.des_edificio','plantas.id_planta','plantas.des_planta','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
@@ -154,7 +154,7 @@ class IncidenciasController extends Controller
             ->get();
 
         $solicitudes=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+            ->select('incidencias.*','incidencias_tipos.des_tipo_incidencia','incidencias_tipos.list_tipo_puesto','incidencias_tipos.val_icono','incidencias_tipos.val_color','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
@@ -182,6 +182,7 @@ class IncidenciasController extends Controller
             ->get();
         
         $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado as estado_puesto','clientes.nom_cliente')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -219,7 +220,7 @@ class IncidenciasController extends Controller
         $fhasta=clone($f2);
         $fhasta=$fhasta->addDay();
         $incidencias=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+            ->select('incidencias.*','incidencias_tipos.des_tipo_incidencia','incidencias_tipos.list_tipo_puesto','incidencias_tipos.val_icono','incidencias_tipos.val_color','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.id_edificio','edificios.des_edificio','plantas.id_planta','plantas.des_planta','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
@@ -245,7 +246,7 @@ class IncidenciasController extends Controller
             ->get();
 
         $solicitudes=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
+            ->select('incidencias.*','incidencias_tipos.des_tipo_incidencia','incidencias_tipos.list_tipo_puesto','incidencias_tipos.val_icono','incidencias_tipos.val_color','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
             ->leftjoin('incidencias_tipos','incidencias.id_tipo_incidencia','incidencias_tipos.id_tipo_incidencia')
@@ -268,6 +269,7 @@ class IncidenciasController extends Controller
             ->get();
         
         $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado as estado_puesto','clientes.nom_cliente')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -314,6 +316,7 @@ class IncidenciasController extends Controller
         }
 
         $puestos=DB::table('puestos')
+            ->select('puestos.*','edificios.des_edificio','plantas.des_planta','estados_puestos.des_estado as estado_puesto','clientes.nom_cliente')
             ->join('edificios','puestos.id_edificio','edificios.id_edificio')
             ->join('plantas','puestos.id_planta','plantas.id_planta')
             ->join('estados_puestos','puestos.id_estado','estados_puestos.id_estado')
@@ -400,7 +403,7 @@ class IncidenciasController extends Controller
         $lista_puestos=$puestos->pluck('id_puesto')->toArray();
 
         $incidencias=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.*','plantas.*','estados_incidencias.des_estado as estado_incidencia','estados_incidencias.id_estado_salas as id_estado_salas','causas_cierre.des_causa','users.name')
+            ->select('incidencias.*','incidencias_tipos.des_tipo_incidencia','incidencias_tipos.list_tipo_puesto','incidencias_tipos.val_icono','incidencias_tipos.val_color','puestos.id_puesto','puestos.cod_puesto','puestos.des_puesto','edificios.id_edificio','edificios.des_edificio','plantas.id_planta','plantas.des_planta','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
@@ -462,7 +465,7 @@ class IncidenciasController extends Controller
             ->get();
 
         $solicitudes=DB::table('incidencias')
-            ->select('incidencias.*','incidencias_tipos.*','estados_incidencias.des_estado as estado_incidencia','estados_incidencias.id_estado_salas as id_estado_salas','causas_cierre.des_causa','users.name')
+        ->select('incidencias.*','incidencias_tipos.des_tipo_incidencia','incidencias_tipos.list_tipo_puesto','incidencias_tipos.val_icono','incidencias_tipos.val_color','estados_incidencias.des_estado as estado_incidencia','causas_cierre.des_causa','users.name')
             ->selectraw("date_format(fec_apertura,'%Y-%m-%d') as fecha_corta")
             ->selectraw("(select count(id_accion) from incidencias_acciones where incidencias_acciones.id_incidencia=incidencias.id_incidencia) as num_acciones")
             ->leftjoin('estados_incidencias','incidencias.id_estado','estados_incidencias.id_estado')
@@ -1093,56 +1096,63 @@ class IncidenciasController extends Controller
                                 $subject.=' (Reapertura)';
                                 break;
                         }
-                        Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto,$momento,$subject) {
-                            if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
-                                Log::debug('modo mail debug '.$to_email);
-                                $message->to('nomecansum@gmail.com')->subject($subject.' '.count(explode(';',$to_email)).' destinatarios');
-                            } else {
-                                Log::debug('modo mail pro '.$to_email);
-                                $message->bcc(explode(';',$to_email), '')->subject($subject);
-                            }
-                            $message->replyTo('no_reply@spotlinker.com','Spotlinker');
-                            $message->from(config('mail.from.address'),config('mail.from.name'));
-                            if($momento=='C'){
-                                if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
-                                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$inc->img_attach1);
-                                    if($adj1!==null){
-                                        $message->attachData($adj1,$inc->img_attach1);
-                                    }  else {
-                                        Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach1);
+                        try{
+                            Mail::send('emails.mail_incidencia'.$momento, ['inc'=>$inc,'tipo'=>$tipo], function($message) use ($tipo, $to_email, $inc, $puesto,$momento,$subject) {
+                                if(config('app.env')=='local'|| config('app.env')=='qa'){//Para que en desarrollo solo me mande los mail a mi
+                                    Log::debug('modo mail debug '.$to_email);
+                                    $message->to('nomecansum@gmail.com')->subject($subject.' '.count(explode(';',$to_email)).' destinatarios');
+                                } else {
+                                    Log::debug('modo mail pro '.$to_email);
+                                    $message->bcc(explode(';',$to_email), '')->subject($subject);
+                                }
+                                $message->replyTo('no_reply@spotlinker.com','Spotlinker');
+                                $message->from(config('mail.from.address'),config('mail.from.name'));
+                                if($momento=='C'){
+                                    if($inc->img_attach1!==null && strlen($inc->img_attach1)>5){
+                                        $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$inc->img_attach1);
+                                        if($adj1!==null){
+                                            $message->attachData($adj1,$inc->img_attach1);
+                                        }  else {
+                                            Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach1);
+                                        }
+                                    }
+                                    if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
+                                        $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$inc->img_attach2);
+                                        if($adj2!==null){
+                                            $message->attachData($adj2,$inc->img_attach2);
+                                        } else {
+                                            Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach2);
+                                        }
+                                        //$message->attachData($adj2,$inc->img_attach2);
+                                    }
+                                } else if($momento=='A'){
+                                    $accion=incidencias_acciones::where('id_incidencia',$inc->id_incidencia)->orderBy('id_accion','desc')->first();
+                                    if($accion->img_attach1!==null && strlen($accion->img_attach1)>5){
+                                        $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$accion->img_attach1);
+                                        if($adj1!==null){
+                                            $message->attachData($adj1,$inc->img_attach1);
+                                        }  else {
+                                            Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach1);
+                                        }
+                                        //$message->attachData($adj1,$accion->img_attach1);
+                                    }
+                                    if($accion->img_attach2!==null && strlen($accion->img_attach2)>5){
+                                        $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$accion->img_attach2);
+                                        if($adj2!==null){
+                                            $message->attachData($adj2,$inc->img_attach2);
+                                        } else {
+                                            Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach2);
+                                        }
+                                        //$message->attachData($adj2,$accion->img_attach2);
                                     }
                                 }
-                                if($inc->img_attach2!==null && strlen($inc->img_attach2)>5){
-                                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$inc->img_attach2);
-                                    if($adj2!==null){
-                                        $message->attachData($adj2,$inc->img_attach2);
-                                    } else {
-                                        Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach2);
-                                    }
-                                    //$message->attachData($adj2,$inc->img_attach2);
-                                }
-                            } else if($momento=='A'){
-                                $accion=incidencias_acciones::where('id_incidencia',$inc->id_incidencia)->orderBy('id_accion','desc')->first();
-                                if($accion->img_attach1!==null && strlen($accion->img_attach1)>5){
-                                    $adj1=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$accion->img_attach1);
-                                    if($adj1!==null){
-                                        $message->attachData($adj1,$inc->img_attach1);
-                                    }  else {
-                                        Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach1);
-                                    }
-                                    //$message->attachData($adj1,$accion->img_attach1);
-                                }
-                                if($accion->img_attach2!==null && strlen($accion->img_attach2)>5){
-                                    $adj2=Storage::disk(config('app.upload_disk'))->get('/uploads/incidencias/'.$inc->id_cliente.'/'.$accion->img_attach2);
-                                    if($adj2!==null){
-                                        $message->attachData($adj2,$inc->img_attach2);
-                                    } else {
-                                        Log::error('No se ha podido adjuntar el archivo '.$inc->img_attach2);
-                                    }
-                                    //$message->attachData($adj2,$accion->img_attach2);
-                                }
-                            }
-                        });
+                            });
+                            savebitacora("Enviardo email ".$to_email." del ID incidencia/solicitud ".$inc->id_incidencia,"Incidencias","post_procesado_incidencia","OK");
+                        } catch(\Throwable $e){
+                            Log::error("Error enviando mail ".$e->getMessage());
+                            savebitacora("Error enviando email ".$to_email." del ID incidencia/solicitud ".$inc->id_incidencia." ".$e->getMessage(),"Incidencias","post_procesado_incidencia","ERROR");
+                        }
+                        
                         break;
                     case 'P': //HTTP Post
                     case 'U': //HTTP Put

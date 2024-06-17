@@ -204,7 +204,7 @@ class sincronizarWorkdayGenerali extends Command
     static function insertar_usu($id,$nombre,$cliente,$id_externo,$colectivo,$departamento,$nivel,$email,$edificio,$turno,$puesto,$planta,$id_tarea){
         //Estos son los datos basicos que se pondran a cualquier usuario, plantas y tipos de puesto que todos tienen que tener
         $plantas_fijas=[751,771,781,791];
-        $tipos_puesto_fijos=[311,396,411,421,431];
+        $tipos_puesto_fijos=[311,396,411,421,431,441,451];
 
         if($id!=null){
             $dato=users::find($id);

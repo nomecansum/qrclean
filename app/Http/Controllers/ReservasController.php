@@ -534,7 +534,7 @@ class ReservasController extends Controller
                 if(($fecha_limite<$fecha_comparacion)){
                     Log::debug("quito puesto ".$pa->id_puesto." por antelacion");
                     $puesto_quitar=$puestos->where('id_puesto',$pa->id_puesto)->first();
-                    if (($usuario->mca_saltarse_antelacion=='N') || ($puesto_quitar->mca_antelacion_obligatoria=='S')) //Si el usuario no tiene permiso para saltarse la antelacion o el puesto tiene la antelacion obligatoria, quitamos el puesto
+                    if (($usuario->mca_saltarse_antelacion=='N') && ($puesto_quitar->mca_antelacion_obligatoria=='S')) //Si el usuario no tiene permiso para saltarse la antelacion o el puesto tiene la antelacion obligatoria, quitamos el puesto
                     {
                         Log::debug("entro ".$pa->cod_puesto." por antelacion " . $usuario->mca_saltarse_antelacion. " - " . $puesto_quitar->mca_antelacion_obligatoria);
                         $puesto_quitar->quitar=true;
